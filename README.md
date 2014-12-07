@@ -1,4 +1,21 @@
-Coconut
-=======
+Coconut Framework
+=================
 
-The Coconut Framework contains primitive data structure and it's operation for Mac OS X and iOS.
+Overview
+--------
+Coconut framework contains general purpose data structure for Mac OS X and iOS,
+
+Copyright
+---------
+This software is distributed under [GNU LESSER GENERAL PUBLIC LICENSE Version 2.1](https://www.gnu.org/licenses/lgpl-2.1-standalone.html).
+
+Contents
+--------
+This library has following kind of classes:
+* Value : The object which can have multiple classes value
+* List  : Single linked list (KDList) and list items for it (KDListItem)
+* Graph : Data structures to present graph structure
+	* Graph : The graph which contains nodes and edges (KDGraph)
+	* Node : Graph node (KDNode)
+	* Edge : Graph edge (KDEdge)
+

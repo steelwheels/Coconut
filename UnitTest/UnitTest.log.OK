@@ -1,0 +1,18 @@
+UnitTest of KiwiData framework
+********************************************************************************
+* CNList
+********************************************************************************
+*** initial state
++ free items : 0
+*** add 3 object
+count : 3
+0) 0
+1) 1
+2) 2
++ free items : 253
++ free items : 256
+*** push 3 object 
+poped 12
+poped 11
+poped 10
++ free items : 256
