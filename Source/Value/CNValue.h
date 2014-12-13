@@ -32,6 +32,8 @@ typedef enum  {
 }
 
 + (BOOL) isObjectType: (CNValueType) valuetype ;
++ (NSString *) valueTypeToString: (CNValueType) type ;
++ (CNValue *) stringToValue: (NSString *) src withType: (CNValueType) type withError: (NSError * __autoreleasing *) error ;
 
 - (instancetype) initWithBooleanValue: (BOOL) val ;
 - (instancetype) initWithCharValue: (unsigned char) val ;
@@ -44,6 +46,8 @@ typedef enum  {
 
 - (void) dealloc ;
 
+- (CNValueType) type ;
+
 - (BOOL) booleanValue ;
 - (unsigned char) charValue ;
 - (NSInteger) signedIntegerValue ;
@@ -51,5 +55,7 @@ typedef enum  {
 - (double) floatValue ;
 - (NSString *) stringValue ;
 - (NSObject *) objectValue ;
+
+- (NSString *) description ;
 
 @end

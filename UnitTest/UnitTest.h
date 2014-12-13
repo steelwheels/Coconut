@@ -8,3 +8,5 @@
 #import <Coconut/Coconut.h>
 
 void testList(void) ;
+void testError(void) ;
+void testValue(void) ;

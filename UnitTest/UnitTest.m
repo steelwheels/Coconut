@@ -16,7 +16,9 @@ int main(int argc, const char * argv[]) {
 	    // insert code here...
 	    printf("UnitTest of KiwiData framework\n");
 		
-		printTitle("CNList") ;		testList() ;
+		printTitle("CNErrorExtension") ;	testError() ;
+		printTitle("CNList") ;			testList() ;
+		printTitle("CNValue") ;			testValue() ;
 	}
     return 0;
 }

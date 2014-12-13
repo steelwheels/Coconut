@@ -1,5 +1,9 @@
 UnitTest of KiwiData framework
 ********************************************************************************
+* CNErrorExtension
+********************************************************************************
+[Error] Test message
+********************************************************************************
 * CNList
 ********************************************************************************
 *** initial state
@@ -16,3 +20,24 @@ poped 12
 poped 11
 poped 10
 + free items : 256
+********************************************************************************
+* CNValue
+********************************************************************************
+**** Target: bool value
+Type : bool, Value : true
+another value -> Type : bool, Value : true
+**** Target: char value
+Type : char, Value : c
+another value -> Type : char, Value : c
+**** Target: int value
+Type : signed int, Value : -123
+another value -> Type : signed int, Value : -123
+**** Target: uint value
+Type : unsigned int, Value : 456
+another value -> Type : unsigned int, Value : 456
+**** Target: float value
+Type : float, Value : -123.450000
+another value -> Type : float, Value : -123.450000
+**** Target: string value
+Type : string, Value : Hello
+another value -> Type : string, Value : Hello

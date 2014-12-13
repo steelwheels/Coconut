@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		051EB9501A3C121800B0FBC0 /* CNErrorExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 051EB94E1A3C121800B0FBC0 /* CNErrorExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		051EB9511A3C121800B0FBC0 /* CNErrorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */; };
+		051EB9531A3C12E800B0FBC0 /* UTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9521A3C12E800B0FBC0 /* UTError.m */; };
+		051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9541A3C171D00B0FBC0 /* UTValue.m */; };
 		059D3DB91A33FE8600FAB027 /* UnitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 059D3DB71A33FE8600FAB027 /* UnitTest.m */; };
 		059D3DBA1A33FE8600FAB027 /* UTList.m in Sources */ = {isa = PBXBuildFile; fileRef = 059D3DB81A33FE8600FAB027 /* UTList.m */; };
 		059D3DBD1A33FEE000FAB027 /* Coconut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 059D3DBC1A33FEE000FAB027 /* Coconut.framework */; };
@@ -61,10 +65,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		051EB94E1A3C121800B0FBC0 /* CNErrorExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorExtension.h; path = ../Source/Error/CNErrorExtension.h; sourceTree = "<group>"; };
+		051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorExtension.m; path = ../Source/Error/CNErrorExtension.m; sourceTree = "<group>"; };
+		051EB9521A3C12E800B0FBC0 /* UTError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTError.m; path = ../UnitTest/UTError.m; sourceTree = SOURCE_ROOT; };
+		051EB9541A3C171D00B0FBC0 /* UTValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTValue.m; path = ../UnitTest/UTValue.m; sourceTree = SOURCE_ROOT; };
 		059D3DAE1A33FE5B00FAB027 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
-		059D3DB71A33FE8600FAB027 /* UnitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitTest.m; path = ../../UnitTest/UnitTest.m; sourceTree = "<group>"; };
-		059D3DB81A33FE8600FAB027 /* UTList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTList.m; path = ../../UnitTest/UTList.m; sourceTree = "<group>"; };
-		059D3DBB1A33FE9D00FAB027 /* UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnitTest.h; path = ../../UnitTest/UnitTest.h; sourceTree = "<group>"; };
+		059D3DB71A33FE8600FAB027 /* UnitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitTest.m; path = ../UnitTest/UnitTest.m; sourceTree = SOURCE_ROOT; };
+		059D3DB81A33FE8600FAB027 /* UTList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTList.m; path = ../UnitTest/UTList.m; sourceTree = SOURCE_ROOT; };
+		059D3DBB1A33FE9D00FAB027 /* UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UnitTest.h; path = ../UnitTest/UnitTest.h; sourceTree = SOURCE_ROOT; };
 		059D3DBC1A33FEE000FAB027 /* Coconut.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Coconut.framework; path = /Users/tomoo/Library/Frameworks/Coconut.framework; sourceTree = "<absolute>"; };
 		059D3DC41A33FFFE00FAB027 /* unit_test.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unit_test.mk; sourceTree = SOURCE_ROOT; };
 		05A4DF221A33E5C900C912F9 /* CNForwarders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNForwarders.h; path = ../Source/Common/CNForwarders.h; sourceTree = "<group>"; };
@@ -102,10 +110,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		051EB94D1A3C120600B0FBC0 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				051EB94E1A3C121800B0FBC0 /* CNErrorExtension.h */,
+				051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */,
+			);
+			name = Error;
+			sourceTree = "<group>";
+		};
 		0557AA811A33DD4200C8B4E7 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				05A4DF211A33E5BA00C912F9 /* Common */,
+				051EB94D1A3C120600B0FBC0 /* Error */,
 				05A4DF261A33E5EC00C912F9 /* List */,
 				05A4DF2B1A33E7F700C912F9 /* Value */,
 				05A4DF301A33E80F00C912F9 /* Graph */,
@@ -118,7 +136,9 @@
 			children = (
 				059D3DBB1A33FE9D00FAB027 /* UnitTest.h */,
 				059D3DB71A33FE8600FAB027 /* UnitTest.m */,
+				051EB9521A3C12E800B0FBC0 /* UTError.m */,
 				059D3DB81A33FE8600FAB027 /* UTList.m */,
+				051EB9541A3C171D00B0FBC0 /* UTValue.m */,
 				059D3DC51A34003300FAB027 /* Supporting Files */,
 			);
 			path = UnitTest;
@@ -215,6 +235,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				051EB9501A3C121800B0FBC0 /* CNErrorExtension.h in Headers */,
 				05A4DF291A33E5FC00C912F9 /* CNList.h in Headers */,
 				05A4DF2E1A33E80900C912F9 /* CNValue.h in Headers */,
 				05A4DF391A33E82200C912F9 /* CNGraph.h in Headers */,
@@ -357,6 +378,8 @@
 			files = (
 				059D3DBA1A33FE8600FAB027 /* UTList.m in Sources */,
 				059D3DB91A33FE8600FAB027 /* UnitTest.m in Sources */,
+				051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */,
+				051EB9531A3C12E800B0FBC0 /* UTError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +392,7 @@
 				05A4DF2A1A33E5FC00C912F9 /* CNList.m in Sources */,
 				05A4DF3A1A33E82200C912F9 /* CNGraph.m in Sources */,
 				05A4DF3C1A33E82200C912F9 /* CNNode.m in Sources */,
+				051EB9511A3C121800B0FBC0 /* CNErrorExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,6 +629,7 @@
 				059D3DB31A33FE5B00FAB027 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		059D3DBF1A33FFC100FAB027 /* Build configuration list for PBXLegacyTarget "Check" */ = {
 			isa = XCConfigurationList;
@@ -613,6 +638,7 @@
 				059D3DC11A33FFC100FAB027 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		05A4DF3E1A33F9E700C912F9 /* Build configuration list for PBXLegacyTarget "Install" */ = {
 			isa = XCConfigurationList;

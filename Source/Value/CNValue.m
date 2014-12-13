@@ -6,6 +6,10 @@
  */
 
 #import "CNValue.h"
+#import "CNErrorExtension.h"
+
+static NSError *
+formatError(CNValueType type, NSString * param) ;
 
 @implementation CNValue
 
@@ -19,6 +23,99 @@
 		} break ;
 		default : {
 			result = NO ;
+		} break ;
+	}
+	return result ;
+}
+
++ (NSString *) valueTypeToString: (CNValueType) type
+{
+	NSString * result = nil ;
+	switch(type){
+		case CNNilValue: {
+			result = @"" ;
+		} break ;
+		case CNBooleanValue: {
+			result = @"bool" ;
+		} break ;
+		case CNCharValue: {
+			result = @"char" ;
+		} break ;
+		case CNSignedIntegerValue: {
+			result = @"signed int" ;
+		} break ;
+		case CNUnsignedIntegerValue: {
+			result = @"unsigned int" ;
+		} break ;
+		case CNFloatValue: {
+			result = @"float" ;
+		} break ;
+		case CNStringValue: {
+			result = @"string" ;
+		} break ;
+		case CNObjectValue: {
+			result = @"object" ;
+		} break ;
+	}
+	return result ;
+}
+
++ (CNValue *) stringToValue: (NSString *) src withType: (CNValueType) type withError:(NSError *__autoreleasing*) error
+{
+	const char * srcstr = [src UTF8String] ;
+	CNValue * result = nil ;
+	switch(type){
+		case CNNilValue: {
+			assert(false) ;
+		} break ;
+		case CNBooleanValue: {
+			if(strcmp(srcstr, "true") == 0 || strcmp(srcstr, "TRUE")){
+				result = [[CNValue alloc] initWithBooleanValue: YES] ;
+			} else if(strcmp(srcstr, "false") == 0 || strcmp(srcstr, "FALSE")){
+				result = [[CNValue alloc] initWithBooleanValue: YES] ;
+			} else {
+				*error = formatError(CNBooleanValue, src) ;
+			}
+		} break ;
+		case CNCharValue: {
+			if(strlen(srcstr) == 1){
+				result = [[CNValue alloc] initWithCharValue: srcstr[0]] ;
+			} else {
+				*error = formatError(CNCharValue, src) ;
+			}
+		} break ;
+		case CNSignedIntegerValue: {
+			char * endp ;
+			NSInteger val = strtoll(srcstr, &endp, 0) ;
+			if(*endp == '\0'){
+				result = [[CNValue alloc] initWithSignedIntegerValue: val] ;
+			} else {
+				*error = formatError(CNSignedIntegerValue, src) ;
+			}
+		} break ;
+		case CNUnsignedIntegerValue: {
+			char * endp ;
+			NSUInteger val = strtoul(srcstr, &endp, 0) ;
+			if(*endp == '\0'){
+				result = [[CNValue alloc] initWithUnsignedIntegerValue: val] ;
+			} else {
+				*error = formatError(CNUnsignedIntegerValue, src) ;
+			}
+		} break ;
+		case CNFloatValue: {
+			char * endp ;
+			double val = strtold(srcstr, &endp) ;
+			if(*endp == '\0'){
+				result = [[CNValue alloc] initWithFloatValue: val] ;
+			} else {
+				*error = formatError(CNUnsignedIntegerValue, src) ;
+			}
+		} break ;
+		case CNStringValue: {
+			result = [[CNValue alloc] initWithStringValue: src] ;
+		} break ;
+		case CNObjectValue: {
+			assert(false) ; /* Not supported */
 		} break ;
 	}
 	return result ;
@@ -105,6 +202,11 @@
 	}
 }
 
+- (CNValueType) type
+{
+	return valueType ;
+}
+
 - (BOOL) booleanValue
 {
 	return valueData.booleanValue ;
@@ -140,4 +242,64 @@
 	return (__bridge NSObject *) valueData.objectValue ;
 }
 
+- (NSString *) description
+{
+	NSString * result = nil ;
+	switch(valueType){
+		case CNNilValue: {
+			result = nil ;
+		} break ;
+		case CNBooleanValue: {
+			result = [self booleanValue] ? @"true" : @"false" ;
+		} break ;
+		case CNCharValue: {
+			char val = [self charValue] ;
+			char valstr[32] ;
+			snprintf(valstr, 32, "%c", val) ;
+			result = [[NSString alloc] initWithUTF8String: valstr] ;
+		} break ;
+		case CNSignedIntegerValue: {
+			NSInteger val = [self signedIntegerValue] ;
+			char valstr[32] ;
+			snprintf(valstr, 32, "%ld", val) ;
+			result = [[NSString alloc] initWithUTF8String: valstr] ;
+		} break ;
+		case CNUnsignedIntegerValue: {
+			NSUInteger val = [self unsignedIntegerValue] ;
+			char valstr[32] ;
+			snprintf(valstr, 32, "%lu", val) ;
+			result = [[NSString alloc] initWithUTF8String: valstr] ;
+		} break ;
+		case CNFloatValue: {
+			double val = [self floatValue] ;
+			char valstr[32] ;
+			snprintf(valstr, 32, "%lf", val) ;
+			result = [[NSString alloc] initWithUTF8String: valstr] ;
+		} break ;
+		case CNStringValue: {
+			result = [self stringValue] ;
+		} break ;
+		case CNObjectValue: {
+			NSObject * objval = [self objectValue] ;
+			result = [objval description] ;
+		} break ;
+	}
+	return result ;
+}
+
 @end
+
+static NSError *
+formatError(CNValueType type, NSString * param)
+{
+	NSString * typestr = [CNValue valueTypeToString: type] ;
+	if(typestr == nil){
+		typestr = @"Unknown" ;
+	}
+	NSString * message = [[NSString alloc] initWithFormat:
+			      @"Type %s is required, but \"%s\" is given",
+			      [typestr UTF8String],
+			      [param UTF8String]] ;
+	return [NSError parseErrorWithMessage: message] ;
+}
+
