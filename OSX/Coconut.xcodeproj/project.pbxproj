@@ -11,6 +11,15 @@
 		051EB9511A3C121800B0FBC0 /* CNErrorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */; };
 		051EB9531A3C12E800B0FBC0 /* UTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9521A3C12E800B0FBC0 /* UTError.m */; };
 		051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9541A3C171D00B0FBC0 /* UTValue.m */; };
+		056DC07C1A3F5297002F7EF9 /* UTText.m in Sources */ = {isa = PBXBuildFile; fileRef = 056DC07B1A3F5297002F7EF9 /* UTText.m */; };
+		058E6ED81A3DA30E009EE505 /* CNText.h in Headers */ = {isa = PBXBuildFile; fileRef = 058E6ED61A3DA30E009EE505 /* CNText.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		058E6ED91A3DA30E009EE505 /* CNText.m in Sources */ = {isa = PBXBuildFile; fileRef = 058E6ED71A3DA30E009EE505 /* CNText.m */; };
+		058E6EDC1A3DA365009EE505 /* CNTextElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 058E6EDA1A3DA365009EE505 /* CNTextElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		058E6EDD1A3DA365009EE505 /* CNTextElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 058E6EDB1A3DA365009EE505 /* CNTextElement.m */; };
+		058E6EE01A3DA565009EE505 /* CNTextLine.h in Headers */ = {isa = PBXBuildFile; fileRef = 058E6EDE1A3DA565009EE505 /* CNTextLine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		058E6EE11A3DA565009EE505 /* CNTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 058E6EDF1A3DA565009EE505 /* CNTextLine.m */; };
+		058E6EE41A3DA689009EE505 /* CNTextSection.h in Headers */ = {isa = PBXBuildFile; fileRef = 058E6EE21A3DA689009EE505 /* CNTextSection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		058E6EE51A3DA689009EE505 /* CNTextSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 058E6EE31A3DA689009EE505 /* CNTextSection.m */; };
 		059D3DB91A33FE8600FAB027 /* UnitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 059D3DB71A33FE8600FAB027 /* UnitTest.m */; };
 		059D3DBA1A33FE8600FAB027 /* UTList.m in Sources */ = {isa = PBXBuildFile; fileRef = 059D3DB81A33FE8600FAB027 /* UTList.m */; };
 		059D3DBD1A33FEE000FAB027 /* Coconut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 059D3DBC1A33FEE000FAB027 /* Coconut.framework */; };
@@ -69,6 +78,15 @@
 		051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorExtension.m; path = ../Source/Error/CNErrorExtension.m; sourceTree = "<group>"; };
 		051EB9521A3C12E800B0FBC0 /* UTError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTError.m; path = ../UnitTest/UTError.m; sourceTree = SOURCE_ROOT; };
 		051EB9541A3C171D00B0FBC0 /* UTValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTValue.m; path = ../UnitTest/UTValue.m; sourceTree = SOURCE_ROOT; };
+		056DC07B1A3F5297002F7EF9 /* UTText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTText.m; path = ../UnitTest/UTText.m; sourceTree = SOURCE_ROOT; };
+		058E6ED61A3DA30E009EE505 /* CNText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNText.h; path = ../Source/Text/CNText.h; sourceTree = "<group>"; };
+		058E6ED71A3DA30E009EE505 /* CNText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNText.m; path = ../Source/Text/CNText.m; sourceTree = "<group>"; };
+		058E6EDA1A3DA365009EE505 /* CNTextElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextElement.h; path = ../Source/Text/CNTextElement.h; sourceTree = "<group>"; };
+		058E6EDB1A3DA365009EE505 /* CNTextElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextElement.m; path = ../Source/Text/CNTextElement.m; sourceTree = "<group>"; };
+		058E6EDE1A3DA565009EE505 /* CNTextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextLine.h; path = ../Source/Text/CNTextLine.h; sourceTree = "<group>"; };
+		058E6EDF1A3DA565009EE505 /* CNTextLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextLine.m; path = ../Source/Text/CNTextLine.m; sourceTree = "<group>"; };
+		058E6EE21A3DA689009EE505 /* CNTextSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextSection.h; path = ../Source/Text/CNTextSection.h; sourceTree = "<group>"; };
+		058E6EE31A3DA689009EE505 /* CNTextSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextSection.m; path = ../Source/Text/CNTextSection.m; sourceTree = "<group>"; };
 		059D3DAE1A33FE5B00FAB027 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		059D3DB71A33FE8600FAB027 /* UnitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UnitTest.m; path = ../UnitTest/UnitTest.m; sourceTree = SOURCE_ROOT; };
 		059D3DB81A33FE8600FAB027 /* UTList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTList.m; path = ../UnitTest/UTList.m; sourceTree = SOURCE_ROOT; };
@@ -126,9 +144,25 @@
 				051EB94D1A3C120600B0FBC0 /* Error */,
 				05A4DF261A33E5EC00C912F9 /* List */,
 				05A4DF2B1A33E7F700C912F9 /* Value */,
+				058E6ED51A3DA0D6009EE505 /* Text */,
 				05A4DF301A33E80F00C912F9 /* Graph */,
 			);
 			name = Source;
+			sourceTree = "<group>";
+		};
+		058E6ED51A3DA0D6009EE505 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				058E6ED61A3DA30E009EE505 /* CNText.h */,
+				058E6ED71A3DA30E009EE505 /* CNText.m */,
+				058E6EE21A3DA689009EE505 /* CNTextSection.h */,
+				058E6EE31A3DA689009EE505 /* CNTextSection.m */,
+				058E6EDE1A3DA565009EE505 /* CNTextLine.h */,
+				058E6EDF1A3DA565009EE505 /* CNTextLine.m */,
+				058E6EDA1A3DA365009EE505 /* CNTextElement.h */,
+				058E6EDB1A3DA365009EE505 /* CNTextElement.m */,
+			);
+			name = Text;
 			sourceTree = "<group>";
 		};
 		059D3DAF1A33FE5B00FAB027 /* UnitTest */ = {
@@ -139,6 +173,7 @@
 				051EB9521A3C12E800B0FBC0 /* UTError.m */,
 				059D3DB81A33FE8600FAB027 /* UTList.m */,
 				051EB9541A3C171D00B0FBC0 /* UTValue.m */,
+				056DC07B1A3F5297002F7EF9 /* UTText.m */,
 				059D3DC51A34003300FAB027 /* Supporting Files */,
 			);
 			path = UnitTest;
@@ -235,6 +270,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				058E6EE41A3DA689009EE505 /* CNTextSection.h in Headers */,
+				058E6EE01A3DA565009EE505 /* CNTextLine.h in Headers */,
+				058E6ED81A3DA30E009EE505 /* CNText.h in Headers */,
+				058E6EDC1A3DA365009EE505 /* CNTextElement.h in Headers */,
 				051EB9501A3C121800B0FBC0 /* CNErrorExtension.h in Headers */,
 				05A4DF291A33E5FC00C912F9 /* CNList.h in Headers */,
 				05A4DF2E1A33E80900C912F9 /* CNValue.h in Headers */,
@@ -380,6 +419,7 @@
 				059D3DB91A33FE8600FAB027 /* UnitTest.m in Sources */,
 				051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */,
 				051EB9531A3C12E800B0FBC0 /* UTError.m in Sources */,
+				056DC07C1A3F5297002F7EF9 /* UTText.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,8 +428,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				05A4DF2F1A33E80900C912F9 /* CNValue.m in Sources */,
+				058E6EE51A3DA689009EE505 /* CNTextSection.m in Sources */,
+				058E6ED91A3DA30E009EE505 /* CNText.m in Sources */,
+				058E6EDD1A3DA365009EE505 /* CNTextElement.m in Sources */,
 				05A4DF381A33E82200C912F9 /* CNEdge.m in Sources */,
 				05A4DF2A1A33E5FC00C912F9 /* CNList.m in Sources */,
+				058E6EE11A3DA565009EE505 /* CNTextLine.m in Sources */,
 				05A4DF3A1A33E82200C912F9 /* CNGraph.m in Sources */,
 				05A4DF3C1A33E82200C912F9 /* CNNode.m in Sources */,
 				051EB9511A3C121800B0FBC0 /* CNErrorExtension.m in Sources */,

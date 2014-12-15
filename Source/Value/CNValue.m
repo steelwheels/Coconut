@@ -86,7 +86,7 @@ formatError(CNValueType type, NSString * param) ;
 		} break ;
 		case CNSignedIntegerValue: {
 			char * endp ;
-			NSInteger val = strtoll(srcstr, &endp, 0) ;
+			NSInteger val = (NSInteger) strtoll(srcstr, &endp, 0) ;
 			if(*endp == '\0'){
 				result = [[CNValue alloc] initWithSignedIntegerValue: val] ;
 			} else {
@@ -261,13 +261,13 @@ formatError(CNValueType type, NSString * param) ;
 		case CNSignedIntegerValue: {
 			NSInteger val = [self signedIntegerValue] ;
 			char valstr[32] ;
-			snprintf(valstr, 32, "%ld", val) ;
+			snprintf(valstr, 32, "%zd", val) ;
 			result = [[NSString alloc] initWithUTF8String: valstr] ;
 		} break ;
 		case CNUnsignedIntegerValue: {
 			NSUInteger val = [self unsignedIntegerValue] ;
 			char valstr[32] ;
-			snprintf(valstr, 32, "%lu", val) ;
+			snprintf(valstr, 32, "%tu", val) ;
 			result = [[NSString alloc] initWithUTF8String: valstr] ;
 		} break ;
 		case CNFloatValue: {

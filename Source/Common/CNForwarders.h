@@ -11,6 +11,11 @@
 /* List */
 @class CNList ;
 
+/* Text */
+@class CNText ;
+@class CNTextLine ;
+@class CNTextSection ;
+
 /* Graph */
 @class CNGraph ;
 @class CNNode ;

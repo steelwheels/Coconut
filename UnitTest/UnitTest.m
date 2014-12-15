@@ -19,6 +19,7 @@ int main(int argc, const char * argv[]) {
 		printTitle("CNErrorExtension") ;	testError() ;
 		printTitle("CNList") ;			testList() ;
 		printTitle("CNValue") ;			testValue() ;
+		printTitle("CNText") ;			testText() ;
 	}
     return 0;
 }
