@@ -10,11 +10,22 @@
 
 @implementation CNTextSection
 
+@synthesize sectionTitle ;
 @synthesize elementList ;
 
 - (instancetype) init
 {
 	if((self = [super initWithElementKind: CNTextSectionElement]) != nil){
+		self.sectionTitle = nil ;
+		self.elementList = [[CNList alloc] init] ;
+	}
+	return self ;
+}
+
+- (instancetype) initWithTitle: (NSString *) title
+{
+	if((self = [super initWithElementKind: CNTextSectionElement]) != nil){
+		self.sectionTitle = title ;
 		self.elementList = [[CNList alloc] init] ;
 	}
 	return self ;

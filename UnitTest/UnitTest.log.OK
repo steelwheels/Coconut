@@ -41,3 +41,10 @@ another value -> Type : float, Value : -123.450000
 **** Target: string value
 Type : string, Value : Hello
 another value -> Type : string, Value : Hello
+********************************************************************************
+* CNText
+********************************************************************************
+line10
+  line0
+  line1
+line11

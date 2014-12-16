@@ -10,10 +10,14 @@
 
 @interface CNTextSection : CNTextElement <CNTextElementOperatiing>
 
+/** Section title (will be nil) */
+@property (strong, nonatomic) NSString *	sectionTitle ;
 /** List of CNTextElement */
-@property (strong, nonatomic) CNList *	elementList ;
+@property (strong, nonatomic) CNList *		elementList ;
 
 - (instancetype) init ;
+- (instancetype) initWithTitle: (NSString *) title ;
+
 - (void) appendElement: (CNTextElement *) element ;
 
 @end
