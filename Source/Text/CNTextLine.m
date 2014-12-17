@@ -6,7 +6,6 @@
  */
 
 #import "CNTextLine.h"
-#import "CNTextElement.h"
 
 @implementation CNTextLine
 
@@ -20,9 +19,7 @@
 
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
 {
-	[CNTextElement printIndent: indent toFile: outfp] ;
-	fputs([self.string UTF8String], outfp) ;
-	fputc('\n', outfp) ;
+	[CNText printString: self.string withIndent: indent toFile: outfp] ;
 }
 
 @end

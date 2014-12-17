@@ -6,13 +6,25 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "CNForwarders.h"
 
-@interface CNText : NSObject
+typedef enum {
+	CNTextLineElement,
+	CNTextSectionElement
+} CNTextKind ;
 
-@property (strong, nonatomic) CNTextSection *	rootSection ;
+@protocol CNTextOperatiing <NSObject>
+- (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent ;
+@end
 
-- (instancetype) init ;
+@interface CNText : NSObject <CNTextOperatiing>
+
+@property (assign, nonatomic) CNTextKind		elementKind ;
+
+- (instancetype) initWithElementKind: (CNTextKind) kind ;
 - (void) printToFile: (FILE *) outfp ;
 
++ (void) printIndent: (NSUInteger) indent toFile: (FILE *) outfp ;
++ (void) printString: (NSString *) str withIndent: (NSUInteger) indent toFile: (FILE *) outfp ;
+
 @end
+

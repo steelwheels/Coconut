@@ -31,24 +31,27 @@
 	return self ;
 }
 
-- (void) appendElement: (CNTextElement *) element
+- (void) appendChildText: (CNText *) element
 {
 	[self.elementList addObject: element] ;
 }
 
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
 {
+	if(self.sectionTitle != nil){
+		[CNText printString: self.sectionTitle withIndent: indent toFile: outfp] ;
+		indent++ ;
+	}
+	
 	const struct CNListItem * item = self.elementList.firstItem ;
 	for( ; item ; item = item->nextItem){
-		CNTextElement * element = (CNTextElement *) CNObjectInListItem(item) ;
+		CNText * element = (CNText *) CNObjectInListItem(item) ;
+		NSUInteger childindent = indent ;
 		switch(element.elementKind){
-			case CNTextLineElement: {
-				[element printToFile: outfp withIndent: indent  ] ;
-			} break ;
-			case CNTextSectionElement: {
-				[element printToFile: outfp withIndent: indent+1] ;
-			} break ;
+			case CNTextLineElement:				      break ;
+			case CNTextSectionElement: childindent = indent + 1 ; break ;
 		}
+		[element printToFile: outfp withIndent: childindent] ;
 	}
 }
 

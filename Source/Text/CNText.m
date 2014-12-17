@@ -6,23 +6,43 @@
  */
 
 #import "CNText.h"
-#import "CNTextSection.h"
 
 @implementation CNText
 
-@synthesize rootSection ;
+@synthesize elementKind ;
 
-- (instancetype) init
+- (instancetype) initWithElementKind: (CNTextKind) kind
 {
 	if((self = [super init]) != nil){
-		self.rootSection = [[CNTextSection alloc] init] ;
+		self.elementKind = kind ;
 	}
 	return self ;
 }
 
+- (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
+{
+	((void) outfp) ; ((void) indent) ;
+	assert(false) ;
+}
+
 - (void) printToFile: (FILE *) outfp
 {
-	[self.rootSection printToFile: outfp withIndent: 0] ;
+	[self printToFile: outfp withIndent: 0] ;
+}
+
++ (void) printIndent: (NSUInteger) indent toFile: (FILE *) outfp
+{
+	NSUInteger	i ;
+	for(i=0 ; i<indent ; i++){
+		fputs("  ", outfp) ;
+	}
+}
+
++ (void) printString: (NSString *) str withIndent: (NSUInteger) indent toFile: (FILE *) outfp
+{
+	[CNText printIndent: indent toFile: outfp] ;
+	fputs([str UTF8String], outfp) ;
+	fputc('\n', outfp) ;
 }
 
 @end

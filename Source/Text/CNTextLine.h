@@ -5,9 +5,9 @@
  *   Copyright (C) 2014 Steel Wheels Project
  */
 
-#import "CNTextElement.h"
+#import "CNText.h"
 
-@interface CNTextLine : CNTextElement <CNTextElementOperatiing>
+@interface CNTextLine : CNText <CNTextOperatiing>
 
 @property (strong, nonatomic) NSString *	string ;
 

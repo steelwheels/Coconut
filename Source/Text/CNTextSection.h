@@ -5,19 +5,19 @@
  *   Copyright (C) 2014 Steel Wheels Project
  */
 
-#import "CNTextElement.h"
+#import "CNText.h"
 #import "CNForwarders.h"
 
-@interface CNTextSection : CNTextElement <CNTextElementOperatiing>
+@interface CNTextSection : CNText <CNTextOperatiing>
 
 /** Section title (will be nil) */
 @property (strong, nonatomic) NSString *	sectionTitle ;
-/** List of CNTextElement */
+/** List of CNText */
 @property (strong, nonatomic) CNList *		elementList ;
 
 - (instancetype) init ;
 - (instancetype) initWithTitle: (NSString *) title ;
 
-- (void) appendElement: (CNTextElement *) element ;
+- (void) appendChildText: (CNText *) element ;
 
 @end

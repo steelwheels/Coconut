@@ -11,16 +11,14 @@ void
 testText(void)
 {
 	CNTextSection * sec0 = [[CNTextSection alloc] init] ;
-	[sec0 appendElement: [[CNTextLine alloc] initWithString: @"line0"]] ;
-	[sec0 appendElement: [[CNTextLine alloc] initWithString: @"line1"]] ;
-	
+	sec0.sectionTitle = @"Section 0" ;
+	[sec0 appendChildText: [[CNTextLine alloc] initWithString: @"line0"]] ;
+	[sec0 appendChildText: [[CNTextLine alloc] initWithString: @"line1"]] ;
 	CNTextSection * sec1 = [[CNTextSection alloc] init] ;
-	[sec1 appendElement: [[CNTextLine alloc] initWithString: @"line10"]] ;
-	[sec1 appendElement: sec0] ;
-	[sec1 appendElement: [[CNTextLine alloc] initWithString: @"line11"]] ;
+
+	[sec1 appendChildText: [[CNTextLine alloc] initWithString: @"line10"]] ;
+	[sec1 appendChildText: sec0] ;
+	[sec1 appendChildText: [[CNTextLine alloc] initWithString: @"line11"]] ;
 	
-	CNText * text = [[CNText alloc] init] ;
-	text.rootSection = sec1 ;
-	
-	[text printToFile: stdout] ;
+	[sec1 printToFile: stdout] ;
 }
