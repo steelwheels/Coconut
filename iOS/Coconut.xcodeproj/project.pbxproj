@@ -8,11 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6AB1A3F506A0026EAA9 /* CNText.m */; };
-		052CE6B31A3F506A0026EAA9 /* CNTextElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6AD1A3F506A0026EAA9 /* CNTextElement.m */; };
 		052CE6B41A3F506A0026EAA9 /* CNTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */; };
 		052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6B11A3F506A0026EAA9 /* CNTextSection.m */; };
 		052CE6B61A3F512B0026EAA9 /* CNText.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052CE6AA1A3F506A0026EAA9 /* CNText.h */; };
-		052CE6B71A3F51300026EAA9 /* CNTextElement.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052CE6AC1A3F506A0026EAA9 /* CNTextElement.h */; };
 		052CE6B81A3F51340026EAA9 /* CNTextLine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052CE6AE1A3F506A0026EAA9 /* CNTextLine.h */; };
 		052CE6B91A3F51390026EAA9 /* CNTextSection.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052CE6B01A3F506A0026EAA9 /* CNTextSection.h */; };
 		053402A21A3B566C0093FF03 /* CNErrorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 053402A11A3B566C0093FF03 /* CNErrorExtension.m */; };
@@ -50,7 +48,6 @@
 			files = (
 				052CE6B91A3F51390026EAA9 /* CNTextSection.h in CopyFiles */,
 				052CE6B81A3F51340026EAA9 /* CNTextLine.h in CopyFiles */,
-				052CE6B71A3F51300026EAA9 /* CNTextElement.h in CopyFiles */,
 				052CE6B61A3F512B0026EAA9 /* CNText.h in CopyFiles */,
 				053402AA1A3B628C0093FF03 /* CNValue.h in CopyFiles */,
 				053402A91A3B62850093FF03 /* CNErrorExtension.h in CopyFiles */,
@@ -68,8 +65,6 @@
 /* Begin PBXFileReference section */
 		052CE6AA1A3F506A0026EAA9 /* CNText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNText.h; path = ../Source/Text/CNText.h; sourceTree = SOURCE_ROOT; };
 		052CE6AB1A3F506A0026EAA9 /* CNText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNText.m; path = ../Source/Text/CNText.m; sourceTree = SOURCE_ROOT; };
-		052CE6AC1A3F506A0026EAA9 /* CNTextElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextElement.h; path = ../Source/Text/CNTextElement.h; sourceTree = SOURCE_ROOT; };
-		052CE6AD1A3F506A0026EAA9 /* CNTextElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextElement.m; path = ../Source/Text/CNTextElement.m; sourceTree = SOURCE_ROOT; };
 		052CE6AE1A3F506A0026EAA9 /* CNTextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextLine.h; path = ../Source/Text/CNTextLine.h; sourceTree = SOURCE_ROOT; };
 		052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextLine.m; path = ../Source/Text/CNTextLine.m; sourceTree = SOURCE_ROOT; };
 		052CE6B01A3F506A0026EAA9 /* CNTextSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextSection.h; path = ../Source/Text/CNTextSection.h; sourceTree = SOURCE_ROOT; };
@@ -108,8 +103,6 @@
 			children = (
 				052CE6AA1A3F506A0026EAA9 /* CNText.h */,
 				052CE6AB1A3F506A0026EAA9 /* CNText.m */,
-				052CE6AC1A3F506A0026EAA9 /* CNTextElement.h */,
-				052CE6AD1A3F506A0026EAA9 /* CNTextElement.m */,
 				052CE6AE1A3F506A0026EAA9 /* CNTextLine.h */,
 				052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */,
 				052CE6B01A3F506A0026EAA9 /* CNTextSection.h */,
@@ -287,7 +280,6 @@
 				05D2C2AA1A34017B00F9F3DB /* CNList.m in Sources */,
 				052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */,
 				052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */,
-				052CE6B31A3F506A0026EAA9 /* CNTextElement.m in Sources */,
 				05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */,
 				05D2C2B41A3401BD00F9F3DB /* CNNode.m in Sources */,
 				052CE6B41A3F506A0026EAA9 /* CNTextLine.m in Sources */,
@@ -440,6 +432,7 @@
 				052CE6BD1A3F516A0026EAA9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		059D3DCA1A3400E700FAB027 /* Build configuration list for PBXProject "Coconut" */ = {
 			isa = XCConfigurationList;

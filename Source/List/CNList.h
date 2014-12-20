@@ -26,6 +26,8 @@ CNObjectInListItem(const struct CNListItem * src)
 	struct CNListItem *	lastItem ;
 }
 
++ (void) initialize ;
+
 - (id) init ;
 - (void) dealloc ;
 

@@ -13,7 +13,14 @@ allocateListItem(void) ;
 static void
 releaseListItem(struct CNListItem * dst) ;
 
+static NSLock *	sResourceLock  = nil ;
+
 @implementation CNList
+
++ (void) initialize
+{
+	sResourceLock = [[NSLock alloc] init] ;
+}
 
 - (id) init
 {
@@ -106,22 +113,11 @@ releaseListItem(struct CNListItem * dst) ;
 
 static struct CNListItem *	s_list_item_pool = NULL ;
 
-static inline NSLock *
-allocateLock(void)
-{
-	static NSLock *	s_resource_lock  = nil ;
-	if(s_resource_lock == NULL){
-		s_resource_lock = [[NSLock alloc] init] ;
-	}
-	return s_resource_lock ;
-}
-
 struct CNListItem *
 allocateListItem(void)
 {
 	struct CNListItem * targitem ;
-	NSLock * reslock = allocateLock() ;
-	[reslock lock] ; {
+	[sResourceLock lock] ; {
 		if(s_list_item_pool == NULL){
 			struct CNListItem * newitems = malloc(sizeof(struct CNListItem) * 256) ;
 			for(unsigned int i=0 ; i<256 ; i++){
@@ -133,15 +129,14 @@ allocateListItem(void)
 		targitem = s_list_item_pool ;
 		s_list_item_pool = targitem->nextItem ;
 		targitem->nextItem = NULL ;
-	} [reslock unlock] ;
+	} [sResourceLock unlock] ;
 	return targitem ;
 }
 
 static void
 releaseListItem(struct CNListItem * dst)
 {
-	NSLock * reslock = allocateLock() ;
-	[reslock lock] ; {
+	[sResourceLock lock] ; {
 		if(dst->object){
 			NSObject * dummyobj = (__bridge_transfer NSObject *) dst->object ;
 			dummyobj = nil ; /* release object */
@@ -149,7 +144,7 @@ releaseListItem(struct CNListItem * dst)
 		}
 		dst->nextItem = s_list_item_pool ;
 		s_list_item_pool = dst ;
-	} ; [reslock unlock] ;
+	} ; [sResourceLock unlock] ;
 }
 
 NSUInteger
