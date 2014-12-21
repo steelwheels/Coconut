@@ -33,7 +33,9 @@ static NSLock *	sResourceLock  = nil ;
 
 - (void) dealloc
 {
-	[self clear] ;
+	[self performSelectorOnMainThread: @selector(clear)
+			       withObject: nil
+			    waitUntilDone: NO] ;
 }
 
 - (NSUInteger) count
@@ -56,7 +58,7 @@ static NSLock *	sResourceLock  = nil ;
 	struct CNListItem * newitem = allocateListItem() ;
 	newitem->object = (__bridge_retained void *) object ;
 	newitem->nextItem = NULL ;
-	if(firstItem == nil){
+	if(firstItem == NULL){
 		firstItem = lastItem = newitem ;
 	} else {
 		lastItem->nextItem = newitem ;
@@ -69,7 +71,7 @@ static NSLock *	sResourceLock  = nil ;
 {
 	struct CNListItem * newitem = allocateListItem() ;
 	newitem->object = (__bridge_retained void *) object ;
-	if(firstItem == nil){
+	if(firstItem == NULL){
 		newitem->nextItem = NULL ;
 		firstItem = lastItem = newitem ;
 	} else {
@@ -86,8 +88,8 @@ static NSLock *	sResourceLock  = nil ;
 		NSObject * curobj = (__bridge_transfer NSObject *) curitem->object ;
 		curitem->object = NULL ;
 		firstItem = curitem->nextItem ;
-		if(firstItem == nil){
-			lastItem = nil ;
+		if(firstItem == NULL){
+			lastItem = NULL ;
 		}
 		itemCount-- ;
 		releaseListItem(curitem) ;
