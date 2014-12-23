@@ -1,11 +1,11 @@
 /**
- * @file	CNErrorExtension.m
+ * @file	CNError.m
  * @brief	Extend NSError class
  * @par Copyright
  *   Copyright (C) 2014 Steel Wheels Project
  */
 
-#import "CNErrorExtension.h"
+#import "CNError.h"
 
 static NSString * s_errorDomain = @"github.com.steelwheels.Coconut" ;
 

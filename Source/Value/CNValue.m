@@ -6,7 +6,7 @@
  */
 
 #import "CNValue.h"
-#import "CNErrorExtension.h"
+#import "CNError.h"
 
 static NSError *
 formatError(CNValueType type, NSString * param) ;

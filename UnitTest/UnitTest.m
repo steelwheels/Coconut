@@ -16,10 +16,11 @@ int main(int argc, const char * argv[]) {
 	    // insert code here...
 	    printf("UnitTest of KiwiData framework\n");
 		
-		printTitle("CNErrorExtension") ;	testError() ;
-		printTitle("CNList") ;			testList() ;
-		printTitle("CNValue") ;			testValue() ;
-		printTitle("CNText") ;			testText() ;
+		printTitle("CNError") ;		testError() ;
+		printTitle("CNList") ;		testList() ;
+		printTitle("CNValue") ;		testValue() ;
+		printTitle("CNText") ;		testText() ;
+		printTitle("CNURL") ;		testURL() ;
 	}
     return 0;
 }

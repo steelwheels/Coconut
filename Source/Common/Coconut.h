@@ -13,6 +13,7 @@ FOUNDATION_EXPORT double KiwiDataVersionNumber;
 //! Project version string for KiwiData.
 FOUNDATION_EXPORT const unsigned char KiwiDataVersionString[];
 
+#import "CNError.h"
 #import "CNValue.h"
 #import "CNList.h"
 #import "CNTextSection.h"
@@ -21,7 +22,4 @@ FOUNDATION_EXPORT const unsigned char KiwiDataVersionString[];
 #import "CNGraph.h"
 #import "CNNode.h"
 #import "CNEdge.h"
-
-#import "CNErrorExtension.h"
-
-
+#import "CNURL.h"

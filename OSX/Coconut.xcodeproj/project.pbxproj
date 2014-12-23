@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		051EB9501A3C121800B0FBC0 /* CNErrorExtension.h in Headers */ = {isa = PBXBuildFile; fileRef = 051EB94E1A3C121800B0FBC0 /* CNErrorExtension.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		051EB9511A3C121800B0FBC0 /* CNErrorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */; };
+		051EB9501A3C121800B0FBC0 /* CNError.h in Headers */ = {isa = PBXBuildFile; fileRef = 051EB94E1A3C121800B0FBC0 /* CNError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		051EB9511A3C121800B0FBC0 /* CNError.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB94F1A3C121800B0FBC0 /* CNError.m */; };
 		051EB9531A3C12E800B0FBC0 /* UTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9521A3C12E800B0FBC0 /* UTError.m */; };
 		051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9541A3C171D00B0FBC0 /* UTValue.m */; };
 		056DC07C1A3F5297002F7EF9 /* UTText.m in Sources */ = {isa = PBXBuildFile; fileRef = 056DC07B1A3F5297002F7EF9 /* UTText.m */; };
@@ -33,6 +33,9 @@
 		05A4DF3A1A33E82200C912F9 /* CNGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A4DF341A33E82200C912F9 /* CNGraph.m */; };
 		05A4DF3B1A33E82200C912F9 /* CNNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A4DF351A33E82200C912F9 /* CNNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05A4DF3C1A33E82200C912F9 /* CNNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 05A4DF361A33E82200C912F9 /* CNNode.m */; };
+		05F63BF71A496AA900086CBE /* CNURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F63BF51A496AA900086CBE /* CNURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05F63BF81A496AA900086CBE /* CNURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F63BF61A496AA900086CBE /* CNURL.m */; };
+		05F63BFA1A49800C00086CBE /* UTURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F63BF91A49800C00086CBE /* UTURL.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,8 +75,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		051EB94E1A3C121800B0FBC0 /* CNErrorExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorExtension.h; path = ../Source/Error/CNErrorExtension.h; sourceTree = "<group>"; };
-		051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorExtension.m; path = ../Source/Error/CNErrorExtension.m; sourceTree = "<group>"; };
+		051EB94E1A3C121800B0FBC0 /* CNError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNError.h; path = ../Source/Error/CNError.h; sourceTree = "<group>"; };
+		051EB94F1A3C121800B0FBC0 /* CNError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNError.m; path = ../Source/Error/CNError.m; sourceTree = "<group>"; };
 		051EB9521A3C12E800B0FBC0 /* UTError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTError.m; path = ../UnitTest/UTError.m; sourceTree = SOURCE_ROOT; };
 		051EB9541A3C171D00B0FBC0 /* UTValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTValue.m; path = ../UnitTest/UTValue.m; sourceTree = SOURCE_ROOT; };
 		056DC07B1A3F5297002F7EF9 /* UTText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTText.m; path = ../UnitTest/UTText.m; sourceTree = SOURCE_ROOT; };
@@ -103,6 +106,9 @@
 		05A4DF361A33E82200C912F9 /* CNNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNNode.m; path = ../Source/Graph/CNNode.m; sourceTree = "<group>"; };
 		05EF37271A33DBE400723243 /* Coconut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Coconut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EF372B1A33DBE400723243 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
+		05F63BF51A496AA900086CBE /* CNURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNURL.h; path = ../Source/File/CNURL.h; sourceTree = "<group>"; };
+		05F63BF61A496AA900086CBE /* CNURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNURL.m; path = ../Source/File/CNURL.m; sourceTree = "<group>"; };
+		05F63BF91A49800C00086CBE /* UTURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTURL.m; path = ../UnitTest/UTURL.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,11 +133,11 @@
 		051EB94D1A3C120600B0FBC0 /* Error */ = {
 			isa = PBXGroup;
 			children = (
-				051EB94E1A3C121800B0FBC0 /* CNErrorExtension.h */,
-				051EB94F1A3C121800B0FBC0 /* CNErrorExtension.m */,
+				051EB94E1A3C121800B0FBC0 /* CNError.h */,
+				051EB94F1A3C121800B0FBC0 /* CNError.m */,
 			);
 			name = Error;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		0557AA811A33DD4200C8B4E7 /* Source */ = {
 			isa = PBXGroup;
@@ -142,6 +148,7 @@
 				05A4DF2B1A33E7F700C912F9 /* Value */,
 				058E6ED51A3DA0D6009EE505 /* Text */,
 				05A4DF301A33E80F00C912F9 /* Graph */,
+				05F63BF41A49689200086CBE /* File */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -157,7 +164,7 @@
 				058E6EDB1A3DA365009EE505 /* CNText.m */,
 			);
 			name = Text;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		059D3DAF1A33FE5B00FAB027 /* UnitTest */ = {
 			isa = PBXGroup;
@@ -168,10 +175,11 @@
 				059D3DB81A33FE8600FAB027 /* UTList.m */,
 				051EB9541A3C171D00B0FBC0 /* UTValue.m */,
 				056DC07B1A3F5297002F7EF9 /* UTText.m */,
+				05F63BF91A49800C00086CBE /* UTURL.m */,
 				059D3DC51A34003300FAB027 /* Supporting Files */,
 			);
 			path = UnitTest;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		059D3DC51A34003300FAB027 /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -189,7 +197,7 @@
 				05A4DF221A33E5C900C912F9 /* CNForwarders.h */,
 			);
 			name = Common;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		05A4DF261A33E5EC00C912F9 /* List */ = {
 			isa = PBXGroup;
@@ -198,7 +206,7 @@
 				05A4DF281A33E5FC00C912F9 /* CNList.m */,
 			);
 			name = List;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		05A4DF2B1A33E7F700C912F9 /* Value */ = {
 			isa = PBXGroup;
@@ -207,7 +215,7 @@
 				05A4DF2D1A33E80900C912F9 /* CNValue.m */,
 			);
 			name = Value;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		05A4DF301A33E80F00C912F9 /* Graph */ = {
 			isa = PBXGroup;
@@ -220,7 +228,7 @@
 				05A4DF361A33E82200C912F9 /* CNNode.m */,
 			);
 			name = Graph;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		05EF371D1A33DBE400723243 = {
 			isa = PBXGroup;
@@ -257,6 +265,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		05F63BF41A49689200086CBE /* File */ = {
+			isa = PBXGroup;
+			children = (
+				05F63BF51A496AA900086CBE /* CNURL.h */,
+				05F63BF61A496AA900086CBE /* CNURL.m */,
+			);
+			name = File;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -264,10 +281,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05F63BF71A496AA900086CBE /* CNURL.h in Headers */,
 				058E6EE41A3DA689009EE505 /* CNTextSection.h in Headers */,
 				058E6EE01A3DA565009EE505 /* CNTextLine.h in Headers */,
 				058E6EDC1A3DA365009EE505 /* CNText.h in Headers */,
-				051EB9501A3C121800B0FBC0 /* CNErrorExtension.h in Headers */,
+				051EB9501A3C121800B0FBC0 /* CNError.h in Headers */,
 				05A4DF291A33E5FC00C912F9 /* CNList.h in Headers */,
 				05A4DF2E1A33E80900C912F9 /* CNValue.h in Headers */,
 				05A4DF391A33E82200C912F9 /* CNGraph.h in Headers */,
@@ -408,6 +426,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05F63BFA1A49800C00086CBE /* UTURL.m in Sources */,
 				059D3DBA1A33FE8600FAB027 /* UTList.m in Sources */,
 				059D3DB91A33FE8600FAB027 /* UnitTest.m in Sources */,
 				051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */,
@@ -420,6 +439,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05F63BF81A496AA900086CBE /* CNURL.m in Sources */,
 				05A4DF2F1A33E80900C912F9 /* CNValue.m in Sources */,
 				058E6EE51A3DA689009EE505 /* CNTextSection.m in Sources */,
 				058E6EDD1A3DA365009EE505 /* CNText.m in Sources */,
@@ -428,7 +448,7 @@
 				058E6EE11A3DA565009EE505 /* CNTextLine.m in Sources */,
 				05A4DF3A1A33E82200C912F9 /* CNGraph.m in Sources */,
 				05A4DF3C1A33E82200C912F9 /* CNNode.m in Sources */,
-				051EB9511A3C121800B0FBC0 /* CNErrorExtension.m in Sources */,
+				051EB9511A3C121800B0FBC0 /* CNError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -460,9 +480,15 @@
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				OTHER_CFLAGS = (
+					"-W",
+					"-Wall",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -474,6 +500,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				OTHER_CFLAGS = (
+					"-W",
+					"-Wall",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -620,6 +652,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
@@ -643,6 +676,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
