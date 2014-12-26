@@ -13,15 +13,21 @@
 		052CE6B61A3F512B0026EAA9 /* CNText.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052CE6AA1A3F506A0026EAA9 /* CNText.h */; };
 		052CE6B81A3F51340026EAA9 /* CNTextLine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052CE6AE1A3F506A0026EAA9 /* CNTextLine.h */; };
 		052CE6B91A3F51390026EAA9 /* CNTextSection.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052CE6B01A3F506A0026EAA9 /* CNTextSection.h */; };
-		053402A21A3B566C0093FF03 /* CNErrorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 053402A11A3B566C0093FF03 /* CNErrorExtension.m */; };
 		053402A31A3B62680093FF03 /* CNForwarders.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2A51A34013800F9F3DB /* CNForwarders.h */; };
 		053402A41A3B626D0093FF03 /* Coconut.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2A61A34013800F9F3DB /* Coconut.h */; };
 		053402A51A3B62710093FF03 /* CNList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2A81A34017B00F9F3DB /* CNList.h */; };
 		053402A61A3B62760093FF03 /* CNEdge.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2AC1A3401BD00F9F3DB /* CNEdge.h */; };
 		053402A71A3B627A0093FF03 /* CNGraph.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2AE1A3401BD00F9F3DB /* CNGraph.h */; };
 		053402A81A3B627E0093FF03 /* CNNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2B01A3401BD00F9F3DB /* CNNode.h */; };
-		053402A91A3B62850093FF03 /* CNErrorExtension.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053402A01A3B566C0093FF03 /* CNErrorExtension.h */; };
 		053402AA1A3B628C0093FF03 /* CNValue.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2B61A34026200F9F3DB /* CNValue.h */; };
+		058A67BB1A4D1B1400033BEB /* CNInputFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67B61A4D1B1400033BEB /* CNInputFile.m */; };
+		058A67BC1A4D1B1400033BEB /* CNInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67B81A4D1B1400033BEB /* CNInputStream.m */; };
+		058A67BD1A4D1B1400033BEB /* CNURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67BA1A4D1B1400033BEB /* CNURL.m */; };
+		058A67BE1A4D1B4000033BEB /* CNInputFile.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 058A67B51A4D1B1400033BEB /* CNInputFile.h */; };
+		058A67C11A4D1B6000033BEB /* CNError.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67C01A4D1B6000033BEB /* CNError.m */; };
+		058A67C21A4D1B6A00033BEB /* CNError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 058A67BF1A4D1B6000033BEB /* CNError.h */; };
+		058A67C31A4D1B7000033BEB /* CNInputStream.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 058A67B71A4D1B1400033BEB /* CNInputStream.h */; };
+		058A67C41A4D1B7600033BEB /* CNURL.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 058A67B91A4D1B1400033BEB /* CNURL.h */; };
 		05D2C2AA1A34017B00F9F3DB /* CNList.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2A91A34017B00F9F3DB /* CNList.m */; };
 		05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2AD1A3401BD00F9F3DB /* CNEdge.m */; };
 		05D2C2B31A3401BD00F9F3DB /* CNGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2AF1A3401BD00F9F3DB /* CNGraph.m */; };
@@ -46,11 +52,14 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				058A67C41A4D1B7600033BEB /* CNURL.h in CopyFiles */,
+				058A67C31A4D1B7000033BEB /* CNInputStream.h in CopyFiles */,
+				058A67C21A4D1B6A00033BEB /* CNError.h in CopyFiles */,
+				058A67BE1A4D1B4000033BEB /* CNInputFile.h in CopyFiles */,
 				052CE6B91A3F51390026EAA9 /* CNTextSection.h in CopyFiles */,
 				052CE6B81A3F51340026EAA9 /* CNTextLine.h in CopyFiles */,
 				052CE6B61A3F512B0026EAA9 /* CNText.h in CopyFiles */,
 				053402AA1A3B628C0093FF03 /* CNValue.h in CopyFiles */,
-				053402A91A3B62850093FF03 /* CNErrorExtension.h in CopyFiles */,
 				053402A81A3B627E0093FF03 /* CNNode.h in CopyFiles */,
 				053402A71A3B627A0093FF03 /* CNGraph.h in CopyFiles */,
 				053402A61A3B62760093FF03 /* CNEdge.h in CopyFiles */,
@@ -70,8 +79,14 @@
 		052CE6B01A3F506A0026EAA9 /* CNTextSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextSection.h; path = ../Source/Text/CNTextSection.h; sourceTree = SOURCE_ROOT; };
 		052CE6B11A3F506A0026EAA9 /* CNTextSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextSection.m; path = ../Source/Text/CNTextSection.m; sourceTree = SOURCE_ROOT; };
 		052CE6C01A3F51A00026EAA9 /* install.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = install.mk; sourceTree = "<group>"; };
-		053402A01A3B566C0093FF03 /* CNErrorExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorExtension.h; path = ../Source/Error/CNErrorExtension.h; sourceTree = SOURCE_ROOT; };
-		053402A11A3B566C0093FF03 /* CNErrorExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorExtension.m; path = ../Source/Error/CNErrorExtension.m; sourceTree = SOURCE_ROOT; };
+		058A67B51A4D1B1400033BEB /* CNInputFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNInputFile.h; path = ../Source/File/CNInputFile.h; sourceTree = "<group>"; };
+		058A67B61A4D1B1400033BEB /* CNInputFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNInputFile.m; path = ../Source/File/CNInputFile.m; sourceTree = "<group>"; };
+		058A67B71A4D1B1400033BEB /* CNInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNInputStream.h; path = ../Source/File/CNInputStream.h; sourceTree = "<group>"; };
+		058A67B81A4D1B1400033BEB /* CNInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNInputStream.m; path = ../Source/File/CNInputStream.m; sourceTree = "<group>"; };
+		058A67B91A4D1B1400033BEB /* CNURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNURL.h; path = ../Source/File/CNURL.h; sourceTree = "<group>"; };
+		058A67BA1A4D1B1400033BEB /* CNURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNURL.m; path = ../Source/File/CNURL.m; sourceTree = "<group>"; };
+		058A67BF1A4D1B6000033BEB /* CNError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNError.h; path = ../Source/Error/CNError.h; sourceTree = "<group>"; };
+		058A67C01A4D1B6000033BEB /* CNError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNError.m; path = ../Source/Error/CNError.m; sourceTree = "<group>"; };
 		059D3DCF1A3400E700FAB027 /* libCoconut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCoconut.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		05D2C2A51A34013800F9F3DB /* CNForwarders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNForwarders.h; path = ../Source/Common/CNForwarders.h; sourceTree = SOURCE_ROOT; };
 		05D2C2A61A34013800F9F3DB /* Coconut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Coconut.h; path = ../Source/Common/Coconut.h; sourceTree = SOURCE_ROOT; };
@@ -122,11 +137,24 @@
 		0534029F1A3B563D0093FF03 /* Error */ = {
 			isa = PBXGroup;
 			children = (
-				053402A01A3B566C0093FF03 /* CNErrorExtension.h */,
-				053402A11A3B566C0093FF03 /* CNErrorExtension.m */,
+				058A67BF1A4D1B6000033BEB /* CNError.h */,
+				058A67C01A4D1B6000033BEB /* CNError.m */,
 			);
 			name = Error;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
+		};
+		058A67B41A4D1AFA00033BEB /* File */ = {
+			isa = PBXGroup;
+			children = (
+				058A67B51A4D1B1400033BEB /* CNInputFile.h */,
+				058A67B61A4D1B1400033BEB /* CNInputFile.m */,
+				058A67B71A4D1B1400033BEB /* CNInputStream.h */,
+				058A67B81A4D1B1400033BEB /* CNInputStream.m */,
+				058A67B91A4D1B1400033BEB /* CNURL.h */,
+				058A67BA1A4D1B1400033BEB /* CNURL.m */,
+			);
+			name = File;
+			sourceTree = SOURCE_ROOT;
 		};
 		059D3DC61A3400E700FAB027 = {
 			isa = PBXGroup;
@@ -154,6 +182,7 @@
 				05D2C2A71A34016100F9F3DB /* List */,
 				05D2C2AB1A3401A900F9F3DB /* Graph */,
 				05D2C2B51A34024E00F9F3DB /* Value */,
+				058A67B41A4D1AFA00033BEB /* File */,
 			);
 			name = Source;
 			path = Coconut;
@@ -280,12 +309,15 @@
 				05D2C2AA1A34017B00F9F3DB /* CNList.m in Sources */,
 				052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */,
 				052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */,
+				058A67BB1A4D1B1400033BEB /* CNInputFile.m in Sources */,
 				05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */,
+				058A67BC1A4D1B1400033BEB /* CNInputStream.m in Sources */,
+				058A67BD1A4D1B1400033BEB /* CNURL.m in Sources */,
 				05D2C2B41A3401BD00F9F3DB /* CNNode.m in Sources */,
 				052CE6B41A3F506A0026EAA9 /* CNTextLine.m in Sources */,
 				05D2C2B81A34026200F9F3DB /* CNValue.m in Sources */,
 				05D2C2B31A3401BD00F9F3DB /* CNGraph.m in Sources */,
-				053402A21A3B566C0093FF03 /* CNErrorExtension.m in Sources */,
+				058A67C11A4D1B6000033BEB /* CNError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

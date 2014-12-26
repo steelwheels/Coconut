@@ -19,6 +19,14 @@ static NSString * s_errorDomain = @"github.com.steelwheels.Coconut" ;
 				      userInfo: errorinfo] ;
 }
 
++ (NSError *) fileErrorWithMessage: (NSString *) message
+{
+	NSDictionary * errorinfo = @{NSLocalizedDescriptionKey: message};
+	return [[NSError alloc] initWithDomain: s_errorDomain
+					  code: CNFileError
+				      userInfo: errorinfo] ;
+}
+
 - (void) printToFile: (FILE *) outfp
 {
 	fputs("[Error] ", outfp) ;

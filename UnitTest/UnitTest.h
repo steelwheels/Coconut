@@ -12,5 +12,6 @@ void testError(void) ;
 void testValue(void) ;
 void testText(void) ;
 void testURL(void) ;
+void testFile(void) ;
 
 

@@ -21,6 +21,7 @@ int main(int argc, const char * argv[]) {
 		printTitle("CNValue") ;		testValue() ;
 		printTitle("CNText") ;		testText() ;
 		printTitle("CNURL") ;		testURL() ;
+		printTitle("CNInputFile") ;	testFile() ;
 	}
     return 0;
 }

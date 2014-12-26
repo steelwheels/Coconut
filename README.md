@@ -21,9 +21,9 @@ This library has following kind of classes:
 	* Node : Graph node (CNNode)
 	* Edge : Graph edge (CNEdge)
 * Text  : Data structures to present text structure
-	* Text        : Super class of all the other text classes
-	* TextLine    : Text line class
-	* TextSection : Text Section class
+	* Text        : Super class of all the other text classes (CNText)
+	* TextLine    : Text line class (CNTextLine)
+	* TextSection : Text Section class (CNTextSection)
 * File  : Extend NSURL class methods
 * Error : Extend NSError class methods
 

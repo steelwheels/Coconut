@@ -8,12 +8,14 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	CNParserError
+	CNParserError,
+	CNFileError
 } CNErrorCode ;
 
 @interface NSError (CNErrorExtension)
 
 + (NSError *) parseErrorWithMessage: (NSString *) message ;
++ (NSError *) fileErrorWithMessage: (NSString *) message ;
 - (void) printToFile: (FILE *) outfp ;
 
 @end
