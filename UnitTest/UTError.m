@@ -10,6 +10,10 @@
 void
 testError(void)
 {
-	NSError * error = [NSError parseErrorWithMessage: @"Test message"] ;
-	[error printToFile: stdout] ;
+	NSError * error0 = [NSError parseErrorWithMessage: @"Test message"] ;
+	[error0 printToFile: stdout] ;
+	
+	NSError * error1 = [NSError memoryErrorWithKind: CNMemoryAllocationError
+					     atFunction: "__func1__"] ;
+	[error1 printToFile: stdout] ;
 }

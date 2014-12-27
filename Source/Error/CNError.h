@@ -9,13 +9,21 @@
 
 typedef enum {
 	CNParserError,
-	CNFileError
+	CNFileError,
+	CNMemoryError
 } CNErrorCode ;
+
+typedef enum {
+	CNMemoryAllocationError
+} CNMemoryErrorKind ;
 
 @interface NSError (CNErrorExtension)
 
 + (NSError *) parseErrorWithMessage: (NSString *) message ;
 + (NSError *) fileErrorWithMessage: (NSString *) message ;
++ (NSError *) memoryErrorWithMessage: (NSString *) message atFunction: (const char *) funcname ;
++ (NSError *) memoryErrorWithKind: (CNMemoryErrorKind) kind atFunction: (const char *) funcname ;
+
 - (void) printToFile: (FILE *) outfp ;
 
 @end

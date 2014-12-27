@@ -11,6 +11,7 @@ void testList(void) ;
 void testError(void) ;
 void testValue(void) ;
 void testText(void) ;
+void testRegularExpression(void) ;
 void testURL(void) ;
 void testFile(void) ;
 
