@@ -8,12 +8,22 @@
 #import "CNError.h"
 
 static NSString * s_errorDomain = @"github.com.steelwheels.Coconut" ;
+static NSString * s_errorLocationKey = @"errorLocation" ;
 
 @implementation NSError (CNErrorExtension)
 
 + (NSError *) parseErrorWithMessage: (NSString *) message
 {
 	NSDictionary * errorinfo = @{NSLocalizedDescriptionKey: message};
+	return [[NSError alloc] initWithDomain: s_errorDomain
+					  code: CNParserError
+				      userInfo: errorinfo] ;
+}
+
++ (NSError *) parseErrorWithMessage: (NSString *) message withLocation: (CNErrorLocation *) location
+{
+	NSDictionary * errorinfo = @{NSLocalizedDescriptionKey: message,
+				     s_errorLocationKey: location} ;
 	return [[NSError alloc] initWithDomain: s_errorDomain
 					  code: CNParserError
 				      userInfo: errorinfo] ;

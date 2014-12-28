@@ -5,6 +5,11 @@
  *   Copyright (C) 2014 Steel Wheels Project
  */
 
+/* Error */
+@class CNError ;
+@class CNErrorLocation ;
+@class CNErrorList ;
+
 /* Value */
 @class CNValue ;
 

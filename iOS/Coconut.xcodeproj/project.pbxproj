@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05164EF81A4F9C2700048DE5 /* CNErrorLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 05164EF71A4F9C2700048DE5 /* CNErrorLocation.m */; };
+		05164EF91A4F9C3700048DE5 /* CNErrorLocation.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05164EF61A4F9C2700048DE5 /* CNErrorLocation.h */; };
+		05164EFC1A4FA65500048DE5 /* CNErrorList.m in Sources */ = {isa = PBXBuildFile; fileRef = 05164EFB1A4FA65500048DE5 /* CNErrorList.m */; };
+		05164EFD1A4FA78E00048DE5 /* CNErrorList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05164EFA1A4FA65500048DE5 /* CNErrorList.h */; };
 		052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6AB1A3F506A0026EAA9 /* CNText.m */; };
 		052CE6B41A3F506A0026EAA9 /* CNTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */; };
 		052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6B11A3F506A0026EAA9 /* CNTextSection.m */; };
@@ -52,6 +56,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				05164EFD1A4FA78E00048DE5 /* CNErrorList.h in CopyFiles */,
+				05164EF91A4F9C3700048DE5 /* CNErrorLocation.h in CopyFiles */,
 				058A67C41A4D1B7600033BEB /* CNURL.h in CopyFiles */,
 				058A67C31A4D1B7000033BEB /* CNInputStream.h in CopyFiles */,
 				058A67C21A4D1B6A00033BEB /* CNError.h in CopyFiles */,
@@ -72,6 +78,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05164EF61A4F9C2700048DE5 /* CNErrorLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorLocation.h; path = ../Source/Error/CNErrorLocation.h; sourceTree = "<group>"; };
+		05164EF71A4F9C2700048DE5 /* CNErrorLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorLocation.m; path = ../Source/Error/CNErrorLocation.m; sourceTree = "<group>"; };
+		05164EFA1A4FA65500048DE5 /* CNErrorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorList.h; path = ../Source/Error/CNErrorList.h; sourceTree = "<group>"; };
+		05164EFB1A4FA65500048DE5 /* CNErrorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorList.m; path = ../Source/Error/CNErrorList.m; sourceTree = "<group>"; };
 		052CE6AA1A3F506A0026EAA9 /* CNText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNText.h; path = ../Source/Text/CNText.h; sourceTree = SOURCE_ROOT; };
 		052CE6AB1A3F506A0026EAA9 /* CNText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNText.m; path = ../Source/Text/CNText.m; sourceTree = SOURCE_ROOT; };
 		052CE6AE1A3F506A0026EAA9 /* CNTextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextLine.h; path = ../Source/Text/CNTextLine.h; sourceTree = SOURCE_ROOT; };
@@ -139,6 +149,10 @@
 			children = (
 				058A67BF1A4D1B6000033BEB /* CNError.h */,
 				058A67C01A4D1B6000033BEB /* CNError.m */,
+				05164EF61A4F9C2700048DE5 /* CNErrorLocation.h */,
+				05164EF71A4F9C2700048DE5 /* CNErrorLocation.m */,
+				05164EFA1A4FA65500048DE5 /* CNErrorList.h */,
+				05164EFB1A4FA65500048DE5 /* CNErrorList.m */,
 			);
 			name = Error;
 			sourceTree = SOURCE_ROOT;
@@ -313,7 +327,9 @@
 				05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */,
 				058A67BC1A4D1B1400033BEB /* CNInputStream.m in Sources */,
 				058A67BD1A4D1B1400033BEB /* CNURL.m in Sources */,
+				05164EF81A4F9C2700048DE5 /* CNErrorLocation.m in Sources */,
 				05D2C2B41A3401BD00F9F3DB /* CNNode.m in Sources */,
+				05164EFC1A4FA65500048DE5 /* CNErrorList.m in Sources */,
 				052CE6B41A3F506A0026EAA9 /* CNTextLine.m in Sources */,
 				05D2C2B81A34026200F9F3DB /* CNValue.m in Sources */,
 				05D2C2B31A3401BD00F9F3DB /* CNGraph.m in Sources */,

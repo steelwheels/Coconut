@@ -6,6 +6,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "CNForwarders.h"
 
 typedef enum {
 	CNParserError,
@@ -20,6 +21,7 @@ typedef enum {
 @interface NSError (CNErrorExtension)
 
 + (NSError *) parseErrorWithMessage: (NSString *) message ;
++ (NSError *) parseErrorWithMessage: (NSString *) message withLocation: (CNErrorLocation *) location ;
 + (NSError *) fileErrorWithMessage: (NSString *) message ;
 + (NSError *) memoryErrorWithMessage: (NSString *) message atFunction: (const char *) funcname ;
 + (NSError *) memoryErrorWithKind: (CNMemoryErrorKind) kind atFunction: (const char *) funcname ;

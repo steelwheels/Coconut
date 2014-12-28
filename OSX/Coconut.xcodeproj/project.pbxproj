@@ -14,6 +14,8 @@
 		054EAB641A4ED41400516EA3 /* CNRegularExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 054EAB621A4ED41400516EA3 /* CNRegularExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054EAB651A4ED41400516EA3 /* CNRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 054EAB631A4ED41400516EA3 /* CNRegularExpression.m */; };
 		054EAB671A4EDBDB00516EA3 /* UTRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 054EAB661A4EDBDB00516EA3 /* UTRegularExpression.m */; };
+		056BB0781A4F9B4000F068DC /* CNErrorLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 056BB0761A4F9B4000F068DC /* CNErrorLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		056BB0791A4F9B4000F068DC /* CNErrorLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 056BB0771A4F9B4000F068DC /* CNErrorLocation.m */; };
 		056DC07C1A3F5297002F7EF9 /* UTText.m in Sources */ = {isa = PBXBuildFile; fileRef = 056DC07B1A3F5297002F7EF9 /* UTText.m */; };
 		058E6EDC1A3DA365009EE505 /* CNText.h in Headers */ = {isa = PBXBuildFile; fileRef = 058E6EDA1A3DA365009EE505 /* CNText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		058E6EDD1A3DA365009EE505 /* CNText.m in Sources */ = {isa = PBXBuildFile; fileRef = 058E6EDB1A3DA365009EE505 /* CNText.m */; };
@@ -41,6 +43,8 @@
 		05B26A1F1A4C709A00A0C5F8 /* CNInputFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B26A1D1A4C709A00A0C5F8 /* CNInputFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B26A201A4C709A00A0C5F8 /* CNInputFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B26A1E1A4C709A00A0C5F8 /* CNInputFile.m */; };
 		05B26A311A4C765C00A0C5F8 /* UTFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B26A301A4C765C00A0C5F8 /* UTFile.m */; };
+		05EF33191A4FA7B500B26136 /* CNErrorList.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EF33171A4FA7B500B26136 /* CNErrorList.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05EF331A1A4FA7B500B26136 /* CNErrorList.m in Sources */ = {isa = PBXBuildFile; fileRef = 05EF33181A4FA7B500B26136 /* CNErrorList.m */; };
 		05F63BF71A496AA900086CBE /* CNURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F63BF51A496AA900086CBE /* CNURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05F63BF81A496AA900086CBE /* CNURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F63BF61A496AA900086CBE /* CNURL.m */; };
 		05F63BFA1A49800C00086CBE /* UTURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F63BF91A49800C00086CBE /* UTURL.m */; };
@@ -90,6 +94,8 @@
 		054EAB621A4ED41400516EA3 /* CNRegularExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNRegularExpression.h; path = ../Source/Text/CNRegularExpression.h; sourceTree = "<group>"; };
 		054EAB631A4ED41400516EA3 /* CNRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNRegularExpression.m; path = ../Source/Text/CNRegularExpression.m; sourceTree = "<group>"; };
 		054EAB661A4EDBDB00516EA3 /* UTRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTRegularExpression.m; path = ../UnitTest/UTRegularExpression.m; sourceTree = SOURCE_ROOT; };
+		056BB0761A4F9B4000F068DC /* CNErrorLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorLocation.h; path = ../Source/Error/CNErrorLocation.h; sourceTree = "<group>"; };
+		056BB0771A4F9B4000F068DC /* CNErrorLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorLocation.m; path = ../Source/Error/CNErrorLocation.m; sourceTree = "<group>"; };
 		056DC07B1A3F5297002F7EF9 /* UTText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTText.m; path = ../UnitTest/UTText.m; sourceTree = SOURCE_ROOT; };
 		058E6EDA1A3DA365009EE505 /* CNText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNText.h; path = ../Source/Text/CNText.h; sourceTree = "<group>"; };
 		058E6EDB1A3DA365009EE505 /* CNText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNText.m; path = ../Source/Text/CNText.m; sourceTree = "<group>"; };
@@ -120,6 +126,8 @@
 		05B26A1D1A4C709A00A0C5F8 /* CNInputFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNInputFile.h; path = ../Source/File/CNInputFile.h; sourceTree = "<group>"; };
 		05B26A1E1A4C709A00A0C5F8 /* CNInputFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNInputFile.m; path = ../Source/File/CNInputFile.m; sourceTree = "<group>"; };
 		05B26A301A4C765C00A0C5F8 /* UTFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTFile.m; path = ../UnitTest/UTFile.m; sourceTree = SOURCE_ROOT; };
+		05EF33171A4FA7B500B26136 /* CNErrorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorList.h; path = ../Source/Error/CNErrorList.h; sourceTree = "<group>"; };
+		05EF33181A4FA7B500B26136 /* CNErrorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorList.m; path = ../Source/Error/CNErrorList.m; sourceTree = "<group>"; };
 		05EF37271A33DBE400723243 /* Coconut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Coconut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EF372B1A33DBE400723243 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		05F63BF51A496AA900086CBE /* CNURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNURL.h; path = ../Source/File/CNURL.h; sourceTree = "<group>"; };
@@ -151,6 +159,10 @@
 			children = (
 				051EB94E1A3C121800B0FBC0 /* CNError.h */,
 				051EB94F1A3C121800B0FBC0 /* CNError.m */,
+				056BB0761A4F9B4000F068DC /* CNErrorLocation.h */,
+				056BB0771A4F9B4000F068DC /* CNErrorLocation.m */,
+				05EF33171A4FA7B500B26136 /* CNErrorList.h */,
+				05EF33181A4FA7B500B26136 /* CNErrorList.m */,
 			);
 			name = Error;
 			sourceTree = SOURCE_ROOT;
@@ -305,6 +317,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05EF33191A4FA7B500B26136 /* CNErrorList.h in Headers */,
+				056BB0781A4F9B4000F068DC /* CNErrorLocation.h in Headers */,
 				054EAB641A4ED41400516EA3 /* CNRegularExpression.h in Headers */,
 				05B26A1F1A4C709A00A0C5F8 /* CNInputFile.h in Headers */,
 				05B26A1B1A4C6F5200A0C5F8 /* CNInputStream.h in Headers */,
@@ -478,6 +492,8 @@
 				05B26A1C1A4C6F5200A0C5F8 /* CNInputStream.m in Sources */,
 				05A4DF2A1A33E5FC00C912F9 /* CNList.m in Sources */,
 				058E6EE11A3DA565009EE505 /* CNTextLine.m in Sources */,
+				056BB0791A4F9B4000F068DC /* CNErrorLocation.m in Sources */,
+				05EF331A1A4FA7B500B26136 /* CNErrorList.m in Sources */,
 				05A4DF3A1A33E82200C912F9 /* CNGraph.m in Sources */,
 				05A4DF3C1A33E82200C912F9 /* CNNode.m in Sources */,
 				051EB9511A3C121800B0FBC0 /* CNError.m in Sources */,
