@@ -9,9 +9,10 @@
 
 static struct CNListItem *
 allocateListItem(void) ;
-
 static void
 releaseListItem(struct CNListItem * dst) ;
+static void
+releaseAllListItem(struct CNListItem * firstitem, struct CNListItem * lastitem) ;
 
 static NSLock *	sResourceLock  = nil ;
 
@@ -33,9 +34,7 @@ static NSLock *	sResourceLock  = nil ;
 
 - (void) dealloc
 {
-	[self performSelectorOnMainThread: @selector(clear)
-			       withObject: nil
-			    waitUntilDone: NO] ;
+	releaseAllListItem(firstItem, lastItem) ;
 }
 
 - (NSUInteger) count
@@ -101,12 +100,7 @@ static NSLock *	sResourceLock  = nil ;
 
 - (void) clear
 {
-	struct CNListItem * item = firstItem ;
-	struct CNListItem * nextitem ;
-	for( ; item ; item = nextitem){
-		nextitem = item->nextItem ;
-		releaseListItem(item) ;
-	}
+	releaseAllListItem(firstItem, lastItem) ;
 	firstItem = lastItem = NULL ;
 	itemCount = 0 ;
 }
@@ -149,13 +143,40 @@ releaseListItem(struct CNListItem * dst)
 	} ; [sResourceLock unlock] ;
 }
 
+static void
+releaseAllListItem(struct CNListItem * firstitem, struct CNListItem * lastitem)
+{
+	if(firstitem == NULL){
+		return ;
+	}
+	@autoreleasepool {
+		dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+		dispatch_async(queue, ^{
+			/* release contents */
+			struct CNListItem * item ;
+			for(item = firstitem ; item ; item = item->nextItem){
+				NSObject * dummyobj = (__bridge_transfer NSObject *) item->object ;
+				dummyobj = nil ; /* release object */
+				item->object = NULL ;
+			}
+			[sResourceLock lock] ; {
+				lastitem->nextItem = s_list_item_pool ;
+				s_list_item_pool = firstitem ;
+			} [sResourceLock unlock] ;
+			//printf("[%s] %tu\n", __func__, CNCountOfFreeListItems()) ;
+		});
+	}
+}
+
 NSUInteger
 CNCountOfFreeListItems(void)
 {
 	NSUInteger count = 0 ;
-	struct CNListItem * item = s_list_item_pool ;
-	for( ; item ; item = item->nextItem){
-		count++ ;
-	}
+	[sResourceLock lock] ; {
+		struct CNListItem * item = s_list_item_pool ;
+		for( ; item ; item = item->nextItem){
+			count++ ;
+		}
+	} ; [sResourceLock unlock] ;
 	return count ;
 }

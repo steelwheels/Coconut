@@ -24,6 +24,8 @@
 		053402A71A3B627A0093FF03 /* CNGraph.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2AE1A3401BD00F9F3DB /* CNGraph.h */; };
 		053402A81A3B627E0093FF03 /* CNNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2B01A3401BD00F9F3DB /* CNNode.h */; };
 		053402AA1A3B628C0093FF03 /* CNValue.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2B61A34026200F9F3DB /* CNValue.h */; };
+		0578436D1A50281800831A95 /* CNRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578436C1A50281800831A95 /* CNRegularExpression.m */; };
+		0578436E1A50286100831A95 /* CNRegularExpression.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0578436B1A50281800831A95 /* CNRegularExpression.h */; };
 		058A67BB1A4D1B1400033BEB /* CNInputFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67B61A4D1B1400033BEB /* CNInputFile.m */; };
 		058A67BC1A4D1B1400033BEB /* CNInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67B81A4D1B1400033BEB /* CNInputStream.m */; };
 		058A67BD1A4D1B1400033BEB /* CNURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67BA1A4D1B1400033BEB /* CNURL.m */; };
@@ -56,6 +58,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				0578436E1A50286100831A95 /* CNRegularExpression.h in CopyFiles */,
 				05164EFD1A4FA78E00048DE5 /* CNErrorList.h in CopyFiles */,
 				05164EF91A4F9C3700048DE5 /* CNErrorLocation.h in CopyFiles */,
 				058A67C41A4D1B7600033BEB /* CNURL.h in CopyFiles */,
@@ -89,6 +92,8 @@
 		052CE6B01A3F506A0026EAA9 /* CNTextSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextSection.h; path = ../Source/Text/CNTextSection.h; sourceTree = SOURCE_ROOT; };
 		052CE6B11A3F506A0026EAA9 /* CNTextSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextSection.m; path = ../Source/Text/CNTextSection.m; sourceTree = SOURCE_ROOT; };
 		052CE6C01A3F51A00026EAA9 /* install.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = install.mk; sourceTree = "<group>"; };
+		0578436B1A50281800831A95 /* CNRegularExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNRegularExpression.h; path = ../Source/Text/CNRegularExpression.h; sourceTree = SOURCE_ROOT; };
+		0578436C1A50281800831A95 /* CNRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNRegularExpression.m; path = ../Source/Text/CNRegularExpression.m; sourceTree = SOURCE_ROOT; };
 		058A67B51A4D1B1400033BEB /* CNInputFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNInputFile.h; path = ../Source/File/CNInputFile.h; sourceTree = "<group>"; };
 		058A67B61A4D1B1400033BEB /* CNInputFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNInputFile.m; path = ../Source/File/CNInputFile.m; sourceTree = "<group>"; };
 		058A67B71A4D1B1400033BEB /* CNInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNInputStream.h; path = ../Source/File/CNInputStream.h; sourceTree = "<group>"; };
@@ -132,9 +137,11 @@
 				052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */,
 				052CE6B01A3F506A0026EAA9 /* CNTextSection.h */,
 				052CE6B11A3F506A0026EAA9 /* CNTextSection.m */,
+				0578436B1A50281800831A95 /* CNRegularExpression.h */,
+				0578436C1A50281800831A95 /* CNRegularExpression.m */,
 			);
 			name = Text;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		052CE6C11A3F51B90026EAA9 /* Support */ = {
 			isa = PBXGroup;
@@ -322,6 +329,7 @@
 			files = (
 				05D2C2AA1A34017B00F9F3DB /* CNList.m in Sources */,
 				052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */,
+				0578436D1A50281800831A95 /* CNRegularExpression.m in Sources */,
 				052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */,
 				058A67BB1A4D1B1400033BEB /* CNInputFile.m in Sources */,
 				05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */,

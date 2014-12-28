@@ -24,6 +24,8 @@ This library has following kind of classes:
 	* Text        : Super class of all the other text classes (CNText)
 	* TextLine    : Text line class (CNTextLine)
 	* TextSection : Text Section class (CNTextSection)
+* Regular expression : Regular expression for text processing 
+          (CNRegularExpression)
 * File  : Extend NSURL class methods
 * Error : Extend NSError class methods
 

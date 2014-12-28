@@ -25,10 +25,11 @@ testList(void)
 	[list addObject: @"2"] ;
 	
 	printList(list) ;
-	printFreeItemCount() ;
+	//printFreeItemCount() ;
 	
+	puts("*** Clear") ;
 	[list clear] ;
-	printFreeItemCount() ;
+	//printFreeItemCount() ;
 	
 	puts("*** push 3 object ") ;
 	[list pushObject: @"10"] ;
@@ -36,7 +37,7 @@ testList(void)
 	[list pushObject: @"12"] ;
 	//printList(list) ;
 	popItems(list) ;
-	printFreeItemCount() ;
+	//printFreeItemCount() ;
 }
 
 static void
