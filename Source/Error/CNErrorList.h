@@ -13,5 +13,6 @@
 @property (strong, nonatomic) CNList *	list ;
 
 - (instancetype) init ;
+- (void) printToFile: (FILE *) outfp ;
 
 @end
