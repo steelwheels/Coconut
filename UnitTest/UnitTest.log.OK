@@ -48,6 +48,13 @@ Section 0
   line0
   line1
 line11
+comp0.header
+  line0
+comp0.middle
+  line1
+comp0.middle
+  line2
+comp0.tail
 ********************************************************************************
 * CNRegularExpression
 ********************************************************************************

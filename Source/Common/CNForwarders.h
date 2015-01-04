@@ -20,6 +20,7 @@
 @class CNText ;
 @class CNTextLine ;
 @class CNTextSection ;
+@class CNTextCompound ;
 
 /* Graph */
 @class CNGraph ;

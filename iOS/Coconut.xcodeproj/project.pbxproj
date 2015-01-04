@@ -34,6 +34,8 @@
 		058A67C21A4D1B6A00033BEB /* CNError.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 058A67BF1A4D1B6000033BEB /* CNError.h */; };
 		058A67C31A4D1B7000033BEB /* CNInputStream.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 058A67B71A4D1B1400033BEB /* CNInputStream.h */; };
 		058A67C41A4D1B7600033BEB /* CNURL.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 058A67B91A4D1B1400033BEB /* CNURL.h */; };
+		05B1B23F1A595FDB0070A440 /* CNTextCompound.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B1B23E1A595FDB0070A440 /* CNTextCompound.m */; };
+		05B1B2401A595FE90070A440 /* CNTextCompound.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05B1B23D1A595FDB0070A440 /* CNTextCompound.h */; };
 		05D2C2AA1A34017B00F9F3DB /* CNList.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2A91A34017B00F9F3DB /* CNList.m */; };
 		05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2AD1A3401BD00F9F3DB /* CNEdge.m */; };
 		05D2C2B31A3401BD00F9F3DB /* CNGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2AF1A3401BD00F9F3DB /* CNGraph.m */; };
@@ -58,6 +60,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				05B1B2401A595FE90070A440 /* CNTextCompound.h in CopyFiles */,
 				0578436E1A50286100831A95 /* CNRegularExpression.h in CopyFiles */,
 				05164EFD1A4FA78E00048DE5 /* CNErrorList.h in CopyFiles */,
 				05164EF91A4F9C3700048DE5 /* CNErrorLocation.h in CopyFiles */,
@@ -103,6 +106,8 @@
 		058A67BF1A4D1B6000033BEB /* CNError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNError.h; path = ../Source/Error/CNError.h; sourceTree = "<group>"; };
 		058A67C01A4D1B6000033BEB /* CNError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNError.m; path = ../Source/Error/CNError.m; sourceTree = "<group>"; };
 		059D3DCF1A3400E700FAB027 /* libCoconut.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCoconut.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		05B1B23D1A595FDB0070A440 /* CNTextCompound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextCompound.h; path = ../Source/Text/CNTextCompound.h; sourceTree = "<group>"; };
+		05B1B23E1A595FDB0070A440 /* CNTextCompound.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextCompound.m; path = ../Source/Text/CNTextCompound.m; sourceTree = "<group>"; };
 		05D2C2A51A34013800F9F3DB /* CNForwarders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNForwarders.h; path = ../Source/Common/CNForwarders.h; sourceTree = SOURCE_ROOT; };
 		05D2C2A61A34013800F9F3DB /* Coconut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Coconut.h; path = ../Source/Common/Coconut.h; sourceTree = SOURCE_ROOT; };
 		05D2C2A81A34017B00F9F3DB /* CNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNList.h; path = ../Source/List/CNList.h; sourceTree = SOURCE_ROOT; };
@@ -133,6 +138,8 @@
 			children = (
 				052CE6AA1A3F506A0026EAA9 /* CNText.h */,
 				052CE6AB1A3F506A0026EAA9 /* CNText.m */,
+				05B1B23D1A595FDB0070A440 /* CNTextCompound.h */,
+				05B1B23E1A595FDB0070A440 /* CNTextCompound.m */,
 				052CE6AE1A3F506A0026EAA9 /* CNTextLine.h */,
 				052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */,
 				052CE6B01A3F506A0026EAA9 /* CNTextSection.h */,
@@ -333,6 +340,7 @@
 				052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */,
 				058A67BB1A4D1B1400033BEB /* CNInputFile.m in Sources */,
 				05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */,
+				05B1B23F1A595FDB0070A440 /* CNTextCompound.m in Sources */,
 				058A67BC1A4D1B1400033BEB /* CNInputStream.m in Sources */,
 				058A67BD1A4D1B1400033BEB /* CNURL.m in Sources */,
 				05164EF81A4F9C2700048DE5 /* CNErrorLocation.m in Sources */,
