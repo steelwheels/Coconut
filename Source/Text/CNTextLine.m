@@ -11,7 +11,7 @@
 
 - (instancetype) initWithString: (NSString *) str
 {
-	if((self = [super initWithElementKind: CNTextLineElement]) != nil){
+	if((self = [super init]) != nil){
 		self.string = str ;
 	}
 	return self ;

@@ -9,16 +9,6 @@
 
 @implementation CNText
 
-@synthesize elementKind ;
-
-- (instancetype) initWithElementKind: (CNTextKind) kind
-{
-	if((self = [super init]) != nil){
-		self.elementKind = kind ;
-	}
-	return self ;
-}
-
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
 {
 	((void) outfp) ; ((void) indent) ;

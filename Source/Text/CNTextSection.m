@@ -15,7 +15,7 @@
 
 - (instancetype) init
 {
-	if((self = [super initWithElementKind: CNTextSectionElement]) != nil){
+	if((self = [super init]) != nil){
 		self.sectionTitle = nil ;
 		self.elementList = [[CNList alloc] init] ;
 	}
@@ -24,7 +24,7 @@
 
 - (instancetype) initWithTitle: (NSString *) title
 {
-	if((self = [super initWithElementKind: CNTextSectionElement]) != nil){
+	if((self = [super init]) != nil){
 		self.sectionTitle = title ;
 		self.elementList = [[CNList alloc] init] ;
 	}
@@ -38,20 +38,16 @@
 
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
 {
+	NSUInteger nextindent = indent ;
 	if(self.sectionTitle != nil){
 		[CNText printString: self.sectionTitle withIndent: indent toFile: outfp] ;
-		indent++ ;
+		nextindent++ ;
 	}
 	
 	const struct CNListItem * item = self.elementList.firstItem ;
 	for( ; item ; item = item->nextItem){
 		CNText * element = (CNText *) CNObjectInListItem(item) ;
-		NSUInteger childindent = indent ;
-		switch(element.elementKind){
-			case CNTextLineElement:				      break ;
-			case CNTextSectionElement: childindent = indent + 1 ; break ;
-		}
-		[element printToFile: outfp withIndent: childindent] ;
+		[element printToFile: outfp withIndent: nextindent] ;
 	}
 }
 

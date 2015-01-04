@@ -7,20 +7,12 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-	CNTextLineElement,
-	CNTextSectionElement
-} CNTextKind ;
-
 @protocol CNTextOperatiing <NSObject>
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent ;
 @end
 
 @interface CNText : NSObject <CNTextOperatiing>
 
-@property (assign, nonatomic) CNTextKind		elementKind ;
-
-- (instancetype) initWithElementKind: (CNTextKind) kind ;
 - (void) printToFile: (FILE *) outfp ;
 
 + (void) printIndent: (NSUInteger) indent toFile: (FILE *) outfp ;

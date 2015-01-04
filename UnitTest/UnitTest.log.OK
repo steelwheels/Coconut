@@ -44,9 +44,9 @@ another value -> Type : string, Value : Hello
 * CNText
 ********************************************************************************
 line10
-  Section 0
-    line0
-    line1
+Section 0
+  line0
+  line1
 line11
 ********************************************************************************
 * CNRegularExpression
