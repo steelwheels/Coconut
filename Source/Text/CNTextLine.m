@@ -17,6 +17,11 @@
 	return self ;
 }
 
+- (NSUInteger) lineCount
+{
+	return 1 ;
+}
+
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
 {
 	[CNText printString: self.string withIndent: indent toFile: outfp] ;

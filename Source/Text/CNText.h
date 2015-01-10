@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol CNTextOperatiing <NSObject>
+- (NSUInteger) lineCount ;
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent ;
 @end
 

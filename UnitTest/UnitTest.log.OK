@@ -55,6 +55,9 @@ comp0.middle
 comp0.middle
   line2
 comp0.tail
+line count of sec0 -> 3
+line count of comp0 -> 7
+line count of sec1 -> 12
 ********************************************************************************
 * CNRegularExpression
 ********************************************************************************

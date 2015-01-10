@@ -15,6 +15,12 @@
 	assert(false) ;
 }
 
+- (NSUInteger) lineCount
+{
+	assert(false) ;
+	return 0 ;
+}
+
 - (void) printToFile: (FILE *) outfp
 {
 	[self printToFile: outfp withIndent: 0] ;

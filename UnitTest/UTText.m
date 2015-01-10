@@ -7,6 +7,9 @@
 
 #import "UnitTest.h"
 
+static void
+printLineCount(const char * varname, CNText * text) ;
+
 void
 testText(void)
 {
@@ -30,4 +33,16 @@ testText(void)
 	[sec1 appendChildText: comp0] ;
 	
 	[sec1 printToFile: stdout] ;
+	
+	printLineCount("sec0", sec0) ;
+	printLineCount("comp0", comp0) ;
+	printLineCount("sec1", sec1) ;
+}
+
+
+static void
+printLineCount(const char * varname, CNText * text)
+{
+	NSUInteger count = [text lineCount] ;
+	printf("line count of %s -> %tu\n", varname, count) ;
 }

@@ -26,6 +26,27 @@
 	[self.elementList addObject: element] ;
 }
 
+- (NSUInteger) lineCount
+{
+	NSUInteger result = 0 ;
+	if(self.headerString){
+		result++ ;
+	}
+	if(self.tailString){
+		result++ ;
+	}
+	NSUInteger elmcount = [self.elementList count] ;
+	if(self.middleString && elmcount >= 2){
+		result += elmcount - 1 ; /* Count of middle strings */
+	}
+	const struct CNListItem * item = [self.elementList firstItem] ;
+	for( ; item ; item = item->nextItem){
+		CNText * childtext = (CNText *) CNObjectInListItem(item) ;
+		result += [childtext lineCount] ;
+	}
+	return result ;
+}
+
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
 {
 	if(self.headerString != nil){

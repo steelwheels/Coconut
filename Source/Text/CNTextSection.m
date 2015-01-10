@@ -36,6 +36,20 @@
 	[self.elementList addObject: element] ;
 }
 
+- (NSUInteger) lineCount
+{
+	NSUInteger result = 0 ;
+	if(self.sectionTitle){
+		result++ ;
+	}
+	const struct CNListItem * item = self.elementList.firstItem ;
+	for( ; item ; item = item->nextItem){
+		CNText * element = (CNText *) CNObjectInListItem(item) ;
+		result += [element lineCount] ;
+	}
+	return result ;
+}
+
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent
 {
 	NSUInteger nextindent = indent ;
