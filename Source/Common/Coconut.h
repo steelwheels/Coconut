@@ -22,6 +22,7 @@ FOUNDATION_EXPORT const unsigned char KiwiDataVersionString[];
 #import "CNTextCompound.h"
 #import "CNTextLine.h"
 #import "CNText.h"
+#import "CNTextVisitor.h"
 #import "CNRegularExpression.h"
 #import "CNGraph.h"
 #import "CNNode.h"

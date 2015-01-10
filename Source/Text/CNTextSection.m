@@ -6,6 +6,7 @@
  */
 
 #import "CNTextSection.h"
+#import "CNTextVisitor.h"
 #import "CNList.h"
 
 @implementation CNTextSection
@@ -48,6 +49,11 @@
 		result += [element lineCount] ;
 	}
 	return result ;
+}
+
+- (id) acceptVisitor: (CNTextVisitor *) visitor withParameter: (id) param
+{
+	return [visitor acceptTextSection: self withParameter: param] ;
 }
 
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent

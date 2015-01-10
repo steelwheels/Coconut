@@ -45,6 +45,8 @@
 		05B26A1F1A4C709A00A0C5F8 /* CNInputFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B26A1D1A4C709A00A0C5F8 /* CNInputFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B26A201A4C709A00A0C5F8 /* CNInputFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B26A1E1A4C709A00A0C5F8 /* CNInputFile.m */; };
 		05B26A311A4C765C00A0C5F8 /* UTFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B26A301A4C765C00A0C5F8 /* UTFile.m */; };
+		05DD155D1A6166EB0053385A /* CNTextVisitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 05DD155B1A6166EB0053385A /* CNTextVisitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05DD155E1A6166EB0053385A /* CNTextVisitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DD155C1A6166EB0053385A /* CNTextVisitor.m */; };
 		05EF33191A4FA7B500B26136 /* CNErrorList.h in Headers */ = {isa = PBXBuildFile; fileRef = 05EF33171A4FA7B500B26136 /* CNErrorList.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05EF331A1A4FA7B500B26136 /* CNErrorList.m in Sources */ = {isa = PBXBuildFile; fileRef = 05EF33181A4FA7B500B26136 /* CNErrorList.m */; };
 		05F63BF71A496AA900086CBE /* CNURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F63BF51A496AA900086CBE /* CNURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -130,6 +132,8 @@
 		05B26A1D1A4C709A00A0C5F8 /* CNInputFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNInputFile.h; path = ../Source/File/CNInputFile.h; sourceTree = "<group>"; };
 		05B26A1E1A4C709A00A0C5F8 /* CNInputFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNInputFile.m; path = ../Source/File/CNInputFile.m; sourceTree = "<group>"; };
 		05B26A301A4C765C00A0C5F8 /* UTFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTFile.m; path = ../UnitTest/UTFile.m; sourceTree = SOURCE_ROOT; };
+		05DD155B1A6166EB0053385A /* CNTextVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextVisitor.h; path = ../Source/Text/CNTextVisitor.h; sourceTree = "<group>"; };
+		05DD155C1A6166EB0053385A /* CNTextVisitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextVisitor.m; path = ../Source/Text/CNTextVisitor.m; sourceTree = "<group>"; };
 		05EF33171A4FA7B500B26136 /* CNErrorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorList.h; path = ../Source/Error/CNErrorList.h; sourceTree = "<group>"; };
 		05EF33181A4FA7B500B26136 /* CNErrorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorList.m; path = ../Source/Error/CNErrorList.m; sourceTree = "<group>"; };
 		05EF37271A33DBE400723243 /* Coconut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Coconut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -196,6 +200,8 @@
 				058E6EDF1A3DA565009EE505 /* CNTextLine.m */,
 				058E6EDA1A3DA365009EE505 /* CNText.h */,
 				058E6EDB1A3DA365009EE505 /* CNText.m */,
+				05DD155B1A6166EB0053385A /* CNTextVisitor.h */,
+				05DD155C1A6166EB0053385A /* CNTextVisitor.m */,
 				054EAB621A4ED41400516EA3 /* CNRegularExpression.h */,
 				054EAB631A4ED41400516EA3 /* CNRegularExpression.m */,
 			);
@@ -323,6 +329,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05DD155D1A6166EB0053385A /* CNTextVisitor.h in Headers */,
 				058AF0781A5959F6005AFBDA /* CNTextCompound.h in Headers */,
 				05EF33191A4FA7B500B26136 /* CNErrorList.h in Headers */,
 				056BB0781A4F9B4000F068DC /* CNErrorLocation.h in Headers */,
@@ -490,6 +497,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05F63BF81A496AA900086CBE /* CNURL.m in Sources */,
+				05DD155E1A6166EB0053385A /* CNTextVisitor.m in Sources */,
 				05B26A201A4C709A00A0C5F8 /* CNInputFile.m in Sources */,
 				05A4DF2F1A33E80900C912F9 /* CNValue.m in Sources */,
 				054EAB651A4ED41400516EA3 /* CNRegularExpression.m in Sources */,

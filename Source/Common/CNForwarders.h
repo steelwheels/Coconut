@@ -21,6 +21,7 @@
 @class CNTextLine ;
 @class CNTextSection ;
 @class CNTextCompound ;
+@class CNTextVisitor ;
 
 /* Graph */
 @class CNGraph ;

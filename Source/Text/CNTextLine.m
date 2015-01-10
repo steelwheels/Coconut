@@ -6,6 +6,7 @@
  */
 
 #import "CNTextLine.h"
+#import "CNTextVisitor.h"
 
 @implementation CNTextLine
 
@@ -20,6 +21,11 @@
 - (NSUInteger) lineCount
 {
 	return 1 ;
+}
+
+- (id) acceptVisitor: (CNTextVisitor *) visitor withParameter: (id) param
+{
+	return [visitor acceptTextLine: self withParameter: param] ;
 }
 
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent

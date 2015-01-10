@@ -6,9 +6,11 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "CNForwarders.h"
 
 @protocol CNTextOperatiing <NSObject>
 - (NSUInteger) lineCount ;
+- (id) acceptVisitor: (CNTextVisitor *) visitor withParameter: (id) param ;
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent ;
 @end
 

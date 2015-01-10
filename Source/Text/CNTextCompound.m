@@ -6,6 +6,7 @@
  */
 
 #import "CNTextCompound.h"
+#import "CNTextVisitor.h"
 #import "CNList.h"
 
 @implementation CNTextCompound
@@ -45,6 +46,11 @@
 		result += [childtext lineCount] ;
 	}
 	return result ;
+}
+
+- (id) acceptVisitor: (CNTextVisitor *) visitor withParameter: (id) param
+{
+	return [visitor acceptTextCompound: self withParameter: param] ;
 }
 
 - (void) printToFile: (FILE *) outfp withIndent: (NSUInteger) indent

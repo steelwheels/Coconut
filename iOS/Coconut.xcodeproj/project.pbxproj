@@ -41,6 +41,8 @@
 		05D2C2B31A3401BD00F9F3DB /* CNGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2AF1A3401BD00F9F3DB /* CNGraph.m */; };
 		05D2C2B41A3401BD00F9F3DB /* CNNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2B11A3401BD00F9F3DB /* CNNode.m */; };
 		05D2C2B81A34026200F9F3DB /* CNValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2B71A34026200F9F3DB /* CNValue.m */; };
+		05EDC4881A61641400854526 /* CNTextVisitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 05EDC4871A61641400854526 /* CNTextVisitor.m */; };
+		05EDC4891A61669E00854526 /* CNTextVisitor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EDC4861A61641400854526 /* CNTextVisitor.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				05EDC4891A61669E00854526 /* CNTextVisitor.h in CopyFiles */,
 				05B1B2401A595FE90070A440 /* CNTextCompound.h in CopyFiles */,
 				0578436E1A50286100831A95 /* CNRegularExpression.h in CopyFiles */,
 				05164EFD1A4FA78E00048DE5 /* CNErrorList.h in CopyFiles */,
@@ -120,6 +123,8 @@
 		05D2C2B11A3401BD00F9F3DB /* CNNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNNode.m; path = ../Source/Graph/CNNode.m; sourceTree = SOURCE_ROOT; };
 		05D2C2B61A34026200F9F3DB /* CNValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNValue.h; path = ../Source/Value/CNValue.h; sourceTree = SOURCE_ROOT; };
 		05D2C2B71A34026200F9F3DB /* CNValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNValue.m; path = ../Source/Value/CNValue.m; sourceTree = SOURCE_ROOT; };
+		05EDC4861A61641400854526 /* CNTextVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextVisitor.h; path = ../Source/Text/CNTextVisitor.h; sourceTree = "<group>"; };
+		05EDC4871A61641400854526 /* CNTextVisitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextVisitor.m; path = ../Source/Text/CNTextVisitor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +149,8 @@
 				052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */,
 				052CE6B01A3F506A0026EAA9 /* CNTextSection.h */,
 				052CE6B11A3F506A0026EAA9 /* CNTextSection.m */,
+				05EDC4861A61641400854526 /* CNTextVisitor.h */,
+				05EDC4871A61641400854526 /* CNTextVisitor.m */,
 				0578436B1A50281800831A95 /* CNRegularExpression.h */,
 				0578436C1A50281800831A95 /* CNRegularExpression.m */,
 			);
@@ -335,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				05D2C2AA1A34017B00F9F3DB /* CNList.m in Sources */,
+				05EDC4881A61641400854526 /* CNTextVisitor.m in Sources */,
 				052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */,
 				0578436D1A50281800831A95 /* CNRegularExpression.m in Sources */,
 				052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */,

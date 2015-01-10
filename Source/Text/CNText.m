@@ -21,6 +21,13 @@
 	return 0 ;
 }
 
+- (id) acceptVisitor: (CNTextVisitor *) visitor withParameter: (id) param
+{
+	(void) visitor ; (void) param ;
+	assert(false) ;
+	return nil ;
+}
+
 - (void) printToFile: (FILE *) outfp
 {
 	[self printToFile: outfp withIndent: 0] ;
