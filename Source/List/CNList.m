@@ -23,7 +23,7 @@ static NSLock *	sResourceLock  = nil ;
 	sResourceLock = [[NSLock alloc] init] ;
 }
 
-- (id) init
+- (instancetype) init
 {
 	if((self = [super init]) != nil){
 		itemCount = 0 ;

@@ -28,7 +28,7 @@ CNObjectInListItem(const struct CNListItem * src)
 
 + (void) initialize ;
 
-- (id) init ;
+- (instancetype) init ;
 - (void) dealloc ;
 
 - (NSUInteger) count ;
