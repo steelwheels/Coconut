@@ -98,6 +98,19 @@ static NSLock *	sResourceLock  = nil ;
 	}
 }
 
+- (BOOL) replaceObject: (NSObject *) orgobj byObject: (NSObject *) newobj
+{
+	NSObject * retobj = nil ;
+	struct CNListItem * item = firstItem ;
+	for( ; item ; item = item->nextItem){
+		if(((__bridge NSObject *) item->object) == orgobj){
+			retobj = (__bridge_transfer NSObject *) item->object ;
+			item->object = (__bridge_retained void *) newobj ;
+		}
+	}
+	return retobj ? YES : NO ;
+}
+
 - (void) clear
 {
 	releaseAllListItem(firstItem, lastItem) ;

@@ -38,6 +38,7 @@ CNObjectInListItem(const struct CNListItem * src)
 - (void) addObject: (NSObject *) object ;
 - (void) pushObject: (NSObject *) object ;
 - (NSObject *) popObject ;
+- (BOOL) replaceObject: (NSObject *) orgobj byObject: (NSObject *) newobj ;
 - (void) clear ;
 
 @end

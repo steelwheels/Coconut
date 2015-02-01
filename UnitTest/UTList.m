@@ -38,6 +38,16 @@ testList(void)
 	//printList(list) ;
 	popItems(list) ;
 	//printFreeItemCount() ;
+	
+	puts("*** Replace object") ;
+	NSString * orgobj = @"o1" ;
+	[list addObject: @"o0"] ;
+	[list addObject: orgobj] ;
+	[list addObject: @"o2"] ;
+	printList(list) ;
+	puts("=> replace o1 by n1") ;
+	[list replaceObject: orgobj byObject: @"n1"] ;
+	printList(list) ;
 }
 
 static void
