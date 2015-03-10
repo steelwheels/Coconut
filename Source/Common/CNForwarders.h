@@ -28,3 +28,5 @@
 @class CNNode ;
 @class CNEdge ;
 
+/* Time */
+@class CNCountdownTimer	;

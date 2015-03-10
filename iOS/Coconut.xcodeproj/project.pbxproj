@@ -24,6 +24,8 @@
 		053402A71A3B627A0093FF03 /* CNGraph.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2AE1A3401BD00F9F3DB /* CNGraph.h */; };
 		053402A81A3B627E0093FF03 /* CNNode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2B01A3401BD00F9F3DB /* CNNode.h */; };
 		053402AA1A3B628C0093FF03 /* CNValue.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D2C2B61A34026200F9F3DB /* CNValue.h */; };
+		056BD4481AADFFBD00D9171D /* CNCountTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 056BD4471AADFFBD00D9171D /* CNCountTimer.m */; };
+		056BD4491AADFFE600D9171D /* CNCountTimer.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 056BD4461AADFFBD00D9171D /* CNCountTimer.h */; };
 		0578436D1A50281800831A95 /* CNRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 0578436C1A50281800831A95 /* CNRegularExpression.m */; };
 		0578436E1A50286100831A95 /* CNRegularExpression.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0578436B1A50281800831A95 /* CNRegularExpression.h */; };
 		058A67BB1A4D1B1400033BEB /* CNInputFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 058A67B61A4D1B1400033BEB /* CNInputFile.m */; };
@@ -62,6 +64,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				056BD4491AADFFE600D9171D /* CNCountTimer.h in CopyFiles */,
 				05EDC4891A61669E00854526 /* CNTextVisitor.h in CopyFiles */,
 				05B1B2401A595FE90070A440 /* CNTextCompound.h in CopyFiles */,
 				0578436E1A50286100831A95 /* CNRegularExpression.h in CopyFiles */,
@@ -98,6 +101,8 @@
 		052CE6B01A3F506A0026EAA9 /* CNTextSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextSection.h; path = ../Source/Text/CNTextSection.h; sourceTree = SOURCE_ROOT; };
 		052CE6B11A3F506A0026EAA9 /* CNTextSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextSection.m; path = ../Source/Text/CNTextSection.m; sourceTree = SOURCE_ROOT; };
 		052CE6C01A3F51A00026EAA9 /* install.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = install.mk; sourceTree = "<group>"; };
+		056BD4461AADFFBD00D9171D /* CNCountTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNCountTimer.h; path = ../../Source/Timer/CNCountTimer.h; sourceTree = "<group>"; };
+		056BD4471AADFFBD00D9171D /* CNCountTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNCountTimer.m; path = ../../Source/Timer/CNCountTimer.m; sourceTree = "<group>"; };
 		0578436B1A50281800831A95 /* CNRegularExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNRegularExpression.h; path = ../Source/Text/CNRegularExpression.h; sourceTree = SOURCE_ROOT; };
 		0578436C1A50281800831A95 /* CNRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNRegularExpression.m; path = ../Source/Text/CNRegularExpression.m; sourceTree = SOURCE_ROOT; };
 		058A67B51A4D1B1400033BEB /* CNInputFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNInputFile.h; path = ../Source/File/CNInputFile.h; sourceTree = "<group>"; };
@@ -178,6 +183,16 @@
 			name = Error;
 			sourceTree = SOURCE_ROOT;
 		};
+		056BD4451AADFFA400D9171D /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				056BD4461AADFFBD00D9171D /* CNCountTimer.h */,
+				056BD4471AADFFBD00D9171D /* CNCountTimer.m */,
+			);
+			name = Timer;
+			path = ../Source/Timer;
+			sourceTree = SOURCE_ROOT;
+		};
 		058A67B41A4D1AFA00033BEB /* File */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,6 +231,7 @@
 				052CE6A91A3F50540026EAA9 /* Text */,
 				05D2C2A71A34016100F9F3DB /* List */,
 				05D2C2AB1A3401A900F9F3DB /* Graph */,
+				056BD4451AADFFA400D9171D /* Timer */,
 				05D2C2B51A34024E00F9F3DB /* Value */,
 				058A67B41A4D1AFA00033BEB /* File */,
 			);
@@ -347,6 +363,7 @@
 				0578436D1A50281800831A95 /* CNRegularExpression.m in Sources */,
 				052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */,
 				058A67BB1A4D1B1400033BEB /* CNInputFile.m in Sources */,
+				056BD4481AADFFBD00D9171D /* CNCountTimer.m in Sources */,
 				05D2C2B21A3401BD00F9F3DB /* CNEdge.m in Sources */,
 				05B1B23F1A595FDB0070A440 /* CNTextCompound.m in Sources */,
 				058A67BC1A4D1B1400033BEB /* CNInputStream.m in Sources */,

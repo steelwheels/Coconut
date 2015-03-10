@@ -11,6 +11,8 @@
 		051EB9511A3C121800B0FBC0 /* CNError.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB94F1A3C121800B0FBC0 /* CNError.m */; };
 		051EB9531A3C12E800B0FBC0 /* UTError.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9521A3C12E800B0FBC0 /* UTError.m */; };
 		051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9541A3C171D00B0FBC0 /* UTValue.m */; };
+		052495711AADE50A00C3C926 /* CNCountTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 0524956F1AADE50A00C3C926 /* CNCountTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		052495721AADE50A00C3C926 /* CNCountTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 052495701AADE50A00C3C926 /* CNCountTimer.m */; };
 		054EAB641A4ED41400516EA3 /* CNRegularExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 054EAB621A4ED41400516EA3 /* CNRegularExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054EAB651A4ED41400516EA3 /* CNRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 054EAB631A4ED41400516EA3 /* CNRegularExpression.m */; };
 		054EAB671A4EDBDB00516EA3 /* UTRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 054EAB661A4EDBDB00516EA3 /* UTRegularExpression.m */; };
@@ -95,6 +97,8 @@
 		051EB94F1A3C121800B0FBC0 /* CNError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNError.m; path = ../Source/Error/CNError.m; sourceTree = "<group>"; };
 		051EB9521A3C12E800B0FBC0 /* UTError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTError.m; path = ../UnitTest/UTError.m; sourceTree = SOURCE_ROOT; };
 		051EB9541A3C171D00B0FBC0 /* UTValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTValue.m; path = ../UnitTest/UTValue.m; sourceTree = SOURCE_ROOT; };
+		0524956F1AADE50A00C3C926 /* CNCountTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNCountTimer.h; path = ../Source/Timer/CNCountTimer.h; sourceTree = "<group>"; };
+		052495701AADE50A00C3C926 /* CNCountTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNCountTimer.m; path = ../Source/Timer/CNCountTimer.m; sourceTree = "<group>"; };
 		054EAB621A4ED41400516EA3 /* CNRegularExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNRegularExpression.h; path = ../Source/Text/CNRegularExpression.h; sourceTree = "<group>"; };
 		054EAB631A4ED41400516EA3 /* CNRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNRegularExpression.m; path = ../Source/Text/CNRegularExpression.m; sourceTree = "<group>"; };
 		054EAB661A4EDBDB00516EA3 /* UTRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTRegularExpression.m; path = ../UnitTest/UTRegularExpression.m; sourceTree = SOURCE_ROOT; };
@@ -175,6 +179,15 @@
 			name = Error;
 			sourceTree = SOURCE_ROOT;
 		};
+		0524956E1AADE3CD00C3C926 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				0524956F1AADE50A00C3C926 /* CNCountTimer.h */,
+				052495701AADE50A00C3C926 /* CNCountTimer.m */,
+			);
+			name = Timer;
+			sourceTree = "<group>";
+		};
 		0557AA811A33DD4200C8B4E7 /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +197,7 @@
 				05A4DF2B1A33E7F700C912F9 /* Value */,
 				058E6ED51A3DA0D6009EE505 /* Text */,
 				05A4DF301A33E80F00C912F9 /* Graph */,
+				0524956E1AADE3CD00C3C926 /* Timer */,
 				05F63BF41A49689200086CBE /* File */,
 			);
 			name = Source;
@@ -329,6 +343,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				052495711AADE50A00C3C926 /* CNCountTimer.h in Headers */,
 				05DD155D1A6166EB0053385A /* CNTextVisitor.h in Headers */,
 				058AF0781A5959F6005AFBDA /* CNTextCompound.h in Headers */,
 				05EF33191A4FA7B500B26136 /* CNErrorList.h in Headers */,
@@ -512,6 +527,7 @@
 				05EF331A1A4FA7B500B26136 /* CNErrorList.m in Sources */,
 				05A4DF3A1A33E82200C912F9 /* CNGraph.m in Sources */,
 				05A4DF3C1A33E82200C912F9 /* CNNode.m in Sources */,
+				052495721AADE50A00C3C926 /* CNCountTimer.m in Sources */,
 				051EB9511A3C121800B0FBC0 /* CNError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

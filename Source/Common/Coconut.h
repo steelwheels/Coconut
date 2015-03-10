@@ -28,6 +28,7 @@ FOUNDATION_EXPORT const unsigned char KiwiDataVersionString[];
 #import "CNNode.h"
 #import "CNEdge.h"
 #import "CNURL.h"
+#import "CNCountTimer.h"
 #import "CNInputStream.h"
 #import "CNInputFile.h"
 
