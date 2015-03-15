@@ -13,10 +13,10 @@
 
 @implementation CNCountTimer
 
-- (instancetype) initWithDelegate: (id <CNTimerWakeupDelegate>) delegate
+- (instancetype) init
 {
 	if((self = [super init]) != nil){
-		timerDelegate		= delegate ;
+		timerDelegates		= [[NSMutableArray alloc] init] ;
 		timerBody		= nil ;
 		
 		startTime		= 0.0 ;
@@ -32,6 +32,11 @@
 	if(timerBody){
 		[timerBody invalidate] ;
 	}
+}
+
+- (void) addDelegate: (id <CNTimerWakeupDelegate>) delegate
+{
+	[timerDelegates addObject: delegate] ;
 }
 
 - (bool) startFromTime: (double) start toTime: (double) stop withInterval: (double) interval
@@ -87,15 +92,15 @@ isFinished(double current, double stop, double interval)
 
 - (void) triggerByTimer
 {
-	bool isfinished = isFinished(currentTime, stopTime, intervalTime) ;
-	if(isfinished){
-		[timerBody invalidate] ;
-		timerBody = nil ;
+	if(isFinished(currentTime, stopTime, intervalTime)){
+		for(id <CNTimerWakeupDelegate> delegate in timerDelegates){
+			[delegate wakeupByTimerDone] ;
+		}
 	} else {
-		double nexttime = currentTime + intervalTime ;
-		bool   willfinished = isFinished(nexttime, stopTime, intervalTime) ;
-		[timerDelegate triggerAtTime: currentTime isLast: willfinished] ;
-		currentTime = nexttime ;
+		for(id <CNTimerWakeupDelegate> delegate in timerDelegates){
+			[delegate wakeupByTimerInterval: currentTime] ;
+		}
+		currentTime += intervalTime ;
 	}
 	
 }

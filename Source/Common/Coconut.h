@@ -31,4 +31,6 @@ FOUNDATION_EXPORT const unsigned char KiwiDataVersionString[];
 #import "CNCountTimer.h"
 #import "CNInputStream.h"
 #import "CNInputFile.h"
+#import "CNNotifierObject.h"
+
 

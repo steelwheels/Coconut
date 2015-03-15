@@ -43,6 +43,8 @@
 		05D2C2B31A3401BD00F9F3DB /* CNGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2AF1A3401BD00F9F3DB /* CNGraph.m */; };
 		05D2C2B41A3401BD00F9F3DB /* CNNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2B11A3401BD00F9F3DB /* CNNode.m */; };
 		05D2C2B81A34026200F9F3DB /* CNValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D2C2B71A34026200F9F3DB /* CNValue.m */; };
+		05D9EC031AB5A38B00FBEA28 /* CNNotifierObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D9EC021AB5A38B00FBEA28 /* CNNotifierObject.m */; };
+		05D9EC041AB5A3AC00FBEA28 /* CNNotifierObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05D9EC011AB5A38B00FBEA28 /* CNNotifierObject.h */; };
 		05EDC4881A61641400854526 /* CNTextVisitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 05EDC4871A61641400854526 /* CNTextVisitor.m */; };
 		05EDC4891A61669E00854526 /* CNTextVisitor.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EDC4861A61641400854526 /* CNTextVisitor.h */; };
 /* End PBXBuildFile section */
@@ -64,6 +66,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				05D9EC041AB5A3AC00FBEA28 /* CNNotifierObject.h in CopyFiles */,
 				056BD4491AADFFE600D9171D /* CNCountTimer.h in CopyFiles */,
 				05EDC4891A61669E00854526 /* CNTextVisitor.h in CopyFiles */,
 				05B1B2401A595FE90070A440 /* CNTextCompound.h in CopyFiles */,
@@ -128,6 +131,8 @@
 		05D2C2B11A3401BD00F9F3DB /* CNNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNNode.m; path = ../Source/Graph/CNNode.m; sourceTree = SOURCE_ROOT; };
 		05D2C2B61A34026200F9F3DB /* CNValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNValue.h; path = ../Source/Value/CNValue.h; sourceTree = SOURCE_ROOT; };
 		05D2C2B71A34026200F9F3DB /* CNValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNValue.m; path = ../Source/Value/CNValue.m; sourceTree = SOURCE_ROOT; };
+		05D9EC011AB5A38B00FBEA28 /* CNNotifierObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNNotifierObject.h; path = ../../Source/Observer/CNNotifierObject.h; sourceTree = "<group>"; };
+		05D9EC021AB5A38B00FBEA28 /* CNNotifierObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNNotifierObject.m; path = ../../Source/Observer/CNNotifierObject.m; sourceTree = "<group>"; };
 		05EDC4861A61641400854526 /* CNTextVisitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextVisitor.h; path = ../Source/Text/CNTextVisitor.h; sourceTree = "<group>"; };
 		05EDC4871A61641400854526 /* CNTextVisitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNTextVisitor.m; path = ../Source/Text/CNTextVisitor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -234,6 +239,7 @@
 				056BD4451AADFFA400D9171D /* Timer */,
 				05D2C2B51A34024E00F9F3DB /* Value */,
 				058A67B41A4D1AFA00033BEB /* File */,
+				05D9EC001AB5A37700FBEA28 /* Observer */,
 			);
 			name = Source;
 			path = Coconut;
@@ -278,6 +284,16 @@
 			);
 			name = Value;
 			sourceTree = "<group>";
+		};
+		05D9EC001AB5A37700FBEA28 /* Observer */ = {
+			isa = PBXGroup;
+			children = (
+				05D9EC011AB5A38B00FBEA28 /* CNNotifierObject.h */,
+				05D9EC021AB5A38B00FBEA28 /* CNNotifierObject.m */,
+			);
+			name = Observer;
+			path = ../Source/Observer;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -357,6 +373,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05D9EC031AB5A38B00FBEA28 /* CNNotifierObject.m in Sources */,
 				05D2C2AA1A34017B00F9F3DB /* CNList.m in Sources */,
 				05EDC4881A61641400854526 /* CNTextVisitor.m in Sources */,
 				052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */,

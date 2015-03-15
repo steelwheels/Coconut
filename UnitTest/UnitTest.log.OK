@@ -86,3 +86,9 @@ input file : file:/Users/tomoo/Project/Coconut/UnitTest/input.txt
 a
 bb
   c c
+********************************************************************************
+* CNNotifierObject
+********************************************************************************
+observe: keypath value, context 0x0-> notifier value 1
+observe: keypath value, context 0x0-> notifier value 1
+observe: keypath value, context 0x0-> notifier value 2

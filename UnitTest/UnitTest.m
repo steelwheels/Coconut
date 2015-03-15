@@ -23,6 +23,7 @@ int main(int argc, const char * argv[]) {
 		printTitle("CNRegularExpression");	testRegularExpression() ;
 		printTitle("CNURL") ;			testURL() ;
 		printTitle("CNInputFile") ;		testFile() ;
+		printTitle("CNNotifierObject") ;	testNotifierObject() ;
 	}
     return 0;
 }

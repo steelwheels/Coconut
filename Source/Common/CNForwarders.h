@@ -29,4 +29,8 @@
 @class CNEdge ;
 
 /* Time */
-@class CNCountdownTimer	;
+@class CNCountTimer	;
+
+/* Observer */
+@class CNNotifierObject ;
+
