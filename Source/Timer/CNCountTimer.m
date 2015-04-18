@@ -23,6 +23,7 @@
 		intervalTime		= 0.0 ;
 		stopTime		= 0.0 ;
 		currentTime		= startTime ;
+		currentCount		= 0 ;
 	}
 	return self ;
 }
@@ -56,6 +57,7 @@
 	startTime	= currentTime = start ;
 	stopTime	= stop ;
 	intervalTime	= interval ;
+	currentCount	= 0 ;
 	double absinterval = interval >= 0.0 ? interval : -interval ;
 	timerBody = [NSTimer timerWithTimeInterval: absinterval
 					    target: self
@@ -96,11 +98,14 @@ isFinished(double current, double stop, double interval)
 		for(id <CNTimerWakeupDelegate> delegate in timerDelegates){
 			[delegate wakeupByTimerDone] ;
 		}
+		[timerBody invalidate] ;
+		timerBody = nil ;
 	} else {
 		for(id <CNTimerWakeupDelegate> delegate in timerDelegates){
-			[delegate wakeupByTimerInterval: currentTime] ;
+			[delegate wakeupByTimerCurrentValue: currentTime withCount: currentCount] ;
 		}
 		currentTime += intervalTime ;
+		currentCount++ ;
 	}
 	
 }

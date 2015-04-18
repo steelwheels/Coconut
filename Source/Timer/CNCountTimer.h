@@ -9,7 +9,7 @@
 #import "CNForwarders.h"
 
 @protocol CNTimerWakeupDelegate
-- (void) wakeupByTimerInterval: (double) time ;
+- (void) wakeupByTimerCurrentValue: (double) time withCount: (unsigned int) count ;
 - (void) wakeupByTimerDone ;
 @end
 
@@ -24,6 +24,7 @@
 	double			intervalTime ;
 	double			stopTime ;
 	double			currentTime ;
+	unsigned int		currentCount ;
 }
 
 - (instancetype) init ;
