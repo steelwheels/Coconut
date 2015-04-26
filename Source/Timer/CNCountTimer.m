@@ -16,14 +16,10 @@
 - (instancetype) init
 {
 	if((self = [super init]) != nil){
-		timerDelegates		= [[NSMutableArray alloc] init] ;
-		timerBody		= nil ;
-		
-		startTime		= 0.0 ;
-		intervalTime		= 0.0 ;
-		stopTime		= 0.0 ;
-		currentTime		= startTime ;
-		currentCount		= 0 ;
+		timerBody	= nil ;
+		timerDelegate	= nil ;
+		downCount	= 0 ;
+		intervalTime	= 0.0 ;
 	}
 	return self ;
 }
@@ -35,79 +31,37 @@
 	}
 }
 
-- (void) addDelegate: (id <CNTimerWakeupDelegate>) delegate
+- (void) repeatWithCount: (unsigned int) count withInterval: (double) interval withDelegate: (id <CNCountTimerDelegate>) delegate
 {
-	[timerDelegates addObject: delegate] ;
-}
-
-- (bool) startFromTime: (double) start toTime: (double) stop withInterval: (double) interval
-{
-	if(interval == 0.0){
-		return false ;
-	} else if(interval > 0.0){
-		if(!(start <= stop)){
-			return false ;
-		}
-	} else { // interval < 0.0
-		if(!(start >= stop)){
-			return false ;
-		}
+	if((downCount = count) > 0){
+		timerDelegate = delegate ;
+		intervalTime = interval ;
+		timerBody = [NSTimer timerWithTimeInterval: intervalTime
+						    target: self
+						  selector: @selector(triggerByTimer)
+						  userInfo: nil
+						   repeats: YES] ;
+		NSRunLoop *runLoop = [NSRunLoop currentRunLoop] ;
+		[runLoop addTimer: timerBody forMode:NSRunLoopCommonModes] ;
+	} else {
+		[delegate repeatDone] ;
 	}
-	
-	startTime	= currentTime = start ;
-	stopTime	= stop ;
-	intervalTime	= interval ;
-	currentCount	= 0 ;
-	double absinterval = interval >= 0.0 ? interval : -interval ;
-	timerBody = [NSTimer timerWithTimeInterval: absinterval
-					    target: self
-					  selector: @selector(triggerByTimer)
-					  userInfo: nil
-					   repeats: YES] ;
-	[[NSRunLoop currentRunLoop] addTimer: timerBody forMode:NSRunLoopCommonModes];
-	return true ;
 }
 
 @end
-
-static bool
-isFinished(double current, double stop, double interval)
-{
-	bool	isfinished ;
-	if(interval > 0.0){
-		if(current > stop){
-			isfinished = true ;
-		} else {
-			isfinished = false ;
-		}
-	} else { // interval < 0.0
-		if(current < stop){
-			isfinished = true ;
-		} else {
-			isfinished = false ;
-		}
-	}
-	return isfinished ;
-}
 
 @implementation CNCountTimer (CNPrivate)
 
 - (void) triggerByTimer
 {
-	if(isFinished(currentTime, stopTime, intervalTime)){
-		for(id <CNTimerWakeupDelegate> delegate in timerDelegates){
-			[delegate wakeupByTimerDone] ;
-		}
+	if(downCount > 0){
+		[timerDelegate repeatForCount: downCount-1] ;
+		downCount-- ;
+	} else {
+		[timerDelegate repeatDone] ;
 		[timerBody invalidate] ;
 		timerBody = nil ;
-	} else {
-		for(id <CNTimerWakeupDelegate> delegate in timerDelegates){
-			[delegate wakeupByTimerCurrentValue: currentTime withCount: currentCount] ;
-		}
-		currentTime += intervalTime ;
-		currentCount++ ;
 	}
-	
 }
 
 @end

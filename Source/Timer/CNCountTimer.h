@@ -8,29 +8,22 @@
 #import <Foundation/Foundation.h>
 #import "CNForwarders.h"
 
-@protocol CNTimerWakeupDelegate
-- (void) wakeupByTimerCurrentValue: (double) time withCount: (unsigned int) count ;
-- (void) wakeupByTimerDone ;
+@protocol CNCountTimerDelegate
+- (void) repeatForCount: (unsigned int) count ;
+- (void) repeatDone ;
 @end
 
 @interface CNCountTimer : NSObject
 {
-	/* Element is id <CNTimerWakeupDelegate> */
-	NSMutableArray *	timerDelegates ;
-
-	NSTimer	*		timerBody ;
-	
-	double			startTime ;
-	double			intervalTime ;
-	double			stopTime ;
-	double			currentTime ;
-	unsigned int		currentCount ;
+	NSTimer	*			timerBody ;
+	id <CNCountTimerDelegate>	timerDelegate ;
+	unsigned int			downCount ;
+	double				intervalTime ;
 }
 
 - (instancetype) init ;
 - (void) dealloc ;
 
-- (void) addDelegate: (id <CNTimerWakeupDelegate>) delegate ;
-- (bool) startFromTime: (double) start toTime: (double) stop withInterval: (double) interval ;
+- (void) repeatWithCount: (unsigned int) count withInterval: (double) interval withDelegate: (id <CNCountTimerDelegate>) delegate ;
 
 @end

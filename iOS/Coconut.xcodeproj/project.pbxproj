@@ -11,6 +11,8 @@
 		05164EF91A4F9C3700048DE5 /* CNErrorLocation.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05164EF61A4F9C2700048DE5 /* CNErrorLocation.h */; };
 		05164EFC1A4FA65500048DE5 /* CNErrorList.m in Sources */ = {isa = PBXBuildFile; fileRef = 05164EFB1A4FA65500048DE5 /* CNErrorList.m */; };
 		05164EFD1A4FA78E00048DE5 /* CNErrorList.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05164EFA1A4FA65500048DE5 /* CNErrorList.h */; };
+		05283F651AEBC28100EA6FD8 /* CNRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 05283F641AEBC28100EA6FD8 /* CNRandom.m */; };
+		05283F661AEBC54A00EA6FD8 /* CNRandom.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05283F631AEBC28100EA6FD8 /* CNRandom.h */; };
 		052CE6B21A3F506A0026EAA9 /* CNText.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6AB1A3F506A0026EAA9 /* CNText.m */; };
 		052CE6B41A3F506A0026EAA9 /* CNTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6AF1A3F506A0026EAA9 /* CNTextLine.m */; };
 		052CE6B51A3F506A0026EAA9 /* CNTextSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 052CE6B11A3F506A0026EAA9 /* CNTextSection.m */; };
@@ -66,6 +68,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				05283F661AEBC54A00EA6FD8 /* CNRandom.h in CopyFiles */,
 				05D9EC041AB5A3AC00FBEA28 /* CNNotifierObject.h in CopyFiles */,
 				056BD4491AADFFE600D9171D /* CNCountTimer.h in CopyFiles */,
 				05EDC4891A61669E00854526 /* CNTextVisitor.h in CopyFiles */,
@@ -97,6 +100,8 @@
 		05164EF71A4F9C2700048DE5 /* CNErrorLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorLocation.m; path = ../Source/Error/CNErrorLocation.m; sourceTree = "<group>"; };
 		05164EFA1A4FA65500048DE5 /* CNErrorList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNErrorList.h; path = ../Source/Error/CNErrorList.h; sourceTree = "<group>"; };
 		05164EFB1A4FA65500048DE5 /* CNErrorList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNErrorList.m; path = ../Source/Error/CNErrorList.m; sourceTree = "<group>"; };
+		05283F631AEBC28100EA6FD8 /* CNRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNRandom.h; sourceTree = "<group>"; };
+		05283F641AEBC28100EA6FD8 /* CNRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRandom.m; sourceTree = "<group>"; };
 		052CE6AA1A3F506A0026EAA9 /* CNText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNText.h; path = ../Source/Text/CNText.h; sourceTree = SOURCE_ROOT; };
 		052CE6AB1A3F506A0026EAA9 /* CNText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNText.m; path = ../Source/Text/CNText.m; sourceTree = SOURCE_ROOT; };
 		052CE6AE1A3F506A0026EAA9 /* CNTextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNTextLine.h; path = ../Source/Text/CNTextLine.h; sourceTree = SOURCE_ROOT; };
@@ -148,6 +153,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05283F621AEBC25300EA6FD8 /* Number */ = {
+			isa = PBXGroup;
+			children = (
+				05283F631AEBC28100EA6FD8 /* CNRandom.h */,
+				05283F641AEBC28100EA6FD8 /* CNRandom.m */,
+			);
+			name = Number;
+			path = ../Source/Number;
+			sourceTree = SOURCE_ROOT;
+		};
 		052CE6A91A3F50540026EAA9 /* Text */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +252,7 @@
 				05D2C2A71A34016100F9F3DB /* List */,
 				05D2C2AB1A3401A900F9F3DB /* Graph */,
 				056BD4451AADFFA400D9171D /* Timer */,
+				05283F621AEBC25300EA6FD8 /* Number */,
 				05D2C2B51A34024E00F9F3DB /* Value */,
 				058A67B41A4D1AFA00033BEB /* File */,
 				05D9EC001AB5A37700FBEA28 /* Observer */,
@@ -388,6 +404,7 @@
 				05164EF81A4F9C2700048DE5 /* CNErrorLocation.m in Sources */,
 				05D2C2B41A3401BD00F9F3DB /* CNNode.m in Sources */,
 				05164EFC1A4FA65500048DE5 /* CNErrorList.m in Sources */,
+				05283F651AEBC28100EA6FD8 /* CNRandom.m in Sources */,
 				052CE6B41A3F506A0026EAA9 /* CNTextLine.m in Sources */,
 				05D2C2B81A34026200F9F3DB /* CNValue.m in Sources */,
 				05D2C2B31A3401BD00F9F3DB /* CNGraph.m in Sources */,
@@ -513,6 +530,11 @@
 		059D3DE41A3400E700FAB027 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				OTHER_CFLAGS = (
+					"-W",
+					"-Wall",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -522,6 +544,11 @@
 		059D3DE51A3400E700FAB027 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				OTHER_CFLAGS = (
+					"-W",
+					"-Wall",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

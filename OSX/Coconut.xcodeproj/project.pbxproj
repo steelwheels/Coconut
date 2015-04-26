@@ -16,6 +16,8 @@
 		051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 051EB9541A3C171D00B0FBC0 /* UTValue.m */; };
 		052495711AADE50A00C3C926 /* CNCountTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 0524956F1AADE50A00C3C926 /* CNCountTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		052495721AADE50A00C3C926 /* CNCountTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 052495701AADE50A00C3C926 /* CNCountTimer.m */; };
+		052BDEC21AEBC59900B67381 /* CNRandom.h in Headers */ = {isa = PBXBuildFile; fileRef = 052BDEC01AEBC59900B67381 /* CNRandom.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		052BDEC31AEBC59900B67381 /* CNRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 052BDEC11AEBC59900B67381 /* CNRandom.m */; };
 		054EAB641A4ED41400516EA3 /* CNRegularExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 054EAB621A4ED41400516EA3 /* CNRegularExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054EAB651A4ED41400516EA3 /* CNRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 054EAB631A4ED41400516EA3 /* CNRegularExpression.m */; };
 		054EAB671A4EDBDB00516EA3 /* UTRegularExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 054EAB661A4EDBDB00516EA3 /* UTRegularExpression.m */; };
@@ -105,6 +107,8 @@
 		051EB9541A3C171D00B0FBC0 /* UTValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTValue.m; path = ../UnitTest/UTValue.m; sourceTree = SOURCE_ROOT; };
 		0524956F1AADE50A00C3C926 /* CNCountTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNCountTimer.h; path = ../Source/Timer/CNCountTimer.h; sourceTree = "<group>"; };
 		052495701AADE50A00C3C926 /* CNCountTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNCountTimer.m; path = ../Source/Timer/CNCountTimer.m; sourceTree = "<group>"; };
+		052BDEC01AEBC59900B67381 /* CNRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNRandom.h; sourceTree = "<group>"; };
+		052BDEC11AEBC59900B67381 /* CNRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNRandom.m; sourceTree = "<group>"; };
 		054EAB621A4ED41400516EA3 /* CNRegularExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNRegularExpression.h; path = ../Source/Text/CNRegularExpression.h; sourceTree = "<group>"; };
 		054EAB631A4ED41400516EA3 /* CNRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNRegularExpression.m; path = ../Source/Text/CNRegularExpression.m; sourceTree = "<group>"; };
 		054EAB661A4EDBDB00516EA3 /* UTRegularExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTRegularExpression.m; path = ../UnitTest/UTRegularExpression.m; sourceTree = SOURCE_ROOT; };
@@ -203,12 +207,23 @@
 			name = Timer;
 			sourceTree = "<group>";
 		};
+		052BDEBF1AEBC57800B67381 /* Number */ = {
+			isa = PBXGroup;
+			children = (
+				052BDEC01AEBC59900B67381 /* CNRandom.h */,
+				052BDEC11AEBC59900B67381 /* CNRandom.m */,
+			);
+			name = Number;
+			path = ../Source/Number;
+			sourceTree = SOURCE_ROOT;
+		};
 		0557AA811A33DD4200C8B4E7 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				05A4DF211A33E5BA00C912F9 /* Common */,
 				051EB94D1A3C120600B0FBC0 /* Error */,
 				05A4DF261A33E5EC00C912F9 /* List */,
+				052BDEBF1AEBC57800B67381 /* Number */,
 				05A4DF2B1A33E7F700C912F9 /* Value */,
 				058E6ED51A3DA0D6009EE505 /* Text */,
 				05A4DF301A33E80F00C912F9 /* Graph */,
@@ -360,6 +375,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				052BDEC21AEBC59900B67381 /* CNRandom.h in Headers */,
 				0508B22D1AB59A4900AD3DB9 /* CNNotifierObject.h in Headers */,
 				052495711AADE50A00C3C926 /* CNCountTimer.h in Headers */,
 				05DD155D1A6166EB0053385A /* CNTextVisitor.h in Headers */,
@@ -545,6 +561,7 @@
 				058E6EE11A3DA565009EE505 /* CNTextLine.m in Sources */,
 				056BB0791A4F9B4000F068DC /* CNErrorLocation.m in Sources */,
 				05EF331A1A4FA7B500B26136 /* CNErrorList.m in Sources */,
+				052BDEC31AEBC59900B67381 /* CNRandom.m in Sources */,
 				05A4DF3A1A33E82200C912F9 /* CNGraph.m in Sources */,
 				05A4DF3C1A33E82200C912F9 /* CNNode.m in Sources */,
 				052495721AADE50A00C3C926 /* CNCountTimer.m in Sources */,
