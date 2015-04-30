@@ -531,13 +531,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				INSTALL_PATH = "$(HOME)/local/lib";
 				OTHER_CFLAGS = (
 					"-W",
 					"-Wall",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -545,13 +546,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				INSTALL_PATH = "$(HOME)/local/lib";
 				OTHER_CFLAGS = (
 					"-W",
 					"-Wall",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};
