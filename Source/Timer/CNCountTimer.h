@@ -15,15 +15,14 @@
 
 @interface CNCountTimer : NSObject
 {
-	NSTimer	*			timerBody ;
+	BOOL				reserveInvalidate ;
 	id <CNCountTimerDelegate>	timerDelegate ;
 	unsigned int			downCount ;
 	double				intervalTime ;
 }
 
 - (instancetype) init ;
-- (void) dealloc ;
-
 - (void) repeatWithCount: (unsigned int) count withInterval: (double) interval withDelegate: (id <CNCountTimerDelegate>) delegate ;
+- (void) invalidate ;
 
 @end

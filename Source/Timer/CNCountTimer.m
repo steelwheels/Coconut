@@ -8,7 +8,7 @@
 #import "CNCountTimer.h"
 
 @interface CNCountTimer (CNPrivate)
-- (void) triggerByTimer ;
+- (void) triggerByTimer: (NSTimer *) timer ;
 @end
 
 @implementation CNCountTimer
@@ -16,19 +16,12 @@
 - (instancetype) init
 {
 	if((self = [super init]) != nil){
-		timerBody	= nil ;
-		timerDelegate	= nil ;
-		downCount	= 0 ;
-		intervalTime	= 0.0 ;
+		reserveInvalidate	= NO ;
+		timerDelegate		= nil ;
+		downCount		= 0 ;
+		intervalTime		= 0.0 ;
 	}
 	return self ;
-}
-
-- (void) dealloc
-{
-	if(timerBody){
-		[timerBody invalidate] ;
-	}
 }
 
 - (void) repeatWithCount: (unsigned int) count withInterval: (double) interval withDelegate: (id <CNCountTimerDelegate>) delegate
@@ -36,31 +29,41 @@
 	if((downCount = count) > 0){
 		timerDelegate = delegate ;
 		intervalTime = interval ;
-		timerBody = [NSTimer timerWithTimeInterval: intervalTime
-						    target: self
-						  selector: @selector(triggerByTimer)
-						  userInfo: nil
-						   repeats: YES] ;
+		reserveInvalidate = NO ;
+		NSTimer * timer = [NSTimer timerWithTimeInterval: intervalTime
+							  target: self
+							selector: @selector(triggerByTimer:)
+							userInfo: nil
+							 repeats: YES] ;
+		//printf("%s start timer on runloop\n", __func__) ;
 		NSRunLoop *runLoop = [NSRunLoop currentRunLoop] ;
-		[runLoop addTimer: timerBody forMode:NSRunLoopCommonModes] ;
+		[runLoop addTimer: timer forMode:NSRunLoopCommonModes] ;
 	} else {
 		[delegate repeatDone] ;
 	}
+}
+
+- (void) invalidate
+{
+	reserveInvalidate = YES ;
 }
 
 @end
 
 @implementation CNCountTimer (CNPrivate)
 
-- (void) triggerByTimer
+- (void) triggerByTimer: (NSTimer *) timer
 {
-	if(downCount > 0){
+	//printf("%s count %u -> ", __func__, downCount) ;
+	if(downCount > 0 && !reserveInvalidate){
 		[timerDelegate repeatForCount: downCount-1] ;
 		downCount-- ;
+		//puts("continue") ;
 	} else {
 		[timerDelegate repeatDone] ;
-		[timerBody invalidate] ;
-		timerBody = nil ;
+		[timer invalidate] ;
+		reserveInvalidate = NO ;
+		//puts("invalidate") ;
 	}
 }
 
