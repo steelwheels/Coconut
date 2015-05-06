@@ -92,3 +92,16 @@ bb
 observe: keypath value, context 0x0-> notifier value 1
 observe: keypath value, context 0x0-> notifier value 1
 observe: keypath value, context 0x0-> notifier value 2
+********************************************************************************
+* CNCountTimer
+********************************************************************************
+[1st-state] repeatForCount: 4
+[1st-state] repeatForCount: 3
+[1st-state] repeatForCount: 2
+[1st-state] repeatForCount: 1
+[1st-state] repeatForCount: 0
+[1st-state] repeatDone
+[2nd-state] repeatForCount: 2
+[2nd-state] repeatForCount: 1
+[2nd-state] repeatForCount: 0
+[2nd-state] repeatDone

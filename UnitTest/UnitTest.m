@@ -24,6 +24,7 @@ int main(int argc, const char * argv[]) {
 		printTitle("CNURL") ;			testURL() ;
 		printTitle("CNInputFile") ;		testFile() ;
 		printTitle("CNNotifierObject") ;	testNotifierObject() ;
+		printTitle("CNCountTimer") ;		testTimer() ;
 	}
     return 0;
 }

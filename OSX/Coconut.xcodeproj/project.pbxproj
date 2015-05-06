@@ -59,6 +59,7 @@
 		05F63BF71A496AA900086CBE /* CNURL.h in Headers */ = {isa = PBXBuildFile; fileRef = 05F63BF51A496AA900086CBE /* CNURL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05F63BF81A496AA900086CBE /* CNURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F63BF61A496AA900086CBE /* CNURL.m */; };
 		05F63BFA1A49800C00086CBE /* UTURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F63BF91A49800C00086CBE /* UTURL.m */; };
+		05F66FC51AF9E17E00AA3F36 /* UTTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F66FC41AF9E17E00AA3F36 /* UTTimer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,6 +156,7 @@
 		05F63BF51A496AA900086CBE /* CNURL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNURL.h; path = ../Source/File/CNURL.h; sourceTree = "<group>"; };
 		05F63BF61A496AA900086CBE /* CNURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CNURL.m; path = ../Source/File/CNURL.m; sourceTree = "<group>"; };
 		05F63BF91A49800C00086CBE /* UTURL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTURL.m; path = ../UnitTest/UTURL.m; sourceTree = SOURCE_ROOT; };
+		05F66FC41AF9E17E00AA3F36 /* UTTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UTTimer.m; path = ../UnitTest/UTTimer.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,9 +268,11 @@
 				05F63BF91A49800C00086CBE /* UTURL.m */,
 				05B26A301A4C765C00A0C5F8 /* UTFile.m */,
 				0508B22F1AB59D2C00AD3DB9 /* UTNotifierObject.m */,
+				05F66FC41AF9E17E00AA3F36 /* UTTimer.m */,
 				059D3DC51A34003300FAB027 /* Supporting Files */,
 			);
-			path = UnitTest;
+			name = UnitTest;
+			path = ../UnitTest;
 			sourceTree = SOURCE_ROOT;
 		};
 		059D3DC51A34003300FAB027 /* Supporting Files */ = {
@@ -536,6 +540,7 @@
 				0508B2301AB59D2C00AD3DB9 /* UTNotifierObject.m in Sources */,
 				054EAB671A4EDBDB00516EA3 /* UTRegularExpression.m in Sources */,
 				051EB9551A3C171D00B0FBC0 /* UTValue.m in Sources */,
+				05F66FC51AF9E17E00AA3F36 /* UTTimer.m in Sources */,
 				05B26A311A4C765C00A0C5F8 /* UTFile.m in Sources */,
 				051EB9531A3C12E800B0FBC0 /* UTError.m in Sources */,
 				056DC07C1A3F5297002F7EF9 /* UTText.m in Sources */,

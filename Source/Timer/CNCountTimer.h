@@ -15,7 +15,7 @@
 
 @interface CNCountTimer : NSObject
 {
-	BOOL				reserveInvalidate ;
+	NSTimer *			timerBody ;
 	id <CNCountTimerDelegate>	timerDelegate ;
 	unsigned int			downCount ;
 	double				intervalTime ;

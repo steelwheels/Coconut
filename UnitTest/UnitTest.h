@@ -15,5 +15,6 @@ void testRegularExpression(void) ;
 void testURL(void) ;
 void testFile(void) ;
 void testNotifierObject(void) ;
+void testTimer(void) ;
 
 
