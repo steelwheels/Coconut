@@ -16,28 +16,24 @@
 - (instancetype) init
 {
 	if((self = [super init]) != nil){
-		timerBody		= nil ;
+		doInvalidate		= NO ;
 		timerDelegate		= nil ;
 		downCount		= 0 ;
-		intervalTime		= 0.0 ;
 	}
 	return self ;
 }
 
 - (void) repeatWithCount: (unsigned int) count withInterval: (double) interval withDelegate: (id <CNCountTimerDelegate>) delegate
 {
-	[self invalidate] ;
 	if((downCount = count) > 0){
 		timerDelegate = delegate ;
-		intervalTime = interval ;
-		timerBody = [NSTimer timerWithTimeInterval: intervalTime
-						    target: self
-						  selector: @selector(triggerByTimer:)
-						  userInfo: nil
-						   repeats: YES] ;
-		//printf("%s start timer on runloop\n", __func__) ;
+		NSTimer * timer = [NSTimer timerWithTimeInterval: interval
+							  target: self
+							selector: @selector(triggerByTimer:)
+							userInfo: nil
+							 repeats: YES] ;
 		NSRunLoop *runLoop = [NSRunLoop currentRunLoop] ;
-		[runLoop addTimer: timerBody forMode:NSRunLoopCommonModes] ;
+		[runLoop addTimer: timer forMode:NSRunLoopCommonModes] ;
 	} else {
 		[delegate repeatDone] ;
 	}
@@ -45,11 +41,8 @@
 
 - (void) invalidate
 {
-	if(timerBody != nil){
-		if([timerBody isValid]){
-			[timerBody invalidate] ;
-		}
-		timerBody = nil ;
+	if(downCount > 0){
+		doInvalidate = YES ;
 	}
 }
 
@@ -59,17 +52,16 @@
 
 - (void) triggerByTimer: (NSTimer *) timer
 {
-	//printf("%s count %u -> ", __func__, downCount) ;
-	if(downCount > 0){
+	if(downCount > 0 && !doInvalidate){
 		[timerDelegate repeatForCount: downCount-1] ;
 		downCount-- ;
-		//puts("continue") ;
 	} else {
 		[timerDelegate repeatDone] ;
 		[timer invalidate] ;
-		timerBody = nil ;
-		//puts("invalidate") ;
+		doInvalidate = NO ;
 	}
 }
 
 @end
+
+
