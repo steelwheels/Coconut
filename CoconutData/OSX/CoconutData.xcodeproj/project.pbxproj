@@ -12,6 +12,16 @@
 		05B2A068208AD39600D16E60 /* CoconutData.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B2A066208AD39600D16E60 /* CoconutData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		05F5DAC2208AD8A4006EB134 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05B2A062208AD39600D16E60;
+			remoteInfo = CoconutData;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		052136B1208AD5F30098F1A7 /* CNArrayStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNArrayStream.swift; sourceTree = "<group>"; };
 		052136B2208AD5F30098F1A7 /* CNStringStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringStream.swift; sourceTree = "<group>"; };
@@ -88,6 +98,24 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXLegacyTarget section */
+		05F5DAB8208AD844006EB134 /* Install */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-f ../../Script/install_osx.mk";
+			buildConfigurationList = 05F5DAB9208AD844006EB134 /* Build configuration list for PBXLegacyTarget "Install" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
+			dependencies = (
+				05F5DAC3208AD8A4006EB134 /* PBXTargetDependency */,
+			);
+			name = Install;
+			passBuildSettingsInEnvironment = 1;
+			productName = Install;
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		05B2A062208AD39600D16E60 /* CoconutData */ = {
 			isa = PBXNativeTarget;
@@ -120,6 +148,9 @@
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 0930;
 					};
+					05F5DAB8208AD844006EB134 = {
+						CreatedOnToolsVersion = 9.3;
+					};
 				};
 			};
 			buildConfigurationList = 05B2A05D208AD39600D16E60 /* Build configuration list for PBXProject "CoconutData" */;
@@ -135,6 +166,7 @@
 			projectRoot = "";
 			targets = (
 				05B2A062208AD39600D16E60 /* CoconutData */,
+				05F5DAB8208AD844006EB134 /* Install */,
 			);
 		};
 /* End PBXProject section */
@@ -160,6 +192,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		05F5DAC3208AD8A4006EB134 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05B2A062208AD39600D16E60 /* CoconutData */;
+			targetProxy = 05F5DAC2208AD8A4006EB134 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		05B2A069208AD39600D16E60 /* Debug */ = {
@@ -295,7 +335,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -303,7 +343,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutData;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 			};
@@ -323,7 +363,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -331,8 +371,35 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutData;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		05F5DABA208AD844006EB134 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		05F5DABB208AD844006EB134 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -353,6 +420,15 @@
 			buildConfigurations = (
 				05B2A06C208AD39600D16E60 /* Debug */,
 				05B2A06D208AD39600D16E60 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05F5DAB9208AD844006EB134 /* Build configuration list for PBXLegacyTarget "Install" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05F5DABA208AD844006EB134 /* Debug */,
+				05F5DABB208AD844006EB134 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
