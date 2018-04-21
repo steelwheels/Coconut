@@ -7,7 +7,7 @@ ios_dir		= iOS
 script_dir	= ../Script
 env_file	= xcode_sets.env
 
-all: osx ios
+all: osx
 
 osx: dummy
 	(cd $(osx_dir) \

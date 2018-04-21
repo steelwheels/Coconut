@@ -1,0 +1,5 @@
+// xcode setting: packaging -> Private module map file = module.modulemap
+module CNEditLineCore {
+	header "../Source/ObjC/CNEditLineCore.h"
+}
+
