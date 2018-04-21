@@ -1,31 +1,15 @@
-Coconut Framework
-=================
+# Coconut Frameworks
+## Introduction
+This document contains describes about Coconut Frameworks.
+It contains some frameworks based on the [Foundation Framework](https://developer.apple.com/documentation/foundation) for macOS and iOS.
 
-Overview
---------
-Coconut framework contains general purpose data structure for Mac OS X and iOS,
+## Copyright
+Copyright (C) 2014-2018 [Steel Wheels Project](https://sites.google.com/site/steelwheelsproject/).
+This software is distributed under [GNU LESSER GENERAL PUBLIC LICENSE Version 2.1](https://www.gnu.org/licenses/lgpl-2.1-standalone.html) and the document is distributed under [GNU Free Documentation License](https://www.gnu.org/licenses/fdl-1.3.en.html).
 
-Copyright
----------
-Copyright (C) 2014 [Steel Wheels Project](https://sites.google.com/site/steelwheelsproject/).
+## Frameworks in this package
+1. CoconutData Framework: The framework to define basic data representation and logics.
 
-This software is distributed under [GNU LESSER GENERAL PUBLIC LICENSE Version 2.1](https://www.gnu.org/licenses/lgpl-2.1-standalone.html).
-
-Contents
---------
-This library has following kind of classes:
-* Value : The object which can have multiple classes value
-* List  : Single linked list (CNList) and list items for it (CNListItem)
-* Graph : Data structures to present graph structure
-	* Graph : The graph which contains nodes and edges (CNGraph)
-	* Node : Graph node (CNNode)
-	* Edge : Graph edge (CNEdge)
-* Text  : Data structures to present text structure
-	* Text        : Super class of all the other text classes (CNText)
-	* TextLine    : Text line class (CNTextLine)
-	* TextSection : Text Section class (CNTextSection)
-* Regular expression : Regular expression for text processing 
-          (CNRegularExpression)
-* File  : Extend NSURL class methods
-* Error : Extend NSError class methods
-
+## Related links
+* [Coconut Frameworks](https://github.com/steelwheels/Coconut): Source code repository on GitHub.
+* [Steel Wheels Project Main Page ](http://steelwheels.github.io/): Developer of this document
