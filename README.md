@@ -9,6 +9,7 @@ This software is distributed under [GNU LESSER GENERAL PUBLIC LICENSE Version 2.
 
 ## Frameworks in this package
 1. CoconutData Framework: The framework to define basic data representation and logics.
+2. CoconutShell Framework: The framework to use command line applications and control character base terminal.
 
 ## Related links
 * [Coconut Frameworks](https://github.com/steelwheels/Coconut): Source code repository on GitHub.

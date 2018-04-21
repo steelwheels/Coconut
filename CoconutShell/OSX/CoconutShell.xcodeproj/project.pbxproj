@@ -17,6 +17,16 @@
 		057D2CE5208B42F300E02E71 /* CNShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057D2CE4208B42F200E02E71 /* CNShell.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		05725CFD208B66FA008A97D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 051FA46C208B40F200AEC734 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 051FA474208B40F200AEC734;
+			remoteInfo = CoconutShell;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		051FA475208B40F200AEC734 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		051FA478208B40F200AEC734 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
@@ -106,6 +116,24 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXLegacyTarget section */
+		05725CF9208B66F1008A97D1 /* Install */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-f ../../Script/Install_osx.mk";
+			buildConfigurationList = 05725CFA208B66F2008A97D1 /* Build configuration list for PBXLegacyTarget "Install" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
+			dependencies = (
+				05725CFE208B66FA008A97D1 /* PBXTargetDependency */,
+			);
+			name = Install;
+			passBuildSettingsInEnvironment = 1;
+			productName = Install;
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		051FA474208B40F200AEC734 /* CoconutShell */ = {
 			isa = PBXNativeTarget;
@@ -138,6 +166,9 @@
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 0930;
 					};
+					05725CF9208B66F1008A97D1 = {
+						CreatedOnToolsVersion = 9.3;
+					};
 				};
 			};
 			buildConfigurationList = 051FA46F208B40F200AEC734 /* Build configuration list for PBXProject "CoconutShell" */;
@@ -153,6 +184,7 @@
 			projectRoot = "";
 			targets = (
 				051FA474208B40F200AEC734 /* CoconutShell */,
+				05725CF9208B66F1008A97D1 /* Install */,
 			);
 		};
 /* End PBXProject section */
@@ -182,6 +214,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		05725CFE208B66FA008A97D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 051FA474208B40F200AEC734 /* CoconutShell */;
+			targetProxy = 05725CFD208B66FA008A97D1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		051FA47B208B40F200AEC734 /* Debug */ = {
@@ -376,6 +416,33 @@
 			};
 			name = Release;
 		};
+		05725CFB208B66F2008A97D1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		05725CFC208B66F2008A97D1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -393,6 +460,15 @@
 			buildConfigurations = (
 				051FA47E208B40F200AEC734 /* Debug */,
 				051FA47F208B40F200AEC734 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05725CFA208B66F2008A97D1 /* Build configuration list for PBXLegacyTarget "Install" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05725CFB208B66F2008A97D1 /* Debug */,
+				05725CFC208B66F2008A97D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
