@@ -10,6 +10,7 @@ This software is distributed under [GNU LESSER GENERAL PUBLIC LICENSE Version 2.
 ## Frameworks in this package
 1. [CoconutData Framework](https://github.com/steelwheels/Coconut/blob/master/CoconutData/README.md): The framework to define basic data representation and logics.
 2. [CoconutShell Framework](https://github.com/steelwheels/Coconut/blob/master/CoconutShell/README.md): The framework to use command line applications and control character base terminal.
+3. [CoconutDatabase Framework](https://github.com/steelwheels/Coconut/blob/master/CoconutDatabase/README.md): The framework to access/manage database such as address book.
 
 ## Related links
 * [Coconut Frameworks](https://github.com/steelwheels/Coconut): Source code repository on GitHub.
