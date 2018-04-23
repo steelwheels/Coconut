@@ -6,12 +6,7 @@
 //  Copyright © 2018年 Steel Wheels Project. All rights reserved.
 //
 
-#import "TargetConditionals.h"
-#if 	TARGET_OS_IPHONE
-#	import <UIKit/UIKit.h>
-#else
-#	import <Cocoa/Cocoa.h>
-#endif
+#import <UIKit/UIKit.h>
 
 //! Project version number for CoconutDatabase.
 FOUNDATION_EXPORT double CoconutDatabaseVersionNumber;

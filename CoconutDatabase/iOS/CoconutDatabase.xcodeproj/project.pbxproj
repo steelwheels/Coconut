@@ -7,29 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		05E0B08E208CCA48004BB276 /* CoconutDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 05E0B08C208CCA48004BB276 /* CoconutDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05FC1F18208CD2ED004447BE /* CNAddressBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC1F17208CD2ED004447BE /* CNAddressBook.swift */; };
+		05980FF5208CD55700D423E4 /* CNAddressBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05980FF4208CD55700D423E4 /* CNAddressBook.swift */; };
+		05FC1F2E208CD417004447BE /* CoconutDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 05FC1F2C208CD417004447BE /* CoconutDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		05FC1F1D208CD3ED004447BE /* PBXContainerItemProxy */ = {
+		05980FF2208CD4F100D423E4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 05E0B080208CCA48004BB276 /* Project object */;
+			containerPortal = 05FC1F20208CD417004447BE /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 05E0B088208CCA48004BB276;
+			remoteGlobalIDString = 05FC1F28208CD417004447BE;
 			remoteInfo = CoconutDatabase;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		05E0B089208CCA48004BB276 /* CoconutDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		05E0B08C208CCA48004BB276 /* CoconutDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutDatabase.h; sourceTree = "<group>"; };
-		05E0B08D208CCA48004BB276 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		05FC1F17208CD2ED004447BE /* CNAddressBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAddressBook.swift; sourceTree = "<group>"; };
+		05980FF4208CD55700D423E4 /* CNAddressBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAddressBook.swift; sourceTree = "<group>"; };
+		05FC1F29208CD417004447BE /* CoconutDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		05FC1F2C208CD417004447BE /* CoconutDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutDatabase.h; sourceTree = "<group>"; };
+		05FC1F2D208CD417004447BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		05E0B085208CCA48004BB276 /* Frameworks */ = {
+		05FC1F25208CD417004447BE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -39,65 +39,65 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0509C059208CCA69003C409D /* Source */ = {
+		05980FED208CD4AB00D423E4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				05E0B08C208CCA48004BB276 /* CoconutDatabase.h */,
-				05FC1F17208CD2ED004447BE /* CNAddressBook.swift */,
+				05FC1F2C208CD417004447BE /* CoconutDatabase.h */,
+				05980FF4208CD55700D423E4 /* CNAddressBook.swift */,
 			);
 			name = Source;
 			path = ../Source;
 			sourceTree = "<group>";
 		};
-		05E0B07F208CCA48004BB276 = {
+		05FC1F1F208CD417004447BE = {
 			isa = PBXGroup;
 			children = (
-				0509C059208CCA69003C409D /* Source */,
-				05E0B08B208CCA48004BB276 /* OSX */,
-				05E0B08A208CCA48004BB276 /* Products */,
+				05980FED208CD4AB00D423E4 /* Source */,
+				05FC1F2B208CD417004447BE /* CoconutDatabase */,
+				05FC1F2A208CD417004447BE /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		05E0B08A208CCA48004BB276 /* Products */ = {
+		05FC1F2A208CD417004447BE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				05E0B089208CCA48004BB276 /* CoconutDatabase.framework */,
+				05FC1F29208CD417004447BE /* CoconutDatabase.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		05E0B08B208CCA48004BB276 /* OSX */ = {
+		05FC1F2B208CD417004447BE /* CoconutDatabase */ = {
 			isa = PBXGroup;
 			children = (
-				05E0B08D208CCA48004BB276 /* Info.plist */,
+				05FC1F2D208CD417004447BE /* Info.plist */,
 			);
-			name = OSX;
+			path = CoconutDatabase;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		05E0B086208CCA48004BB276 /* Headers */ = {
+		05FC1F26208CD417004447BE /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05E0B08E208CCA48004BB276 /* CoconutDatabase.h in Headers */,
+				05FC1F2E208CD417004447BE /* CoconutDatabase.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXLegacyTarget section */
-		05FC1F19208CD3D4004447BE /* Install */ = {
+		05980FEE208CD4E900D423E4 /* Install */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "-f ../../Script/install_osx.mk";
-			buildConfigurationList = 05FC1F1A208CD3D4004447BE /* Build configuration list for PBXLegacyTarget "Install" */;
+			buildArgumentsString = "-f ../../Script/install_ios.mk";
+			buildConfigurationList = 05980FEF208CD4E900D423E4 /* Build configuration list for PBXLegacyTarget "Install" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			buildWorkingDirectory = "";
 			dependencies = (
-				05FC1F1E208CD3ED004447BE /* PBXTargetDependency */,
+				05980FF3208CD4F100D423E4 /* PBXTargetDependency */,
 			);
 			name = Install;
 			passBuildSettingsInEnvironment = 1;
@@ -106,14 +106,14 @@
 /* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
-		05E0B088208CCA48004BB276 /* CoconutDatabase */ = {
+		05FC1F28208CD417004447BE /* CoconutDatabase */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 05E0B091208CCA48004BB276 /* Build configuration list for PBXNativeTarget "CoconutDatabase" */;
+			buildConfigurationList = 05FC1F31208CD417004447BE /* Build configuration list for PBXNativeTarget "CoconutDatabase" */;
 			buildPhases = (
-				05E0B084208CCA48004BB276 /* Sources */,
-				05E0B085208CCA48004BB276 /* Frameworks */,
-				05E0B086208CCA48004BB276 /* Headers */,
-				05E0B087208CCA48004BB276 /* Resources */,
+				05FC1F24208CD417004447BE /* Sources */,
+				05FC1F25208CD417004447BE /* Frameworks */,
+				05FC1F26208CD417004447BE /* Headers */,
+				05FC1F27208CD417004447BE /* Resources */,
 			);
 			buildRules = (
 			);
@@ -121,47 +121,47 @@
 			);
 			name = CoconutDatabase;
 			productName = CoconutDatabase;
-			productReference = 05E0B089208CCA48004BB276 /* CoconutDatabase.framework */;
+			productReference = 05FC1F29208CD417004447BE /* CoconutDatabase.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		05E0B080208CCA48004BB276 /* Project object */ = {
+		05FC1F20208CD417004447BE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
-					05E0B088208CCA48004BB276 = {
+					05980FEE208CD4E900D423E4 = {
+						CreatedOnToolsVersion = 9.3;
+					};
+					05FC1F28208CD417004447BE = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 0930;
 					};
-					05FC1F19208CD3D4004447BE = {
-						CreatedOnToolsVersion = 9.3;
-					};
 				};
 			};
-			buildConfigurationList = 05E0B083208CCA48004BB276 /* Build configuration list for PBXProject "CoconutDatabase" */;
+			buildConfigurationList = 05FC1F23208CD417004447BE /* Build configuration list for PBXProject "CoconutDatabase" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 05E0B07F208CCA48004BB276;
-			productRefGroup = 05E0B08A208CCA48004BB276 /* Products */;
+			mainGroup = 05FC1F1F208CD417004447BE;
+			productRefGroup = 05FC1F2A208CD417004447BE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				05E0B088208CCA48004BB276 /* CoconutDatabase */,
-				05FC1F19208CD3D4004447BE /* Install */,
+				05FC1F28208CD417004447BE /* CoconutDatabase */,
+				05980FEE208CD4E900D423E4 /* Install */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		05E0B087208CCA48004BB276 /* Resources */ = {
+		05FC1F27208CD417004447BE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -171,26 +171,53 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		05E0B084208CCA48004BB276 /* Sources */ = {
+		05FC1F24208CD417004447BE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05FC1F18208CD2ED004447BE /* CNAddressBook.swift in Sources */,
+				05980FF5208CD55700D423E4 /* CNAddressBook.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		05FC1F1E208CD3ED004447BE /* PBXTargetDependency */ = {
+		05980FF3208CD4F100D423E4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 05E0B088208CCA48004BB276 /* CoconutDatabase */;
-			targetProxy = 05FC1F1D208CD3ED004447BE /* PBXContainerItemProxy */;
+			target = 05FC1F28208CD417004447BE /* CoconutDatabase */;
+			targetProxy = 05980FF2208CD4F100D423E4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		05E0B08F208CCA48004BB276 /* Debug */ = {
+		05980FF0208CD4E900D423E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		05980FF1208CD4E900D423E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		05FC1F2F208CD417004447BE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -222,7 +249,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -242,10 +269,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -253,7 +280,7 @@
 			};
 			name = Debug;
 		};
-		05E0B090208CCA48004BB276 /* Release */ = {
+		05FC1F30208CD417004447BE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -285,7 +312,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -299,133 +326,103 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
+				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		05E0B092208CCA48004BB276 /* Debug */ = {
+		05FC1F32208CD417004447BE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
-				FRAMEWORK_VERSION = A;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				FRAMEWORK_SEARCH_PATHS = "$(HOME)/local/Frameworks";
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "$(HOME)/local/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutDatabase;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		05E0B093208CCA48004BB276 /* Release */ = {
+		05FC1F33208CD417004447BE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
-				FRAMEWORK_VERSION = A;
-				GCC_OPTIMIZATION_LEVEL = 2;
+				FRAMEWORK_SEARCH_PATHS = "$(HOME)/local/Frameworks";
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "$(HOME)/local/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutDatabase;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 4.0;
-			};
-			name = Release;
-		};
-		05FC1F1B208CD3D4004447BE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEBUGGING_SYMBOLS = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = TR2DNF3P93;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		05FC1F1C208CD3D4004447BE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = TR2DNF3P93;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		05E0B083208CCA48004BB276 /* Build configuration list for PBXProject "CoconutDatabase" */ = {
+		05980FEF208CD4E900D423E4 /* Build configuration list for PBXLegacyTarget "Install" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				05E0B08F208CCA48004BB276 /* Debug */,
-				05E0B090208CCA48004BB276 /* Release */,
+				05980FF0208CD4E900D423E4 /* Debug */,
+				05980FF1208CD4E900D423E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		05E0B091208CCA48004BB276 /* Build configuration list for PBXNativeTarget "CoconutDatabase" */ = {
+		05FC1F23208CD417004447BE /* Build configuration list for PBXProject "CoconutDatabase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				05E0B092208CCA48004BB276 /* Debug */,
-				05E0B093208CCA48004BB276 /* Release */,
+				05FC1F2F208CD417004447BE /* Debug */,
+				05FC1F30208CD417004447BE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		05FC1F1A208CD3D4004447BE /* Build configuration list for PBXLegacyTarget "Install" */ = {
+		05FC1F31208CD417004447BE /* Build configuration list for PBXNativeTarget "CoconutDatabase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				05FC1F1B208CD3D4004447BE /* Debug */,
-				05FC1F1C208CD3D4004447BE /* Release */,
+				05FC1F32208CD417004447BE /* Debug */,
+				05FC1F33208CD417004447BE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 05E0B080208CCA48004BB276 /* Project object */;
+	rootObject = 05FC1F20208CD417004447BE /* Project object */;
 }
