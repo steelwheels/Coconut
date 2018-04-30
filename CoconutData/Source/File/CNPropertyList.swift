@@ -9,12 +9,22 @@ import Foundation
 
 public class CNPropertyList
 {
-	private var mBundleDirName	: String
+	private enum BundleDirectory {
+		case bundleDirectory(String)
+		case applicationDirectory
+	}
+
+	private var mBundleDirectory	: BundleDirectory
 	private var mPropertyList	: NSDictionary?
 
 	public init(bundleDirectoryName dirname: String){
-		mBundleDirName = dirname
-		mPropertyList  = nil
+		mBundleDirectory = .bundleDirectory(dirname)
+		mPropertyList    = nil
+	}
+
+	public init(applicationDirectoryName dirname: String){
+		mBundleDirectory = .applicationDirectory
+		mPropertyList    = nil
 	}
 
 	public var version: String? {
@@ -32,18 +42,26 @@ public class CNPropertyList
 		if let plist = mPropertyList {
 			return plist
 		} else {
-			if let pathname = mainBundlePath() {
-				if let plist = NSDictionary(contentsOfFile: pathname) {
-					mPropertyList = plist
-					return plist
+			switch mBundleDirectory {
+			case .applicationDirectory:
+				if let dict = Bundle.main.infoDictionary {
+					mPropertyList = NSDictionary(dictionary: dict)
+					return mPropertyList
+				}
+			case .bundleDirectory(let bname):
+				if let pathname = mainBundlePath(bundleName: bname) {
+					if let plist = NSDictionary(contentsOfFile: pathname) {
+						mPropertyList = plist
+						return plist
+					}
 				}
 			}
 		}
 		return nil
 	}
 
-	private func mainBundlePath() -> String? {
-		if let path = Bundle.main.path(forResource: "Info", ofType: "plist", inDirectory: mBundleDirName + "/Contents") {
+	private func mainBundlePath(bundleName bname: String) -> String? {
+		if let path = Bundle.main.path(forResource: "Info", ofType: "plist", inDirectory: bname + "/Contents") {
 			return path
 		} else {
 			return nil
