@@ -61,9 +61,8 @@ internal class CNBookmarks
 			let data = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
 			return data
 		}
-		catch {
-			let urlstr = url.absoluteString
-			fatalError("Can not allocate bookmark: \"\(urlstr)")
+		catch let err as NSError {
+			fatalError("\(err.description)")
 		}
 	}
 

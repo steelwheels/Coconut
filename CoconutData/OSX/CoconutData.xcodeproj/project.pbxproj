@@ -38,6 +38,12 @@
 		0599584C208AF07700DE2DC9 /* CNTokenStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584A208AF07700DE2DC9 /* CNTokenStream.swift */; };
 		05995855208AF10300DE2DC9 /* CNParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995854208AF10300DE2DC9 /* CNParser.swift */; };
 		05B2A068208AD39600D16E60 /* CoconutData.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B2A066208AD39600D16E60 /* CoconutData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05C52E7E20993ABF00DD56B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C52E7D20993ABF00DD56B4 /* AppDelegate.swift */; };
+		05C52E8020993ABF00DD56B4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C52E7F20993ABF00DD56B4 /* ViewController.swift */; };
+		05C52E8220993AC000DD56B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05C52E8120993AC000DD56B4 /* Assets.xcassets */; };
+		05C52E8520993AC000DD56B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05C52E8320993AC000DD56B4 /* Main.storyboard */; };
+		05C52E9020993DE600DD56B4 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; };
+		05C52E9220993E0600DD56B4 /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05DF7D992090D4B1003B5110 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF7D982090D4B1003B5110 /* CNStringUtil.swift */; };
 		05E81091208B33F800230477 /* CNAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E81090208B33F800230477 /* CNAccess.swift */; };
 		05F5EA71208F793400CF98C3 /* CNText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA70208F793400CF98C3 /* CNText.swift */; };
@@ -45,6 +51,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		05C52E8B20993AD600DD56B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05F5DAB8208AD844006EB134;
+			remoteInfo = Install;
+		};
 		05F5DAC2208AD8A4006EB134 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
@@ -53,6 +66,19 @@
 			remoteInfo = CoconutData;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		05C52E9120993DEE00DD56B4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				05C52E9220993E0600DD56B4 /* CoconutData.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0503766C208B2EE200D2DB37 /* CNError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNError.swift; sourceTree = "<group>"; };
@@ -88,6 +114,14 @@
 		05B2A063208AD39600D16E60 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B2A066208AD39600D16E60 /* CoconutData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData.h; sourceTree = "<group>"; };
 		05B2A067208AD39600D16E60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05C52E7B20993ABF00DD56B4 /* UTApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UTApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		05C52E7D20993ABF00DD56B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		05C52E7F20993ABF00DD56B4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		05C52E8120993AC000DD56B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		05C52E8420993AC000DD56B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		05C52E8620993AC000DD56B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05C52E8720993AC000DD56B4 /* UTApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UTApplication.entitlements; sourceTree = "<group>"; };
+		05C52E8F20993DE600DD56B4 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		05DF7D982090D4B1003B5110 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05E81090208B33F800230477 /* CNAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAccess.swift; sourceTree = "<group>"; };
 		05F5EA70208F793400CF98C3 /* CNText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNText.swift; sourceTree = "<group>"; };
@@ -99,6 +133,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05C52E7820993ABF00DD56B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05C52E9020993DE600DD56B4 /* CoconutData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,12 +218,24 @@
 			path = Parser;
 			sourceTree = "<group>";
 		};
+		05A7FE6320993A570043BC53 /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				05C52E8D20993B5B00DD56B4 /* UTApplication */,
+			);
+			name = Test;
+			path = ../Test;
+			sourceTree = "<group>";
+		};
 		05B2A059208AD39600D16E60 = {
 			isa = PBXGroup;
 			children = (
 				05DA41CF208AD3F800EF285F /* Source */,
+				05A7FE6320993A570043BC53 /* Test */,
 				05B2A065208AD39600D16E60 /* OSX */,
+				05C52E7C20993ABF00DD56B4 /* UTApplication */,
 				05B2A064208AD39600D16E60 /* Products */,
+				05C52E8E20993DE600DD56B4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -189,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				05B2A063208AD39600D16E60 /* CoconutData.framework */,
+				05C52E7B20993ABF00DD56B4 /* UTApplication.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -199,6 +254,34 @@
 				05B2A067208AD39600D16E60 /* Info.plist */,
 			);
 			name = OSX;
+			sourceTree = "<group>";
+		};
+		05C52E7C20993ABF00DD56B4 /* UTApplication */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UTApplication;
+			sourceTree = "<group>";
+		};
+		05C52E8D20993B5B00DD56B4 /* UTApplication */ = {
+			isa = PBXGroup;
+			children = (
+				05C52E7D20993ABF00DD56B4 /* AppDelegate.swift */,
+				05C52E7F20993ABF00DD56B4 /* ViewController.swift */,
+				05C52E8120993AC000DD56B4 /* Assets.xcassets */,
+				05C52E8620993AC000DD56B4 /* Info.plist */,
+				05C52E8720993AC000DD56B4 /* UTApplication.entitlements */,
+				05C52E8320993AC000DD56B4 /* Main.storyboard */,
+			);
+			path = UTApplication;
+			sourceTree = "<group>";
+		};
+		05C52E8E20993DE600DD56B4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				05C52E8F20993DE600DD56B4 /* CoconutData.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		05C68AAE208AFD17003C813E /* File */ = {
@@ -295,18 +378,46 @@
 			productReference = 05B2A063208AD39600D16E60 /* CoconutData.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		05C52E7A20993ABF00DD56B4 /* UTApplication */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05C52E8820993AC000DD56B4 /* Build configuration list for PBXNativeTarget "UTApplication" */;
+			buildPhases = (
+				05C52E7720993ABF00DD56B4 /* Sources */,
+				05C52E7820993ABF00DD56B4 /* Frameworks */,
+				05C52E7920993ABF00DD56B4 /* Resources */,
+				05C52E9120993DEE00DD56B4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				05C52E8C20993AD600DD56B4 /* PBXTargetDependency */,
+			);
+			name = UTApplication;
+			productName = UTApplication;
+			productReference = 05C52E7B20993ABF00DD56B4 /* UTApplication.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		05B2A05A208AD39600D16E60 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
 					05B2A062208AD39600D16E60 = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 0930;
+					};
+					05C52E7A20993ABF00DD56B4 = {
+						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 					05F5DAB8208AD844006EB134 = {
 						CreatedOnToolsVersion = 9.3;
@@ -319,6 +430,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 05B2A059208AD39600D16E60;
 			productRefGroup = 05B2A064208AD39600D16E60 /* Products */;
@@ -327,6 +439,7 @@
 			targets = (
 				05B2A062208AD39600D16E60 /* CoconutData */,
 				05F5DAB8208AD844006EB134 /* Install */,
+				05C52E7A20993ABF00DD56B4 /* UTApplication */,
 			);
 		};
 /* End PBXProject section */
@@ -336,6 +449,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05C52E7920993ABF00DD56B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05C52E8220993AC000DD56B4 /* Assets.xcassets in Resources */,
+				05C52E8520993AC000DD56B4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,15 +505,40 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05C52E7720993ABF00DD56B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05C52E8020993ABF00DD56B4 /* ViewController.swift in Sources */,
+				05C52E7E20993ABF00DD56B4 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		05C52E8C20993AD600DD56B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05F5DAB8208AD844006EB134 /* Install */;
+			targetProxy = 05C52E8B20993AD600DD56B4 /* PBXContainerItemProxy */;
+		};
 		05F5DAC3208AD8A4006EB134 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 05B2A062208AD39600D16E60 /* CoconutData */;
 			targetProxy = 05F5DAC2208AD8A4006EB134 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		05C52E8320993AC000DD56B4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				05C52E8420993AC000DD56B4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		05B2A069208AD39600D16E60 /* Debug */ = {
@@ -526,6 +673,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -555,6 +703,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -567,6 +716,52 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		05C52E8920993AC000DD56B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ../Test/UTApplication/UTApplication.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = ../Test/UTApplication/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTApplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		05C52E8A20993AC000DD56B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ../Test/UTApplication/UTApplication.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = ../Test/UTApplication/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTApplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -615,6 +810,15 @@
 			buildConfigurations = (
 				05B2A06C208AD39600D16E60 /* Debug */,
 				05B2A06D208AD39600D16E60 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05C52E8820993AC000DD56B4 /* Build configuration list for PBXNativeTarget "UTApplication" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05C52E8920993AC000DD56B4 /* Debug */,
+				05C52E8A20993AC000DD56B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
