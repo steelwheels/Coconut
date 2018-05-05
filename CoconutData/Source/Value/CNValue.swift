@@ -200,7 +200,7 @@ private enum CNValueData {
 			case .UIntValue(let val):	result = "\(val)"
 			case .FloatValue(let val):	result = "\(val)"
 			case .DoubleValue(let val):	result = "\(val)"
-			case .StringValue(let val):	result = "\"" + val + "\""
+			case .StringValue(let val):	result = val
 			case .DateValue(let val):	result = val.description
 			case .ArrayValue(let arr):
 				var str:String = "["

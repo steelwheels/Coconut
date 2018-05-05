@@ -11,7 +11,7 @@ import Foundation
 public func testValue(console cons: CNConsole) -> Bool
 {
 	let res0 = printValue(value: CNValue(booleanValue: true), expected: "true", console: cons)
-	let res1 = printValue(value: CNValue(stringValue: "Hello, world"), expected: "\"Hello, world\"", console: cons)
+	let res1 = printValue(value: CNValue(stringValue: "Hello, world"), expected: "Hello, world", console: cons)
 	return res0 && res1
 }
 
