@@ -169,3 +169,65 @@ public class CNPipeConsole: CNConsole
 		}
 	}
 }
+
+public class CNBufferedConsole: CNConsole
+{
+	private enum BufferedString {
+	case OutputString(String)
+	case ErrorString(String)
+	}
+
+	private var mReceiverConsole:	CNConsole?
+	private var mBuffer:		Array<BufferedString>
+
+	public override init(){
+		mReceiverConsole	= nil
+		mBuffer			= []
+		super.init()
+	}
+
+	public var receiverConsole: CNConsole? {
+		get { return mReceiverConsole }
+		set(newcons){
+			mReceiverConsole = newcons
+			if let recv = mReceiverConsole {
+				flush(receiver: recv)
+			}
+		}
+	}
+
+	public override func print(string str: String){
+		mBuffer.append(.OutputString(str))
+		if let recv = mReceiverConsole {
+			flush(receiver: recv)
+		}
+	}
+
+	public override func error(string str: String){
+		mBuffer.append(.ErrorString(str))
+		if let recv = mReceiverConsole {
+			flush(receiver: recv)
+		}
+	}
+
+	public override func scan() -> String? {
+		if let recv = mReceiverConsole {
+			return recv.scan()
+		} else {
+			return nil
+		}
+	}
+
+	private func flush(receiver recv: CNConsole){
+		for bstr in mBuffer {
+			switch bstr {
+			case .OutputString(let str):
+				recv.print(string: str)
+			case .ErrorString(let str):
+				recv.error(string: str)
+			}
+		}
+		mBuffer = []
+	}
+}
+

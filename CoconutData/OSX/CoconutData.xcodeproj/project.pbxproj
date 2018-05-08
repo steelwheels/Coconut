@@ -30,6 +30,7 @@
 		05725CE6208B4450008A97D1 /* CNPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05725CE5208B4450008A97D1 /* CNPipe.swift */; };
 		05725CEA208B451A008A97D1 /* CNConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05725CE9208B451A008A97D1 /* CNConnection.swift */; };
 		0578DA2C2090C1C400ED852C /* CNPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0578DA2B2090C1C400ED852C /* CNPropertyList.swift */; };
+		057C7EF720A1ED950085662E /* UTConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057C7EF620A1ED950085662E /* UTConsole.swift */; };
 		057D2CDF208B426100E02E71 /* CNColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057D2CDE208B426000E02E71 /* CNColor.swift */; };
 		057FF40B209DE871006EEF7B /* UTValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057FF40A209DE871006EEF7B /* UTValue.swift */; };
 		058740F9208AFF2C00FF2B65 /* CNThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058740F8208AFF2C00FF2B65 /* CNThread.swift */; };
@@ -142,6 +143,7 @@
 		05725CE5208B4450008A97D1 /* CNPipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNPipe.swift; sourceTree = "<group>"; };
 		05725CE9208B451A008A97D1 /* CNConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNConnection.swift; sourceTree = "<group>"; };
 		0578DA2B2090C1C400ED852C /* CNPropertyList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNPropertyList.swift; sourceTree = "<group>"; };
+		057C7EF620A1ED950085662E /* UTConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTConsole.swift; sourceTree = "<group>"; };
 		057D2CDE208B426000E02E71 /* CNColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNColor.swift; sourceTree = "<group>"; };
 		057FF40A209DE871006EEF7B /* UTValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValue.swift; sourceTree = "<group>"; };
 		058740F8208AFF2C00FF2B65 /* CNThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNThread.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 			children = (
 				0543A4BD209DE1C000F5B34F /* main.swift */,
 				057FF40A209DE871006EEF7B /* UTValue.swift */,
+				057C7EF620A1ED950085662E /* UTConsole.swift */,
 			);
 			path = UnitTest;
 			sourceTree = "<group>";
@@ -593,6 +596,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
+				057C7EF720A1ED950085662E /* UTConsole.swift in Sources */,
 				0543A4BE209DE1C000F5B34F /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

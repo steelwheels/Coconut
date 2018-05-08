@@ -9,12 +9,17 @@ import CoconutData
 import Foundation
 import Darwin
 
-let console = CNConsole()
+let console = CNFileConsole()
 console.print(string: "Hello, World!\n")
 
+console.print(string: "* testValue\n")
 let result0 = testValue(console: console)
 
-if result0 {
+console.print(string: "* testConsole\n")
+let result1 = testConsole(console: console)
+
+let result = result0 && result1
+if result {
 	console.print(string: "[Result] OK\n")
 	Darwin.exit(0)
 } else {
