@@ -7,9 +7,9 @@
 
 import Foundation
 
-public enum CNOrientation {
-	case Horizontal
-	case Vertical
+public enum CNOrientation: Int32 {
+	case Horizontal			= 0
+	case Vertical			= 1
 
 	public var description: String {
 		get {
