@@ -42,6 +42,10 @@ public class CNFilePath
 		return Bundle.main.url(forResource: fname, withExtension: fext)
 	}
 
+	public class func URLForResourceFile(fileName fname: String, fileExtension fext: String, subdirectory subdir: String) -> URL? {
+		return Bundle.main.url(forResource: fname, withExtension: fext, subdirectory: subdir)
+	}
+
 	public class func URLForResourceFile(fileName fname: String, fileExtension fext: String, forClass fclass: AnyClass) -> URL? {
         	let bundle = Bundle(for: fclass)
         	return bundle.url(forResource: fname, withExtension: fext)
