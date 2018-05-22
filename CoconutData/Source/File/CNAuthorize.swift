@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum CNAuthorizeState: Int
+public enum CNAuthorizeState: Int32
 {
 	case Undetermined	= 0
 	case Examinating	= 1
