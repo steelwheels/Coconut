@@ -18,7 +18,10 @@ let result0 = testValue(console: console)
 console.print(string: "* testConsole\n")
 let result1 = testConsole(console: console)
 
-let result = result0 && result1
+console.print(string: "* testFilePath\n")
+let result2 = testFilePath(console: console)
+
+let result = result0 && result1 && result2
 if result {
 	console.print(string: "[Result] OK\n")
 	Darwin.exit(0)

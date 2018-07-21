@@ -56,6 +56,14 @@ public class CNFilePath
 		return bundle.url(forResource: fname, withExtension: fext, subdirectory: subdir)
 	}
 
+	/* reference: https://qiita.com/masakihori/items/8d4af538b040c65a8871 */
+	public class func UTIForFile(URL url: URL) -> String? {
+		guard let r = try? url.resourceValues(forKeys: [.typeIdentifierKey]) else {
+			return nil
+		}
+		return r.typeIdentifier
+	}
+
 	private class func name(_ name: String?) -> String {
 		if let str = name {
 			return str
