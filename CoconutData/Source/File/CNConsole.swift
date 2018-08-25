@@ -172,62 +172,66 @@ public class CNPipeConsole: CNConsole
 
 public class CNBufferedConsole: CNConsole
 {
-	private enum BufferedString {
-	case OutputString(String)
-	case ErrorString(String)
-	}
+	private var mOutputBuffer:	Array<String>
+	private var mErrorBuffer:	Array<String>
 
-	private var mReceiverConsole:	CNConsole?
-	private var mBuffer:		Array<BufferedString>
+	private var mOutputConsole: CNConsole?
 
 	public override init(){
-		mReceiverConsole	= nil
-		mBuffer			= []
-		super.init()
+		mOutputBuffer	= []
+		mErrorBuffer	= []
+		mOutputConsole	= nil
 	}
 
-	public var receiverConsole: CNConsole? {
-		get { return mReceiverConsole }
-		set(newcons){
-			mReceiverConsole = newcons
-			if let recv = mReceiverConsole {
-				flush(receiver: recv)
+	public var outputConsole: CNConsole? {
+		get { return mOutputConsole }
+		set(console){
+			if let cons = console {
+				flushOutput(console: cons)
+				flushError(console: cons)
 			}
+			mOutputConsole = console
 		}
 	}
 
 	public override func print(string str: String){
-		mBuffer.append(.OutputString(str))
-		if let recv = mReceiverConsole {
-			flush(receiver: recv)
+		if let console = mOutputConsole {
+			flushOutput(console: console)
+			console.print(string: str)
+		} else {
+			mOutputBuffer.append(str)
 		}
 	}
 
 	public override func error(string str: String){
-		mBuffer.append(.ErrorString(str))
-		if let recv = mReceiverConsole {
-			flush(receiver: recv)
+		if let console = mOutputConsole {
+			flushError(console: console)
+			console.error(string: str)
+		} else {
+			mErrorBuffer.append(str)
 		}
+	}
+
+	private func flushOutput(console cons: CNConsole){
+		for elm in mOutputBuffer {
+			cons.print(string: elm)
+		}
+		mOutputBuffer = []
+	}
+
+	private func flushError(console cons: CNConsole){
+		for elm in mErrorBuffer {
+			cons.error(string: elm)
+		}
+		mErrorBuffer = []
 	}
 
 	public override func scan() -> String? {
-		if let recv = mReceiverConsole {
-			return recv.scan()
+		if let console = mOutputConsole {
+			return console.scan()
 		} else {
 			return nil
 		}
-	}
-
-	private func flush(receiver recv: CNConsole){
-		for bstr in mBuffer {
-			switch bstr {
-			case .OutputString(let str):
-				recv.print(string: str)
-			case .ErrorString(let str):
-				recv.error(string: str)
-			}
-		}
-		mBuffer = []
 	}
 }
 

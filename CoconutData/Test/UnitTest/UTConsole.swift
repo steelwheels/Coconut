@@ -16,7 +16,7 @@ public func testConsole(console cons: CNConsole) -> Bool
 	bufcons.print(string: "buffer2\n")
 
 	cons.print(string: "- flush buffer\n")
-	bufcons.receiverConsole = cons
+	bufcons.outputConsole = cons
 
 	cons.print(string: "- after buffered\n")
 	bufcons.print(string: "after1\n")
