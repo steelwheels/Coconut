@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05019B72213BE42300DDA180 /* CNStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05019B71213BE42300DDA180 /* CNStack.swift */; };
 		0503766D208B2EE200D2DB37 /* CNError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0503766C208B2EE200D2DB37 /* CNError.swift */; };
 		051FA468208B3F4400AEC734 /* CNFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051FA467208B3F4400AEC734 /* CNFile.swift */; };
 		052136B3208AD5F30098F1A7 /* CNArrayStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052136B1208AD5F30098F1A7 /* CNArrayStream.swift */; };
@@ -122,6 +123,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05019B71213BE42300DDA180 /* CNStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStack.swift; sourceTree = "<group>"; };
 		0503766C208B2EE200D2DB37 /* CNError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNError.swift; sourceTree = "<group>"; };
 		051FA467208B3F4400AEC734 /* CNFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFile.swift; sourceTree = "<group>"; };
 		052136B1208AD5F30098F1A7 /* CNArrayStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNArrayStream.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				0599583A208AEE0B00DE2DC9 /* CNCharacter.swift */,
 				052136B1208AD5F30098F1A7 /* CNArrayStream.swift */,
 				052136B2208AD5F30098F1A7 /* CNStringStream.swift */,
+				05019B71213BE42300DDA180 /* CNStack.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				05725CEA208B451A008A97D1 /* CNConnection.swift in Sources */,
 				05995845208AEFD900DE2DC9 /* CNValueUtil.swift in Sources */,
 				0565A9D8208B7AE400E91568 /* CNJSONVisitor.swift in Sources */,
+				05019B72213BE42300DDA180 /* CNStack.swift in Sources */,
 				05F5EA71208F793400CF98C3 /* CNText.swift in Sources */,
 				0565A9D5208B7AE400E91568 /* CNJSONUtil.swift in Sources */,
 				0599584C208AF07700DE2DC9 /* CNTokenStream.swift in Sources */,
