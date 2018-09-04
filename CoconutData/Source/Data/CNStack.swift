@@ -19,6 +19,15 @@ public class CNStack<T>
 		mArray.append(data)
 	}
 
+	public func peek() -> T? {
+		let cnt = mArray.count
+		if cnt > 0 {
+			return mArray[cnt-1]
+		} else {
+			return nil
+		}
+	}
+
 	public func pop() -> T? {
 		if mArray.count > 0 {
 			return mArray.popLast()
