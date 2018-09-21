@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -530,7 +530,7 @@
 					};
 					05B2A062208AD39600D16E60 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = "";
 					};
 					05B5BBCD209DDF4500E0981B = {
 						CreatedOnToolsVersion = 9.3;
@@ -549,7 +549,7 @@
 				};
 			};
 			buildConfigurationList = 05B2A05D208AD39600D16E60 /* Build configuration list for PBXProject "CoconutData" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
