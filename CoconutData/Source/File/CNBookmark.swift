@@ -2,7 +2,7 @@
  * @file	CNBookmark.swift
  * @brief	Extend CNBookmark class
  * @par Copyright
- *   Copyright (C) 2016, 2017 Steel Wheels Project
+ *   Copyright (C) 2016, 2017, 2018 Steel Wheels Project
  */
 
 import Foundation

@@ -12,46 +12,45 @@ import Foundation
 
 public class CNShell
 {
-	public enum Port {
-	case File(CNDataFile)
-	case Pipe(CNPipe)
-	case Standard
-	}
-
-	public class func execute(command cmd: String, inputFile infile: Port, outputFile outfile: Port, errorFile errfile: Port, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
+	public class func execute(command cmd: String, console cons: CNConsole, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
 		let process  		= Process()
 
 		process.launchPath	= "/bin/sh"
 		process.arguments	= ["-c", cmd]
 
-		/* Standard input */
-		switch infile {
-		case .File(let file):
-			process.standardInput = file.fileHandle
-		case .Pipe(let pipe):
-			process.standardInput = pipe.pipe
-		case .Standard:
-			process.standardInput = FileHandle.standardInput
-		}
+		let inpipe  = Pipe()
+		let outpipe = Pipe()
+		let errpipe = Pipe()
 
-		/* Standard output */
-		switch outfile {
-		case .File(let file):
-			process.standardOutput = file.fileHandle
-		case .Pipe(let pipe):
-			process.standardOutput = pipe.pipe
-		case .Standard:
-			process.standardOutput = FileHandle.standardOutput
-		}
+		process.standardInput  = inpipe
+		process.standardOutput = outpipe
+		process.standardError  = errpipe
 
-		/* Standard error */
-		switch errfile {
-		case .File(let file):
-			process.standardError = file.fileHandle
-		case .Pipe(let pipe):
-			process.standardError = pipe.pipe
-		case .Standard:
-			process.standardError = FileHandle.standardError
+		inpipe.fileHandleForWriting.writeabilityHandler = {
+			(filehandle: FileHandle) -> Void in
+			if let str = cons.scan() {
+				if let data = str.data(using: .utf8) {
+					filehandle.write(data)
+				} else {
+					NSLog("Error encoding data: \(str)")
+				}
+			}
+		}
+		outpipe.fileHandleForReading.readabilityHandler = {
+			(_ handle: FileHandle) -> Void in
+			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
+				cons.print(string: str)
+			} else {
+				NSLog("Error decoding data: \(handle.availableData)")
+			}
+		}
+		errpipe.fileHandleForReading.readabilityHandler = {
+			(_ handle: FileHandle) -> Void in
+			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
+				cons.error(string: str)
+			} else {
+				NSLog("Error decoding data: \(handle.availableData)")
+			}
 		}
 
 		if let handler = termhdl  {

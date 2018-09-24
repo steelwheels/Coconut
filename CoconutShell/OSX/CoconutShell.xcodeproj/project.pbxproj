@@ -8,12 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		050C8907208CBF350005E936 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8905208CBF350005E936 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		051AB5F421590AC400D7C71C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB5F321590AC400D7C71C /* main.swift */; };
+		051AB5FA21590B0B00D7C71C /* CoconutShell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; };
+		051AB5FB21590B0E00D7C71C /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
 		053BAD7B208CBF7900AC3BF0 /* CNShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD75208CBF7900AC3BF0 /* CNShell.swift */; };
 		053BAD7C208CBF7900AC3BF0 /* CNCurses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD76208CBF7900AC3BF0 /* CNCurses.swift */; };
 		053BAD7D208CBF7900AC3BF0 /* CNColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD77208CBF7900AC3BF0 /* CNColor.swift */; };
+		056AF18621590A12007AE91A /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
+		056AF18821590A24007AE91A /* CoconutShell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; };
+		056AF18A21590A3E007AE91A /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		056AF18B21590A41007AE91A /* CoconutShell.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		051AB5F821590ACD00D7C71C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 050C88F9208CBF350005E936 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 056AF17B2158E261007AE91A;
+			remoteInfo = UTShellBundle;
+		};
 		053BAD8B208CC18E00AC3BF0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 050C88F9208CBF350005E936 /* Project object */;
@@ -21,15 +35,51 @@
 			remoteGlobalIDString = 050C8901208CBF350005E936;
 			remoteInfo = CoconutShell;
 		};
+		056AF1822158FE0F007AE91A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 050C88F9208CBF350005E936 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 053BAD87208CC18500AC3BF0;
+			remoteInfo = Install;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		051AB5EF21590AC400D7C71C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		056AF18921590A32007AE91A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				056AF18A21590A3E007AE91A /* CoconutData.framework in CopyFiles */,
+				056AF18B21590A41007AE91A /* CoconutShell.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		050C8902208CBF350005E936 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		050C8905208CBF350005E936 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
 		050C8906208CBF350005E936 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		051AB5F121590AC400D7C71C /* UTShell */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UTShell; sourceTree = BUILT_PRODUCTS_DIR; };
+		051AB5F321590AC400D7C71C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		053BAD75208CBF7900AC3BF0 /* CNShell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShell.swift; sourceTree = "<group>"; };
 		053BAD76208CBF7900AC3BF0 /* CNCurses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCurses.swift; sourceTree = "<group>"; };
 		053BAD77208CBF7900AC3BF0 /* CNColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNColor.swift; sourceTree = "<group>"; };
+		056AF17C2158E261007AE91A /* UTShell.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UTShell.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		056AF17E2158E261007AE91A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		056AF18521590A12007AE91A /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
+		056AF18721590A24007AE91A /* CoconutShell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutShell.framework; path = ../../../../Library/Frameworks/CoconutShell.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +87,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		051AB5EE21590AC400D7C71C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				051AB5FA21590B0B00D7C71C /* CoconutShell.framework in Frameworks */,
+				051AB5FB21590B0E00D7C71C /* CoconutData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		056AF1792158E261007AE91A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				056AF18821590A24007AE91A /* CoconutShell.framework in Frameworks */,
+				056AF18621590A12007AE91A /* CoconutData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +116,8 @@
 			children = (
 				053BAD73208CBF6100AC3BF0 /* Source */,
 				050C8904208CBF350005E936 /* OSX */,
+				056AF1842158FE5E007AE91A /* Frameworks */,
+				056AF1772158DE44007AE91A /* Test */,
 				050C8903208CBF350005E936 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +126,8 @@
 			isa = PBXGroup;
 			children = (
 				050C8902208CBF350005E936 /* CoconutShell.framework */,
+				056AF17C2158E261007AE91A /* UTShell.bundle */,
+				051AB5F121590AC400D7C71C /* UTShell */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -68,6 +140,14 @@
 			name = OSX;
 			sourceTree = "<group>";
 		};
+		051AB5F221590AC400D7C71C /* UTShell */ = {
+			isa = PBXGroup;
+			children = (
+				051AB5F321590AC400D7C71C /* main.swift */,
+			);
+			path = UTShell;
+			sourceTree = "<group>";
+		};
 		053BAD73208CBF6100AC3BF0 /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +158,33 @@
 			);
 			name = Source;
 			path = ../Source;
+			sourceTree = "<group>";
+		};
+		056AF1772158DE44007AE91A /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				051AB5F221590AC400D7C71C /* UTShell */,
+				056AF17D2158E261007AE91A /* UTShellBundle */,
+			);
+			name = Test;
+			path = ../Test;
+			sourceTree = "<group>";
+		};
+		056AF17D2158E261007AE91A /* UTShellBundle */ = {
+			isa = PBXGroup;
+			children = (
+				056AF17E2158E261007AE91A /* Info.plist */,
+			);
+			path = UTShellBundle;
+			sourceTree = "<group>";
+		};
+		056AF1842158FE5E007AE91A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				056AF18721590A24007AE91A /* CoconutShell.framework */,
+				056AF18521590A12007AE91A /* CoconutData.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,12 +237,50 @@
 			productReference = 050C8902208CBF350005E936 /* CoconutShell.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		051AB5F021590AC400D7C71C /* UTShell */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 051AB5F721590AC400D7C71C /* Build configuration list for PBXNativeTarget "UTShell" */;
+			buildPhases = (
+				051AB5ED21590AC400D7C71C /* Sources */,
+				051AB5EE21590AC400D7C71C /* Frameworks */,
+				051AB5EF21590AC400D7C71C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				051AB5F921590ACD00D7C71C /* PBXTargetDependency */,
+			);
+			name = UTShell;
+			productName = UTShell;
+			productReference = 051AB5F121590AC400D7C71C /* UTShell */;
+			productType = "com.apple.product-type.tool";
+		};
+		056AF17B2158E261007AE91A /* UTShellBundle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 056AF17F2158E261007AE91A /* Build configuration list for PBXNativeTarget "UTShellBundle" */;
+			buildPhases = (
+				056AF1782158E261007AE91A /* Sources */,
+				056AF1792158E261007AE91A /* Frameworks */,
+				056AF17A2158E261007AE91A /* Resources */,
+				056AF18921590A32007AE91A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				056AF1832158FE0F007AE91A /* PBXTargetDependency */,
+			);
+			name = UTShellBundle;
+			productName = UTShellBundle;
+			productReference = 056AF17C2158E261007AE91A /* UTShell.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		050C88F9208CBF350005E936 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1000;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
@@ -143,8 +288,14 @@
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 0930;
 					};
+					051AB5F021590AC400D7C71C = {
+						CreatedOnToolsVersion = 10.0;
+					};
 					053BAD87208CC18500AC3BF0 = {
 						CreatedOnToolsVersion = 9.3;
+					};
+					056AF17B2158E261007AE91A = {
+						CreatedOnToolsVersion = 10.0;
 					};
 				};
 			};
@@ -162,12 +313,21 @@
 			targets = (
 				050C8901208CBF350005E936 /* CoconutShell */,
 				053BAD87208CC18500AC3BF0 /* Install */,
+				056AF17B2158E261007AE91A /* UTShellBundle */,
+				051AB5F021590AC400D7C71C /* UTShell */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		050C8900208CBF350005E936 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		056AF17A2158E261007AE91A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -187,13 +347,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		051AB5ED21590AC400D7C71C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				051AB5F421590AC400D7C71C /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		056AF1782158E261007AE91A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		051AB5F921590ACD00D7C71C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 056AF17B2158E261007AE91A /* UTShellBundle */;
+			targetProxy = 051AB5F821590ACD00D7C71C /* PBXContainerItemProxy */;
+		};
 		053BAD8C208CC18E00AC3BF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 050C8901208CBF350005E936 /* CoconutShell */;
 			targetProxy = 053BAD8B208CC18E00AC3BF0 /* PBXContainerItemProxy */;
+		};
+		056AF1832158FE0F007AE91A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 053BAD87208CC18500AC3BF0 /* Install */;
+			targetProxy = 056AF1822158FE0F007AE91A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -385,6 +570,43 @@
 			};
 			name = Release;
 		};
+		051AB5F521590AC400D7C71C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_OPTIMIZATION_LEVEL = 2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/UTShell.bundle/Contents/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/UTShell.bundle/Contents/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		051AB5F621590AC400D7C71C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_OPTIMIZATION_LEVEL = 2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/UTShell.bundle/Contents/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/UTShell.bundle/Contents/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
 		053BAD89208CC18500AC3BF0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -412,6 +634,49 @@
 			};
 			name = Release;
 		};
+		056AF1802158E261007AE91A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = ../Test/UTShellBundle/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTShellBundle;
+				PRODUCT_NAME = UTShell;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		056AF1812158E261007AE91A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = ../Test/UTShellBundle/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTShellBundle;
+				PRODUCT_NAME = UTShell;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -433,11 +698,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		051AB5F721590AC400D7C71C /* Build configuration list for PBXNativeTarget "UTShell" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				051AB5F521590AC400D7C71C /* Debug */,
+				051AB5F621590AC400D7C71C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		053BAD88208CC18500AC3BF0 /* Build configuration list for PBXLegacyTarget "Install" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				053BAD89208CC18500AC3BF0 /* Debug */,
 				053BAD8A208CC18500AC3BF0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		056AF17F2158E261007AE91A /* Build configuration list for PBXNativeTarget "UTShellBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				056AF1802158E261007AE91A /* Debug */,
+				056AF1812158E261007AE91A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
