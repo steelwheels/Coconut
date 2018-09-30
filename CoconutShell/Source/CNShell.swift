@@ -13,18 +13,9 @@ import Foundation
 public class CNShell
 {
 	public class func execute(command cmd: String, console cons: CNConsole, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
-		let process  		= Process()
-
-		process.launchPath	= "/bin/sh"
-		process.arguments	= ["-c", cmd]
-
 		let inpipe  = Pipe()
 		let outpipe = Pipe()
 		let errpipe = Pipe()
-
-		process.standardInput  = inpipe
-		process.standardOutput = outpipe
-		process.standardError  = errpipe
 
 		inpipe.fileHandleForWriting.writeabilityHandler = {
 			(filehandle: FileHandle) -> Void in
@@ -51,6 +42,31 @@ public class CNShell
 			} else {
 				NSLog("Error decoding data: \(handle.availableData)")
 			}
+		}
+
+		return CNShell.execute(command: cmd, input: inpipe, output: outpipe, error: errpipe, terminateHandler: termhdl)
+	}
+
+	public class func execute(command cmd: String, input inpipe: Pipe?, output outpipe: Pipe?, error errpipe: Pipe?, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
+		let process  		= Process()
+
+		process.launchPath	= "/bin/sh"
+		process.arguments	= ["-c", cmd]
+
+		if let pipe = inpipe {
+			process.standardInput = pipe
+		} else {
+			process.standardInput = FileHandle.standardInput
+		}
+		if let pipe = outpipe {
+			process.standardOutput = pipe
+		} else {
+			process.standardOutput = FileHandle.standardOutput
+		}
+		if let pipe = errpipe {
+			process.standardError = pipe
+		} else {
+			process.standardError = FileHandle.standardError
 		}
 
 		if let handler = termhdl  {
