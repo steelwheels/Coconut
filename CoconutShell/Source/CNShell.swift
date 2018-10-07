@@ -44,7 +44,9 @@ public class CNShell
 			}
 		}
 
-		return CNShell.execute(command: cmd, input: inpipe, output: outpipe, error: errpipe, terminateHandler: termhdl)
+		let process = CNShell.execute(command: cmd, input: inpipe, output: outpipe, error: errpipe, terminateHandler: termhdl)
+
+		return process
 	}
 
 	public class func execute(command cmd: String, input inpipe: Pipe?, output outpipe: Pipe?, error errpipe: Pipe?, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
@@ -69,10 +71,19 @@ public class CNShell
 			process.standardError = FileHandle.standardError
 		}
 
-		if let handler = termhdl  {
-			process.terminationHandler = {
-				(process: Process) -> Void in
+		process.terminationHandler = {
+			(process: Process) -> Void in
+			if let handler = termhdl  {
 				handler(process.terminationStatus)
+			}
+			if let inpipe  = process.standardInput as? Pipe {
+				inpipe.fileHandleForWriting.writeabilityHandler = nil
+			}
+			if let outpipe = process.standardOutput as? Pipe {
+				outpipe.fileHandleForReading.readabilityHandler = nil
+			}
+			if let errpipe = process.standardError as? Pipe {
+				errpipe.fileHandleForReading.readabilityHandler = nil
 			}
 		}
 
