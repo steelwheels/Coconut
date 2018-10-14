@@ -28,6 +28,10 @@ public class CNCurses
 		endwin()
 	}
 
+	public func window(x ox:Int32, y oy: Int32, width ow:Int32, height oh:Int32) -> CNWindow {
+		return CNWindow(x: ox, y: oy, width: ow, height: oh)
+	}
+
 	public var screenWidth: Int {
 		get { return Int(getmaxx(stdscr)) }
 	}
@@ -140,3 +144,20 @@ public class CNCurses
 }
 
 
+
+@objc public class CNWindow: NSObject
+{
+	private typealias CNWindowPointer = OpaquePointer?
+
+	private var mWindow:	CNWindowPointer
+
+	public init(x ox:Int32, y oy: Int32, width ow:Int32, height oh:Int32){
+		mWindow = newwin(oh, ow, oy, ox)
+		wborder(mWindow, 0, 0, 0, 0, 0, 0, 0, 0)
+	}
+
+	public func put(string s: String){
+		waddstr(mWindow, s)
+		wrefresh(mWindow)
+	}
+}
