@@ -150,10 +150,25 @@ public class CNCurses
 	private typealias CNWindowPointer = OpaquePointer?
 
 	private var mWindow:	CNWindowPointer
+	private var mWidth:	Int32
+	private var mHeight:	Int32
 
 	public init(x ox:Int32, y oy: Int32, width ow:Int32, height oh:Int32){
+		mWidth  = ow
+		mHeight = oh
 		mWindow = newwin(oh, ow, oy, ox)
 		wborder(mWindow, 0, 0, 0, 0, 0, 0, 0, 0)
+	}
+
+	public func close() {
+		delwin(mWindow)
+		mWindow = nil
+	}
+
+	public func moveTo(x xval: Int32, y yval: Int32){
+		if xval < mWidth && yval < mHeight {
+			wmove(mWindow, yval, xval)
+		}
 	}
 
 	public func put(string s: String){
