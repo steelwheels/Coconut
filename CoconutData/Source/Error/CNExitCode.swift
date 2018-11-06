@@ -19,12 +19,12 @@ public enum CNExitCode: Int32
 	public var code: Int32 {
 		let result: Int32
 		switch self {
-		case .NoError:		result = 0
-		case .InternalError:	result = 1
-		case .CommandLineError:	result = 2
-		case .SyntaxError:	result = 3
-		case .ExecError:	result = 4
-		case .Exception:	result = 5
+		case .NoError:			result = 0
+		case .InternalError:		result = 1
+		case .CommandLineError:		result = 2
+		case .SyntaxError:		result = 3
+		case .ExecError:		result = 4
+		case .Exception:		result = 5
 		}
 		return result
 	}

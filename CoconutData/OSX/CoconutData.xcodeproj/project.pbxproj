@@ -541,13 +541,14 @@
 					};
 					05B2A062208AD39600D16E60 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = "";
+						LastSwiftMigration = 1010;
 					};
 					05B5BBCD209DDF4500E0981B = {
 						CreatedOnToolsVersion = 9.3;
 					};
 					05C52E7A20993ABF00DD56B4 = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 1;
@@ -892,7 +893,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -922,7 +923,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -979,7 +980,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1002,7 +1003,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
