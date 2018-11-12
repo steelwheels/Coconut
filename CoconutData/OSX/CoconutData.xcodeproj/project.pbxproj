@@ -13,10 +13,13 @@
 		052136B3208AD5F30098F1A7 /* CNArrayStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052136B1208AD5F30098F1A7 /* CNArrayStream.swift */; };
 		052136B4208AD5F30098F1A7 /* CNStringStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052136B2208AD5F30098F1A7 /* CNStringStream.swift */; };
 		052170F121022AB1001801A6 /* UTFilePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052170F021022AB1001801A6 /* UTFilePath.swift */; };
+		0526E5A9219877F300FB1B8E /* CNObservedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0526E5A8219877F300FB1B8E /* CNObservedValueTable.swift */; };
 		053BC8F32090D0AC006CBB06 /* CNExitCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BC8F22090D0AC006CBB06 /* CNExitCode.swift */; };
 		0543A4BE209DE1C000F5B34F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0543A4BD209DE1C000F5B34F /* main.swift */; };
 		0543A4C4209DE1DD00F5B34F /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B2A063208AD39600D16E60 /* CoconutData.framework */; };
-		0543A4C7209DE46200F5B34F /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		055BD3A02199C48400BF7373 /* UTObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BD39F2199C48400BF7373 /* UTObserver.swift */; };
+		055BD3A22199C6D600BF7373 /* CNOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BD3A12199C6D600BF7373 /* CNOperation.swift */; };
+		055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BD3A32199D7F700BF7373 /* UTOperation.swift */; };
 		0565A9D3208B7AE400E91568 /* CNJSONMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9CD208B7AE300E91568 /* CNJSONMatcher.swift */; };
 		0565A9D4208B7AE400E91568 /* CNJSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9CE208B7AE300E91568 /* CNJSONObject.swift */; };
 		0565A9D5208B7AE400E91568 /* CNJSONUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9CF208B7AE400E91568 /* CNJSONUtil.swift */; };
@@ -91,16 +94,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		0543A4C6209DE45600F5B34F /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0543A4C7209DE46200F5B34F /* CoconutData.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		05B5BBD6209DDF6C00E0981B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -130,9 +123,13 @@
 		052136B1208AD5F30098F1A7 /* CNArrayStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNArrayStream.swift; sourceTree = "<group>"; };
 		052136B2208AD5F30098F1A7 /* CNStringStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringStream.swift; sourceTree = "<group>"; };
 		052170F021022AB1001801A6 /* UTFilePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTFilePath.swift; sourceTree = "<group>"; };
+		0526E5A8219877F300FB1B8E /* CNObservedValueTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNObservedValueTable.swift; sourceTree = "<group>"; };
 		053BC8F22090D0AC006CBB06 /* CNExitCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNExitCode.swift; sourceTree = "<group>"; };
 		0543A4BB209DE1C000F5B34F /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0543A4BD209DE1C000F5B34F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		055BD39F2199C48400BF7373 /* UTObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTObserver.swift; sourceTree = "<group>"; };
+		055BD3A12199C6D600BF7373 /* CNOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNOperation.swift; sourceTree = "<group>"; };
+		055BD3A32199D7F700BF7373 /* UTOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTOperation.swift; sourceTree = "<group>"; };
 		0565A9CD208B7AE300E91568 /* CNJSONMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNJSONMatcher.swift; sourceTree = "<group>"; };
 		0565A9CE208B7AE300E91568 /* CNJSONObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNJSONObject.swift; sourceTree = "<group>"; };
 		0565A9CF208B7AE400E91568 /* CNJSONUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNJSONUtil.swift; sourceTree = "<group>"; };
@@ -233,6 +230,7 @@
 				052136B1208AD5F30098F1A7 /* CNArrayStream.swift */,
 				052136B2208AD5F30098F1A7 /* CNStringStream.swift */,
 				05019B71213BE42300DDA180 /* CNStack.swift */,
+				0526E5A8219877F300FB1B8E /* CNObservedValueTable.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -244,6 +242,8 @@
 				057FF40A209DE871006EEF7B /* UTValue.swift */,
 				057C7EF620A1ED950085662E /* UTConsole.swift */,
 				052170F021022AB1001801A6 /* UTFilePath.swift */,
+				055BD39F2199C48400BF7373 /* UTObserver.swift */,
+				055BD3A32199D7F700BF7373 /* UTOperation.swift */,
 			);
 			path = UnitTest;
 			sourceTree = "<group>";
@@ -265,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				058740F8208AFF2C00FF2B65 /* CNThread.swift */,
+				055BD3A12199C6D600BF7373 /* CNOperation.swift */,
 			);
 			path = Process;
 			sourceTree = "<group>";
@@ -458,7 +459,6 @@
 			buildPhases = (
 				0543A4B7209DE1C000F5B34F /* Sources */,
 				0543A4B8209DE1C000F5B34F /* Frameworks */,
-				0543A4C6209DE45600F5B34F /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -538,6 +538,7 @@
 				TargetAttributes = {
 					0543A4BA209DE1C000F5B34F = {
 						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 1010;
 					};
 					05B2A062208AD39600D16E60 = {
 						CreatedOnToolsVersion = 9.3;
@@ -613,6 +614,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */,
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
 				052170F121022AB1001801A6 /* UTFilePath.swift in Sources */,
 				057C7EF720A1ED950085662E /* UTConsole.swift in Sources */,
@@ -624,6 +626,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0526E5A9219877F300FB1B8E /* CNObservedValueTable.swift in Sources */,
 				0565A9D6208B7AE400E91568 /* CNJSONGrep.swift in Sources */,
 				058DF0B2218A1223003A33F9 /* CNGraphics.swift in Sources */,
 				0578DA2C2090C1C400ED852C /* CNPropertyList.swift in Sources */,
@@ -653,8 +656,10 @@
 				0503766D208B2EE200D2DB37 /* CNError.swift in Sources */,
 				05899935208B0013002FEAEA /* CNMath.swift in Sources */,
 				0565A9D4208B7AE400E91568 /* CNJSONObject.swift in Sources */,
+				055BD3A02199C48400BF7373 /* UTObserver.swift in Sources */,
 				05DF7D992090D4B1003B5110 /* CNStringUtil.swift in Sources */,
 				052136B4208AD5F30098F1A7 /* CNStringStream.swift in Sources */,
+				055BD3A22199C6D600BF7373 /* CNOperation.swift in Sources */,
 				058740F9208AFF2C00FF2B65 /* CNThread.swift in Sources */,
 				05E81091208B33F800230477 /* CNAccess.swift in Sources */,
 				05995855208AF10300DE2DC9 /* CNParser.swift in Sources */,
@@ -728,7 +733,7 @@
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -744,7 +749,7 @@
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
