@@ -46,6 +46,11 @@ public func testOperation(console cons: CNConsole) -> Bool
 	queue.addOperation(op1)
 	queue.addOperation(op2)
 
+	/* Wait op2 is started */
+	while !op2.isExecuting {
+	}
+
+	cons.print(string: "Cancel OP2\n")
 	op2.cancel()
 
 	cons.print(string: "Wait for finish operations\n")

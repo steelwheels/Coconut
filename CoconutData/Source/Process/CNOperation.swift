@@ -13,9 +13,9 @@ open class CNOperation: Operation
 	private static let isFinishedItem	= "isFinished"
 	private static let isCanceledItem	= "isCanceled"
 
-	private var mIsExecuting:	Bool
-	private var mIsFinished:	Bool
-	private var mIsCanceled:	Bool
+	@objc private dynamic var mIsExecuting:	Bool
+	@objc private dynamic var mIsFinished:	Bool
+	@objc private dynamic var mIsCanceled:	Bool
 
 	public override init() {
 		mIsExecuting	= false
@@ -66,6 +66,7 @@ open class CNOperation: Operation
 	open override func main() {
 		isExecuting	= true
 		isFinished	= false
+		isCancelled	= false
 
 		mainOperation()
 		

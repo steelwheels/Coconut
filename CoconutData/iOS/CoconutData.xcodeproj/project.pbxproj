@@ -39,6 +39,8 @@
 		05995850208AF0A600DE2DC9 /* CNToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584E208AF0A600DE2DC9 /* CNToken.swift */; };
 		05995851208AF0A600DE2DC9 /* CNTokenStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584F208AF0A600DE2DC9 /* CNTokenStream.swift */; };
 		05995853208AF0D500DE2DC9 /* CNParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995852208AF0D500DE2DC9 /* CNParser.swift */; };
+		05AC92CA219B2E9200EEF197 /* CNOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AC92C9219B2E9200EEF197 /* CNOperation.swift */; };
+		05AC92CC219B2EA000EEF197 /* CNObservedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AC92CB219B2EA000EEF197 /* CNObservedValueTable.swift */; };
 		05DF7D9B2090D4D7003B5110 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF7D9A2090D4D7003B5110 /* CNStringUtil.swift */; };
 		05E81093208B341C00230477 /* CNAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E81092208B341C00230477 /* CNAccess.swift */; };
 		05EDAD85213BE640003C9147 /* CNStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDAD84213BE640003C9147 /* CNStack.swift */; };
@@ -91,6 +93,8 @@
 		0599584E208AF0A600DE2DC9 /* CNToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNToken.swift; sourceTree = "<group>"; };
 		0599584F208AF0A600DE2DC9 /* CNTokenStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTokenStream.swift; sourceTree = "<group>"; };
 		05995852208AF0D500DE2DC9 /* CNParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNParser.swift; sourceTree = "<group>"; };
+		05AC92C9219B2E9200EEF197 /* CNOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNOperation.swift; sourceTree = "<group>"; };
+		05AC92CB219B2EA000EEF197 /* CNObservedValueTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNObservedValueTable.swift; sourceTree = "<group>"; };
 		05DF7D9A2090D4D7003B5110 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05E81092208B341C00230477 /* CNAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAccess.swift; sourceTree = "<group>"; };
 		05EDAD84213BE640003C9147 /* CNStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStack.swift; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 		058740FA208AFF4A00FF2B65 /* Process */ = {
 			isa = PBXGroup;
 			children = (
+				05AC92C9219B2E9200EEF197 /* CNOperation.swift */,
 				058740FB208AFF6000FF2B65 /* CNThread.swift */,
 			);
 			path = Process;
@@ -254,6 +259,7 @@
 				0599583C208AEE2000DE2DC9 /* CNCharacter.swift */,
 				05F5DAC5208ADBD8006EB134 /* CNArrayStream.swift */,
 				05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */,
+				05AC92CB219B2EA000EEF197 /* CNObservedValueTable.swift */,
 				05EDAD84213BE640003C9147 /* CNStack.swift */,
 			);
 			path = Data;
@@ -365,6 +371,7 @@
 				0578DA2E2090C1E800ED852C /* CNPropertyList.swift in Sources */,
 				05387F97208F79A200848EA3 /* CNReservedWord.swift in Sources */,
 				0565A9E9208B7B8B00E91568 /* CNFileManager.swift in Sources */,
+				05AC92CA219B2E9200EEF197 /* CNOperation.swift in Sources */,
 				05995850208AF0A600DE2DC9 /* CNToken.swift in Sources */,
 				05F5DAC7208ADBD8006EB134 /* CNArrayStream.swift in Sources */,
 				0589993A208B010E002FEAEA /* CNState.swift in Sources */,
@@ -382,6 +389,7 @@
 				0599583D208AEE2000DE2DC9 /* CNCharacter.swift in Sources */,
 				0565A9F9208B822500E91568 /* CNAuthorize.swift in Sources */,
 				051FA46A208B3FD500AEC734 /* CNFile.swift in Sources */,
+				05AC92CC219B2EA000EEF197 /* CNObservedValueTable.swift in Sources */,
 				0565A9EB208B7B8B00E91568 /* CNFileURL.swift in Sources */,
 				056EA8BA208AFE5600D1DFFE /* CNConsole.swift in Sources */,
 				057D2CE1208B42B300E02E71 /* CNColor.swift in Sources */,

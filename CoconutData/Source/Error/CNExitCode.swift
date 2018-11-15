@@ -13,7 +13,6 @@ public enum CNExitCode: Int32
 	case InternalError
 	case CommandLineError
 	case SyntaxError
-	case ExecError
 	case Exception
 
 	public var code: Int32 {
@@ -23,8 +22,19 @@ public enum CNExitCode: Int32
 		case .InternalError:		result = 1
 		case .CommandLineError:		result = 2
 		case .SyntaxError:		result = 3
-		case .ExecError:		result = 4
-		case .Exception:		result = 5
+		case .Exception:		result = 4
+		}
+		return result
+	}
+
+	public var description: String {
+		let result: String
+		switch self {
+		case .NoError:		result = "No error"
+		case .InternalError:	result = "Internal error"
+		case .CommandLineError:	result = "Commandline error"
+		case .SyntaxError:	result = "Syntax error"
+		case .Exception:	result = "Exception"
 		}
 		return result
 	}
