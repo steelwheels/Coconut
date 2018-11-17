@@ -1,9 +1,9 @@
 /**
-* @file		UTOperation.swift
-* @brief	Test function for CNOperation class
-* @par Copyright
-*   Copyright (C) 2018 Steel Wheels Project
-*/
+ * @file		UTOperation.swift
+ * @brief	Test function for CNOperation class
+ * @par Copyright
+ *   Copyright (C) 2018 Steel Wheels Project
+ */
 
 import CoconutData
 import Foundation

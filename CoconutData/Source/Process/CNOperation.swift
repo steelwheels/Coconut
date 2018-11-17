@@ -24,6 +24,12 @@ open class CNOperation: Operation
 		super.init()
 	}
 
+	public func reset(){
+		mIsExecuting	= false
+		mIsFinished	= false
+		mIsCanceled	= false
+	}
+
 	open override var isExecuting: Bool {
 		get {
 			return mIsExecuting
@@ -66,10 +72,11 @@ open class CNOperation: Operation
 	open override func main() {
 		isExecuting	= true
 		isFinished	= false
-		isCancelled	= false
 
-		mainOperation()
-		
+		if !isCancelled {
+			mainOperation()
+		}
+
 		isExecuting	= false
 		isFinished	= true
 	}

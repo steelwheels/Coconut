@@ -27,7 +27,10 @@ let result3 = testObserver(console: console)
 console.print(string: "* testOperation\n")
 let result4 = testOperation(console: console)
 
-let result = result0 && result1 && result2 && result3 && result4
+console.print(string: "* testOperationQueue\n")
+let result5 = testOperationQueue(console: console)
+
+let result = result0 && result1 && result2 && result3 && result4 && result5
 if result {
 	console.print(string: "[Result] OK\n")
 	Darwin.exit(0)
