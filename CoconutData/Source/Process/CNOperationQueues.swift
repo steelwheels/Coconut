@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class CNOperationQueues
+open class CNOperationQueues
 {
 	private var		mQueueNum:		Int
 	private var		mOperationQueues:	Array<OperationQueue>
