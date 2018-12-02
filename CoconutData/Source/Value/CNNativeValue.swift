@@ -50,14 +50,20 @@ public enum CNNativeValue {
 		case .dictionaryValue(let val):
 			let sect = CNTextSection()
 			sect.header = "{" ; sect.footer = "}"
-			for (key, elm) in val {
-				let elmtxt = elm.toText()
-				if let elmline = elmtxt as? CNTextLine {
-					elmline.prepend(string: key + ": ")
-					sect.add(text: elmline)
+			let keys = val.keys.sorted()
+			for key in keys {
+				if let elm = val[key] {
+					let elmtxt = elm.toText()
+					if let elmline = elmtxt as? CNTextLine {
+						elmline.prepend(string: key + ": ")
+						sect.add(text: elmline)
+					} else {
+						sect.add(string: key + ": ")
+						sect.add(text: elmtxt)
+					}
 				} else {
-					sect.add(string: key + ": ")
-					sect.add(text: elmtxt)
+					NSLog("No object at \(#function)")
+					sect.add(text: CNTextLine(string: "?"))
 				}
 			}
 			result = sect
