@@ -12,7 +12,6 @@ import Foundation
  */
 public enum CNNativeValue {
 	case nullValue
-	case booleanValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
 	case stringValue(_ val: String)
 	case dateValue(_ val: Date)
@@ -88,8 +87,6 @@ public enum CNNativeValue {
 		switch self {
 		case .nullValue:
 			result = CNTextLine(string: "null")
-		case .booleanValue(let val):
-			result = CNTextLine(string: "\(val)")
 		case .numberValue(let val):
 			result = CNTextLine(string: val.description)
 		case .stringValue(let val):
@@ -145,8 +142,6 @@ public enum CNNativeValue {
 		switch self {
 		case .nullValue:
 			result = NSNull()
-		case .booleanValue(let val):
-			result = val
 		case .numberValue(let val):
 			result = val
 		case .stringValue(let val):
@@ -181,9 +176,7 @@ public enum CNNativeValue {
 
 	public static func anyToValue(object obj: Any) -> CNNativeValue? {
 		var result: CNNativeValue? = nil
-		if let val = obj as? Bool {
-			result = .booleanValue(val)
-		} else if let val = obj as? NSNumber {
+		if let val = obj as? NSNumber {
 			result = .numberValue(val)
 		} else if let val = obj as? String {
 			result = .stringValue(val)
