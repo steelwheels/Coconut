@@ -24,6 +24,65 @@ public enum CNNativeValue {
 	case arrayValue(_ val: Array<CNNativeValue>)
 	case objectValue(_ val: NSObject)
 
+	public func numberElement(identifier ident: String) -> NSNumber? {
+		if let elm = valueElement(identifier: ident){
+			switch elm {
+			case .numberValue(let obj):
+				return obj
+			default:
+				break // do not return anything
+			}
+		}
+		return nil
+	}
+
+	public func stringElement(identifier ident: String) -> String? {
+		if let elm = valueElement(identifier: ident){
+			switch elm {
+			case .stringValue(let obj):
+				return obj
+			default:
+				break // do not return anything
+			}
+		}
+		return nil
+	}
+
+	public func pointElement(identifier ident: String) -> CGPoint? {
+		if let elm = valueElement(identifier: ident){
+			switch elm {
+			case .pointValue(let obj):
+				return obj
+			default:
+				break // do not return anything
+			}
+		}
+		return nil
+	}
+
+	public func dictionaryElement(identifier ident: String) -> Dictionary<String, CNNativeValue>? {
+		if let elm = valueElement(identifier: ident){
+			switch elm {
+			case .dictionaryValue(let obj):
+				return obj
+			default:
+				break // do not return anything
+			}
+		}
+		return nil
+	}
+
+	private func valueElement(identifier ident: String) -> CNNativeValue? {
+		let result: CNNativeValue?
+		switch self {
+		case .dictionaryValue(let dict):
+			result = dict[ident]
+		default:
+			result = nil
+		}
+		return result
+	}
+
 	public func toText() -> CNText {
 		let result: CNText
 		switch self {
