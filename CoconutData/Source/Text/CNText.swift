@@ -57,6 +57,10 @@ public class CNTextLine: CNText
 		mString += src
 	}
 
+	public func prepend(string src: String){
+		mString  = src + mString
+	}
+
 	open override func print(console cons: CNConsole, indent idt: Int){
 		printIndent(console: cons, indent: idt)
 		cons.print(string: mString + "\n")
