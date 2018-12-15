@@ -16,7 +16,7 @@ public enum CNAxis: Int32
 		let result: String
 		switch self {
 		case .horizontal:	result = "horizontal"
-		case .vertical:		result = "vertial"
+		case .vertical:		result = "vertical"
 		}
 		return result
 	}
