@@ -7,43 +7,51 @@
 
 import Foundation
 
-public enum CNAlignment: Int32 {
-	case Left
-	case Center
-	case Right
+public enum CNAxis: Int32
+{
+	case horizontal
+	case vertical
 
-	case Top
-	case Middle
-	case Bottom
-
-	public var isVertical: Bool {
-		get {
-			let result: Bool
-			switch self {
-			case .Left, .Center, .Right:
-				result = false
-			case .Top, .Middle, .Bottom:
-				result = true
-			}
-			return result
-		}
-	}
-
-	public init(nsTextAlignment align: NSTextAlignment) {
-		switch align {
-		case .left:	self = .Left
-		case .center:	self = .Center
-		case .right:	self = .Right
-		default:	self = .Left
-		}
-	}
-
-	public func toNSTextAlignment() -> NSTextAlignment {
-		let result: NSTextAlignment
+	public var description: String {
+		let result: String
 		switch self {
-		case .Left,   .Top:		result = .left
-		case .Center, .Middle:		result = .center
-		case .Right,  .Bottom:		result = .right
+		case .horizontal:	result = "horizontal"
+		case .vertical:		result = "vertial"
+		}
+		return result
+	}
+}
+
+
+public enum CNAlignment: Int32 {
+	case leading
+	case trailing
+	case fill
+	case center
+
+	public var description: String {
+		let result: String
+		switch self {
+		case .leading:		result = "leading"
+		case .trailing:		result = "trailing"
+		case .fill:		result = "fill"
+		case .center:		result = "center"
+		}
+		return result
+	}
+}
+
+public enum CNDistribution {
+	case fill
+	case fillEqually
+	case equalSpacing
+
+	public var description: String {
+		let result: String
+		switch self {
+		case .fill:		result = "fill"
+		case .fillEqually:	result = "fillEqually"
+		case .equalSpacing:	result = "equalSpacing"
 		}
 		return result
 	}
