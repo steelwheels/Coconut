@@ -11,7 +11,7 @@ public protocol CNDatabaseProtocol
 {
 	func stateId() -> UInt64
 	func read(identifier ident: String) -> CNNativeValue?
-	func write(identifier ident: String, value val: CNNativeValue) -> CNNativeValue?
+	func write(identifier ident: String, value val: CNNativeValue)
 	func delete(identifier ident: String)
 	func commit()
 	func toText() -> CNTextSection
@@ -37,10 +37,8 @@ private class CNDatabaseStorage
 		return mDictionary[ident]
 	}
 
-	public func write(identifier ident: String, value val: CNNativeValue) -> CNNativeValue? {
-		let prevdata = mDictionary[ident]
+	public func write(identifier ident: String, value val: CNNativeValue) {
 		mDictionary[ident] = val
-		return prevdata
 	}
 
 	public func delete(identifier ident: String)  {
@@ -116,8 +114,8 @@ open class CNBaseDatabase: CNDatabaseProtocol
 		}
 	}
 
-	open func write(identifier ident: String, value val: CNNativeValue) -> CNNativeValue? {
-		return mWriteCache.write(identifier: ident, value: val)
+	open func write(identifier ident: String, value val: CNNativeValue) {
+		mWriteCache.write(identifier: ident, value: val)
 	}
 
 	open func delete(identifier ident: String) {
