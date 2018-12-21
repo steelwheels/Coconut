@@ -30,10 +30,14 @@ public class CNJSONDecoder
 	}
 
 	private func convert(dictionary obj: NSDictionary) -> (CNNativeValue?, NSError?) {
-		if let point = convertToPoint(dictionary: obj) {
+		if let rect = convertToRect(dictionary: obj) {
+			return (CNNativeValue.rectValue(rect), nil)
+		} else if let point = convertToPoint(dictionary: obj) {
 			return (CNNativeValue.pointValue(point), nil)
 		} else if let size = convertToSize(dictionary: obj) {
 			return (CNNativeValue.sizeValue(size), nil)
+		} else if let range = convertToRange(dictionary: obj) {
+			return (CNNativeValue.rangeValue(range), nil)
 		} else if let keys = obj.allKeys as? Array<NSString> {
 			var result: Dictionary<String, CNNativeValue> = [:]
 			for key in keys {
@@ -56,29 +60,46 @@ public class CNJSONDecoder
 		}
 	}
 
+	private func convertToRect(dictionary obj: NSDictionary) -> NSRect? {
+		if obj.count == 2 {
+			if let origin = obj["origin"] as? NSDictionary, let size = obj["size"] as? NSDictionary {
+				if let originval = convertToPoint(dictionary: origin), let sizeval = convertToSize(dictionary: size) {
+					return NSRect(origin: originval, size: sizeval)
+				}
+			}
+		}
+		return nil
+	}
+
 	private func convertToPoint(dictionary obj: NSDictionary) -> CGPoint? {
-		if let (x, y) = convertTo2Floats(dictionary: obj, name0: "x", name1: "y") {
-			return CGPoint(x: x, y: y)
+		if let (x, y) = convertTo2Numbers(dictionary: obj, name0: "x", name1: "y") {
+			return CGPoint(x: CGFloat(x.doubleValue), y: CGFloat(y.doubleValue))
 		} else {
 			return nil
 		}
 	}
 
 	private func convertToSize(dictionary obj: NSDictionary) -> CGSize? {
-		if let (width, height) = convertTo2Floats(dictionary: obj, name0: "width", name1: "height") {
-			return CGSize(width: width, height: height)
+		if let (width, height) = convertTo2Numbers(dictionary: obj, name0: "width", name1: "height") {
+			return CGSize(width: CGFloat(width.doubleValue), height: CGFloat(height.doubleValue))
 		} else {
 			return nil
 		}
 	}
 
-	private func convertTo2Floats(dictionary obj: NSDictionary, name0 nm0: String, name1 nm1: String) -> (CGFloat, CGFloat)? {
+	private func convertToRange(dictionary obj: NSDictionary) -> NSRange? {
+		if let (location, length) = convertTo2Numbers(dictionary: obj, name0: "location", name1: "length") {
+			return NSRange(location: location.intValue, length: length.intValue)
+		} else {
+			return nil
+		}
+	}
+
+	private func convertTo2Numbers(dictionary obj: NSDictionary, name0 nm0: String, name1 nm1: String) -> (NSNumber, NSNumber)? {
 		if obj.count == 2 {
 			if let num0 = obj.value(forKey: nm0) as? NSNumber,
 			   let num1 = obj.value(forKey: nm1) as? NSNumber {
-				let val0 = CGFloat(num0.doubleValue)
-				let val1 = CGFloat(num1.doubleValue)
-				return (val0, val1)
+				return (num0, num1)
 			}
 		}
 		return nil
@@ -128,24 +149,46 @@ public class CNJSONEncoder: CNNativeValueVisitor
 	}
 	
 	open override func visit(date obj: Date){
-		fatalError("Not supported at \(#function)")
+		mResult = NSDate(timeInterval: 0.0, since: obj)
 	}
 
 	open override func visit(range obj: NSRange){
-		fatalError("Not supported at \(#function)")
+		let location = NSNumber(integerLiteral: obj.location)
+		let length   = NSNumber(integerLiteral: obj.length)
+		mResult = NSDictionary(dictionary: [
+			NSString(string: "location") : location,
+			NSString(string: "length")   : length
+		])
 	}
 
 	open override func visit(point obj: CGPoint){
-		fatalError("Not supported at \(#function)")
+		mResult = convertTo2Numbers(name0: "x", value0: Double(obj.x), name1: "y", value1: Double(obj.y))
 	}
 
 	open override func visit(size obj: CGSize){
-		fatalError("Not supported at \(#function)")
+		mResult = convertTo2Numbers(name0: "width", value0: Double(obj.width), name1: "height", value1: Double(obj.height))
 	}
 
 	open override func visit(rect obj: CGRect){
-		fatalError("Not supported at \(#function)")
+		let origin = convertTo2Numbers(name0: "x", value0: Double(obj.origin.x), name1: "y", value1: Double(obj.origin.y))
+		let size   = convertTo2Numbers(name0: "width", value0: Double(obj.size.width), name1: "height", value1: Double(obj.size.height))
+		mResult = NSDictionary(dictionary: [
+			NSString(string: "origin"): origin,
+			NSString(string: "size"): size
+		])
 	}
+
+	private func convertTo2Numbers(name0 nm0: String, value0 val0: Double, name1 nm1: String, value1 val1: Double) -> NSDictionary {
+		let nmstr0  = NSString(string: nm0)
+		let valnum0 = NSNumber(floatLiteral: val0)
+		let nmstr1  = NSString(string: nm1)
+		let valnum1 = NSNumber(floatLiteral: val1)
+		return NSDictionary(dictionary: [
+			nmstr0: valnum0,
+			nmstr1: valnum1
+		])
+	}
+
 	open override func visit(dictionary obj: Dictionary<String, CNNativeValue>){
 		let newdict = NSMutableDictionary(capacity: 32)
 		for (key, val) in obj {

@@ -27,6 +27,17 @@ class ViewController: NSViewController {
 			if let value = valuep {
 				console.print(string: "** JSON file ***\n")
 				printValue(value: value, console: console)
+
+				/* Select output file */
+				URL.savePanel(title: "Select JSON output", outputDirectory: nil, saveFileCallback: {
+					(_  url:URL) -> Bool in
+					if let err = CNJSONFile.writeFile(URL: url, JSONObject: value) {
+						NSLog("Output selection: \(err.description)")
+						return false
+					} else {
+						return true
+					}
+				})
 			} else {
 				NSLog("Failed to read json file]: \(err!.description)")
 			}

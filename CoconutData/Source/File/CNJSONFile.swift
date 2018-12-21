@@ -42,42 +42,5 @@ public class CNJSONFile {
 			return error
 		}
 	}
-
-	public class func serialize(JSONObject srcobj: CNNativeValue) -> (String?, NSError?) {
-		do {
-			let encoder = CNJSONEncoder()
-			let obj     = encoder.convert(value: srcobj)
-			let data    = try JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted)
-			let strp  = String(data: data, encoding: String.Encoding.utf8)
-			if let str = strp {
-				return (str, nil)
-			} else {
-				let error = NSError.parseError(message: "Can not translate into string")
-				return (nil, error)
-			}
-		}
-		catch {
-			let error = NSError.parseError(message: "Can not serialize")
-			return (nil, error)
-		}
-	}
-
-	public class func unserialize(string src : String) -> (CNNativeValue?, NSError?) {
-		do {
-			let datap = src.data(using: String.Encoding.utf8, allowLossyConversion: false)
-			if let data = datap {
-				let json = try JSONSerialization.jsonObject(with: data, options: [])
-				let decoder = CNJSONDecoder()
-				return decoder.convert(object: json)
-			} else {
-				let error = NSError.parseError(message: "Can not serialize the objet in URL:\(src)")
-				return (nil, error)
-			}
-		}
-		catch {
-			let error = NSError.parseError(message: "Can not serialize the objet in URL:\(src)")
-			return (nil, error)
-		}
-	}
 }
 
