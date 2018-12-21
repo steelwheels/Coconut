@@ -60,11 +60,11 @@ public class CNJSONDecoder
 		}
 	}
 
-	private func convertToRect(dictionary obj: NSDictionary) -> NSRect? {
+	private func convertToRect(dictionary obj: NSDictionary) -> CGRect? {
 		if obj.count == 2 {
 			if let origin = obj["origin"] as? NSDictionary, let size = obj["size"] as? NSDictionary {
 				if let originval = convertToPoint(dictionary: origin), let sizeval = convertToSize(dictionary: size) {
-					return NSRect(origin: originval, size: sizeval)
+					return CGRect(origin: originval, size: sizeval)
 				}
 			}
 		}
