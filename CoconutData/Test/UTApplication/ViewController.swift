@@ -18,7 +18,21 @@ class ViewController: NSViewController {
 	}
 
 	override func viewDidAppear() {
-		let _ = URL.openPanel(title: "UTApplication", selection: .SelectFile, fileTypes: ["txt"])
+		let console = CNFileConsole()
+		
+		//let _ = URL.openPanel(title: "UTApplication", selection: .SelectFile, fileTypes: ["txt"])
+		if let url = CNFilePath.URLForResourceFile(fileName: "manifest", fileExtension: "json") {
+			Swift.print("URL: \(url.description)")
+			let (valuep, err) = CNJSONFile.readFile(URL: url)
+			if let value = valuep {
+				console.print(string: "** JSON file ***\n")
+				printValue(value: value, console: console)
+			} else {
+				NSLog("Failed to read json file]: \(err!.description)")
+			}
+		} else {
+			NSLog("Failed to load manifest.json")
+		}
 	}
 
 	override var representedObject: Any? {
@@ -27,6 +41,8 @@ class ViewController: NSViewController {
 		}
 	}
 
-
+	private func printValue(value val: CNNativeValue, console cons: CNConsole){
+		val.toText().print(console: cons)
+	}
 }
 
