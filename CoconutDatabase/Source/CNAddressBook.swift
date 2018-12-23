@@ -43,7 +43,7 @@ public class CNAddressBook
 		return mState
 	}
 
-	public func contacts() -> Array<Dictionary<String, Any>>? {
+	public func contacts() -> CNNativeValue? {
 		if mState == .Authorized {
 			let keys    = [
 				CNContactIdentifierKey		as CNKeyDescriptor,
@@ -59,12 +59,13 @@ public class CNAddressBook
 			let request = CNContactFetchRequest(keysToFetch: keys)
 			do {
 				let store = CNContactStore()
-				var result: Array<Dictionary<String, Any>> = []
+				var result: Array<CNNativeValue> = []
 				try store.enumerateContacts(with: request, usingBlock: {
 					(contact, pointer) in
-					result.append(CNAddressBook.contactToDictionary(contact: contact))
+					let dict = CNAddressBook.contactToDictionary(contact: contact)
+					result.append(.dictionaryValue(dict))
 				})
-				return result
+				return .arrayValue(result)
 			}
 			catch {
 				return nil
@@ -74,8 +75,8 @@ public class CNAddressBook
 		}
 	}
 
-	private class func contactToDictionary(contact cont: CNContact) -> Dictionary<String, Any> {
-		var result: Dictionary<String, Any> = [:]
+	private class func contactToDictionary(contact cont: CNContact) -> Dictionary<String, CNNativeValue> {
+		var result: Dictionary<String, CNNativeValue> = [:]
 
 		appendDictionary(destination: &result, property: CNContactIdentifierKey, 	value: cont.identifier)
 
@@ -99,9 +100,9 @@ public class CNAddressBook
 		return result
 	}
 
-	private class func appendDictionary(destination dst: inout Dictionary<String, Any>, property prop: String, value val: String) {
+	private class func appendDictionary(destination dst: inout Dictionary<String, CNNativeValue>, property prop: String, value val: String) {
 		if val.lengthOfBytes(using: .utf8) > 0 {
-			dst[prop] = val
+			dst[prop] = .stringValue(val)
 		}
 	}
 }

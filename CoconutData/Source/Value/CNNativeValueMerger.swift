@@ -9,6 +9,10 @@ import Foundation
 
 public class CNNativeValueMerger
 {
+	public init(){
+
+	}
+
 	public func merge(_ s0: CNNativeValue, _ s1: CNNativeValue) -> CNNativeValue? {
 		if let dict0 = s0.toDictionary(), let dict1 = s1.toDictionary() {
 			return mergeDictionary(dict0, dict1)
