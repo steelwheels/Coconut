@@ -95,4 +95,6 @@ read "ident2" -> "Hello"
   write_cache: {
   }
 * testResource
+Load resource for file:///tmp/a.num
+[OK] Loaded => 1.23
 [Result] OK

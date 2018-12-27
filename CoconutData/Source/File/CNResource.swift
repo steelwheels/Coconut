@@ -42,7 +42,7 @@ public class CNResource {
 		/* Add new item */
 		let newitem = Item(localPath: path)
 		if var table = mResourceTable[name] {
-			table[path] = newitem
+			table[ident] = newitem
 		} else {
 			mResourceTable[name] = [ident:newitem]
 		}
