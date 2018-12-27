@@ -21,12 +21,12 @@ private class UTOperation: CNOperation
 	}
 	
 	public override func mainOperation() {
-		mConsole.print(string: "op[\(mIdentifier)]\n")
+		//mConsole.print(string: "op[\(mIdentifier)]\n")
 		Thread.sleep(forTimeInterval: mSleepTime)
 	}
 
 	public func printState(){
-		mConsole.print(string: "op[\(mIdentifier)] ... ")
+		//mConsole.print(string: "op[\(mIdentifier)] ... ")
 		if self.isCancelled {
 			mConsole.print(string: "Canceled\n")
 		} else if self.isFinished {

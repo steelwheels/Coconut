@@ -22,7 +22,7 @@ private class UTOperation: CNOperation
 	}
 
 	public override func mainOperation() {
-		mConsole.print(string: "Execute ... \(mName)\n")
+		//mConsole.print(string: "Execute ... \(mName)\n")
 		if mDoWaitCancel {
 			var docont = true
 			while docont {

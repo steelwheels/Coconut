@@ -24,7 +24,7 @@
 		0543A4BE209DE1C000F5B34F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0543A4BD209DE1C000F5B34F /* main.swift */; };
 		0543A4C4209DE1DD00F5B34F /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B2A063208AD39600D16E60 /* CoconutData.framework */; };
 		05471B0E21CBECDE00F66B8F /* CNNativeValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05471B0D21CBECDE00F66B8F /* CNNativeValueCoder.swift */; };
-		05471B1021CBF2A200F66B8F /* UTJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05471B0F21CBF2A200F66B8F /* UTJSON.swift */; };
+		05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05471B0F21CBF2A200F66B8F /* UTResource.swift */; };
 		054D735D21B039C700950D9D /* CNNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054D735C21B039C700950D9D /* CNNativeValue.swift */; };
 		055BD3A02199C48400BF7373 /* UTObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BD39F2199C48400BF7373 /* UTObserver.swift */; };
 		055BD3A22199C6D600BF7373 /* CNOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BD3A12199C6D600BF7373 /* CNOperation.swift */; };
@@ -37,6 +37,7 @@
 		0565A9F1208B7BB100E91568 /* CNFileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9EE208B7BB100E91568 /* CNFileURL.swift */; };
 		0565A9F3208B7C2800E91568 /* CNBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9F2208B7C2800E91568 /* CNBookmark.swift */; };
 		0565A9F7208B820900E91568 /* CNAuthorize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9F6208B820900E91568 /* CNAuthorize.swift */; };
+		0567B19D21D50DB4000C74B8 /* CNResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567B19C21D50DB4000C74B8 /* CNResource.swift */; };
 		056EA8B7208AFD6300D1DFFE /* CNConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056EA8B6208AFD6300D1DFFE /* CNConsole.swift */; };
 		05725CE6208B4450008A97D1 /* CNPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05725CE5208B4450008A97D1 /* CNPipe.swift */; };
 		05725CEA208B451A008A97D1 /* CNConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05725CE9208B451A008A97D1 /* CNConnection.swift */; };
@@ -76,6 +77,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 05B5BBCD209DDF4500E0981B;
 			remoteInfo = UnitTestBundle;
+		};
+		0567B1A221D517D0000C74B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0543A4BA209DE1C000F5B34F;
+			remoteInfo = UnitTest;
 		};
 		05B5BBD4209DDF5300E0981B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -151,7 +159,7 @@
 		0543A4BB209DE1C000F5B34F /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0543A4BD209DE1C000F5B34F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		05471B0D21CBECDE00F66B8F /* CNNativeValueCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValueCoder.swift; sourceTree = "<group>"; };
-		05471B0F21CBF2A200F66B8F /* UTJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTJSON.swift; sourceTree = "<group>"; };
+		05471B0F21CBF2A200F66B8F /* UTResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTResource.swift; sourceTree = "<group>"; };
 		054D735C21B039C700950D9D /* CNNativeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValue.swift; sourceTree = "<group>"; };
 		055BD39F2199C48400BF7373 /* UTObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTObserver.swift; sourceTree = "<group>"; };
 		055BD3A12199C6D600BF7373 /* CNOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNOperation.swift; sourceTree = "<group>"; };
@@ -164,6 +172,7 @@
 		0565A9EE208B7BB100E91568 /* CNFileURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFileURL.swift; sourceTree = "<group>"; };
 		0565A9F2208B7C2800E91568 /* CNBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNBookmark.swift; sourceTree = "<group>"; };
 		0565A9F6208B820900E91568 /* CNAuthorize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAuthorize.swift; sourceTree = "<group>"; };
+		0567B19C21D50DB4000C74B8 /* CNResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNResource.swift; sourceTree = "<group>"; };
 		056EA8B6208AFD6300D1DFFE /* CNConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNConsole.swift; sourceTree = "<group>"; };
 		05725CE5208B4450008A97D1 /* CNPipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNPipe.swift; sourceTree = "<group>"; };
 		05725CE9208B451A008A97D1 /* CNConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNConnection.swift; sourceTree = "<group>"; };
@@ -271,7 +280,7 @@
 				055BD3A32199D7F700BF7373 /* UTOperation.swift */,
 				051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */,
 				0512640821C5E1E5008B01FA /* UTDatabase.swift */,
-				05471B0F21CBF2A200F66B8F /* UTJSON.swift */,
+				05471B0F21CBF2A200F66B8F /* UTResource.swift */,
 			);
 			path = UnitTest;
 			sourceTree = "<group>";
@@ -419,6 +428,7 @@
 				05725CE9208B451A008A97D1 /* CNConnection.swift */,
 				05E81090208B33F800230477 /* CNAccess.swift */,
 				051FA467208B3F4400AEC734 /* CNFile.swift */,
+				0567B19C21D50DB4000C74B8 /* CNResource.swift */,
 				0565A9D1208B7AE400E91568 /* CNJSONFile.swift */,
 				05725CE5208B4450008A97D1 /* CNPipe.swift */,
 				056EA8B6208AFD6300D1DFFE /* CNConsole.swift */,
@@ -466,6 +476,21 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXLegacyTarget section */
+		0567B19E21D517C4000C74B8 /* check */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-f ../../Script/unit_test.mk";
+			buildConfigurationList = 0567B19F21D517C4000C74B8 /* Build configuration list for PBXLegacyTarget "check" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
+			dependencies = (
+				0567B1A321D517D0000C74B8 /* PBXTargetDependency */,
+			);
+			name = check;
+			passBuildSettingsInEnvironment = 1;
+			productName = check;
+		};
 		05F5DAB8208AD844006EB134 /* Install */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "-f ../../Script/install_osx.mk";
@@ -572,6 +597,9 @@
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 1010;
 					};
+					0567B19E21D517C4000C74B8 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					05B2A062208AD39600D16E60 = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 1010;
@@ -611,6 +639,7 @@
 				05C52E7A20993ABF00DD56B4 /* UTApplication */,
 				05B5BBCD209DDF4500E0981B /* UnitTestBundle */,
 				0543A4BA209DE1C000F5B34F /* UnitTest */,
+				0567B19E21D517C4000C74B8 /* check */,
 			);
 		};
 /* End PBXProject section */
@@ -648,7 +677,7 @@
 			files = (
 				055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */,
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
-				05471B1021CBF2A200F66B8F /* UTJSON.swift in Sources */,
+				05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */,
 				052170F121022AB1001801A6 /* UTFilePath.swift in Sources */,
 				057C7EF720A1ED950085662E /* UTConsole.swift in Sources */,
 				0512640921C5E1E5008B01FA /* UTDatabase.swift in Sources */,
@@ -700,6 +729,7 @@
 				058740F9208AFF2C00FF2B65 /* CNThread.swift in Sources */,
 				05E81091208B33F800230477 /* CNAccess.swift in Sources */,
 				05995855208AF10300DE2DC9 /* CNParser.swift in Sources */,
+				0567B19D21D50DB4000C74B8 /* CNResource.swift in Sources */,
 				0565A9F3208B7C2800E91568 /* CNBookmark.swift in Sources */,
 				056058AE21CA8E4B00E593E2 /* CNNativeValueVisitor.swift in Sources */,
 				0565A9F0208B7BB100E91568 /* CNFilePath.swift in Sources */,
@@ -729,6 +759,11 @@
 			isa = PBXTargetDependency;
 			target = 05B5BBCD209DDF4500E0981B /* UnitTestBundle */;
 			targetProxy = 0543A4C2209DE1C900F5B34F /* PBXContainerItemProxy */;
+		};
+		0567B1A321D517D0000C74B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0543A4BA209DE1C000F5B34F /* UnitTest */;
+			targetProxy = 0567B1A221D517D0000C74B8 /* PBXContainerItemProxy */;
 		};
 		05B5BBD5209DDF5300E0981B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -788,6 +823,36 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		0567B1A021D517C4000C74B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0567B1A121D517C4000C74B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -1085,6 +1150,15 @@
 			buildConfigurations = (
 				0543A4C0209DE1C000F5B34F /* Debug */,
 				0543A4C1209DE1C000F5B34F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0567B19F21D517C4000C74B8 /* Build configuration list for PBXLegacyTarget "check" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0567B1A021D517C4000C74B8 /* Debug */,
+				0567B1A121D517C4000C74B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

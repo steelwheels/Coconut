@@ -51,7 +51,7 @@ private class CNDatabaseStorage
 
 	public func toText() -> CNTextSection {
 		let section = CNTextSection()
-		for ident in mDictionary.keys {
+		for ident in mDictionary.keys.sorted() {
 			if let value = mDictionary[ident] {
 				let valtxt = value.toText()
 				let newtxt: CNText

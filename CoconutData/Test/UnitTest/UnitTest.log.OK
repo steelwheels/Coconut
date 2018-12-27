@@ -1,0 +1,98 @@
+Hello, World!
+* testValue
+exp: true -> real: true
+exp: Hello, world -> real: Hello, world
+* testConsole
+- put string to buffer
+- flush buffer
+buffer1
+buffer2
+- after buffered
+after1
+* testFilePath
+UTI: com.netscape.javascript-source 
+* testObserver
+isExecuting -> true
+* testOperation
+Cancel OP2
+Wait for finish operations
+Canceled ... op2
+* testOperationQueue
+* TEST0
+Finished
+Finished
+Finished
+Finished
+Done (0)
+* TEST1
+Finished
+Finished
+Finished
+Finished
+Done (1)
+* TEST2
+Finished
+Finished
+Finished
+Finished
+Done (2)
+* testDatabse
+* Main database: Initial state
+  read_cache: {
+  }
+  write_cache: {
+  }
+  main_database: {
+  }
+* Main database: add some values
+  read_cache: {
+  }
+  write_cache: {
+    ident0 : 1
+    ident1 : 1.23
+  }
+  main_database: {
+  }
+* Main database: after commit
+  read_cache: {
+  }
+  write_cache: {
+  }
+  main_database: {
+      ident0 : 1
+      ident1 : 1.23
+  }
+read "ident0" -> 1
+read "ident1" -> 1.23
+read "ident2" -> nil
+* Remote database: read
+read "ident0" -> 1
+read "ident1" -> 1.23
+read "ident2" -> nil
+  read_cache: {
+    ident0 : 1
+    ident1 : 1.23
+  }
+  write_cache: {
+  }
+* Remote database: write
+  read_cache: {
+    ident0 : 1
+    ident1 : 1.23
+  }
+  write_cache: {
+    ident2 : "Hello"
+  }
+* Remote database: commit
+read "ident0" -> 0
+read "ident1" -> 1.23
+read "ident2" -> "Hello"
+  read_cache: {
+    ident0 : 0
+    ident1 : 1.23
+    ident2 : "Hello"
+  }
+  write_cache: {
+  }
+* testResource
+[Result] OK

@@ -33,8 +33,8 @@ let result5 = testOperationQueue(console: console)
 console.print(string: "* testDatabse\n")
 let result6 = testDatabase(console: console)
 
-console.print(string: "* testJSON\n")
-let result7 = testJSON(console: console)
+console.print(string: "* testResource\n")
+let result7 = testResource(console: console)
 
 let result = result0 && result1 && result2 && result3 && result4 && result5 && result6
 if result {
