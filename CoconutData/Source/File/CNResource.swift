@@ -8,15 +8,19 @@
 import Foundation
 
 public class CNResource {
-	public typealias LoaderFunc = (_ url: URL) -> AnyObject?
+	public typealias LoaderFunc = (_ url: URL) -> Any?
 
 	private class Item {
 		var 	localPath:	String
-		var 	content:	AnyObject?
+		var 	content:	Any?
 
 		public init(localPath path: String){
 			localPath = path
 			content   = nil
+		}
+
+		public func toString() -> String {
+			return localPath
 		}
 	}
 
@@ -29,6 +33,8 @@ public class CNResource {
 		mLoaders	= [:]
 		mResourceTable	= [:]
 	}
+
+	public var baseURL: URL { get { return mBaseURL }}
 
 	public func set(resourceName name: String, loader load: @escaping LoaderFunc) {
 		mLoaders[name] = load
@@ -48,7 +54,7 @@ public class CNResource {
 		}
 	}
 
-	public func load(resourceName name: String, identifier ident: String) -> AnyObject? {
+	public func load(resourceName name: String, identifier ident: String) -> Any? {
 		guard let loader = mLoaders[name] else {
 			NSLog("No loader for resource \"\(name)\" at \(#function)")
 			return nil
@@ -73,6 +79,34 @@ public class CNResource {
 				return nil
 			}
 		}
+	}
+
+	public func toText() -> CNTextSection {
+		let section = CNTextSection()
+		section.header = "{" ; section.footer = "}"
+
+		for (name, table) in mResourceTable {
+			let subsec = CNTextSection()
+			subsec.header = "\(name): " ; subsec.footer = "}"
+			let content = encodeToExt(table: table)
+			subsec.add(text: content)
+			section.add(text: subsec)
+		}
+
+		return section
+	}
+
+	private func encodeToExt(table tab: Dictionary<String, Item>) -> CNTextSection {
+		let section = CNTextSection()
+		section.header = "{" ; section.footer = "}"
+
+		for (name, item) in tab {
+			let line = "\(name): " + item.toString()
+			let text = CNTextLine(string: line)
+			section.add(text: text)
+		}
+
+		return section
 	}
 }
 

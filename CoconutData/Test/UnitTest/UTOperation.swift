@@ -27,7 +27,7 @@ private class UTOperation: CNOperation
 			var docont = true
 			while docont {
 				if isCancelled {
-					mConsole.print(string: "Canceled ... \(mName)\n")
+					//mConsole.print(string: "Canceled ... \(mName)\n")
 					docont = false
 				}
 			}
@@ -50,7 +50,7 @@ public func testOperation(console cons: CNConsole) -> Bool
 	while !op2.isExecuting {
 	}
 
-	cons.print(string: "Cancel OP2\n")
+	//cons.print(string: "Cancel OP2\n")
 	op2.cancel()
 
 	cons.print(string: "Wait for finish operations\n")

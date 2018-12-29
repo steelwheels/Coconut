@@ -14,9 +14,7 @@ UTI: com.netscape.javascript-source
 * testObserver
 isExecuting -> true
 * testOperation
-Cancel OP2
 Wait for finish operations
-Canceled ... op2
 * testOperationQueue
 * TEST0
 Finished
