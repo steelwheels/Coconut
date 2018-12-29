@@ -42,7 +42,7 @@ public class CNResource {
 
 	public func set(resourceName name: String, identifier ident: String, localPath path: String){
 		guard let _ = mLoaders[name] else {
-			NSLog("No allocator at \(#function)")
+			NSLog("No allocator for \"\(name)\" at \(#function)")
 			return
 		}
 		/* Add new item */
