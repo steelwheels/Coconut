@@ -27,11 +27,13 @@ public class CNResource {
 	private var mBaseURL:		URL
 	private var mLoaders:		Dictionary<String, LoaderFunc>
 	private var mResourceTable:	Dictionary<String, Dictionary<String, Item>>
+	private var mConsole:		CNConsole
 
-	public init(baseURL url: URL){
+	public init(baseURL url: URL, console cons: CNConsole){
 		mBaseURL	= url
 		mLoaders	= [:]
 		mResourceTable	= [:]
+		mConsole	= cons
 	}
 
 	public var baseURL: URL { get { return mBaseURL }}
@@ -42,7 +44,7 @@ public class CNResource {
 
 	public func set(resourceName name: String, identifier ident: String, localPath path: String){
 		guard let _ = mLoaders[name] else {
-			NSLog("No allocator for \"\(name)\" at \(#function)")
+			mConsole.error(string: "No allocator for \"\(name)\" at \(#function)\n")
 			return
 		}
 		/* Add new item */
@@ -56,15 +58,15 @@ public class CNResource {
 
 	public func load(resourceName name: String, identifier ident: String) -> Any? {
 		guard let loader = mLoaders[name] else {
-			NSLog("No loader for resource \"\(name)\" at \(#function)")
+			mConsole.error(string: "No loader for resource \"\(name)\" at \(#function)")
 			return nil
 		}
 		guard let table = mResourceTable[name] else {
-			NSLog("Unknown resource \"\(name)\" at \(#function)")
+			mConsole.error(string: "Unknown resource \"\(name)\" at \(#function)")
 			return nil
 		}
 		guard let item = table[ident] else {
-			NSLog("No resource named \"\(ident)\" at \(#function)")
+			mConsole.error(string: "No resource named \"\(ident)\" at \(#function)")
 			return nil
 		}
 		if let data = item.content {
@@ -75,7 +77,7 @@ public class CNResource {
 				item.content = newdata
 				return newdata
 			} else {
-				NSLog("Failed to load \"\(ident)\" at \(#function)")
+				mConsole.error(string: "Failed to load \"\(ident)\" at \(#function)")
 				return nil
 			}
 		}
