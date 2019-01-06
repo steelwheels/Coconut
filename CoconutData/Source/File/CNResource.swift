@@ -49,8 +49,9 @@ public class CNResource {
 		}
 		/* Add new item */
 		let newitem = Item(localPath: path)
-		if var table = mResourceTable[name] {
-			table[ident] = newitem
+		if let _ = mResourceTable[name] {
+			/* Update the instance itself (Avoid modification of copied resource) */
+			mResourceTable[name]![ident] = newitem
 		} else {
 			mResourceTable[name] = [ident:newitem]
 		}

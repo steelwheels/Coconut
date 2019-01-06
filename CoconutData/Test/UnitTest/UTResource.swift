@@ -11,7 +11,7 @@ import Foundation
 public func testResource(console cons: CNConsole) -> Bool
 {
 	let baseurl  = URL(fileURLWithPath: "/tmp")
-	let resource = CNResource(baseURL: baseurl)
+	let resource = CNResource(baseURL: baseurl, console: cons)
 
 	resource.set(resourceName: "number", loader: {
 		(_ url: URL) -> AnyObject? in
