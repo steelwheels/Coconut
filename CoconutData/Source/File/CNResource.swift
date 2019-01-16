@@ -38,6 +38,14 @@ public class CNResource {
 
 	public var baseURL: URL { get { return mBaseURL }}
 
+	public func propertyNames(for resname: String) -> Array<String> {
+		if let dict = mResourceTable[resname] {
+			return Array(dict.keys)
+		} else {
+			return []
+		}
+	}
+
 	public func set(resourceName name: String, loader load: @escaping LoaderFunc) {
 		mLoaders[name] = load
 	}

@@ -41,7 +41,7 @@ public enum CNAlignment: Int32 {
 	}
 }
 
-public enum CNDistribution {
+public enum CNDistribution: Int32 {
 	case fill
 	case fillEqually
 	case equalSpacing
