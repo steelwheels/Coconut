@@ -23,7 +23,7 @@ public class CNShell
 				if let data = str.data(using: .utf8) {
 					filehandle.write(data)
 				} else {
-					NSLog("Error encoding data: \(str)")
+					CNLog(type: .Error, message: "Error encoding data: \(str)", place: #file)
 				}
 			}
 		}
@@ -32,7 +32,7 @@ public class CNShell
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
 				cons.print(string: str)
 			} else {
-				NSLog("Error decoding data: \(handle.availableData)")
+				CNLog(type: .Error, message: "Error decoding data: \(handle.availableData)", place: #file)
 			}
 		}
 		errpipe.fileHandleForReading.readabilityHandler = {
@@ -40,7 +40,7 @@ public class CNShell
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
 				cons.error(string: str)
 			} else {
-				NSLog("Error decoding data: \(handle.availableData)")
+				CNLog(type: .Error, message: "Error decoding data: \(handle.availableData)", place: #file)
 			}
 		}
 

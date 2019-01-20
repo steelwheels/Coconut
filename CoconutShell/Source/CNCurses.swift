@@ -96,7 +96,7 @@ public class CNCurses
 		if let colid = addColorPair(foregroundColor: fcol, backgroundColor: bcol) {
 			attrset(COLOR_PAIR(colid))
 		} else {
-			NSLog("Color table overflow")
+			CNLog(type: .Error, message: "Color table overflow", place: #file)
 		}
 	}
 
