@@ -74,7 +74,7 @@ public func CNStringToValue(targetType type: CNValueType, string str: String) ->
 			result = CNValue(dateValue: Date(timeIntervalSince1970: interval))
 		}
 	case .ArrayType, .DictionaryType:
-		NSLog("Not supported yet")
+		CNLog(type: .Error, message: "Not supported yet", place: #file)
 	}
 	return result
 }

@@ -25,7 +25,7 @@ open class CNOperationQueues
 	public func execute(operationGroups groups: Array<Array<CNOperation>>, timeLimit limit: TimeInterval?) {
 		/* add all operations to queue */
 		guard groups.count <= mQueueNum else {
-			NSLog("[Error] Invalid parameter num \(groups.count) at \(#function)")
+			CNLog(type: .Error, message: "Invalid parameter num \(groups.count)", place: #file)
 			return
 		}
 

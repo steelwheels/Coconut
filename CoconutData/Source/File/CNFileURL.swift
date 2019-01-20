@@ -47,7 +47,7 @@ public extension URL
 				preference.synchronize()
 				result = urls[0]
 			} else {
-				NSLog("Invalid result: \(urls)")
+				CNLog(type: .Error, message: "Invalid result: \(urls)", place: #file)
 			}
 		case .cancel:
 			break

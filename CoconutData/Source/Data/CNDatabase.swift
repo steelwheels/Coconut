@@ -68,7 +68,7 @@ private class CNDatabaseStorage
 				}
 				section.add(text: newtxt)
 			} else {
-				NSLog("Can not happen at \(#function)")
+				CNLog(type: .Error, message: "Can not happen", place: #function)
 			}
 		}
 		return section
@@ -90,7 +90,7 @@ open class CNBaseDatabase: CNDatabaseProtocol
 	}
 
 	open func stateId() -> UInt64 {
-		NSLog("Must be override at \(#function)")
+		CNLog(type: .Error, message: "Must be override", place: #file)
 		return 0
 	}
 
@@ -226,7 +226,7 @@ open class CNRemoteDatabase: CNBaseDatabase
 		if let db = mRemoteDatabase {
 			return db.stateId()
 		} else {
-			NSLog("No state id at \(#function)")
+			CNLog(type: .Error, message: "No state id", place: #file)
 			return 0
 		}
 	}
@@ -256,7 +256,7 @@ open class CNRemoteDatabase: CNBaseDatabase
 			/* Commit */
 			db.commit()
 		} else {
-			NSLog("No remote database at \(#function)")
+			CNLog(type: .Error, message: "No remove database", place: #file)
 		}
 	}
 }
