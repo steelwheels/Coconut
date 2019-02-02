@@ -15,6 +15,10 @@ public class CNStack<T>
 		mArray = []
 	}
 
+	public var count: Int {
+		get { return mArray.count }
+	}
+
 	public func push(_ data: T){
 		mArray.append(data)
 	}
