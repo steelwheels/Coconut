@@ -7,114 +7,124 @@
 
 import Foundation
 
-public class CNResource {
+private class CNFileResource
+{
 	public typealias LoaderFunc = (_ url: URL) -> Any?
 
-	private class Item {
-		var 	localPath:	String
-		var 	content:	Any?
+	private var	mBaseURL:	URL
+	private var	mLoader:	LoaderFunc
+	private var	mFileMap:	Dictionary<String, String> 	// Identifier, FilePath
+	private var	mContents:	Dictionary<String, Any>		// Identifier, Data
 
-		public init(localPath path: String){
-			localPath = path
-			content   = nil
-		}
-
-		public func toString() -> String {
-			return localPath
-		}
-	}
-
-	private var mBaseURL:		URL
-	private var mLoaders:		Dictionary<String, LoaderFunc>
-	private var mResourceTable:	Dictionary<String, Dictionary<String, Item>>
-	private var mConsole:		CNConsole
-
-	public init(baseURL url: URL, console cons: CNConsole){
+	public init(baseURL url: URL, fileMap fmap: Dictionary<String, String>, loader ldr: @escaping LoaderFunc){
 		mBaseURL	= url
-		mLoaders	= [:]
-		mResourceTable	= [:]
-		mConsole	= cons
+		mFileMap	= fmap
+		mLoader		= ldr
+		mContents	= [:]
 	}
 
-	public var baseURL: URL { get { return mBaseURL }}
-
-	public func propertyNames(for resname: String) -> Array<String> {
-		if let dict = mResourceTable[resname] {
-			return Array(dict.keys)
-		} else {
-			return []
-		}
-	}
-
-	public func set(resourceName name: String, loader load: @escaping LoaderFunc) {
-		mLoaders[name] = load
-	}
-
-	public func set(resourceName name: String, identifier ident: String, localPath path: String){
-		guard let _ = mLoaders[name] else {
-			mConsole.error(string: "No allocator for \"\(name)\" at \(#function)\n")
-			return
-		}
-		/* Add new item */
-		let newitem = Item(localPath: path)
-		if let _ = mResourceTable[name] {
-			/* Update the instance itself (Avoid modification of copied resource) */
-			mResourceTable[name]![ident] = newitem
-		} else {
-			mResourceTable[name] = [ident:newitem]
-		}
-	}
-
-	public func load(resourceName name: String, identifier ident: String) -> Any? {
-		guard let loader = mLoaders[name] else {
-			mConsole.error(string: "No loader for resource \"\(name)\" at \(#function)")
-			return nil
-		}
-		guard let table = mResourceTable[name] else {
-			mConsole.error(string: "Unknown resource \"\(name)\" at \(#function)")
-			return nil
-		}
-		guard let item = table[ident] else {
-			mConsole.error(string: "No resource named \"\(ident)\" at \(#function)")
-			return nil
-		}
-		if let data = item.content {
+	public func load(identifier ident: String) -> Any? {
+		if let data = mContents[ident] {
 			return data
 		} else {
-			let url = mBaseURL.appendingPathComponent(item.localPath)
-			if let newdata = loader(url) {
-				item.content = newdata
-				return newdata
-			} else {
-				mConsole.error(string: "Failed to load \"\(ident)\" at \(#function)")
-				return nil
+			if let url = fullPath(identifier: ident) {
+				if let newdata = mLoader(url) {
+					mContents[ident] = newdata
+					return newdata
+				}
 			}
+			return nil
 		}
+	}
+
+	private func fullPath(identifier ident: String) -> URL? {
+		if let path = mFileMap[ident] {
+			return mBaseURL.appendingPathComponent(path)
+		}
+		return nil
+	}
+
+	public func add(fileMap fmap: Dictionary<String, String>) {
+		for (key, value) in fmap {
+			mFileMap[key] = value
+		}
+	}
+
+	public func identifiers() -> Array<String> {
+		return Array(mFileMap.keys)
 	}
 
 	public func toText() -> CNTextSection {
 		let section = CNTextSection()
 		section.header = "{" ; section.footer = "}"
 
-		for (name, table) in mResourceTable {
-			let subsec = CNTextSection()
-			subsec.header = "\(name): " ; subsec.footer = "}"
-			let content = encodeToExt(table: table)
-			subsec.add(text: content)
-			section.add(text: subsec)
+		for (ident, path) in mFileMap {
+			let member = CNTextLine(string: "\(ident): \(path)")
+			section.add(text: member)
 		}
 
 		return section
 	}
+}
 
-	private func encodeToExt(table tab: Dictionary<String, Item>) -> CNTextSection {
+public class CNResource
+{
+	public typealias LoaderFunc =  (_ url: URL) -> Any?
+
+	private var	mBaseURL:		URL
+	private var 	mConsole:		CNConsole
+	private var	mFileResources:		Dictionary<String, CNFileResource>
+
+	public var baseURL: URL 	{ get { return mBaseURL 	}}
+	
+	public init(baseURL url: URL, console cons: CNConsole){
+		mBaseURL	= url
+		mConsole	= cons
+		mFileResources	= [:]
+	}
+
+	public func set(category cat: String, baseURL url: URL, fileMap fmap: Dictionary<String, String>, loader ldr: @escaping LoaderFunc){
+		let fileres = CNFileResource(baseURL: url, fileMap: fmap, loader: ldr)
+		mFileResources[cat] = fileres
+	}
+
+	public func add(category cat: String, fileMap fmap: Dictionary<String, String>) {
+		if let res = mFileResources[cat] {
+			res.add(fileMap: fmap)
+		} else {
+			CNLog(type: .Error, message: "Category \"\(cat)\" is not found", place: #function)
+		}
+	}
+
+	public func load<T>(category cat: String, identifier ident: String) -> T? {
+		if let res = mFileResources[cat] {
+			if let val = res.load(identifier: ident) {
+				if let retval = val as? T {
+					return retval
+				} else {
+					CNLog(type: .Error, message: "Unmatched data type", place: #function)
+				}
+			}
+		}
+		return nil
+	}
+
+	public func identifiers(category cat: String) -> Array<String>? {
+		if let res = mFileResources[cat] {
+			return res.identifiers()
+		}
+		return nil
+	}
+
+	public func toText() -> CNTextSection {
 		let section = CNTextSection()
 		section.header = "{" ; section.footer = "}"
 
-		for (name, item) in tab {
-			let line = "\(name): " + item.toString()
-			let text = CNTextLine(string: line)
-			section.add(text: text)
+		for (key, res) in mFileResources {
+			let subsec = res.toText()
+			subsec.header = "\(key): {"
+			subsec.footer = "}"
+			section.add(text: subsec)
 		}
 
 		return section
