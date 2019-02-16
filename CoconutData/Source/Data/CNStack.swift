@@ -39,5 +39,9 @@ public class CNStack<T>
 			return nil
 		}
 	}
+
+	public func peekAll() -> Array<T> {
+		return mArray.reversed()
+	}
 }
 
