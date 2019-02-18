@@ -16,6 +16,7 @@ public enum CNValueType {
 	case FloatType
 	case DoubleType
 	case StringType
+	case URLType
 	case DateType
 	case ArrayType
 	case DictionaryType
@@ -32,6 +33,7 @@ public enum CNValueType {
 			case .FloatType:	result = "Float"
 			case .DoubleType:	result = "Double"
 			case .StringType:	result = "String"
+			case .URLType:		result = "URL"
 			case .DateType:		result = "Date"
 			case .ArrayType:	result = "Array"
 			case .DictionaryType:	result = "Dictionary"
@@ -51,6 +53,7 @@ public enum CNValueType {
 		case "Float":		result = .FloatType
 		case "Double":		result = .DoubleType
 		case "String":		result = .StringType
+		case "URL":		result = .URLType
 		case "Date":		result = .DateType
 		case "Array":		result = .ArrayType
 		case "Dictionary":	result = .DictionaryType
@@ -68,6 +71,7 @@ private enum CNValueData {
 	case FloatValue(value: Float)
 	case DoubleValue(value: Double)
 	case StringValue(value: String)
+	case URLValue(value: URL)
 	case DateValue(value: Date)
 	case ArrayValue(value: Array<CNValue>)
 	case DictionaryValue(value: Dictionary<String, CNValue>)
@@ -135,6 +139,16 @@ private enum CNValueData {
 		}
 	}
 
+	public var URLValue: URL? {
+		get {
+			switch self {
+			case .URLValue(let val):	return val
+			case .StringValue(let val):	return URL(string: val)
+			default:			return nil
+			}
+		}
+	}
+
 	public var dateValue: Date? {
 		get {
 			switch self {
@@ -180,12 +194,14 @@ private enum CNValueData {
 			result = 0x0600_0000 | (Int(val * 100.0) & MASK)
 		case .StringValue(let val):
 			result = 0x0700_0000 | (Int(val.lengthOfBytes(using: .utf8)) & MASK)
+		case .URLValue(let val):
+			result = 0x0800_0000 | (Int(val.absoluteString.lengthOfBytes(using: .utf8)) & MASK)
 		case .DateValue(let val):
-			result = 0x0800_0000 | (val.hashValue & MASK)
+			result = 0x0900_0000 | (val.hashValue & MASK)
 		case .ArrayValue(let val):
-			result = 0x0900_0000 | (Int(val.count) & MASK)
-		case .DictionaryValue(let val):
 			result = 0x0A00_0000 | (Int(val.count) & MASK)
+		case .DictionaryValue(let val):
+			result = 0x0B00_0000 | (Int(val.count) & MASK)
 		}
 		return result
 	}
@@ -201,6 +217,7 @@ private enum CNValueData {
 			case .FloatValue(let val):	result = "\(val)"
 			case .DoubleValue(let val):	result = "\(val)"
 			case .StringValue(let val):	result = val
+			case .URLValue(let val):	result = val.absoluteString
 			case .DateValue(let val):	result = val.description
 			case .ArrayValue(let arr):
 				var str:String = "["
@@ -281,6 +298,11 @@ public class CNValue: NSObject, Comparable
 		mData = .DateValue(value: val)
 	}
 
+	public init(URLValue val: URL){
+		mType = .URLType
+		mData = .URLValue(value: val)
+	}
+
 	public init(arrayValue val: Array<CNValue>){
 		mType = .ArrayType
 		mData = .ArrayValue(value: val)
@@ -298,6 +320,7 @@ public class CNValue: NSObject, Comparable
 	public var floatValue: Float?		{ return mData.floatValue }
 	public var doubleValue: Double?		{ return mData.doubleValue }
 	public var stringValue: String?		{ return mData.stringValue }
+	public var URLValue: URL?		{ return mData.URLValue }
 	public var dateValue: Date?		{ return mData.dateValue }
 	public var arrayValue: Array<CNValue>?	{ return mData.arrayValue }
 	public var dictionaryValue: Dictionary<String, CNValue>?
@@ -389,6 +412,19 @@ public class CNValue: NSObject, Comparable
 			}
 		case .StringType:
 			return CNValue(stringValue: description)
+		case .URLType:
+			switch type {
+			case .StringType:
+				if let url = URL(string: stringValue!) {
+					return CNValue(URLValue: url)
+				} else {
+					return nil
+				}
+			case .URLType:
+				return self
+			default:
+				return nil
+			}
 		case .DateType:
 			switch type {
 			case .DateType:
@@ -448,6 +484,10 @@ public class CNValue: NSObject, Comparable
 				result = compareElement(lhs.doubleValue!, rhs.doubleValue!)
 			case .StringType:
 				result = compareElement(lhs.stringValue!, rhs.stringValue!)
+			case .URLType:
+				let lval = lhs.URLValue!.absoluteString
+				let rval = rhs.URLValue!.absoluteString
+				result = compareElement(lval, rval)
 			case .DateType:
 				result = compareElement(lhs.dateValue!, rhs.dateValue!)
 			case .ArrayType:
