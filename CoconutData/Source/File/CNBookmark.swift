@@ -32,7 +32,7 @@ internal class CNBookmarks
 			if let url = CNBookmarks.resolveURL(bookmarkData: data) {
 				return url
 			} else {
-				CNLog(type: .Error, message: "Broken bookmark data for key \"\(path)\"", place: #file)
+				CNLog(type: .Error, message: "Broken bookmark data for key \"\(path)\"", file: #file, line:#line, function: #function)
 			}
 		}
 		return nil
@@ -73,7 +73,7 @@ internal class CNBookmarks
 			return newurl
 		}
 		catch {
-			CNLog(type: .Error, message: "Failed to resolve bookmark", place: #file)
+			CNLog(type: .Error, message: "Failed to resolve bookmark", file: #file, line: #line, function: #function)
 			return nil
 		}
 	}

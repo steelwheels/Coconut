@@ -47,7 +47,7 @@ public extension URL
 				preference.synchronize()
 				result = urls[0]
 			} else {
-				CNLog(type: .Error, message: "Invalid result: \(urls)", place: #file)
+				CNLog(type: .Error, message: "Invalid result: \(urls)", file: #file, line: #line, function: #function)
 			}
 		case .cancel:
 			break

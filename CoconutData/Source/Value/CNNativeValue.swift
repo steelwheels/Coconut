@@ -251,7 +251,7 @@ public enum CNNativeValue {
 						sect.add(text: elmtxt)
 					}
 				} else {
-					CNLog(type: .Error, message: "No object", place: #file)
+					CNLog(type: .Error, message: "No object", file: #file, line: #line, function: #function)
 					sect.add(text: CNTextLine(string: "?"))
 				}
 			}
@@ -366,7 +366,7 @@ public enum CNNativeValue {
 		} else if let val = obj as? NSObject {
 			result = .objectValue(val)
 		} else {
-			CNLog(type: .Error, message: "Failed to convert \(obj)", place: #file)
+			CNLog(type: .Error, message: "Failed to convert \(obj)", file: #file, line: #line, function: #function)
 			result = nil
 		}
 		return result

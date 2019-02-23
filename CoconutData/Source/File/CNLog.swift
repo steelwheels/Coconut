@@ -8,9 +8,10 @@
 import Foundation
 
 public enum CNLogType: Int, Comparable {
-	case Normal	= 0
-	case Warning	= 1
-	case Error	= 2
+	case Debug	= 0
+	case Flow	= 1
+	case Warning	= 2
+	case Error	= 3
 
 	public static func < (lhs: CNLogType, rhs: CNLogType) -> Bool {
 		return lhs.rawValue < rhs.rawValue
@@ -19,37 +20,71 @@ public enum CNLogType: Int, Comparable {
 	public var description: String {
 		let result: String
 		switch self {
-		case .Normal:	result = "Normal"
+		case .Debug:	result = "Debug  " // keep same string length
+		case .Flow:	result = "Flow   "
 		case .Warning:	result = "Warning"
-		case .Error:	result = "Error"
+		case .Error:	result = "Error  "
 		}
 		return result
 	}
 }
 
-private var mStaticConsole: CNConsole?	= nil
-private var mDoVerbose: Bool		= false
+private var mLogConsole:	CNConsole?	= nil
+private var mLogLevel:		CNLogType	= .Warning
 
-public func CNLogSetup(console cons: CNConsole?, doVerbose verb: Bool)
+public func CNLogSetup(console cons: CNConsole?, logLevel level: CNLogType)
 {
-	mStaticConsole	= cons
-	mDoVerbose	= verb
+	mLogConsole	= cons
+	mLogLevel	= level
 }
 
-public func CNLog(type typ: CNLogType, message msg: String, place plc: String)
+public func CNLog(type typ: CNLogType, message msg: String, file fname: String, line ln: Int, function fnc: String)
 {
-	guard typ > .Normal || mDoVerbose else {
-		return
+	if typ.rawValue >= mLogLevel.rawValue {
+		let place   = "\(fname)/\(ln)/\(fnc)"
+		let message = "[\(typ.description)] \(msg) at \(place)\n"
+		CNPrintString(string: message)
 	}
-	let message = "[\(typ.description)] \(msg) at \(plc)\n"
-	if let cons = mStaticConsole {
-		cons.print(string: message)
+}
+
+public func CNLog(type typ: CNLogType, text txt: CNText, file fname: String, line ln: Int, function fnc: String)
+{
+	if typ.rawValue >= mLogLevel.rawValue {
+		let place   = "\(fname)/\(ln)/\(fnc)"
+		let header  = "[\(typ.description)] at \(place)\n"
+		CNPrintString(string: header)
+		CNPrintText(text: txt)
+	}
+}
+
+public func CNDoPrintLog(logLevel level: CNLogType) -> Bool {
+	return level >= mLogLevel
+}
+
+private func CNPrintString(string str: String)
+{
+	if let cons = mLogConsole {
+		cons.print(string: str)
 	} else {
 		#if os(OSX)
-			let fcons = CNFileConsole()
-			fcons.print(string: message)
+		let fcons = CNFileConsole()
+		fcons.print(string: str)
 		#else
-			 NSLog(message)
+		NSLog(str)
+		#endif
+	}
+}
+
+private func CNPrintText(text txt: CNText)
+{
+	if let cons = mLogConsole {
+		txt.print(console: cons)
+	} else {
+		#if os(OSX)
+		let fcons = CNFileConsole()
+		txt.print(console: fcons)
+		#else
+		NSLog("Failed to dump text at \(#file):\(#line):\(#function)")
 		#endif
 	}
 }

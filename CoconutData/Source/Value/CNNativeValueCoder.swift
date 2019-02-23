@@ -50,7 +50,7 @@ public class CNJSONDecoder
 						return (nil, err!)
 					}
 				} else {
-					CNLog(type: .Error, message: "Can not happen", place: #file)
+					CNLog(type: .Error, message: "Can not happen", file:#file, line:#line, function:#function)
 				}
 			}
 			return (CNNativeValue.dictionaryValue(result), nil)

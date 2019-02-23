@@ -92,7 +92,7 @@ public class CNResource
 		if let res = mFileResources[cat] {
 			res.add(fileMap: fmap)
 		} else {
-			CNLog(type: .Error, message: "Category \"\(cat)\" is not found", place: #function)
+			CNLog(type: .Error, message: "Category \"\(cat)\" is not found", file: #file, line: #line, function: #function)
 		}
 	}
 
@@ -102,7 +102,7 @@ public class CNResource
 				if let retval = val as? T {
 					return retval
 				} else {
-					CNLog(type: .Error, message: "Unmatched data type", place: #function)
+					CNLog(type: .Error, message: "Unmatched data type", file: #file, line: #line, function: #function)
 				}
 			}
 		}

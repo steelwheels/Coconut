@@ -25,7 +25,7 @@ open class CNOperationQueues
 	public func execute(operationGroups groups: Array<Array<CNOperation>>, timeLimit limit: TimeInterval?) {
 		/* add all operations to queue */
 		guard groups.count <= mQueueNum else {
-			CNLog(type: .Error, message: "Invalid parameter num \(groups.count)", place: #file)
+			CNLog(type: .Error, message: "Invalid parameter num \(groups.count)", file: #file, line: #line, function: #function)
 			return
 		}
 
