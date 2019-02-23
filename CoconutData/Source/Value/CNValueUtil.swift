@@ -69,9 +69,7 @@ public func CNStringToValue(targetType type: CNValueType, string str: String) ->
 	case .StringType:
 		result = CNValue(stringValue: str)
 	case .URLType:
-		if let url = URL(string: str) {
-			result = CNValue(URLValue: url)
-		}
+		result = CNValue(URLValue: URL(string: str))
 	case .DateType:
 		if let dval = Double(str) {
 			let interval = TimeInterval(dval)
