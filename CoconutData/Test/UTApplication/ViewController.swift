@@ -32,17 +32,17 @@ class ViewController: NSViewController {
 				URL.savePanel(title: "Select JSON output", outputDirectory: nil, saveFileCallback: {
 					(_  url:URL) -> Bool in
 					if let err = CNJSONFile.writeFile(URL: url, JSONObject: value) {
-						CNLog(type: .Error, message: "Output selection: \(err.description)", place: #file)
+						CNLog(type: .Error, message: "Output selection: \(err.description)", file: #file, line: #line, function: #function)
 						return false
 					} else {
 						return true
 					}
 				})
 			} else {
-				CNLog(type: .Error, message: "Failed to read json file: \(err!.description)", place: #file)
+				CNLog(type: .Error, message: "Failed to read json file: \(err!.description)", file: #file, line: #line, function: #function)
 			}
 		} else {
-			CNLog(type: .Error, message: "Failed to load manifest.json", place: #file)
+			CNLog(type: .Error, message: "Failed to load manifest.json", file: #file, line: #line, function: #function)
 		}
 	}
 
