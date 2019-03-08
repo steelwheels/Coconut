@@ -18,69 +18,73 @@ private class UTOperation: CNOperation
 		mIdentifier	= ident
 		mSleepTime 	= stime
 		mConsole 	= cons
-	}
-	
-	public override func mainOperation() {
-		//mConsole.print(string: "op[\(mIdentifier)]\n")
-		Thread.sleep(forTimeInterval: mSleepTime)
+		super.init()
+
+		self.mainFunction = {
+			Thread.sleep(forTimeInterval: self.mSleepTime)
+		}
 	}
 
 	public func printState(){
 		//mConsole.print(string: "op[\(mIdentifier)] ... ")
 		if self.isCancelled {
-			mConsole.print(string: "Canceled\n")
+			mConsole.print(string: "Canceled\(mIdentifier)\n")
 		} else if self.isFinished {
-			mConsole.print(string: "Finished\n")
+			mConsole.print(string: "Finished\(mIdentifier)\n")
 		} else {
-			mConsole.print(string: "??\n")
+			mConsole.print(string: "??\(mIdentifier)\n")
 		}
 	}
 }
 
 public func testOperationQueue(console cons: CNConsole) -> Bool
 {
-	let queues = CNOperationQueues(queueNum: 2)
+	let queue = CNOperationQueue()
 
 	cons.print(string: "* TEST0\n")
-	let groups0 = allocateOperations(sleepTime: 0.0, console: cons)
-	queues.execute(operationGroups: groups0, timeLimit: nil)
-	printOperations(operationGroups: groups0)
+	let ops0 = allocateOperations(sleepTime: 0.0, console: cons)
+	checkQueue(state: queue.execute(operations: ops0, timeLimit: nil), console: cons)
+	queue.waitOperations()
+	printOperations(operations: ops0)
 	cons.print(string: "Done (0)\n")
 
 	cons.print(string: "* TEST1\n")
-	let groups1 = allocateOperations(sleepTime: 0.0, console: cons)
-	queues.execute(operationGroups: groups1, timeLimit: 0.1)
-	printOperations(operationGroups: groups1)
+	let ops1 = allocateOperations(sleepTime: 0.0, console: cons)
+	checkQueue(state: queue.execute(operations: ops1, timeLimit: 0.1), console: cons)
+	queue.waitOperations()
+	printOperations(operations: ops1)
 	cons.print(string: "Done (1)\n")
 
 	cons.print(string: "* TEST2\n")
-	let groups2 = allocateOperations(sleepTime: 1.0, console: cons)
-	queues.execute(operationGroups: groups2, timeLimit: 0.1)
-	printOperations(operationGroups: groups2)
+	let ops2 = allocateOperations(sleepTime: 1.0, console: cons)
+	checkQueue(state: queue.execute(operations: ops2, timeLimit: 0.1), console: cons)
+	queue.waitOperations()
+	printOperations(operations: ops2)
 	cons.print(string: "Done (2)\n")
 
 	return true
 }
 
-private func allocateOperations(sleepTime stime: TimeInterval, console cons: CNConsole) -> Array<Array<UTOperation>>
+private func allocateOperations(sleepTime stime: TimeInterval, console cons: CNConsole) -> Array<UTOperation>
 {
-	var groups: Array<Array<UTOperation>> = []
+	var ops: Array<UTOperation> = []
 	for i in 0..<2 {
-		var group: Array<UTOperation> = []
-		for j in 0..<2 {
-			group.append(UTOperation(identifier: i * 10 + j, sleepTime: stime, console: cons))
-		}
-		groups.append(group)
+		ops.append(UTOperation(identifier: i, sleepTime: stime, console: cons))
 	}
-	return groups
+	return ops
 }
 
-private func printOperations(operationGroups groups: Array<Array<UTOperation>>)
+private func printOperations(operations ops: Array<UTOperation>)
 {
-	for group in groups {
-		for op in group {
-			op.printState()
-		}
+	for op in ops {
+		op.printState()
 	}
 }
+
+private func checkQueue(state val: Bool, console cons: CNConsole) {
+	if !val {
+		cons.error(string: "[Error] Failed to enqueue operation\n")
+	}
+}
+
 

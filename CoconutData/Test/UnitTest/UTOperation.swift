@@ -19,16 +19,15 @@ private class UTOperation: CNOperation
 		mDoWaitCancel	= dowait
 		mConsole	= cons
 		super.init()
-	}
 
-	public override func mainOperation() {
-		//mConsole.print(string: "Execute ... \(mName)\n")
-		if mDoWaitCancel {
-			var docont = true
-			while docont {
-				if isCancelled {
-					//mConsole.print(string: "Canceled ... \(mName)\n")
-					docont = false
+		self.mainFunction = {
+			if self.mDoWaitCancel {
+				var docont = true
+				while docont {
+					if self.isCancelled {
+						//mConsole.print(string: "Canceled ... \(mName)\n")
+						docont = false
+					}
 				}
 			}
 		}

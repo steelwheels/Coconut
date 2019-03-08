@@ -9,63 +9,53 @@ import Foundation
 
 open class CNOperation: Operation
 {
-	private static let isExecutingItem	= "isExecuting"
-	private static let isFinishedItem	= "isFinished"
-	private static let isCanceledItem	= "isCanceled"
+	public typealias MainFunction     = () -> Void
+	public typealias ListenerFunction = CNObservedValueTable.ListenerFunction
 
-	@objc private dynamic var mIsExecuting:	Bool
-	@objc private dynamic var mIsFinished:	Bool
-	@objc private dynamic var mIsCanceled:	Bool
+	public static let isExecutingItem	= "isExecuting"
+	public static let isFinishedItem	= "isFinished"
+	public static let isCanceledItem	= "isCanceled"
+
+	public  var mainFunction	: MainFunction?
+	private var mObservedValueTable	: CNObservedValueTable
 
 	public override init() {
-		mIsExecuting	= false
-		mIsFinished	= false
-		mIsCanceled	= false
+		mainFunction	    = nil
+		mObservedValueTable = CNObservedValueTable()
 		super.init()
+		reset()
 	}
 
 	public func reset(){
-		mIsExecuting	= false
-		mIsFinished	= false
-		mIsCanceled	= false
+		mObservedValueTable.setBooleanValue(false, forKey: CNOperation.isExecutingItem)
+		mObservedValueTable.setBooleanValue(false, forKey: CNOperation.isFinishedItem)
+		mObservedValueTable.setBooleanValue(false, forKey: CNOperation.isCanceledItem)
 	}
 
 	open override var isExecuting: Bool {
 		get {
-			return mIsExecuting
+			return mObservedValueTable.booleanValue(forKey: CNOperation.isExecutingItem)
 		}
 		set(val) {
-			if val != mIsExecuting {
-				willChangeValue(forKey: CNOperation.isExecutingItem)
-				mIsExecuting = val
-				didChangeValue(forKey: CNOperation.isExecutingItem)
-			}
+			mObservedValueTable.setBooleanValue(val, forKey: CNOperation.isExecutingItem)
 		}
 	}
 
 	open override var isFinished: Bool {
 		get {
-			return mIsFinished
+			return mObservedValueTable.booleanValue(forKey: CNOperation.isFinishedItem)
 		}
 		set(val) {
-			if val != mIsFinished {
-				willChangeValue(forKey: CNOperation.isFinishedItem)
-				mIsFinished = val
-				didChangeValue(forKey: CNOperation.isFinishedItem)
-			}
+			mObservedValueTable.setBooleanValue(val, forKey: CNOperation.isFinishedItem)
 		}
 	}
 
 	open override var isCancelled: Bool {
 		get {
-			return mIsCanceled
+			return mObservedValueTable.booleanValue(forKey: CNOperation.isCanceledItem)
 		}
 		set(val){
-			if val != mIsCanceled {
-				willChangeValue(forKey: CNOperation.isCanceledItem)
-				mIsCanceled = val
-				didChangeValue(forKey: CNOperation.isCanceledItem)
-			}
+			mObservedValueTable.setBooleanValue(val, forKey: CNOperation.isCanceledItem)
 		}
 	}
 
@@ -74,7 +64,9 @@ open class CNOperation: Operation
 		isFinished	= false
 
 		if !isCancelled {
-			mainOperation()
+			if let mainfunc = mainFunction {
+				mainfunc()
+			}
 		}
 
 		isExecuting	= false
@@ -86,8 +78,16 @@ open class CNOperation: Operation
 		super.cancel()
 	}
 
-	open func mainOperation() -> Void {
-		/* Do nothing */
+	public func addIsExecutingListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
+		mObservedValueTable.setObserver(forKey: CNOperation.isExecutingItem, listnerFunction: lfunc)
+	}
+
+	public func addIsFinishedListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
+		mObservedValueTable.setObserver(forKey: CNOperation.isFinishedItem, listnerFunction: lfunc)
+	}
+
+	public func addIsCanceledListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
+		mObservedValueTable.setObserver(forKey: CNOperation.isCanceledItem, listnerFunction: lfunc)
 	}
 }
 

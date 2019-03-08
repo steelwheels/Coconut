@@ -17,22 +17,16 @@ isExecuting -> true
 Wait for finish operations
 * testOperationQueue
 * TEST0
-Finished
-Finished
-Finished
-Finished
+Finished0
+Finished1
 Done (0)
 * TEST1
-Finished
-Finished
-Finished
-Finished
+Finished0
+Finished1
 Done (1)
 * TEST2
-Finished
-Finished
-Finished
-Finished
+Finished0
+Finished1
 Done (2)
 * testDatabse
 * Main database: Initial state

@@ -11,6 +11,7 @@
 		051AB5F421590AC400D7C71C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB5F321590AC400D7C71C /* main.swift */; };
 		051AB5FA21590B0B00D7C71C /* CoconutShell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; };
 		051AB5FB21590B0E00D7C71C /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
+		05231E9A222C046A0003AE98 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
 		053BAD7B208CBF7900AC3BF0 /* CNShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD75208CBF7900AC3BF0 /* CNShell.swift */; };
 		053BAD7C208CBF7900AC3BF0 /* CNCurses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD76208CBF7900AC3BF0 /* CNCurses.swift */; };
 		053BAD7D208CBF7900AC3BF0 /* CNColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD77208CBF7900AC3BF0 /* CNColor.swift */; };
@@ -87,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05231E9A222C046A0003AE98 /* CoconutData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,7 +516,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 1;
 				INFOPLIST_FILE = Info.plist;
@@ -550,7 +555,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/Frameworks";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(HOME)/Library/Frameworks",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
 				FRAMEWORK_VERSION = A;
 				GCC_OPTIMIZATION_LEVEL = 1;
 				INFOPLIST_FILE = Info.plist;
