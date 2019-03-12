@@ -62,6 +62,31 @@ public func CNOpenFile(filePath path: String, accessType acctyp: CNFileAccessTyp
 	}
 }
 
+public func CNOpenFile(URL url: URL, accessType acctyp: CNFileAccessType) -> (CNTextFile?, NSError?)
+{
+	do {
+		var file: CNTextFile
+		switch acctyp {
+		case .ReadAccess:
+			let handle = try FileHandle(forReadingFrom: url)
+			file = CNTextFileObject(fileHandle: handle)
+		case .WriteAccess:
+			let handle = try fileHandleToWrite(URL: url, withAppend: false)
+			file = CNTextFileObject(fileHandle: handle)
+		case .AppendAccess:
+			let handle = try fileHandleToWrite(URL: url, withAppend: true)
+			file = CNTextFileObject(fileHandle: handle)
+		}
+		return (file, nil)
+	} catch let err as NSError {
+		return (nil, err)
+	} catch {
+		let path = url.absoluteString
+		let err  = NSError.fileError(message: "Failed to open file \"\(path)\"")
+		return (nil, err)
+	}
+}
+
 public func CNOpenFile(fileHandle handle: FileHandle) -> CNTextFile
 {
 	return CNTextFileObject(fileHandle: handle)
@@ -77,9 +102,26 @@ private func fileHandleToWrite(filePath path: String, withAppend doappend: Bool)
 {
 	let fmanager = FileManager.default
 	if !fmanager.fileExists(atPath: path) {
-		fmanager.createFile(atPath: path, contents: nil, attributes: nil)
+		if !fmanager.createFile(atPath: path, contents: nil, attributes: nil) {
+			throw NSError.fileError(message: "Can not create file: \(path)")
+		}
 	}
 	let url = pathToURL(filePath: path)
+	let handle = try FileHandle(forWritingTo: url)
+	if doappend {
+		handle.seekToEndOfFile()
+	}
+	return handle
+}
+
+private func fileHandleToWrite(URL url: URL, withAppend doappend: Bool) throws -> FileHandle
+{
+	let fmanager = FileManager.default
+	if !fmanager.fileExists(atURL: url) {
+		if !fmanager.createFile(atURL: url, contents: nil, attributes: nil) {
+			throw NSError.fileError(message: "Can not create file: \(url.absoluteString)")
+		}
+	}
 	let handle = try FileHandle(forWritingTo: url)
 	if doappend {
 		handle.seekToEndOfFile()
