@@ -11,7 +11,7 @@ public class CNTokenStream
 {
 	private var mStream	: CNArrayStream<CNToken>
 
-	public init(source src: Array<CNToken>){
+	public required init(source src: Array<CNToken>){
 		mStream = CNArrayStream(source: src)
 	}
 

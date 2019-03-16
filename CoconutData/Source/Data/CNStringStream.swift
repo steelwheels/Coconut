@@ -13,7 +13,7 @@ public class CNStringStream
 	private var mStartIndex:	String.Index
 	private var mEndIndex:		String.Index
 
-	public init(string src: String){
+	public required init(string src: String){
 		mString		= src
 		mStartIndex	= src.startIndex
 		mEndIndex	= src.endIndex

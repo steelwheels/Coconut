@@ -166,7 +166,7 @@ private class CNDataFileObject: CNDataFile
 	private var mFileHandle:	FileHandle
 	private var mDidClosed:		Bool
 
-	public init(fileHandle handle: FileHandle){
+	public required init(fileHandle handle: FileHandle){
 		mFileHandle = handle
 		mDidClosed  = false
 	}
@@ -212,7 +212,7 @@ private class CNTextFileObject: CNDataFileObject, CNTextFile
 	public static let 		CHUNK_SIZE = 512
 	private var mLineBuffer:	CNLineBuffer
 
-	public override init(fileHandle handle: FileHandle) {
+	public required init(fileHandle handle: FileHandle) {
 		mLineBuffer = CNLineBuffer()
 		super.init(fileHandle: handle)
 	}

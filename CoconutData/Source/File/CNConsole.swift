@@ -69,7 +69,7 @@ public class CNIndentedConsole: CNConsole
 	private var mIndentValue:	Int
 	private var mIndentString:	String
 
-	public init(console cons: CNConsole){
+	public required init(console cons: CNConsole){
 		mConsole 	= cons
 		mIndentValue	= 0
 		mIndentString	= ""

@@ -9,7 +9,7 @@ import Foundation
 
 public class CNNativeValueMerger
 {
-	public init(){
+	public init() {
 
 	}
 

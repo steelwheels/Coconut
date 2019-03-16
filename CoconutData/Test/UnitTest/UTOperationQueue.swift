@@ -14,7 +14,7 @@ private class UTOperation: CNOperation
 	private var mSleepTime:		TimeInterval
 	private var mConsole:		CNConsole
 
-	public init(identifier ident: Int, sleepTime stime: TimeInterval, console cons: CNConsole) {
+	public required init(identifier ident: Int, sleepTime stime: TimeInterval, console cons: CNConsole) {
 		mIdentifier	= ident
 		mSleepTime 	= stime
 		mConsole 	= cons

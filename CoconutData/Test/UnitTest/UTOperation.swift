@@ -14,7 +14,7 @@ private class UTOperation: CNOperation
 	private var mDoWaitCancel:	Bool
 	private var mConsole:		CNConsole
 
-	public init(name nm: String, doWaitCancel dowait: Bool, console cons: CNConsole) {
+	public required init(name nm: String, doWaitCancel dowait: Bool, console cons: CNConsole) {
 		mName		= nm
 		mDoWaitCancel	= dowait
 		mConsole	= cons

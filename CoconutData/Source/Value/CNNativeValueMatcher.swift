@@ -13,7 +13,7 @@ public class CNNativeValueMatcher: CNNativeValueVisitor
 	private var mValueExpression:	NSRegularExpression?
 	private var mValueString:	String?
 
-	public init(nameExpression nexp: NSRegularExpression?, valueExpression vexp: NSRegularExpression?){
+	public required init(nameExpression nexp: NSRegularExpression?, valueExpression vexp: NSRegularExpression?){
 		mNameExpression		= nexp
 		mValueExpression	= vexp
 		mValueString		= nil

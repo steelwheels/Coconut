@@ -17,12 +17,12 @@ public class CNPropertyList
 	private var mBundleDirectory	: BundleDirectory
 	private var mPropertyList	: NSDictionary?
 
-	public init(bundleDirectoryName dirname: String){
+	public required init(bundleDirectoryName dirname: String){
 		mBundleDirectory = .bundleDirectory(dirname)
 		mPropertyList    = nil
 	}
 
-	public init(applicationDirectoryName dirname: String){
+	public required init(applicationDirectoryName dirname: String){
 		mBundleDirectory = .applicationDirectory
 		mPropertyList    = nil
 	}

@@ -12,7 +12,7 @@ public class CNNativeValueSelector: CNNativeValueVisitor
 	private var mMatcher:		CNNativeValueMatcher
 	private var mResult:		CNNativeValue?
 
-	public init(nameExpression nexp: NSRegularExpression?, valueExpression vexp: NSRegularExpression?){
+	public required init(nameExpression nexp: NSRegularExpression?, valueExpression vexp: NSRegularExpression?){
 		mMatcher = CNNativeValueMatcher(nameExpression: nexp, valueExpression: vexp)
 		mResult	 = nil
 	}

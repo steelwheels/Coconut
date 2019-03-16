@@ -45,7 +45,7 @@ public class CNTextLine: CNText
 {
 	private var mString: String
 
-	public init(string str: String){
+	public required init(string str: String){
 		mString = str
 	}
 

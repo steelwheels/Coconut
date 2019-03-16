@@ -22,7 +22,7 @@ public class CNReservedWordTable
 {
 	private var mDictionary : Dictionary<String, Int>
 
-	public init(reservedWords words: Array<CNReservedWord>){
+	public required init(reservedWords words: Array<CNReservedWord>){
 		mDictionary = [:]
 		for word in words {
 			mDictionary[word.word] = word.id
