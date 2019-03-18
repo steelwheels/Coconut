@@ -64,7 +64,7 @@ private class CNDirectoryResource
 			mFileMap[ident] = [CNFileResource(path: pathstr)]
 		}
 	}
-	
+
 	public func load<T>(baseURL url: URL, identifier ident: String, index idx: Int) -> T? {
 		if let files = mFileMap[ident] {
 			if idx < files.count {
