@@ -103,8 +103,8 @@ public class CNStringStream
 
 	public var description: String {
 		get {
-			let sidx = mStartIndex.encodedOffset
-			let eidx = mEndIndex.encodedOffset
+			let sidx = mStartIndex.utf16Offset(in: mString)
+			let eidx = mEndIndex.utf16Offset(in: mString)
 			return "String(\"\(mString)\")[\(sidx):\(eidx)]"
 		}
 	}

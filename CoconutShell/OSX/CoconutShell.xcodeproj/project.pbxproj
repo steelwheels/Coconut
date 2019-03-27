@@ -283,15 +283,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1000;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
 					050C8901208CBF350005E936 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1020;
 					};
 					051AB5F021590AC400D7C71C = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 					};
 					053BAD87208CC18500AC3BF0 = {
 						CreatedOnToolsVersion = 9.3;
@@ -307,6 +308,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 050C88F8208CBF350005E936;
 			productRefGroup = 050C8903208CBF350005E936 /* Products */;
@@ -539,7 +541,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -578,7 +580,7 @@
 				SKIP_INSTALL = NO;
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -598,7 +600,8 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -617,7 +620,8 @@
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/UTShell.bundle/Contents/Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -668,6 +672,7 @@
 				PRODUCT_NAME = UTShell;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;

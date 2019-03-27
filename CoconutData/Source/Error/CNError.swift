@@ -18,69 +18,69 @@ public enum CNErrorCode: Int {
 
 public extension NSError
 {
-	public class func domain() -> String {
+	class func domain() -> String {
 		return "github.com.steelwheels.Coconut"
 	}
 	
-	public class func errorLocationKey() -> String {
+	class func errorLocationKey() -> String {
 		return "errorLocation"
 	}
 
-	public class func informationNotice(message m: String) -> NSError {
+	class func informationNotice(message m: String) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: m]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.Information.rawValue, userInfo: userinfo)
 		return error
 	}
 
-	public class func internalError(message m: String) -> NSError {
+	class func internalError(message m: String) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: m]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.InternalError.rawValue, userInfo: userinfo)
 		return error
 	}
 
-	public class func internalError(message m: String, location l: NSString) -> NSError {
+	class func internalError(message m: String, location l: NSString) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: NSString(string: m), self.errorLocationKey(): l]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.InternalError.rawValue, userInfo: userinfo)
 		return error
 	}
 
-	public class func parseError(message m: String) -> NSError {
+	class func parseError(message m: String) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: m]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.ParseError.rawValue, userInfo: userinfo)
 		return error
 	}
 	
-	public class func parseError(message m: String, location l: NSString) -> NSError {
+	class func parseError(message m: String, location l: NSString) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: NSString(string: m), self.errorLocationKey(): l]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.ParseError.rawValue, userInfo: userinfo)
 		return error
 	}
 	
-	public class func fileError(message m: String) -> NSError {
+	class func fileError(message m: String) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: m]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.FileError.rawValue, userInfo: userinfo)
 		return error
 	}
 	
-	public class func fileError(message m: String, location l: NSString) -> NSError {
+	class func fileError(message m: String, location l: NSString) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: NSString(string: m), self.errorLocationKey(): l]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.FileError.rawValue, userInfo: userinfo)
 		return error
 	}
 	
-	public class func serializeError(message m: String) -> NSError {
+	class func serializeError(message m: String) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: m]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.SerializeError.rawValue, userInfo: userinfo)
 		return error
 	}
 	
-	public class func serializeError(message m: String, location l: NSString) -> NSError {
+	class func serializeError(message m: String, location l: NSString) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: NSString(string: m), self.errorLocationKey(): l]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.SerializeError.rawValue, userInfo: userinfo)
 		return error
 	}
 
-	public var errorCode: CNErrorCode {
+	var errorCode: CNErrorCode {
 		get {
 			if let ecode = CNErrorCode(rawValue: self.code) {
 				return ecode
@@ -90,7 +90,7 @@ public extension NSError
 		}
 	}
 
-	public func toString() -> String {
+	func toString() -> String {
 		let dict : Dictionary = userInfo
 		var message = self.localizedDescription
 		let lockey : String = NSError.errorLocationKey()

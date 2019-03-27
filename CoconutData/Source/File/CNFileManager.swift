@@ -27,15 +27,15 @@ public enum CNFileType: Int32 {
 
 public extension FileManager
 {
-	public func fileExists(atURL url: URL) -> Bool {
+	func fileExists(atURL url: URL) -> Bool {
 		return fileExists(atPath: url.absoluteString)
 	}
 
-	public func createFile(atURL url: URL, contents data: Data?, attributes attr: [FileAttributeKey:Any]?) -> Bool {
+	func createFile(atURL url: URL, contents data: Data?, attributes attr: [FileAttributeKey:Any]?) -> Bool {
 		return createFile(atPath: url.absoluteString, contents: data, attributes: attr)
 	}
 
-	public func checkFileType(pathString pathstr: String) -> CNFileType {
+	func checkFileType(pathString pathstr: String) -> CNFileType {
 		var isdir    = ObjCBool(false)
 		if self.fileExists(atPath: pathstr, isDirectory: &isdir) {
 			if isdir.boolValue {

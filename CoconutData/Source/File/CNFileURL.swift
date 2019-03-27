@@ -16,12 +16,12 @@ import Foundation
 public extension URL
 {
 #if os(OSX)
-	public enum CNFileSelection {
+	enum CNFileSelection {
 		case SelectFile
 		case SelectDirectory
 	}
 
-	public static func openPanel(title tl: String, selection sel: CNFileSelection, fileTypes types: Array<String>) -> URL?
+	static func openPanel(title tl: String, selection sel: CNFileSelection, fileTypes types: Array<String>) -> URL?
 	{
 		let panel = NSOpenPanel()
 		panel.title = tl
@@ -58,7 +58,7 @@ public extension URL
 	}
 
 
-	public static func savePanel(title tl: String, outputDirectory outdir: URL?, saveFileCallback callback: @escaping ((_: URL) -> Bool))
+	static func savePanel(title tl: String, outputDirectory outdir: URL?, saveFileCallback callback: @escaping ((_: URL) -> Bool))
 	{
 		let panel = NSSavePanel()
 		panel.title = tl
@@ -81,7 +81,7 @@ public extension URL
 	}
 #endif
 
-	public static func relativePath(sourceURL src: URL, baseDirectory base: URL) -> URL {
+	static func relativePath(sourceURL src: URL, baseDirectory base: URL) -> URL {
 		let srccomp = src.pathComponents
 		let basecomp = base.pathComponents
 		let common = findLastCommonComponent(array0: srccomp, array1: basecomp)
@@ -105,7 +105,7 @@ public extension URL
 		return src
 	}
 
-	public func loadContents() -> (NSString?, NSError?) {
+	func loadContents() -> (NSString?, NSError?) {
 		if startAccessingSecurityScopedResource() {
 			do {
 				let contents = try NSString(contentsOf: self, encoding: String.Encoding.utf8.rawValue)

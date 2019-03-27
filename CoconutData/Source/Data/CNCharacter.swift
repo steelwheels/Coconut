@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Character {
-	public func isSpace() -> Bool {
+	func isSpace() -> Bool {
 		let result: Bool
 		switch self {
 		case " ", "\t", "\n", "\r":
@@ -19,19 +19,19 @@ public extension Character {
 		return result
 	}
 
-	public func isAlpha() -> Bool {
+	func isAlpha() -> Bool {
 		return ("a"<=self && self<="z") || ("A"<=self && self<="Z")
 	}
 
-	public func isDigit() -> Bool {
+	func isDigit() -> Bool {
 		return ("0"<=self && self<="9")
 	}
 
-	public func isHex() -> Bool {
+	func isHex() -> Bool {
 		return ("0"<=self && self<="9") || ("a"<=self && self<="f") || ("A"<=self && self<="F")
 	}
 
-	public func isAlphaOrNum() -> Bool {
+	func isAlphaOrNum() -> Bool {
 		return isAlpha() || isDigit()
 	}
 }
