@@ -333,7 +333,9 @@ public enum CNNativeValue {
 
 	public static func anyToValue(object obj: Any) -> CNNativeValue? {
 		var result: CNNativeValue? = nil
-		if let val = obj as? NSNumber {
+		if let _ = obj as? NSNull {
+			result = .nullValue
+		} else if let val = obj as? NSNumber {
 			result = .numberValue(val)
 		} else if let val = obj as? String {
 			result = .stringValue(val)
