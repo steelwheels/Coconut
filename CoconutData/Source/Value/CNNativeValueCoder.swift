@@ -229,9 +229,5 @@ public class CNJSONEncoder: CNNativeValueVisitor
 		}
 		mResult = newarr
 	}
-
-	open override func visit(object obj: NSObject){
-		fatalError("Not supported at \(#function)")
-	}
 }
 

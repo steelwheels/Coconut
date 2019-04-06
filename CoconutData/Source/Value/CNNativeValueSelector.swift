@@ -78,9 +78,5 @@ public class CNNativeValueSelector: CNNativeValueVisitor
 		}
 		mResult = newarr.count > 0 ? .arrayValue(newarr) : nil
 	}
-	open override func visit(object obj: NSObject){
-		mResult = nil
-	}
-
 }
 

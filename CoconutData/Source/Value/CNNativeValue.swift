@@ -23,7 +23,6 @@ public enum CNNativeValue {
 	case arrayValue(_ val: Array<CNNativeValue>)
 	case URLValue(_ val: URL)
 	case imageValue(_ val: CNImage)
-	case objectValue(_ val: NSObject)
 
 	public func toNumber() -> NSNumber? {
 		let result: NSNumber?
@@ -124,15 +123,6 @@ public enum CNNativeValue {
 		return result
 	}
 
-	public func toObject() -> NSObject? {
-		let result: NSObject?
-		switch self {
-		case .objectValue(let obj):	result = obj
-		default:			result = nil
-		}
-		return result
-	}
-
 	public func numberProperty(identifier ident: String) -> NSNumber? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toNumber()
@@ -200,14 +190,6 @@ public enum CNNativeValue {
 	public func arrayProperty(identifier ident: String) -> Array<CNNativeValue>? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toArray()
-		} else {
-			return nil
-		}
-	}
-
-	public func objectProperty(identifier ident: String) -> NSObject? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toObject()
 		} else {
 			return nil
 		}
@@ -304,8 +286,6 @@ public enum CNNativeValue {
 			result = CNTextLine(string: "\(val.absoluteString)")
 		case .imageValue(let val):
 			result = CNTextLine(string: "\(val.description)")
-		case .objectValue(let val):
-			result = CNTextLine(string: "\(val.description)")
 		}
 		return result
 	}
@@ -369,8 +349,6 @@ public enum CNNativeValue {
 			result = val
 		case .imageValue(let val):
 			result = val
-		case .objectValue(let val):
-			result = val
 		}
 		return result
 	}
@@ -413,8 +391,6 @@ public enum CNNativeValue {
 			result = .URLValue(val)
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
-		} else if let val = obj as? NSObject {
-			result = .objectValue(val)
 		} else {
 			CNLog(type: .Error, message: "Failed to convert \(obj)", file: #file, line: #line, function: #function)
 			result = nil

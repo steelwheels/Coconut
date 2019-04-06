@@ -23,7 +23,6 @@ public class CNNativeValueVisitor
 		case .arrayValue(let obj):	visit(array: obj)
 		case .URLValue(let obj):	visit(URL: obj)
 		case .imageValue(let obj):	visit(image: obj)
-		case .objectValue(let obj):	visit(object: obj)
 		}
 	}
 
@@ -39,6 +38,5 @@ public class CNNativeValueVisitor
 	open func visit(array obj: Array<CNNativeValue>){ }
 	open func visit(URL obj: URL){ }
 	open func visit(image obj: CNImage){ }
-	open func visit(object obj: NSObject){ }
 }
 
