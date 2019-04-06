@@ -22,6 +22,7 @@ public enum CNNativeValue {
 	case dictionaryValue(_ val: Dictionary<String, CNNativeValue>)
 	case arrayValue(_ val: Array<CNNativeValue>)
 	case URLValue(_ val: URL)
+	case imageValue(_ val: CNImage)
 	case objectValue(_ val: NSObject)
 
 	public func toNumber() -> NSNumber? {
@@ -109,6 +110,15 @@ public enum CNNativeValue {
 		let result: URL?
 		switch self {
 		case .URLValue(let url):	result = url
+		default:			result = nil
+		}
+		return result
+	}
+
+	public func toImage() -> CNImage? {
+		let result: CNImage?
+		switch self {
+		case .imageValue(let obj):	result = obj
 		default:			result = nil
 		}
 		return result
@@ -211,6 +221,14 @@ public enum CNNativeValue {
 		}
 	}
 
+	public func imageProperty(identifier ident: String) -> CNImage? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toImage()
+		} else {
+			return nil
+		}
+	}
+
 	public func valueProperty(identifier ident: String) -> CNNativeValue? {
 		let result: CNNativeValue?
 		switch self {
@@ -284,6 +302,8 @@ public enum CNNativeValue {
 			result = sect
 		case .URLValue(let val):
 			result = CNTextLine(string: "\(val.absoluteString)")
+		case .imageValue(let val):
+			result = CNTextLine(string: "\(val.description)")
 		case .objectValue(let val):
 			result = CNTextLine(string: "\(val.description)")
 		}
@@ -347,6 +367,8 @@ public enum CNNativeValue {
 			result = newarr
 		case .URLValue(let val):
 			result = val
+		case .imageValue(let val):
+			result = val
 		case .objectValue(let val):
 			result = val
 		}
@@ -389,6 +411,8 @@ public enum CNNativeValue {
 			result = .arrayValue(newarr)
 		} else if let val = obj as? URL {
 			result = .URLValue(val)
+		} else if let val = obj as? CNImage {
+			result = .imageValue(val)
 		} else if let val = obj as? NSObject {
 			result = .objectValue(val)
 		} else {

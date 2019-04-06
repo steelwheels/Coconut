@@ -47,6 +47,12 @@ public class CNNativeValueSelector: CNNativeValueVisitor
 	open override func visit(rect obj: CGRect){
 		mResult = nil
 	}
+	open override func visit(URL obj: URL){
+		mResult = nil
+	}
+	open override func visit(image obj: CNImage){
+		mResult = nil
+	}
 	open override func visit(dictionary obj: Dictionary<String, CNNativeValue>){
 		let srcval = CNNativeValue.dictionaryValue(obj)
 		if let _ = mMatcher.match(value: srcval) {

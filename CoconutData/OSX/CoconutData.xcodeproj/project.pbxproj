@@ -330,8 +330,8 @@
 				05995842208AEEFB00DE2DC9 /* CNValue.swift */,
 				05995844208AEFD800DE2DC9 /* CNValueUtil.swift */,
 				054D735C21B039C700950D9D /* CNNativeValue.swift */,
-				05471B0D21CBECDE00F66B8F /* CNNativeValueCoder.swift */,
 				056058AD21CA8E4B00E593E2 /* CNNativeValueVisitor.swift */,
+				05471B0D21CBECDE00F66B8F /* CNNativeValueCoder.swift */,
 				05416EAB21CAA638002E68BA /* CNNativeValueMerger.swift */,
 				05416EAD21CAAD70002E68BA /* CNNativeValueMatcher.swift */,
 				05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */,
@@ -601,7 +601,7 @@
 				TargetAttributes = {
 					0543A4BA209DE1C000F5B34F = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 					};
 					0567B19E21D517C4000C74B8 = {
 						CreatedOnToolsVersion = 10.1;
@@ -817,7 +817,7 @@
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -833,7 +833,7 @@
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

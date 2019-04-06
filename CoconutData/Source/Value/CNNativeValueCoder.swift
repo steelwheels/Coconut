@@ -23,6 +23,9 @@ public class CNJSONDecoder
 		} else if let url = obj as? URL {
 			let val: CNNativeValue = .URLValue(url)
 			return (val, nil)
+		} else if let image = obj as? CNImage {
+			let val: CNNativeValue = .imageValue(image)
+			return (val, nil)
 		} else if let _ = obj as? NSNull {
 			let val: CNNativeValue = .nullValue
 			return (val, nil)
@@ -154,7 +157,11 @@ public class CNJSONEncoder: CNNativeValueVisitor
 	open override func visit(URL url: URL){
 		mResult = NSString(string: url.absoluteString)
 	}
-	
+
+	open override func visit(image obj: CNImage){
+		mResult = NSString(string: "\(obj.description)")
+	}
+
 	open override func visit(date obj: Date){
 		mResult = NSDate(timeInterval: 0.0, since: obj)
 	}
