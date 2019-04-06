@@ -76,6 +76,9 @@ public class CNNativeValueMatcher: CNNativeValueVisitor
 	open override func visit(array obj: Array<CNNativeValue>){
 		mValueString = nil
 	}
+	open override func visit(URL obj: URL) {
+		mValueString = obj.absoluteString
+	}
 	open override func visit(object obj: NSObject){
 		mValueString = nil
 	}

@@ -16,6 +16,7 @@
 		053BC8F52090D0CF006CBB06 /* CNExitCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BC8F42090D0CF006CBB06 /* CNExitCode.swift */; };
 		054D735F21B03CEA00950D9D /* CNNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054D735E21B03CEA00950D9D /* CNNativeValue.swift */; };
 		0554E0CB21D52A45005B8069 /* CNResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554E0CA21D52A45005B8069 /* CNResource.swift */; };
+		0564CDBD22581C7600B95048 /* CNType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0564CDBC22581C7600B95048 /* CNType.swift */; };
 		0565A9E9208B7B8B00E91568 /* CNFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9E6208B7B8A00E91568 /* CNFileManager.swift */; };
 		0565A9EA208B7B8B00E91568 /* CNFilePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9E7208B7B8A00E91568 /* CNFilePath.swift */; };
 		0565A9EB208B7B8B00E91568 /* CNFileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9E8208B7B8A00E91568 /* CNFileURL.swift */; };
@@ -73,6 +74,7 @@
 		053BC8F42090D0CF006CBB06 /* CNExitCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNExitCode.swift; sourceTree = "<group>"; };
 		054D735E21B03CEA00950D9D /* CNNativeValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValue.swift; sourceTree = "<group>"; };
 		0554E0CA21D52A45005B8069 /* CNResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNResource.swift; sourceTree = "<group>"; };
+		0564CDBC22581C7600B95048 /* CNType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNType.swift; sourceTree = "<group>"; };
 		0565A9E6208B7B8A00E91568 /* CNFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFileManager.swift; sourceTree = "<group>"; };
 		0565A9E7208B7B8A00E91568 /* CNFilePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFilePath.swift; sourceTree = "<group>"; };
 		0565A9E8208B7B8A00E91568 /* CNFileURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFileURL.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 		05F5DAC4208ADBB6006EB134 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				0564CDBC22581C7600B95048 /* CNType.swift */,
 				05B21D4921AC3818009B0F36 /* CNDatabase.swift */,
 				05DF7D9A2090D4D7003B5110 /* CNStringUtil.swift */,
 				057D2CE0208B42B300E02E71 /* CNColor.swift */,
@@ -333,7 +336,7 @@
 				TargetAttributes = {
 					0586619B208AD69400ADA9D3 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1020;
 					};
 					05F5DABC208AD891006EB134 = {
 						CreatedOnToolsVersion = 9.3;
@@ -346,6 +349,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 05866192208AD69400ADA9D3;
 			productRefGroup = 0586619D208AD69400ADA9D3 /* Products */;
@@ -387,6 +391,7 @@
 				0589993A208B010E002FEAEA /* CNState.swift in Sources */,
 				0588874E21CBD7E700BE14B5 /* CNJSONFile.swift in Sources */,
 				05725CE8208B4474008A97D1 /* CNPipe.swift in Sources */,
+				0564CDBD22581C7600B95048 /* CNType.swift in Sources */,
 				05D8FC0B21CBF65A00769685 /* CNNativeValueCoder.swift in Sources */,
 				05725CEC208B4539008A97D1 /* CNConnection.swift in Sources */,
 				05995847208AEFEC00DE2DC9 /* CNValueUtil.swift in Sources */,
@@ -574,7 +579,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -603,7 +608,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

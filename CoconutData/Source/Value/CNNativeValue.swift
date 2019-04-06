@@ -21,6 +21,7 @@ public enum CNNativeValue {
 	case rectValue(_ val: CGRect)
 	case dictionaryValue(_ val: Dictionary<String, CNNativeValue>)
 	case arrayValue(_ val: Array<CNNativeValue>)
+	case URLValue(_ val: URL)
 	case objectValue(_ val: NSObject)
 
 	public func toNumber() -> NSNumber? {
@@ -99,6 +100,15 @@ public enum CNNativeValue {
 		let result: Array<CNNativeValue>?
 		switch self {
 		case .arrayValue(let obj):	result = obj
+		default:			result = nil
+		}
+		return result
+	}
+
+	public func toURL() -> URL? {
+		let result: URL?
+		switch self {
+		case .URLValue(let url):	result = url
 		default:			result = nil
 		}
 		return result
@@ -193,6 +203,14 @@ public enum CNNativeValue {
 		}
 	}
 
+	public func URLProperty(identifier ident: String) -> URL? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toURL()
+		} else {
+			return nil
+		}
+	}
+
 	public func valueProperty(identifier ident: String) -> CNNativeValue? {
 		let result: CNNativeValue?
 		switch self {
@@ -264,6 +282,8 @@ public enum CNNativeValue {
 				sect.add(text: elmtxt)
 			}
 			result = sect
+		case .URLValue(let val):
+			result = CNTextLine(string: "\(val.absoluteString)")
 		case .objectValue(let val):
 			result = CNTextLine(string: "\(val.description)")
 		}
@@ -325,6 +345,8 @@ public enum CNNativeValue {
 				newarr.append(elm.toAny())
 			}
 			result = newarr
+		case .URLValue(let val):
+			result = val
 		case .objectValue(let val):
 			result = val
 		}
@@ -365,6 +387,8 @@ public enum CNNativeValue {
 				}
 			}
 			result = .arrayValue(newarr)
+		} else if let val = obj as? URL {
+			result = .URLValue(val)
 		} else if let val = obj as? NSObject {
 			result = .objectValue(val)
 		} else {

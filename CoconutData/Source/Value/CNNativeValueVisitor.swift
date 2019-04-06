@@ -21,6 +21,7 @@ public class CNNativeValueVisitor
 		case .rectValue(let obj):	visit(rect: obj)
 		case .dictionaryValue(let obj):	visit(dictionary: obj)
 		case .arrayValue(let obj):	visit(array: obj)
+		case .URLValue(let obj):	visit(URL: obj)
 		case .objectValue(let obj):	visit(object: obj)
 		}
 	}
@@ -35,6 +36,7 @@ public class CNNativeValueVisitor
 	open func visit(rect obj: CGRect){ }
 	open func visit(dictionary obj: Dictionary<String, CNNativeValue>){ }
 	open func visit(array obj: Array<CNNativeValue>){ }
+	open func visit(URL obj: URL){ }
 	open func visit(object obj: NSObject){ }
 }
 
