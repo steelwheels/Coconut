@@ -37,7 +37,7 @@ public extension FileManager
 
 	func checkFileType(pathString pathstr: String) -> CNFileType {
 		var isdir    = ObjCBool(false)
-		if self.fileExists(atPath: pathstr, isDirectory: &isdir) {
+		if fileExists(atPath: pathstr, isDirectory: &isdir) {
 			if isdir.boolValue {
 				return .Directory
 			} else {

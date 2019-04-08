@@ -122,28 +122,38 @@ public class CNPipeConsole: CNConsole
 		super.init()
 
 		inputPipe.fileHandleForReading.readabilityHandler = {
-			(_ handle: FileHandle) -> Void in
+			[weak self] (_ handle: FileHandle) -> Void in
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
-				self.print(string: str)
+				if let myself = self {
+					myself.print(string: str)
+				} else {
+					CNLog(type: .Flow, message: str, file: #file, line: #line, function: #function)
+				}
 			} else {
 				NSLog("Error decoding data: \(handle.availableData)")
 			}
 		}
 		errorPipe.fileHandleForReading.readabilityHandler = {
-			(_ handle: FileHandle) -> Void in
+			[weak self] (_ handle: FileHandle) -> Void in
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
-				self.error(string: str)
+				if let myself = self {
+					myself.error(string: str)
+				} else {
+					CNLog(type: .Error, message: str, file: #file, line: #line, function: #function)
+				}
 			} else {
 				NSLog("Error decoding data: \(handle.availableData)")
 			}
 		}
 		outputPipe.fileHandleForWriting.writeabilityHandler = {
-			(filehandle: FileHandle) -> Void in
-			if let str = self.scan() {
-				if let data = str.data(using: .utf8) {
-					filehandle.write(data)
-				} else {
-					NSLog("Error encoding data: \(str)")
+			[weak self] (filehandle: FileHandle) -> Void in
+			if let myself = self {
+				if let str = myself.scan() {
+					if let data = str.data(using: .utf8) {
+						filehandle.write(data)
+					} else {
+						NSLog("Error encoding data: \(str)")
+					}
 				}
 			}
 		}

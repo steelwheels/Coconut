@@ -60,6 +60,13 @@ public class CNObservedValueTable
 			mValueTable.addObserver(newobs, forKeyPath: key, options: [.new], context: nil)
 		}
 	}
+
+	public func removeObserver(forKey key: String){
+		if let obs = mObservers[key] {
+			mValueTable.removeObserver(obs, forKeyPath: key)
+			mObservers.removeValue(forKey: key)
+		}
+	}
 }
 
 private class CNListener: NSObject

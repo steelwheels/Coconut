@@ -15,20 +15,29 @@ open class CNOperationQueue
 		mOperationQueue = OperationQueue()
 	}
 
-	public func execute(operations ops: Array<CNOperation>, timeLimit limit: TimeInterval?) -> Bool {
+	public var operationCount: Int {
+		get {
+			return mOperationQueue.operationCount
+		}
+	}
+
+	public func execute(operations ops: Array<CNOperation>, timeLimit limitp: TimeInterval?) -> Bool {
 		/* Check the operation queue is busy */
-		guard limit == nil || operationsFinished(operations: ops) else {
+		guard limitp == nil || operationsFinished(operations: ops) else {
 			return false
 		}
 
 		/* Add all operations into the queue */
 		mOperationQueue.addOperations(ops, waitUntilFinished: false)
 
-		if let limit = limit {
+		if let limit = limitp {
 			/* Limit the execution time */
 			DispatchQueue.main.asyncAfter(deadline: .now() + limit) {
-				if !self.operationsFinished(operations: ops) {
-					self.cancelOperations(operations: ops)
+				[weak self] () -> Void in
+				if let myself = self {
+					if !myself.operationsFinished(operations: ops) {
+						myself.cancelOperations(operations: ops)
+					}
 				}
 			}
 		}

@@ -26,6 +26,12 @@ open class CNOperation: Operation
 		reset()
 	}
 
+	deinit {
+		mObservedValueTable.removeObserver(forKey: CNOperation.isExecutingItem)
+		mObservedValueTable.removeObserver(forKey: CNOperation.isFinishedItem)
+		mObservedValueTable.removeObserver(forKey: CNOperation.isCanceledItem)
+	}
+
 	public func reset(){
 		mObservedValueTable.setBooleanValue(false, forKey: CNOperation.isExecutingItem)
 		mObservedValueTable.setBooleanValue(false, forKey: CNOperation.isFinishedItem)
