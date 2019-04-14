@@ -7,23 +7,106 @@
 
 import Foundation
 
-open class CNConsole
+public protocol CNConsole {
+	func print(string str: String)
+	func error(string str: String)
+	func scan() -> String?
+}
+
+public class CNDefaultConsole: CNConsole
 {
-	public init(){
-
+	public func print(string str: String){
+		NSLog(str)
 	}
 
-	open func print(string str: String){
-		Swift.print(str, terminator: "")
+	public func error(string str: String){
+		NSLog(str)
 	}
 
-	open func error(string str: String){
-		Swift.print(str, terminator: "")
-	}
-
-	open func scan() -> String? {
+	public func scan() -> String? {
 		return nil
 	}
+}
+
+public class CNLogConsole
+{
+	public enum MessageType: Int {
+		case Flow	= 0
+		case Warning	= 1
+		case Error	= 2
+
+		public func description() -> String {
+			let desc: String
+			switch self {
+			case .Flow:	desc = "Flow   "
+			case .Warning:	desc = "Warning"
+			case .Error:	desc = "Error  "
+			}
+			return desc
+		}
+	}
+
+	private var mDebugLevel:	MessageType
+	private var mConsole:		CNConsole
+
+	public init(debugLevel level: MessageType, toConsole cons: CNConsole){
+		mDebugLevel = level
+		mConsole    = cons
+	}
+
+	public var connectedConsole: CNConsole {
+		get { return mConsole }
+	}
+
+	public func print(type logtype: MessageType, string str: String, file fname: String, line ln: Int, function fnc: String) {
+		if logtype.rawValue >= mDebugLevel.rawValue {
+			let desc    = logtype.description()
+			let place   = "\(fname)/\(ln)/\(fnc)"
+			let message = "[\(desc)] \(str) at \(place)\n"
+			switch logtype {
+			case .Flow:
+				mConsole.print(string: message)
+			case .Warning, .Error:
+				mConsole.error(string: message)
+			}
+		}
+	}
+}
+
+public protocol CNLogging
+{
+	var console: CNLogConsole?	{ get set }
+	func log(type logtype: CNLogConsole.MessageType, string str: String, file filestr: String, line linestr: Int, function funcstr: String)
+	func log(type logtype: CNLogConsole.MessageType, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String)
+
+}
+
+extension CNLogging
+{
+	public func log(type logtype: CNLogConsole.MessageType, string str: String, file filestr: String, line linestr: Int, function funcstr: String) {
+		if let cons = console {
+			cons.print(type: logtype, string: str, file: filestr, line: linestr, function: funcstr)
+		} else {
+			let desc    = logtype.description()
+			let message = "[\(desc)] \(str) at \(filestr)/\(linestr)/\(funcstr)"
+			NSLog(message)
+		}
+	}
+
+	public func log(type logtype: CNLogConsole.MessageType, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String) {
+		let cons: CNConsole
+		if let logcons = console {
+			cons = logcons.connectedConsole
+		} else {
+			cons = CNDefaultConsole()
+		}
+
+		let desc    = logtype.description()
+		let message = "[\(desc)] at \(filestr)/\(linestr)/\(funcstr)\n"
+		cons.print(string: message)
+		txt.print(console: cons)
+	}
+
 }
 
 public class CNFileConsole : CNConsole
@@ -38,19 +121,19 @@ public class CNFileConsole : CNConsole
 		errorHandle	= ehdl
 	}
 
-	public override init() {
+	public init() {
 		inputHandle	= FileHandle.standardInput
 		outputHandle	= FileHandle.standardOutput
 		errorHandle	= FileHandle.standardError
 	}
 
-	public override func print(string str: String){
+	public func print(string str: String){
 		if let data = str.data(using: .utf8) {
 			outputHandle.write(data)
 		}
 	}
 
-	public override func error(string str: String){
+	public func error(string str: String){
 		if let data = str.data(using: .utf8) {
 			errorHandle.write(data)
 		} else {
@@ -58,7 +141,7 @@ public class CNFileConsole : CNConsole
 		}
 	}
 
-	public override func scan() -> String? {
+	public func scan() -> String? {
 		return String(data: inputHandle.availableData, encoding: .utf8)
 	}
 }
@@ -75,15 +158,15 @@ public class CNIndentedConsole: CNConsole
 		mIndentString	= ""
 	}
 
-	public override func print(string str: String){
+	public func print(string str: String){
 		mConsole.print(string: mIndentString + str)
 	}
 
-	public override func error(string str: String){
+	public func error(string str: String){
 		mConsole.error(string: mIndentString + str)
 	}
 
-	public override func scan() -> String? {
+	public func scan() -> String? {
 		return mConsole.scan()
 	}
 
@@ -114,20 +197,17 @@ public class CNPipeConsole: CNConsole
 	public var errorPipe:		Pipe
 	public var outputPipe:		Pipe
 
-	public override init(){
+	public init(){
 		toConsole	= nil
 		inputPipe	= Pipe()
 		errorPipe	= Pipe()
 		outputPipe	= Pipe()
-		super.init()
 
 		inputPipe.fileHandleForReading.readabilityHandler = {
 			[weak self] (_ handle: FileHandle) -> Void in
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
 				if let myself = self {
 					myself.print(string: str)
-				} else {
-					CNLog(type: .Flow, message: str, file: #file, line: #line, function: #function)
 				}
 			} else {
 				NSLog("Error decoding data: \(handle.availableData)")
@@ -138,8 +218,6 @@ public class CNPipeConsole: CNConsole
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
 				if let myself = self {
 					myself.error(string: str)
-				} else {
-					CNLog(type: .Error, message: str, file: #file, line: #line, function: #function)
 				}
 			} else {
 				NSLog("Error decoding data: \(handle.availableData)")
@@ -159,19 +237,19 @@ public class CNPipeConsole: CNConsole
 		}
 	}
 
-	open override func print(string str: String){
+	open func print(string str: String){
 		if let cons = toConsole {
 			cons.print(string: str)
 		}
 	}
 
-	open override func error(string str: String){
+	open func error(string str: String){
 		if let cons = toConsole {
 			cons.error(string: str)
 		}
 	}
 
-	open override func scan() -> String? {
+	open func scan() -> String? {
 		if let cons = toConsole {
 			return cons.scan()
 		} else {
@@ -187,7 +265,7 @@ public class CNBufferedConsole: CNConsole
 
 	private var mOutputConsole: CNConsole?
 
-	public override init(){
+	public init(){
 		mOutputBuffer	= []
 		mErrorBuffer	= []
 		mOutputConsole	= nil
@@ -204,7 +282,7 @@ public class CNBufferedConsole: CNConsole
 		}
 	}
 
-	public override func print(string str: String){
+	public func print(string str: String){
 		if let console = mOutputConsole {
 			flushOutput(console: console)
 			console.print(string: str)
@@ -213,7 +291,7 @@ public class CNBufferedConsole: CNConsole
 		}
 	}
 
-	public override func error(string str: String){
+	public func error(string str: String){
 		if let console = mOutputConsole {
 			flushError(console: console)
 			console.error(string: str)
@@ -236,7 +314,7 @@ public class CNBufferedConsole: CNConsole
 		mErrorBuffer = []
 	}
 
-	public override func scan() -> String? {
+	public func scan() -> String? {
 		if let console = mOutputConsole {
 			return console.scan()
 		} else {

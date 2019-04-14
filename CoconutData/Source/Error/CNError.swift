@@ -82,7 +82,7 @@ public extension NSError
 
 	var errorCode: CNErrorCode {
 		get {
-			if let ecode = CNErrorCode(rawValue: self.code) {
+			if let ecode = CNErrorCode(rawValue: code) {
 				return ecode
 			} else {
 				return .UnknownError

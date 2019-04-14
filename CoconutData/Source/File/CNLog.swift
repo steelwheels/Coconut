@@ -5,6 +5,7 @@
  *   Copyright (C) 2019 Steel Wheels Project
  */
 
+/*
 import Foundation
 
 public enum CNLogType: Int, Comparable {
@@ -88,4 +89,5 @@ private func CNPrintText(text txt: CNText)
 		#endif
 	}
 }
+*/
 

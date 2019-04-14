@@ -33,7 +33,7 @@ public class CNText
 	}
 
 	open func append(string src: String){
-		CNLog(type: .Error, message: "Must be override", file: #file, line: #line, function: #function)
+		NSLog("Must be override")
 	}
 
 	public final func append(text src: CNTextLine){

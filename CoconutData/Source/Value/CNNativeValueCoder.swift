@@ -56,7 +56,7 @@ public class CNJSONDecoder
 						return (nil, err!)
 					}
 				} else {
-					CNLog(type: .Error, message: "Can not happen", file:#file, line:#line, function:#function)
+					NSLog("Can not happen")
 				}
 			}
 			return (CNNativeValue.dictionaryValue(result), nil)

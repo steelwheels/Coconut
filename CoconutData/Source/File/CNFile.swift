@@ -264,7 +264,7 @@ private class CNTextFileObject: CNDataFileObject, CNTextFile
 		if let data = str.data(using: .utf8) {
 			put(data: data)
 		} else {
-			CNLog(type: .Error, message: "Failed to put", file: #file, line: #line, function: #function)
+			NSLog("Failed to put")
 		}
 	}
 
@@ -272,7 +272,7 @@ private class CNTextFileObject: CNDataFileObject, CNTextFile
 		if let data = s.data(using: .utf8) {
 			put(data: data)
 		} else {
-			CNLog(type: .Error, message: "Failed to put", file: #file, line: #line, function: #function)
+			NSLog("Failed to put")
 		}
 	}
 }
@@ -303,7 +303,7 @@ private class CNLineBuffer
 			}
 
 		} else {
-			CNLog(type: .Error, message: "Failed to append", file: #file, line: #line, function: #function)
+			NSLog("Failed to append")
 		}
 	}
 

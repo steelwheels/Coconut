@@ -23,7 +23,7 @@ public class CNShell
 				if let data = str.data(using: .utf8) {
 					filehandle.write(data)
 				} else {
-					CNLog(type: .Error, message: "Error encoding data: \(str)", file: #file, line: #line, function: #function)
+					cons.error(string: "Error encoding data: \(str) at \(#file)/\(#line)/\(#function)")
 				}
 			}
 		}
@@ -31,16 +31,12 @@ public class CNShell
 			(_ handle: FileHandle) -> Void in
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
 				cons.print(string: str)
-			} else {
-				CNLog(type: .Error, message: "Error decoding data: \(handle.availableData)", file: #file, line: #line, function: #function)
 			}
 		}
 		errpipe.fileHandleForReading.readabilityHandler = {
 			(_ handle: FileHandle) -> Void in
 			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
 				cons.error(string: str)
-			} else {
-				CNLog(type: .Error, message: "Error decoding data: \(handle.availableData)", file: #file, line: #line, function: #function)
 			}
 		}
 

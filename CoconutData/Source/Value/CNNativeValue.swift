@@ -269,7 +269,7 @@ public enum CNNativeValue {
 						sect.add(text: elmtxt)
 					}
 				} else {
-					CNLog(type: .Error, message: "No object", file: #file, line: #line, function: #function)
+					NSLog("No object")
 					sect.add(text: CNTextLine(string: "?"))
 				}
 			}
@@ -392,7 +392,7 @@ public enum CNNativeValue {
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
 		} else {
-			CNLog(type: .Error, message: "Failed to convert \(obj)", file: #file, line: #line, function: #function)
+			NSLog("Failed to convert \(obj)")
 			result = nil
 		}
 		return result
