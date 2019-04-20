@@ -13,8 +13,75 @@ public protocol CNConsole {
 	func scan() -> String?
 }
 
+public enum CNLogType {
+	case Flow
+	case Warning
+	case Error
+
+	public var description: String {
+		get {
+			let result: String
+			switch self {
+			case .Flow:	result = "Flow"
+			case .Warning:	result = "Debug"
+			case .Error:	result = "Error"
+			}
+			return result
+		}
+	}
+}
+
+public protocol CNLogging
+{
+	var console: CNConsole?	{ get }
+
+	func log(type logtype: CNLogType, string str: String, file filestr: String, line linestr: Int, function funcstr: String)
+	func log(type logtype: CNLogType, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String)
+}
+
+extension CNLogging
+{
+	public func log(type logtype: CNLogType, string str: String, file filestr: String, line lineval: Int, function funcstr: String){
+		let desc  = "[\(logtype.description)] "
+		let place = placeString(file: filestr, line: lineval, function: funcstr)
+		log(type: logtype, entireString: desc + str + " at " + place + "\n")
+	}
+
+	public func log(type logtype: CNLogType, text   txt: CNText, file filestr: String, line lineval: Int, function funcstr: String){
+		let desc  = "[\(logtype.description)] "
+		let place = placeString(file: filestr, line: lineval, function: funcstr)
+		log(type: logtype, entireString: desc + " at " + place + "\n")
+		if let cons = console {
+			txt.print(console: cons)
+		}
+	}
+
+	private func log(type logtype: CNLogType, entireString str: String) {
+		let doverbose: Bool
+		switch CNPreference.shared.systemPreference.buildMode {
+		  case .Debug:		doverbose = true
+		  case .Release:	doverbose = false
+		}
+		switch logtype {
+		case .Flow:
+			if doverbose {
+				console?.print(string: str)
+			}
+		case .Warning, .Error:
+			console?.error(string: str)
+		}
+	}
+
+	private func placeString(file filestr: String, line linestr: Int, function funcstr: String) -> String {
+		return "\(filestr)/\(linestr)/\(funcstr)\n"
+	}
+}
+
 public class CNDefaultConsole: CNConsole
 {
+	public init(){
+	}
+
 	public func print(string str: String){
 		NSLog(str)
 	}
@@ -26,87 +93,6 @@ public class CNDefaultConsole: CNConsole
 	public func scan() -> String? {
 		return nil
 	}
-}
-
-public class CNLogConsole
-{
-	public enum MessageType: Int {
-		case Flow	= 0
-		case Warning	= 1
-		case Error	= 2
-
-		public func description() -> String {
-			let desc: String
-			switch self {
-			case .Flow:	desc = "Flow   "
-			case .Warning:	desc = "Warning"
-			case .Error:	desc = "Error  "
-			}
-			return desc
-		}
-	}
-
-	private var mDebugLevel:	MessageType
-	private var mConsole:		CNConsole
-
-	public init(debugLevel level: MessageType, toConsole cons: CNConsole){
-		mDebugLevel = level
-		mConsole    = cons
-	}
-
-	public var connectedConsole: CNConsole {
-		get { return mConsole }
-	}
-
-	public func print(type logtype: MessageType, string str: String, file fname: String, line ln: Int, function fnc: String) {
-		if logtype.rawValue >= mDebugLevel.rawValue {
-			let desc    = logtype.description()
-			let place   = "\(fname)/\(ln)/\(fnc)"
-			let message = "[\(desc)] \(str) at \(place)\n"
-			switch logtype {
-			case .Flow:
-				mConsole.print(string: message)
-			case .Warning, .Error:
-				mConsole.error(string: message)
-			}
-		}
-	}
-}
-
-public protocol CNLogging
-{
-	var console: CNLogConsole?	{ get set }
-	func log(type logtype: CNLogConsole.MessageType, string str: String, file filestr: String, line linestr: Int, function funcstr: String)
-	func log(type logtype: CNLogConsole.MessageType, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String)
-
-}
-
-extension CNLogging
-{
-	public func log(type logtype: CNLogConsole.MessageType, string str: String, file filestr: String, line linestr: Int, function funcstr: String) {
-		if let cons = console {
-			cons.print(type: logtype, string: str, file: filestr, line: linestr, function: funcstr)
-		} else {
-			let desc    = logtype.description()
-			let message = "[\(desc)] \(str) at \(filestr)/\(linestr)/\(funcstr)"
-			NSLog(message)
-		}
-	}
-
-	public func log(type logtype: CNLogConsole.MessageType, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String) {
-		let cons: CNConsole
-		if let logcons = console {
-			cons = logcons.connectedConsole
-		} else {
-			cons = CNDefaultConsole()
-		}
-
-		let desc    = logtype.description()
-		let message = "[\(desc)] at \(filestr)/\(linestr)/\(funcstr)\n"
-		cons.print(string: message)
-		txt.print(console: cons)
-	}
-
 }
 
 public class CNFileConsole : CNConsole
@@ -273,28 +259,28 @@ public class CNBufferedConsole: CNConsole
 
 	public var outputConsole: CNConsole? {
 		get { return mOutputConsole }
-		set(console){
-			if let cons = console {
+		set(newcons){
+			if let cons = newcons {
 				flushOutput(console: cons)
 				flushError(console: cons)
 			}
-			mOutputConsole = console
+			mOutputConsole = newcons
 		}
 	}
 
 	public func print(string str: String){
-		if let console = mOutputConsole {
-			flushOutput(console: console)
-			console.print(string: str)
+		if let cons = mOutputConsole {
+			flushOutput(console: cons)
+			cons.print(string: str)
 		} else {
 			mOutputBuffer.append(str)
 		}
 	}
 
 	public func error(string str: String){
-		if let console = mOutputConsole {
-			flushError(console: console)
-			console.error(string: str)
+		if let cons = mOutputConsole {
+			flushError(console: cons)
+			cons.error(string: str)
 		} else {
 			mErrorBuffer.append(str)
 		}
@@ -315,8 +301,8 @@ public class CNBufferedConsole: CNConsole
 	}
 
 	public func scan() -> String? {
-		if let console = mOutputConsole {
-			return console.scan()
+		if let cons = mOutputConsole {
+			return cons.scan()
 		} else {
 			return nil
 		}

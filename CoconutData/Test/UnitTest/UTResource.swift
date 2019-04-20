@@ -22,9 +22,9 @@ public func testResource(console cons: CNConsole) -> Bool
 
 	var result = true
 	if let res: NSNumber = resource.load(category: "Number", identifier: "number0", index: 0) {
-		console.print(string: "[OK] Loaded => \(res.doubleValue)\n")
+		cons.print(string: "[OK] Loaded => \(res.doubleValue)\n")
 	} else {
-		console.print(string: "[Error] Can not load resource0\n")
+		cons.print(string: "[Error] Can not load resource0\n")
 		result = false
 	}
 

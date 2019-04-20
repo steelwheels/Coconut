@@ -1,4 +1,6 @@
 Hello, World!
+* testPreference
+System Preference: buildMode=release
 * testValue
 exp: true -> real: true
 exp: Hello, world -> real: Hello, world

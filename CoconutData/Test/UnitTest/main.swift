@@ -9,39 +9,42 @@ import CoconutData
 import Foundation
 import Darwin
 
-let console = CNFileConsole()
-console.print(string: "Hello, World!\n")
+let cons = CNFileConsole()
+cons.print(string: "Hello, World!\n")
 
-console.print(string: "* testValue\n")
-let result0 = testValue(console: console)
+cons.print(string: "* testPreference\n")
+let result8 = testPreference(console: cons)
 
-console.print(string: "* testConsole\n")
-let result1 = testConsole(console: console)
+cons.print(string: "* testValue\n")
+let result0 = testValue(console: cons)
 
-console.print(string: "* testFilePath\n")
-let result2 = testFilePath(console: console)
+cons.print(string: "* testConsole\n")
+let result1 = testConsole(console: cons)
 
-console.print(string: "* testObserver\n")
-let result3 = testObserver(console: console)
+cons.print(string: "* testFilePath\n")
+let result2 = testFilePath(console: cons)
 
-console.print(string: "* testOperation\n")
-let result4 = testOperation(console: console)
+cons.print(string: "* testObserver\n")
+let result3 = testObserver(console: cons)
 
-console.print(string: "* testOperationQueue\n")
-let result5 = testOperationQueue(console: console)
+cons.print(string: "* testOperation\n")
+let result4 = testOperation(console: cons)
 
-console.print(string: "* testDatabse\n")
-let result6 = testDatabase(console: console)
+cons.print(string: "* testOperationQueue\n")
+let result5 = testOperationQueue(console: cons)
 
-console.print(string: "* testResource\n")
-let result7 = testResource(console: console)
+cons.print(string: "* testDatabse\n")
+let result6 = testDatabase(console: cons)
 
-let result = result0 && result1 && result2 && result3 && result4 && result5 && result6
+cons.print(string: "* testResource\n")
+let result7 = testResource(console: cons)
+
+let result = result0 && result1 && result2 && result3 && result4 && result5 && result6 && result7 && result8
 if result {
-	console.print(string: "[Result] OK\n")
+	cons.print(string: "[Result] OK\n")
 	Darwin.exit(0)
 } else {
-	console.print(string: "[Result] NG\n")
+	cons.print(string: "[Result] NG\n")
 	Darwin.exit(1)
 }
 

@@ -18,7 +18,7 @@ public func testValue(console cons: CNConsole) -> Bool
 private func printValue(value val: CNValue, expected exp: String, console cons: CNConsole) -> Bool
 {
 	let desc = val.description
-	console.print(string: "exp: \(exp) -> real: \(desc)\n")
+	cons.print(string: "exp: \(exp) -> real: \(desc)\n")
 	return desc == exp
 }
 
