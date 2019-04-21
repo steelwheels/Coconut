@@ -285,7 +285,19 @@ public enum CNNativeValue {
 		case .URLValue(let val):
 			result = CNTextLine(string: "\(val.absoluteString)")
 		case .imageValue(let val):
-			result = CNTextLine(string: "\(val.description)")
+			#if os(OSX)
+				let name: String
+				if let n = val.name() {
+					name = n
+				} else {
+					name = "<unknown>"
+				}
+				let size = val.size
+				result = CNTextLine(string: "{image: name:\(name), size:\(size.width) x \(size.height)}")
+			#else
+				let size = val.size
+				result = CNTextLine(string: "{image: size:\(size.width) x \(size.height)}")
+			#endif
 		}
 		return result
 	}
@@ -320,17 +332,11 @@ public enum CNNativeValue {
 			]
 			result = newdict
 		case .rectValue(let val):
-			let origin: Dictionary<String, Any> = [
+			let rect: Dictionary<String, Any> = [
 				"x"	: NSNumber(value: Double(val.origin.x)),
-				"y"	: NSNumber(value: Double(val.origin.y))
-			]
-			let size: Dictionary<String, Any> = [
+				"y"	: NSNumber(value: Double(val.origin.y)),
 				"width"	: NSNumber(value: Double(val.size.width)),
 				"height": NSNumber(value: Double(val.size.height))
-			]
-			let rect: Dictionary<String, Any> = [
-				"origin": origin,
-				"size":	  size
 			]
 			result = rect
 		case .dictionaryValue(let dict):
