@@ -71,7 +71,7 @@ private enum CNValueData {
 	case FloatValue(value: Float)
 	case DoubleValue(value: Double)
 	case StringValue(value: String)
-	case URLValue(value: URL?)
+	case URLValue(value: URL)
 	case DateValue(value: Date)
 	case ArrayValue(value: Array<CNValue>)
 	case DictionaryValue(value: Dictionary<String, CNValue>)
@@ -195,11 +195,7 @@ private enum CNValueData {
 		case .StringValue(let val):
 			result = 0x0700_0000 | (Int(val.lengthOfBytes(using: .utf8)) & MASK)
 		case .URLValue(let val):
-			if let url = val {
-				result = 0x0800_0000 | (Int(url.absoluteString.lengthOfBytes(using: .utf8)) & MASK)
-			} else {
-				result = 0x0800_0000 | 0x1234
-			}
+			result = 0x0800_0000 | (Int(val.absoluteString.lengthOfBytes(using: .utf8)) & MASK)
 		case .DateValue(let val):
 			result = 0x0900_0000 | (val.hashValue & MASK)
 		case .ArrayValue(let val):
@@ -222,12 +218,7 @@ private enum CNValueData {
 			case .DoubleValue(let val):	result = "\(val)"
 			case .StringValue(let val):	result = val
 			case .DateValue(let val):	result = val.description
-			case .URLValue(let val):
-				if let url = val {
-					result = url.absoluteString
-				} else {
-					result = ""
-				}
+			case .URLValue(let val):	result = val.absoluteString
 			case .ArrayValue(let arr):
 				var str:String = "["
 				var is1st      = true
@@ -307,7 +298,7 @@ public class CNValue: NSObject, Comparable
 		mData = .DateValue(value: val)
 	}
 
-	public init(URLValue val: URL?){
+	public init(URLValue val: URL){
 		mType = .URLType
 		mData = .URLValue(value: val)
 	}
@@ -424,8 +415,11 @@ public class CNValue: NSObject, Comparable
 		case .URLType:
 			switch type {
 			case .StringType:
-				let url = URL(string: stringValue!)
-				return CNValue(URLValue: url)
+				if let url = URL(string: stringValue!) {
+					return CNValue(URLValue: url)
+				} else {
+					return nil
+				}
 			case .URLType:
 				return self
 			default:
