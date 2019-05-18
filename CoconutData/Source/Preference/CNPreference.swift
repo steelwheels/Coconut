@@ -161,7 +161,7 @@ extension CNPreference
 	}}
 
 	public var documentTypePreference: CNDocumentTypePreference { get {
-		return get(name: "system", allocator: {
+		return get(name: "documentType", allocator: {
 			() -> CNDocumentTypePreference in return CNDocumentTypePreference()
 		})
 	}}
