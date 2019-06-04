@@ -82,6 +82,10 @@ public class CNNativeValueMatcher: CNNativeValueVisitor
 	open override func visit(image obj: CNImage) {
 		mValueString = "\(obj.description)"
 	}
+	open override func visit(anyObject obj: AnyObject){
+		let classname = String(describing: type(of: obj))
+		mValueString = "(anyObject: \(classname))"
+	}
 }
 
 

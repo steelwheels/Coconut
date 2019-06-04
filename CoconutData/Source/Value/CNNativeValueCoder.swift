@@ -127,13 +127,13 @@ public class CNJSONDecoder
 
 public class CNJSONEncoder: CNNativeValueVisitor
 {
-	private var mResult: NSObject?
+	private var mResult: AnyObject?
 
 	public override init(){
 		mResult = nil
 	}
 
-	public func convert(value val: CNNativeValue) -> NSObject {
+	public func convert(value val: CNNativeValue) -> AnyObject {
 		accept(value: val)
 		if let result = mResult {
 			return result
@@ -160,6 +160,10 @@ public class CNJSONEncoder: CNNativeValueVisitor
 
 	open override func visit(image obj: CNImage){
 		mResult = NSString(string: "\(obj.description)")
+	}
+
+	open override func visit(anyObject obj: AnyObject){
+		mResult = obj
 	}
 
 	open override func visit(date obj: Date){

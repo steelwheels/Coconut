@@ -23,6 +23,7 @@ public enum CNNativeValue {
 	case arrayValue(_ val: Array<CNNativeValue>)
 	case URLValue(_ val: URL)
 	case imageValue(_ val: CNImage)
+	case anyObjectValue(_ val: AnyObject)
 
 	public func toNumber() -> NSNumber? {
 		let result: NSNumber?
@@ -123,6 +124,15 @@ public enum CNNativeValue {
 		return result
 	}
 
+	public func toAnyObject() -> AnyObject? {
+		let result: AnyObject?
+		switch self {
+		case .anyObjectValue(let obj):	result = obj
+		default:			result = nil
+		}
+		return result
+	}
+
 	public func numberProperty(identifier ident: String) -> NSNumber? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toNumber()
@@ -206,6 +216,14 @@ public enum CNNativeValue {
 	public func imageProperty(identifier ident: String) -> CNImage? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toImage()
+		} else {
+			return nil
+		}
+	}
+
+	public func anyObjectProperty(identifier ident: String) -> AnyObject? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toAnyObject()
 		} else {
 			return nil
 		}
@@ -298,6 +316,9 @@ public enum CNNativeValue {
 				let size = val.size
 				result = CNTextLine(string: "{image: size:\(size.width) x \(size.height)}")
 			#endif
+		case .anyObjectValue(let val):
+			let classname = String(describing: type(of: val))
+			result = CNTextLine(string: "anyObject(\(classname))")
 		}
 		return result
 	}
@@ -355,6 +376,8 @@ public enum CNNativeValue {
 			result = val
 		case .imageValue(let val):
 			result = val
+		case .anyObjectValue(let val):
+			result = val
 		}
 		return result
 	}
@@ -398,8 +421,7 @@ public enum CNNativeValue {
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
 		} else {
-			NSLog("Failed to convert \(obj)")
-			result = nil
+			result = .anyObjectValue(obj as AnyObject)
 		}
 		return result
 	}
