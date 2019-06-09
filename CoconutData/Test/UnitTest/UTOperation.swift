@@ -8,26 +8,24 @@
 import CoconutData
 import Foundation
 
-private class UTOperation: CNOperation
+private class UTOperationContext: CNOperationContext
 {
 	private var mName:		String
 	private var mDoWaitCancel:	Bool
-	private var mConsole:		CNConsole
 
 	public required init(name nm: String, doWaitCancel dowait: Bool, console cons: CNConsole) {
 		mName		= nm
 		mDoWaitCancel	= dowait
-		mConsole	= cons
-		super.init()
+		super.init(console: cons)
+	}
 
-		self.mainFunction = {
-			if self.mDoWaitCancel {
-				var docont = true
-				while docont {
-					if self.isCancelled {
-						//mConsole.print(string: "Canceled ... \(mName)\n")
-						docont = false
-					}
+	open override func main() {
+		if self.mDoWaitCancel {
+			var docont = true
+			while docont {
+				if self.isCancelled {
+					//mConsole.print(string: "Canceled ... \(mName)\n")
+					docont = false
 				}
 			}
 		}
@@ -36,9 +34,13 @@ private class UTOperation: CNOperation
 
 public func testOperation(console cons: CNConsole) -> Bool
 {
-	let op0 = UTOperation(name: "op0", doWaitCancel: false, console: cons)
-	let op1 = UTOperation(name: "op1", doWaitCancel: false, console: cons)
-	let op2 = UTOperation(name: "op2", doWaitCancel: true,  console: cons)
+	let ctxt0 = UTOperationContext(name: "op0", doWaitCancel: false, console: cons)
+	let ctxt1 = UTOperationContext(name: "op1", doWaitCancel: false, console: cons)
+	let ctxt2 = UTOperationContext(name: "op2", doWaitCancel: true,  console: cons)
+
+	let op0   = CNOperationExecutor(context: ctxt0)
+	let op1   = CNOperationExecutor(context: ctxt1)
+	let op2   = CNOperationExecutor(context: ctxt2)
 
 	let queue = OperationQueue()
 	queue.addOperation(op0)

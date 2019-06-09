@@ -21,45 +21,35 @@ open class CNOperationQueue
 		}
 	}
 
-	public func execute(operations ops: Array<CNOperation>, timeLimit limitp: TimeInterval?) -> Bool {
-		/* Check the operation queue is busy */
-		guard limitp == nil || operationsFinished(operations: ops) else {
-			return false
-		}
+	public func execute(operations ctxts: Array<CNOperationContext>, timeLimit limitp: TimeInterval?) -> Array<CNOperationContext> {
+		var nonexecs: Array<CNOperationContext> = []
 
 		/* Add all operations into the queue */
-		mOperationQueue.addOperations(ops, waitUntilFinished: false)
+		var execs: Array<CNOperationExecutor> = []
+		for ctxt in ctxts {
+			if !ctxt.isExecuting {
+				let exec = CNOperationExecutor(context: ctxt)
+				execs.append(exec)
+			} else {
+				nonexecs.append(ctxt)
+			}
+		}
+		mOperationQueue.addOperations(execs, waitUntilFinished: false)
 
 		if let limit = limitp {
 			/* Limit the execution time */
 			DispatchQueue.main.asyncAfter(deadline: .now() + limit) {
-				[weak self] () -> Void in
-				if let myself = self {
-					if !myself.operationsFinished(operations: ops) {
-						myself.cancelOperations(operations: ops)
+				() -> Void in
+				for exec in execs {
+					if exec.context.isExecuting {
+						nonexecs.append(exec.context)
+						exec.cancel()
 					}
 				}
 			}
 		}
 		//waitOperations()
-		return true
-	}
-
-	private func operationsFinished(operations ops: Array<CNOperation>) -> Bool {
-		for op in ops {
-			if op.isExecuting {
-				return false
-			}
-		}
-		return true
-	}
-
-	private func cancelOperations(operations ops: Array<CNOperation>) {
-		for op in ops {
-			if op.isExecuting {
-				op.cancel()
-			}
-		}
+		return nonexecs
 	}
 
 	public func waitOperations() {
