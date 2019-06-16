@@ -44,7 +44,14 @@ import Foundation
 	}
 
 	public var console: CNConsole? {
-		get { return mConsole }
+		get {
+			return mConsole
+		}
+		set(newcons){
+			if let cons = newcons {
+				mConsole = cons
+			}
+		}
 	}
 
 	public func reset(){

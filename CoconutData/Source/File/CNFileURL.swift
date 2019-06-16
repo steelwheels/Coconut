@@ -118,21 +118,22 @@ public extension URL
 	}
 
 	func loadContents() -> (NSString?, NSError?) {
-		if startAccessingSecurityScopedResource() {
-			do {
-				let contents = try NSString(contentsOf: self, encoding: String.Encoding.utf8.rawValue)
-				stopAccessingSecurityScopedResource()
-				return (contents, nil)
+		var resstr: NSString? = nil
+		var reserr:  NSError?  = nil
+		let issecure = startAccessingSecurityScopedResource()
+		  do {
+			resstr = try NSString(contentsOf: self, encoding: String.Encoding.utf8.rawValue)
+			if resstr == nil {
+				reserr = NSError.fileError(message: "Failed to load: \(path)")
 			}
-			catch {
-				stopAccessingSecurityScopedResource()
-				let error = NSError.fileError(message: "Can not access: \(path)")
-				return (nil, error)
-			}
-		} else {
-			let error = NSError.fileError(message: "Can not access: \(path)")
-			return (nil, error)
+		  }
+		  catch {
+			reserr = NSError.fileError(message: "Failed to load: \(path)")
+		  }
+		if issecure {
+			stopAccessingSecurityScopedResource()
 		}
+		return (resstr, reserr)
 	}
 
 	private static func findLastCommonComponent(array0 s0: Array<String>, array1 s1: Array<String>) -> Int {

@@ -19,6 +19,10 @@ private class CNFileResource
 		mContent	= nil
 	}
 
+	public func fullPathURL(baseURL url: URL) -> URL? {
+		return url.appendingPathComponent(mPath)
+	}
+
 	public func load<T>(baseURL url: URL, loader ldr: LoaderFunc) -> T? {
 		if let content = mContent {
 			return content as? T
@@ -63,6 +67,15 @@ private class CNDirectoryResource
 		} else {
 			mFileMap[ident] = [CNFileResource(path: pathstr)]
 		}
+	}
+
+	public func fullPathURL(baseURL url: URL, identifier ident: String, index idx: Int) -> URL? {
+		if let files = mFileMap[ident] {
+			if idx < files.count {
+				return files[idx].fullPathURL(baseURL: url)
+			}
+		}
+		return nil
 	}
 
 	public func load<T>(baseURL url: URL, identifier ident: String, index idx: Int) -> T? {
@@ -129,6 +142,13 @@ public class CNResource
 
 	public func count(category cat: String, identifier ident: String) -> Int? {
 		return mDirectoryResources[cat]?.count(identifier: ident)
+	}
+
+	public func fullPathURL(category cat: String, identifier ident: String, index idx: Int) -> URL? {
+		if let dirres = mDirectoryResources[cat] {
+			return dirres.fullPathURL(baseURL: mBaseURL, identifier: ident, index: idx)
+		}
+		return nil
 	}
 
 	public func load<T>(category cat: String, identifier ident: String, index idx: Int) -> T? {
