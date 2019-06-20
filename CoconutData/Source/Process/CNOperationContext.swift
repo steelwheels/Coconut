@@ -35,11 +35,15 @@ import Foundation
 		mObservedValueTable.removeObserver(forKey: CNOperationContext.isCanceledItem)
 	}
 
-	public func setParameter(name nm: String, value val: CNNativeValue){
+	public func parameterNames() -> Array<String> {
+		return Array(mParameters.keys)
+	}
+
+	open func setParameter(name nm: String, value val: CNNativeValue){
 		mParameters[nm] = val
 	}
 
-	public func parameter(name nm: String) -> CNNativeValue? {
+	open func parameter(name nm: String) -> CNNativeValue? {
 		return mParameters[nm]
 	}
 
