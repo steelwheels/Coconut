@@ -13,17 +13,21 @@ import Foundation
 	public static let isFinishedItem	= "isFinished"
 	public static let isCanceledItem	= "isCanceled"
 
+	public typealias FinalOperationFunction = (_ ctxt: CNOperationContext) -> Void
+
 	private var mObservedValueTable:	CNObservedValueTable
 	private var mParameters:		Dictionary<String, CNNativeValue>
 	private var mConsole:			CNConsole
 
 	public weak var ownerExecutor: 		CNOperationExecutor?
+	public var      finalOperation:		FinalOperationFunction?
 
 	public init(console cons: CNConsole) {
 		mObservedValueTable = CNObservedValueTable()
 		mParameters	    = [:]
 		mConsole	    = cons
 		ownerExecutor	    = nil
+		finalOperation	    = nil
 		super.init()
 		reset()
 	}
@@ -103,7 +107,15 @@ import Foundation
 		}
 	}
 
-	open func main() {
+	public func main() {
+		mainOperation()
+		if let finop = finalOperation {
+			finop(self)
+		}
+	}
+
+	open func mainOperation(){
+		/* Execute user defined operation at the sub class */
 	}
 
 	public func cancel() {

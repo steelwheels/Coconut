@@ -18,20 +18,31 @@ UTI: com.netscape.javascript-source
 * testObserver
 isExecuting -> true
 * testOperation
+Finished
+Finished
+Finished
 Wait for finish operations
+testOperation ... Done
 * testOperationQueue
 * TEST0
+Finished
+Finished
 Finished0
 Finished1
 Done (0)
 * TEST1
+Finished
+Finished
 Finished0
 Finished1
 Done (1)
 * TEST2
+Finished
+Finished
 Finished0
 Finished1
 Done (2)
+testOperationQueue: OK
 * testDatabse
 * Main database: Initial state
   read_cache: {

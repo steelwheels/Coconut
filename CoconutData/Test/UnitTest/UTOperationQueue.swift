@@ -13,13 +13,16 @@ private class UTOperationContext: CNOperationContext
 	private var mIdentifier:	Int
 	private var mSleepTime:		TimeInterval
 
+	public var finalOperationDone:	Bool
+
 	public required init(identifier ident: Int, sleepTime stime: TimeInterval, console cons: CNConsole) {
-		mIdentifier	= ident
-		mSleepTime 	= stime
+		mIdentifier		= ident
+		mSleepTime 		= stime
+		finalOperationDone 	= false
 		super.init(console: cons)
 	}
 
-	open override func main() {
+	open override func mainOperation() {
 		Thread.sleep(forTimeInterval: self.mSleepTime)
 	}
 
@@ -39,28 +42,49 @@ public func testOperationQueue(console cons: CNConsole) -> Bool
 {
 	let queue = CNOperationQueue()
 
+	var finalnum = 0
+	let finalop = {
+		(_ ctxt: CNOperationContext) -> Void in
+		if let uctxt = ctxt as? UTOperationContext {
+			uctxt.finalOperationDone = true
+		}
+		cons.print(string: "Finished\n")
+		finalnum += 1
+	}
+	
 	cons.print(string: "* TEST0\n")
 	let ctxts0 = allocateOperations(sleepTime: 0.0, console: cons)
-	let res0   = checkQueue(results: queue.execute(operations: ctxts0, timeLimit: nil), console: cons)
+	let res0   = checkQueue(results: queue.execute(operations: ctxts0, timeLimit: nil, finalOperation: finalop), console: cons)
 	queue.waitOperations()
-	printContexts(contexts: ctxts0)
+	printContexts(contexts: ctxts0, console: cons)
 	cons.print(string: "Done (0)\n")
 
 	cons.print(string: "* TEST1\n")
 	let ctxt1 = allocateOperations(sleepTime: 0.0, console: cons)
-	let res1  = checkQueue(results: queue.execute(operations: ctxt1, timeLimit: 0.1), console: cons)
+	let res1  = checkQueue(results: queue.execute(operations: ctxt1, timeLimit: 0.1, finalOperation: finalop), console: cons)
 	queue.waitOperations()
-	printContexts(contexts: ctxt1)
+	printContexts(contexts: ctxt1, console: cons)
 	cons.print(string: "Done (1)\n")
 
 	cons.print(string: "* TEST2\n")
 	let ctxts2 = allocateOperations(sleepTime: 1.0, console: cons)
-	let res2   = checkQueue(results: queue.execute(operations: ctxts2, timeLimit: 0.1), console: cons)
+	let res2   = checkQueue(results: queue.execute(operations: ctxts2, timeLimit: 0.1, finalOperation: finalop), console: cons)
 	queue.waitOperations()
-	printContexts(contexts: ctxts2)
+	printContexts(contexts: ctxts2, console: cons)
 	cons.print(string: "Done (2)\n")
 
-	return res0 && res1 && res2
+	var result = false
+	if res0 && res1 && res2 {
+		if finalnum == 2 * 3 {
+			cons.print(string: "testOperationQueue: OK\n")
+			result = true
+		} else {
+			cons.print(string: "testOperationQueue: Some operation is NOT finished: \(finalnum)\n")
+		}
+	} else {
+		cons.print(string: "testOperationQueue:Unexpected results\n")
+	}
+	return result
 }
 
 private func allocateOperations(sleepTime stime: TimeInterval, console cons: CNConsole) -> Array<UTOperationContext>
@@ -73,10 +97,14 @@ private func allocateOperations(sleepTime stime: TimeInterval, console cons: CNC
 	return ctxts
 }
 
-private func printContexts(contexts ctxts: Array<UTOperationContext>)
+private func printContexts(contexts ctxts: Array<UTOperationContext>, console cons: CNConsole)
 {
 	for ctxt in ctxts {
-		ctxt.printState()
+		if ctxt.finalOperationDone {
+			ctxt.printState()
+		} else {
+			cons.error(string: "Operation is NOT finished\n")
+		}
 	}
 }
 

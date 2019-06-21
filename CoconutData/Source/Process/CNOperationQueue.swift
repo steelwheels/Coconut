@@ -9,6 +9,8 @@ import Foundation
 
 open class CNOperationQueue
 {
+	public typealias FinalOperationFunction = CNOperationContext.FinalOperationFunction
+
 	private var mOperationQueue:	OperationQueue
 
 	public init(){
@@ -21,12 +23,14 @@ open class CNOperationQueue
 		}
 	}
 
-	public func execute(operations ctxts: Array<CNOperationContext>, timeLimit limitp: TimeInterval?) -> Array<CNOperationContext> {
+	public func execute(operations ctxts: Array<CNOperationContext>, timeLimit limitp: TimeInterval?, finalOperation finop: FinalOperationFunction?) -> Array<CNOperationContext> {
 		var nonexecs: Array<CNOperationContext> = []
 
 		/* Add all operations into the queue */
 		var execs: Array<CNOperationExecutor> = []
 		for ctxt in ctxts {
+			/* Set finalOperation which is called at the end of operation */
+			ctxt.finalOperation = finop
 			if !ctxt.isExecuting {
 				let exec = CNOperationExecutor(context: ctxt)
 				execs.append(exec)
