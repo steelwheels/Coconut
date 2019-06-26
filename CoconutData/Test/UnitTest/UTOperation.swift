@@ -19,7 +19,7 @@ private class UTOperationContext: CNOperationContext
 		super.init(console: cons)
 	}
 
-	open override func mainOperation() {
+	open override func main() {
 		if self.mDoWaitCancel {
 			var docont = true
 			while docont {
@@ -38,14 +38,8 @@ public func testOperation(console cons: CNConsole) -> Bool
 	let ctxt1 = UTOperationContext(name: "op1", doWaitCancel: false, console: cons)
 	let ctxt2 = UTOperationContext(name: "op2", doWaitCancel: true,  console: cons)
 
-	var finishedNum = 0
-
-	let queue = CNOperationQueue()
-	let _     = queue.execute(operations: [ctxt0, ctxt1, ctxt2], timeLimit: nil, finalOperation: {
-		 (_ ctxt: CNOperationContext) -> Void in
-		cons.print(string: "Finished\n")
-		finishedNum += 1
-	})
+	let queue   = CNOperationQueue()
+	let noexecs = queue.execute(operations: [ctxt0, ctxt1, ctxt2], timeLimit: nil)
 
 	/* Wait op2 is started */
 	while !ctxt2.isExecuting {
@@ -57,11 +51,11 @@ public func testOperation(console cons: CNConsole) -> Bool
 	cons.print(string: "Wait for finish operations\n")
 	queue.waitOperations()
 
-	if finishedNum == 3 {
+	if noexecs.count == 0 {
 		cons.print(string: "testOperation ... Done\n")
 		return true
 	} else {
-		cons.print(string: "testOperation ... Failed\n")
+		cons.print(string: "testOperation ... Fail\n")
 		return false
 	}
 }
