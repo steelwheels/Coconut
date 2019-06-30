@@ -1,5 +1,5 @@
 /**
- * @file	CNPreferemce.h
+ * @file	CNPreference.swift
  * @brief	Define CNPreference class
  * @par Copyright
  *   Copyright (C) 2019 Steel Wheels Project
@@ -7,28 +7,13 @@
 
 import Foundation
 
-public enum CNBuildMode {
-	case Release
-	case Debug
-
-	public var description: String {
-		get {
-			let result: String
-			switch self {
-			case .Debug:	result = "debug"
-			case .Release:	result = "release"
-			}
-			return result
-		}
-	}
-}
 
 open class CNConfig
 {
-	public var	buildMode:	CNBuildMode
+	public var doVerbose: Bool
 
-	public init(){
-		buildMode	= .Debug
+	public init(doVerbose verb: Bool){
+		doVerbose = verb
 	}
 }
 
@@ -59,10 +44,14 @@ open class CNPreference
 
 public class CNSystemPreference
 {
-	public var buildMode:		CNBuildMode
+	public var doVerbose:		Bool
 
 	public init(){
-		buildMode = .Debug
+		#if DEBUG
+			doVerbose = true
+		#else
+			doVerbose = false
+		#endif
 	}
 }
 
@@ -165,22 +154,10 @@ extension CNPreference
 			() -> CNDocumentTypePreference in return CNDocumentTypePreference()
 		})
 	}}
-}
 
-private var sDidSetupped: Bool = false
-
-public func CNSetupPreference(config conf: CNConfig)
-{
-	/* Skip setup if it already setupped */
-	if sDidSetupped {
-		return
-	} else {
-		sDidSetupped = true
+	open func set(config conf: CNConfig){
+		CNPreference.shared.systemPreference.doVerbose = conf.doVerbose
 	}
-
-	/* Setup system preference */
-	let pref = CNPreference.shared
-	pref.systemPreference.buildMode = conf.buildMode
-
 }
+
 

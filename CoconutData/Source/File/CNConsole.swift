@@ -57,11 +57,7 @@ extension CNLogging
 	}
 
 	private func log(type logtype: CNLogType, entireString str: String) {
-		let doverbose: Bool
-		switch CNPreference.shared.systemPreference.buildMode {
-		  case .Debug:		doverbose = true
-		  case .Release:	doverbose = false
-		}
+		let doverbose = CNPreference.shared.systemPreference.doVerbose
 		switch logtype {
 		case .Flow:
 			if doverbose {
