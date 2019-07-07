@@ -30,11 +30,19 @@ open class CNOperationExecutor: Operation
 		mContext.isFinished  = false
 
 		if !mContext.isCancelled {
+			/* Start time */
+			let starttime = Date()
+
+			/* Execute main operation */
 			mContext.main()
+
+			/* Get execution time */
+			mContext.executionCount	    += 1
+			mContext.totalExecutionTime += Date().timeIntervalSince(starttime)
 		}
 
-		mContext.isExecuting	= false
 		mContext.isFinished	= true
+		mContext.isExecuting	= false
 	}
 
 	open override func cancel() {

@@ -1,6 +1,6 @@
 Hello, World!
 * testPreference
-System Preference: buildMode=release
+Verbose mode is set ... OK
 * testURL
 nullURL = file:///dev/null
 * testValue

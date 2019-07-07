@@ -10,15 +10,17 @@ import Foundation
 
 public func testPreference(console cons: CNConsole) -> Bool
 {
-	let result = true
-
-	let config = CNConfig()
-	config.buildMode = .Release
-	CNSetupPreference(config: config)
-
+	let conf = CNConfig(doVerbose: true)
 	let pref = CNPreference.shared
-	let mode = pref.systemPreference.buildMode
-	cons.print(string: "System Preference: buildMode=\(mode.description)\n")
+	pref.set(config: conf)
+
+	var result: Bool = true
+	if pref.systemPreference.doVerbose {
+		cons.print(string: "Verbose mode is set ... OK\n")
+	} else {
+		cons.print(string: "Verbose mode is NOT set ... Error\n")
+		result = false
+	}
 
 	return result
 }

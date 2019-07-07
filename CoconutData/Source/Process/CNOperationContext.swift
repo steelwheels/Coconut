@@ -18,12 +18,16 @@ import Foundation
 	private var mConsole:			CNConsole
 
 	public weak var ownerExecutor: 		CNOperationExecutor?
+	public var 	executionCount:		Int
+	public var	totalExecutionTime:	TimeInterval	/* [ms] */
 
 	public init(console cons: CNConsole) {
 		mObservedValueTable = CNObservedValueTable()
 		mParameters	    = [:]
 		mConsole	    = cons
 		ownerExecutor	    = nil
+		executionCount	    = 0
+		totalExecutionTime  = 0.0
 		super.init()
 		reset()
 	}

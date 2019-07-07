@@ -30,6 +30,15 @@ private class UTOperationContext: CNOperationContext
 			}
 		}
 	}
+
+	public func checkExectime(requiredCount count: Int) -> Bool {
+		if self.executionCount == count {
+			if self.totalExecutionTime > 0.0 {
+				return true
+			}
+		}
+		return false
+	}
 }
 
 public func testOperation(console cons: CNConsole) -> Bool
@@ -51,12 +60,27 @@ public func testOperation(console cons: CNConsole) -> Bool
 	cons.print(string: "Wait for finish operations\n")
 	queue.waitOperations()
 
+	/* Check exec count */
+	var result = true
+	if !ctxt0.checkExectime(requiredCount: 1) {
+		cons.print(string: "[Error] Context0 exec check failed\n")
+		result = false
+	}
+	if !ctxt1.checkExectime(requiredCount: 1) {
+		cons.print(string: "[Error] Context1 exec check failed\n")
+		result = false
+	}
+	if !ctxt2.checkExectime(requiredCount: 1) {
+		cons.print(string: "[Error] Context2 exec check failed\n")
+		result = false
+	}
+
 	if noexecs.count == 0 {
 		cons.print(string: "testOperation ... Done\n")
-		return true
 	} else {
 		cons.print(string: "testOperation ... Fail\n")
-		return false
+		result = false
 	}
+	return result
 }
 
