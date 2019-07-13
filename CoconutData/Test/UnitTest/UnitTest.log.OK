@@ -15,6 +15,10 @@ buffer2
 after1
 * testFilePath
 UTI: com.netscape.javascript-source 
+Get sceme from "/usr/local/bin" -> <none> -> OK
+Get sceme from "https://yahoo.com" -> Sceme:"https" -> OK
+Get sceme from "https//yahoo.com" -> <none> -> OK
+Get sceme from "ftp.c://yahoo.com" -> Sceme:"ftp.c" -> OK
 * testObserver
 isExecuting -> true
 * testOperation
