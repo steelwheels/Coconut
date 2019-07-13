@@ -1,5 +1,5 @@
 /*
- * @file	CNGraphics.swift
+ * @file	CNGraphicsType.swift
  * @brief	Define data type for graphics
  * @par Copyright
  *   Copyright (C) 2018 Steel Wheels Project
