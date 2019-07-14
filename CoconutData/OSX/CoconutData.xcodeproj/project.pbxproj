@@ -77,20 +77,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		052633A122879D0D00944E3F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 05F5DAB8208AD844006EB134;
-			remoteInfo = Install;
-		};
-		052633A322879DB500944E3F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 05B5BBCD209DDF4500E0981B;
-			remoteInfo = UnitTestBundle;
-		};
 		052633A52287A08500944E3F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
@@ -526,7 +512,6 @@
 			buildWorkingDirectory = "";
 			dependencies = (
 				0567B1A321D517D0000C74B8 /* PBXTargetDependency */,
-				052633A422879DB500944E3F /* PBXTargetDependency */,
 			);
 			name = check;
 			passBuildSettingsInEnvironment = 1;
@@ -561,7 +546,6 @@
 			);
 			dependencies = (
 				052633A62287A08500944E3F /* PBXTargetDependency */,
-				052633A222879D0D00944E3F /* PBXTargetDependency */,
 			);
 			name = UnitTest;
 			productName = UnitTest;
@@ -806,16 +790,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		052633A222879D0D00944E3F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 05F5DAB8208AD844006EB134 /* Install */;
-			targetProxy = 052633A122879D0D00944E3F /* PBXContainerItemProxy */;
-		};
-		052633A422879DB500944E3F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 05B5BBCD209DDF4500E0981B /* UnitTestBundle */;
-			targetProxy = 052633A322879DB500944E3F /* PBXContainerItemProxy */;
-		};
 		052633A62287A08500944E3F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 05B5BBCD209DDF4500E0981B /* UnitTestBundle */;
