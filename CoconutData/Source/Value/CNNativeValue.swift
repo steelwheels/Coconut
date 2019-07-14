@@ -62,27 +62,47 @@ public enum CNNativeValue {
 	}
 
 	public func toPoint() -> CGPoint? {
-		let result: CGPoint?
+		var result: CGPoint? = nil
 		switch self {
 		case .pointValue(let obj):	result = obj
+		case .dictionaryValue(let obj):
+			if let xval = obj["x"], let yval = obj["y"] {
+				if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
+					let xval = CGFloat(xnum.doubleValue)
+					let yval = CGFloat(ynum.doubleValue)
+					result = CGPoint(x: xval, y:yval)
+				}
+			}
 		default:			result = nil
 		}
 		return result
 	}
 
 	public func toSize() -> CGSize? {
-		let result: CGSize?
+		var result: CGSize? = nil
 		switch self {
 		case .sizeValue(let obj):	result = obj
+		case .dictionaryValue(let obj):
+			if let wval = obj["width"], let hval = obj["height"] {
+				if let wnum = wval.toNumber(), let hnum = hval.toNumber() {
+					let wval = CGFloat(wnum.doubleValue)
+					let hval = CGFloat(hnum.doubleValue)
+					result = CGSize(width: wval, height: hval)
+				}
+			}
 		default:			result = nil
 		}
 		return result
 	}
 
 	public func toRect() -> CGRect? {
-		let result: CGRect?
+		var result: CGRect? = nil
 		switch self {
 		case .rectValue(let obj):	result = obj
+		case .dictionaryValue:
+			if let oval = self.toPoint(), let sval = self.toSize() {
+				result = CGRect(origin: oval, size: sval)
+			}
 		default:			result = nil
 		}
 		return result
@@ -269,9 +289,11 @@ public enum CNNativeValue {
 		case .sizeValue(let val):
 			result = CNTextLine(string: "{width:\(val.width), height:\(val.height)}")
 		case .rectValue(let val):
-			let ptstr = "origin:{x:\(val.origin.x), y:\(val.origin.y)}"
-			let szstr = "size:{width:\(val.size.width), height:\(val.size.height)}"
-			result = CNTextLine(string: "{" + ptstr + ", " + szstr + "}")
+			let x      = val.origin.x
+			let y      = val.origin.y
+			let width  = val.size.width
+			let height = val.size.height
+			result = CNTextLine(string: "{x:\(x), y:\(y), width:\(width), height:\(height)}")
 		case .dictionaryValue(let val):
 			let sect = CNTextSection()
 			sect.header = "{" ; sect.footer = "}"
@@ -453,9 +475,9 @@ public enum CNNativeValue {
 				}
 			}
 			/* Decode rect type */
-			if let oval = dict["origin"], let sval = dict["size"] {
-				if let origin = oval.toPoint(), let size = sval.toSize() {
-					return .rectValue(CGRect(origin: origin, size: size))
+			if let xval = dict["x"], let yval = dict["y"], let wval = dict["width"], let hval = dict["height"] {
+				if let x = xval.toNumber(), let y = yval.toNumber(), let width = wval.toNumber(), let height = hval.toNumber() {
+					return .rectValue(CGRect(x: x.doubleValue, y: y.doubleValue, width: width.doubleValue, height: height.doubleValue))
 				}
 			}
 		}

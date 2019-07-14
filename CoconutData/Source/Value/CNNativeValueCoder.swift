@@ -67,12 +67,22 @@ public class CNJSONDecoder
 	}
 
 	private func convertToRect(dictionary obj: NSDictionary) -> CGRect? {
-		if obj.count == 2 {
-			if let origin = obj["origin"] as? NSDictionary, let size = obj["size"] as? NSDictionary {
-				if let originval = convertToPoint(dictionary: origin), let sizeval = convertToSize(dictionary: size) {
-					return CGRect(origin: originval, size: sizeval)
+		if obj.count == 4 {
+			if let xval = obj["x"], let yval = obj["y"], let wval = obj["width"], let hval = obj["height"] {
+				if let x      = convertToFloat(object: xval),
+				   let y      = convertToFloat(object: yval),
+				   let width  = convertToFloat(object: wval),
+				   let height = convertToFloat(object: hval) {
+					return CGRect(x: x, y: y, width: width, height: height)
 				}
 			}
+		}
+		return nil
+	}
+
+	private func convertToFloat(object obj: Any) -> CGFloat? {
+		if let num = obj as? NSNumber {
+			return CGFloat(num.doubleValue)
 		}
 		return nil
 	}
@@ -188,11 +198,15 @@ public class CNJSONEncoder: CNNativeValueVisitor
 	}
 
 	open override func visit(rect obj: CGRect){
-		let origin = convertTo2Numbers(name0: "x", value0: Double(obj.origin.x), name1: "y", value1: Double(obj.origin.y))
-		let size   = convertTo2Numbers(name0: "width", value0: Double(obj.size.width), name1: "height", value1: Double(obj.size.height))
+		let xnum = NSNumber(value: Double(obj.origin.x))
+		let ynum = NSNumber(value: Double(obj.origin.y))
+		let wnum = NSNumber(value: Double(obj.size.width))
+		let hnum = NSNumber(value: Double(obj.size.height))
 		mResult = NSDictionary(dictionary: [
-			NSString(string: "origin"): origin,
-			NSString(string: "size"): size
+			NSString(string: "x"): 		xnum,
+			NSString(string: "y"): 		ynum,
+			NSString(string: "width"): 	wnum,
+			NSString(string: "height"): 	hnum
 		])
 	}
 
