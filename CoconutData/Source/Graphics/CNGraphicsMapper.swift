@@ -70,5 +70,17 @@ public class CNGraphicsMapper
 		let height = sz.height * p2lRatio.height
 		return CGSize(width: width, height: height)
 	}
+
+	public func  logicalToPhysical(vector vec: CGVector) -> CGVector {
+		let dx = vec.dx * l2pRatio.width
+		let dy = vec.dy * l2pRatio.height
+		return CGVector(dx: dx, dy: dy)
+	}
+
+	public func physicalToLogical(vector vec: CGVector) -> CGVector {
+		let dx = vec.dx * p2lRatio.width
+		let dy = vec.dy * p2lRatio.height
+		return CGVector(dx: dx, dy: dy)
+	}
 }
 
