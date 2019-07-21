@@ -36,6 +36,9 @@ let result4 = testOperation(console: cons)
 cons.print(string: "* testOperationQueue\n")
 let result5 = testOperationQueue(console: cons)
 
+cons.print(string: "* testGraphics\n")
+let result10 = testGraphics(console: cons)
+
 cons.print(string: "* testDatabse\n")
 let result6 = testDatabase(console: cons)
 
@@ -43,7 +46,7 @@ cons.print(string: "* testResource\n")
 let result7 = testResource(console: cons)
 
 let result = result0 && result1 && result2 && result3 && result4 && result5 &&
-	     result6 && result7 && result8 && result9
+	     result6 && result7 && result8 && result9 && result10
 if result {
 	cons.print(string: "[Result] OK\n")
 	Darwin.exit(0)

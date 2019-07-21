@@ -33,9 +33,7 @@ private class UTOperationContext: CNOperationContext
 
 	public func checkExectime(requiredCount count: Int) -> Bool {
 		if self.executionCount == count {
-			if self.totalExecutionTime > 0.0 {
-				return true
-			}
+			return true
 		}
 		return false
 	}
