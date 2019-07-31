@@ -6,3 +6,12 @@
  */
 
 import Foundation
+
+public class CNGraphics {
+	public static func distance(pointA pa: CGPoint, pointB pb: CGPoint) -> CGFloat {
+		let dx = pb.x - pa.x
+		let dy = pb.y - pa.y
+		return sqrt(dx*dx + dy*dy)
+	}
+}
+
