@@ -62,6 +62,7 @@
 		0599584B208AF07700DE2DC9 /* CNToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995849208AF07700DE2DC9 /* CNToken.swift */; };
 		0599584C208AF07700DE2DC9 /* CNTokenStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584A208AF07700DE2DC9 /* CNTokenStream.swift */; };
 		05995855208AF10300DE2DC9 /* CNParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995854208AF10300DE2DC9 /* CNParser.swift */; };
+		05A9C8F222F477BB000F1990 /* CNNativeStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A9C8F122F477BB000F1990 /* CNNativeStruct.swift */; };
 		05B2A068208AD39600D16E60 /* CoconutData.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B2A066208AD39600D16E60 /* CoconutData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B5BBD7209DDF8200E0981B /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C52E7E20993ABF00DD56B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C52E7D20993ABF00DD56B4 /* AppDelegate.swift */; };
@@ -205,6 +206,7 @@
 		05995849208AF07700DE2DC9 /* CNToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNToken.swift; sourceTree = "<group>"; };
 		0599584A208AF07700DE2DC9 /* CNTokenStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTokenStream.swift; sourceTree = "<group>"; };
 		05995854208AF10300DE2DC9 /* CNParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNParser.swift; sourceTree = "<group>"; };
+		05A9C8F122F477BB000F1990 /* CNNativeStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeStruct.swift; sourceTree = "<group>"; };
 		05B2A063208AD39600D16E60 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B2A066208AD39600D16E60 /* CoconutData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData.h; sourceTree = "<group>"; };
 		05B2A067208AD39600D16E60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -353,6 +355,7 @@
 				05416EAB21CAA638002E68BA /* CNNativeValueMerger.swift */,
 				05416EAD21CAAD70002E68BA /* CNNativeValueMatcher.swift */,
 				05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */,
+				05A9C8F122F477BB000F1990 /* CNNativeStruct.swift */,
 			);
 			path = Value;
 			sourceTree = "<group>";
@@ -775,6 +778,7 @@
 				0567B19D21D50DB4000C74B8 /* CNResource.swift in Sources */,
 				0565A9F3208B7C2800E91568 /* CNBookmark.swift in Sources */,
 				056058AE21CA8E4B00E593E2 /* CNNativeValueVisitor.swift in Sources */,
+				05A9C8F222F477BB000F1990 /* CNNativeStruct.swift in Sources */,
 				0565A9F0208B7BB100E91568 /* CNFilePath.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
