@@ -17,7 +17,7 @@ open class CNNativeStruct
 		mMembers    = [:]
 	}
 
-	public var name: String { return mStructName }
+	public var structName: String { return mStructName }
 	public var members: Dictionary<String, CNNativeValue> { return mMembers }
 
 	public func member(name nm: String) -> CNNativeValue? {
