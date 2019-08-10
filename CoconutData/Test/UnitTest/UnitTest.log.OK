@@ -41,6 +41,31 @@ testOperationQueue: OK
 * testGraphics
 point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... OK
 size: (5.0, 5.0) -> (2.5, 2.5) -> (5.0, 5.0) ... OK
+* testEscapeSequence
+* dumpSequence
+string("Hello, World !!")
+* dumpCode
+code: "[1A"
+cursorUp(1)
+Same code
+* dumpCode
+code: "[3C"
+cursorForward(3)
+Same code
+* dumpCode
+code: "[1,2H"
+cursorPoisition(1,2)
+Same code
+* dumpCode
+code: "[2J"
+eraceFromBeginToEnd
+Same code
+* dumpSequence
+string("Hello, ")
+cursorNextLine(1)
+string(" and ")
+eraceFromBeginToEnd
+string(". Bye.")
 * testDatabse
 * Main database: Initial state
   read_cache: {

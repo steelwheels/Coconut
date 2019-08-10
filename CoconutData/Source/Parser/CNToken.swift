@@ -269,7 +269,7 @@ private class CNTokenizer
 					let _ = srcstream.getc() // drop 1st character
 					return CNToken(type: .UIntToken(0), lineNo: mCurrentLine)
 				}
-			} else if c1.isDigit() {
+			} else if c1.isNumber {
 				return try getDigitTokenFromStream(stream: srcstream)
 			} else if c1.isAlpha() || c1 == "_" {
 				return try getIdentifierTokenFromStream(stream: srcstream)
@@ -301,7 +301,7 @@ private class CNTokenizer
 		var hasperiod = false
 		let resstr = getAnyStringFromStream(stream: srcstream, matchingFunc: {
 			(_ c: Character) -> Bool in
-			if c.isDigit() {
+			if c.isNumber {
 				return true
 			} else if c == "." {
 				hasperiod = true
@@ -329,7 +329,7 @@ private class CNTokenizer
 		let _ = srcstream.gets(count: 2) // drop first "0x"
 		let resstr = getAnyStringFromStream(stream: srcstream, matchingFunc: {
 			(_ c: Character) -> Bool in
-			if c.isHex() {
+			if c.isHexDigit {
 				return true
 			} else {
 				return false

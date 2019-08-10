@@ -23,15 +23,14 @@ public extension Character {
 		return ("a"<=self && self<="z") || ("A"<=self && self<="Z")
 	}
 
-	func isDigit() -> Bool {
-		return ("0"<=self && self<="9")
-	}
-
-	func isHex() -> Bool {
-		return ("0"<=self && self<="9") || ("a"<=self && self<="f") || ("A"<=self && self<="F")
+	func toInt() -> UInt32? {
+		if self.isNumber {
+			return self.unicodeScalars.first!.value - Unicode.Scalar("0").value
+		}
+		return nil
 	}
 
 	func isAlphaOrNum() -> Bool {
-		return isAlpha() || isDigit()
+		return self.isAlpha() || self.isNumber
 	}
 }

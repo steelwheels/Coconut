@@ -11,6 +11,8 @@
 		0503766D208B2EE200D2DB37 /* CNError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0503766C208B2EE200D2DB37 /* CNError.swift */; };
 		0506587821AC282E000566F6 /* CNDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0506587721AC282E000566F6 /* CNDatabase.swift */; };
 		0512640921C5E1E5008B01FA /* UTDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0512640821C5E1E5008B01FA /* UTDatabase.swift */; };
+		05137F9122FAFFFD00FC9C65 /* CNEscapeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05137F9022FAFFFD00FC9C65 /* CNEscapeCode.swift */; };
+		051BB4B322FCF1370062F47F /* UTEscapeSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */; };
 		051D06A2219F0ABC00734AAA /* UTOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */; };
 		051FA468208B3F4400AEC734 /* CNFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051FA467208B3F4400AEC734 /* CNFile.swift */; };
 		052136B3208AD5F30098F1A7 /* CNArrayStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052136B1208AD5F30098F1A7 /* CNArrayStream.swift */; };
@@ -155,6 +157,8 @@
 		0503766C208B2EE200D2DB37 /* CNError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNError.swift; sourceTree = "<group>"; };
 		0506587721AC282E000566F6 /* CNDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDatabase.swift; sourceTree = "<group>"; };
 		0512640821C5E1E5008B01FA /* UTDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTDatabase.swift; sourceTree = "<group>"; };
+		05137F9022FAFFFD00FC9C65 /* CNEscapeCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNEscapeCode.swift; sourceTree = "<group>"; };
+		051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTEscapeSequence.swift; sourceTree = "<group>"; };
 		051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTOperationQueue.swift; sourceTree = "<group>"; };
 		051FA467208B3F4400AEC734 /* CNFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFile.swift; sourceTree = "<group>"; };
 		052136B1208AD5F30098F1A7 /* CNArrayStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNArrayStream.swift; sourceTree = "<group>"; };
@@ -279,6 +283,7 @@
 				057D2CDE208B426000E02E71 /* CNColor.swift */,
 				0589993B208B013A002FEAEA /* CNState.swift */,
 				0599583A208AEE0B00DE2DC9 /* CNCharacter.swift */,
+				05137F9022FAFFFD00FC9C65 /* CNEscapeCode.swift */,
 				052136B1208AD5F30098F1A7 /* CNArrayStream.swift */,
 				052136B2208AD5F30098F1A7 /* CNStringStream.swift */,
 				05019B71213BE42300DDA180 /* CNStack.swift */,
@@ -303,6 +308,7 @@
 				0512640821C5E1E5008B01FA /* UTDatabase.swift */,
 				05471B0F21CBF2A200F66B8F /* UTResource.swift */,
 				0587F31D22E3FF0300F28B50 /* UTGraphics.swift */,
+				051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */,
 			);
 			path = UnitTest;
 			sourceTree = "<group>";
@@ -713,6 +719,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				051BB4B322FCF1370062F47F /* UTEscapeSequence.swift in Sources */,
 				0587F31E22E3FF0300F28B50 /* UTGraphics.swift in Sources */,
 				055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */,
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
@@ -749,6 +756,7 @@
 				05995845208AEFD900DE2DC9 /* CNValueUtil.swift in Sources */,
 				05019B72213BE42300DDA180 /* CNStack.swift in Sources */,
 				05F5EA71208F793400CF98C3 /* CNText.swift in Sources */,
+				05137F9122FAFFFD00FC9C65 /* CNEscapeCode.swift in Sources */,
 				0599584C208AF07700DE2DC9 /* CNTokenStream.swift in Sources */,
 				05DF713121CBD24600B6FD4F /* CNNativeValueSelector.swift in Sources */,
 				053BC8F32090D0AC006CBB06 /* CNExitCode.swift in Sources */,
