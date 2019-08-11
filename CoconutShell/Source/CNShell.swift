@@ -12,6 +12,14 @@ import Foundation
 
 public class CNShell
 {
+	public var	prompt: String
+	public var	console: CNConsole
+
+	public init(prompt prmpt: String, console cons: CNConsole){
+		prompt  = prmpt
+		console = cons
+	}
+
 	public class func execute(command cmd: String, console cons: CNConsole, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
 		let inpipe  = Pipe()
 		let outpipe = Pipe()
