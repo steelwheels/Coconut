@@ -1,6 +1,6 @@
 /*
- * @file	CNShell.swift
- * @brief	Define CNShell class
+ * @file	CNShellUtil.swift
+ * @brief	Define CNShellUtil class
  * @par Copyright
  *   Copyright (C) 2017 Steel Wheels Project
  */
@@ -8,18 +8,9 @@
 import CoconutData
 import Foundation
 
-#if os(OSX)
-
-public class CNShell
+public class CNShellUtil
 {
-	public var	prompt: String
-	public var	console: CNConsole
-
-	public init(prompt prmpt: String, console cons: CNConsole){
-		prompt  = prmpt
-		console = cons
-	}
-
+	#if os(OSX)
 	public class func execute(command cmd: String, console cons: CNConsole, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
 		let inpipe  = Pipe()
 		let outpipe = Pipe()
@@ -48,11 +39,13 @@ public class CNShell
 			}
 		}
 
-		let process = CNShell.execute(command: cmd, input: inpipe, output: outpipe, error: errpipe, terminateHandler: termhdl)
+		let process = CNShellUtil.execute(command: cmd, input: inpipe, output: outpipe, error: errpipe, terminateHandler: termhdl)
 
 		return process
 	}
+	#endif
 
+	#if os(OSX)
 	public class func execute(command cmd: String, input inpipe: Pipe?, output outpipe: Pipe?, error errpipe: Pipe?, terminateHandler termhdl: ((_ exitcode: Int32) -> Void)?) -> Process {
 		let process  		= Process()
 
@@ -94,7 +87,9 @@ public class CNShell
 		process.launch()
 		return process
 	}
-	
+	#endif
+
+	#if os(OSX)
 	private static var commandTable: Dictionary<String, String> = [:]
 
 	public class func searchCommand(commandName name: String) -> String? {
@@ -116,7 +111,7 @@ public class CNShell
 		}
 		return nil
 	}
+	#endif
 }
 
-#endif /* os(OSX) */
 

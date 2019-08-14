@@ -5,6 +5,8 @@
  *   Copyright (C) 2018 Steel Wheels Project
  */
 
+#if os(OSX)
+
 import CoconutData
 import Foundation
 import Darwin.ncurses
@@ -176,3 +178,6 @@ public class CNCurses
 		wrefresh(mWindow)
 	}
 }
+
+#endif // os(OSX)
+

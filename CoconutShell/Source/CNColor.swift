@@ -5,6 +5,8 @@
  *   Copyright (C) 2015-2018 Steel Wheels Project
  */
 
+#if os(OSX)
+
 import CoconutData
 import Foundation
 import Darwin.ncurses
@@ -26,4 +28,6 @@ extension CNColor
 		return result
 	}
 }
+
+#endif // os(OSX)
 

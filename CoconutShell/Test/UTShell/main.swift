@@ -13,7 +13,7 @@ import Foundation
 print("Hello, World!")
 
 let file = CNFileConsole()
-let process = CNShell.execute(command: "ls", console: file, terminateHandler: {
+let process = CNShellUtil.execute(command: "ls", console: file, terminateHandler: {
 	(_ exitcode: Int32) -> Void in
 	file.print(string: "*** /bin/ls ... done")
 })
