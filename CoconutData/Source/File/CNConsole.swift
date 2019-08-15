@@ -172,6 +172,7 @@ public class CNIndentedConsole: CNConsole
 	}
 }
 
+/*
 public class CNPipeConsole: CNConsole
 {
 	public var toConsole: 		CNConsole?
@@ -239,6 +240,7 @@ public class CNPipeConsole: CNConsole
 		}
 	}
 }
+*/
 
 public class CNBufferedConsole: CNConsole
 {

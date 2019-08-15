@@ -74,6 +74,7 @@
 		05C52E9020993DE600DD56B4 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; };
 		05C52E9220993E0600DD56B4 /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C6A20622676796003922C9 /* CNPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C6A20522676796003922C9 /* CNPreference.swift */; };
+		05C887DD2303BF2B0044AC03 /* CNConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887DC2303BF2B0044AC03 /* CNConnector.swift */; };
 		05DF713121CBD24600B6FD4F /* CNNativeValueSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */; };
 		05DF7D992090D4B1003B5110 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF7D982090D4B1003B5110 /* CNStringUtil.swift */; };
 		05E81091208B33F800230477 /* CNAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E81090208B33F800230477 /* CNAccess.swift */; };
@@ -225,6 +226,7 @@
 		05C52E8720993AC000DD56B4 /* UTApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UTApplication.entitlements; sourceTree = "<group>"; };
 		05C52E8F20993DE600DD56B4 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		05C6A20522676796003922C9 /* CNPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPreference.swift; sourceTree = "<group>"; };
+		05C887DC2303BF2B0044AC03 /* CNConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNConnector.swift; sourceTree = "<group>"; };
 		05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValueSelector.swift; sourceTree = "<group>"; };
 		05DF7D982090D4B1003B5110 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05E81090208B33F800230477 /* CNAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAccess.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 				0567B19C21D50DB4000C74B8 /* CNResource.swift */,
 				0565A9D1208B7AE400E91568 /* CNJSONFile.swift */,
 				05725CE5208B4450008A97D1 /* CNPipe.swift */,
+				05C887DC2303BF2B0044AC03 /* CNConnector.swift */,
 				056EA8B6208AFD6300D1DFFE /* CNConsole.swift */,
 			);
 			path = File;
@@ -650,7 +653,7 @@
 					};
 					05C52E7A20993ABF00DD56B4 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1030;
 						SystemCapabilities = {
 							com.apple.HardenedRuntime = {
 								enabled = 1;
@@ -738,6 +741,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05C887DD2303BF2B0044AC03 /* CNConnector.swift in Sources */,
 				0526E5A9219877F300FB1B8E /* CNObservedValueTable.swift in Sources */,
 				058DF0B2218A1223003A33F9 /* CNGraphicsType.swift in Sources */,
 				0578DA2C2090C1C400ED852C /* CNPropertyList.swift in Sources */,
@@ -1146,7 +1150,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1170,7 +1174,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UTApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

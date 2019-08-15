@@ -12,6 +12,7 @@
 		0575328C2303912200EBBE13 /* CNShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057532892303912200EBBE13 /* CNShellUtil.swift */; };
 		0575328F2303916500EBBE13 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0575328E2303916500EBBE13 /* CoconutData.framework */; };
 		05A6374D23038FA30036C432 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A6374B23038FA30036C432 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05C811492304D03A0032C1FA /* CNShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C811482304D03A0032C1FA /* CNShell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,7 @@
 		05A6374823038FA30036C432 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A6374B23038FA30036C432 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoconutShell.h; path = ../../Source/CoconutShell.h; sourceTree = "<group>"; };
 		05A6374C23038FA30036C432 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05C811482304D03A0032C1FA /* CNShell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 			children = (
 				057532872303912200EBBE13 /* CNColor.swift */,
 				057532882303912200EBBE13 /* CNCurses.swift */,
+				05C811482304D03A0032C1FA /* CNShell.swift */,
 				057532892303912200EBBE13 /* CNShellUtil.swift */,
 			);
 			name = Source;
@@ -194,6 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0575328C2303912200EBBE13 /* CNShellUtil.swift in Sources */,
+				05C811492304D03A0032C1FA /* CNShell.swift in Sources */,
 				0575328A2303912200EBBE13 /* CNColor.swift in Sources */,
 				0575328B2303912200EBBE13 /* CNCurses.swift in Sources */,
 			);
@@ -346,6 +350,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(HOME)/local/Frameworks";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/local/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -374,6 +379,7 @@
 				FRAMEWORK_SEARCH_PATHS = "$(HOME)/local/Frameworks";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/local/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

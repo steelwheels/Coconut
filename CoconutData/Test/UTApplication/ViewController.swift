@@ -32,18 +32,21 @@ class ViewController: NSViewController {
 				URL.savePanel(title: "Select JSON output", outputDirectory: nil, saveFileCallback: {
 					(_  url:URL) -> Bool in
 					if let err = CNJSONFile.writeFile(URL: url, JSONObject: value) {
-						CNLog(type: .Error, message: "Output selection: \(err.description)", file: #file, line: #line, function: #function)
+						console.error(string: "[Error] Output selection: \(err.description)")
 						return false
 					} else {
 						return true
 					}
 				})
 			} else {
-				CNLog(type: .Error, message: "Failed to read json file: \(err!.description)", file: #file, line: #line, function: #function)
+				console.error(string: "Failed to read json file: \(err!.description)")
 			}
 		} else {
-			CNLog(type: .Error, message: "Failed to load manifest.json", file: #file, line: #line, function: #function)
+			console.error(string: "Failed to load manifest.json")
 		}
+
+		// Connection test
+		testConnection(console: console)
 	}
 
 	override var representedObject: Any? {
@@ -55,5 +58,23 @@ class ViewController: NSViewController {
 	private func printValue(value val: CNNativeValue, console cons: CNConsole){
 		val.toText().print(console: cons)
 	}
-}
 
+	private func testConnection(console cons: CNConsole)
+	{
+		var printed: Bool = false
+
+		let connector = CNConnection()
+		connector.receiverFunction = {
+			(_ str: String) -> Void in
+			cons.print(string: "Receive: \(str)\n")
+			printed = true
+		}
+
+		connector.send(string: "Hello, connector !!")
+		//connector.finish()
+
+		while !printed {
+			/* wait */
+		}
+	}
+}

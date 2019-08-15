@@ -10,6 +10,12 @@ import Foundation
 
 public func testConsole(console cons: CNConsole) -> Bool
 {
+	let res0 = testBufferConsole(console: cons)
+	return res0
+}
+
+public func testBufferConsole(console cons: CNConsole) -> Bool
+{
 	let bufcons = CNBufferedConsole()
 	cons.print(string: "- put string to buffer\n")
 	bufcons.print(string: "buffer1\n")
@@ -23,4 +29,5 @@ public func testConsole(console cons: CNConsole) -> Bool
 	
 	return true
 }
+
 

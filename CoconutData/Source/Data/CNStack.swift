@@ -19,7 +19,7 @@ public class CNStack<T>
 		get { return mArray.count }
 	}
 
-	public func push(_ data: T){
+	open func push(_ data: T){
 		mArray.append(data)
 	}
 
@@ -32,7 +32,7 @@ public class CNStack<T>
 		}
 	}
 
-	public func pop() -> T? {
+	open func pop() -> T? {
 		if mArray.count > 0 {
 			return mArray.popLast()
 		} else {
@@ -45,3 +45,26 @@ public class CNStack<T>
 	}
 }
 
+public class CNMutexStack<T>: CNStack<T>
+{
+	private var mLock:	NSLock
+
+	public override init(){
+		mLock = NSLock()
+		super.init()
+	}
+
+	open override func push(_ data: T){
+		mLock.lock()
+		  super.push(data)
+		mLock.unlock()
+	}
+
+	open override func pop() -> T? {
+		let result: T?
+		mLock.lock()
+		  result = super.pop()
+		mLock.unlock()
+		return result
+	}
+}
