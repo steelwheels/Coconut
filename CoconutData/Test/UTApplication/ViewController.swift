@@ -63,15 +63,13 @@ class ViewController: NSViewController {
 	{
 		var printed: Bool = false
 
-		let connector = CNConnection()
-		connector.receiverFunction = {
+		let pipe = Pipe()
+		pipe.setReader(handler: {
 			(_ str: String) -> Void in
 			cons.print(string: "Receive: \(str)\n")
 			printed = true
-		}
-
-		connector.send(string: "Hello, connector !!")
-		//connector.finish()
+		})
+		pipe.write(string: "Hello, pipe !!")
 
 		while !printed {
 			/* wait */

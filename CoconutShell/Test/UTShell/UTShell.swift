@@ -11,6 +11,11 @@ import Foundation
 
 public class UTShell: CNShell {
 	public var printed = false
+
+	public override func promptString() -> String {
+		return "UTShell$ "
+	}
+
 	public override func main() {
 		//NSLog("*** Main ***")
 		super.main()
@@ -20,20 +25,19 @@ public class UTShell: CNShell {
 public func testShell(console cons: CNConsole) -> Bool
 {
 	let intf  = CNShellInterface()
-	let shell = UTShell(interface: intf)
-	intf.stdout.receiverFunction = {
+	let shell = UTShell(interface: intf, console: cons)
+	intf.output.setReader(handler: {
 		(_ str: String) -> Void in
 		cons.print(string: "testShell/Out: \"\(str)\"\n")
 		shell.printed = true
-	}
-	intf.stderr.receiverFunction = {
+	})
+	intf.error.setReader(handler: {
 		(_ str: String) -> Void in
 		cons.print(string: "testShell/Err: \"\(str)\"\n")
 		shell.printed = true
-	}
+	})
 
-	shell.prompt = "UTShell$ "
-	intf.stdin.send(string: "input-command")
+	intf.input.write(string: "input-command")
 
 	shell.start()
 	while !shell.printed {

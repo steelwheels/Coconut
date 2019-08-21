@@ -14,58 +14,70 @@ public enum CNShellCommand {
 }
 
 public struct CNShellInterface {
-	public var	commands:	CNMutexStack<CNShellCommand>		// Terminal -> Shell
-	public var 	stdin:		CNConnection				// Terminal -> Shell
-	public var 	stdout:		CNConnection				// Shell -> Terminal
-	public var	stderr:		CNConnection				// Shell -> Terminal
+	public var	commands:	CNMutexStack<CNShellCommand>	// Terminal -> Shell
+	public var 	input:		Pipe				// Terminal -> Shell
+	public var 	output:		Pipe				// Shell -> Terminal
+	public var	error:		Pipe				// Shell -> Terminal
+
+	public init(input inp: Pipe, output outp: Pipe, error errp: Pipe){
+		commands	= CNMutexStack()
+		input		= inp
+		output		= outp
+		error		= errp
+	}
 
 	public init(){
-		commands	= CNMutexStack()
-		stdin		= CNConnection()
-		stdout		= CNConnection()
-		stderr		= CNConnection()
+		self.init(input: Pipe(), output: Pipe(), error: Pipe())
 	}
 }
 
 open class CNShell: Thread
 {
-	private var mPrompt:		String
 	private var mInterface:		CNShellInterface
+	private var mConsole:		CNConsole
 	private var mInputs:		Array<String>
 	private var mInLock:		NSLock
 
-	public init(interface intf: CNShellInterface) {
-		mPrompt 	= "$ "
+	public init(interface intf: CNShellInterface, console cons: CNConsole) {
 		mInterface	= intf
+		mConsole	= cons
 		mInputs		= []
 		mInLock		= NSLock()
 		super.init()
 
-		mInterface.stdin.receiverFunction = {
+		mInterface.input.setReader(handler: {
 			[weak self] (_ str: String) -> Void in
 			if let myself = self {
 				myself.pushInput(string: str)
 			}
-		}
+		})
 	}
 
-	public var prompt: String {
-		get		{ return mPrompt }
-		set(newstr)	{ mPrompt = newstr }
+	open func promptString() -> String {
+		return "$ "
 	}
+
+	public var console: CNConsole { get { return  mConsole }}
 
 	open override func main() {
 		var doprompt = true
+		mConsole.print(string: "main-0\n")
 		while !isCancelled {
+			mConsole.print(string: "main-1\n")
 			if doprompt {
-				output(string: mPrompt)
+				mConsole.print(string: "main-2\n")
+				output(string: promptString())
 				doprompt = false
 			}
+			mConsole.print(string: "main-3\n")
 			if let input = popInput() {
+				mConsole.print(string: "main-4\n")
 				execute(string: input)
 				doprompt = true
 			}
+			mConsole.print(string: "main-5\n")
 		}
+		mConsole.print(string: "main-E\n")
 	}
 
 	private func pushInput(string str: String) {
@@ -87,11 +99,11 @@ open class CNShell: Thread
 	}
 
 	public func output(string str: String){
-		mInterface.stdout.send(string: str)
+		mInterface.output.write(string: str)
 	}
 
 	public func error(string str: String){
-		mInterface.stderr.send(string: str)
+		mInterface.error.write(string: str)
 	}
 
 	open func execute(string str: String){
