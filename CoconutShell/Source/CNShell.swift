@@ -61,23 +61,16 @@ open class CNShell: Thread
 
 	open override func main() {
 		var doprompt = true
-		mConsole.print(string: "main-0\n")
 		while !isCancelled {
-			mConsole.print(string: "main-1\n")
 			if doprompt {
-				mConsole.print(string: "main-2\n")
 				output(string: promptString())
 				doprompt = false
 			}
-			mConsole.print(string: "main-3\n")
 			if let input = popInput() {
-				mConsole.print(string: "main-4\n")
 				execute(string: input)
 				doprompt = true
 			}
-			mConsole.print(string: "main-5\n")
 		}
-		mConsole.print(string: "main-E\n")
 	}
 
 	private func pushInput(string str: String) {
