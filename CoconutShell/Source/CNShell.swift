@@ -34,13 +34,13 @@ open class CNShell: Thread
 	private var mEnvironment:	CNShellEnvironment
 	private var mInLock:		NSLock
 
-	public init(interface intf: CNShellInterface, console cons: CNConsole, config conf: CNConfig) {
+	public init(interface intf: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig) {
 		mInterface	= intf
 		mConsole	= cons
 		mConfig		= conf
 		mInputs		= []
 		mExitCode	= nil
-		mEnvironment	= CNShellEnvironment()
+		mEnvironment	= env
 		mInLock		= NSLock()
 		super.init()
 
