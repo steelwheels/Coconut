@@ -8,19 +8,12 @@
 import CoconutData
 import Foundation
 
-public enum CNShellCommand {
-	case selectPreviousHistory
-	case selectNextHistory
-}
-
 public struct CNShellInterface {
-	public var	commands:	CNMutexStack<CNShellCommand>	// Terminal -> Shell
 	public var 	input:		Pipe				// Terminal -> Shell
 	public var 	output:		Pipe				// Shell -> Terminal
 	public var	error:		Pipe				// Shell -> Terminal
 
 	public init(input inp: Pipe, output outp: Pipe, error errp: Pipe){
-		commands	= CNMutexStack()
 		input		= inp
 		output		= outp
 		error		= errp
@@ -35,13 +28,19 @@ open class CNShell: Thread
 {
 	private var mInterface:		CNShellInterface
 	private var mConsole:		CNConsole
+	private var mConfig:		CNConfig
 	private var mInputs:		Array<String>
+	private var mExitCode:		Int?
+	private var mEnvironment:	CNShellEnvironment
 	private var mInLock:		NSLock
 
-	public init(interface intf: CNShellInterface, console cons: CNConsole) {
+	public init(interface intf: CNShellInterface, console cons: CNConsole, config conf: CNConfig) {
 		mInterface	= intf
 		mConsole	= cons
+		mConfig		= conf
 		mInputs		= []
+		mExitCode	= nil
+		mEnvironment	= CNShellEnvironment()
 		mInLock		= NSLock()
 		super.init()
 
@@ -53,21 +52,27 @@ open class CNShell: Thread
 		})
 	}
 
+	public var console: CNConsole 			{ get { return mConsole }}
+	public var config:  CNConfig  			{ get { return mConfig  }}
+	public var environment:	CNShellEnvironment	{ get { return mEnvironment }}
+
+	public var exitCode: Int? {
+		return mExitCode
+	}
+
 	open func promptString() -> String {
 		return "$ "
 	}
 
-	public var console: CNConsole { get { return  mConsole }}
-
 	open override func main() {
 		var doprompt = true
-		while !isCancelled {
+		while !isCancelled && mExitCode == nil {
 			if doprompt {
 				output(string: promptString())
 				doprompt = false
 			}
 			if let input = popInput() {
-				execute(string: input)
+				parse(string: input)
 				doprompt = true
 			}
 		}
@@ -97,6 +102,20 @@ open class CNShell: Thread
 
 	public func error(string str: String){
 		mInterface.error.write(string: str)
+	}
+
+	public func exit(code ecode: Int) {
+		mExitCode = ecode
+	}
+
+	private func parse(string str: String){
+		let lines = str.components(separatedBy: ";")
+		for line in lines {
+			parse(line: line)
+		}
+	}
+
+	private func parse(line str: String){
 	}
 
 	open func execute(string str: String){

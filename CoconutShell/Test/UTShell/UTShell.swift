@@ -24,8 +24,9 @@ public class UTShell: CNShell {
 
 public func testShell(console cons: CNConsole) -> Bool
 {
-	let intf  = CNShellInterface()
-	let shell = UTShell(interface: intf, console: cons)
+	let config = CNConfig(doVerbose: true)
+	let intf   = CNShellInterface()
+	let shell  = UTShell(interface: intf, console: cons, config: config)
 	intf.output.setReader(handler: {
 		(_ str: String) -> Void in
 		cons.print(string: "testShell/Out: \"\(str)\"\n")
