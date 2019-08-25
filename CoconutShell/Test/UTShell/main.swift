@@ -17,8 +17,9 @@ public func main() {
 
 	let res0 = testShellUtil(console: console)
 	let res1 = testShell(console: console)
+	let res2 = testProcess(console: console)
 
-	let result = res0 && res1
+	let result = res0 && res1 && res2
 	if result {
 		console.print(string: "Result: OK\n")
 		Darwin.exit(0)

@@ -9,7 +9,7 @@ import CoconutShell
 import CoconutData
 import Foundation
 
-public class UTShell: CNShell {
+public class UTShellThread: CNShellThread {
 	public var printed = false
 
 	public override func promptString() -> String {
@@ -27,7 +27,7 @@ public func testShell(console cons: CNConsole) -> Bool
 	let env    = CNShellEnvironment()
 	let config = CNConfig(doVerbose: true)
 	let intf   = CNShellInterface()
-	let shell  = UTShell(interface: intf, environment: env, console: cons, config: config)
+	let shell  = UTShellThread(interface: intf, environment: env, console: cons, config: config)
 	intf.output.setReader(handler: {
 		(_ str: String) -> Void in
 		cons.print(string: "testShell/Out: \"\(str)\"\n")

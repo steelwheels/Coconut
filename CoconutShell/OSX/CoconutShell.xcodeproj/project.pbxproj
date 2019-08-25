@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		050C8907208CBF350005E936 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8905208CBF350005E936 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		051669FE23126EC1000BF46D /* CNPipeThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051669FD23126EC1000BF46D /* CNPipeThread.swift */; };
+		05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051669FF23126ECC000BF46D /* CNShellThread.swift */; };
 		051AB5F421590AC400D7C71C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB5F321590AC400D7C71C /* main.swift */; };
 		051AB5FA21590B0B00D7C71C /* CoconutShell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; };
 		051AB5FB21590B0E00D7C71C /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
@@ -20,9 +22,11 @@
 		056AF18821590A24007AE91A /* CoconutShell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; };
 		056AF18A21590A3E007AE91A /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		056AF18B21590A41007AE91A /* CoconutShell.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05730E9023129F1700D05BE9 /* CNPipeProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05730E8F23129F1700D05BE9 /* CNPipeProcess.swift */; };
+		05A195DF2312437A00365273 /* CNShellInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A195DE2312437A00365273 /* CNShellInterface.swift */; };
 		05C887D72303A5390044AC03 /* UTShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887D62303A5390044AC03 /* UTShellUtil.swift */; };
 		05C887D92303A6B60044AC03 /* UTShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887D82303A6B60044AC03 /* UTShell.swift */; };
-		05C887DB2303A7960044AC03 /* CNShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887DA2303A7960044AC03 /* CNShell.swift */; };
+		05CF20762312B0D900A8F550 /* UTProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CF20752312B0D900A8F550 /* UTProcess.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +80,8 @@
 		050C8902208CBF350005E936 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		050C8905208CBF350005E936 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
 		050C8906208CBF350005E936 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		051669FD23126EC1000BF46D /* CNPipeThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNPipeThread.swift; sourceTree = "<group>"; };
+		051669FF23126ECC000BF46D /* CNShellThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellThread.swift; sourceTree = "<group>"; };
 		051AB5F121590AC400D7C71C /* UTShell */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UTShell; sourceTree = BUILT_PRODUCTS_DIR; };
 		051AB5F321590AC400D7C71C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		051DCEBF2311355C00B5D491 /* CNShellEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNShellEnvironment.swift; sourceTree = "<group>"; };
@@ -86,9 +92,11 @@
 		056AF17E2158E261007AE91A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		056AF18521590A12007AE91A /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		056AF18721590A24007AE91A /* CoconutShell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutShell.framework; path = ../../../../Library/Frameworks/CoconutShell.framework; sourceTree = "<group>"; };
+		05730E8F23129F1700D05BE9 /* CNPipeProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNPipeProcess.swift; sourceTree = "<group>"; };
+		05A195DE2312437A00365273 /* CNShellInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNShellInterface.swift; sourceTree = "<group>"; };
 		05C887D62303A5390044AC03 /* UTShellUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTShellUtil.swift; sourceTree = "<group>"; };
 		05C887D82303A6B60044AC03 /* UTShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTShell.swift; sourceTree = "<group>"; };
-		05C887DA2303A7960044AC03 /* CNShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNShell.swift; sourceTree = "<group>"; };
+		05CF20752312B0D900A8F550 /* UTProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTProcess.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +164,7 @@
 				051AB5F321590AC400D7C71C /* main.swift */,
 				05C887D62303A5390044AC03 /* UTShellUtil.swift */,
 				05C887D82303A6B60044AC03 /* UTShell.swift */,
+				05CF20752312B0D900A8F550 /* UTProcess.swift */,
 			);
 			path = UTShell;
 			sourceTree = "<group>";
@@ -166,9 +175,12 @@
 				050C8905208CBF350005E936 /* CoconutShell.h */,
 				053BAD77208CBF7900AC3BF0 /* CNColor.swift */,
 				053BAD76208CBF7900AC3BF0 /* CNCurses.swift */,
-				05C887DA2303A7960044AC03 /* CNShell.swift */,
+				051669FD23126EC1000BF46D /* CNPipeThread.swift */,
+				051669FF23126ECC000BF46D /* CNShellThread.swift */,
+				05A195DE2312437A00365273 /* CNShellInterface.swift */,
 				051DCEBF2311355C00B5D491 /* CNShellEnvironment.swift */,
 				053BAD75208CBF7900AC3BF0 /* CNShellUtil.swift */,
+				05730E8F23129F1700D05BE9 /* CNPipeProcess.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -357,11 +369,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				051669FE23126EC1000BF46D /* CNPipeThread.swift in Sources */,
 				053BAD7D208CBF7900AC3BF0 /* CNColor.swift in Sources */,
 				051DCEC02311355C00B5D491 /* CNShellEnvironment.swift in Sources */,
-				05C887DB2303A7960044AC03 /* CNShell.swift in Sources */,
 				053BAD7C208CBF7900AC3BF0 /* CNCurses.swift in Sources */,
+				05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */,
 				053BAD7B208CBF7900AC3BF0 /* CNShellUtil.swift in Sources */,
+				05A195DF2312437A00365273 /* CNShellInterface.swift in Sources */,
+				05730E9023129F1700D05BE9 /* CNPipeProcess.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +386,7 @@
 			files = (
 				051AB5F421590AC400D7C71C /* main.swift in Sources */,
 				05C887D92303A6B60044AC03 /* UTShell.swift in Sources */,
+				05CF20762312B0D900A8F550 /* UTProcess.swift in Sources */,
 				05C887D72303A5390044AC03 /* UTShellUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
