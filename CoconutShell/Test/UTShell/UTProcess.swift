@@ -18,7 +18,10 @@ public func testProcess(console cons: CNConsole) -> Bool
 
 	let env     = CNShellEnvironment()
 	let conf    = CNConfig(doVerbose: true)
-	let process = CNPipeProcess(interface: intf, environment: env, console: cons, config: conf)
+	let process = CNPipeProcess(interface: intf, environment: env, console: cons, config: conf){
+		(_ process: Process) -> Void in
+		cons.print(string: "Process finished\n")
+	}
 
 	cons.print(string: "Execute process: ls\n")
 	process.execute(command: "ls")

@@ -29,6 +29,10 @@ public extension Pipe
 		}
 	}
 
+	func write(data dt: Data){
+		self.fileHandleForWriting.write(dt)
+	}
+
 	func setReader(handler reader: @escaping (_ str: String) -> Void) {
 		self.fileHandleForReading.readabilityHandler = {
 			(_ handle: FileHandle) -> Void in
