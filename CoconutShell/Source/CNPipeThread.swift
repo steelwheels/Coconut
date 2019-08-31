@@ -14,19 +14,16 @@ open class CNPipeThread: Thread
 	private var mEnvironment:	CNShellEnvironment
 	private var mConsole:		CNConsole
 	private var mConfig:		CNConfig
-	private var mExitCode:		Int?
 
 	public var environment:	CNShellEnvironment	{ get { return mEnvironment	}}
 	public var console: CNConsole 			{ get { return mConsole 	}}
 	public var config:  CNConfig  			{ get { return mConfig  	}}
-	public var exitCode: Int? 			{ get { return mExitCode	}}
 
 	public init(interface intf: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig) {
 		mInterface	= intf
 		mEnvironment	= env
 		mConsole	= cons
 		mConfig		= conf
-		mExitCode	= nil
 		super.init()
 
 		intf.input.setReader(handler: {
@@ -35,6 +32,10 @@ open class CNPipeThread: Thread
 				myself.pushInput(string: str)
 			}
 		})
+	}
+
+	open var terminationStatus: Int32 {
+		get { return 1 }		// must be override
 	}
 
 	open func pushInput(string str: String) {

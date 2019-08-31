@@ -19,13 +19,17 @@ open class CNShellThread: CNPipeThread
 		super.init(interface: intf, environment: env, console: cons, config: conf)
 	}
 
+	open override var terminationStatus: Int32 {
+		get { return 0 }
+	}
+
 	open func promptString() -> String {
 		return "$ "
 	}
 
 	open override func main() {
 		var doprompt = true
-		while !isCancelled && exitCode == nil {
+		while !isCancelled {
 			if doprompt {
 				output(string: promptString())
 				doprompt = false
