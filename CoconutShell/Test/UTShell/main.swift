@@ -15,9 +15,14 @@ print("Hello, World!")
 public func main() {
 	let console = CNFileConsole()
 
+	console.print(string: "** testShellUtil\n")
 	let res0 = testShellUtil(console: console)
-	let res1 = testShell(console: console)
-	let res2 = testProcess(console: console)
+
+	console.print(string: "** testProcess\n")
+	let res1 = testProcess(console: console)
+
+	console.print(string: "** testShell\n")
+	let res2 = testShell(console: console)
 
 	let result = res0 && res1 && res2
 	if result {

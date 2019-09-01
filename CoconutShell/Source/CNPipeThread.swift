@@ -10,28 +10,26 @@ import Foundation
 
 open class CNPipeThread: Thread
 {
-	private var mInterface:		CNShellInterface
-	private var mEnvironment:	CNShellEnvironment
-	private var mConsole:		CNConsole
-	private var mConfig:		CNConfig
+	private var mInterface:			CNShellInterface
+	private var mEnvironment:		CNShellEnvironment
+	private var mConsole:			CNConsole
+	private var mConfig:			CNConfig
 
+	public var interface:   CNShellInterface	{ get { return mInterface	}}
 	public var environment:	CNShellEnvironment	{ get { return mEnvironment	}}
 	public var console: CNConsole 			{ get { return mConsole 	}}
 	public var config:  CNConfig  			{ get { return mConfig  	}}
 
-	public init(interface intf: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig) {
-		mInterface	= intf
-		mEnvironment	= env
-		mConsole	= cons
-		mConfig		= conf
+	public init(interface parent: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig) {
+		mInterface		= CNShellInterface()
+		mEnvironment		= env
+		mConsole		= cons
+		mConfig			= conf
 		super.init()
 
-		intf.input.setReader(handler: {
-			[weak self] (_ str: String) -> Void in
-			if let myself = self {
-				myself.pushInput(string: str)
-			}
-		})
+		mInterface.connectInput(from: parent.input)
+		mInterface.connectOutput(to: parent.output)
+		mInterface.connectError(to: parent.error)
 	}
 
 	open var terminationStatus: Int32 {

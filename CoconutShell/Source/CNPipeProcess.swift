@@ -19,79 +19,42 @@ public class CNPipeProcess
 	private var mEnvironment:		CNShellEnvironment
 	private var mConsole:			CNConsole
 	private var mConfig:			CNConfig
-	private var mIsExecuting:		Bool
+	private var mIsStarted:			Bool
 	private var mIsFinished:		Bool
 	private var mInterface:			CNShellInterface
-	private var mPrevInputWriter:		FileAccessHandler?
 	private var mTerminationHandler:	TerminationHandler?
 
-	public var isExecuting: Bool	{ get { return mIsExecuting	}}
 	public var isFinished:  Bool	{ get { return mIsFinished	}}
 
 	public var core: Process { get { return mProcess }}
 
-	public init(interface intf: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?) {
+	public init(interface parent: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?) {
 		mProcess		= Process()
-		mInterface		= intf
+		mInterface		= CNShellInterface()
 		mEnvironment		= env
 		mConsole		= cons
 		mConfig			= conf
-		mIsExecuting		= false
+		mIsStarted		= false
 		mIsFinished		= false
 		mTerminationHandler	= termhdlr
 
-		/* Keep original handler */
-		mPrevInputWriter = intf.input.fileHandleForWriting.writeabilityHandler
-
-		/* Connect input */
-		let inpipe		= Pipe()
-		intf.input.fileHandleForWriting.writeabilityHandler = {
-			[weak self]  (_ hdl: FileHandle) -> Void in
-			if let myself = self {
-				let data = hdl.availableData
-				myself.mInterface.output.write(data: data)
-			}
-		}
-		/* Connect output */
-		let outpipe		= Pipe()
-		outpipe.fileHandleForReading.readabilityHandler = {
-			[weak self] (_ hdl: FileHandle) -> Void in
-			if let myself = self {
-				let data = hdl.availableData
-				myself.mInterface.output.write(data: data)
-			}
-		}
-		/* Connect error */
-		let errpipe		= Pipe()
-		errpipe.fileHandleForReading.readabilityHandler = {
-			[weak self] (_ hdl: FileHandle) -> Void in
-			if let myself = self {
-				let data = hdl.availableData
-				myself.mInterface.error.write(data: data)
-			}
-		}
+		mInterface.connectInput(from: parent.input)
+		mInterface.connectOutput(to: parent.output)
+		mInterface.connectError(to: parent.error)
 
 		/* Connect interface with process */
-		mProcess.standardInput	= inpipe
-		mProcess.standardOutput	= outpipe
-		mProcess.standardError	= errpipe
+		mProcess.standardInput	= mInterface.input
+		mProcess.standardOutput	= mInterface.output
+		mProcess.standardError	= mInterface.error
 		mProcess.terminationHandler = {
 			[weak self] (process: Process) -> Void in
 			if let myself = self {
 				/* Reset connection */
-				myself.mInterface.input.fileHandleForWriting.writeabilityHandler = myself.mPrevInputWriter
-				/* Detach pipes */
-				if let inpipe  = process.standardInput as? Pipe {
-					inpipe.fileHandleForWriting.writeabilityHandler = nil
-				}
-				if let outpipe = process.standardOutput as? Pipe {
-					outpipe.fileHandleForReading.readabilityHandler = nil
-				}
-				if let errpipe = process.standardError as? Pipe {
-					errpipe.fileHandleForReading.readabilityHandler = nil
-				}
+				myself.mInterface.unconnectInput()
+				myself.mInterface.unconnectOutput()
+				myself.mInterface.unconnectError()
 				/* Update status */
-				myself.mIsExecuting	= false
+				myself.mIsStarted	= false
 				myself.mIsFinished	= true
 				/* Call handler */
 				if let handler = myself.mTerminationHandler {
@@ -102,7 +65,7 @@ public class CNPipeProcess
 	}
 
 	public func execute(command cmd: String) {
-		mIsExecuting		= true
+		mIsStarted		= true
 		mIsFinished		= false
 		mProcess.launchPath	= "/bin/sh"
 		mProcess.arguments	= ["-c", cmd]
@@ -110,7 +73,7 @@ public class CNPipeProcess
 	}
 
 	public func waitUntilExit() {
-		if mIsExecuting {
+		if mIsStarted {
 			mProcess.waitUntilExit()
 		}
 	}

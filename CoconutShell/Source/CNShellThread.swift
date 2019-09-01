@@ -35,7 +35,7 @@ open class CNShellThread: CNPipeThread
 				doprompt = false
 			}
 			if let input = popInput() {
-				parse(string: input)
+				parse(line: input)
 				doprompt = true
 			}
 		}
@@ -59,14 +59,8 @@ open class CNShellThread: CNPipeThread
 		return result
 	}
 
-	private func parse(string str: String){
-		let lines = str.components(separatedBy: ";")
-		for line in lines {
-			parse(line: line)
-		}
-	}
-
-	private func parse(line str: String){
+	open func parse(line str: String){
+		NSLog("parse(\(str))")
 	}
 
 	open func execute(string str: String){
