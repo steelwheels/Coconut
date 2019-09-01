@@ -36,7 +36,8 @@ open class CNPipeThread: Thread
 		get { return 1 }		// must be override
 	}
 
-	open func pushInput(string str: String) {
+	open func input(string str: String) {
+		NSLog("override this method: \(str)")
 	}
 
 	public func output(string str: String){

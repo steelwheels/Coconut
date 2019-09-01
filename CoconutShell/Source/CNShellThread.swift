@@ -10,12 +10,10 @@ import Foundation
 
 open class CNShellThread: CNPipeThread
 {
-	private var mInLock:		NSLock
-	private var mInputs:		Array<String>
+	private var mInputedString: String
 
 	public override init(interface intf: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig){
-		mInLock		= NSLock()
-		mInputs		= []
+		mInputedString = ""
 		super.init(interface: intf, environment: env, console: cons, config: conf)
 	}
 
@@ -34,33 +32,40 @@ open class CNShellThread: CNPipeThread
 				output(string: promptString())
 				doprompt = false
 			}
-			if let input = popInput() {
-				parse(line: input)
-				doprompt = true
+			/* Read input */
+			let data = self.interface.input.fileHandleForReading.availableData
+			if let str = String(data: data, encoding: .utf8) {
+				if addString(string: str) {
+					doprompt = true
+				}
 			}
 		}
 	}
 
-	open override func pushInput(string str: String) {
-		mInLock.lock()
-		mInputs.append(str)
-		mInLock.unlock()
-	}
-
-	private func popInput() -> String? {
-		var result: String?
-		mInLock.lock()
-		if mInputs.count > 0 {
-			result = mInputs.removeFirst()
-		} else {
-			result = nil
+	private func addString(string str: String) -> Bool {
+		var newstr = mInputedString + str
+		while newstr.lengthOfBytes(using: .utf8) > 0 {
+			if let nlidx = newstr.firstIndex(of: "\n") {
+				/* put string before newline */
+				let line = newstr[..<nlidx]
+				input(string: String(line))
+				/* Keep string after newline */
+				let nxtidx = newstr.index(after: nlidx)
+				if nxtidx < newstr.endIndex {
+					newstr = String(newstr[nxtidx..<newstr.endIndex])
+				} else {
+					newstr = ""
+				}
+			} else {
+				break
+			}
 		}
-		mInLock.unlock()
-		return result
+		mInputedString = newstr
+		return true
 	}
 
-	open func parse(line str: String){
-		NSLog("parse(\(str))")
+	open override func input(string str: String){
+		NSLog("input(\(str))")
 	}
 
 	open func execute(string str: String){
