@@ -21,8 +21,11 @@ public func main() {
 	console.print(string: "** testProcess\n")
 	let res1 = testProcess(console: console)
 
-	console.print(string: "** testShell\n")
-	let res2 = testShell(console: console)
+	console.print(string: "** unixCommands\n")
+	let res2 = testUnixCommand(console: console)
+	
+	//console.print(string: "** testShell\n")
+	//let res2 = testShell(console: console)
 
 	let result = res0 && res1 && res2
 	if result {

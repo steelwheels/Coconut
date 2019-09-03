@@ -1,6 +1,6 @@
 /*
- * @file	CNShellCommand.swift
- * @brief	Define KLShell class
+ * @file	CNPipeProcess.swift
+ * @brief	Define CNPipeProcess class
  * @par Copyright
  *   Copyright (C) 2018 Steel Wheels Project
  */

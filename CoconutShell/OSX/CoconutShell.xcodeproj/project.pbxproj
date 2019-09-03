@@ -27,6 +27,8 @@
 		05C887D72303A5390044AC03 /* UTShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887D62303A5390044AC03 /* UTShellUtil.swift */; };
 		05C887D92303A6B60044AC03 /* UTShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887D82303A6B60044AC03 /* UTShell.swift */; };
 		05CF20762312B0D900A8F550 /* UTProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CF20752312B0D900A8F550 /* UTProcess.swift */; };
+		05D10050231E9F030054F81C /* CNUnixCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D1004F231E9F030054F81C /* CNUnixCommand.swift */; };
+		05D10052231EA3860054F81C /* UTUnixCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D10051231EA3860054F81C /* UTUnixCommand.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +99,8 @@
 		05C887D62303A5390044AC03 /* UTShellUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTShellUtil.swift; sourceTree = "<group>"; };
 		05C887D82303A6B60044AC03 /* UTShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTShell.swift; sourceTree = "<group>"; };
 		05CF20752312B0D900A8F550 /* UTProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTProcess.swift; sourceTree = "<group>"; };
+		05D1004F231E9F030054F81C /* CNUnixCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNUnixCommand.swift; sourceTree = "<group>"; };
+		05D10051231EA3860054F81C /* UTUnixCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTUnixCommand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +167,7 @@
 			children = (
 				051AB5F321590AC400D7C71C /* main.swift */,
 				05C887D62303A5390044AC03 /* UTShellUtil.swift */,
+				05D10051231EA3860054F81C /* UTUnixCommand.swift */,
 				05C887D82303A6B60044AC03 /* UTShell.swift */,
 				05CF20752312B0D900A8F550 /* UTProcess.swift */,
 			);
@@ -181,6 +186,7 @@
 				051DCEBF2311355C00B5D491 /* CNShellEnvironment.swift */,
 				053BAD75208CBF7900AC3BF0 /* CNShellUtil.swift */,
 				05730E8F23129F1700D05BE9 /* CNPipeProcess.swift */,
+				05D1004F231E9F030054F81C /* CNUnixCommand.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -373,6 +379,7 @@
 				053BAD7D208CBF7900AC3BF0 /* CNColor.swift in Sources */,
 				051DCEC02311355C00B5D491 /* CNShellEnvironment.swift in Sources */,
 				053BAD7C208CBF7900AC3BF0 /* CNCurses.swift in Sources */,
+				05D10050231E9F030054F81C /* CNUnixCommand.swift in Sources */,
 				05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */,
 				053BAD7B208CBF7900AC3BF0 /* CNShellUtil.swift in Sources */,
 				05A195DF2312437A00365273 /* CNShellInterface.swift in Sources */,
@@ -387,6 +394,7 @@
 				051AB5F421590AC400D7C71C /* main.swift in Sources */,
 				05C887D92303A6B60044AC03 /* UTShell.swift in Sources */,
 				05CF20762312B0D900A8F550 /* UTProcess.swift in Sources */,
+				05D10052231EA3860054F81C /* UTUnixCommand.swift in Sources */,
 				05C887D72303A5390044AC03 /* UTShellUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

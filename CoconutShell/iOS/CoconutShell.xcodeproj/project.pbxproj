@@ -14,6 +14,7 @@
 		0575328F2303916500EBBE13 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0575328E2303916500EBBE13 /* CoconutData.framework */; };
 		05A337E72312443000180233 /* CNShellInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A337E62312443000180233 /* CNShellInterface.swift */; };
 		05A337E92312478200180233 /* CNPipeThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A337E82312478200180233 /* CNPipeThread.swift */; };
+		05A3B89F231EA5080092052B /* CNUnixCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A3B89E231EA5080092052B /* CNUnixCommand.swift */; };
 		05A6374D23038FA30036C432 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A6374B23038FA30036C432 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05AA6180231136E9006BAABF /* CNShellEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA617F231136E9006BAABF /* CNShellEnvironment.swift */; };
 		05C811492304D03A0032C1FA /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C811482304D03A0032C1FA /* CNShellThread.swift */; };
@@ -37,6 +38,7 @@
 		0575328E2303916500EBBE13 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../local/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		05A337E62312443000180233 /* CNShellInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellInterface.swift; sourceTree = "<group>"; };
 		05A337E82312478200180233 /* CNPipeThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPipeThread.swift; sourceTree = "<group>"; };
+		05A3B89E231EA5080092052B /* CNUnixCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNUnixCommand.swift; sourceTree = "<group>"; };
 		05A6374823038FA30036C432 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A6374B23038FA30036C432 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoconutShell.h; path = ../../Source/CoconutShell.h; sourceTree = "<group>"; };
 		05A6374C23038FA30036C432 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 				05AA617F231136E9006BAABF /* CNShellEnvironment.swift */,
 				057532892303912200EBBE13 /* CNShellUtil.swift */,
 				0538D51D2312AEAE0046A1BE /* CNPipeProcess.swift */,
+				05A3B89E231EA5080092052B /* CNUnixCommand.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -212,6 +215,7 @@
 				05A337E92312478200180233 /* CNPipeThread.swift in Sources */,
 				05AA6180231136E9006BAABF /* CNShellEnvironment.swift in Sources */,
 				05C811492304D03A0032C1FA /* CNShellThread.swift in Sources */,
+				05A3B89F231EA5080092052B /* CNUnixCommand.swift in Sources */,
 				0538D51E2312AEAE0046A1BE /* CNPipeProcess.swift in Sources */,
 				0575328A2303912200EBBE13 /* CNColor.swift in Sources */,
 				0575328B2303912200EBBE13 /* CNCurses.swift in Sources */,
