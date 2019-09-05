@@ -12,7 +12,6 @@ import Foundation
 
 public class CNPipeProcess
 {
-	public typealias FileAccessHandler	= (_ hdl:  FileHandle) -> Void
 	public typealias TerminationHandler	= (_ proc: Process) -> Void
 
 	private var mProcess:			Process

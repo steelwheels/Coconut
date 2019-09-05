@@ -24,8 +24,7 @@ public class CNUnixCommandTable
 	}
 
 	public struct CommandInfo {
-		var 	path: String
-
+		public var 	path: String
 		init(path pstr: String){
 			path = pstr
 		}
@@ -56,4 +55,9 @@ public class CNUnixCommandTable
 	public var commandNames: Array<String> {
 		get { return Array(mCommandTable.keys) }
 	}
+
+	public func search(byName name: String) -> CommandInfo? {
+		return mCommandTable[name]
+	}
+
 }
