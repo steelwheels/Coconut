@@ -18,3 +18,70 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 		}
 	}
 }
+
+open class CNThread: Thread
+{
+	public typealias TerminationHandler	= (_ thread: Thread) -> Int32
+
+	public enum Status {
+		case Idle
+		case Running
+		case Finished
+	}
+
+	private var mStatus:			Status
+	private var mInputHandle:		FileHandle
+	private var mOutputHandle:		FileHandle
+	private var mErrorHandle:		FileHandle
+	private var mConsole:			CNConsole
+	private var mTerminationStatus:		Int32
+	private var mTerminationHandler:	TerminationHandler?
+
+	public var status: Status 			{ get { return mStatus			}}
+	public var inputFileHandle:  FileHandle		{ get { return mInputHandle		}}
+	public var outputFileHandle: FileHandle		{ get { return mOutputHandle		}}
+	public var errorFileHandle:  FileHandle		{ get { return mErrorHandle		}}
+	open   var terminationStatus:	Int32	    	{ get { return mTerminationStatus	}}
+	public var console:    CNConsole		{ get { return mConsole 		}}
+
+	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle, terminationHander termhdlr: TerminationHandler?) {
+		mStatus			= .Idle
+		mInputHandle		= inhdl
+		mOutputHandle		= outhdl
+		mErrorHandle		= errhdl
+		mConsole		= CNFileConsole(input: inhdl, output: outhdl, error: errhdl)
+		mTerminationStatus	= -1
+		mTerminationHandler	= termhdlr
+		super.init()
+	}
+
+	open override func start() {
+		/* Update status */
+		mStatus = .Running
+		/* Start process */
+		super.start()
+	}
+
+	open override func main(){
+		/* Execute main operation */
+		self.mTerminationStatus = mainOperation()
+		/* Execution finished */
+		if let hdlr = mTerminationHandler {
+			self.mTerminationStatus = hdlr(self)
+		}
+		/* Update status */
+		mStatus = .Finished
+	}
+
+	open func mainOperation() -> Int32 {
+		NSLog("Override this method")
+		return 1
+	}
+
+	public func waitUntilExit() {
+		while self.status == .Running {
+			usleep(100)	// 100us = 0.1ms
+		}
+	}
+}
+

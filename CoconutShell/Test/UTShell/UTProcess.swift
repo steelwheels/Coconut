@@ -11,17 +11,13 @@ import Foundation
 
 public func testProcess(console cons: CNConsole) -> Bool
 {
-	let intf    = CNShellInterface()
-	intf.connectWithStandardInput()
-	intf.connectWithStandardOutput()
-	intf.connectWithStandardError()
-
-	let env     = CNShellEnvironment()
-	let conf    = CNConfig(doVerbose: true)
-	let process = CNPipeProcess(interface: intf, environment: env, console: cons, config: conf){
+	let process = CNProcess(input:  FileHandle.standardInput,
+				output: FileHandle.standardOutput,
+				error:  FileHandle.standardError,
+				terminationHander: {
 		(_ process: Process) -> Void in
 		cons.print(string: "[UTShell] Process finished\n")
-	}
+	})
 
 	cons.print(string: "[UTShell] Execute process: ls\n")
 	process.execute(command: "/bin/ls")

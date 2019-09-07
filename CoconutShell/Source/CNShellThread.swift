@@ -8,38 +8,48 @@
 import CoconutData
 import Foundation
 
-open class CNShellThread: CNPipeThread
+open class CNShellThread: CNThread
 {
-	private var mInputedString: String
+	private var mEnvironment:	CNShellEnvironment
+	private var mConfig:		CNConfig
+	private var mInputedString: 	String
 
-	public override init(interface intf: CNShellInterface, environment env: CNShellEnvironment, console cons: CNConsole, config conf: CNConfig){
-		mInputedString = ""
-		super.init(interface: intf, environment: env, console: cons, config: conf)
+	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle,  environment env: CNShellEnvironment, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
+		mEnvironment	= env
+		mConfig		= conf
+		mInputedString	= ""
+		super.init(input: inhdl, output: outhdl, error: errhdl, terminationHander: termhdlr)
 	}
 
-	open override var terminationStatus: Int32 {
-		get { return 0 }
-	}
+	public var environment: CNShellEnvironment	{ get { return mEnvironment	}}
+	public var config: CNConfig			{ get { return mConfig		}}
 
 	open func promptString() -> String {
 		return "$ "
 	}
 
-	open override func main() {
+	open override func start() {
+		super.start()
+	}
+
+	open override func mainOperation() -> Int32 {
 		var doprompt = true
 		while !isCancelled {
 			if doprompt {
-				output(string: promptString())
+				if let data = promptString().data(using: .utf8) {
+					self.outputFileHandle.write(data)
+				}
 				doprompt = false
 			}
 			/* Read input */
-			let data = self.interface.input.fileHandleForReading.availableData
+			let data = self.inputFileHandle.availableData
 			if let str = String(data: data, encoding: .utf8) {
 				if addString(string: str) {
 					doprompt = true
 				}
 			}
 		}
+		return 0
 	}
 
 	private func addString(string str: String) -> Bool {
@@ -48,7 +58,7 @@ open class CNShellThread: CNPipeThread
 			if let nlidx = newstr.firstIndex(of: "\n") {
 				/* put string before newline */
 				let line = newstr[..<nlidx]
-				input(string: String(line))
+				self.inputLine(line: String(line))
 				/* Keep string after newline */
 				let nxtidx = newstr.index(after: nlidx)
 				if nxtidx < newstr.endIndex {
@@ -64,11 +74,7 @@ open class CNShellThread: CNPipeThread
 		return true
 	}
 
-	open override func input(string str: String){
-		NSLog("input(\(str))")
-	}
-
-	open func execute(string str: String){
-		NSLog("execute(\(str))")
+	open func inputLine(line str: String) {
+		NSLog("Override this method")
 	}
 }
