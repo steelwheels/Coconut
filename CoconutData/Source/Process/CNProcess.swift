@@ -39,8 +39,6 @@ open class CNProcess
 	public var errorFileHandle:	FileHandle  { get { return force(fileHandle: mProcess.standardError) 	}}
 	open   var terminationStatus:	Int32	    { get { return mProcess.terminationStatus			}}
 
-	public var core:		Process     { get { return mProcess					}}
-
 	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle, terminationHander termhdlr: TerminationHandler?) {
 		mIsStarted		= false
 		mProcess		= Process()
