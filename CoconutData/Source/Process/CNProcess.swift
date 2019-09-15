@@ -19,20 +19,12 @@ open class CNProcess
 		case Finished
 	}
 
-	private var mIsStarted:			Bool
+	private var mStatus:			Status
 	private var mProcess:			Process
 	private var mConsole:			CNConsole
 	private var mTerminationHandler:	TerminationHandler?
 
-	public var status: Status { get {
-		if !mIsStarted {
-			return .Idle
-		} else if mProcess.isRunning {
-			return .Running
-		} else {
-			return .Finished
-		}
-	}}
+	public var status: Status { get { return mStatus }}
 
 	public var inputFileHandle: 	FileHandle  { get { return force(fileHandle: mProcess.standardInput) 	}}
 	public var outputFileHandle:	FileHandle  { get { return force(fileHandle: mProcess.standardOutput)	}}
@@ -40,7 +32,7 @@ open class CNProcess
 	open   var terminationStatus:	Int32	    { get { return mProcess.terminationStatus			}}
 
 	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle, terminationHander termhdlr: TerminationHandler?) {
-		mIsStarted		= false
+		mStatus			= .Idle
 		mProcess		= Process()
 		mConsole		= CNFileConsole(input: inhdl, output: outhdl, error: errhdl)
 		mTerminationHandler	= termhdlr
@@ -52,6 +44,8 @@ open class CNProcess
 		mProcess.terminationHandler = {
 			[weak self] (process: Process) -> Void in
 			if let myself = self {
+				/* Update status */
+				myself.mStatus = .Finished
 				/* Call handler */
 				if let handler = myself.mTerminationHandler {
 					handler(myself.mProcess)
@@ -69,14 +63,19 @@ open class CNProcess
 	}
 
 	public func execute(command cmd: String) {
-		mIsStarted		= true
+		mStatus			= .Running
 		mProcess.launchPath	= "/bin/sh"
 		mProcess.arguments	= ["-c", cmd]
 		mProcess.launch()
 	}
 
 	public func waitUntilExit() {
-		mProcess.waitUntilExit()
+		switch mStatus {
+		case .Idle, .Finished:
+			break
+		case .Running:
+			mProcess.waitUntilExit()
+		}
 	}
 }
 
