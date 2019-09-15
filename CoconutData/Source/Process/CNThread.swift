@@ -71,6 +71,13 @@ open class CNThread: Thread
 		}
 		/* Update status */
 		mStatus = .Finished
+		/* Close files */
+		if mOutputHandle != FileHandle.standardOutput {
+			mOutputHandle.closeFile()
+		}
+		if mErrorHandle != FileHandle.standardError {
+			mErrorHandle.closeFile()
+		}
 	}
 
 	open func mainOperation() -> Int32 {

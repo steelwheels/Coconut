@@ -50,6 +50,17 @@ open class CNProcess
 				if let handler = myself.mTerminationHandler {
 					handler(myself.mProcess)
 				}
+				/* Close outputs */
+				if let file = myself.mProcess.standardOutput as? FileHandle {
+					if file != FileHandle.standardOutput {
+						file.closeFile()
+					}
+				}
+				if let file = myself.mProcess.standardError as? FileHandle {
+					if file != FileHandle.standardError {
+						file.closeFile()
+					}
+				}
 			}
 		}
 	}
