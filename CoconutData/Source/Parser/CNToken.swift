@@ -216,6 +216,12 @@ public func CNStringToToken(string srcstr: String) -> (CNParseError, Array<CNTok
 	return tokenizer.tokenize(string: srcstr)
 }
 
+public func CNStringStreamToToken(stream srcstrm: CNStringStream) -> (CNParseError, Array<CNToken>)
+{
+	let tokenizer = CNTokenizer()
+	return tokenizer.tokenize(stream: srcstrm)
+}
+
 private class CNTokenizer
 {
 	var mCurrentLine: Int
@@ -228,6 +234,19 @@ private class CNTokenizer
 		do {
 			let stream = CNStringStream(string: srcstr)
 			let tokens = try stringToTokens(stream: stream)
+			return (.NoError, tokens)
+		} catch let error {
+			if let tkerr = error as? CNParseError {
+				return (tkerr, [])
+			} else {
+				fatalError("Unknown error")
+			}
+		}
+	}
+
+	public func tokenize(stream srcstrm: CNStringStream) -> (CNParseError, Array<CNToken>) {
+		do {
+			let tokens = try stringToTokens(stream: srcstrm)
 			return (.NoError, tokens)
 		} catch let error {
 			if let tkerr = error as? CNParseError {

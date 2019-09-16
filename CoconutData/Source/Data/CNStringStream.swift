@@ -77,11 +77,45 @@ public class CNStringStream
 		}
 	}
 
+	public func skipSpaces() {
+		while let c = getc() {
+			if !c.isSpace() {
+				let _ = self.ungetc()
+				return
+			}
+		}
+	}
+
 	public func isEmpty() -> Bool {
 		if mStartIndex < mEndIndex {
 			return false
 		} else {
 			return true
+		}
+	}
+
+	public func splitByFirstCharacter(characters chars: Array<Character>) -> (CNStringStream, CNStringStream)? {
+		var currentidx = mStartIndex
+		while currentidx < mEndIndex {
+			let c: Character = mString[currentidx]
+			for targ in chars {
+				if targ == c {
+					let nextidx = mString.index(after: currentidx)
+					let stra    = String(mString[mStartIndex..<currentidx])
+					let strb    = String(mString[nextidx..<mEndIndex])
+					return (CNStringStream(string: stra), CNStringStream(string: strb))
+				}
+			}
+			currentidx = mString.index(after: currentidx)
+		}
+		return nil
+	}
+
+	public func toString() -> String? {
+		if mStartIndex < mEndIndex {
+			return String(mString[mStartIndex..<mEndIndex])
+		} else {
+			return nil
 		}
 	}
 
