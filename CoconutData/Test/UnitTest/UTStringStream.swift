@@ -23,7 +23,8 @@ public func testStringStream(console cons: CNConsole) -> Bool
 	cons.print(string: "[STREAM-A] " + streama.description + "\n")
 	cons.print(string: "[STREAM-B] " + streamb.description + "\n")
 
-	let (err, tokens) = CNStringStreamToToken(stream: streama)
+	let config = CNParserConfig()
+	let (err, tokens) = CNStringStreamToToken(stream: streama, config: config)
 	switch err {
 	case .NoError:
 		dumpTokens(tokens: tokens, console: cons)

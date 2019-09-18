@@ -1,6 +1,20 @@
 Hello, World!
 * testPreference
 Verbose mode is set ... OK
+* testStringStream
+[INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]
+[STREAM-A] String(" (ab, c1, da_) : e01 ")[0:21]
+[STREAM-B] String(" hoge fuga")[0:10]
+<Tokens>
+SymbolToken(()
+IdentifierToken(ab)
+SymbolToken(,)
+IdentifierToken(c1)
+SymbolToken(,)
+IdentifierToken(da_)
+SymbolToken())
+SymbolToken(:)
+IdentifierToken(e01)
 * testURL
 nullURL = file:///dev/null
 * testValue

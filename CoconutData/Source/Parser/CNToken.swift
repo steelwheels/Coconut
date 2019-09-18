@@ -210,24 +210,26 @@ public struct CNToken {
 	}
 }
 
-public func CNStringToToken(string srcstr: String) -> (CNParseError, Array<CNToken>)
+public func CNStringToToken(string srcstr: String, config conf: CNParserConfig) -> (CNParseError, Array<CNToken>)
 {
-	let tokenizer = CNTokenizer()
+	let tokenizer = CNTokenizer(config: conf)
 	return tokenizer.tokenize(string: srcstr)
 }
 
-public func CNStringStreamToToken(stream srcstrm: CNStringStream) -> (CNParseError, Array<CNToken>)
+public func CNStringStreamToToken(stream srcstrm: CNStringStream, config conf: CNParserConfig) -> (CNParseError, Array<CNToken>)
 {
-	let tokenizer = CNTokenizer()
+	let tokenizer = CNTokenizer(config: conf)
 	return tokenizer.tokenize(stream: srcstrm)
 }
 
 private class CNTokenizer
 {
-	var mCurrentLine: Int
+	var mConfig:		CNParserConfig
+	var mCurrentLine:	Int
 
-	public init(){
-		mCurrentLine = 1
+	public init(config conf: CNParserConfig){
+		mConfig		= conf
+		mCurrentLine	= 1
 	}
 
 	public func tokenize(string srcstr: String) -> (CNParseError, Array<CNToken>) {
@@ -364,7 +366,7 @@ private class CNTokenizer
 	private func getIdentifierTokenFromStream(stream srcstream: CNStringStream) throws -> CNToken {
 		let resstr = getAnyStringFromStream(stream: srcstream, matchingFunc: {
 			(_ c: Character) -> Bool in
-			return c.isAlphaOrNum() || c == "_"
+			return c.isAlphaOrNum() || c == "_" || (mConfig.allowIdentiferHasPeriod && c == ".")
 		})
 		let lresstr = resstr.lowercased()
 		if lresstr == "true"{

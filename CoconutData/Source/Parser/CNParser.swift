@@ -32,3 +32,18 @@ public enum CNParseError: Error
 		return result
 	}
 }
+
+public struct CNParserConfig
+{
+	private var mAllowIdentiferHasPeriod	: Bool
+
+	public init(allowIdentiferHasPeriod allowp: Bool){
+		mAllowIdentiferHasPeriod = allowp
+	}
+
+	public init(){
+		self.init(allowIdentiferHasPeriod: false)
+	}
+
+	public var allowIdentiferHasPeriod: Bool { get { return mAllowIdentiferHasPeriod	}}
+}
