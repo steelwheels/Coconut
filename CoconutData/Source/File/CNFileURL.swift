@@ -117,23 +117,21 @@ public extension URL
 		return src
 	}
 
-	func loadContents() -> (NSString?, NSError?) {
+	func loadContents() -> NSString? {
 		var resstr: NSString? = nil
-		var reserr:  NSError?  = nil
 		let issecure = startAccessingSecurityScopedResource()
-		  do {
+		do {
 			resstr = try NSString(contentsOf: self, encoding: String.Encoding.utf8.rawValue)
 			if resstr == nil {
-				reserr = NSError.fileError(message: "Failed to load: \(path)")
+				return nil
 			}
-		  }
-		  catch {
-			reserr = NSError.fileError(message: "Failed to load: \(path)")
-		  }
+		} catch {
+			return nil
+		}
 		if issecure {
 			stopAccessingSecurityScopedResource()
 		}
-		return (resstr, reserr)
+		return resstr
 	}
 
 	private static func findLastCommonComponent(array0 s0: Array<String>, array1 s1: Array<String>) -> Int {
