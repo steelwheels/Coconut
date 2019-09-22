@@ -25,6 +25,17 @@ public enum CNFileType: Int32 {
 	}
 }
 
+public enum CNFileOpenResult {
+	case 	ok(_ file: CNTextFile)
+	case	error(_ error: NSError)
+}
+
+public enum CNFileAccessType {
+	case ReadAccess
+	case WriteAccess
+	case AppendAccess
+}
+
 public extension FileManager
 {
 	func fileExists(atURL url: URL) -> Bool {
@@ -47,67 +58,58 @@ public extension FileManager
 			return .NotExist
 		}
 	}
-}
 
-public enum CNFileAccessType {
-	case ReadAccess
-	case WriteAccess
-	case AppendAccess
-}
-
-public func CNOpenFile(filePath path: String, accessType acctyp: CNFileAccessType) -> (CNTextFile?, NSError?)
-{
-	do {
-		var file: CNTextFile
-		switch acctyp {
-		case .ReadAccess:
-			let fileurl = pathToURL(filePath: path)
-			let handle = try FileHandle(forReadingFrom: fileurl)
-			file = CNTextFileObject(fileHandle: handle)
-		case .WriteAccess:
-			let handle = try fileHandleToWrite(filePath: path, withAppend: false)
-			file = CNTextFileObject(fileHandle: handle)
-		case .AppendAccess:
-			let handle = try fileHandleToWrite(filePath: path, withAppend: true)
-			file = CNTextFileObject(fileHandle: handle)
+	func openFile(filePath path: String, accessType acctyp: CNFileAccessType) -> CNFileOpenResult {
+		do {
+			var file: CNTextFile
+			switch acctyp {
+			case .ReadAccess:
+				let fileurl = pathToURL(filePath: path)
+				let handle = try FileHandle(forReadingFrom: fileurl)
+				file = CNTextFileObject(fileHandle: handle)
+			case .WriteAccess:
+				let handle = try fileHandleToWrite(filePath: path, withAppend: false)
+				file = CNTextFileObject(fileHandle: handle)
+			case .AppendAccess:
+				let handle = try fileHandleToWrite(filePath: path, withAppend: true)
+				file = CNTextFileObject(fileHandle: handle)
+			}
+			return .ok(file)
+		} catch let err as NSError {
+			return .error(err)
+		} catch {
+			let err = NSError.fileError(message: "Failed to open file \"\(path)\"")
+			return .error(err)
 		}
-		return (file, nil)
-	} catch let err as NSError {
-		return (nil, err)
-	} catch {
-		let err = NSError.fileError(message: "Failed to open file \"\(path)\"")
-		return (nil, err)
 	}
-}
 
-public func CNOpenFile(URL url: URL, accessType acctyp: CNFileAccessType) -> (CNTextFile?, NSError?)
-{
-	do {
-		var file: CNTextFile
-		switch acctyp {
-		case .ReadAccess:
-			let handle = try FileHandle(forReadingFrom: url)
-			file = CNTextFileObject(fileHandle: handle)
-		case .WriteAccess:
-			let handle = try fileHandleToWrite(URL: url, withAppend: false)
-			file = CNTextFileObject(fileHandle: handle)
-		case .AppendAccess:
-			let handle = try fileHandleToWrite(URL: url, withAppend: true)
-			file = CNTextFileObject(fileHandle: handle)
+	func openFile(URL url: URL, accessType acctyp: CNFileAccessType) -> CNFileOpenResult {
+		do {
+			var file: CNTextFile
+			switch acctyp {
+			case .ReadAccess:
+				let handle = try FileHandle(forReadingFrom: url)
+				file = CNTextFileObject(fileHandle: handle)
+			case .WriteAccess:
+				let handle = try FileHandle(forReadingFrom: url)
+				file = CNTextFileObject(fileHandle: handle)
+			case .AppendAccess:
+				let handle = try FileHandle(forWritingTo: url)
+				file = CNTextFileObject(fileHandle: handle)
+			}
+			return .ok(file)
+		} catch let err as NSError {
+			return .error(err)
+		} catch {
+			let err = NSError.fileError(message: "Failed to open URL \"\(url.absoluteString)\"")
+			return .error(err)
 		}
-		return (file, nil)
-	} catch let err as NSError {
-		return (nil, err)
-	} catch {
-		let path = url.absoluteString
-		let err  = NSError.fileError(message: "Failed to open file \"\(path)\"")
-		return (nil, err)
 	}
-}
 
-public func CNOpenFile(fileHandle handle: FileHandle) -> CNTextFile
-{
-	return CNTextFileObject(fileHandle: handle)
+	func openFile(fileHandle handle: FileHandle) -> CNTextFile
+	{
+		return CNTextFileObject(fileHandle: handle)
+	}
 }
 
 private func pathToURL(filePath path: String) -> URL {
