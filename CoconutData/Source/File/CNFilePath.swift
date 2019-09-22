@@ -12,29 +12,31 @@ import Foundation
  */
 public class CNFilePath
 {
+	public enum FilePathError {
+		case ok(_ url: URL)
+		case error(_ error: NSError)
+	}
+
 	public class func URLForHomeDirectory() -> URL {
 		let homedir = NSHomeDirectory()
 		return URL(fileURLWithPath: homedir, isDirectory: true)
 	}
 	
-	public class func URLForBundleFile(bundleName bname: String?, fileName fname: String?, ofType type: String?) -> (URL?, NSError?) {
+	public class func URLForBundleFile(bundleName bname: String?, fileName fname: String?, ofType type: String?) -> FilePathError {
 		let mainbundle = Bundle.main
 		if let bundlepath = mainbundle.path(forResource: bname, ofType: "bundle") {
 			if let resourcebundle = Bundle(path: bundlepath) {
 				if let resourcepath = resourcebundle.path(forResource: fname, ofType: type){
-					let url = URL(string: "file://" + resourcepath)
-					return (url, nil)
-				} else {
-					let error = NSError.fileError(message: "File \"\(name(fname))\" of type \"\(name(type))\" is not found")
-					return (nil, error)
+					if let url = URL(string: "file://" + resourcepath) {
+						return .ok(url)
+					}
 				}
+				return .error(NSError.fileError(message: "File \"\(name(fname))\" of type \"\(name(type))\" is not found"))
 			} else {
-				let error = NSError.fileError(message: "Failed to allocate bundle \"\(bundlepath)\"")
-				return (nil, error)
+				return .error(NSError.fileError(message: "Failed to allocate bundle \"\(bundlepath)\""))
 			}
 		} else {
-			let error = NSError.fileError(message: "\(name(bname)).bundle is not found")
-			return (nil, error)
+			return .error(NSError.fileError(message: "\(name(bname)).bundle is not found"))
 		}
 	}
 
