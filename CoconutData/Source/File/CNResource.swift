@@ -114,7 +114,7 @@ private class CNDirectoryResource
 	}
 }
 
-public class CNResource
+open class CNResource
 {
 	public typealias LoaderFunc = (_ url: URL) -> Any?
 
@@ -123,7 +123,7 @@ public class CNResource
 
 	public var baseURL: URL { get { return mBaseURL }}
 
-	public required init(baseURL url: URL) {
+	public init(baseURL url: URL) {
 		mBaseURL		= url
 		mDirectoryResources	= [:]
 	}
