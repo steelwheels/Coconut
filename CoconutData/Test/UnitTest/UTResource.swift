@@ -21,6 +21,13 @@ public func testResource(console cons: CNConsole) -> Bool
 	resource.add(category: "Number", identifier: "number0", path: "a.num")
 
 	var result = true
+	if let path = resource.pathString(category: "Number", identifier: "number0", index: 0) {
+		cons.print(string: "[Path] \(path)\n")
+	} else {
+		cons.print(string: "[Error] Can not get path string\n")
+		result = false
+	}
+
 	if let res: NSNumber = resource.load(category: "Number", identifier: "number0", index: 0) {
 		cons.print(string: "[OK] Loaded => \(res.doubleValue)\n")
 	} else {
