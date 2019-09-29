@@ -59,10 +59,6 @@ private class CNDirectoryResource
 		return nil
 	}
 
-	public func set(identifier ident: String, path pathstr: String) {
-		mFileMap[ident] = [CNFileResource(path: pathstr)]
-	}
-
 	public func add(identifier ident: String, path pathstr: String) {
 		if let _ = mFileMap[ident] {
 			mFileMap[ident]?.append(CNFileResource(path: pathstr))
@@ -141,10 +137,6 @@ open class CNResource
 
 	public func allocate(category cat: String, loader ldr: @escaping LoaderFunc) {
 		mDirectoryResources[cat] = CNDirectoryResource(loader: ldr)
-	}
-
-	public func set(category cat: String, identifier ident: String, path pathstr: String) {
-		mDirectoryResources[cat]?.set(identifier: ident, path: pathstr)
 	}
 
 	public func add(category cat: String, identifier ident: String, path pathstr: String) {
