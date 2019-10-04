@@ -13,9 +13,8 @@ public class CNJSONFile {
 			let data = try Data(contentsOf: url)
 			return try read(data: data)
 		}
-		catch {
-			let error = NSError.parseError(message: "Failed to read data from  URL:\(url.absoluteString)")
-			return (nil, error)
+		catch let err  {
+			return (nil, err as NSError)
 		}
 	}
 

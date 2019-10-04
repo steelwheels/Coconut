@@ -178,7 +178,7 @@ open class CNResource
 		let section = CNTextSection()
 		section.header = "{" ; section.footer = "}"
 
-		let urltxt = CNTextLine(string: "URL: \(mBaseURL.absoluteString)")
+		let urltxt = CNTextLine(string: "URL: \(mBaseURL.relativeString)")
 		section.add(text: urltxt)
 
 		for (category, resource) in mDirectoryResources {
