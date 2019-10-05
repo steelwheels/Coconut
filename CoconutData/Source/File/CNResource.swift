@@ -181,9 +181,14 @@ open class CNResource
 		let urltxt = CNTextLine(string: "URL: \(mBaseURL.relativeString)")
 		section.add(text: urltxt)
 
-		for (category, resource) in mDirectoryResources {
-			let subsec = resource.toText(category: category)
-			section.add(text: subsec)
+		let categories = mDirectoryResources.keys.sorted()
+		for category in categories {
+			if let dirres = mDirectoryResources[category] {
+				let subsec = dirres.toText(category: category)
+				section.add(text: subsec)
+			} else {
+				fatalError("Can not happen")
+			}
 		}
 		return section
 	}
