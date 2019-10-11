@@ -38,6 +38,9 @@ public class CNAddressBook
 						self.mState = .Denied
 					}
 				})
+			@unknown default:
+				NSLog("Unknown status")
+				mState = .Denied
 			}
 		}
 		return mState
@@ -84,6 +87,7 @@ public class CNAddressBook
 		switch cont.contactType {
 		case .organization:	typestr = "organization"
 		case .person:		typestr = "person"
+		@unknown default:	NSLog("Unknown contact type") ; typestr = "<unknown>"
 		}
 		appendDictionary(destination: &result, property: CNContactTypeKey,		value: typestr)
 

@@ -13,7 +13,7 @@ public func testFilePath(console cons: CNConsole) -> Bool
 	var result0: Bool
 
 	/* URI */
-	let url = URL(fileURLWithPath: "/System//Library/WidgetResources/AppleClasses/AppleButton.js")
+	let url = URL(fileURLWithPath: "Info.plist")
 	if let uti = CNFilePath.UTIForFile(URL: url) {
 		cons.print(string: "UTI: \(uti) \n")
 		result0 = true

@@ -28,7 +28,7 @@ buffer2
 - after buffered
 after1
 * testFilePath
-UTI: com.netscape.javascript-source 
+UTI: com.apple.property-list 
 Get sceme from "/usr/local/bin" -> <none> -> OK
 Get sceme from "https://yahoo.com" -> Sceme:"https" -> OK
 Get sceme from "https//yahoo.com" -> <none> -> OK
