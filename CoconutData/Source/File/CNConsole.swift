@@ -172,75 +172,111 @@ public class CNIndentedConsole: CNConsole
 	}
 }
 
-/*
-public class CNPipeConsole: CNConsole
+public class CNPipeConsole
 {
-	public var toConsole: 		CNConsole?
-	public var inputPipe:		Pipe
-	public var errorPipe:		Pipe
-	public var outputPipe:		Pipe
+	public typealias InputHandler	= () -> String?
+	public typealias OutputHandler	= (_ str: String) -> Void
 
-	public init(){
-		toConsole	= nil
-		inputPipe	= Pipe()
-		errorPipe	= Pipe()
-		outputPipe	= Pipe()
+	private var mInputPipe:		Pipe
+	private var mOutputPipe:	Pipe
+	private var mErrorPipe:		Pipe
 
-		inputPipe.fileHandleForReading.readabilityHandler = {
+	private var mInputHandler:	InputHandler?
+	private var mOutputHandler:	OutputHandler?
+	private var mErrorHandler:	OutputHandler?
+
+	private var mInterfaceConsole: CNFileConsole
+
+	public var interfaceConsole: CNFileConsole { get { return mInterfaceConsole }}
+
+	public var inputHandler: InputHandler? {
+		get { return mInputHandler }
+		set(hdl){ mInputHandler = hdl }
+	}
+
+	public var outputHandler: OutputHandler? {
+		get { return mOutputHandler }
+		set(hdl){ mOutputHandler = hdl }
+	}
+
+	public var errorHandler: OutputHandler? {
+		get { return mErrorHandler }
+		set(hdl){ mErrorHandler = hdl }
+	}
+
+	public init() {
+		mInputHandler	= nil
+		mOutputHandler	= nil
+		mErrorHandler	= nil
+
+		mInputPipe  	= Pipe()
+		mOutputPipe 	= Pipe()
+		mErrorPipe  	= Pipe()
+		mInterfaceConsole = CNFileConsole(input:  mInputPipe.fileHandleForReading,
+						  output: mOutputPipe.fileHandleForWriting,
+						  error:  mErrorPipe.fileHandleForWriting)
+
+		/* Close input */
+		mInputPipe.fileHandleForWriting.writeabilityHandler = {
 			[weak self] (_ handle: FileHandle) -> Void in
-			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
-				if let myself = self {
-					myself.print(string: str)
-				}
-			} else {
-				NSLog("Error decoding data: \(handle.availableData)")
-			}
-		}
-		errorPipe.fileHandleForReading.readabilityHandler = {
-			[weak self] (_ handle: FileHandle) -> Void in
-			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
-				if let myself = self {
-					myself.error(string: str)
-				}
-			} else {
-				NSLog("Error decoding data: \(handle.availableData)")
-			}
-		}
-		outputPipe.fileHandleForWriting.writeabilityHandler = {
-			[weak self] (filehandle: FileHandle) -> Void in
 			if let myself = self {
-				if let str = myself.scan() {
+				if let str = myself.input() {
 					if let data = str.data(using: .utf8) {
-						filehandle.write(data)
+						myself.mInputPipe.fileHandleForWriting.write(data)
 					} else {
-						NSLog("Error encoding data: \(str)")
+						NSLog("Failed to read data")
 					}
+				} else {
+					myself.mInputPipe.fileHandleForWriting.closeFile()
+				}
+			}
+		}
+
+		/* Connect output */
+		mOutputPipe.fileHandleForReading.readabilityHandler = {
+			[weak self] (_ handle: FileHandle) -> Void in
+			if let myself = self {
+				if let str = String(data: handle.availableData, encoding: .utf8) {
+					myself.output(string: str)
+				} else {
+					NSLog("Non string data")
+				}
+			}
+		}
+		/* Connect error */
+		mErrorPipe.fileHandleForReading.readabilityHandler = {
+			[weak self] (_ handle: FileHandle) -> Void in
+			if let myself = self {
+				if let str = String(data: handle.availableData, encoding: .utf8) {
+					myself.error(string: str)
+				} else {
+					NSLog("Non string data")
 				}
 			}
 		}
 	}
 
-	open func print(string str: String){
-		if let cons = toConsole {
-			cons.print(string: str)
-		}
-	}
 
-	open func error(string str: String){
-		if let cons = toConsole {
-			cons.error(string: str)
-		}
-	}
-
-	open func scan() -> String? {
-		if let cons = toConsole {
-			return cons.scan()
+	private func input() -> String? {
+		if let hdl = mInputHandler {
+			return hdl()
 		} else {
 			return nil
 		}
 	}
+
+	private func output(string str: String) {
+		if let hdl = mOutputHandler {
+			hdl(str)
+		}
+	}
+
+	private func error(string str: String) {
+		if let hdl = mErrorHandler {
+			hdl(str)
+		}
+	}
 }
-*/
 
 public class CNBufferedConsole: CNConsole
 {
