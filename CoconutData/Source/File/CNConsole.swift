@@ -93,9 +93,9 @@ public class CNDefaultConsole: CNConsole
 
 public class CNFileConsole : CNConsole
 {
-	var inputHandle:	FileHandle
-	var outputHandle:	FileHandle
-	var errorHandle:	FileHandle
+	public var inputHandle:		FileHandle
+	public var outputHandle:	FileHandle
+	public var errorHandle:		FileHandle
 
 	public init(input ihdl: FileHandle, output ohdl: FileHandle, error ehdl: FileHandle){
 		inputHandle	= ihdl

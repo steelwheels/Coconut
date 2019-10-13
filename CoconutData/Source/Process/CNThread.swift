@@ -33,7 +33,7 @@ open class CNThread: Thread
 	private var mInputHandle:		FileHandle
 	private var mOutputHandle:		FileHandle
 	private var mErrorHandle:		FileHandle
-	private var mConsole:			CNConsole
+	private var mConsole:			CNFileConsole
 	private var mTerminationStatus:		Int32
 	private var mTerminationHandler:	TerminationHandler?
 
@@ -42,7 +42,7 @@ open class CNThread: Thread
 	public var outputFileHandle: FileHandle		{ get { return mOutputHandle		}}
 	public var errorFileHandle:  FileHandle		{ get { return mErrorHandle		}}
 	open   var terminationStatus:	Int32	    	{ get { return mTerminationStatus	}}
-	public var console:    CNConsole		{ get { return mConsole 		}}
+	public var console:    CNFileConsole		{ get { return mConsole 		}}
 
 	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle, terminationHander termhdlr: TerminationHandler?) {
 		mStatus			= .Idle
@@ -89,6 +89,13 @@ open class CNThread: Thread
 		while self.status == .Running {
 			usleep(100)	// 100us = 0.1ms
 		}
+	}
+
+	public func set(console cons: CNFileConsole) {
+		mInputHandle	= cons.inputHandle
+		mOutputHandle	= cons.outputHandle
+		mErrorHandle	= cons.errorHandle
+		mConsole	= CNFileConsole(input: mInputHandle, output: mOutputHandle, error: mErrorHandle)
 	}
 }
 

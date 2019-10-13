@@ -7,7 +7,7 @@
 
 import Foundation
 
-@objc open class CNOperationContext: NSObject, CNLogging
+@objc open class CNOperationContext: NSObject
 {
 	public static let isExecutingItem	= "isExecuting"
 	public static let isFinishedItem	= "isFinished"
@@ -15,16 +15,28 @@ import Foundation
 
 	private var mObservedValueTable:	CNObservedValueTable
 	private var mParameters:		Dictionary<String, CNNativeValue>
-	private var mConsole:			CNConsole
+	private var mInputHandle:		FileHandle
+	private var mOutputHandle:		FileHandle
+	private var mErrorHandle:		FileHandle
+	private var mConsole:			CNFileConsole
 
 	public weak var ownerExecutor: 		CNOperationExecutor?
+
+	public var inputFileHandle:  FileHandle		{ get { return mInputHandle		}}
+	public var outputFileHandle: FileHandle		{ get { return mOutputHandle		}}
+	public var errorFileHandle:  FileHandle		{ get { return mErrorHandle		}}
+	public var console:    CNFileConsole		{ get { return mConsole 		}}
+
 	public var 	executionCount:		Int
 	public var	totalExecutionTime:	TimeInterval	/* [ms] */
 
-	public init(console cons: CNConsole) {
+	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle) {
 		mObservedValueTable = CNObservedValueTable()
 		mParameters	    = [:]
-		mConsole	    = cons
+		mInputHandle	    = inhdl
+		mOutputHandle	    = outhdl
+		mErrorHandle 	    = errhdl
+		mConsole	    = CNFileConsole(input: inhdl, output: outhdl, error: errhdl)
 		ownerExecutor	    = nil
 		executionCount	    = 0
 		totalExecutionTime  = 0.0
@@ -49,17 +61,6 @@ import Foundation
 
 	open func parameter(name nm: String) -> CNNativeValue? {
 		return mParameters[nm]
-	}
-
-	public var console: CNConsole? {
-		get {
-			return mConsole
-		}
-		set(newcons){
-			if let cons = newcons {
-				mConsole = cons
-			}
-		}
 	}
 
 	public func reset(){
@@ -115,6 +116,13 @@ import Foundation
 		if let exec = ownerExecutor {
 			exec.cancel()
 		}
+	}
+
+	public func set(console cons: CNFileConsole) {
+		mInputHandle	= cons.inputHandle
+		mOutputHandle	= cons.outputHandle
+		mErrorHandle	= cons.errorHandle
+		mConsole	= CNFileConsole(input: mInputHandle, output: mOutputHandle, error: mErrorHandle)
 	}
 }
 

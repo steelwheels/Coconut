@@ -13,10 +13,10 @@ private class UTOperationContext: CNOperationContext
 	private var mName:			String
 	private var mDoWaitCancel:		Bool
 
-	public required init(name nm: String, doWaitCancel dowait: Bool, console cons: CNConsole) {
+	public required init(name nm: String, doWaitCancel dowait: Bool, input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle) {
 		mName			= nm
 		mDoWaitCancel		= dowait
-		super.init(console: cons)
+		super.init(input: inhdl, output: outhdl, error: errhdl)
 	}
 
 	open override func main() {
@@ -39,11 +39,15 @@ private class UTOperationContext: CNOperationContext
 	}
 }
 
-public func testOperation(console cons: CNConsole) -> Bool
+public func testOperation(console cons: CNFileConsole) -> Bool
 {
-	let ctxt0 = UTOperationContext(name: "op0", doWaitCancel: false, console: cons)
-	let ctxt1 = UTOperationContext(name: "op1", doWaitCancel: false, console: cons)
-	let ctxt2 = UTOperationContext(name: "op2", doWaitCancel: true,  console: cons)
+	let inhdl  = cons.inputHandle
+	let outhdl = cons.outputHandle
+	let errhdl = cons.errorHandle
+
+	let ctxt0 = UTOperationContext(name: "op0", doWaitCancel: false, input: inhdl, output: outhdl, error: errhdl)
+	let ctxt1 = UTOperationContext(name: "op1", doWaitCancel: false, input: inhdl, output: outhdl, error: errhdl)
+	let ctxt2 = UTOperationContext(name: "op2", doWaitCancel: true,  input: inhdl, output: outhdl, error: errhdl)
 
 	let queue   = CNOperationQueue()
 	let noexecs = queue.execute(operations: [ctxt0, ctxt1, ctxt2], timeLimit: nil)

@@ -13,10 +13,10 @@ private class UTOperationContext: CNOperationContext
 	private var mIdentifier:	Int
 	private var mSleepTime:		TimeInterval
 
-	public required init(identifier ident: Int, sleepTime stime: TimeInterval, console cons: CNConsole) {
+	public required init(identifier ident: Int, sleepTime stime: TimeInterval, input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle) {
 		mIdentifier		= ident
 		mSleepTime 		= stime
-		super.init(console: cons)
+		super.init(input: inhdl, output: outhdl, error: errhdl)
 	}
 
 	open override func main() {
@@ -34,35 +34,39 @@ private class UTOperationContext: CNOperationContext
 	public func printState(){
 		//mConsole.print(string: "op[\(mIdentifier)] ... ")
 		if self.isCancelled {
-			console?.print(string: "Canceled\(mIdentifier)\n")
+			self.outputFileHandle.write(string: "Canceled\(mIdentifier)\n")
 		} else if self.isFinished {
-			console?.print(string: "Finished\(mIdentifier)\n")
+			self.outputFileHandle.write(string: "Finished\(mIdentifier)\n")
 		} else {
-			console?.print(string: "??\(mIdentifier)\n")
+			self.outputFileHandle.write(string: "Unknown\(mIdentifier)\n")
 		}
 	}
 }
 
-public func testOperationQueue(console cons: CNConsole) -> Bool
+public func testOperationQueue(console cons: CNFileConsole) -> Bool
 {
 	let queue = CNOperationQueue()
-	
+
+	let inhdl  = cons.inputHandle
+	let outhdl = cons.outputHandle
+	let errhdl = cons.errorHandle
+
 	cons.print(string: "* TEST0\n")
-	let ctxts0 = allocateOperations(sleepTime: 0.0, console: cons)
+	let ctxts0 = allocateOperations(sleepTime: 0.0, input: inhdl, output: outhdl, error: errhdl)
 	let res0   = checkQueue(results: queue.execute(operations: ctxts0, timeLimit: nil), console: cons)
 	queue.waitOperations()
 	printContexts(contexts: ctxts0, console: cons)
 	cons.print(string: "Done (0)\n")
 
 	cons.print(string: "* TEST1\n")
-	let ctxt1 = allocateOperations(sleepTime: 0.0, console: cons)
+	let ctxt1 = allocateOperations(sleepTime: 0.0, input: inhdl, output: outhdl, error: errhdl)
 	let res1  = checkQueue(results: queue.execute(operations: ctxt1, timeLimit: 0.1), console: cons)
 	queue.waitOperations()
 	printContexts(contexts: ctxt1, console: cons)
 	cons.print(string: "Done (1)\n")
 
 	cons.print(string: "* TEST2\n")
-	let ctxts2 = allocateOperations(sleepTime: 1.0, console: cons)
+	let ctxts2 = allocateOperations(sleepTime: 1.0, input: inhdl, output: outhdl, error: errhdl)
 	let res2   = checkQueue(results: queue.execute(operations: ctxts2, timeLimit: 0.1), console: cons)
 	queue.waitOperations()
 	printContexts(contexts: ctxts2, console: cons)
@@ -78,11 +82,11 @@ public func testOperationQueue(console cons: CNConsole) -> Bool
 	return result
 }
 
-private func allocateOperations(sleepTime stime: TimeInterval, console cons: CNConsole) -> Array<UTOperationContext>
+private func allocateOperations(sleepTime stime: TimeInterval, input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle) -> Array<UTOperationContext>
 {
 	var ctxts: Array<UTOperationContext> = []
 	for i in 0..<2 {
-		let ctxt = UTOperationContext(identifier: i, sleepTime: stime, console: cons)
+		let ctxt = UTOperationContext(identifier: i, sleepTime: stime, input: inhdl, output: outhdl, error: errhdl)
 		ctxts.append(ctxt)
 	}
 	return ctxts
