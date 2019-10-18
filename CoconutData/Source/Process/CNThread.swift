@@ -78,11 +78,11 @@ open class CNThread: Thread
 		return 1
 	}
 
-	public func waitUntilExit() -> Int {
+	public func waitUntilExit() -> Int32 {
 		while self.status == .Running {
 			usleep(100)	// 100us = 0.1ms
 		}
-		return Int(mTerminationStatus)
+		return mTerminationStatus
 	}
 
 	public func set(console cons: CNFileConsole) {

@@ -69,14 +69,14 @@ open class CNProcess
 		mProcess.launch()
 	}
 
-	public func waitUntilExit() -> Int {
-		let result: Int
+	public func waitUntilExit() -> Int32 {
+		let result: Int32
 		switch mStatus {
 		case .Idle, .Finished:
 			result = 1
 		case .Running:
 			mProcess.waitUntilExit()
-			result = Int(mProcess.terminationStatus)
+			result = mProcess.terminationStatus
 		}
 		return result
 	}
