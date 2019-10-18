@@ -50,17 +50,6 @@ open class CNProcess
 				if let handler = myself.mTerminationHandler {
 					handler(myself.mProcess)
 				}
-				/* Close outputs */
-				if let file = myself.mProcess.standardOutput as? FileHandle {
-					if file != FileHandle.standardOutput {
-						file.closeFile()
-					}
-				}
-				if let file = myself.mProcess.standardError as? FileHandle {
-					if file != FileHandle.standardError {
-						file.closeFile()
-					}
-				}
 			}
 		}
 	}
@@ -80,13 +69,16 @@ open class CNProcess
 		mProcess.launch()
 	}
 
-	public func waitUntilExit() {
+	public func waitUntilExit() -> Int {
+		let result: Int
 		switch mStatus {
 		case .Idle, .Finished:
-			break
+			result = 1
 		case .Running:
 			mProcess.waitUntilExit()
+			result = Int(mProcess.terminationStatus)
 		}
+		return result
 	}
 }
 

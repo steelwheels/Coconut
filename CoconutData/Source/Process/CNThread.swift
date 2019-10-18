@@ -71,13 +71,6 @@ open class CNThread: Thread
 		}
 		/* Update status */
 		mStatus = .Finished
-		/* Close files */
-		if mOutputHandle != FileHandle.standardOutput {
-			mOutputHandle.closeFile()
-		}
-		if mErrorHandle != FileHandle.standardError {
-			mErrorHandle.closeFile()
-		}
 	}
 
 	open func mainOperation() -> Int32 {
@@ -85,10 +78,11 @@ open class CNThread: Thread
 		return 1
 	}
 
-	public func waitUntilExit() {
+	public func waitUntilExit() -> Int {
 		while self.status == .Running {
 			usleep(100)	// 100us = 0.1ms
 		}
+		return Int(mTerminationStatus)
 	}
 
 	public func set(console cons: CNFileConsole) {
