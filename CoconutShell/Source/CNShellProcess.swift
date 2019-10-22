@@ -15,10 +15,10 @@ open class CNShellProcess: CNProcess
 	private var mEnvironment:	CNShellEnvironment
 	private var mConfig:		CNConfig
 
-	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle, environment env: CNShellEnvironment, config conf: CNConfig, terminationHander termhdlr: CNProcess.TerminationHandler?) {
+	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNShellEnvironment, config conf: CNConfig, terminationHander termhdlr: CNProcess.TerminationHandler?) {
 		mEnvironment	= env
 		mConfig		= conf
-		super.init(input: inhdl, output: outhdl, error: errhdl, terminationHander: termhdlr)
+		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
 	}
 
 	public var environment: CNShellEnvironment	{ get { return mEnvironment	}}

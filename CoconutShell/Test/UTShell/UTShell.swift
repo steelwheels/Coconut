@@ -16,49 +16,60 @@ public class UTShellThread: CNShellThread {
 		return "UTShell$ "
 	}
 
-	public override func main() {
-		//NSLog("*** Main ***")
-		super.main()
+	open override func inputLine(line str: String) {
+		console.print(string: "UTShell/In \"\(str)\"\n")
+		printed = true
 	}
 }
 
-public func testShell(console cons: CNConsole) -> Bool
+public func testShell(console cons: CNFileConsole) -> Bool
 {
-	let env    = CNShellEnvironment()
-	let config = CNConfig(doVerbose: true)
-	let shell  = UTShellThread(input:  FileHandle.standardInput,
-				   output: FileHandle.standardOutput,
-				   error:  FileHandle.standardError,
+	let inpipe  = Pipe()
+	let outpipe = Pipe()
+	let errpipe = Pipe()
+
+
+	let instrm  = CNFileStream.pipe(inpipe)
+	let outstrm = CNFileStream.pipe(outpipe)
+	let errstrm = CNFileStream.pipe(errpipe)
+	let env     = CNShellEnvironment()
+	let config  = CNConfig(doVerbose: true)
+	let shell   = UTShellThread(input: instrm, output: outstrm, error: errstrm,
 				   environment: env,
 				   config: config,
 				   terminationHander: nil)
-	FileHandle.standardOutput.writeabilityHandler = {
+
+	outpipe.fileHandleForReading.readabilityHandler = {
 		(_ hdl: FileHandle) -> Void in
 		let data = hdl.availableData
 		if let str = String(data: data, encoding: .utf8) {
-			cons.print(string: "testShell/Out: \"\(str)\"\n")
-			shell.printed = true
+			cons.print(string: "UTShell/Out: \"\(str)\"\n")
 		}
-	}
-	FileHandle.standardError.writeabilityHandler = {
-		(_ hdl: FileHandle) -> Void in
-		let data = hdl.availableData
-		if let str = String(data: data, encoding: .utf8) {
-			cons.print(string: "testShell/Err: \"\(str)\"\n")
-			shell.printed = true
-		}
-	}
-	let instr = "input-command"
-	if let data = instr.data(using: .utf8) {
-		FileHandle.standardInput.write(data)
 	}
 
+	errpipe.fileHandleForReading.readabilityHandler = {
+		(_ hdl: FileHandle) -> Void in
+		let data = hdl.availableData
+		if let str = String(data: data, encoding: .utf8) {
+			cons.print(string: "UTShell/Err: \"\(str)\"\n")
+		}
+	}
+
+	cons.print(string: "testShell: Start\n")
 	shell.start()
+
+	/* input command */
+	shell.inputFileHandle.write(string: "shell-command\n")
+	shell.inputFileHandle.closeFile()
+
+	/* Wait some prited */
 	while !shell.printed {
 	}
+
 	shell.cancel()
 	while !shell.isFinished {
 	}
+	cons.print(string: "testShell: Cancelled\n")
 
 	return true
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		05037670208B2F2000D2DB37 /* CNError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0503766F208B2F2000D2DB37 /* CNError.swift */; };
+		0517E1BD235E7F62002EB80C /* CNProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0517E1BC235E7F62002EB80C /* CNProcess.swift */; };
 		051FA46A208B3FD500AEC734 /* CNFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051FA469208B3FD500AEC734 /* CNFile.swift */; };
 		053084E2219DBDD2004DB0BF /* CNOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */; };
 		0532D64122FC48A40031F929 /* CNEscapeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0532D64022FC48A30031F929 /* CNEscapeCode.swift */; };
@@ -71,6 +72,7 @@
 
 /* Begin PBXFileReference section */
 		0503766F208B2F2000D2DB37 /* CNError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNError.swift; sourceTree = "<group>"; };
+		0517E1BC235E7F62002EB80C /* CNProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNProcess.swift; sourceTree = "<group>"; };
 		051FA469208B3FD500AEC734 /* CNFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFile.swift; sourceTree = "<group>"; };
 		053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNOperationQueue.swift; sourceTree = "<group>"; };
 		0532D64022FC48A30031F929 /* CNEscapeCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNEscapeCode.swift; sourceTree = "<group>"; };
@@ -209,9 +211,10 @@
 		058740FA208AFF4A00FF2B65 /* Process */ = {
 			isa = PBXGroup;
 			children = (
+				0517E1BC235E7F62002EB80C /* CNProcess.swift */,
+				058740FB208AFF6000FF2B65 /* CNThread.swift */,
 				05C85DA722AABDD1007C5527 /* CNOperationContext.swift */,
 				05C85DA622AABDD1007C5527 /* CNOperationExecutor.swift */,
-				058740FB208AFF6000FF2B65 /* CNThread.swift */,
 				053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */,
 			);
 			path = Process;
@@ -446,6 +449,7 @@
 				05037670208B2F2000D2DB37 /* CNError.swift in Sources */,
 				05E81093208B341C00230477 /* CNAccess.swift in Sources */,
 				05995853208AF0D500DE2DC9 /* CNParser.swift in Sources */,
+				0517E1BD235E7F62002EB80C /* CNProcess.swift in Sources */,
 				0565A9F5208B7C5600E91568 /* CNBookmark.swift in Sources */,
 				0588875621CBD7FA00BE14B5 /* CNNativeValueMatcher.swift in Sources */,
 				0565A9EA208B7B8B00E91568 /* CNFilePath.swift in Sources */,

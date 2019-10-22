@@ -24,10 +24,10 @@ public func main() {
 	console.print(string: "** unixCommands\n")
 	let res2 = testUnixCommand(console: console)
 	
-	//console.print(string: "** testShell\n")
-	//let res2 = testShell(console: console)
+	console.print(string: "** testShell\n")
+	let res3 = testShell(console: console)
 
-	let result = res0 && res1 && res2
+	let result = res0 && res1 && res2 && res3
 	if result {
 		console.print(string: "Result: OK\n")
 		Darwin.exit(0)

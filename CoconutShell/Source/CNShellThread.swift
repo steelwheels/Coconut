@@ -14,11 +14,11 @@ open class CNShellThread: CNThread
 	private var mConfig:		CNConfig
 	private var mInputedString: 	String
 
-	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle,  environment env: CNShellEnvironment, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
+	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream,  environment env: CNShellEnvironment, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
 		mEnvironment	= env
 		mConfig		= conf
 		mInputedString	= ""
-		super.init(input: inhdl, output: outhdl, error: errhdl, terminationHander: termhdlr)
+		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
 	}
 
 	public var environment: CNShellEnvironment	{ get { return mEnvironment	}}
@@ -36,14 +36,11 @@ open class CNShellThread: CNThread
 		var doprompt = true
 		while !isCancelled {
 			if doprompt {
-				if let data = promptString().data(using: .utf8) {
-					self.outputFileHandle.write(data)
-				}
+				self.console.print(string: promptString())
 				doprompt = false
 			}
 			/* Read input */
-			let data = self.inputFileHandle.availableData
-			if let str = String(data: data, encoding: .utf8) {
+			if let str = self.console.scan() {
 				if addString(string: str) {
 					doprompt = true
 				}

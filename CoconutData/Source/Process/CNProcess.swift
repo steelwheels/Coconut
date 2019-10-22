@@ -7,9 +7,29 @@
 
 import Foundation
 
+public protocol CNProcessStream
+{
+	var	inputStream: 	CNFileStream { get }
+	var	outputStream:	CNFileStream { get }
+	var	errorStream:	CNFileStream { get }
+}
+
+public extension CNProcessStream
+{
+	var inputFileHandle: FileHandle {
+		get { CNFileStream.streamToFileHandle(stream: inputStream, forInside: false, isInput: true) }
+	}
+	var outputFileHandle: FileHandle {
+		get { CNFileStream.streamToFileHandle(stream: outputStream, forInside: false, isInput: false) }
+	}
+	var errorFileHandle: FileHandle {
+		get { CNFileStream.streamToFileHandle(stream: errorStream, forInside: false, isInput: false) }
+	}
+}
+
 #if os(OSX)
 
-open class CNProcess
+open class CNProcess: CNProcessStream
 {
 	public typealias TerminationHandler	= (_ proc: Process) -> Void
 
@@ -21,26 +41,35 @@ open class CNProcess
 
 	private var mStatus:			Status
 	private var mProcess:			Process
+	private var mInputStream:		CNFileStream
+	private var mOutputStream:		CNFileStream
+	private var mErrorStream:		CNFileStream
 	private var mConsole:			CNConsole
 	private var mTerminationHandler:	TerminationHandler?
 
 	public var status: Status { get { return mStatus }}
-
-	public var inputFileHandle: 	FileHandle  { get { return force(fileHandle: mProcess.standardInput) 	}}
-	public var outputFileHandle:	FileHandle  { get { return force(fileHandle: mProcess.standardOutput)	}}
-	public var errorFileHandle:	FileHandle  { get { return force(fileHandle: mProcess.standardError) 	}}
 	open   var terminationStatus:	Int32	    { get { return mProcess.terminationStatus			}}
 
-	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle, terminationHander termhdlr: TerminationHandler?) {
+	public var inputStream: CNFileStream	{ get { return mInputStream	}}
+	public var outputStream: CNFileStream	{ get { return mOutputStream	}}
+	public var errorStream: CNFileStream	{ get { return mErrorStream	}}
+
+	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, terminationHander termhdlr: TerminationHandler?) {
 		mStatus			= .Idle
 		mProcess		= Process()
-		mConsole		= CNFileConsole(input: inhdl, output: outhdl, error: errhdl)
 		mTerminationHandler	= termhdlr
 
+		mInputStream	= instrm
+		mOutputStream	= outstrm
+		mErrorStream	= errstrm
+		mConsole	= CNFileConsole(input:  CNFileStream.streamToFileHandle(stream: instrm,  forInside: true, isInput: true),
+						output: CNFileStream.streamToFileHandle(stream: outstrm, forInside: true, isInput: false),
+						error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
+
 		/* Connect interface with process */
-		mProcess.standardInput	= inhdl
-		mProcess.standardOutput	= outhdl
-		mProcess.standardError	= errhdl
+		mProcess.standardInput	= CNFileStream.streamToAny(stream: instrm)
+		mProcess.standardOutput	= CNFileStream.streamToAny(stream: outstrm)
+		mProcess.standardError	= CNFileStream.streamToAny(stream: errstrm)
 		mProcess.terminationHandler = {
 			[weak self] (process: Process) -> Void in
 			if let myself = self {
@@ -51,14 +80,6 @@ open class CNProcess
 					handler(myself.mProcess)
 				}
 			}
-		}
-	}
-
-	private func force(fileHandle hdl: Any?) -> FileHandle {
-		if let hdl = hdl as? FileHandle {
-			return hdl
-		} else {
-			fatalError("can not happen")
 		}
 	}
 
@@ -76,9 +97,19 @@ open class CNProcess
 			result = 1
 		case .Running:
 			mProcess.waitUntilExit()
+			closeStreams()
 			result = mProcess.terminationStatus
 		}
 		return result
+	}
+
+	private func closeStreams() {
+		if let outpipe = mProcess.standardOutput as? Pipe {
+			outpipe.fileHandleForWriting.closeFile()
+		}
+		if let errpipe = mProcess.standardError as? Pipe {
+			errpipe.fileHandleForWriting.closeFile()
+		}
 	}
 }
 

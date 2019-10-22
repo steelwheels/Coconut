@@ -10,14 +10,12 @@ import Foundation
 
 public func testProcess(console cons: CNFileConsole) -> Bool
 {
-	let process = CNProcess(terminationHander: {
+	let process = CNProcess(input:  .fileHandle(cons.inputHandle),
+				output: .fileHandle(cons.outputHandle),
+				error:  .fileHandle(cons.errorHandle),
+				terminationHander: {
 		(_ proc: Process) -> Void in
 		cons.print(string: "END of process\n")
-	})
-
-	process.set(outputWriterHandler: {
-		(_ str: String) -> Void in
-		cons.print(string: "OUTPUT: \(str)")
 	})
 
 	//let input = process.inputFileHandle

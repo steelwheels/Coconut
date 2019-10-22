@@ -80,6 +80,7 @@
 		05DF7D992090D4B1003B5110 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF7D982090D4B1003B5110 /* CNStringUtil.swift */; };
 		05E81091208B33F800230477 /* CNAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E81090208B33F800230477 /* CNAccess.swift */; };
 		05ED45DC23214D9700ED2852 /* CNProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05ED45DB23214D9700ED2852 /* CNProcess.swift */; };
+		05EEADB0235DEF29008B49A4 /* UTThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EEADAF235DEF29008B49A4 /* UTThread.swift */; };
 		05F5EA71208F793400CF98C3 /* CNText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA70208F793400CF98C3 /* CNText.swift */; };
 		05F5EA73208F794000CF98C3 /* CNReservedWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA72208F794000CF98C3 /* CNReservedWord.swift */; };
 /* End PBXBuildFile section */
@@ -234,6 +235,7 @@
 		05DF7D982090D4B1003B5110 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05E81090208B33F800230477 /* CNAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAccess.swift; sourceTree = "<group>"; };
 		05ED45DB23214D9700ED2852 /* CNProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNProcess.swift; sourceTree = "<group>"; };
+		05EEADAF235DEF29008B49A4 /* UTThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTThread.swift; sourceTree = "<group>"; };
 		05F5EA70208F793400CF98C3 /* CNText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNText.swift; sourceTree = "<group>"; };
 		05F5EA72208F794000CF98C3 /* CNReservedWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReservedWord.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -311,6 +313,7 @@
 				052170F021022AB1001801A6 /* UTFilePath.swift */,
 				055BD39F2199C48400BF7373 /* UTObserver.swift */,
 				052087BD235C892D0084E340 /* UTProcess.swift */,
+				05EEADAF235DEF29008B49A4 /* UTThread.swift */,
 				055BD3A32199D7F700BF7373 /* UTOperation.swift */,
 				051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */,
 				0512640821C5E1E5008B01FA /* UTDatabase.swift */,
@@ -733,6 +736,7 @@
 				055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */,
 				05178D70232EEFFD00F35AF0 /* UTStringStream.swift in Sources */,
 				052087BF235C89990084E340 /* UTProcess.swift in Sources */,
+				05EEADB0235DEF29008B49A4 /* UTThread.swift in Sources */,
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
 				05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */,
 				052170F121022AB1001801A6 /* UTFilePath.swift in Sources */,

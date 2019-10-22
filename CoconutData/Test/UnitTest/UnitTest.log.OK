@@ -52,6 +52,14 @@ Finished0
 Finished1
 Done (2)
 testOperationQueue: OK
+* testProcess
+Hello, World !!
+END of process
+Process is finished with exit code: 0
+* testThread
+UTThread: mainOperation
+UTThread: finished
+Wait done with exit code: 0
 * testGraphics
 point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... OK
 size: (5.0, 5.0) -> (2.5, 2.5) -> (5.0, 5.0) ... OK
