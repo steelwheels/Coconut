@@ -10,16 +10,17 @@ import Foundation
 
 public func testPreference(console cons: CNConsole) -> Bool
 {
-	let conf = CNConfig(doVerbose: true)
+	let conf = CNConfig(logLevel: .flow)
 	let pref = CNPreference.shared
 	pref.set(config: conf)
 
-	var result: Bool = true
-	if pref.systemPreference.doVerbose {
-		cons.print(string: "Verbose mode is set ... OK\n")
-	} else {
-		cons.print(string: "Verbose mode is NOT set ... Error\n")
-		result = false
+	var result: Bool = false
+	switch pref.systemPreference.logLevel {
+	case .error:	cons.print(string: "LogLevel: error\n")
+	case .warning:	cons.print(string: "LogLevel: warning\n")
+	case .flow:	cons.print(string: "LogLevel: flow\n")
+			result = true
+	case .detail:	cons.print(string: "LogLevel: detail\n")
 	}
 
 	return result

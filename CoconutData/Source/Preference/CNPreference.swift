@@ -10,10 +10,50 @@ import Foundation
 
 open class CNConfig
 {
-	public var doVerbose: Bool
+	public enum LogLevel: Int {
+		case error	= 0	// Error
+		case warning	= 1	// + Warning (default value)
+		case flow	= 2	// + Control flow
+		case detail	= 3	// + Precise information
 
-	public init(doVerbose verb: Bool){
-		doVerbose = verb
+		public var description: String {
+			get {
+				let result: String
+				switch self {
+				case .error:	result = "error"
+				case .warning:	result = "warning"
+				case .flow:	result = "flow"
+				case .detail:	result = "detail"
+				}
+				return result
+			}
+		}
+
+		public func isMatched(logLevel level: LogLevel) -> Bool {
+			return self.rawValue >= level.rawValue
+		}
+
+		public static var defaultLevel: LogLevel {
+			return .warning
+		}
+
+		public static func decode(string str: String) -> LogLevel? {
+			let result: LogLevel?
+			switch str {
+			case "error":		result = .error
+			case "warning":		result = .warning
+			case "flow":		result = .flow
+			case "detail":		result = .detail
+			default:		result = nil
+			}
+			return result
+		}
+	}
+
+	public var logLevel:	LogLevel
+
+	public init(logLevel log: LogLevel){
+		logLevel = log
 	}
 }
 
@@ -44,13 +84,13 @@ open class CNPreference
 
 public class CNSystemPreference
 {
-	public var doVerbose:		Bool
+	public var logLevel:		CNConfig.LogLevel
 
 	public init(){
 		#if DEBUG
-			doVerbose = true
+			logLevel = .flow
 		#else
-			doVerbose = false
+			logLevel = .error
 		#endif
 	}
 }
@@ -87,22 +127,22 @@ public class CNDocumentTypePreference: CNLogging
 					collectTypeDeclaration(typeDeclaration: dict)
 				}
 			} else {
-				log(type: .Error, string:  "Invalid description: \(decl)", file: #file, line: #line, function: #function)
+				log(type: .error, string:  "Invalid description: \(decl)", file: #file, line: #line, function: #function)
 			}
 		}
 	}
 
 	private func collectTypeDeclaration(typeDeclaration decl: Dictionary<String, AnyObject>){
 		guard let uti = decl["UTTypeIdentifier"] as? String else {
-			log(type: .Error, string: "No UTTypeIdentifier", file: #file, line: #line, function: #function)
+			log(type: .error, string: "No UTTypeIdentifier", file: #file, line: #line, function: #function)
 			return
 		}
 		guard let tags = decl["UTTypeTagSpecification"] as? Dictionary<String, AnyObject> else {
-			log(type: .Error, string: "No UTTypeTagSpecification", file: #file, line: #line, function: #function)
+			log(type: .error, string: "No UTTypeTagSpecification", file: #file, line: #line, function: #function)
 			return
 		}
 		guard let exts = tags["public.filename-extension"] as? Array<String> else {
-			log(type: .Error, string: "No public.filename-extension", file: #file, line: #line, function: #function)
+			log(type: .error, string: "No public.filename-extension", file: #file, line: #line, function: #function)
 			return
 		}
 		mDocumentTypes[uti] = exts
@@ -120,7 +160,7 @@ public class CNDocumentTypePreference: CNLogging
 			if let exts = mDocumentTypes[uti] {
 				result.append(contentsOf: exts)
 			} else {
-				log(type: .Error, string: "Unknown UTI: \(uti)", file: #file, line: #line, function: #function)
+				log(type: .error, string: "Unknown UTI: \(uti)", file: #file, line: #line, function: #function)
 			}
 		}
 		return result
@@ -156,7 +196,7 @@ extension CNPreference
 	}}
 
 	open func set(config conf: CNConfig){
-		CNPreference.shared.systemPreference.doVerbose = conf.doVerbose
+		CNPreference.shared.systemPreference.logLevel = conf.logLevel
 	}
 }
 

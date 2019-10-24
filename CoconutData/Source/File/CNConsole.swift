@@ -13,41 +13,23 @@ public protocol CNConsole {
 	func scan() -> String?
 }
 
-public enum CNLogType {
-	case Flow
-	case Warning
-	case Error
-
-	public var description: String {
-		get {
-			let result: String
-			switch self {
-			case .Flow:	result = "Flow"
-			case .Warning:	result = "Debug"
-			case .Error:	result = "Error"
-			}
-			return result
-		}
-	}
-}
-
 public protocol CNLogging
 {
 	var console: CNConsole?	{ get }
 
-	func log(type logtype: CNLogType, string str: String, file filestr: String, line linestr: Int, function funcstr: String)
-	func log(type logtype: CNLogType, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String)
+	func log(type logtype: CNConfig.LogLevel, string str: String, file filestr: String, line linestr: Int, function funcstr: String)
+	func log(type logtype: CNConfig.LogLevel, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String)
 }
 
 extension CNLogging
 {
-	public func log(type logtype: CNLogType, string str: String, file filestr: String, line lineval: Int, function funcstr: String){
+	public func log(type logtype: CNConfig.LogLevel, string str: String, file filestr: String, line lineval: Int, function funcstr: String){
 		let desc  = "[\(logtype.description)] "
 		let place = placeString(file: filestr, line: lineval, function: funcstr)
 		log(type: logtype, entireString: desc + str + " at " + place + "\n")
 	}
 
-	public func log(type logtype: CNLogType, text   txt: CNText, file filestr: String, line lineval: Int, function funcstr: String){
+	public func log(type logtype: CNConfig.LogLevel, text   txt: CNText, file filestr: String, line lineval: Int, function funcstr: String){
 		let desc  = "[\(logtype.description)] "
 		let place = placeString(file: filestr, line: lineval, function: funcstr)
 		log(type: logtype, entireString: desc + " at " + place + "\n")
@@ -56,15 +38,15 @@ extension CNLogging
 		}
 	}
 
-	private func log(type logtype: CNLogType, entireString str: String) {
-		let doverbose = CNPreference.shared.systemPreference.doVerbose
-		switch logtype {
-		case .Flow:
-			if doverbose {
+	private func log(type loglevel: CNConfig.LogLevel, entireString str: String) {
+		let curlevel = CNPreference.shared.systemPreference.logLevel
+		if curlevel.isMatched(logLevel: loglevel) {
+			switch loglevel {
+			case .error, .warning:
+				console?.print(string: str)
+			case .flow, .detail:
 				console?.print(string: str)
 			}
-		case .Warning, .Error:
-			console?.error(string: str)
 		}
 	}
 

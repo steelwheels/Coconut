@@ -1,6 +1,6 @@
 Hello, World!
 * testPreference
-Verbose mode is set ... OK
+LogLevel: flow
 * testStringStream
 [INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]
 [STREAM-A] String(" (ab, c1, da_) : e01 ")[0:21]
