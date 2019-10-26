@@ -52,4 +52,21 @@ public class CNStringUtil
 			return src.components(separatedBy: CharacterSet.whitespaces).filter{ $0.lengthOfBytes(using: .utf8) > 0 }
 		}
 	}
+
+	public class func spacePrefix(string str: String) -> String {
+		var spaces: String = ""
+		let start = str.startIndex
+		let end   = str.endIndex
+		var idx   = start
+		while idx < end {
+			let c = str[idx]
+			if c==" " || c=="\t" {
+				spaces.append(c)
+			} else {
+				break
+			}
+			idx = str.index(after: idx)
+		}
+		return spaces
+	}
 }
