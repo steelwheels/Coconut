@@ -210,13 +210,18 @@ public struct CNToken {
 	}
 }
 
-public func CNStringToToken(string srcstr: String, config conf: CNParserConfig) -> (CNParseError, Array<CNToken>)
+public enum CNTokenizeResult {
+	case ok(Array<CNToken>)
+	case error(CNParseError)
+}
+
+public func CNStringToToken(string srcstr: String, config conf: CNParserConfig) -> CNTokenizeResult
 {
 	let tokenizer = CNTokenizer(config: conf)
 	return tokenizer.tokenize(string: srcstr)
 }
 
-public func CNStringStreamToToken(stream srcstrm: CNStringStream, config conf: CNParserConfig) -> (CNParseError, Array<CNToken>)
+public func CNStringStreamToToken(stream srcstrm: CNStringStream, config conf: CNParserConfig) -> CNTokenizeResult
 {
 	let tokenizer = CNTokenizer(config: conf)
 	return tokenizer.tokenize(stream: srcstrm)
@@ -232,27 +237,27 @@ private class CNTokenizer
 		mCurrentLine	= 1
 	}
 
-	public func tokenize(string srcstr: String) -> (CNParseError, Array<CNToken>) {
+	public func tokenize(string srcstr: String) -> CNTokenizeResult {
 		do {
 			let stream = CNStringStream(string: srcstr)
 			let tokens = try stringToTokens(stream: stream)
-			return (.NoError, tokens)
+			return .ok(tokens)
 		} catch let error {
 			if let tkerr = error as? CNParseError {
-				return (tkerr, [])
+				return .error(tkerr)
 			} else {
 				fatalError("Unknown error")
 			}
 		}
 	}
 
-	public func tokenize(stream srcstrm: CNStringStream) -> (CNParseError, Array<CNToken>) {
+	public func tokenize(stream srcstrm: CNStringStream) -> CNTokenizeResult {
 		do {
 			let tokens = try stringToTokens(stream: srcstrm)
-			return (.NoError, tokens)
+			return .ok(tokens)
 		} catch let error {
 			if let tkerr = error as? CNParseError {
-				return (tkerr, [])
+				return .error(tkerr)
 			} else {
 				fatalError("Unknown error")
 			}

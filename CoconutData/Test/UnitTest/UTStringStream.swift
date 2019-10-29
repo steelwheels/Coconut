@@ -24,15 +24,16 @@ public func testStringStream(console cons: CNConsole) -> Bool
 	cons.print(string: "[STREAM-B] " + streamb.description + "\n")
 
 	let config = CNParserConfig()
-	let (err, tokens) = CNStringStreamToToken(stream: streama, config: config)
-	switch err {
-	case .NoError:
+	let result: Bool
+	switch CNStringStreamToToken(stream: streama, config: config) {
+	case .ok(let tokens):
 		dumpTokens(tokens: tokens, console: cons)
-	case .ParseError(_, _), .TokenizeError(_, _):
+		result = true
+	case .error(let err):
 		cons.print(string: "[Error] " + err.description() + "\n")
-		return false
+		result = false
 	}
-	return true
+	return result
 }
 
 private func dumpTokens(tokens tkns: Array<CNToken>, console cons: CNConsole)
