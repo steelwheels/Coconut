@@ -69,4 +69,34 @@ public class CNStringUtil
 		}
 		return spaces
 	}
+
+	public class func traceForward(string str: String, pointer ptr: String.Index, doSkipFunc skip: (Character) -> Bool) -> String.Index {
+		let end   = str.endIndex
+		var idx   = ptr
+		while idx < end {
+			if skip(str[idx]) {
+				idx = str.index(after: idx)
+			} else {
+				break
+			}
+		}
+		return idx
+	}
+
+	public class func traceBackward(string str: String, pointer ptr: String.Index, doSkipFunc skip: (Character) -> Bool) -> String.Index {
+		let start   = str.startIndex
+		var curidx  = ptr
+		if start < curidx {
+			var previdx = str.index(before: curidx)
+			while start < previdx {
+				if skip(str[previdx]) {
+					curidx  = previdx
+					previdx = str.index(before: curidx)
+				} else {
+					break
+				}
+			}
+		}
+		return curidx
+	}
 }

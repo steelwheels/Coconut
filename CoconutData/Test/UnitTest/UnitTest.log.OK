@@ -15,6 +15,19 @@ IdentifierToken(da_)
 SymbolToken())
 SymbolToken(:)
 IdentifierToken(e01)
+* testStringUtil
+* traceForward:  " * " -> "* "
+* traceBackward: " * " -> " *"
+* traceForward:  "* " -> "* "
+* traceBackward: "* " -> "*"
+* traceForward:  " *" -> "*"
+* traceBackward: " *" -> " *"
+* traceForward:  "*" -> "*"
+* traceBackward: "*" -> "*"
+* traceForward:  " " -> ""
+* traceBackward: " " -> " "
+* traceForward:  "" -> ""
+* traceBackward: "" -> ""
 * testURL
 nullURL = file:///dev/null
 * testValue
