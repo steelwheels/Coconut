@@ -16,8 +16,8 @@ public class UTShellThread: CNShellThread {
 		return "UTShell$ "
 	}
 
-	open override func inputLine(line str: String) {
-		console.print(string: "UTShell/In \"\(str)\"\n")
+	open override func execute(command cmd: String) {
+		console.print(string: "UTShell/In \"\(cmd)\"\n")
 		printed = true
 	}
 }
@@ -33,7 +33,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	let outstrm = CNFileStream.pipe(outpipe)
 	let errstrm = CNFileStream.pipe(errpipe)
 	let env     = CNShellEnvironment()
-	let config  = CNConfig(doVerbose: true)
+	let config  = CNConfig(logLevel: .detail)
 	let shell   = UTShellThread(input: instrm, output: outstrm, error: errstrm,
 				   environment: env,
 				   config: config,

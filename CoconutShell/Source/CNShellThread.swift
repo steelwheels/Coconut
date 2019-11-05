@@ -11,14 +11,15 @@ import Foundation
 open class CNShellThread: CNThread
 {
 	private var mEnvironment:	CNShellEnvironment
+	private var mReadline:		CNReadline
 	private var mConfig:		CNConfig
-	private var mInputedString: 	String
 
 	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream,  environment env: CNShellEnvironment, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
 		mEnvironment	= env
+		mReadline 	= CNReadline()
 		mConfig		= conf
-		mInputedString	= ""
 		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
+		mReadline.console = super.console
 	}
 
 	public var environment: CNShellEnvironment	{ get { return mEnvironment	}}
@@ -33,22 +34,52 @@ open class CNShellThread: CNThread
 	}
 
 	open override func mainOperation() -> Int32 {
-		var doprompt = true
+		let BS  = CNEscapeCode.backspace.encode()
+		let DEL = BS + " " + BS
+
+		var doprompt    = true
+		var currentline = ""
 		while !isCancelled {
 			if doprompt {
-				self.console.print(string: promptString())
+				self.console.print(string: promptString() + currentline)
 				doprompt = false
 			}
-			/* Read input */
-			if let str = self.console.scan() {
-				if addString(string: str) {
-					doprompt = true
+			/* Read command line */
+			let cmdline = mReadline.readLine()
+			if cmdline.didUpdated {
+				let context = cmdline.context
+
+				let fixedcmds = context.fixedCommands
+				if fixedcmds.count > 0 {
+					/* Execute commands */
+					for cmd in fixedcmds {
+						console.print(string: "\n") // Execute at new line
+						execute(command: cmd)
+					}
+					/* Print prompt again */
+					currentline = context.commandLine
+					doprompt    = true
+				} else {
+					/* Erace current command line */
+					let curlen  = currentline.count
+					for _ in 0..<curlen {
+						console.print(string: DEL)
+					}
+					/* Print new command line */
+					let newline = context.commandLine
+					console.print(string: newline)
+					currentline = newline
 				}
 			}
 		}
 		return 0
 	}
 
+	open func execute(command cmd: String) {
+		NSLog("Override this method (a)")
+	}
+
+/*
 	private func addString(string str: String) -> Bool {
 		var newstr = mInputedString + str
 		while newstr.lengthOfBytes(using: .utf8) > 0 {
@@ -71,7 +102,6 @@ open class CNShellThread: CNThread
 		return true
 	}
 
-	open func inputLine(line str: String) {
-		NSLog("Override this method")
-	}
+
+*/
 }

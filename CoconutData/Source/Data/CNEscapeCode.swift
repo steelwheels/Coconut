@@ -7,7 +7,18 @@
 
 import Foundation
 
-private let ESC: Character				= "\u{1b}"
+/* Reference
+ *  - https://seiai.ed.jp/sys/text/java/utf8table.html (Japanese)
+ *  - https://ttssh2.osdn.jp/manual/ja/about/ctrlseq.html (Japanese)
+ *  - http://man7.org/linux/man-pages/man4/console_codes.4.html
+ */
+private let BS:		Character		= "\u{08}"	// BS
+private let TAB:	Character		= "\u{09}"	// HT
+private let NEWLINE1:	Character		= "\u{0a}"	// LF
+private let NEWLINE2:	Character		= "\u{0d}"	// CR
+private let ESC:	Character		= "\u{1b}"	// ESC
+private let DEL:	Character		= "\u{7f}"	// DEL
+
 
 /* Reference:
  *  - https://en.wikipedia.org/wiki/ANSI_escape_code
@@ -15,6 +26,9 @@ private let ESC: Character				= "\u{1b}"
  */
 public enum CNEscapeCode {
 	case	string(String)
+	case	newline
+	case	tab
+	case	backspace
 	case 	cursorUp(Int)
 	case 	cursorDown(Int)
 	case	cursorForward(Int)
@@ -32,6 +46,9 @@ public enum CNEscapeCode {
 		var result: String
 		switch self {
 		case .string(let str):				result = "string(\"\(str)\")"
+		case .newline:					result = "newline"
+		case .tab:					result = "tab"
+		case .backspace:				result = "backspace"
 		case .cursorUp(let n):				result = "cursorUp(\(n))"
 		case .cursorDown(let n):			result = "cursorDown(\(n))"
 		case .cursorForward(let n):			result = "cursorForward(\(n))"
@@ -52,6 +69,9 @@ public enum CNEscapeCode {
 		var result: String
 		switch self {
 		case .string(let str):				result = str
+		case .newline:					result = String(NEWLINE2)
+		case .tab:					result = String(TAB)
+		case .backspace:				result = String(BS)
 		case .cursorUp(let n):				result = "\(ESC)[\(n)A"
 		case .cursorDown(let n):			result = "\(ESC)[\(n)B"
 		case .cursorForward(let n):			result = "\(ESC)[\(n)C"
@@ -74,6 +94,21 @@ public enum CNEscapeCode {
 		case .string(let s0):
 			switch src {
 			case .string(let s1):			result = (s0 == s1)
+			default:				break
+			}
+		case .newline:
+			switch src {
+			case .newline:				result = true
+			default:				break
+			}
+		case .tab:
+			switch src {
+			case .tab:				result = true
+			default:				break
+			}
+		case .backspace:
+			switch src {
+			case .backspace:			result = true
 			default:				break
 			}
 		case .cursorUp(let n0):
@@ -160,17 +195,20 @@ public enum CNEscapeCode {
 		}
 	}
 
-	public static func decode(string src: String) -> (DecodeError?, Array<CNEscapeCode>) {
-		var result: Array<CNEscapeCode> = []
-		var decerr:  DecodeError? = nil
+	public enum DecodeResult {
+		case	ok(Array<CNEscapeCode>)
+		case	error(DecodeError)
+	}
+
+	public static func decode(string src: String) -> DecodeResult {
 		do {
-			result = try decodeString(string: src)
+			let result = try decodeString(string: src)
+			return .ok(result)
 		} catch let err as DecodeError {
-			decerr = err
+			return .error(err)
 		} catch {
-			decerr = .unknownError
+			return .error(.unknownError)
 		}
-		return (decerr, result)
 	}
 
 	private static func decodeString(string src: String) throws -> Array<CNEscapeCode> {
@@ -199,6 +237,15 @@ public enum CNEscapeCode {
 					substr.append(c1)
 					idx = idx1
 				}
+			case NEWLINE1, NEWLINE2:
+				result.append(.newline)
+				idx = idx0
+			case TAB:
+				result.append(.tab)
+				idx = idx0
+			case BS, DEL:
+				result.append(.backspace)
+				idx = idx0
 			default:
 				substr.append(c0)
 				idx = idx0
@@ -252,7 +299,9 @@ public enum CNEscapeCode {
 	}
 
 	private static func get1Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> Int {
-		if tokens.count == 2 {
+		if tokens.count == 1 {
+			return 1 // default value
+		} else if tokens.count == 2 {
 			if let param = tokens[0].getInt() {
 				return param
 			}

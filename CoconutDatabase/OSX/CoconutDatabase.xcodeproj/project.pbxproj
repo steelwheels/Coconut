@@ -22,6 +22,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0557A9DC236E9AA500C0D71F /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		0587E00322E76BBD00961BB2 /* CoconutDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutDatabase.framework; path = ../../../../Library/Frameworks/CoconutDatabase.framework; sourceTree = "<group>"; };
 		05E0B089208CCA48004BB276 /* CoconutDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05E0B08C208CCA48004BB276 /* CoconutDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutDatabase.h; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		0587E00222E76BBD00961BB2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0557A9DC236E9AA500C0D71F /* CoconutData.framework */,
 				0587E00322E76BBD00961BB2 /* CoconutDatabase.framework */,
 			);
 			name = Frameworks;
@@ -140,7 +142,7 @@
 		05E0B080208CCA48004BB276 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
 					05E0B088208CCA48004BB276 = {
@@ -325,7 +327,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -359,7 +361,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;

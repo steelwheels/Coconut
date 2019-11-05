@@ -28,11 +28,90 @@ IdentifierToken(e01)
 * traceBackward: " " -> " "
 * traceForward:  "" -> ""
 * traceBackward: "" -> ""
+* testReadline
+CTXT: 21 This is first message
+CTXT: 21 This is first message
+CTXT: 17 This is first message
+CTXT: 20 This is first message
+CTXT: 18 This is first message
+CTXT: 28 This is first mess<INSERTED>age
+CTXT: 0 age
+CTXT: 0 
+CTXT: 11 <NEW-ADDED>
+CTXT: 23 <NEW-ADDED><MORE-ADDED>
+CTXT: 22 <NEW-ADDED><MORE-ADDED
+CTXT: 20 <NEW-ADDED><MORE-ADDED
+CTXT: 19 <NEW-ADDED><MORE-ADED
+CTXT: 20 <NEW-ADDED><MORE-AD	ED
 * testURL
 nullURL = file:///dev/null
 * testValue
 exp: true -> real: true
 exp: Hello, world -> real: Hello, world
+* testQueue
+Initial: {1st:-1, next:0, count:0 }
+[]
+Push: {1st:0, next:1, count:1 }
+[0 ]
+Push: {1st:0, next:2, count:2 }
+[0 1 ]
+Pop: {1st:1, next:2, count:2 }
+[1 ]
+ Data = 0
+Pop: {1st:2, next:2, count:2 }
+[]
+ Data = 1
+Pop: {1st:2, next:2, count:2 }
+[]
+ Data = nil
+Push x 16: {1st:2, next:18, count:18 }
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 ]
+Pop x 16: {1st:18, next:18, count:18 }
+[]
+Pop 1 more : {1st:18, next:18, count:18 }
+[]
+Push x 16: {1st:18, next:34, count:34 }
+[16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 ]
+Pop x 16: {1st:34, next:34, count:34 }
+[]
+Pop 1 more : {1st:34, next:34, count:34 }
+[]
+Push x 16: {1st:34, next:50, count:50 }
+[32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 ]
+Pop x 16: {1st:50, next:50, count:50 }
+[]
+Pop 1 more : {1st:50, next:50, count:50 }
+[]
+Push x 16: {1st:50, next:66, count:66 }
+[48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 ]
+Pop x 16: {1st:2, next:2, count:66 }
+[]
+Pop 1 more : {1st:2, next:2, count:66 }
+[]
+Push x 16: {1st:2, next:18, count:66 }
+[64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 ]
+Pop x 16: {1st:18, next:18, count:66 }
+[]
+Pop 1 more : {1st:18, next:18, count:66 }
+[]
+Push x 16: {1st:18, next:34, count:66 }
+[80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 ]
+Pop x 16: {1st:34, next:34, count:66 }
+[]
+Pop 1 more : {1st:34, next:34, count:66 }
+[]
+Push x 16: {1st:34, next:50, count:66 }
+[96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 ]
+Pop x 16: {1st:50, next:50, count:66 }
+[]
+Pop 1 more : {1st:50, next:50, count:66 }
+[]
+Push x 16: {1st:50, next:66, count:66 }
+[112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 ]
+Pop x 16: {1st:2, next:2, count:66 }
+[]
+Pop 1 more : {1st:2, next:2, count:66 }
+[]
 * testConsole
 - put string to buffer
 - flush buffer

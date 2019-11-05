@@ -28,12 +28,10 @@ private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool
 	cons.print(string: "* dumpCode\n")
 	let str = ecode.encode()
 	cons.print(string: "code: \"\(str)\"\n")
-	let (err, codes) = CNEscapeCode.decode(string: str)
 
-	var result = false
-	if let e = err {
-		cons.error(string: "[Error] \(e.description())\n")
-	} else {
+	let result: Bool
+	switch CNEscapeCode.decode(string: str) {
+	case .ok(let codes):
 		for code in codes {
 			cons.print(string: code.description())
 			cons.print(string: "\n")
@@ -41,28 +39,34 @@ private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool
 		if codes.count == 1 {
 			if ecode.compare(code: codes[0]) {
 				cons.print(string: "Same code\n")
-				result = true
 			} else {
 				cons.error(string: "[Error] Different code\n")
 			}
 		} else {
 			cons.error(string: "[Error] Too many codes\n")
 		}
+		result = true
+	case .error(let err):
+		cons.error(string: "[Error] \(err.description())\n")
+		result = false
 	}
 	return result
 }
 
 private func dumpSequence(string src: String, console cons: CNConsole) -> Bool {
 	cons.print(string: "* dumpSequence\n")
-	let (err, codes) = CNEscapeCode.decode(string: src)
-	if let e = err {
-		cons.print(string: "[Error] " + e.description() + "\n")
-		return false
-	} else {
+
+	let result: Bool
+	switch CNEscapeCode.decode(string: src) {
+	case .ok(let codes):
 		for code in codes {
 			cons.print(string: code.description())
 			cons.print(string: "\n")
 		}
-		return true
+		result = true
+	case .error(let err):
+		cons.print(string: "[Error] " + err.description() + "\n")
+		result = false
 	}
+	return result
 }

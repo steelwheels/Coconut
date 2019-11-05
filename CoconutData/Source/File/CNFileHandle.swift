@@ -6,6 +6,7 @@
  */
 
 import Foundation
+import Darwin
 
 public enum CNFileStream
 {
@@ -49,7 +50,8 @@ public enum CNFileStream
 	}
 }
 
-extension FileHandle {
+extension FileHandle
+{
 	public func write(string str: String) {
 		if let data = str.data(using: .utf8) {
 			self.write(data)

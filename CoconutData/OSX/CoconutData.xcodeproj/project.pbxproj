@@ -15,6 +15,7 @@
 		05178D70232EEFFD00F35AF0 /* UTStringStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05178D6F232EEFFD00F35AF0 /* UTStringStream.swift */; };
 		051BB4B322FCF1370062F47F /* UTEscapeSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */; };
 		051D06A2219F0ABC00734AAA /* UTOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */; };
+		051D94A9236E710C008A9E8C /* UTReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051D94A8236E710C008A9E8C /* UTReadline.swift */; };
 		051FA468208B3F4400AEC734 /* CNFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051FA467208B3F4400AEC734 /* CNFile.swift */; };
 		052087BF235C89990084E340 /* UTProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052087BD235C892D0084E340 /* UTProcess.swift */; };
 		052136B3208AD5F30098F1A7 /* CNArrayStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052136B1208AD5F30098F1A7 /* CNArrayStream.swift */; };
@@ -23,6 +24,7 @@
 		0526E5A9219877F300FB1B8E /* CNObservedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0526E5A8219877F300FB1B8E /* CNObservedValueTable.swift */; };
 		052F4A58227FBFE50057730C /* UTURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052F4A57227FBFE50057730C /* UTURL.swift */; };
 		053084E0219DBDA8004DB0BF /* CNOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053084DF219DBDA8004DB0BF /* CNOperationQueue.swift */; };
+		0536FF5B236E60C300848EF2 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0536FF5A236E60C300848EF2 /* CNReadline.swift */; };
 		053751C52268BACC003E6F5A /* UTPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053751C42268BACC003E6F5A /* UTPreference.swift */; };
 		053BC8F32090D0AC006CBB06 /* CNExitCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BC8F22090D0AC006CBB06 /* CNExitCode.swift */; };
 		05416EAC21CAA638002E68BA /* CNNativeValueMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05416EAB21CAA638002E68BA /* CNNativeValueMerger.swift */; };
@@ -77,6 +79,8 @@
 		05C52E9020993DE600DD56B4 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; };
 		05C52E9220993E0600DD56B4 /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05C6A20622676796003922C9 /* CNPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C6A20522676796003922C9 /* CNPreference.swift */; };
+		05CB79BE236F040800301547 /* CNQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CB79BD236F040800301547 /* CNQueue.swift */; };
+		05CB79C0236F120600301547 /* UTQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CB79BF236F120600301547 /* UTQueue.swift */; };
 		05DF713121CBD24600B6FD4F /* CNNativeValueSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */; };
 		05DF7D992090D4B1003B5110 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF7D982090D4B1003B5110 /* CNStringUtil.swift */; };
 		05E81091208B33F800230477 /* CNAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E81090208B33F800230477 /* CNAccess.swift */; };
@@ -166,6 +170,7 @@
 		05178D6F232EEFFD00F35AF0 /* UTStringStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTStringStream.swift; sourceTree = "<group>"; };
 		051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTEscapeSequence.swift; sourceTree = "<group>"; };
 		051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTOperationQueue.swift; sourceTree = "<group>"; };
+		051D94A8236E710C008A9E8C /* UTReadline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTReadline.swift; sourceTree = "<group>"; };
 		051FA467208B3F4400AEC734 /* CNFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFile.swift; sourceTree = "<group>"; };
 		052087BD235C892D0084E340 /* UTProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTProcess.swift; sourceTree = "<group>"; };
 		052136B1208AD5F30098F1A7 /* CNArrayStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNArrayStream.swift; sourceTree = "<group>"; };
@@ -174,6 +179,7 @@
 		0526E5A8219877F300FB1B8E /* CNObservedValueTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNObservedValueTable.swift; sourceTree = "<group>"; };
 		052F4A57227FBFE50057730C /* UTURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTURL.swift; sourceTree = "<group>"; };
 		053084DF219DBDA8004DB0BF /* CNOperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNOperationQueue.swift; sourceTree = "<group>"; };
+		0536FF5A236E60C300848EF2 /* CNReadline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNReadline.swift; sourceTree = "<group>"; };
 		053751C42268BACC003E6F5A /* UTPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTPreference.swift; sourceTree = "<group>"; };
 		053BC8F22090D0AC006CBB06 /* CNExitCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNExitCode.swift; sourceTree = "<group>"; };
 		05416EAB21CAA638002E68BA /* CNNativeValueMerger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValueMerger.swift; sourceTree = "<group>"; };
@@ -233,6 +239,8 @@
 		05C52E8720993AC000DD56B4 /* UTApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UTApplication.entitlements; sourceTree = "<group>"; };
 		05C52E8F20993DE600DD56B4 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		05C6A20522676796003922C9 /* CNPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPreference.swift; sourceTree = "<group>"; };
+		05CB79BD236F040800301547 /* CNQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNQueue.swift; sourceTree = "<group>"; };
+		05CB79BF236F120600301547 /* UTQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTQueue.swift; sourceTree = "<group>"; };
 		05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValueSelector.swift; sourceTree = "<group>"; };
 		05DF7D982090D4B1003B5110 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05E81090208B33F800230477 /* CNAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAccess.swift; sourceTree = "<group>"; };
@@ -298,6 +306,7 @@
 				05137F9022FAFFFD00FC9C65 /* CNEscapeCode.swift */,
 				052136B1208AD5F30098F1A7 /* CNArrayStream.swift */,
 				05019B71213BE42300DDA180 /* CNStack.swift */,
+				05CB79BD236F040800301547 /* CNQueue.swift */,
 				0526E5A8219877F300FB1B8E /* CNObservedValueTable.swift */,
 				0506587721AC282E000566F6 /* CNDatabase.swift */,
 			);
@@ -310,6 +319,7 @@
 				0543A4BD209DE1C000F5B34F /* main.swift */,
 				053751C42268BACC003E6F5A /* UTPreference.swift */,
 				052F4A57227FBFE50057730C /* UTURL.swift */,
+				05CB79BF236F120600301547 /* UTQueue.swift */,
 				057FF40A209DE871006EEF7B /* UTValue.swift */,
 				057C7EF620A1ED950085662E /* UTConsole.swift */,
 				052170F021022AB1001801A6 /* UTFilePath.swift */,
@@ -324,6 +334,7 @@
 				051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */,
 				05178D6F232EEFFD00F35AF0 /* UTStringStream.swift */,
 				055B2C17236C6FDE009C94EF /* UTStringUtil.swift */,
+				051D94A8236E710C008A9E8C /* UTReadline.swift */,
 			);
 			path = UnitTest;
 			sourceTree = "<group>";
@@ -476,6 +487,7 @@
 				05E81090208B33F800230477 /* CNAccess.swift */,
 				051FA467208B3F4400AEC734 /* CNFile.swift */,
 				056A4515232327B000C7DCBF /* CNFileHandle.swift */,
+				0536FF5A236E60C300848EF2 /* CNReadline.swift */,
 				0567B19C21D50DB4000C74B8 /* CNResource.swift */,
 				0565A9D1208B7AE400E91568 /* CNJSONFile.swift */,
 				056EA8B6208AFD6300D1DFFE /* CNConsole.swift */,
@@ -646,7 +658,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 1110;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
 					0543A4BA209DE1C000F5B34F = {
@@ -736,9 +748,11 @@
 			files = (
 				051BB4B322FCF1370062F47F /* UTEscapeSequence.swift in Sources */,
 				0587F31E22E3FF0300F28B50 /* UTGraphics.swift in Sources */,
+				051D94A9236E710C008A9E8C /* UTReadline.swift in Sources */,
 				055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */,
 				05178D70232EEFFD00F35AF0 /* UTStringStream.swift in Sources */,
 				052087BF235C89990084E340 /* UTProcess.swift in Sources */,
+				05CB79C0236F120600301547 /* UTQueue.swift in Sources */,
 				05EEADB0235DEF29008B49A4 /* UTThread.swift in Sources */,
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
 				05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */,
@@ -781,6 +795,7 @@
 				0583FA272302FE7600100DAB /* CNKeyCode.swift in Sources */,
 				053BC8F32090D0AC006CBB06 /* CNExitCode.swift in Sources */,
 				054D735D21B039C700950D9D /* CNNativeValue.swift in Sources */,
+				0536FF5B236E60C300848EF2 /* CNReadline.swift in Sources */,
 				053084E0219DBDA8004DB0BF /* CNOperationQueue.swift in Sources */,
 				05549D9C22581B1C004E2444 /* CNType.swift in Sources */,
 				0587F31A22E3F62400F28B50 /* CNGraphicsMapper.swift in Sources */,
@@ -808,6 +823,7 @@
 				056058AE21CA8E4B00E593E2 /* CNNativeValueVisitor.swift in Sources */,
 				05A9C8F222F477BB000F1990 /* CNNativeStruct.swift in Sources */,
 				0565A9F0208B7BB100E91568 /* CNFilePath.swift in Sources */,
+				05CB79BE236F040800301547 /* CNQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1056,7 +1072,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1087,7 +1103,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
