@@ -70,10 +70,6 @@ public class CNDataFileObject: CNDataFile
 		return mFileHandle.availableData
 	}
 
-	public func getData(ofLength len: Int) -> Data {
-		return mFileHandle.readData(ofLength: len)
-	}
-
 	public func getAllData() -> Data {
 		return mFileHandle.readDataToEndOfFile()
 	}
@@ -85,7 +81,6 @@ public class CNDataFileObject: CNDataFile
 
 public class CNTextFileObject: CNDataFileObject, CNTextFile
 {
-	public static let 		CHUNK_SIZE = 512
 	private var mLineBuffer:	CNLineBuffer
 
 	public required init(fileHandle handle: FileHandle) {
@@ -98,7 +93,7 @@ public class CNTextFileObject: CNDataFileObject, CNTextFile
 			if let c = mLineBuffer.getChar() {
 				return c
 			} else {
-				let newdata = getData(ofLength: CNLineBuffer.CHUNK_SIZE)
+				let newdata = getData()
 				if newdata.count == 0 {
 					/* end of file */
 					close()
