@@ -7,20 +7,10 @@
 
 import Foundation
 
-public extension Character {
-	func isSpace() -> Bool {
-		let result: Bool
-		switch self {
-		case " ", "\t", "\n", "\r":
-			result = true
-		default:
-			result = false
-		}
-		return result
-	}
-
-	func isAlpha() -> Bool {
-		return ("a"<=self && self<="z") || ("A"<=self && self<="Z")
+public extension Character
+{
+	var isLetterOrNumber: Bool {
+		get { return self.isLetter || self.isNumber }
 	}
 
 	func toInt() -> UInt32? {
@@ -28,9 +18,5 @@ public extension Character {
 			return self.unicodeScalars.first!.value - Unicode.Scalar("0").value
 		}
 		return nil
-	}
-
-	func isAlphaOrNum() -> Bool {
-		return self.isAlpha() || self.isNumber
 	}
 }

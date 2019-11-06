@@ -335,7 +335,7 @@ public enum CNEscapeCode {
 				idx0 = idx2
 
 				/* Finish at the alphabet */
-				if c2.isAlpha() {
+				if c2.isLetter {
 					return (idx0, result)
 				}
 			}

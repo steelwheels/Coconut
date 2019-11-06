@@ -22,7 +22,7 @@ public func testStringUtil(console cons: CNConsole) -> Bool
 private func testTrace(string str: String, console cons: CNConsole) {
 	let skipfunc = {
 		(_ c: Character) -> Bool in
-		return c.isSpace()
+		return c.isWhitespace
 	}
 
 	let fptr = CNStringUtil.traceForward(string: str, pointer: str.startIndex, doSkipFunc: skipfunc)

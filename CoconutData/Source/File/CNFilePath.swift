@@ -80,7 +80,7 @@ public class CNFilePath
 			var result: String = ""
 			while i < lastidx {
 				let c = str[i]
-				if c.isAlphaOrNum() || c == "." || c == "_" {
+				if c.isLetterOrNumber || c == "." || c == "_" {
 					result.append(c)
 				} else {
 					return nil

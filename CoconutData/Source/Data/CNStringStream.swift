@@ -79,7 +79,7 @@ public class CNStringStream
 
 	public func skipSpaces() {
 		while let c = getc() {
-			if !c.isSpace() {
+			if !c.isWhitespace {
 				let _ = self.ungetc()
 				return
 			}

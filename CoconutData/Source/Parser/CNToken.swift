@@ -297,7 +297,7 @@ private class CNTokenizer
 				}
 			} else if c1.isNumber {
 				return try getDigitTokenFromStream(stream: srcstream)
-			} else if c1.isAlpha() || c1 == "_" {
+			} else if c1.isLetter || c1 == "_" {
 				return try getIdentifierTokenFromStream(stream: srcstream)
 			} else if c1 == "\"" {
 				return try getStringTokenFromStream(stream: srcstream)
@@ -371,7 +371,7 @@ private class CNTokenizer
 	private func getIdentifierTokenFromStream(stream srcstream: CNStringStream) throws -> CNToken {
 		let resstr = getAnyStringFromStream(stream: srcstream, matchingFunc: {
 			(_ c: Character) -> Bool in
-			return c.isAlphaOrNum() || c == "_" || (mConfig.allowIdentiferHasPeriod && c == ".")
+			return c.isLetterOrNumber || c == "_" || (mConfig.allowIdentiferHasPeriod && c == ".")
 		})
 		let lresstr = resstr.lowercased()
 		if lresstr == "true"{
@@ -456,7 +456,7 @@ private class CNTokenizer
 	{
 		while true {
 			if let c = srcstream.getc() {
-				if !c.isSpace() {
+				if !c.isWhitespace {
 					let _ = srcstream.ungetc()
 					break
 				} else if c == "\n" {
