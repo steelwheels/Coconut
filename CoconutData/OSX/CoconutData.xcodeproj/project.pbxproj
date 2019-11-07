@@ -88,6 +88,7 @@
 		05EEADB0235DEF29008B49A4 /* UTThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EEADAF235DEF29008B49A4 /* UTThread.swift */; };
 		05F5EA71208F793400CF98C3 /* CNText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA70208F793400CF98C3 /* CNText.swift */; };
 		05F5EA73208F794000CF98C3 /* CNReservedWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA72208F794000CF98C3 /* CNReservedWord.swift */; };
+		05F7DACD23730E1100E363E9 /* UTCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F7DACC23730E1100E363E9 /* UTCharacter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -248,6 +249,7 @@
 		05EEADAF235DEF29008B49A4 /* UTThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTThread.swift; sourceTree = "<group>"; };
 		05F5EA70208F793400CF98C3 /* CNText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNText.swift; sourceTree = "<group>"; };
 		05F5EA72208F794000CF98C3 /* CNReservedWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReservedWord.swift; sourceTree = "<group>"; };
+		05F7DACC23730E1100E363E9 /* UTCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCharacter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,6 +336,7 @@
 				051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */,
 				05178D6F232EEFFD00F35AF0 /* UTStringStream.swift */,
 				055B2C17236C6FDE009C94EF /* UTStringUtil.swift */,
+				05F7DACC23730E1100E363E9 /* UTCharacter.swift */,
 				051D94A8236E710C008A9E8C /* UTReadline.swift */,
 			);
 			path = UnitTest;
@@ -757,6 +760,7 @@
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
 				05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */,
 				052170F121022AB1001801A6 /* UTFilePath.swift in Sources */,
+				05F7DACD23730E1100E363E9 /* UTCharacter.swift in Sources */,
 				057C7EF720A1ED950085662E /* UTConsole.swift in Sources */,
 				0512640921C5E1E5008B01FA /* UTDatabase.swift in Sources */,
 				055B2C18236C6FDE009C94EF /* UTStringUtil.swift in Sources */,
