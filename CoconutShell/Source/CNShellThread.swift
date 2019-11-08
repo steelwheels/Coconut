@@ -39,6 +39,7 @@ open class CNShellThread: CNThread
 
 		var doprompt    = true
 		var currentline = ""
+		var currentpos  = 0
 		while !isCancelled {
 			if doprompt {
 				self.console.print(string: promptString() + currentline)
@@ -60,6 +61,12 @@ open class CNShellThread: CNThread
 					currentline = context.commandLine
 					doprompt    = true
 				} else {
+					/* Move cursor to end of line */
+					let forward = currentline.count - currentpos
+					if forward > 0 {
+						let movstr = CNEscapeCode.cursorForward(forward).encode()
+						console.print(string: movstr)
+					}
 					/* Erace current command line */
 					let curlen  = currentline.count
 					for _ in 0..<curlen {
@@ -68,7 +75,17 @@ open class CNShellThread: CNThread
 					/* Print new command line */
 					let newline = context.commandLine
 					console.print(string: newline)
+					/* Adjust cursor */
+					let newlen = newline.count
+					let newpos = context.position
+					let back   = newlen - newpos
+					if back > 0 {
+						let movl = CNEscapeCode.cursorBack(back).encode()
+						console.print(string: movl)
+					}
+					/* Update current line*/
 					currentline = newline
+					currentpos  = newpos
 				}
 			}
 		}
