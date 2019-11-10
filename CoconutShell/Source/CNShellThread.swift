@@ -46,26 +46,24 @@ open class CNShellThread: CNThread
 				doprompt = false
 			}
 			/* Read command line */
-			let cmdline = mReadline.readLine()
-			if cmdline.didUpdated {
-				let context = cmdline.context
-
-				let fixedcmds = context.fixedCommands
-				if fixedcmds.count > 0 {
-					/* Execute commands */
-					for cmd in fixedcmds {
-						console.print(string: "\n") // Execute at new line
-						execute(command: cmd)
-					}
+			switch mReadline.readLine() {
+			case .commandLine(let cmdline):
+				let determined       = cmdline.didDetermined
+				let (newline, newpos) = cmdline.get()
+				if determined {
+					/* Execute command */
+					console.print(string: "\n") // Execute at new line
+					execute(command: newline)
 					/* Print prompt again */
-					currentline = context.commandLine
+					currentline = ""
+					currentpos  = 0
 					doprompt    = true
 				} else {
 					/* Move cursor to end of line */
 					let forward = currentline.count - currentpos
+					let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
 					if forward > 0 {
-						let movstr = CNEscapeCode.cursorForward(forward).encode()
-						console.print(string: movstr)
+						console.print(string: fwdstr)
 					}
 					/* Erace current command line */
 					let curlen  = currentline.count
@@ -73,20 +71,22 @@ open class CNShellThread: CNThread
 						console.print(string: DEL)
 					}
 					/* Print new command line */
-					let newline = context.commandLine
 					console.print(string: newline)
 					/* Adjust cursor */
 					let newlen = newline.count
-					let newpos = context.position
 					let back   = newlen - newpos
+					let bakstr = CNEscapeCode.cursorBack(back).encode()
 					if back > 0 {
-						let movl = CNEscapeCode.cursorBack(back).encode()
-						console.print(string: movl)
+						console.print(string: bakstr)
 					}
 					/* Update current line*/
 					currentline = newline
 					currentpos  = newpos
 				}
+			case .escapeCode(let code):
+				console.print(string: "ECODE: \(code.description())\n")
+			case .none:
+				break
 			}
 		}
 		return 0
@@ -95,30 +95,4 @@ open class CNShellThread: CNThread
 	open func execute(command cmd: String) {
 		NSLog("Override this method (a)")
 	}
-
-/*
-	private func addString(string str: String) -> Bool {
-		var newstr = mInputedString + str
-		while newstr.lengthOfBytes(using: .utf8) > 0 {
-			if let nlidx = newstr.firstIndex(of: "\n") {
-				/* put string before newline */
-				let line = newstr[..<nlidx]
-				self.inputLine(line: String(line))
-				/* Keep string after newline */
-				let nxtidx = newstr.index(after: nlidx)
-				if nxtidx < newstr.endIndex {
-					newstr = String(newstr[nxtidx..<newstr.endIndex])
-				} else {
-					newstr = ""
-				}
-			} else {
-				break
-			}
-		}
-		mInputedString = newstr
-		return true
-	}
-
-
-*/
 }

@@ -63,14 +63,19 @@ public func testReadline(console cons: CNFileConsole) -> Bool
 	var docont = true
 	while docont {
 		if !readline.didFinished {
-			let cmdline = readline.readLine()
-			if cmdline.didUpdated {
-				let context = cmdline.context
-				cons.print(string: "CTXT: \(context.position) \(context.commandLine)\n")
+			switch readline.readLine() {
+			case .commandLine(let cmdline):
+				//if cmdline.didDetermined {
+					let (cmdstr, cmdpos) = cmdline.get()
+					cons.print(string: "CTXT: \(cmdpos) \(cmdstr)\n")
+				//}
+			case .escapeCode(let code):
+				cons.print(string: "ECODE: \(code.description())\n")
+			case .none:
+				break
 			}
 		} else {
 			docont = false
-
 		}
 	}
 	return true

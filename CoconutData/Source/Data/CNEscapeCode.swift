@@ -19,16 +19,17 @@ private let NEWLINE2:	Character		= "\u{0d}"	// CR
 private let ESC:	Character		= "\u{1b}"	// ESC
 private let DEL:	Character		= "\u{7f}"	// DEL
 
-
 /* Reference:
  *  - https://en.wikipedia.org/wiki/ANSI_escape_code
  *  - https://qiita.com/PruneMazui/items/8a023347772620025ad6
+ *  - http://www.termsys.demon.co.uk/vtansi.htm
  */
 public enum CNEscapeCode {
 	case	string(String)
 	case	newline
 	case	tab
-	case	backspace
+	case	backspace				/* = moveLeft(1)		*/
+	case	delete					/* Delete left 1 character	*/
 	case 	cursorUp(Int)
 	case 	cursorDown(Int)
 	case	cursorForward(Int)
@@ -41,6 +42,8 @@ public enum CNEscapeCode {
 	case 	eraceFromCursorToBegin
 	case	eraceFromBeginToEnd
 	case	eraceEntireBuffer
+	case	scrollUp
+	case	scrollDown
 
 	public func description() -> String {
 		var result: String
@@ -49,6 +52,7 @@ public enum CNEscapeCode {
 		case .newline:					result = "newline"
 		case .tab:					result = "tab"
 		case .backspace:				result = "backspace"
+		case .delete:					result = "delete"
 		case .cursorUp(let n):				result = "cursorUp(\(n))"
 		case .cursorDown(let n):			result = "cursorDown(\(n))"
 		case .cursorForward(let n):			result = "cursorForward(\(n))"
@@ -61,6 +65,8 @@ public enum CNEscapeCode {
 		case .eraceFromCursorToBegin:			result = "eraceFromCursorToBegin"
 		case .eraceFromBeginToEnd:			result = "eraceFromBeginToEnd"
 		case .eraceEntireBuffer:			result = "eraceEntireBuffer"
+		case .scrollUp:					result = "scrollUp"
+		case .scrollDown:				result = "scrollDown"
 		}
 		return result
 	}
@@ -72,6 +78,7 @@ public enum CNEscapeCode {
 		case .newline:					result = String(NEWLINE2)
 		case .tab:					result = String(TAB)
 		case .backspace:				result = String(BS)
+		case .delete:					result = String(DEL)
 		case .cursorUp(let n):				result = "\(ESC)[\(n)A"
 		case .cursorDown(let n):			result = "\(ESC)[\(n)B"
 		case .cursorForward(let n):			result = "\(ESC)[\(n)C"
@@ -84,6 +91,8 @@ public enum CNEscapeCode {
 		case .eraceFromCursorToBegin:			result = "\(ESC)[1J"
 		case .eraceFromBeginToEnd:			result = "\(ESC)[2J"
 		case .eraceEntireBuffer:			result = "\(ESC)[3J"
+		case .scrollUp:					result = "\(ESC)M"
+		case .scrollDown:				result = "\(ESC)D"
 		}
 		return result
 	}
@@ -109,6 +118,11 @@ public enum CNEscapeCode {
 		case .backspace:
 			switch src {
 			case .backspace:			result = true
+			default:				break
+			}
+		case .delete:
+			switch src {
+			case .delete:				result = true
 			default:				break
 			}
 		case .cursorUp(let n0):
@@ -169,6 +183,16 @@ public enum CNEscapeCode {
 		case .eraceEntireBuffer:
 			switch src {
 			case .eraceEntireBuffer:		result = true
+			default:				break
+			}
+		case .scrollUp:
+			switch src {
+			case .scrollUp:				result = true
+			default:				break
+			}
+		case .scrollDown:
+			switch src {
+			case .scrollDown:			result = true
 			default:				break
 			}
 		}
@@ -232,6 +256,12 @@ public enum CNEscapeCode {
 					let (idx2, command2) = try decodeEscapeSequence(string: src, index: idx1)
 					result.append(command2)
 					idx = idx2
+				case "D":
+					result.append(.scrollDown)
+					idx = idx1
+				case "U":
+					result.append(.scrollUp)
+					idx = idx1
 				default:
 					substr.append(c0)
 					substr.append(c1)
@@ -243,8 +273,11 @@ public enum CNEscapeCode {
 			case TAB:
 				result.append(.tab)
 				idx = idx0
-			case BS, DEL:
+			case BS:
 				result.append(.backspace)
+				idx = idx0
+			case DEL:
+				result.append(.delete)
 				idx = idx0
 			default:
 				substr.append(c0)

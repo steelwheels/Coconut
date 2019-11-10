@@ -17,41 +17,32 @@ public class CNCommandLine
 		case eraceFromBeginToEnd
 	}
 
-	public struct Context {
-		public var	fixedCommands:	Array<String>
-		public var 	commandLine:	String
-		public var	position:	Int
-		public init(fixedCommands fcmds: Array<String>, commandLine cmdline: String, position pos: Int) {
-			fixedCommands	= fcmds
-			commandLine	= cmdline
-			position	= pos
-		}
-	}
-
-	private var	mFixedCommands:		Array<String>
 	private var	mCommandLine:		String
 	private var	mCurrentIndex:		String.Index
 	private var 	mCurrentPosition:	Int
-	private var	mDidUpdated:		Bool
+	private var	mDidDetermined:		Bool
+
+	public var didDetermined: Bool { get { return mDidDetermined }}
 
 	public init(){
-		mFixedCommands	 = []
 		mCommandLine	 = ""
 		mCurrentIndex	 = mCommandLine.endIndex
 		mCurrentPosition = 0
-		mDidUpdated	 = true
+		mDidDetermined   = false
 	}
 
-	public var didUpdated: Bool { get { return mDidUpdated }}
-	public var context: Context {
-		get {
-			let ctxt = Context(fixedCommands: mFixedCommands, commandLine: mCommandLine, position: mCurrentPosition)
-			mFixedCommands	 = []
-			//mCommandLine	 = ""
-			//mCurrentIndex	 = mCommandLine.startIndex
-			//mCurrentPosition = 0
-			mDidUpdated      = false
-			return ctxt
+	public func determine() {
+		mDidDetermined = true
+	}
+
+	public func get() -> (String, Int) {
+		if mDidDetermined {
+			let curcmd = mCommandLine
+			let curpos = mCurrentPosition
+			replace(string: "")
+			return (curcmd, curpos)
+		} else {
+			return (mCommandLine, mCurrentPosition)
 		}
 	}
 
@@ -59,12 +50,7 @@ public class CNCommandLine
 		mCommandLine	 = str
 		mCurrentIndex	 = str.endIndex
 		mCurrentPosition = str.count
-		mDidUpdated 	 = true
-	}
-
-	public func enter() {
-		mFixedCommands.append(mCommandLine)
-		replace(string: "")
+		mDidDetermined   = false
 	}
 
 	public func insert(string str: String){
@@ -79,7 +65,6 @@ public class CNCommandLine
 				break
 			}
 		}
-		mDidUpdated = true
 	}
 
 	public func moveCursor(delta dlt: Int) {
@@ -107,7 +92,6 @@ public class CNCommandLine
 				}
 			}
 		}
-		mDidUpdated = true
 	}
 
 	public func erace(command cmd: EraceCommand) {
@@ -120,14 +104,12 @@ public class CNCommandLine
 				mCommandLine.removeSubrange(subrange)
 				mCurrentIndex	 =  previdx
 				mCurrentPosition -= 1
-				mDidUpdated	 =  true
 			}
 		case .eraceFromCursorToEnd:
 			if mCurrentIndex < mCommandLine.endIndex {
 				let subrange = mCurrentIndex..<mCommandLine.endIndex
 				mCommandLine.removeSubrange(subrange)
 				/* Index is not changed */
-				mDidUpdated      = true
 			}
 		case .eraceFromCursorToBegin:
 			if mCommandLine.startIndex < mCurrentIndex {
@@ -135,7 +117,6 @@ public class CNCommandLine
 				mCommandLine.removeSubrange(subrange)
 				mCurrentIndex	 = mCommandLine.startIndex
 				mCurrentPosition = 0
-				mDidUpdated	 =  true
 			}
 
 		case .eraceFromBeginToEnd:
@@ -143,15 +124,8 @@ public class CNCommandLine
 				mCommandLine	 = ""
 				mCurrentIndex	 = mCommandLine.startIndex
 				mCurrentPosition = 0
-				mDidUpdated      = true
 			}
 		}
-	}
-
-	private func erace(subRange srange: Range<String.Index>) {
-		mCommandLine.removeSubrange(srange)
-		mCurrentIndex    = mCommandLine.startIndex
-		mCurrentPosition = 0
 	}
 }
 
@@ -187,86 +161,93 @@ open class CNReadline
 		CNReadline.restoreRawMode(fileHandle: mConsole.inputHandle, originalTerm: mPreviousTerm)
 	}
 
-	open func readLine() -> CNCommandLine {
+	public enum Result {
+		case	none
+		case	commandLine(CNCommandLine)
+		case	escapeCode(CNEscapeCode)
+	}
+
+	open func readLine() -> Result {
+		/* Scan input */
 		if let str = self.scan() {
 			switch CNEscapeCode.decode(string: str) {
 			case .ok(let codes):
 				for code in codes {
 					mCurrentBuffer.push(code)
 				}
-				flushBuffer()
 			case .error(let err):
 				let msg = "[Error] " + err.description()
 				mConsole.error(string: msg)
 			}
 		}
-		return mCommandLine
+		/* Return result */
+		if let code = mCurrentBuffer.pop() {
+			if decodeForCommandLine(escapeCode: code) {
+				return .commandLine(mCommandLine)
+			} else {
+				return .escapeCode(code)
+			}
+		} else {
+			return .none
+		}
 	}
 
 	open func scan() -> String? {
 		return mConsole.scan()
 	}
 
-	private func flushBuffer() {
-		var docont: Bool = true
-		while docont && mCurrentBuffer.count > 0 {
-			if let ecode = mCurrentBuffer.pop() {
-				switch flushCode(escapeCode: ecode) {
-				case .doContinue:
-					break
-				case .doIgnore:
-					break
-				case .doFlush:
-					docont = false
-					break
-				}
-			} else {
-				break
-			}
-		}
-	}
-
-	private enum FlushResult {
-		case doIgnore
-		case doContinue
-		case doFlush
-	}
-
-	private func flushCode(escapeCode ecode: CNEscapeCode) -> FlushResult {
-		var result: FlushResult = .doIgnore
-		switch ecode {
+	private func decodeForCommandLine(escapeCode code: CNEscapeCode) -> Bool {
+		let result: Bool
+		switch code {
 		case .string(let str):
 			mCommandLine.insert(string: str)
+			result = true
 		case .newline:
-			mCommandLine.enter()
+			mCommandLine.determine()
+			result = true
 		case .tab:
 			mCommandLine.insert(string: "\t")
+			result = true
 		case .backspace:
+			mCommandLine.moveCursor(delta: -1)
+			result = true
+		case .delete:
 			mCommandLine.erace(command: .eraceCursorLeft)
+			result = true
 		case .cursorUp(let n), .cursorPreviousLine(let n):
 			if let newstr = mCommandHistory.traceHistory(delta: -n) {
 				mCommandLine.replace(string: newstr)
 			}
+			result = true
 		case .cursorDown(let n), .cursorNextLine(let n):
 			if let newstr = mCommandHistory.traceHistory(delta: n) {
 				mCommandLine.replace(string: newstr)
 			}
+			result = true
 		case .cursorForward(let n):
 			mCommandLine.moveCursor(delta: n)
+			result = true
 		case .cursorBack(let n):
 			mCommandLine.moveCursor(delta: -n)
+			result = true
 		case .cursorHolizontalAbsolute(_):
-			result = .doIgnore
+			result = true			/* ignored */
 		case .cursorPoisition(_, _):
-			result = .doIgnore
+			result = true			/* ignored */
 		case .eraceFromCursorToEnd:
 			mCommandLine.erace(command: .eraceFromCursorToEnd)
+			result = true
 		case .eraceFromCursorToBegin:
 			mCommandLine.erace(command: .eraceFromCursorToBegin)
+			result = true
 		case .eraceFromBeginToEnd:
 			mCommandLine.erace(command: .eraceFromBeginToEnd)
+			result = true
 		case .eraceEntireBuffer:
 			mCommandLine.erace(command: .eraceFromBeginToEnd)
+			result = true
+		case .scrollUp, .scrollDown:
+			result = false
 		}
 		return result
 	}
