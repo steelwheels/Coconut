@@ -203,6 +203,61 @@ cursorNextLine(1)
 string(" and ")
 eraceFromBeginToEnd
 string(". Bye.")
+* testKeyBinding
+selectorName:insertNewline: -> [newline ]
+selectorName:insertNewlineIgnoringFieldEditor: -> [newline ]
+selectorName:insertTab: -> [tab ]
+selectorName:insertTabIgnoringFieldEditor: -> [tab ]
+selectorName:insertBacktab: -> [Error] Failed to convert to escape code
+selectorName:cycleToNextInputScript: -> [Error] Failed to convert to escape code
+selectorName:togglePlatformInputSystem: -> [Error] Failed to convert to escape code
+selectorName:cycleToNextInputKeyboardLayout: -> [Error] Failed to convert to escape code
+selectorName:deleteBackward: -> [delete ]
+selectorName:deleteWordBackward: -> [Error] Failed to convert to escape code
+selectorName:deleteForward: -> [cursorForward(1) delete ]
+selectorName:deleteWordForward: -> [Error] Failed to convert to escape code
+selectorName:cancelOperation: -> [string("") ]
+[Error] Failed to decode keybinding: complete:
+selectorName:moveUp: -> [cursorUp(1) ]
+selectorName:moveUpAndModifySelection: -> [cursorUp(1) ]
+selectorName:scrollPageUp: -> [scrollUp ]
+selectorName:moveToBeginningOfDocument: -> [Error] Failed to convert to escape code
+selectorName:moveToBeginningOfDocumentAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:moveToBeginningOfParagraph: -> [Error] Failed to convert to escape code
+selectorName:moveParagraphBackwardAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:moveDown: -> [cursorDown(1) ]
+selectorName:moveDownAndModifySelection: -> [cursorDown(1) ]
+selectorName:scrollPageDown: -> [scrollDown ]
+selectorName:moveToEndOfDocument: -> [Error] Failed to convert to escape code
+selectorName:moveToEndOfDocumentAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:moveToEndOfParagraph: -> [Error] Failed to convert to escape code
+selectorName:moveParagraphForwardAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:moveLeft: -> [cursorBack(1) ]
+selectorName:moveLeftAndModifySelection: -> [cursorBack(1) ]
+selectorName:moveToBeginningOfLine: -> [Error] Failed to convert to escape code
+selectorName:moveToBeginningOfLineAndModifySelection: -> [Error] Failed to convert to escape code
+[Error] Failed to decode keybinding: changeBaseWritingDirectionToRTL:
+[Error] Failed to decode keybinding: changeBaseWritingDirectionToLTR:
+selectorName:moveWordLeft: -> [Error] Failed to convert to escape code
+selectorName:moveWordLeftAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:moveRight: -> [cursorForward(1) ]
+selectorName:moveRightAndModifySelection: -> [cursorForward(1) ]
+selectorName:moveToEndOfLine: -> [Error] Failed to convert to escape code
+selectorName:moveToEndOfLineAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:moveWordRight: -> [Error] Failed to convert to escape code
+selectorName:moveWordRightAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:scrollToBeginningOfDocument: -> [Error] Failed to convert to escape code
+selectorName:scrollToEndOfDocument: -> [Error] Failed to convert to escape code
+selectorName:pageUp: -> [scrollUp ]
+selectorName:pageUpAndModifySelection: -> [scrollUp ]
+selectorName:pageDown: -> [scrollDown ]
+selectorName:pageDownAndModifySelection: -> [scrollDown ]
+selectorName:moveBackward: -> [cursorBack(1) ]
+selectorName:moveForward: -> [cursorForward(1) ]
+selectorName:deleteToEndOfParagraph: -> [Error] Failed to convert to escape code
+[Error] Failed to decode keybinding: centerSelectionInVisibleArea:
+[Error] Failed to decode keybinding: transpose:
+[Error] Failed to decode keybinding: yank:
 * testDatabse
 * Main database: Initial state
   read_cache: {

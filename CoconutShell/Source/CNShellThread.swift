@@ -84,7 +84,7 @@ open class CNShellThread: CNThread
 					currentpos  = newpos
 				}
 			case .escapeCode(let code):
-				console.print(string: "ECODE: \(code.description())\n")
+				console.error(string: "ECODE: \(code.description())\n")
 			case .none:
 				break
 			}
@@ -93,6 +93,6 @@ open class CNShellThread: CNThread
 	}
 
 	open func execute(command cmd: String) {
-		NSLog("Override this method (a)")
+		console.error(string: "execute: \(cmd)\n")
 	}
 }
