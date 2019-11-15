@@ -244,14 +244,15 @@ public enum CNEscapeCode {
 			let (c0, idx0) = try nextChar(string: src, index: idx)
 			switch c0 {
 			case ESC:
+				/* Save current sub string */
+				if substr.count > 0 {
+					result.append(CNEscapeCode.string(substr))
+					substr = ""
+				}
+				/* get next char */
 				let (c1, idx1) = try nextChar(string: src, index: idx0)
 				switch c1 {
 				case "[":
-					/* Save current sub string */
-					if substr.count > 0 {
-						result.append(CNEscapeCode.string(substr))
-						substr = ""
-					}
 					/* Decode escape sequence */
 					let (idx2, command2) = try decodeEscapeSequence(string: src, index: idx1)
 					result.append(command2)
@@ -263,20 +264,43 @@ public enum CNEscapeCode {
 					result.append(.scrollUp)
 					idx = idx1
 				default:
-					substr.append(c0)
-					substr.append(c1)
+					result.append(.string("\(c0)\(c1)"))
 					idx = idx1
 				}
 			case NEWLINE1, NEWLINE2:
+				/* Save current sub string */
+				if substr.count > 0 {
+					result.append(CNEscapeCode.string(substr))
+					substr = ""
+				}
+				/* add newline */
 				result.append(.newline)
 				idx = idx0
 			case TAB:
+				/* Save current sub string */
+				if substr.count > 0 {
+					result.append(CNEscapeCode.string(substr))
+					substr = ""
+				}
+				/* add tab */
 				result.append(.tab)
 				idx = idx0
 			case BS:
+				/* Save current sub string */
+				if substr.count > 0 {
+					result.append(CNEscapeCode.string(substr))
+					substr = ""
+				}
+				/* add backspace */
 				result.append(.backspace)
 				idx = idx0
 			case DEL:
+				/* Save current sub string */
+				if substr.count > 0 {
+					result.append(CNEscapeCode.string(substr))
+					substr = ""
+				}
+				/* add delete */
 				result.append(.delete)
 				idx = idx0
 			default:
