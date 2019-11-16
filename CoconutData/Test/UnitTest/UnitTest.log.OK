@@ -197,6 +197,18 @@ Same code
 code: "[2J"
 eraceFromBeginToEnd
 Same code
+* dumpCode
+code: "[37m"
+foregroundColor(White)
+Same code
+* dumpCode
+code: "[41m"
+backgroundColor(Red)
+Same code
+* dumpCode
+code: "[0m"
+setNormalAttributes
+Same code
 * dumpSequence
 string("Hello, ")
 cursorNextLine(1)

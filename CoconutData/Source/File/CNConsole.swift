@@ -92,17 +92,13 @@ public class CNFileConsole : CNConsole
 	}
 
 	public func print(string str: String){
-		if let data = str.data(using: .utf8) {
-			outputHandle.write(data)
-		}
+		outputHandle.write(string: str)
 	}
 
 	public func error(string str: String){
-		if let data = str.data(using: .utf8) {
-			errorHandle.write(data)
-		} else {
-			print(string: str)
-		}
+		let attr = CNEscapeCode.foregroundColor(.Red).encode()
+		let rev  = CNEscapeCode.setNormalAttributes.encode()
+		errorHandle.write(string: attr + str + rev)
 	}
 
 	public func scan() -> String? {

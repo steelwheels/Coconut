@@ -248,6 +248,8 @@ open class CNReadline
 			result = true
 		case .scrollUp, .scrollDown:
 			result = false
+		case .foregroundColor(_), .backgroundColor(_), .setNormalAttributes:
+			result = true			/* ignored */
 		}
 		return result
 	}

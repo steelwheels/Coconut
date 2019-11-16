@@ -44,6 +44,9 @@ public enum CNEscapeCode {
 	case	eraceEntireBuffer
 	case	scrollUp
 	case	scrollDown
+	case	foregroundColor(CNColor)
+	case	backgroundColor(CNColor)
+	case	setNormalAttributes
 
 	public func description() -> String {
 		var result: String
@@ -67,6 +70,9 @@ public enum CNEscapeCode {
 		case .eraceEntireBuffer:			result = "eraceEntireBuffer"
 		case .scrollUp:					result = "scrollUp"
 		case .scrollDown:				result = "scrollDown"
+		case .foregroundColor(let col):			result = "foregroundColor(\(col.description()))"
+		case .backgroundColor(let col):			result = "backgroundColor(\(col.description()))"
+		case .setNormalAttributes:			result = "setNormalAttributes"
 		}
 		return result
 	}
@@ -93,6 +99,19 @@ public enum CNEscapeCode {
 		case .eraceEntireBuffer:			result = "\(ESC)[3J"
 		case .scrollUp:					result = "\(ESC)M"
 		case .scrollDown:				result = "\(ESC)D"
+		case .foregroundColor(let col):			result = "\(ESC)[\(colorToCode(isForeground: true, color: col))m"
+		case .backgroundColor(let col):			result = "\(ESC)[\(colorToCode(isForeground: false, color: col))m"
+		case .setNormalAttributes:			result = "\(ESC)[0m"
+		}
+		return result
+	}
+
+	private func colorToCode(isForeground isfg: Bool, color col: CNColor) -> Int {
+		let result: Int
+		if isfg {
+			result = Int(col.rawValue) + 30
+		} else {
+			result = Int(col.rawValue) + 40
 		}
 		return result
 	}
@@ -193,6 +212,21 @@ public enum CNEscapeCode {
 		case .scrollDown:
 			switch src {
 			case .scrollDown:			result = true
+			default:				break
+			}
+		case .foregroundColor(let col0):
+			switch src {
+			case .foregroundColor(let col1):	result = col0 == col1
+			default:				break
+			}
+		case .backgroundColor(let col0):
+			switch src {
+			case .backgroundColor(let col1):	result = col0 == col1
+			default:				break
+			}
+		case .setNormalAttributes:
+			switch src {
+			case .setNormalAttributes:		result = true
 			default:				break
 			}
 		}
@@ -345,6 +379,26 @@ public enum CNEscapeCode {
 				case 3: result = CNEscapeCode.eraceEntireBuffer
 				default:
 					throw DecodeError.invalidParameter(c, param)
+				}
+			case "m":
+				let param = try get1Parameter(from: tokens, forCommand: c)
+				if param == 0 {
+					/* Reset status */
+					result = .setNormalAttributes
+				} else if 30<=param && param<=37 {
+					if let col = CNColor(rawValue: Int32(param - 30)) {
+						result = .foregroundColor(col)
+					} else {
+						throw DecodeError.unknownCommand(c)
+					}
+				} else if 40<=param && param<=47 {
+					if let col = CNColor(rawValue: Int32(param - 40)) {
+						result = .backgroundColor(col)
+					} else {
+						throw DecodeError.unknownCommand(c)
+					}
+				} else {
+					throw DecodeError.unknownCommand(c)
 				}
 			default:
 				throw DecodeError.unknownCommand(c)
