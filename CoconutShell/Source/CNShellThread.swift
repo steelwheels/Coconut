@@ -54,6 +54,9 @@ open class CNShellThread: CNThread
 					/* Execute command */
 					console.print(string: "\n") // Execute at new line
 					execute(command: newline)
+					/* Reset terminal */
+					let resetstr = CNEscapeCode.setNormalAttributes.encode()
+					console.print(string: resetstr)
 					/* Print prompt again */
 					currentline = ""
 					currentpos  = 0
