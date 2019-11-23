@@ -43,6 +43,34 @@ public class CNStringUtil
 		return result
 	}
 
+	public class func divideBySpaces(string src: String) -> Array<String> {
+		var result: Array<String> = []
+		var headidx = src.startIndex
+		var curidx  = headidx
+		let endidx  = src.endIndex
+		while curidx < endidx {
+			let c = src[curidx]
+			if c.isWhitespace {
+				/* flush current word */
+				if headidx < curidx {
+					let word = src[headidx..<curidx]
+					result.append(String(word))
+				}
+				headidx = src.index(after: curidx)
+				curidx  = headidx
+			} else {
+				curidx  = src.index(after: curidx)
+			}
+		}
+		/* flush current word */
+		if headidx < curidx {
+			let word = src[headidx..<curidx]
+			result.append(String(word))
+			headidx = curidx
+		}
+		return result
+	}
+
 	private class func divideBySpace(inQuote inquote: Bool, string src: String) -> Array<String> {
 		if src == "" {
 			return []

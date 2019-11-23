@@ -16,6 +16,13 @@ public func testStringUtil(console cons: CNConsole) -> Bool
 	testTrace(string: "*", console: cons)
 	testTrace(string: " ", console: cons)
 	testTrace(string: "", console: cons)
+
+	cons.print(string: "// test CNStringUtil.divideBySpaces\n")
+	testDivideBySpaces(string: "", console: cons)
+	testDivideBySpaces(string: "a", console: cons)
+	testDivideBySpaces(string: "12 23", console: cons)
+	testDivideBySpaces(string: " 23 34 ", console: cons)
+	testDivideBySpaces(string: " 34      4 5 ", console: cons)
 	return true
 }
 
@@ -34,3 +41,13 @@ private func testTrace(string str: String, console cons: CNConsole) {
 	cons.print(string: "* traceBackward: \"\(str)\" -> \"\(bstr)\"\n")
 
 }
+
+private func testDivideBySpaces(string str: String, console cons: CNConsole) {
+	cons.print(string: "\"\(str)\" => [")
+	let words = CNStringUtil.divideBySpaces(string: str)
+	for word in words {
+		cons.print(string: "\"\(word)\" ")
+	}
+	cons.print(string: "]\n")
+}
+

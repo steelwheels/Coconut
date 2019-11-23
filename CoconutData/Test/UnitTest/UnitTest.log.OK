@@ -28,6 +28,12 @@ IdentifierToken(e01)
 * traceBackward: " " -> " "
 * traceForward:  "" -> ""
 * traceBackward: "" -> ""
+// test CNStringUtil.divideBySpaces
+"" => []
+"a" => ["a" ]
+"12 23" => ["12" "23" ]
+" 23 34 " => ["23" "34" ]
+" 34      4 5 " => ["34" "4" "5" ]
 * testCharacter
 "NUL":0x00 "SOH":0x01 "STX":0x02 "ETX":0x03 "EOT":0x04 "ENQ":0x05 "ACK":0x06 "BEL":0x07 
 "BS":0x08 "TAB":0x09 "LF":0x0a "VT":0x0b "FF":0x0c "CR":0x0d "SO":0x0e "SI":0x0f 
@@ -215,7 +221,8 @@ cursorNextLine(1)
 string(" and ")
 eraceFromBeginToEnd
 string(". Bye.")
-* testKeyBinding
+[31mColor message
+[0m* testKeyBinding
 selectorName:insertNewline: -> [newline ]
 selectorName:insertNewlineIgnoringFieldEditor: -> [newline ]
 selectorName:insertTab: -> [tab ]
