@@ -82,6 +82,15 @@ open class CNPreference
 	}
 }
 
+public class CNApplicationPreference
+{
+	public var	isWindowApplication: Bool
+
+	public init(){
+		isWindowApplication = false
+	}
+}
+
 public class CNSystemPreference
 {
 	public var logLevel:		CNConfig.LogLevel
@@ -172,6 +181,12 @@ public class CNDocumentTypePreference
 
 extension CNPreference
 {
+	public var applicationPreference: CNApplicationPreference { get {
+		return get(name: "application", allocator: {
+			() -> CNApplicationPreference in return CNApplicationPreference()
+		})
+	}}
+
 	public var systemPreference: CNSystemPreference { get {
 		return get(name: "system", allocator: {
 			() -> CNSystemPreference in return CNSystemPreference()
