@@ -95,29 +95,18 @@ public class CNSystemPreference
 	}
 }
 
-public class CNDocumentTypePreference: CNLogging
+public class CNDocumentTypePreference
 {
-	private var mConsole:		CNConsole?
 	private var mDocumentTypes:	Dictionary<String, Array<String>>	// UTI, extension
 
 	public init() {
-		mConsole        = nil
 		mDocumentTypes  = [:]
-
 		if let infodict = Bundle.main.infoDictionary {
 			/* Import document types */
 			if let imports = infodict["UTImportedTypeDeclarations"] as? Array<AnyObject> {
 				collectTypeDeclarations(typeDeclarations: imports)
 			}
 		}
-	}
-
-	public func set(console cons: CNConsole?) {
-		mConsole = cons
-	}
-
-	public var console: CNConsole? {
-		get { return mConsole }
 	}
 
 	private func collectTypeDeclarations(typeDeclarations decls: Array<AnyObject>){
@@ -127,22 +116,22 @@ public class CNDocumentTypePreference: CNLogging
 					collectTypeDeclaration(typeDeclaration: dict)
 				}
 			} else {
-				log(type: .error, string:  "Invalid description: \(decl)", file: #file, line: #line, function: #function)
+				NSLog("Invalid description: \(decl)")
 			}
 		}
 	}
 
 	private func collectTypeDeclaration(typeDeclaration decl: Dictionary<String, AnyObject>){
 		guard let uti = decl["UTTypeIdentifier"] as? String else {
-			log(type: .error, string: "No UTTypeIdentifier", file: #file, line: #line, function: #function)
+			NSLog("No UTTypeIdentifier")
 			return
 		}
 		guard let tags = decl["UTTypeTagSpecification"] as? Dictionary<String, AnyObject> else {
-			log(type: .error, string: "No UTTypeTagSpecification", file: #file, line: #line, function: #function)
+			NSLog("No UTTypeTagSpecification")
 			return
 		}
 		guard let exts = tags["public.filename-extension"] as? Array<String> else {
-			log(type: .error, string: "No public.filename-extension", file: #file, line: #line, function: #function)
+			NSLog("No public.filename-extension")
 			return
 		}
 		mDocumentTypes[uti] = exts
@@ -160,7 +149,7 @@ public class CNDocumentTypePreference: CNLogging
 			if let exts = mDocumentTypes[uti] {
 				result.append(contentsOf: exts)
 			} else {
-				log(type: .error, string: "Unknown UTI: \(uti)", file: #file, line: #line, function: #function)
+				NSLog("Unknown UTI: \(uti)")
 			}
 		}
 		return result
