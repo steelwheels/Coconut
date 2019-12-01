@@ -12,16 +12,13 @@ import Foundation
 
 open class CNShellProcess: CNProcess
 {
-	private var mEnvironment:	CNShellEnvironment
 	private var mConfig:		CNConfig
 
-	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNShellEnvironment, config conf: CNConfig, terminationHander termhdlr: CNProcess.TerminationHandler?) {
-		mEnvironment	= env
+	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig, terminationHander termhdlr: CNProcess.TerminationHandler?) {
 		mConfig		= conf
 		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
 	}
 
-	public var environment: CNShellEnvironment	{ get { return mEnvironment	}}
 	public var config: CNConfig			{ get { return mConfig		}}
 }
 

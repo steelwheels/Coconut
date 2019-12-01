@@ -32,10 +32,8 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	let instrm  = CNFileStream.pipe(inpipe)
 	let outstrm = CNFileStream.pipe(outpipe)
 	let errstrm = CNFileStream.pipe(errpipe)
-	let env     = CNShellEnvironment()
 	let config  = CNConfig(logLevel: .detail)
 	let shell   = UTShellThread(input: instrm, output: outstrm, error: errstrm,
-				   environment: env,
 				   config: config,
 				   terminationHander: nil)
 
