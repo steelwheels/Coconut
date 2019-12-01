@@ -81,6 +81,24 @@ open class CNProcess: CNProcessStream
 				}
 			}
 		}
+		/* Update environment variables */
+		updateEnvironmentVariables()
+	}
+
+	private func updateEnvironmentVariables() {
+		let tmpurl = FileManager.default.temporaryDirectory
+
+		let newenv: Dictionary<String, String> = [
+			"TMPDIR":	tmpurl.path
+		]
+		/* Add new environment variables */
+		if var env = mProcess.environment {
+			for key in newenv.keys {
+				env[key] = newenv[key]
+			}
+		} else {
+			mProcess.environment = newenv
+		}
 	}
 
 	public func execute(command cmd: String) {
