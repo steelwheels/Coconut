@@ -63,15 +63,15 @@ CTXT: 18 This is first message
 CTXT: 18 This is first message
 CTXT: 18 This is first message
 CTXT: 28 This is first mess<INSERTED>age
-CTXT: 0 age
-CTXT: 0 age
-CTXT: 0 
-CTXT: 11 <NEW-ADDED>
-CTXT: 23 <NEW-ADDED><MORE-ADDED>
-CTXT: 22 <NEW-ADDED><MORE-ADDED>
-CTXT: 20 <NEW-ADDED><MORE-ADDED>
-CTXT: 19 <NEW-ADDED><MORE-ADDED>
-CTXT: 20 <NEW-ADDED><MORE-AD	DED>
+ECODE: eraceFromCursorToBegin
+ECODE: eraceFromCursorToBegin
+ECODE: eraceFromCursorToEnd
+CTXT: 39 This is first mess<INSERTED><NEW-ADDED>age
+CTXT: 51 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
+CTXT: 50 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
+CTXT: 48 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
+CTXT: 47 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
+CTXT: 48 This is first mess<INSERTED><NEW-ADDED><MORE-AD	DED>age
 * testURL
 nullURL = file:///dev/null
 * testValue
@@ -200,8 +200,8 @@ code: "[1,2H"
 cursorPoisition(1,2)
 Same code
 * dumpCode
-code: "[2J"
-eraceFromBeginToEnd
+code: "[2K"
+eraceEntireLine
 Same code
 * dumpCode
 code: "[37m"
@@ -219,7 +219,7 @@ Same code
 string("Hello, ")
 cursorNextLine(1)
 string(" and ")
-eraceFromBeginToEnd
+eraceEntireLine
 string(". Bye.")
 [31mColor message
 [0m* testKeyBinding

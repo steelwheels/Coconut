@@ -14,7 +14,7 @@ public class CNCommandLine
 		case eraceCursorLeft
 		case eraceFromCursorToEnd
 		case eraceFromCursorToBegin
-		case eraceFromBeginToEnd
+		case eraceEntireBuffer
 	}
 
 	private var	mCommandLine:		String
@@ -119,7 +119,7 @@ public class CNCommandLine
 				mCurrentPosition = 0
 			}
 
-		case .eraceFromBeginToEnd:
+		case .eraceEntireBuffer:
 			if mCommandLine.count > 0 {
 				mCommandLine	 = ""
 				mCurrentIndex	 = mCommandLine.startIndex
@@ -235,19 +235,22 @@ open class CNReadline
 		case .cursorPoisition(_, _):
 			result = true			/* ignored */
 		case .eraceFromCursorToEnd:
-			mCommandLine.erace(command: .eraceFromCursorToEnd)
-			result = true
+			result = false			/* skipped */
 		case .eraceFromCursorToBegin:
+			result = false			/* skipped */
+		case .eraceEntireBuffer:
+			result = false			/* skipped */
+		case .eraceFromCursorToLeft:
 			mCommandLine.erace(command: .eraceFromCursorToBegin)
 			result = true
-		case .eraceFromBeginToEnd:
-			mCommandLine.erace(command: .eraceFromBeginToEnd)
+		case .eraceFromCursorToRight:
+			mCommandLine.erace(command: .eraceFromCursorToEnd)
 			result = true
-		case .eraceEntireBuffer:
-			mCommandLine.erace(command: .eraceFromBeginToEnd)
+		case .eraceEntireLine:
+			mCommandLine.erace(command: .eraceEntireBuffer)
 			result = true
 		case .scrollUp, .scrollDown:
-			result = false
+			result = false			/* skipped */
 		case .foregroundColor(_), .backgroundColor(_), .setNormalAttributes:
 			result = true			/* ignored */
 		}

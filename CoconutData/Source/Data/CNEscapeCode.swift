@@ -38,10 +38,12 @@ public enum CNEscapeCode {
 	case	cursorPreviousLine(Int)
 	case	cursorHolizontalAbsolute(Int)		/* (Column)		*/
 	case	cursorPoisition(Int, Int)		/* (Row, Column)	*/
-	case	eraceFromCursorToEnd
-	case 	eraceFromCursorToBegin
-	case	eraceFromBeginToEnd
-	case	eraceEntireBuffer
+	case	eraceFromCursorToEnd			/* Clear from cursor to end of buffer 		*/
+	case 	eraceFromCursorToBegin			/* Clear from begining of buffer to cursor	*/
+	case	eraceEntireBuffer			/* Clear entire buffer				*/
+	case 	eraceFromCursorToRight			/* Clear from cursor to end of line		*/
+	case	eraceFromCursorToLeft			/* Clear from cursor to beginning of line	*/
+	case	eraceEntireLine				/* Clear entire line				*/
 	case	scrollUp
 	case	scrollDown
 	case	foregroundColor(CNColor)
@@ -66,8 +68,10 @@ public enum CNEscapeCode {
 		case .cursorPoisition(let row, let col):	result = "cursorPoisition(\(row),\(col))"
 		case .eraceFromCursorToEnd:			result = "eraceFromCursorToEnd"
 		case .eraceFromCursorToBegin:			result = "eraceFromCursorToBegin"
-		case .eraceFromBeginToEnd:			result = "eraceFromBeginToEnd"
 		case .eraceEntireBuffer:			result = "eraceEntireBuffer"
+		case .eraceFromCursorToRight:			result = "eraceFromCursorToRight"
+		case .eraceFromCursorToLeft:			result = "eraceFromCursorToLeft"
+		case .eraceEntireLine:				result = "eraceEntireLine"
 		case .scrollUp:					result = "scrollUp"
 		case .scrollDown:				result = "scrollDown"
 		case .foregroundColor(let col):			result = "foregroundColor(\(col.description()))"
@@ -95,8 +99,10 @@ public enum CNEscapeCode {
 		case .cursorPoisition(let row, let col):	result = "\(ESC)[\(row),\(col)H"
 		case .eraceFromCursorToEnd:			result = "\(ESC)[0J"
 		case .eraceFromCursorToBegin:			result = "\(ESC)[1J"
-		case .eraceFromBeginToEnd:			result = "\(ESC)[2J"
-		case .eraceEntireBuffer:			result = "\(ESC)[3J"
+		case .eraceEntireBuffer:			result = "\(ESC)[2J"
+		case .eraceFromCursorToRight:			result = "\(ESC)[0K"
+		case .eraceFromCursorToLeft:			result = "\(ESC)[1K"
+		case .eraceEntireLine:				result = "\(ESC)[2K"
 		case .scrollUp:					result = "\(ESC)M"
 		case .scrollDown:				result = "\(ESC)D"
 		case .foregroundColor(let col):			result = "\(ESC)[\(colorToCode(isForeground: true, color: col))m"
@@ -194,14 +200,24 @@ public enum CNEscapeCode {
 			case .eraceFromCursorToBegin:		result = true
 			default:				break
 			}
-		case .eraceFromBeginToEnd:
-			switch src {
-			case .eraceFromBeginToEnd:		result = true
-			default:				break
-			}
 		case .eraceEntireBuffer:
 			switch src {
 			case .eraceEntireBuffer:		result = true
+			default:				break
+			}
+		case .eraceFromCursorToRight:
+			switch src {
+			case .eraceFromCursorToRight:		result = true
+			default:				break
+			}
+		case .eraceFromCursorToLeft:
+			switch src {
+			case .eraceFromCursorToLeft:		result = true
+			default:				break
+			}
+		case .eraceEntireLine:
+			switch src {
+			case .eraceEntireLine:			result = true
 			default:				break
 			}
 		case .scrollUp:
@@ -375,8 +391,16 @@ public enum CNEscapeCode {
 				switch param {
 				case 0: result = CNEscapeCode.eraceFromCursorToEnd
 				case 1: result = CNEscapeCode.eraceFromCursorToBegin
-				case 2: result = CNEscapeCode.eraceFromBeginToEnd
-				case 3: result = CNEscapeCode.eraceEntireBuffer
+				case 2: result = CNEscapeCode.eraceEntireBuffer
+				default:
+					throw DecodeError.invalidParameter(c, param)
+				}
+			case "K":
+				let param = try get1Parameter(from: tokens, forCommand: c)
+				switch param {
+				case 0: result = CNEscapeCode.eraceFromCursorToRight
+				case 1: result = CNEscapeCode.eraceFromCursorToLeft
+				case 2: result = CNEscapeCode.eraceEntireLine
 				default:
 					throw DecodeError.invalidParameter(c, param)
 				}
