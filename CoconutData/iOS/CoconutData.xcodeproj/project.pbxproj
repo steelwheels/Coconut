@@ -48,6 +48,7 @@
 		05995850208AF0A600DE2DC9 /* CNToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584E208AF0A600DE2DC9 /* CNToken.swift */; };
 		05995851208AF0A600DE2DC9 /* CNTokenStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584F208AF0A600DE2DC9 /* CNTokenStream.swift */; };
 		05995853208AF0D500DE2DC9 /* CNParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995852208AF0D500DE2DC9 /* CNParser.swift */; };
+		059A03BF239B9330007E11A6 /* CNAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059A03BE239B9330007E11A6 /* CNAttributedString.swift */; };
 		05A9C8F422F47938000F1990 /* CNNativeStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A9C8F322F47937000F1990 /* CNNativeStruct.swift */; };
 		05AC92CC219B2EA000EEF197 /* CNObservedValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AC92CB219B2EA000EEF197 /* CNObservedValueTable.swift */; };
 		05B21D4A21AC3819009B0F36 /* CNDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B21D4921AC3818009B0F36 /* CNDatabase.swift */; };
@@ -117,6 +118,7 @@
 		0599584E208AF0A600DE2DC9 /* CNToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNToken.swift; sourceTree = "<group>"; };
 		0599584F208AF0A600DE2DC9 /* CNTokenStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTokenStream.swift; sourceTree = "<group>"; };
 		05995852208AF0D500DE2DC9 /* CNParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNParser.swift; sourceTree = "<group>"; };
+		059A03BE239B9330007E11A6 /* CNAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAttributedString.swift; sourceTree = "<group>"; };
 		05A9C8F322F47937000F1990 /* CNNativeStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeStruct.swift; sourceTree = "<group>"; };
 		05AC92CB219B2EA000EEF197 /* CNObservedValueTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNObservedValueTable.swift; sourceTree = "<group>"; };
 		05B21D4921AC3818009B0F36 /* CNDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNDatabase.swift; sourceTree = "<group>"; };
@@ -303,6 +305,7 @@
 				051914A2237AFAFF008C0637 /* CNKeyBinding.swift */,
 				05F5DAC5208ADBD8006EB134 /* CNArrayStream.swift */,
 				05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */,
+				059A03BE239B9330007E11A6 /* CNAttributedString.swift */,
 				05AC92CB219B2EA000EEF197 /* CNObservedValueTable.swift */,
 				05EDAD84213BE640003C9147 /* CNStack.swift */,
 				050DEEA623701AD0008E1A52 /* CNQueue.swift */,
@@ -443,6 +446,7 @@
 				0565A9EB208B7B8B00E91568 /* CNFileURL.swift in Sources */,
 				053084E2219DBDD2004DB0BF /* CNOperationQueue.swift in Sources */,
 				05A9C8F422F47938000F1990 /* CNNativeStruct.swift in Sources */,
+				059A03BF239B9330007E11A6 /* CNAttributedString.swift in Sources */,
 				056EA8BA208AFE5600D1DFFE /* CNConsole.swift in Sources */,
 				0554E0CB21D52A45005B8069 /* CNResource.swift in Sources */,
 				05C9616322D7739800CAB51B /* CNGraphicsFunction.swift in Sources */,

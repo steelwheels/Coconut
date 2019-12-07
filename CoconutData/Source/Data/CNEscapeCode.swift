@@ -34,10 +34,10 @@ public enum CNEscapeCode {
 	case 	cursorDown(Int)
 	case	cursorForward(Int)
 	case	cursorBack(Int)
-	case	cursorNextLine(Int)
-	case	cursorPreviousLine(Int)
-	case	cursorHolizontalAbsolute(Int)		/* (Column)		*/
-	case	cursorPoisition(Int, Int)		/* (Row, Column)	*/
+	case	cursorNextLine(Int)			/* Moves cursor to beginning of the line n	*/
+	case	cursorPreviousLine(Int)			/* Moves cursor to beginning of the line n	*/
+	case	cursorHolizontalAbsolute(Int)		/* (Column)					*/
+	case	cursorPoisition(Int, Int)		/* (Row, Column)				*/
 	case	eraceFromCursorToEnd			/* Clear from cursor to end of buffer 		*/
 	case 	eraceFromCursorToBegin			/* Clear from begining of buffer to cursor	*/
 	case	eraceEntireBuffer			/* Clear entire buffer				*/

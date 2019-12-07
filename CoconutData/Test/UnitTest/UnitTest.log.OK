@@ -15,6 +15,80 @@ IdentifierToken(da_)
 SymbolToken())
 SymbolToken(:)
 IdentifierToken(e01)
+* testAttributedString
+"0123*456789"
+**** Search forward  5 -> Offset = 1
+**** Search forward  X -> Offset = nil
+**** Search backward 1 -> Offset = 2
+**** Search backward 3 -> Offset = 0
+**** Search backward X -> Offset = nil
+**** Original String   -> "abcdefg
+01234*56789
+abcdefg"
+**** Move forward: 1 -> "abcdefg
+012345*6789
+abcdefg"
+**** Move forward: 10 -> "abcdefg
+0123456789*
+abcdefg"
+**** Move backward: 2 -> "abcdefg
+01234567*89
+abcdefg"
+**** Move backward: 10 -> "abcdefg
+*0123456789
+abcdefg"
+Expected last position: 8
+**** Original String   -> "abcdefg
+0123*456789
+abcdefg"
+**** Move down: 1(true) -> "abcdefg
+0123456789
+*abcdefg"
+**** Move down: 1(false) -> "abcdefg
+0123456789
+abcd*efg"
+**** Move up: 1(true) -> "*abcdefg
+0123456789
+abcdefg"
+**** Move up: 1(false) -> "abcd*efg
+0123456789
+abcdefg"
+**** Original String   -> "abcdefg
+01234*56789
+abcdefg"
+**** Delete forward: 1 -> "abcdefg
+01234*6789
+abcdefg"
+**** Delete backward: 1 -> "abcdefg
+0123*6789
+abcdefg"
+**** Delete forward: 10 -> "abcdefg
+0123*
+abcdefg"
+**** Delete backward: 10 -> "abcdefg
+*
+abcdefg"
+**** Delete forward: 5 -> "abcdefg
+*
+abcdefg"
+**** Delete backward: 5 -> "abcdefg
+*
+abcdefg"
+**** Delete entire-line -> "abcdefg
+*abcdefg"
+**** Original String   -> "abcdefg
+0123*456789
+abcdefg"
+**** Write String  -> "abcdefg
+0123Hello*9
+abcdefg"
+**** Write String  -> "abcdefg
+0123Hello,Good-Morning*
+abcdefg"
+**** Write String  -> "abcdefg
+0123Hello,Good-Morning,Goot-Night*
+abcdefg"
+Expected last position: 41
 * testStringUtil
 * traceForward:  " * " -> "* "
 * traceBackward: " * " -> " *"
