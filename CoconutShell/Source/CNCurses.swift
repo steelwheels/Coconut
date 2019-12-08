@@ -16,12 +16,12 @@ public class CNCurses
 		mCurrentBuffer	= CNQueue()
 	}
 
-	public enum ControlCommand {
+	public enum Result {
 		case	none
 		case	escapeCode(CNEscapeCode)
 	}
 
-	open func readLine(console cons: CNConsole) -> ControlCommand {
+	open func readInput(console cons: CNConsole) -> Result {
 		/* Scan input */
 		if let str = cons.scan() {
 			switch CNEscapeCode.decode(string: str) {

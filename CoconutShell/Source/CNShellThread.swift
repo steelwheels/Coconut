@@ -51,7 +51,7 @@ open class CNShellThread: CNThread
 			mMode 		= newmode
 			switch newmode {
 			case .readline:		mReadlineStatus = ReadlineStatus(doPrompt: true)
-			case .curses:		break
+			case .curses:		mCursesStatus   = CursesStatus(cursorVisible: false)
 			}
 		}
 	}
@@ -61,7 +61,7 @@ open class CNShellThread: CNThread
 		mReadline 	= CNReadline()
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mCurses		= CNCurses()
-		mCursesStatus	= CursesStatus(cursorVisible: true)
+		mCursesStatus	= CursesStatus(cursorVisible: false)
 		mConfig		= conf
 		mPreviousTerm	= CNShellThread.enableRawMode(fileStream: instrm)
 		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
@@ -81,7 +81,7 @@ open class CNShellThread: CNThread
 			case .readline:
 				shellOperation()
 			case .curses:
-				break
+				cursesOperation()
 			}
 		}
 		return 0
@@ -142,6 +142,16 @@ open class CNShellThread: CNThread
 			}
 		case .escapeCode(let code):
 			console.error(string: "ECODE: \(code.description())\n")
+		case .none:
+			break
+		}
+	}
+
+	private func cursesOperation() {
+		switch mCurses.readInput(console: self.console) {
+		case .escapeCode(let ecode):
+			/* Send code to terminal */
+			console.print(string: ecode.encode())
 		case .none:
 			break
 		}
