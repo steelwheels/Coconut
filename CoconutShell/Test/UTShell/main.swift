@@ -27,7 +27,10 @@ public func main() {
 	console.print(string: "** testShell\n")
 	let res3 = testShell(console: console)
 
-	let result = res0 && res1 && res2 && res3
+	console.print(string: "** testReadline\n")
+	let res4 = testReadline(console: console)
+
+	let result = res0 && res1 && res2 && res3 && res4
 	if result {
 		console.print(string: "Result: OK\n")
 		Darwin.exit(0)

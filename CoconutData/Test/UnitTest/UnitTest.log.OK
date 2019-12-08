@@ -89,6 +89,18 @@ abcdefg"
 0123Hello,Good-Morning,Goot-Night*
 abcdefg"
 Expected last position: 41
+**** Original String   -> "アイウエオ
+あ1い*2う3え4お5
+かきくけこ"
+Delete forward 1 char ->"アイウエオ
+あ1い*う3え4お5
+かきくけこ"
+Delete forward 1 char ->"アイウエオ
+あ1い*3え4お5
+かきくけこ"
+Delete backword 1 char ->"アイウエオ
+あ1*3え4お5
+かきくけこ"
 * testStringUtil
 * traceForward:  " * " -> "* "
 * traceBackward: " * " -> " *"
@@ -125,27 +137,6 @@ Expected last position: 41
 "h":0x68 "i":0x69 "j":0x6a "k":0x6b "l":0x6c "m":0x6d "n":0x6e "o":0x6f 
 "p":0x70 "q":0x71 "r":0x72 "s":0x73 "t":0x74 "u":0x75 "v":0x76 "w":0x77 
 "x":0x78 "y":0x79 "z":0x7a "{":0x7b "|":0x7c "}":0x7d "~":0x7e "DEL":0x7f 
-* testReadline
-CTXT: 21 This is first message
-CTXT: 21 This is first message
-CTXT: 21 This is first message
-CTXT: 21 This is first message
-CTXT: 17 This is first message
-CTXT: 20 This is first message
-CTXT: 18 This is first message
-CTXT: 18 This is first message
-CTXT: 18 This is first message
-CTXT: 18 This is first message
-CTXT: 28 This is first mess<INSERTED>age
-ECODE: eraceFromCursorToBegin
-ECODE: eraceFromCursorToBegin
-ECODE: eraceFromCursorToEnd
-CTXT: 39 This is first mess<INSERTED><NEW-ADDED>age
-CTXT: 51 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
-CTXT: 50 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
-CTXT: 48 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
-CTXT: 47 This is first mess<INSERTED><NEW-ADDED><MORE-ADDED>age
-CTXT: 48 This is first mess<INSERTED><NEW-ADDED><MORE-AD	DED>age
 * testURL
 nullURL = file:///dev/null
 * testValue

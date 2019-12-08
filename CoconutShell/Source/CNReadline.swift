@@ -5,6 +5,7 @@
  *   Copyright (C) 2019 Steel Wheels Project
  */
 
+import CoconutData
 import Foundation
 import Darwin
 
@@ -141,24 +142,14 @@ private class CNCommandHistory
 
 open class CNReadline
 {
-	private var mConsole:		CNFileConsole
 	private var mCommandLine:	CNCommandLine
 	private var mCommandHistory:	CNCommandHistory
 	private var mCurrentBuffer:	CNQueue<CNEscapeCode>
-	private var mPreviousTerm:	termios
-
-	public var console: CNFileConsole { get { return mConsole } set(cons){ set(console: cons) }}
 
 	public init(){
-		mConsole	= CNFileConsole()
 		mCommandLine	= CNCommandLine()
 		mCommandHistory	= CNCommandHistory()
 		mCurrentBuffer	= CNQueue<CNEscapeCode>()
-		mPreviousTerm	= CNReadline.enableRawMode(fileHandle: mConsole.inputHandle)
-	}
-
-	deinit {
-		CNReadline.restoreRawMode(fileHandle: mConsole.inputHandle, originalTerm: mPreviousTerm)
 	}
 
 	public enum Result {
@@ -167,9 +158,9 @@ open class CNReadline
 		case	escapeCode(CNEscapeCode)
 	}
 
-	open func readLine() -> Result {
+	open func readLine(console cons: CNConsole) -> Result {
 		/* Scan input */
-		if let str = self.scan() {
+		if let str = self.scan(console: cons) {
 			switch CNEscapeCode.decode(string: str) {
 			case .ok(let codes):
 				for code in codes {
@@ -177,7 +168,7 @@ open class CNReadline
 				}
 			case .error(let err):
 				let msg = "[Error] " + err.description()
-				mConsole.error(string: msg)
+				cons.error(string: msg)
 			}
 		}
 		/* Return result */
@@ -190,10 +181,6 @@ open class CNReadline
 		} else {
 			return .none
 		}
-	}
-
-	open func scan() -> String? {
-		return mConsole.scan()
 	}
 
 	private func decodeForCommandLine(escapeCode code: CNEscapeCode) -> Bool {
@@ -257,40 +244,8 @@ open class CNReadline
 		return result
 	}
 
-	private func set(console cons: CNFileConsole) {
-		/* Restore current handler */
-		CNReadline.restoreRawMode(fileHandle: mConsole.inputHandle, originalTerm: mPreviousTerm)
-		/* Update for new one */
-		mPreviousTerm = CNReadline.enableRawMode(fileHandle: cons.inputHandle)
-		mConsole = cons
-	}
-
-	/*
-	 * Following code is copied from StackOverflow.
-	 * See https://stackoverflow.com/questions/49748507/listening-to-stdin-in-swift
-	 */
-	private static func initStruct<S>() -> S {
-	    let struct_pointer = UnsafeMutablePointer<S>.allocate(capacity: 1)
-	    let struct_memory = struct_pointer.pointee
-	    struct_pointer.deallocate()
-	    return struct_memory
-	}
-
-	private static func enableRawMode(fileHandle: FileHandle) -> termios {
-	    var raw: termios = initStruct()
-	    tcgetattr(fileHandle.fileDescriptor, &raw)
-
-	    let original = raw
-
-	    raw.c_lflag &= ~(UInt(ECHO | ICANON))
-	    tcsetattr(fileHandle.fileDescriptor, TCSAFLUSH, &raw);
-
-	    return original
-	}
-
-	private static func restoreRawMode(fileHandle: FileHandle, originalTerm: termios) {
-	    var term = originalTerm
-	    tcsetattr(fileHandle.fileDescriptor, TCSAFLUSH, &term);
+	open func scan(console cons: CNConsole) -> String? {
+		return cons.scan()
 	}
 }
 

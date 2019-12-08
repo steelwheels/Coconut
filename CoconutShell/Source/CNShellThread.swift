@@ -8,16 +8,22 @@
 import CoconutData
 import Foundation
 
+
 open class CNShellThread: CNThread
 {
 	private var mReadline:		CNReadline
 	private var mConfig:		CNConfig
+	private var mPreviousTerm:	termios
 
 	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
 		mReadline 	= CNReadline()
 		mConfig		= conf
+		mPreviousTerm	= CNShellThread.enableRawMode(fileStream: instrm)
 		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
-		mReadline.console = super.console
+	}
+
+	deinit {
+		CNShellThread.restoreRawMode(fileHandle: super.console.inputHandle, originalTerm: mPreviousTerm)
 	}
 
 	public var config: CNConfig			{ get { return mConfig		}}
@@ -43,7 +49,7 @@ open class CNShellThread: CNThread
 				doprompt = false
 			}
 			/* Read command line */
-			switch mReadline.readLine() {
+			switch mReadline.readLine(console: self.console) {
 			case .commandLine(let cmdline):
 				let determined       = cmdline.didDetermined
 				let (newline, newpos) = cmdline.get()
@@ -94,5 +100,44 @@ open class CNShellThread: CNThread
 
 	open func execute(command cmd: String) {
 		console.error(string: "execute: \(cmd)\n")
+	}
+
+	/*
+	 * Following code is copied from StackOverflow.
+	 * See https://stackoverflow.com/questions/49748507/listening-to-stdin-in-swift
+	 */
+	private static func initStruct<S>() -> S {
+	    let struct_pointer = UnsafeMutablePointer<S>.allocate(capacity: 1)
+	    let struct_memory = struct_pointer.pointee
+	    struct_pointer.deallocate()
+	    return struct_memory
+	}
+
+	private static func enableRawMode(fileStream: CNFileStream) -> termios {
+		switch fileStream {
+		case .fileHandle(let handle):
+			return enableRawMode(fileHandle: handle)
+		case .pipe(let pipe):
+			return enableRawMode(fileHandle: pipe.fileHandleForReading)
+		case .null:
+			fatalError()
+		}
+	}
+
+	private static func enableRawMode(fileHandle: FileHandle) -> termios {
+	    var raw: termios = initStruct()
+	    tcgetattr(fileHandle.fileDescriptor, &raw)
+
+	    let original = raw
+
+	    raw.c_lflag &= ~(UInt(ECHO | ICANON))
+	    tcsetattr(fileHandle.fileDescriptor, TCSAFLUSH, &raw);
+
+	    return original
+	}
+
+	private static func restoreRawMode(fileHandle: FileHandle, originalTerm: termios) {
+	    var term = originalTerm
+	    tcsetattr(fileHandle.fileDescriptor, TCSAFLUSH, &term);
 	}
 }

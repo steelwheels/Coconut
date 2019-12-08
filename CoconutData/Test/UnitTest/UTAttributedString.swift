@@ -15,7 +15,8 @@ public func testAttributedString(console cons: CNConsole) -> Bool
 	let res2 = testMoveVertFunction(console: cons)
 	let res3 = testDeleteFunction(console: cons)
 	let res4 = testWriteFunction(console: cons)
-	return res0 && res1 && res2 && res3 && res4
+	let res5 = testJapaneseFunction(console: cons)
+	return res0 && res1 && res2 && res3 && res4 && res5
 }
 
 private func testSearchFunction(console cons: CNConsole) -> Bool
@@ -170,6 +171,29 @@ private func testWriteFunction(console cons: CNConsole) -> Bool
 		cons.print(string: "Expected last position 41, But result is \(pos3)\n")
 		return false
 	}
+}
+
+private func testJapaneseFunction(console cons: CNConsole) -> Bool
+{
+	let pos0 = 9
+
+	cons.print(string: "**** Original String   -> ")
+	let str1 = NSMutableAttributedString(string: "アイウエオ\nあ1い2う3え4お5\nかきくけこ")
+	printAttributedString(string: str1, cursor: pos0, console: cons)
+
+	cons.print(string: "Delete forward 1 char ->" )
+	let pos2 = str1.deleteForwardCharacters(at: pos0, number: 1)
+	printAttributedString(string: str1, cursor: pos2, console: cons)
+
+	cons.print(string: "Delete forward 1 char ->" )
+	let pos3 = str1.deleteForwardCharacters(at: pos2, number: 1)
+	printAttributedString(string: str1, cursor: pos3, console: cons)
+
+	cons.print(string: "Delete backword 1 char ->" )
+	let pos4 = str1.deleteBackwardCharacters(at: pos3, number: 1)
+	printAttributedString(string: str1, cursor: pos4, console: cons)
+
+	return true
 }
 
 private func printAttributedString(string str: NSAttributedString, cursor pos: Int, console cons: CNConsole) {

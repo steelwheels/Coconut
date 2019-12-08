@@ -5,6 +5,7 @@
  *   Copyright (C) 2019 Steel Wheels Project
  */
 
+import CoconutShell
 import CoconutData
 import Foundation
 
@@ -41,10 +42,9 @@ private class UTReadline: CNReadline {
 		]
 		messageIndex = 0
 		super.init()
-		super.console = cons
 	}
 
-	public override func scan() -> String? {
+	public override func scan(console cons: CNConsole) -> String? {
 		if messageIndex < messages.count {
 			let msg = messages[messageIndex]
 			messageIndex += 1
@@ -63,7 +63,7 @@ public func testReadline(console cons: CNFileConsole) -> Bool
 	var docont = true
 	while docont {
 		if !readline.didFinished {
-			switch readline.readLine() {
+			switch readline.readLine(console: cons) {
 			case .commandLine(let cmdline):
 				//if cmdline.didDetermined {
 					let (cmdstr, cmdpos) = cmdline.get()
