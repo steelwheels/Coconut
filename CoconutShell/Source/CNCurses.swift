@@ -10,11 +10,9 @@ import Foundation
 
 public class CNCurses
 {
-	public var console:		CNConsole
 	private var mCurrentBuffer:	CNQueue<CNEscapeCode>
 
 	public init(){
-		console		= CNFileConsole()
 		mCurrentBuffer	= CNQueue()
 	}
 
@@ -23,9 +21,9 @@ public class CNCurses
 		case	escapeCode(CNEscapeCode)
 	}
 
-	open func readLine() -> ControlCommand {
+	open func readLine(console cons: CNConsole) -> ControlCommand {
 		/* Scan input */
-		if let str = self.scan() {
+		if let str = cons.scan() {
 			switch CNEscapeCode.decode(string: str) {
 			case .ok(let codes):
 				for code in codes {
@@ -33,7 +31,7 @@ public class CNCurses
 				}
 			case .error(let err):
 				let msg = "[Error] " + err.description()
-				console.error(string: msg)
+				cons.error(string: msg)
 			}
 		}
 		/* Return result */
@@ -44,7 +42,7 @@ public class CNCurses
 		}
 	}
 
-	open func scan() -> String? {
-		return console.scan()
+	open func scan(console cons: CNConsole) -> String? {
+		return cons.scan()
 	}
 }

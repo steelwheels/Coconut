@@ -11,12 +11,57 @@ import Foundation
 
 open class CNShellThread: CNThread
 {
+	public enum ShellMode {
+		case readline
+		case curses
+	}
+
+	private struct ReadlineStatus {
+		var	doPrompt	: Bool
+		var	editingLine	: String
+		var 	editingPosition	: Int
+
+		public init(doPrompt prompt: Bool){
+			doPrompt	= prompt
+			editingLine	= ""
+			editingPosition	= 0
+		}
+	}
+
+	private struct CursesStatus {
+		var	cursorVisible:	Bool
+
+		public init(cursorVisible vis: Bool){
+			cursorVisible = vis
+		}
+	}
+
+	private var mMode:		ShellMode
 	private var mReadline:		CNReadline
+	private var mReadlineStatus:	ReadlineStatus
+	private var mCurses:		CNCurses
+	private var mCursesStatus:	CursesStatus
 	private var mConfig:		CNConfig
 	private var mPreviousTerm:	termios
 
+	public var config: CNConfig { get { return mConfig }}
+	public var mode: ShellMode {
+		get { return mMode }
+		set(newmode) {
+			mMode 		= newmode
+			switch newmode {
+			case .readline:		mReadlineStatus = ReadlineStatus(doPrompt: true)
+			case .curses:		break
+			}
+		}
+	}
+
 	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
+		mMode		= .readline
 		mReadline 	= CNReadline()
+		mReadlineStatus	= ReadlineStatus(doPrompt: true)
+		mCurses		= CNCurses()
+		mCursesStatus	= CursesStatus(cursorVisible: true)
 		mConfig		= conf
 		mPreviousTerm	= CNShellThread.enableRawMode(fileStream: instrm)
 		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
@@ -26,76 +71,80 @@ open class CNShellThread: CNThread
 		CNShellThread.restoreRawMode(fileHandle: super.console.inputHandle, originalTerm: mPreviousTerm)
 	}
 
-	public var config: CNConfig			{ get { return mConfig		}}
-
-	open func promptString() -> String {
-		return "$ "
-	}
-
 	open override func start() {
 		super.start()
 	}
 
 	open override func mainOperation() -> Int32 {
-		let BS  = CNEscapeCode.backspace.encode()
-		let DEL = BS + " " + BS
-
-		var doprompt    = true
-		var currentline = ""
-		var currentpos  = 0
 		while !isCancelled {
-			if doprompt {
-				self.console.print(string: promptString() + currentline)
-				doprompt = false
-			}
-			/* Read command line */
-			switch mReadline.readLine(console: self.console) {
-			case .commandLine(let cmdline):
-				let determined       = cmdline.didDetermined
-				let (newline, newpos) = cmdline.get()
-				if determined {
-					/* Execute command */
-					console.print(string: "\n") // Execute at new line
-					execute(command: newline)
-					/* Reset terminal */
-					let resetstr = CNEscapeCode.setNormalAttributes.encode()
-					console.print(string: resetstr)
-					/* Print prompt again */
-					currentline = ""
-					currentpos  = 0
-					doprompt    = true
-				} else {
-					/* Move cursor to end of line */
-					let forward = currentline.count - currentpos
-					let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
-					if forward > 0 {
-						console.print(string: fwdstr)
-					}
-					/* Erace current command line */
-					let curlen  = currentline.count
-					for _ in 0..<curlen {
-						console.print(string: DEL)
-					}
-					/* Print new command line */
-					console.print(string: newline)
-					/* Adjust cursor */
-					let newlen = newline.count
-					let back   = newlen - newpos
-					let bakstr = CNEscapeCode.cursorBack(back).encode()
-					if back > 0 {
-						console.print(string: bakstr)
-					}
-					/* Update current line*/
-					currentline = newline
-					currentpos  = newpos
-				}
-			case .escapeCode(let code):
-				console.error(string: "ECODE: \(code.description())\n")
-			case .none:
+			switch mMode {
+			case .readline:
+				shellOperation()
+			case .curses:
 				break
 			}
 		}
 		return 0
+	}
+
+	open func promptString() -> String {
+		return "$ "
+	}
+
+	private func shellOperation() {
+		let BS  = CNEscapeCode.backspace.encode()
+		let DEL = BS + " " + BS
+
+		if mReadlineStatus.doPrompt {
+			self.console.print(string: promptString() + mReadlineStatus.editingLine)
+			mReadlineStatus.doPrompt = false
+		}
+		/* Read command line */
+		switch mReadline.readLine(console: self.console) {
+		case .commandLine(let cmdline):
+			let determined        = cmdline.didDetermined
+			let (newline, newpos) = cmdline.get()
+			if determined {
+				/* Execute command */
+				console.print(string: "\n") // Execute at new line
+				execute(command: newline)
+				/* Reset terminal */
+				let resetstr = CNEscapeCode.setNormalAttributes.encode()
+				console.print(string: resetstr)
+				/* Print prompt again */
+				mReadlineStatus.doPrompt	= true
+				mReadlineStatus.editingLine     = ""
+				mReadlineStatus.editingPosition	= 0
+			} else {
+				/* Move cursor to end of line */
+				let forward = mReadlineStatus.editingLine.count - mReadlineStatus.editingPosition
+				let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
+				if forward > 0 {
+					console.print(string: fwdstr)
+				}
+				/* Erace current command line */
+				let curlen  = mReadlineStatus.editingLine.count
+				for _ in 0..<curlen {
+					console.print(string: DEL)
+				}
+				/* Print new command line */
+				console.print(string: newline)
+				/* Adjust cursor */
+				let newlen = newline.count
+				let back   = newlen - newpos
+				let bakstr = CNEscapeCode.cursorBack(back).encode()
+				if back > 0 {
+					console.print(string: bakstr)
+				}
+				/* Update current line*/
+				mReadlineStatus.editingLine     = newline
+				mReadlineStatus.editingPosition = newpos
+			}
+		case .escapeCode(let code):
+			console.error(string: "ECODE: \(code.description())\n")
+		case .none:
+			break
+		}
 	}
 
 	open func execute(command cmd: String) {
