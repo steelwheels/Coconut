@@ -49,6 +49,10 @@ public enum CNEscapeCode {
 	case	foregroundColor(CNColor)
 	case	backgroundColor(CNColor)
 	case	setNormalAttributes
+	case	requestScreenSize			/* Send request to receive screen size
+							 * Ps = 18 -> Report the size of the text area in characters as CSI 8 ; height ; width t
+							 */
+	case	screenSize(Int, Int)			/* Set screen size (Width, Height)		*/
 
 	public func description() -> String {
 		var result: String
@@ -77,6 +81,8 @@ public enum CNEscapeCode {
 		case .foregroundColor(let col):			result = "foregroundColor(\(col.description()))"
 		case .backgroundColor(let col):			result = "backgroundColor(\(col.description()))"
 		case .setNormalAttributes:			result = "setNormalAttributes"
+		case .requestScreenSize:			result = "requestScreenSize"
+		case .screenSize(let width, let height):	result = "screenSize(\(width), \(height))"
 		}
 		return result
 	}
@@ -108,6 +114,8 @@ public enum CNEscapeCode {
 		case .foregroundColor(let col):			result = "\(ESC)[\(colorToCode(isForeground: true, color: col))m"
 		case .backgroundColor(let col):			result = "\(ESC)[\(colorToCode(isForeground: false, color: col))m"
 		case .setNormalAttributes:			result = "\(ESC)[0m"
+		case .requestScreenSize:			result = "\(ESC)[18;0;0t"
+		case .screenSize(let width, let height):	result = "\(ESC)[8;\(height);\(width)t"
 		}
 		return result
 	}
@@ -243,6 +251,17 @@ public enum CNEscapeCode {
 		case .setNormalAttributes:
 			switch src {
 			case .setNormalAttributes:		result = true
+			default:				break
+			}
+		case .requestScreenSize:
+			switch src {
+			case .requestScreenSize:		result = true
+			default:				break
+			}
+		case .screenSize(let width0, let height0):
+			switch src {
+			case .screenSize(let width1, let height1):
+				result = (width0 == width1) && (height0 == height1)
 			default:				break
 			}
 		}
@@ -424,6 +443,16 @@ public enum CNEscapeCode {
 				} else {
 					throw DecodeError.unknownCommand(c)
 				}
+			case "t":
+				let (param0, param1, param2) = try get3Parameter(from: tokens, forCommand: c)
+				switch param0 {
+				case 8:
+					result = .screenSize(param1, param2)
+				case 18:
+					result = .requestScreenSize
+				default:
+					throw DecodeError.invalidParameter(c, 0)
+				}
 			default:
 				throw DecodeError.unknownCommand(c)
 			}
@@ -448,6 +477,15 @@ public enum CNEscapeCode {
 		if tokens.count == 4 {
 			if let p0 = tokens[0].getInt(), let p1 = tokens[2].getInt() {
 				return (p0, p1)
+			}
+		}
+		throw DecodeError.invalidParameter(c, -1)
+	}
+
+	private static func get3Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> (Int, Int, Int) {
+		if tokens.count == 6 {
+			if let p0 = tokens[0].getInt(), let p1 = tokens[2].getInt(), let p2 = tokens[4].getInt() {
+				return (p0, p1, p2)
 			}
 		}
 		throw DecodeError.invalidParameter(c, -1)

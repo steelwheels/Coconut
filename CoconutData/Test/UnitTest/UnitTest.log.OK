@@ -253,34 +253,33 @@ size: (5.0, 5.0) -> (2.5, 2.5) -> (5.0, 5.0) ... OK
 * dumpSequence
 string("Hello, World !!")
 * dumpCode
-code: "[1A"
 cursorUp(1)
 Same code
 * dumpCode
-code: "[3C"
 cursorForward(3)
 Same code
 * dumpCode
-code: "[1,2H"
 cursorPoisition(1,2)
 Same code
 * dumpCode
-code: "[2K"
 eraceEntireLine
 Same code
 * dumpCode
-code: "[37m"
 foregroundColor(White)
 Same code
 * dumpCode
-code: "[41m"
 backgroundColor(Red)
 Same code
 * dumpCode
-code: "[0m"
 setNormalAttributes
 Same code
-* dumpSequence
+* dumpCode
+requestScreenSize
+Same code
+* dumpCode
+screenSize(25, 80)
+[31m[Error] Different code
+[0m* dumpSequence
 string("Hello, ")
 cursorNextLine(1)
 string(" and ")

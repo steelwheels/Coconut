@@ -11,11 +11,6 @@ import Foundation
 
 open class CNShellThread: CNThread
 {
-	public enum ShellMode {
-		case readline
-		case curses
-	}
-
 	private struct ReadlineStatus {
 		var	doPrompt	: Bool
 		var	editingLine	: String
@@ -28,40 +23,19 @@ open class CNShellThread: CNThread
 		}
 	}
 
-	private struct CursesStatus {
-		var	cursorVisible:	Bool
-
-		public init(cursorVisible vis: Bool){
-			cursorVisible = vis
-		}
-	}
-
-	private var mMode:		ShellMode
+	private var mTerminalInfo:	CNTerminalInfo
 	private var mReadline:		CNReadline
 	private var mReadlineStatus:	ReadlineStatus
-	private var mCurses:		CNCurses
-	private var mCursesStatus:	CursesStatus
 	private var mConfig:		CNConfig
 	private var mPreviousTerm:	termios
 
-	public var config: CNConfig { get { return mConfig }}
-	public var mode: ShellMode {
-		get { return mMode }
-		set(newmode) {
-			mMode 		= newmode
-			switch newmode {
-			case .readline:		mReadlineStatus = ReadlineStatus(doPrompt: true)
-			case .curses:		mCursesStatus   = CursesStatus(cursorVisible: false)
-			}
-		}
-	}
+	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo }}
+	public var config: CNConfig		{ get { return mConfig	}}
 
 	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
-		mMode		= .readline
-		mReadline 	= CNReadline()
+		mTerminalInfo	= CNTerminalInfo()
+		mReadline 	= CNReadline(terminalInfo: mTerminalInfo)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
-		mCurses		= CNCurses()
-		mCursesStatus	= CursesStatus(cursorVisible: false)
 		mConfig		= conf
 		mPreviousTerm	= CNShellThread.enableRawMode(fileStream: instrm)
 		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
@@ -77,11 +51,65 @@ open class CNShellThread: CNThread
 
 	open override func mainOperation() -> Int32 {
 		while !isCancelled {
-			switch mMode {
-			case .readline:
-				shellOperation()
-			case .curses:
-				cursesOperation()
+			let BS  = CNEscapeCode.backspace.encode()
+			let DEL = BS + " " + BS
+
+			if mReadlineStatus.doPrompt {
+				self.console.print(string: promptString() + mReadlineStatus.editingLine)
+				mReadlineStatus.doPrompt = false
+			}
+			/* Read command line */
+			switch mReadline.readLine(console: self.console) {
+			case .commandLine(let cmdline):
+				let determined        = cmdline.didDetermined
+				let (newline, newpos) = cmdline.get()
+				if determined {
+					/* Execute command */
+					console.print(string: "\n") // Execute at new line
+					execute(command: newline)
+					/* Reset terminal */
+					let resetstr = CNEscapeCode.setNormalAttributes.encode()
+					console.print(string: resetstr)
+					/* Print prompt again */
+					mReadlineStatus.doPrompt	= true
+					mReadlineStatus.editingLine     = ""
+					mReadlineStatus.editingPosition	= 0
+				} else {
+					/* Move cursor to end of line */
+					let forward = mReadlineStatus.editingLine.count - mReadlineStatus.editingPosition
+					let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
+					if forward > 0 {
+						console.print(string: fwdstr)
+					}
+					/* Erace current command line */
+					let curlen  = mReadlineStatus.editingLine.count
+					for _ in 0..<curlen {
+						console.print(string: DEL)
+					}
+					/* Print new command line */
+					console.print(string: newline)
+					/* Adjust cursor */
+					let newlen = newline.count
+					let back   = newlen - newpos
+					let bakstr = CNEscapeCode.cursorBack(back).encode()
+					if back > 0 {
+						console.print(string: bakstr)
+					}
+					/* Update current line*/
+					mReadlineStatus.editingLine     = newline
+					mReadlineStatus.editingPosition = newpos
+				}
+			case .escapeCode(let code):
+				switch code {
+				case .screenSize(let width, let height):
+					mTerminalInfo.width	 = width
+					mTerminalInfo.height 	= height
+					NSLog("Update terminal info: \(width) \(height)")
+				default:
+					console.error(string: "ECODE: \(code.description())\n")
+				}
+			case .none:
+				break
 			}
 		}
 		return 0
@@ -89,72 +117,6 @@ open class CNShellThread: CNThread
 
 	open func promptString() -> String {
 		return "$ "
-	}
-
-	private func shellOperation() {
-		let BS  = CNEscapeCode.backspace.encode()
-		let DEL = BS + " " + BS
-
-		if mReadlineStatus.doPrompt {
-			self.console.print(string: promptString() + mReadlineStatus.editingLine)
-			mReadlineStatus.doPrompt = false
-		}
-		/* Read command line */
-		switch mReadline.readLine(console: self.console) {
-		case .commandLine(let cmdline):
-			let determined        = cmdline.didDetermined
-			let (newline, newpos) = cmdline.get()
-			if determined {
-				/* Execute command */
-				console.print(string: "\n") // Execute at new line
-				execute(command: newline)
-				/* Reset terminal */
-				let resetstr = CNEscapeCode.setNormalAttributes.encode()
-				console.print(string: resetstr)
-				/* Print prompt again */
-				mReadlineStatus.doPrompt	= true
-				mReadlineStatus.editingLine     = ""
-				mReadlineStatus.editingPosition	= 0
-			} else {
-				/* Move cursor to end of line */
-				let forward = mReadlineStatus.editingLine.count - mReadlineStatus.editingPosition
-				let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
-				if forward > 0 {
-					console.print(string: fwdstr)
-				}
-				/* Erace current command line */
-				let curlen  = mReadlineStatus.editingLine.count
-				for _ in 0..<curlen {
-					console.print(string: DEL)
-				}
-				/* Print new command line */
-				console.print(string: newline)
-				/* Adjust cursor */
-				let newlen = newline.count
-				let back   = newlen - newpos
-				let bakstr = CNEscapeCode.cursorBack(back).encode()
-				if back > 0 {
-					console.print(string: bakstr)
-				}
-				/* Update current line*/
-				mReadlineStatus.editingLine     = newline
-				mReadlineStatus.editingPosition = newpos
-			}
-		case .escapeCode(let code):
-			console.error(string: "ECODE: \(code.description())\n")
-		case .none:
-			break
-		}
-	}
-
-	private func cursesOperation() {
-		switch mCurses.readInput(console: self.console) {
-		case .escapeCode(let ecode):
-			/* Send code to terminal */
-			console.print(string: ecode.encode())
-		case .none:
-			break
-		}
 	}
 
 	open func execute(command cmd: String) {

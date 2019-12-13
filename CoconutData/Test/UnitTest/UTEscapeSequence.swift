@@ -18,6 +18,8 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 	let res6 = dumpCode(code: CNEscapeCode.foregroundColor(.White), console: cons)
 	let res7 = dumpCode(code: CNEscapeCode.backgroundColor(.Red), console: cons)
 	let res8 = dumpCode(code: CNEscapeCode.setNormalAttributes, console: cons)
+	let res9 = dumpCode(code: CNEscapeCode.requestScreenSize, console: cons)
+	let res10 = dumpCode(code: CNEscapeCode.screenSize(80, 25), console: cons)
 
 	let str0 = CNEscapeCode.cursorNextLine(1).encode()
 	let str1 = CNEscapeCode.eraceEntireLine.encode()
@@ -26,15 +28,13 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 
 	cons.error(string: "Color message\n")
 
-	return res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8
+	return res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10
 }
 
 private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool {
 	cons.print(string: "* dumpCode\n")
-	let str = ecode.encode()
-	cons.print(string: "code: \"\(str)\"\n")
-
 	let result: Bool
+	let str = ecode.encode()
 	switch CNEscapeCode.decode(string: str) {
 	case .ok(let codes):
 		for code in codes {

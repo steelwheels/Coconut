@@ -11,6 +11,7 @@
 		050DEEA723701AD0008E1A52 /* CNQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050DEEA623701AD0008E1A52 /* CNQueue.swift */; };
 		0517E1BD235E7F62002EB80C /* CNProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0517E1BC235E7F62002EB80C /* CNProcess.swift */; };
 		051914A3237AFB00008C0637 /* CNKeyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051914A2237AFAFF008C0637 /* CNKeyBinding.swift */; };
+		051F2BBD23A28C4D0048FD32 /* CNCurses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051F2BBC23A28C4D0048FD32 /* CNCurses.swift */; };
 		051FA46A208B3FD500AEC734 /* CNFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051FA469208B3FD500AEC734 /* CNFile.swift */; };
 		053084E2219DBDD2004DB0BF /* CNOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */; };
 		0532D64122FC48A40031F929 /* CNEscapeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0532D64022FC48A30031F929 /* CNEscapeCode.swift */; };
@@ -41,6 +42,7 @@
 		0588875621CBD7FA00BE14B5 /* CNNativeValueMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0588875221CBD7FA00BE14B5 /* CNNativeValueMatcher.swift */; };
 		05899938208B0059002FEAEA /* CNMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05899937208B0059002FEAEA /* CNMath.swift */; };
 		0589993A208B010E002FEAEA /* CNState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05899939208B010E002FEAEA /* CNState.swift */; };
+		058C8336239FF00700B58054 /* CNTerminalInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058C8335239FF00700B58054 /* CNTerminalInfo.swift */; };
 		0599583D208AEE2000DE2DC9 /* CNCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599583C208AEE2000DE2DC9 /* CNCharacter.swift */; };
 		05995840208AEEB300DE2DC9 /* CNValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599583F208AEEB300DE2DC9 /* CNValue.swift */; };
 		05995847208AEFEC00DE2DC9 /* CNValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995846208AEFEC00DE2DC9 /* CNValueUtil.swift */; };
@@ -78,6 +80,7 @@
 		050DEEA623701AD0008E1A52 /* CNQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNQueue.swift; sourceTree = "<group>"; };
 		0517E1BC235E7F62002EB80C /* CNProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNProcess.swift; sourceTree = "<group>"; };
 		051914A2237AFAFF008C0637 /* CNKeyBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNKeyBinding.swift; sourceTree = "<group>"; };
+		051F2BBC23A28C4D0048FD32 /* CNCurses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCurses.swift; sourceTree = "<group>"; };
 		051FA469208B3FD500AEC734 /* CNFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFile.swift; sourceTree = "<group>"; };
 		053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNOperationQueue.swift; sourceTree = "<group>"; };
 		0532D64022FC48A30031F929 /* CNEscapeCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNEscapeCode.swift; sourceTree = "<group>"; };
@@ -110,6 +113,7 @@
 		0588875221CBD7FA00BE14B5 /* CNNativeValueMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueMatcher.swift; sourceTree = "<group>"; };
 		05899937208B0059002FEAEA /* CNMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNMath.swift; sourceTree = "<group>"; };
 		05899939208B010E002FEAEA /* CNState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNState.swift; sourceTree = "<group>"; };
+		058C8335239FF00700B58054 /* CNTerminalInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTerminalInfo.swift; sourceTree = "<group>"; };
 		0599583C208AEE2000DE2DC9 /* CNCharacter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCharacter.swift; sourceTree = "<group>"; };
 		0599583F208AEEB300DE2DC9 /* CNValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValue.swift; sourceTree = "<group>"; };
 		05995846208AEFEC00DE2DC9 /* CNValueUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValueUtil.swift; sourceTree = "<group>"; };
@@ -234,6 +238,15 @@
 			path = Math;
 			sourceTree = "<group>";
 		};
+		058C8334239FEFE700B58054 /* Terminal */ = {
+			isa = PBXGroup;
+			children = (
+				058C8335239FF00700B58054 /* CNTerminalInfo.swift */,
+				051F2BBC23A28C4D0048FD32 /* CNCurses.swift */,
+			);
+			path = Terminal;
+			sourceTree = "<group>";
+		};
 		0599583E208AEE9900DE2DC9 /* Value */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +285,7 @@
 				05899936208B0042002FEAEA /* Math */,
 				058740FA208AFF4A00FF2B65 /* Process */,
 				056EA8B8208AFE3F00D1DFFE /* File */,
+				058C8334239FEFE700B58054 /* Terminal */,
 				0599584D208AF08700DE2DC9 /* Parser */,
 				05F5DAC4208ADBB6006EB134 /* Data */,
 				0599583E208AEE9900DE2DC9 /* Value */,
@@ -366,7 +380,7 @@
 		05866193208AD69400ADA9D3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
 					0586619B208AD69400ADA9D3 = {
@@ -421,6 +435,7 @@
 				054D735F21B03CEA00950D9D /* CNNativeValue.swift in Sources */,
 				0583FA292302FFA200100DAB /* CNKeyCode.swift in Sources */,
 				05995850208AF0A600DE2DC9 /* CNToken.swift in Sources */,
+				051F2BBD23A28C4D0048FD32 /* CNCurses.swift in Sources */,
 				0588875321CBD7FA00BE14B5 /* CNNativeValueSelector.swift in Sources */,
 				05F5DAC7208ADBD8006EB134 /* CNArrayStream.swift in Sources */,
 				0589993A208B010E002FEAEA /* CNState.swift in Sources */,
@@ -430,6 +445,7 @@
 				05995847208AEFEC00DE2DC9 /* CNValueUtil.swift in Sources */,
 				05EDAD85213BE640003C9147 /* CNStack.swift in Sources */,
 				05387F95208F799900848EA3 /* CNText.swift in Sources */,
+				058C8336239FF00700B58054 /* CNTerminalInfo.swift in Sources */,
 				05995851208AF0A600DE2DC9 /* CNTokenStream.swift in Sources */,
 				0588875421CBD7FA00BE14B5 /* CNNativeValueVisitor.swift in Sources */,
 				053BC8F52090D0CF006CBB06 /* CNExitCode.swift in Sources */,
@@ -604,7 +620,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -636,7 +652,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

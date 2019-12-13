@@ -142,11 +142,13 @@ private class CNCommandHistory
 
 open class CNReadline
 {
+	private var mTermInfo:		CNTerminalInfo
 	private var mCommandLine:	CNCommandLine
 	private var mCommandHistory:	CNCommandHistory
 	private var mCurrentBuffer:	CNQueue<CNEscapeCode>
 
-	public init(){
+	public init(terminalInfo terminfo: CNTerminalInfo){
+		mTermInfo	= terminfo
 		mCommandLine	= CNCommandLine()
 		mCommandHistory	= CNCommandHistory()
 		mCurrentBuffer	= CNQueue<CNEscapeCode>()
@@ -240,6 +242,10 @@ open class CNReadline
 			result = false			/* skipped */
 		case .foregroundColor(_), .backgroundColor(_), .setNormalAttributes:
 			result = true			/* ignored */
+		case .requestScreenSize:
+			result = true			/* ignored */
+		case .screenSize(_, _):
+			result = false
 		}
 		return result
 	}
