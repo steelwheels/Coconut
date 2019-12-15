@@ -7,7 +7,8 @@
 
 import Foundation
 
-public class CNCurses {
+public class CNCurses
+{
 	public struct Size {
 		public var 	width: 		Int
 		public var	height:		Int
@@ -20,7 +21,7 @@ public class CNCurses {
 	private var	mTerminalInfo:	CNTerminalInfo
 
 	public init(terminalInfo tinfo: CNTerminalInfo) {
-		mTerminalInfo = tinfo
+		mTerminalInfo	= tinfo
 	}
 
 	public var size: Size {

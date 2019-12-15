@@ -56,6 +56,37 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	cons.print(string: "testShell: Start\n")
 	shell.start()
 
+	/* Check request from shell */
+	var result      = true
+	var didresponce = false
+	while !didresponce {
+		let data = shell.outputFileHandle.availableData
+		if let str = String(data: data, encoding: .utf8) {
+			switch CNEscapeCode.decode(string: str) {
+			case .ok(let codes):
+				for code in codes {
+					switch code {
+					case .requestScreenSize:
+						shell.inputFileHandle.write(string: CNEscapeCode.screenSize(80, 25).encode())
+						didresponce = true
+					default:
+						cons.error(string: "[Error] Ignored: \(code.description())\n")
+						didresponce = true
+						result      = false
+					}
+				}
+			case .error(let err):
+				cons.error(string: "[Error] Failed to decode: \(str) \(err.description())\n")
+				didresponce = true
+				result      = false
+			}
+		} else {
+			cons.error(string: "[Error] Failed to decode request\n")
+			didresponce = true
+			result      = false
+		}
+	}
+
 	/* input command */
 	shell.inputFileHandle.write(string: "shell-command\n")
 	shell.inputFileHandle.closeFile()
@@ -69,6 +100,6 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	}
 	cons.print(string: "testShell: Cancelled\n")
 
-	return true
+	return result
 }
 

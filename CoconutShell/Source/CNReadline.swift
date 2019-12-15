@@ -175,7 +175,7 @@ open class CNReadline
 		}
 		/* Return result */
 		if let code = mCurrentBuffer.pop() {
-			if decodeForCommandLine(escapeCode: code) {
+			if decode(escapeCode: code) {
 				return .commandLine(mCommandLine)
 			} else {
 				return .escapeCode(code)
@@ -185,7 +185,7 @@ open class CNReadline
 		}
 	}
 
-	private func decodeForCommandLine(escapeCode code: CNEscapeCode) -> Bool {
+	private func decode(escapeCode code: CNEscapeCode) -> Bool {
 		let result: Bool
 		switch code {
 		case .string(let str):

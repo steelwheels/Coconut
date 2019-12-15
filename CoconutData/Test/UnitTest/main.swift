@@ -39,6 +39,9 @@ let result18 = testQueue(console: cons)
 cons.print(string: "* testConsole\n")
 let result1 = testConsole(console: cons)
 
+cons.print(string: "* testFileHandle\n")
+let result21 = testFileHandle(console: cons)
+
 cons.print(string: "* testFilePath\n")
 let result2 = testFilePath(console: cons)
 
@@ -75,7 +78,7 @@ let result7 = testResource(console: cons)
 let result = result0 && result1 && result2 && result3 && result4  && result5 &&
 	     result6 && result7 && result8 && result9 && result10 && result11 &&
 	     result12 && result13 && result14 && result15 && result17 &&
-	     result18 && result19 && result20
+	     result18 && result19 && result20 && result21
 if result {
 	cons.print(string: "[Result] OK\n")
 	Darwin.exit(0)

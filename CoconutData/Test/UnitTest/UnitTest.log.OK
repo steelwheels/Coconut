@@ -213,7 +213,13 @@ buffer1
 buffer2
 - after buffered
 after1
+* testFileHandle
+FileDescriptor = 0
+- Initial statelocal mode: <unknown>
+- Set raw mode -> Failed
+- Reset raw mode -> Failed
 * testFilePath
+testFilePath: Info.plist
 UTI: com.apple.property-list 
 Get sceme from "/usr/local/bin" -> <none> -> OK
 Get sceme from "https://yahoo.com" -> Sceme:"https" -> OK
@@ -277,9 +283,9 @@ Same code
 requestScreenSize
 Same code
 * dumpCode
-screenSize(25, 80)
-[31m[Error] Different code
-[0m* dumpSequence
+screenSize(80, 25)
+Same code
+* dumpSequence
 string("Hello, ")
 cursorNextLine(1)
 string(" and ")

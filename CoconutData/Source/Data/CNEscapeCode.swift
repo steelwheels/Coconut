@@ -447,7 +447,7 @@ public enum CNEscapeCode {
 				let (param0, param1, param2) = try get3Parameter(from: tokens, forCommand: c)
 				switch param0 {
 				case 8:
-					result = .screenSize(param1, param2)
+					result = .screenSize(param2, param1)
 				case 18:
 					result = .requestScreenSize
 				default:

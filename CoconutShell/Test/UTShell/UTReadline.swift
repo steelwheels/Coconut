@@ -17,7 +17,7 @@ private class UTReadline: CNReadline {
 		get { return messageIndex >= messages.count }
 	}
 
-	public init(console cons: CNFileConsole) {
+	public init(console cons: CNFileConsole, terminalInfo tinfo: CNTerminalInfo) {
 		messages = [
 			"This is first message",
 			CNEscapeCode.cursorUp(1).encode(),
@@ -41,7 +41,7 @@ private class UTReadline: CNReadline {
 			CNEscapeCode.tab.encode()
 		]
 		messageIndex = 0
-		super.init()
+		super.init(terminalInfo: tinfo)
 	}
 
 	public override func scan(console cons: CNConsole) -> String? {
@@ -58,7 +58,8 @@ private class UTReadline: CNReadline {
 
 public func testReadline(console cons: CNFileConsole) -> Bool
 {
-	let readline = UTReadline(console: cons)
+	let tinfo    = CNTerminalInfo()
+	let readline = UTReadline(console: cons, terminalInfo: tinfo)
 
 	var docont = true
 	while docont {

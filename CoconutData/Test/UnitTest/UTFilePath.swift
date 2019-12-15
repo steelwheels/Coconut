@@ -13,6 +13,7 @@ public func testFilePath(console cons: CNConsole) -> Bool
 	var result0: Bool
 
 	/* URI */
+	cons.print(string: "testFilePath: Info.plist\n")
 	let url = URL(fileURLWithPath: "Info.plist")
 	if let uti = CNFilePath.UTIForFile(URL: url) {
 		cons.print(string: "UTI: \(uti) \n")

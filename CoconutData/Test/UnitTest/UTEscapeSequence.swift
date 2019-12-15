@@ -45,7 +45,8 @@ private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool
 			if ecode.compare(code: codes[0]) {
 				cons.print(string: "Same code\n")
 			} else {
-				cons.error(string: "[Error] Different code\n")
+				let desc = codes[0].description()
+				cons.error(string: "[Error] Different code: \(desc)\n")
 			}
 		} else {
 			cons.error(string: "[Error] Too many codes\n")

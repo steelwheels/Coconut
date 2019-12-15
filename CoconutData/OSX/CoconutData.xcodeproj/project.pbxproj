@@ -93,6 +93,7 @@
 		05F5EA73208F794000CF98C3 /* CNReservedWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA72208F794000CF98C3 /* CNReservedWord.swift */; };
 		05F7DACD23730E1100E363E9 /* UTCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F7DACC23730E1100E363E9 /* UTCharacter.swift */; };
 		05FC09B0237C29BA00667AC4 /* UTKeyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC09AF237C29BA00667AC4 /* UTKeyBinding.swift */; };
+		05FD029123A52F5000744D8C /* UTFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FD029023A52F5000744D8C /* UTFileHandle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -258,6 +259,7 @@
 		05F5EA72208F794000CF98C3 /* CNReservedWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReservedWord.swift; sourceTree = "<group>"; };
 		05F7DACC23730E1100E363E9 /* UTCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCharacter.swift; sourceTree = "<group>"; };
 		05FC09AF237C29BA00667AC4 /* UTKeyBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTKeyBinding.swift; sourceTree = "<group>"; };
+		05FD029023A52F5000744D8C /* UTFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTFileHandle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -334,6 +336,7 @@
 				05CB79BF236F120600301547 /* UTQueue.swift */,
 				057FF40A209DE871006EEF7B /* UTValue.swift */,
 				057C7EF620A1ED950085662E /* UTConsole.swift */,
+				05FD029023A52F5000744D8C /* UTFileHandle.swift */,
 				052170F021022AB1001801A6 /* UTFilePath.swift */,
 				055BD39F2199C48400BF7373 /* UTObserver.swift */,
 				052087BD235C892D0084E340 /* UTProcess.swift */,
@@ -769,6 +772,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05FD029123A52F5000744D8C /* UTFileHandle.swift in Sources */,
 				051BB4B322FCF1370062F47F /* UTEscapeSequence.swift in Sources */,
 				0587F31E22E3FF0300F28B50 /* UTGraphics.swift in Sources */,
 				055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */,
