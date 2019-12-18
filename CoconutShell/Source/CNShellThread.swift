@@ -63,12 +63,15 @@ open class CNShellThread: CNThread
 			/* Read command line */
 			switch mReadline.readLine(console: self.console) {
 			case .commandLine(let cmdline):
-				let determined        = cmdline.didDetermined
-				let (newline, newpos) = cmdline.get()
+				let determined  = cmdline.didDetermined
+				let newline	= cmdline.string
+				let newpos	= cmdline.position
 				if determined {
 					/* Execute command */
 					console.print(string: "\n") // Execute at new line
 					execute(command: newline)
+					/* Save current command */
+					mReadline.saveCurrentCommand()
 					/* Reset terminal */
 					let resetstr = CNEscapeCode.setNormalAttributes.encode()
 					console.print(string: resetstr)
