@@ -9,6 +9,15 @@ import Foundation
 
 public extension Character
 {
+	/* Reference: http://jkorpela.fi/chars/c0.html */
+	static var BS		= Character("\u{08}")
+	static var TAB		= Character("\u{09}")
+	static var LF		= Character("\u{0a}")
+	static var VT		= Character("\u{0b}")
+	static var CR		= Character("\u{0d}")
+	static var ESC		= Character("\u{1b}")
+	static var DEL		= Character("\u{7f}")
+
 	var isLetterOrNumber: Bool {
 		get { return self.isLetter || self.isNumber }
 	}

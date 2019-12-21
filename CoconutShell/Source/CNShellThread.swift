@@ -96,7 +96,7 @@ open class CNShellThread: CNThread
 					/* Adjust cursor */
 					let newlen = newline.count
 					let back   = newlen - newpos
-					let bakstr = CNEscapeCode.cursorBack(back).encode()
+					let bakstr = CNEscapeCode.cursorBackward(back).encode()
 					if back > 0 {
 						console.print(string: bakstr)
 					}

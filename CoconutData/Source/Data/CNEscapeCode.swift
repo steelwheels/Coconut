@@ -7,18 +7,6 @@
 
 import Foundation
 
-/* Reference
- *  - https://seiai.ed.jp/sys/text/java/utf8table.html (Japanese)
- *  - https://ttssh2.osdn.jp/manual/ja/about/ctrlseq.html (Japanese)
- *  - http://man7.org/linux/man-pages/man4/console_codes.4.html
- */
-private let BS:		Character		= "\u{08}"	// BS
-private let TAB:	Character		= "\u{09}"	// HT
-private let NEWLINE1:	Character		= "\u{0a}"	// LF
-private let NEWLINE2:	Character		= "\u{0d}"	// CR
-private let ESC:	Character		= "\u{1b}"	// ESC
-private let DEL:	Character		= "\u{7f}"	// DEL
-
 /* Reference:
  *  - https://en.wikipedia.org/wiki/ANSI_escape_code
  *  - https://qiita.com/PruneMazui/items/8a023347772620025ad6
@@ -33,7 +21,7 @@ public enum CNEscapeCode {
 	case 	cursorUp(Int)
 	case 	cursorDown(Int)
 	case	cursorForward(Int)
-	case	cursorBack(Int)
+	case	cursorBackward(Int)
 	case	cursorNextLine(Int)			/* Moves cursor to beginning of the line n	*/
 	case	cursorPreviousLine(Int)			/* Moves cursor to beginning of the line n	*/
 	case	cursorHolizontalAbsolute(Int)		/* (Column)					*/
@@ -65,7 +53,7 @@ public enum CNEscapeCode {
 		case .cursorUp(let n):				result = "cursorUp(\(n))"
 		case .cursorDown(let n):			result = "cursorDown(\(n))"
 		case .cursorForward(let n):			result = "cursorForward(\(n))"
-		case .cursorBack(let n):			result = "cursorBack(\(n))"
+		case .cursorBackward(let n):			result = "cursorBack(\(n))"
 		case .cursorNextLine(let n):			result = "cursorNextLine(\(n))"
 		case .cursorPreviousLine(let n):		result = "cursorPreviousLine(\(n))"
 		case .cursorHolizontalAbsolute(let pos):	result = "cursorHolizontalAbsolute(\(pos))"
@@ -88,17 +76,18 @@ public enum CNEscapeCode {
 	}
 
 	public func encode() -> String {
+		let ESC = Character.ESC
 		var result: String
 		switch self {
 		case .string(let str):				result = str
-		case .newline:					result = String(NEWLINE2)
-		case .tab:					result = String(TAB)
-		case .backspace:				result = String(BS)
-		case .delete:					result = String(DEL)
+		case .newline:					result = String(Character.CR)
+		case .tab:					result = String(Character.TAB)
+		case .backspace:				result = String(Character.BS)
+		case .delete:					result = String(Character.DEL)
 		case .cursorUp(let n):				result = "\(ESC)[\(n)A"
 		case .cursorDown(let n):			result = "\(ESC)[\(n)B"
 		case .cursorForward(let n):			result = "\(ESC)[\(n)C"
-		case .cursorBack(let n):			result = "\(ESC)[\(n)D"
+		case .cursorBackward(let n):			result = "\(ESC)[\(n)D"
 		case .cursorNextLine(let n):			result = "\(ESC)[\(n)E"
 		case .cursorPreviousLine(let n):		result = "\(ESC)[\(n)F"
 		case .cursorHolizontalAbsolute(let n):		result = "\(ESC)[\(n)G"
@@ -173,9 +162,9 @@ public enum CNEscapeCode {
 			case .cursorForward(let n1):		result = (n0 == n1)
 			default:				break
 			}
-		case .cursorBack(let n0):
+		case .cursorBackward(let n0):
 			switch src {
-			case .cursorBack(let n1):		result = (n0 == n1)
+			case .cursorBackward(let n1):		result = (n0 == n1)
 			default:				break
 			}
 		case .cursorNextLine(let n0):
@@ -312,7 +301,7 @@ public enum CNEscapeCode {
 		while  idx < end {
 			let (c0, idx0) = try nextChar(string: src, index: idx)
 			switch c0 {
-			case ESC:
+			case Character.ESC:
 				/* Save current sub string */
 				if substr.count > 0 {
 					result.append(CNEscapeCode.string(substr))
@@ -336,7 +325,7 @@ public enum CNEscapeCode {
 					result.append(.string("\(c0)\(c1)"))
 					idx = idx1
 				}
-			case NEWLINE1, NEWLINE2:
+			case Character.LF, Character.CR:
 				/* Save current sub string */
 				if substr.count > 0 {
 					result.append(CNEscapeCode.string(substr))
@@ -345,7 +334,7 @@ public enum CNEscapeCode {
 				/* add newline */
 				result.append(.newline)
 				idx = idx0
-			case TAB:
+			case Character.TAB:
 				/* Save current sub string */
 				if substr.count > 0 {
 					result.append(CNEscapeCode.string(substr))
@@ -354,7 +343,7 @@ public enum CNEscapeCode {
 				/* add tab */
 				result.append(.tab)
 				idx = idx0
-			case BS:
+			case Character.BS:
 				/* Save current sub string */
 				if substr.count > 0 {
 					result.append(CNEscapeCode.string(substr))
@@ -363,7 +352,7 @@ public enum CNEscapeCode {
 				/* add backspace */
 				result.append(.backspace)
 				idx = idx0
-			case DEL:
+			case Character.DEL:
 				/* Save current sub string */
 				if substr.count > 0 {
 					result.append(CNEscapeCode.string(substr))
@@ -399,7 +388,7 @@ public enum CNEscapeCode {
 			case "A": result = CNEscapeCode.cursorUp(try get1Parameter(from: tokens, forCommand: c))
 			case "B": result = CNEscapeCode.cursorDown(try get1Parameter(from: tokens, forCommand: c))
 			case "C": result = CNEscapeCode.cursorForward(try get1Parameter(from: tokens, forCommand: c))
-			case "D": result = CNEscapeCode.cursorBack(try get1Parameter(from: tokens, forCommand: c))
+			case "D": result = CNEscapeCode.cursorBackward(try get1Parameter(from: tokens, forCommand: c))
 			case "E": result = CNEscapeCode.cursorNextLine(try get1Parameter(from: tokens, forCommand: c))
 			case "F": result = CNEscapeCode.cursorPreviousLine(try get1Parameter(from: tokens, forCommand: c))
 			case "G": result = CNEscapeCode.cursorHolizontalAbsolute(try get1Parameter(from: tokens, forCommand: c))

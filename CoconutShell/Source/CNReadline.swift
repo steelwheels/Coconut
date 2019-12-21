@@ -84,7 +84,7 @@ open class CNReadline
 		case .cursorForward(let n):
 			cmdline.moveCursor(delta: n)
 			result = true
-		case .cursorBack(let n):
+		case .cursorBackward(let n):
 			cmdline.moveCursor(delta: -n)
 			result = true
 		case .cursorHolizontalAbsolute(_):

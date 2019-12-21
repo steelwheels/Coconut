@@ -12,34 +12,72 @@ private let ESC:	Character		= "\u{1b}"	// ESC
 /*
  * reference: https://www.hcs.harvard.edu/~jrus/site/system-bindings.html
  */
-public enum CNKeyBinding {
-	case insertNewline(Bool)		// true: Leave form box, false: dont leave
-	case insertTab(Bool)			// true: Leave form box, false: dont leave
+public enum CNKeyBinding
+{
+	public enum LeaveMode {
+		case Leave
+		case DoNotLeave
+	}
+
+	public enum DeleteUnit {
+		case character
+		case word
+		case paragraph
+	}
+
+	public enum CursorDirection {
+		case left
+		case right
+		case up
+		case down
+	}
+
+	public enum ScrollDirection {
+		case up
+		case down
+	}
+
+	public enum ScrollUnit {
+		case page
+		case document
+	}
+
+	public enum DocumentDirection {
+		case forward
+		case backward
+	}
+
+	public enum DocumentUnit {
+		case word
+		case line
+		case paragraph
+		case document
+	}
+
+	case insertNewline(LeaveMode)		// true: Leave form box, false: dont leave
+	case insertTab(LeaveMode)		// true: Leave form box, false: dont leave
 	case insertBackTab
 	case cycleToNextInputScript
 	case togglePlatformInputSystem
 	case cycleToNextInputKeyboardLayout
-	case deleteBackward(Int)		// 0: One character, 1: One word, 2: One paragraph
-	case deleteForward(Int)			// 0: One character, 1: One word, 2: One paragraph
+	case deleteBackward(DeleteUnit)
+	case deleteForward(DeleteUnit)
 	case cancel
-	case moveUp(Int)			// 0: One line, 1: Paragraph, 2: Document
-	case moveDown(Int)			// 0: One line, 1: Paragraph, 2: Document
-	case moveLeft(Int)			// 0: One char, 1: Word, 2: Line
-	case moveRight(Int)			// 0: One char, 1: Word, 2: Line
-	case scrollUp				// page up
-	case scrollDown				// page down
+	case moveCursor(CursorDirection)
+	case moveTo(DocumentDirection, DocumentUnit)
+	case scroll(ScrollDirection, ScrollUnit)
 
 	public static func decode(selectorName name: String) -> CNKeyBinding? {
 		let result: CNKeyBinding?
 		switch name {
 		case "insertNewline:":
-			result = .insertNewline(true)
+			result = .insertNewline(.DoNotLeave)
 		case "insertNewlineIgnoringFieldEditor:":
-			result = .insertNewline(false)
+			result = .insertNewline(.DoNotLeave)
 		case "insertTab:":
-			result = .insertTab(true)
+			result = .insertTab(.DoNotLeave)
 		case "insertTabIgnoringFieldEditor:":
-			result = .insertTab(false)
+			result = .insertTab(.DoNotLeave)
 		case "insertBacktab:":
 			result = .insertBackTab
 		case "cycleToNextInputScript:":
@@ -49,63 +87,63 @@ public enum CNKeyBinding {
 		case "cycleToNextInputKeyboardLayout:":
 			result = .cycleToNextInputKeyboardLayout
 		case "deleteBackward:":
-			result = .deleteBackward(0)
+			result = .deleteBackward(.character)
 		case "deleteWordBackward:":
-			result = .deleteBackward(1)
+			result = .deleteBackward(.word)
 		case "deleteForward:":
-			result = .deleteForward(0)
+			result = .deleteForward(.character)
 		case "deleteWordForward:":
-			result = .deleteForward(1)
+			result = .deleteForward(.word)
 		case "cancelOperation:":
 			result = .cancel
 		case "complete:":
 			result = nil	// Not supported
 		case "moveUp:", "moveUpAndModifySelection:":
-			result = .moveUp(0)
+			result = .moveCursor(.up)
 		case "scrollPageUp:":
-			result = .scrollUp
+			result = .scroll(.up, .page)
 		case "moveToBeginningOfDocument:", "moveToBeginningOfDocumentAndModifySelection:":
-			result = .moveUp(2)
+			result = .moveTo(.backward, .document)
 		case "moveToBeginningOfParagraph:", "moveParagraphBackwardAndModifySelection:":
-			result = .moveUp(1)
+			result = .moveTo(.backward, .paragraph)
 		case "moveDown:", "moveDownAndModifySelection:":
-			result = .moveDown(0)
+			result = .moveCursor(.down)
 		case "scrollPageDown:":
-			result = .scrollDown
+			result = .scroll(.down, .page)
 		case "moveToEndOfDocument:" ,"moveToEndOfDocumentAndModifySelection:":
-			result = .moveDown(2)
+			result = .moveTo(.forward, .document)
 		case "moveToEndOfParagraph:":
-			result = .moveDown(1)
+			result = .moveTo(.forward, .paragraph)
 		case "moveParagraphForwardAndModifySelection:":
-			result = .moveUp(1)
+			result = .moveTo(.forward, .paragraph)
 		case "moveLeft:", "moveLeftAndModifySelection:":
-			result = .moveLeft(0)
+			result = .moveCursor(.left)
 		case "moveToBeginningOfLine:", "moveToBeginningOfLineAndModifySelection:":
-			result = .moveLeft(2)
+			result = .moveTo(.backward, .line)
 		case "changeBaseWritingDirectionToRTL:", "changeBaseWritingDirectionToLTR:":
 			result = nil	// Not supported
 		case "moveWordLeft:", "moveWordLeftAndModifySelection:":
-			result = .moveLeft(1)
+			result = .moveTo(.backward, .word)
 		case "moveRight:", "moveRightAndModifySelection:":
-			result = .moveRight(0)
+			result = .moveCursor(.right)
 		case "moveToEndOfLine:", "moveToEndOfLineAndModifySelection:":
-			result = .moveRight(2)
+			result = .moveTo(.forward, .line)
 		case "moveWordRight:", "moveWordRightAndModifySelection:":
-			result = .moveRight(1)
+			result = .moveTo(.forward, .word)
 		case "scrollToBeginningOfDocument:":
-			result = .moveUp(2)
+			result = .scroll(.up, .document)
 		case "scrollToEndOfDocument:":
-			result = .moveDown(2)
+			result = .scroll(.down, .document)
 		case "pageUp:", "pageUpAndModifySelection:":
-			result = .scrollUp
+			result = .scroll(.up, .page)
 		case "pageDown:", "pageDownAndModifySelection:":
-			result = .scrollDown
+			result = .scroll(.down, .page)
 		case "moveBackward:":
-			result = .moveLeft(0)
+			result = .moveCursor(.left)
 		case "moveForward:":
-			result = .moveRight(0)
+			result = .moveCursor(.right)
 		case "deleteToEndOfParagraph:":
-			result = .deleteForward(2)
+			result = .deleteForward(.paragraph)
 		case "centerSelectionInVisibleArea:":
 			result = nil 	// Not supported
 		case "transpose:":
@@ -133,36 +171,34 @@ public enum CNKeyBinding {
 			result = nil // Not supported
 		case .cycleToNextInputKeyboardLayout:
 			result = nil // Not supported
-		case .deleteBackward(let n):
-			if n == 0 {
+		case .deleteBackward(let unit):
+			switch unit {
+			case .character:
 				result = [.delete]
+			case .paragraph, .word:
+				result = nil 		// Not supported
 			}
-		case .deleteForward(let n):
-			if n == 0 {
+		case .deleteForward(let unit):
+			switch unit {
+			case .character:
 				result = [.cursorForward(1), .delete]
+			case .paragraph, .word:
+				result = nil		// Not supported
 			}
 		case .cancel:
 			result = [.string("\(ESC)")]
-		case .moveUp(let n):
-			if n == 0 {
-				result = [.cursorUp(1)]
+		case .moveCursor(let dir):
+			switch dir {
+			case .up:	result = [.cursorUp(1)]
+			case .down:	result = [.cursorDown(1)]
+			case .left:	result = [.cursorBackward(1)]
+			case .right:	result = [.cursorForward(1)]
 			}
-		case .moveDown(let n):
-			if n == 0 {
-				result = [.cursorDown(1)]
-			}
-		case .moveLeft(let n):
-			if n == 0 {
-				result = [.cursorBack(1)]
-			}
-		case .moveRight(let n):
-			if n == 0 {
-				result = [.cursorForward(1)]
-			}
-		case .scrollUp:
-			result = [.scrollUp]
-		case .scrollDown:
-			result = [.scrollDown]
+		case .moveTo(_, _):
+			result = nil			// Not supported
+		case .scroll(_, _):
+			result = nil			// Not supported
+
 		}
 		return result
 	}

@@ -309,14 +309,14 @@ selectorName:cancelOperation: -> [string("") ]
 [Error] Failed to decode keybinding: complete:
 selectorName:moveUp: -> [cursorUp(1) ]
 selectorName:moveUpAndModifySelection: -> [cursorUp(1) ]
-selectorName:scrollPageUp: -> [scrollUp ]
+selectorName:scrollPageUp: -> [Error] Failed to convert to escape code
 selectorName:moveToBeginningOfDocument: -> [Error] Failed to convert to escape code
 selectorName:moveToBeginningOfDocumentAndModifySelection: -> [Error] Failed to convert to escape code
 selectorName:moveToBeginningOfParagraph: -> [Error] Failed to convert to escape code
 selectorName:moveParagraphBackwardAndModifySelection: -> [Error] Failed to convert to escape code
 selectorName:moveDown: -> [cursorDown(1) ]
 selectorName:moveDownAndModifySelection: -> [cursorDown(1) ]
-selectorName:scrollPageDown: -> [scrollDown ]
+selectorName:scrollPageDown: -> [Error] Failed to convert to escape code
 selectorName:moveToEndOfDocument: -> [Error] Failed to convert to escape code
 selectorName:moveToEndOfDocumentAndModifySelection: -> [Error] Failed to convert to escape code
 selectorName:moveToEndOfParagraph: -> [Error] Failed to convert to escape code
@@ -337,10 +337,10 @@ selectorName:moveWordRight: -> [Error] Failed to convert to escape code
 selectorName:moveWordRightAndModifySelection: -> [Error] Failed to convert to escape code
 selectorName:scrollToBeginningOfDocument: -> [Error] Failed to convert to escape code
 selectorName:scrollToEndOfDocument: -> [Error] Failed to convert to escape code
-selectorName:pageUp: -> [scrollUp ]
-selectorName:pageUpAndModifySelection: -> [scrollUp ]
-selectorName:pageDown: -> [scrollDown ]
-selectorName:pageDownAndModifySelection: -> [scrollDown ]
+selectorName:pageUp: -> [Error] Failed to convert to escape code
+selectorName:pageUpAndModifySelection: -> [Error] Failed to convert to escape code
+selectorName:pageDown: -> [Error] Failed to convert to escape code
+selectorName:pageDownAndModifySelection: -> [Error] Failed to convert to escape code
 selectorName:moveBackward: -> [cursorBack(1) ]
 selectorName:moveForward: -> [cursorForward(1) ]
 selectorName:deleteToEndOfParagraph: -> [Error] Failed to convert to escape code

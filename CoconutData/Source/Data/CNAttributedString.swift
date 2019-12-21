@@ -23,8 +23,9 @@ public extension NSAttributedString {
 	 *    The position is placed *before* c
 	 */
 	func searchForward(character c: Character, from index: Int) -> Int? {
-		var i = index
-		while true {
+		var i   = index
+		let len = self.length
+		while i<len {
 			if let csrc = character(at: i) {
 				if c == csrc {
 					return i - index
@@ -45,7 +46,7 @@ public extension NSAttributedString {
 	 */
 	func searchBackward(character c: Character, from index: Int) -> Int? {
 		var i = index
-		while true {
+		while 0 < i {
 			if let csrc = character(at: i-1) {
 				if c == csrc {
 					return index - i
