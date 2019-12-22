@@ -179,6 +179,21 @@ public class CNDocumentTypePreference
 	}
 }
 
+public class CNTerminalPreference
+{
+	public var	width:			Int
+	public var	height:			Int
+	public var	foregroundColor:	CNColor
+	public var	backgroundColor:	CNColor
+
+	public init() {
+		width			= 80
+		height			= 20
+		foregroundColor		= CNColor.Green
+		backgroundColor		= CNColor.Black
+	}
+}
+
 extension CNPreference
 {
 	public var applicationPreference: CNApplicationPreference { get {
@@ -196,6 +211,12 @@ extension CNPreference
 	public var documentTypePreference: CNDocumentTypePreference { get {
 		return get(name: "documentType", allocator: {
 			() -> CNDocumentTypePreference in return CNDocumentTypePreference()
+		})
+	}}
+
+	public var terminalPreference: CNTerminalPreference { get {
+		return get(name: "terminal", allocator: {
+			() -> CNTerminalPreference in return CNTerminalPreference()
 		})
 	}}
 

@@ -8,12 +8,16 @@
 import Foundation
 
 public class CNTerminalInfo {
-	public var	width:	Int
-	public var	height:	Int
+	public var	width:			Int
+	public var	height:			Int
+	public var	foregroundColor:	CNColor
+	public var	backgroundColor:	CNColor
 
 	public init(){
 		width		= 0
 		height		= 0
+		foregroundColor	= CNColor.Green
+		backgroundColor	= CNColor.Black
 	}
 }
 

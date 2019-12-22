@@ -76,3 +76,5 @@ private func dumpSequence(string src: String, console cons: CNConsole) -> Bool {
 	}
 	return result
 }
+
+

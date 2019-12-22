@@ -62,18 +62,24 @@ public extension NSAttributedString {
 
 	func moveCursorForward(from index: Int, number num: Int) -> Int {
 		if let tonl = self.searchForward(character: "\n", from: index) {
-			let off = min(num, tonl)
-			return index + off
+			return min(index + num, index + tonl)
 		} else {
-			let maxoff = max(0, self.length - 1)
-			return min(maxoff, index + num)
+			return min(index + num, self.length)
+		}
+	}
+
+	func moveCursorToLineEnd(from index: Int) -> Int {
+		if let tonl = self.searchForward(character: "\n", from: index) {
+			return index + tonl
+		} else {
+			return self.length
 		}
 	}
 
 	func moveCursorBackward(from index: Int, number num: Int) -> Int {
 		if let tonl = self.searchBackward(character: "\n", from: index) {
 			let off = min(num, tonl)
-			return index - off
+			return max(0, index - off)
 		} else {
 			return max(0, index - num)
 		}
@@ -87,6 +93,14 @@ public extension NSAttributedString {
 			}
 		}
 		return nil
+	}
+
+	func backspace(from index: Int) -> Int {
+		if 1 <= index {
+			return index - 1
+		} else {
+			return 0
+		}
 	}
 
 	func moveCursorUp(from index: Int, number num: Int, moveToHead head: Bool) -> Int {
@@ -152,6 +166,30 @@ public extension NSAttributedString {
 		}
 		return curidx
 	}
+
+	func moveCursorTo(from idx: Int , x xpos: Int?, y ypos: Int?) -> Int {
+		var newidx = idx
+		if let x = xpos {
+			/* Get current offset from list head */
+			let curoff: Int
+			if let h = self.searchBackward(character: "\n", from: newidx) {
+				curoff = h
+			} else {
+				curoff = 0
+			}
+			/* Get offset from given x */
+			let diff = x - curoff
+			if diff > 0 {
+				newidx = self.moveCursorForward(from: newidx,  number:  diff)
+			} else {
+				newidx = self.moveCursorBackward(from: newidx, number: -diff)
+			}
+		}
+		if let y = ypos {
+			NSLog("Ignored y: \(y)")
+		}
+		return newidx
+	}
 }
 
 public extension NSMutableAttributedString
@@ -169,6 +207,11 @@ public extension NSMutableAttributedString
 		return index + str.length
 	}
 
+	func clear() {
+		let range = NSRange(location: 0, length: self.length)
+		self.deleteCharacters(in: range)
+	}
+
 	func deleteForwardCharacters(at index: Int, number num: Int) -> Int {
 		if let tonl = self.searchForward(character: "\n", from: index) {
 			let delnum   = min(num, tonl)
@@ -180,6 +223,14 @@ public extension NSMutableAttributedString
 			self.deleteCharacters(in: delrange)
 		}
 		return index
+	}
+
+	func deleteForwardLineCharacters(at index: Int) -> Int {
+		if let len = self.searchForward(character: "\n", from: index) {
+			return deleteForwardCharacters(at: index, number: len)
+		} else {
+			return deleteBackwardAllCharacters(at: index)
+		}
 	}
 
 	func deleteForwardAllCharacters(at index: Int) -> Int {
@@ -205,6 +256,14 @@ public extension NSMutableAttributedString
 			result = index - delnum
 		}
 		return result
+	}
+
+	func deleteBackwardLineCharacters(at index: Int) -> Int {
+		if let len = self.searchBackward(character: "\n", from: index) {
+			return deleteBackwardCharacters(at: index, number: len)
+		} else {
+			return deleteBackwardAllCharacters(at: index)
+		}
 	}
 
 	func deleteBackwardAllCharacters(at index: Int) -> Int {

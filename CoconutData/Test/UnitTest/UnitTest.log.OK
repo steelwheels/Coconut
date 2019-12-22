@@ -38,6 +38,12 @@ abcdefg"
 *0123456789
 abcdefg"
 Expected last position: 8
+"0123*456789"
+**** Move forward: 1 -> "01234*56789"
+**** Move forward: 10 -> "0123456789*"
+**** Move backward: 3 -> "0123456*789"
+**** Move backward: 10 -> "*0123456789"
+Expected last position: 0
 **** Original String   -> "abcdefg
 0123*456789
 abcdefg"
@@ -292,7 +298,154 @@ string(" and ")
 eraceEntireLine
 string(". Bye.")
 [31mColor message
-[0m* testKeyBinding
+[0m* testTextStorage
+- Initial state
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3*4_5_6_7_8_9_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:string("Hello")
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l_l_o*9_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:string("Good-morning!!")
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_!*
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorBack(14)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l_l_o*G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:backspace
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l_l*o_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:newline
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l_l_
+*G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:backspace
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l_l*
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:delete
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l*
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorUp(1)
+_a_b_c_d_e_f_g*h_i_j_
+_0_1_2_3_H_e_l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorDown(1)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l*
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorForward(1)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l*
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorBack(1)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e*l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorForward(20)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l*
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorBack(20)
+_a_b_c_d_e_f_g_h_i_j_
+*0_1_2_3_H_e_l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorForward(5)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H*e_l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorNextLine(2)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_H_e_l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+*a_b_c_d_e_f_g_h_i_j
+- Execute:cursorPreviousLine(2)
+_a_b_c_d_e_f_g_h_i_j_
+*0_1_2_3_H_e_l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorHolizontalAbsolute(4)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3*H_e_l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorHolizontalAbsolute(2)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1*2_3_H_e_l_
+_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:eraceFromCursorToEnd
+_a_b_c_d_e_f_g_h_i_j_
+_0_1*
+- Execute:eraceFromCursorToBegin
+*
+- Execute:string("abcdefghij
+0123456789
+abcdefghij")
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_4_5_6_7_8_9_
+_a_b_c_d_e_f_g_h_i_j*
+- Execute:cursorBack(5)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_4_5_6_7_8_9_
+_a_b_c_d_e*f_g_h_i_j
+- Execute:eraceEntireBuffer
+*
+- Execute:string("abcdefghij
+0123456789
+abcdefghij")
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_4_5_6_7_8_9_
+_a_b_c_d_e_f_g_h_i_j*
+- Execute:cursorBack(5)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_4_5_6_7_8_9_
+_a_b_c_d_e*f_g_h_i_j
+- Execute:cursorUp(1)
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_4*5_6_7_8_9_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:eraceFromCursorToRight
+_a_b_c_d_e_f_g_h_i_j_
+_0_1_2_3_4*
+_a_b_c_d_e_f_g_h_i_j
+- Execute:eraceFromCursorToLeft
+_a_b_c_d_e_f_g_h_i_j_
+*
+_a_b_c_d_e_f_g_h_i_j
+- Execute:string("inserted")
+_a_b_c_d_e_f_g_h_i_j_
+_i_n_s_e_r_t_e_d*
+_a_b_c_d_e_f_g_h_i_j
+- Execute:cursorBack(5)
+_a_b_c_d_e_f_g_h_i_j_
+_i_n_s*e_r_t_e_d_
+_a_b_c_d_e_f_g_h_i_j
+- Execute:eraceEntireLine
+_a_b_c_d_e_f_g_h_i_j_
+*a_b_c_d_e_f_g_h_i_j
+- Execute:foregroundColor(Red)
+- Execute:backgroundColor(Blue)
+- Execute:string("COLOR")
+_a_b_c_d_e_f_g_h_i_j_
+_C_O_L_O_R*f_g_h_i_j
+- Execute:setNormalAttributes
+* testKeyBinding
 selectorName:insertNewline: -> [newline ]
 selectorName:insertNewlineIgnoringFieldEditor: -> [newline ]
 selectorName:insertTab: -> [tab ]

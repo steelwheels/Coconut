@@ -49,6 +49,8 @@ private func testSearchFunction(console cons: CNConsole) -> Bool
 
 private func testMoveHolizFunction(console cons: CNConsole) -> Bool
 {
+	var result = true
+
 	let pos0 = 13
 
 	cons.print(string: "**** Original String   -> ")
@@ -73,11 +75,40 @@ private func testMoveHolizFunction(console cons: CNConsole) -> Bool
 
 	if pos5 == 8 {
 		cons.print(string: "Expected last position: \(pos5)\n")
-		return true
 	} else {
 		cons.print(string: "Expected last position 8, But result is \(pos5)\n")
-		return false
+		result = false
 	}
+
+	let pos10 = 4
+
+	let str2 = NSMutableAttributedString(string: "0123456789")
+	printAttributedString(string: str2, cursor: pos10, console: cons)
+
+	cons.print(string: "**** Move forward: 1 -> ")
+	let pos11 = str2.moveCursorForward(from: pos10, number: 1)
+	printAttributedString(string: str2, cursor: pos11, console: cons)
+
+	cons.print(string: "**** Move forward: 10 -> ")
+	let pos12 = str2.moveCursorForward(from: pos11, number: 10)
+	printAttributedString(string: str2, cursor: pos12, console: cons)
+
+	cons.print(string: "**** Move backward: 3 -> ")
+	let pos13 = str2.moveCursorBackward(from: pos12, number: 3)
+	printAttributedString(string: str2, cursor: pos13, console: cons)
+
+	cons.print(string: "**** Move backward: 10 -> ")
+	let pos14 = str2.moveCursorBackward(from: pos13, number: 10)
+	printAttributedString(string: str2, cursor: pos14, console: cons)
+
+	if pos14 == 0 {
+		cons.print(string: "Expected last position: \(pos14)\n")
+	} else {
+		cons.print(string: "Expected last position 0, But result is \(pos14)\n")
+		result = false
+	}
+
+	return result
 }
 
 private func testMoveVertFunction(console cons: CNConsole) -> Bool

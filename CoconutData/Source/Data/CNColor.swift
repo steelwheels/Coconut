@@ -34,5 +34,37 @@ public enum CNColor: Int32 {
 		}
 		return result
 	}
+
+	#if os(OSX)
+	public func toObject() -> NSColor {
+		let result: NSColor
+		switch self {
+		case .Black:	result = NSColor.black
+		case .Red:	result = NSColor.red
+		case .Green:	result = NSColor.green
+		case .Yellow:	result = NSColor.yellow
+		case .Blue:	result = NSColor.blue
+		case .Magenta:	result = NSColor.magenta
+		case .Cyan:	result = NSColor.cyan
+		case .White:	result = NSColor.white
+		}
+		return result
+	}
+	#else
+	public func toObject() -> UIColor {
+		let result: UIColor
+		switch self {
+		case .Black:	result = UIColor.black
+		case .Red:	result = UIColor.red
+		case .Green:	result = UIColor.green
+		case .Yellow:	result = UIColor.yellow
+		case .Blue:	result = UIColor.blue
+		case .Magenta:	result = UIColor.magenta
+		case .Cyan:	result = UIColor.cyan
+		case .White:	result = UIColor.white
+		}
+		return result
+	}
+	#endif
 }
 

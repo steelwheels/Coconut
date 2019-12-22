@@ -59,6 +59,8 @@
 		058740F9208AFF2C00FF2B65 /* CNThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058740F8208AFF2C00FF2B65 /* CNThread.swift */; };
 		0587F31A22E3F62400F28B50 /* CNGraphicsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0587F31922E3F62400F28B50 /* CNGraphicsMapper.swift */; };
 		0587F31E22E3FF0300F28B50 /* UTGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0587F31D22E3FF0300F28B50 /* UTGraphics.swift */; };
+		0589516A23ADD3920093A3BA /* CNTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0589516923ADD3920093A3BA /* CNTextStorage.swift */; };
+		0589516C23AE5A7E0093A3BA /* UTTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0589516B23AE5A7E0093A3BA /* UTTextStorage.swift */; };
 		05899935208B0013002FEAEA /* CNMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05899934208B0013002FEAEA /* CNMath.swift */; };
 		0589993C208B013A002FEAEA /* CNState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0589993B208B013A002FEAEA /* CNState.swift */; };
 		058BA7EB22AA9E8C007CD9C4 /* CNOperationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058BA7EA22AA9E8C007CD9C4 /* CNOperationContext.swift */; };
@@ -220,6 +222,8 @@
 		058740F8208AFF2C00FF2B65 /* CNThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNThread.swift; sourceTree = "<group>"; };
 		0587F31922E3F62400F28B50 /* CNGraphicsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNGraphicsMapper.swift; sourceTree = "<group>"; };
 		0587F31D22E3FF0300F28B50 /* UTGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTGraphics.swift; sourceTree = "<group>"; };
+		0589516923ADD3920093A3BA /* CNTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTextStorage.swift; sourceTree = "<group>"; };
+		0589516B23AE5A7E0093A3BA /* UTTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTTextStorage.swift; sourceTree = "<group>"; };
 		05899934208B0013002FEAEA /* CNMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNMath.swift; sourceTree = "<group>"; };
 		0589993B208B013A002FEAEA /* CNState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNState.swift; sourceTree = "<group>"; };
 		058BA7EA22AA9E8C007CD9C4 /* CNOperationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNOperationContext.swift; sourceTree = "<group>"; };
@@ -312,6 +316,7 @@
 				052136B2208AD5F30098F1A7 /* CNStringStream.swift */,
 				05DF7D982090D4B1003B5110 /* CNStringUtil.swift */,
 				05B50DEC239A861D00CFA0B9 /* CNAttributedString.swift */,
+				0589516923ADD3920093A3BA /* CNTextStorage.swift */,
 				057D2CDE208B426000E02E71 /* CNColor.swift */,
 				0589993B208B013A002FEAEA /* CNState.swift */,
 				0599583A208AEE0B00DE2DC9 /* CNCharacter.swift */,
@@ -347,6 +352,7 @@
 				05471B0F21CBF2A200F66B8F /* UTResource.swift */,
 				0587F31D22E3FF0300F28B50 /* UTGraphics.swift */,
 				051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */,
+				0589516B23AE5A7E0093A3BA /* UTTextStorage.swift */,
 				05FC09AF237C29BA00667AC4 /* UTKeyBinding.swift */,
 				05178D6F232EEFFD00F35AF0 /* UTStringStream.swift */,
 				05B50DEE239A8C8C00CFA0B9 /* UTAttributedString.swift */,
@@ -775,6 +781,7 @@
 				05FD029123A52F5000744D8C /* UTFileHandle.swift in Sources */,
 				051BB4B322FCF1370062F47F /* UTEscapeSequence.swift in Sources */,
 				0587F31E22E3FF0300F28B50 /* UTGraphics.swift in Sources */,
+				0589516C23AE5A7E0093A3BA /* UTTextStorage.swift in Sources */,
 				055BD3A42199D7F700BF7373 /* UTOperation.swift in Sources */,
 				05178D70232EEFFD00F35AF0 /* UTStringStream.swift in Sources */,
 				052087BF235C89990084E340 /* UTProcess.swift in Sources */,
@@ -830,6 +837,7 @@
 				058C8333239FEEDB00B58054 /* CNTerminalInfo.swift in Sources */,
 				0587F31A22E3F62400F28B50 /* CNGraphicsMapper.swift in Sources */,
 				057DE780237AE84E00BCCB64 /* CNKeyBinding.swift in Sources */,
+				0589516A23ADD3920093A3BA /* CNTextStorage.swift in Sources */,
 				0599583B208AEE0B00DE2DC9 /* CNCharacter.swift in Sources */,
 				0565A9F7208B820900E91568 /* CNAuthorize.swift in Sources */,
 				055551CC22D38AA3009E3464 /* CNGraphicsFunction.swift in Sources */,
