@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		053F459223B8BF4E00F97651 /* CNCommandHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F459123B8BF4E00F97651 /* CNCommandHistory.swift */; };
 		0575328A2303912200EBBE13 /* CNColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057532872303912200EBBE13 /* CNColor.swift */; };
 		0575328C2303912200EBBE13 /* CNShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057532892303912200EBBE13 /* CNShellUtil.swift */; };
 		0575328F2303916500EBBE13 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0575328E2303916500EBBE13 /* CoconutData.framework */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		053F459123B8BF4E00F97651 /* CNCommandHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandHistory.swift; sourceTree = "<group>"; };
 		057532872303912200EBBE13 /* CNColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNColor.swift; sourceTree = "<group>"; };
 		057532892303912200EBBE13 /* CNShellUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellUtil.swift; sourceTree = "<group>"; };
 		0575328E2303916500EBBE13 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../local/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				05BBC62F239BE3FB00DC73A9 /* CNReadline.swift */,
 				05C3A9B423A91FB400D54EC9 /* CNCommandLines.swift */,
 				05C3A9B323A91FB400D54EC9 /* CNCommandLine.swift */,
+				053F459123B8BF4E00F97651 /* CNCommandHistory.swift */,
 				05A3B89E231EA5080092052B /* CNUnixCommand.swift */,
 			);
 			name = Source;
@@ -217,6 +220,7 @@
 				0575328A2303912200EBBE13 /* CNColor.swift in Sources */,
 				05C3A9B523A91FB400D54EC9 /* CNCommandLine.swift in Sources */,
 				05CE2DFF2323354E005D295D /* CNShellProcess.swift in Sources */,
+				053F459223B8BF4E00F97651 /* CNCommandHistory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

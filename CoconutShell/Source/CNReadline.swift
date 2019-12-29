@@ -52,8 +52,8 @@ open class CNReadline
 		}
 	}
 
-	public func saveCurrentCommand(){
-		mCommandLines.saveCurrentCommand()
+	public func saveCurrentCommand(isValidCommand isvalid: Bool){
+		mCommandLines.saveCurrentCommand(isValidCommand: isvalid)
 	}
 
 	private func decode(escapeCode code: CNEscapeCode) -> Bool {
@@ -120,6 +120,10 @@ open class CNReadline
 
 	open func scan(console cons: CNConsole) -> String? {
 		return cons.scan()
+	}
+
+	public func history() -> Array<String> {
+		return mCommandLines.history()
 	}
 }
 

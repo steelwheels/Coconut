@@ -64,9 +64,11 @@ open class CNShellThread: CNThread
 				if determined {
 					/* Execute command */
 					console.print(string: "\n") // Execute at new line
-					execute(command: newline)
+					let isok = execute(command: newline)
+
 					/* Save current command */
-					mReadline.saveCurrentCommand()
+					mReadline.saveCurrentCommand(isValidCommand: isok)
+
 					/* Reset terminal */
 					let resetstr = CNEscapeCode.setNormalAttributes.encode()
 					console.print(string: resetstr)
@@ -95,6 +97,9 @@ open class CNShellThread: CNThread
 					if back > 0 {
 						console.print(string: bakstr)
 					}
+					/* Update history */
+					CNCommandHistory.shared.history = mReadline.history()
+
 					/* Update current line*/
 					mReadlineStatus.editingLine     = newline
 					mReadlineStatus.editingPosition = newpos
@@ -123,7 +128,8 @@ open class CNShellThread: CNThread
 		return "$ "
 	}
 
-	open func execute(command cmd: String) {
+	open func execute(command cmd: String) -> Bool {
 		console.error(string: "execute: \(cmd)\n")
+		return false
 	}
 }

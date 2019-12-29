@@ -30,7 +30,7 @@ public class CNCommandLines
 		}
 	}
 
-	public func saveCurrentCommand() {
+	public func saveCurrentCommand(isValidCommand isvalid: Bool) {
 		/* If there is same command, remove it */
 		var dupidx: Int? = nil
 		for i in 0..<mCommandLines.count {
@@ -45,8 +45,10 @@ public class CNCommandLines
 
 		/* Add command to history */
 		mCurrentCommand.resetDetermined()
-		mCommandLines.append(mCurrentCommand)
-
+		if isvalid {
+			mCommandLines.append(mCurrentCommand)
+		}
+	
 		/* If the count is over the limit, remove it */
 		if mCommandLines.count > mMaxCount {
 			mCommandLines.removeFirst()
@@ -87,6 +89,14 @@ public class CNCommandLines
 		}
 		//NSLog("downCommand: result=nil")
 		return nil
+	}
+
+	public func history() -> Array<String> {
+		var result: Array<String> = []
+		for cmdline in mCommandLines {
+			result.append(cmdline.string)
+		}
+		return result
 	}
 }
 
