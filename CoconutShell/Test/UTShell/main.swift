@@ -35,7 +35,7 @@ public func main() {
 		console.print(string: "Result: OK\n")
 		Darwin.exit(0)
 	} else {
-		console.print(string: "Result: NG\n")
+		console.print(string: "Result: NG \(res0) \(res1) \(res2) \(res3) \(res4)\n")
 		Darwin.exit(1)
 	}
 }

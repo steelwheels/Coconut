@@ -26,17 +26,16 @@ open class CNShellThread: CNThread
 	private var mTerminalInfo:	CNTerminalInfo
 	private var mReadline:		CNReadline
 	private var mReadlineStatus:	ReadlineStatus
-	private var mConfig:		CNConfig
+	private var mIsCancelled:	Bool
 
 	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo }}
-	public var config: CNConfig		{ get { return mConfig	}}
 
-	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig, terminationHander termhdlr: TerminationHandler?){
+	public override init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig){
 		mTerminalInfo	= CNTerminalInfo()
 		mReadline 	= CNReadline(terminalInfo: mTerminalInfo)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
-		mConfig		= conf
-		super.init(input: instrm, output: outstrm, error: errstrm, terminationHander: termhdlr)
+		mIsCancelled	= false
+		super.init(queue: disque, input: instrm, output: outstrm, error: errstrm, config: conf)
 
 		/* Set raw mode */
 		let _ = self.inputStream.setRawMode(enable: true)
@@ -46,13 +45,9 @@ open class CNShellThread: CNThread
 		let _ = self.inputStream.setRawMode(enable: false)
 	}
 
-	open override func start() {
-		super.start()
-	}
-
-	open override func mainOperation() -> Int32 {
+	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {
 		/* Setup terminal */
-		while !isCancelled {
+		while !mIsCancelled {
 			let BS  = CNEscapeCode.backspace.encode()
 			let DEL = BS + " " + BS
 
@@ -114,10 +109,14 @@ open class CNShellThread: CNThread
 					console.error(string: "ECODE: \(code.description())\n")
 				}
 			case .none:
-				break
+				mIsCancelled = true
 			}
 		}
 		return 0
+	}
+
+	public func cancel(){
+		mIsCancelled = true
 	}
 
 	open func promptString() -> String {

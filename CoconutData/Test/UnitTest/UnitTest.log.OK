@@ -255,8 +255,12 @@ Hello, World !!
 END of process
 Process is finished with exit code: 0
 * testThread
+[UTSimpleThread] start
+[UTSimpleThread] waitUntilExit/start
+[UTSimpleThread] main/start
 UTThread: mainOperation
-UTThread: finished
+[UTSimpleThread] main/end
+[UTSimpleThread] waitUntilExit/done
 Wait done with exit code: 0
 * testGraphics
 point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... OK
@@ -321,73 +325,73 @@ _0_1_2_3_H_e_l_l*o_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:newline
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_
-*G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+*
 _a_b_c_d_e_f_g_h_i_j
 - Execute:backspace
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l*
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_!*
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:delete
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l*
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!*
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorUp(1)
-_a_b_c_d_e_f_g*h_i_j_
-_0_1_2_3_H_e_l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_a_b_c_d_e_f_g_h_i_j*
+_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorDown(1)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l*
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G*o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorForward(1)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l*
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G_o*o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorBack(1)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e*l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G*o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorForward(20)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l*
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!*
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorBack(20)
 _a_b_c_d_e_f_g_h_i_j_
-*0_1_2_3_H_e_l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1*2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorForward(5)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H*e_l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l*l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorNextLine(2)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
+_
 *a_b_c_d_e_f_g_h_i_j
 - Execute:cursorPreviousLine(2)
 _a_b_c_d_e_f_g_h_i_j_
-*0_1_2_3_H_e_l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+*0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorHolizontalAbsolute(4)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3*H_e_l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1_2_3*H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:cursorHolizontalAbsolute(2)
 _a_b_c_d_e_f_g_h_i_j_
-_0_1*2_3_H_e_l_
-_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
+_0_1*2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
+_
 _a_b_c_d_e_f_g_h_i_j
 - Execute:eraceFromCursorToEnd
 _a_b_c_d_e_f_g_h_i_j_

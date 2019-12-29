@@ -23,9 +23,9 @@ private class UTReadline: CNReadline {
 			CNEscapeCode.cursorUp(1).encode(),
 			CNEscapeCode.cursorDown(2).encode(),
 			CNEscapeCode.cursorForward(3).encode(),
-			CNEscapeCode.cursorBack(4).encode(),
+			CNEscapeCode.cursorBackward(4).encode(),
 			CNEscapeCode.cursorForward(3).encode(),
-			CNEscapeCode.cursorBack(2).encode(),
+			CNEscapeCode.cursorBackward(2).encode(),
 			CNEscapeCode.cursorNextLine(5).encode(),
 			CNEscapeCode.cursorPreviousLine(6).encode(),
 			CNEscapeCode.cursorPoisition(7, 8).encode(),
@@ -36,7 +36,7 @@ private class UTReadline: CNReadline {
 			"<NEW-ADDED>",
 			"<MORE-ADDED>",
 			CNEscapeCode.backspace.encode(),
-			CNEscapeCode.cursorBack(2).encode(),
+			CNEscapeCode.cursorBackward(2).encode(),
 			CNEscapeCode.backspace.encode(),
 			CNEscapeCode.tab.encode()
 		]
@@ -67,7 +67,7 @@ public func testReadline(console cons: CNFileConsole) -> Bool
 			switch readline.readLine(console: cons) {
 			case .commandLine(let cmdline):
 				//if cmdline.didDetermined {
-					let (cmdstr, cmdpos) = cmdline.get()
+					let (cmdstr, cmdpos) = cmdline.getAndClear()
 					cons.print(string: "CTXT: \(cmdpos) \(cmdstr)\n")
 				//}
 			case .escapeCode(let code):

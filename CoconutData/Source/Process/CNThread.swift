@@ -19,97 +19,78 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 	}
 }
 
-open class CNThread: Thread, CNProcessStream
+open class CNThread: CNProcessStream
 {
-	public typealias TerminationHandler	= (_ thread: Thread) -> Int32
-
-	public enum Status {
-		case Idle
-		case Running
-		case Finished
-	}
-
-	private var mStatus:			Status
+	private var mQueue:			DispatchQueue
+	private var mSemaphore:			DispatchSemaphore
 	private var mInputStream:		CNFileStream
 	private var mOutputStream:		CNFileStream
 	private var mErrorStream:		CNFileStream
 	private var mConsole:			CNFileConsole
+	private var mConfig:			CNConfig
+	private var mArguments:			Array<CNNativeValue>
+	private var mIsRunning:			Bool
 	private var mTerminationStatus:		Int32
-	private var mTerminationHandler:	TerminationHandler?
 
-	public var status: Status 			{ get { return mStatus			}}
-	open   var terminationStatus:	Int32	    	{ get { return mTerminationStatus	}}
-	public var console:    CNFileConsole		{ get { return mConsole 		}}
+	public var queue:		DispatchQueue	{ get { return mQueue		}}
+	public var inputStream:  	CNFileStream	{ get { return mInputStream	}}
+	public var outputStream: 	CNFileStream 	{ get { return mOutputStream	}}
+	public var errorStream:  	CNFileStream	{ get { return mErrorStream 	}}
+	public var console:      	CNFileConsole	{ get { return mConsole 	}}
+	public var config:		CNConfig 	{ get { return mConfig 		}}
+	public var isRunning:	 	Bool		{ get { return mIsRunning	}}
 
-	public var inputStream:  CNFileStream { get { return mInputStream	}}
-	public var outputStream: CNFileStream { get { return mOutputStream	}}
-	public var errorStream:  CNFileStream { get { return mErrorStream 	}}
-
-	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, terminationHander termhdlr: TerminationHandler?) {
-		mStatus			= .Idle
+	public init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig) {
+		mQueue			= disque
+		mSemaphore		= DispatchSemaphore(value: 0)
 		mInputStream		= instrm
 		mOutputStream		= outstrm
 		mErrorStream		= errstrm
+		mConfig			= conf
+		mArguments		= []
+		mIsRunning		= false
 		mTerminationStatus	= -1
-		mTerminationHandler	= termhdlr
 
 		mConsole = CNFileConsole(input:  CNFileStream.streamToFileHandle(stream: instrm,  forInside: true, isInput: true),
 					 output: CNFileStream.streamToFileHandle(stream: outstrm, forInside: true, isInput: false),
 					 error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
 
-		super.init()
 	}
 
-	open override func start() {
-		/* Update status */
-		mStatus = .Running
-		/* Start process */
-		super.start()
-	}
-
-	open override func main(){
-		/* Execute main operation */
-		self.mTerminationStatus = mainOperation()
-		/* Execution finished */
-		if let hdlr = mTerminationHandler {
-			self.mTerminationStatus = hdlr(self)
+	public func start(arguments args: Array<CNNativeValue>){
+		log(string: "start/start")
+		mArguments = args
+		mIsRunning = true
+		mQueue.async {
+			self.log(string: "start/async/start")
+			self.mTerminationStatus = self.main(arguments: self.mArguments)
+			self.mSemaphore.signal()
+			self.mIsRunning = false
+			self.log(string: "main/async/end")
 		}
-		/* Update status */
-		mStatus = .Finished
+		log(string: "start/done")
 	}
 
-	open func mainOperation() -> Int32 {
-		NSLog("Override this method")
-		return 1
+	open func main(arguments args: Array<CNNativeValue>) -> Int32 {
+		mConsole.error(string: "Override this method\n")
+		return -1
 	}
 
 	public func waitUntilExit() -> Int32 {
-		while self.status == .Running {
-			usleep(100)	// 100us = 0.1ms
-		}
-		closeStreams()
+		log(string: "waitUntilExit/start")
+		mSemaphore.wait()
+		log(string: "waitUntilExit/done")
 		return mTerminationStatus
 	}
 
-	private func closeStreams() {
-		switch mOutputStream {
-		case .null:		break
-		case .fileHandle(_):	break
-		case .pipe(let pipe):	pipe.fileHandleForWriting.closeFile()
-		}
-		switch mErrorStream {
-		case .null:		break
-		case .fileHandle(_):	break
-		case .pipe(let pipe):	pipe.fileHandleForWriting.closeFile()
+	public func log(string str: String) {
+		switch mConfig.logLevel {
+		case .detail:
+			let name = String(describing: type(of: self))
+			mConsole.print(string: "[\(name)] \(str)\n")
+		case .flow, .error, .warning:
+			break
 		}
 	}
-
-	/*
-	public func set(console cons: CNFileConsole) {
-		mInputHandle	= cons.inputHandle
-		mOutputHandle	= cons.outputHandle
-		mErrorHandle	= cons.errorHandle
-		mConsole	= CNFileConsole(input: mInputHandle, output: mOutputHandle, error: mErrorHandle)
-	}*/
 }
 
