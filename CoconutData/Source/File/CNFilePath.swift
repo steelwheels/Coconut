@@ -17,6 +17,11 @@ public class CNFilePath
 		case error(_ error: NSError)
 	}
 
+	public enum FilePathsError {
+		case ok(_ urls: [URL])
+		case error(_ error: NSError)
+	}
+
 	public class func URLForHomeDirectory() -> URL {
 		let homedir = NSHomeDirectory()
 		return URL(fileURLWithPath: homedir, isDirectory: true)
@@ -56,6 +61,15 @@ public class CNFilePath
 	public class func URLForResourceFile(fileName fname: String, fileExtension fext: String, subdirectory subdir: String, forClass fclass: AnyClass) -> URL? {
 		let bundle = Bundle(for: fclass)
 		return bundle.url(forResource: fname, withExtension: fext, subdirectory: subdir)
+	}
+
+	public class func URLsForResourceFiles(fileExtension fext: String, subdirectory subdir: String, forClass fclass: AnyClass) -> FilePathsError {
+		let bundle = Bundle(for: fclass)
+		if let result = bundle.urls(forResourcesWithExtension: fext, subdirectory: subdir) {
+			return .ok(result)
+		} else {
+			return .error(NSError.fileError(message: "Failed to read bundle for ext \(fext) in subdir \(subdir)"))
+		}
 	}
 
 	/* reference: https://qiita.com/masakihori/items/8d4af538b040c65a8871 */
