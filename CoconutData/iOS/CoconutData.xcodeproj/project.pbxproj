@@ -31,6 +31,7 @@
 		056A451823232A3600C7DCBF /* CNFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056A451723232A3600C7DCBF /* CNFileHandle.swift */; };
 		056EA8BA208AFE5600D1DFFE /* CNConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056EA8B9208AFE5600D1DFFE /* CNConsole.swift */; };
 		0578DA2E2090C1E800ED852C /* CNPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0578DA2D2090C1E800ED852C /* CNPropertyList.swift */; };
+		0579AA2F23B9DCA900FAED1E /* CNCommandHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0579AA2E23B9DCA900FAED1E /* CNCommandHistory.swift */; };
 		057D2CE1208B42B300E02E71 /* CNColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057D2CE0208B42B300E02E71 /* CNColor.swift */; };
 		0583FA292302FFA200100DAB /* CNKeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0583FA282302FFA200100DAB /* CNKeyCode.swift */; };
 		058661A1208AD69500ADA9D3 /* CoconutData.h in Headers */ = {isa = PBXBuildFile; fileRef = 0586619F208AD69400ADA9D3 /* CoconutData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -101,6 +102,7 @@
 		056A451723232A3600C7DCBF /* CNFileHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFileHandle.swift; sourceTree = "<group>"; };
 		056EA8B9208AFE5600D1DFFE /* CNConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNConsole.swift; sourceTree = "<group>"; };
 		0578DA2D2090C1E800ED852C /* CNPropertyList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNPropertyList.swift; sourceTree = "<group>"; };
+		0579AA2E23B9DCA900FAED1E /* CNCommandHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandHistory.swift; sourceTree = "<group>"; };
 		057D2CE0208B42B300E02E71 /* CNColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNColor.swift; sourceTree = "<group>"; };
 		0583FA282302FFA200100DAB /* CNKeyCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNKeyCode.swift; sourceTree = "<group>"; };
 		0586619C208AD69400ADA9D3 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -323,6 +325,7 @@
 				05AC92CB219B2EA000EEF197 /* CNObservedValueTable.swift */,
 				05EDAD84213BE640003C9147 /* CNStack.swift */,
 				050DEEA623701AD0008E1A52 /* CNQueue.swift */,
+				0579AA2E23B9DCA900FAED1E /* CNCommandHistory.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				0599583D208AEE2000DE2DC9 /* CNCharacter.swift in Sources */,
 				056A451823232A3600C7DCBF /* CNFileHandle.swift in Sources */,
 				0565A9F9208B822500E91568 /* CNAuthorize.swift in Sources */,
+				0579AA2F23B9DCA900FAED1E /* CNCommandHistory.swift in Sources */,
 				051FA46A208B3FD500AEC734 /* CNFile.swift in Sources */,
 				051914A3237AFB00008C0637 /* CNKeyBinding.swift in Sources */,
 				05AC92CC219B2EA000EEF197 /* CNObservedValueTable.swift in Sources */,

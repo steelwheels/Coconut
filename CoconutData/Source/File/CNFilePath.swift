@@ -63,13 +63,39 @@ public class CNFilePath
 		return bundle.url(forResource: fname, withExtension: fext, subdirectory: subdir)
 	}
 
-	public class func URLsForResourceFiles(fileExtension fext: String, subdirectory subdir: String, forClass fclass: AnyClass) -> FilePathsError {
+	public class func URLsForResourceFiles(fileExtension fext: String, subdirectory subdir: String?, forClass fclass: AnyClass) -> FilePathsError {
 		let bundle = Bundle(for: fclass)
 		if let result = bundle.urls(forResourcesWithExtension: fext, subdirectory: subdir) {
 			return .ok(result)
 		} else {
-			return .error(NSError.fileError(message: "Failed to read bundle for ext \(fext) in subdir \(subdir)"))
+			let err: NSError
+			if let dir = subdir {
+				err = NSError.fileError(message: "Failed to read bundle for ext \(fext) in subdir \(dir)")
+			} else {
+				err = NSError.fileError(message: "Failed to read bundle for ext \(fext)")
+			}
+			return .error(err)
 		}
+	}
+
+	public class func URLsForResourceFiles(fileExtension fext: String, subdirectory subdir: String?, bundleName bname: String) -> FilePathsError {
+		let mainbundle = Bundle.main
+		if let bundlepath = mainbundle.path(forResource: bname, ofType: "bundle") {
+			if let bundle = Bundle(path: bundlepath) {
+				if let result = bundle.urls(forResourcesWithExtension: fext, subdirectory: subdir) {
+					return .ok(result)
+				} else {
+					let err: NSError
+					if let dir = subdir {
+						err = NSError.fileError(message: "Failed to read bundle \(bname) for ext \(fext) in subdir \(dir)")
+					} else {
+						err = NSError.fileError(message: "Failed to read bundle \(bname) for ext \(fext)")
+					}
+					return .error(err)
+				}
+			}
+		}
+		return .error(NSError.fileError(message: "Failed to find bundle \(bname)"))
 	}
 
 	/* reference: https://qiita.com/masakihori/items/8d4af538b040c65a8871 */

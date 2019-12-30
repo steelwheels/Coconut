@@ -16,7 +16,6 @@
 		053D50FF239C75D80027B067 /* UTReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D50FE239C75D70027B067 /* UTReadline.swift */; };
 		0557A9E0236E9B1F00C0D71F /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
 		0557A9E3236E9B2100C0D71F /* CoconutShell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; };
-		056AC86923B8B2F00003EB09 /* CNCommandHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056AC86823B8B2F00003EB09 /* CNCommandHistory.swift */; };
 		056AF18621590A12007AE91A /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
 		056AF18821590A24007AE91A /* CoconutShell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; };
 		056AF18A21590A3E007AE91A /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -89,7 +88,6 @@
 		053BAD75208CBF7900AC3BF0 /* CNShellUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellUtil.swift; sourceTree = "<group>"; };
 		053BAD77208CBF7900AC3BF0 /* CNColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNColor.swift; sourceTree = "<group>"; };
 		053D50FE239C75D70027B067 /* UTReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTReadline.swift; sourceTree = "<group>"; };
-		056AC86823B8B2F00003EB09 /* CNCommandHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandHistory.swift; sourceTree = "<group>"; };
 		056AF17C2158E261007AE91A /* UTShell.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UTShell.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		056AF17E2158E261007AE91A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		056AF18521590A12007AE91A /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
@@ -188,7 +186,6 @@
 				05FC90A9239BE3A500BA16E6 /* CNReadline.swift */,
 				059C508123A7B0250035482B /* CNCommandLines.swift */,
 				059C508323A7D36C0035482B /* CNCommandLine.swift */,
-				056AC86823B8B2F00003EB09 /* CNCommandHistory.swift */,
 				05D1004F231E9F030054F81C /* CNUnixCommand.swift */,
 			);
 			name = Source;
@@ -386,7 +383,6 @@
 				053BAD7B208CBF7900AC3BF0 /* CNShellUtil.swift in Sources */,
 				059C508423A7D36C0035482B /* CNCommandLine.swift in Sources */,
 				05933EE62323345300F614A2 /* CNShellProcess.swift in Sources */,
-				056AC86923B8B2F00003EB09 /* CNCommandHistory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

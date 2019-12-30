@@ -69,8 +69,13 @@ open class CNShellThread: CNThread
 					/* Save current command */
 					mReadline.saveCurrentCommand(isValidCommand: isok)
 
+					/* Update history */
+					let histmgr = CNCommandHistory.shared
+					histmgr.set(history: mReadline.history())
+
 					/* Reset terminal */
 					let resetstr = CNEscapeCode.setNormalAttributes.encode()
+					
 					console.print(string: resetstr)
 					/* Print prompt again */
 					mReadlineStatus.doPrompt	= true
@@ -90,6 +95,7 @@ open class CNShellThread: CNThread
 					}
 					/* Print new command line */
 					console.print(string: newline)
+
 					/* Adjust cursor */
 					let newlen = newline.count
 					let back   = newlen - newpos
@@ -97,8 +103,6 @@ open class CNShellThread: CNThread
 					if back > 0 {
 						console.print(string: bakstr)
 					}
-					/* Update history */
-					CNCommandHistory.shared.history = mReadline.history()
 
 					/* Update current line*/
 					mReadlineStatus.editingLine     = newline

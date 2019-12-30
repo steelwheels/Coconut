@@ -77,6 +77,7 @@
 		05B50DED239A861D00CFA0B9 /* CNAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B50DEC239A861D00CFA0B9 /* CNAttributedString.swift */; };
 		05B50DEF239A8C8C00CFA0B9 /* UTAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B50DEE239A8C8C00CFA0B9 /* UTAttributedString.swift */; };
 		05B5BBD7209DDF8200E0981B /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05BA444423B9D67D0012C845 /* CNCommandHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BA444323B9D67D0012C845 /* CNCommandHistory.swift */; };
 		05C52E7E20993ABF00DD56B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C52E7D20993ABF00DD56B4 /* AppDelegate.swift */; };
 		05C52E8020993ABF00DD56B4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C52E7F20993ABF00DD56B4 /* ViewController.swift */; };
 		05C52E8220993AC000DD56B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05C52E8120993AC000DD56B4 /* Assets.xcassets */; };
@@ -243,6 +244,7 @@
 		05B50DEE239A8C8C00CFA0B9 /* UTAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTAttributedString.swift; sourceTree = "<group>"; };
 		05B5BBCE209DDF4500E0981B /* UnitTest.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTest.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B5BBD0209DDF4500E0981B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05BA444323B9D67D0012C845 /* CNCommandHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandHistory.swift; sourceTree = "<group>"; };
 		05C52E7B20993ABF00DD56B4 /* UTApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UTApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C52E7D20993ABF00DD56B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05C52E7F20993ABF00DD56B4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				05CB79BD236F040800301547 /* CNQueue.swift */,
 				0526E5A8219877F300FB1B8E /* CNObservedValueTable.swift */,
 				0506587721AC282E000566F6 /* CNDatabase.swift */,
+				05BA444323B9D67D0012C845 /* CNCommandHistory.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -822,6 +825,7 @@
 				05471B0E21CBECDE00F66B8F /* CNNativeValueCoder.swift in Sources */,
 				058BA7EB22AA9E8C007CD9C4 /* CNOperationContext.swift in Sources */,
 				05995845208AEFD900DE2DC9 /* CNValueUtil.swift in Sources */,
+				05BA444423B9D67D0012C845 /* CNCommandHistory.swift in Sources */,
 				05019B72213BE42300DDA180 /* CNStack.swift in Sources */,
 				05ED45DC23214D9700ED2852 /* CNProcess.swift in Sources */,
 				05F5EA71208F793400CF98C3 /* CNText.swift in Sources */,
