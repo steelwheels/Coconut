@@ -64,6 +64,7 @@ open class CNThread: CNProcessStream
 		mQueue.async {
 			self.log(string: "start/async/start")
 			self.mTerminationStatus = self.main(arguments: self.mArguments)
+			self.closeStreams()
 			self.mSemaphore.signal()
 			self.mIsRunning = false
 			self.log(string: "main/async/end")
@@ -81,6 +82,21 @@ open class CNThread: CNProcessStream
 		mSemaphore.wait()
 		log(string: "waitUntilExit/done")
 		return mTerminationStatus
+	}
+
+	private func closeStreams() {
+		switch mOutputStream {
+		case .pipe(let pipe):
+			pipe.fileHandleForWriting.closeFile()
+		case .fileHandle(_), .null:
+			break	// Do nothing
+		}
+		switch mErrorStream {
+		case .pipe(let pipe):
+			pipe.fileHandleForWriting.closeFile()
+		case .fileHandle(_), .null:
+			break	// Do nothing
+		}
 	}
 
 	public func log(string str: String) {
