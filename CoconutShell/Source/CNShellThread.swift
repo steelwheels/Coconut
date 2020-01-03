@@ -8,7 +8,6 @@
 import CoconutData
 import Foundation
 
-
 open class CNShellThread: CNThread
 {
 	private struct ReadlineStatus {
@@ -29,6 +28,7 @@ open class CNShellThread: CNThread
 	private var mIsCancelled:	Bool
 
 	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo }}
+	public var readline: CNReadline { get { return mReadline }}
 
 	public override init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig){
 		mTerminalInfo	= CNTerminalInfo()
@@ -132,7 +132,7 @@ open class CNShellThread: CNThread
 		return "$ "
 	}
 
-	open func execute(command cmd: String) -> Bool {
+	open func execute(command cmd: String) -> Bool {	// -> OK/Fail
 		console.error(string: "execute: \(cmd)\n")
 		return false
 	}

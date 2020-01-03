@@ -125,5 +125,15 @@ open class CNReadline
 	public func history() -> Array<String> {
 		return mCommandLines.history()
 	}
+
+	public func search(byIndex idx: Int) -> String? {
+		let elmidx = mCommandLines.commandCount - idx
+		if 0 <= elmidx && elmidx < mCommandLines.commandCount {
+			if let cmdline = mCommandLines.command(at: elmidx) {
+				return cmdline.string
+			}
+		}
+		return nil
+	}
 }
 

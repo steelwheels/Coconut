@@ -16,9 +16,10 @@ public class UTShellThread: CNShellThread {
 		return "UTShell$ "
 	}
 
-	open override func execute(command cmd: String) {
+	open override func execute(command cmd: String) -> Bool {
 		console.print(string: "UTShell/In \"\(cmd)\"\n")
 		printed = true
+		return true
 	}
 }
 

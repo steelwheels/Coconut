@@ -108,6 +108,11 @@ Delete backword 1 char ->"アイウエオ
 あ1*3え4お5
 かきくけこ"
 * testStringUtil
+"padding---"
+"0123456789"
+"01234     "
+"     01234"
+"  01234   "
 * traceForward:  " * " -> "* "
 * traceBackward: " * " -> " *"
 * traceForward:  "* " -> "* "
@@ -255,12 +260,57 @@ Hello, World !!
 END of process
 Process is finished with exit code: 0
 * testThread
-[UTSimpleThread] start
+----- testSimpleThread
+[UTSimpleThread] start/start
+[UTSimpleThread] start/done
 [UTSimpleThread] waitUntilExit/start
-[UTSimpleThread] main/start
+[UTSimpleThread] start/async/start
 UTThread: mainOperation
-[UTSimpleThread] main/end
+[UTSimpleThread] main/async/end
 [UTSimpleThread] waitUntilExit/done
+Wait done with exit code: 0
+----- testNestedThread
+[UTNestedThread] start/start
+[UTNestedThread] start/done
+[UTNestedThread] waitUntilExit/start
+[UTNestedThread] start/async/start
+UTNestedThread0: mainOperation/start
+UTNestedThread0: mainOperation/main/start
+[UTNestedThread] start/start
+[UTNestedThread] start/done
+[UTNestedThread] start/async/start
+UTNestedThread0: mainOperation/main/waitUntilExit
+UTNestedThread1: mainOperation/start
+UTNestedThread1: mainOperation/main/start
+[UTNestedThread] waitUntilExit/start
+[UTNestedThread] start/start
+[UTNestedThread] start/done
+UTNestedThread1: mainOperation/main/waitUntilExit
+[UTNestedThread] start/async/start
+[UTNestedThread] waitUntilExit/start
+UTNestedThread2: mainOperation/start
+UTNestedThread2: mainOperation/main/start
+[UTNestedThread] start/start
+[UTNestedThread] start/done
+UTNestedThread2: mainOperation/main/waitUntilExit
+[UTNestedThread] start/async/start
+[UTNestedThread] waitUntilExit/start
+UTNestedThread3: mainOperation/start
+UTNestedThread3: mainOperation/done
+[UTNestedThread] main/async/end
+[UTNestedThread] waitUntilExit/done
+UTNestedThread2: mainOperation/main/echode=0
+UTNestedThread2: mainOperation/done
+[UTNestedThread] waitUntilExit/done
+[UTNestedThread] main/async/end
+UTNestedThread1: mainOperation/main/echode=0
+UTNestedThread1: mainOperation/done
+[UTNestedThread] main/async/end
+[UTNestedThread] waitUntilExit/done
+UTNestedThread0: mainOperation/main/echode=0
+UTNestedThread0: mainOperation/done
+[UTNestedThread] main/async/end
+[UTNestedThread] waitUntilExit/done
 Wait done with exit code: 0
 * testGraphics
 point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... OK

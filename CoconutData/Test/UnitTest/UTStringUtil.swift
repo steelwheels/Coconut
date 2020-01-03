@@ -10,6 +10,8 @@ import Foundation
 
 public func testStringUtil(console cons: CNConsole) -> Bool
 {
+	testPadding(console: cons)
+
 	testTrace(string: " * ", console: cons)
 	testTrace(string: "* ", console: cons)
 	testTrace(string: " *", console: cons)
@@ -24,6 +26,20 @@ public func testStringUtil(console cons: CNConsole) -> Bool
 	testDivideBySpaces(string: " 23 34 ", console: cons)
 	testDivideBySpaces(string: " 34      4 5 ", console: cons)
 	return true
+}
+
+private func testPadding(console cons: CNConsole)
+{
+	let src0 = "01234"
+	let src1 = src0.pad(char: "-", toLength: 10, align: .left)
+	let src2 = src0.pad(char: "-", toLength: 10, align: .right)
+	let src3 = src0.pad(char: "-", toLength: 10, align: .center)
+
+	cons.print(string: "\"padding---\"\n")
+	cons.print(string: "\"0123456789\"\n")
+	cons.print(string: "\"" + src1 + "\"\n")
+	cons.print(string: "\"" + src2 + "\"\n")
+	cons.print(string: "\"" + src3 + "\"\n")
 }
 
 private func testTrace(string str: String, console cons: CNConsole) {

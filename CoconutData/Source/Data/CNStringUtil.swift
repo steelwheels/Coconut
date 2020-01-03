@@ -7,6 +7,33 @@
 
 import Foundation
 
+public extension String {
+
+	func pad(char c: Character, toLength len: Int, align algn: NSTextAlignment) -> String {
+		let curlen = self.count
+		let diff   = len - curlen
+		if diff > 0 {
+			let newstr: String
+			switch algn {
+			case .left, .natural, .justified:
+				newstr = self + String(repeating: " ", count: diff)
+			case .right:
+				newstr = String(repeating: " ", count: diff) + self
+			case .center:
+				let hdiff = diff / 2
+				newstr = String(repeating: " ", count: hdiff)
+					 + self
+					 + String(repeating: " ", count: diff - hdiff)
+			@unknown default:
+				newstr = self + String(repeating: " ", count: diff)
+			}
+			return newstr
+		} else {
+			return self
+		}
+	}
+}
+
 public class CNStringUtil
 {
 	public class func divideByQuote(sourceString src: String, quote qchar: Character) -> Array<String>

@@ -30,6 +30,15 @@ public class CNCommandLines
 		}
 	}
 
+	public var commandCount: Int { get { return mCommandLines.count }}
+
+	public func command(at index: Int) -> CNCommandLine? {
+		if 0<=index && index<mCommandLines.count {
+			return mCommandLines[index]
+		}
+		return nil
+	}
+
 	public func saveCurrentCommand(isValidCommand isvalid: Bool) {
 		/* If there is same command, remove it */
 		var dupidx: Int? = nil
