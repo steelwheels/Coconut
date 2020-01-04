@@ -42,9 +42,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 		(_ hdl: FileHandle) -> Void in
 		let data = hdl.availableData
 		if let str = String(data: data, encoding: .utf8) {
-			if str.count > 0 {
-				cons.print(string: "UTShell/Out: \"\(str)\"\n")
-			}
+			cons.print(string: "UTShell/Out: \"\(str)\"\n")
 		}
 	}
 
@@ -52,9 +50,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 		(_ hdl: FileHandle) -> Void in
 		let data = hdl.availableData
 		if let str = String(data: data, encoding: .utf8) {
-			if str.count > 0 {
-				cons.print(string: "UTShell/Err: \"\(str)\"\n")
-			}
+			cons.print(string: "UTShell/Err: \"\(str)\"\n")
 		}
 	}
 
@@ -107,10 +103,8 @@ public func testShell(console cons: CNFileConsole) -> Bool
 
 	cons.print(string: "testShell: Wait until exit\n")
 	shell.cancel()
-	/* already finished by cancel
-	 * let ecode = shell.waitUntilExit()
-	 * cons.print(string: "testShell: exitCode=\(ecode)\n")
-	 */
+	let ecode = shell.waitUntilExit()
+	cons.print(string: "testShell: exitCode=\(ecode)\n")
 
 	return result
 }

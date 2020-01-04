@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		050C8907208CBF350005E936 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8905208CBF350005E936 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		050D48C923BFF47400F8CBB3 /* CNShellStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050D48C823BFF47400F8CBB3 /* CNShellStatement.swift */; };
 		05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051669FF23126ECC000BF46D /* CNShellThread.swift */; };
 		051AB5F421590AC400D7C71C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB5F321590AC400D7C71C /* main.swift */; };
 		05231E9A222C046A0003AE98 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
@@ -83,7 +82,6 @@
 		050C8902208CBF350005E936 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		050C8905208CBF350005E936 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
 		050C8906208CBF350005E936 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		050D48C823BFF47400F8CBB3 /* CNShellStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNShellStatement.swift; sourceTree = "<group>"; };
 		051669FF23126ECC000BF46D /* CNShellThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellThread.swift; sourceTree = "<group>"; };
 		051AB5F121590AC400D7C71C /* UTShell */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UTShell; sourceTree = BUILT_PRODUCTS_DIR; };
 		051AB5F321590AC400D7C71C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -189,7 +187,6 @@
 				059C508123A7B0250035482B /* CNCommandLines.swift */,
 				059C508323A7D36C0035482B /* CNCommandLine.swift */,
 				05D1004F231E9F030054F81C /* CNUnixCommand.swift */,
-				050D48C823BFF47400F8CBB3 /* CNShellStatement.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -383,7 +380,6 @@
 				059C508223A7B0250035482B /* CNCommandLines.swift in Sources */,
 				05FC90AA239BE3A500BA16E6 /* CNReadline.swift in Sources */,
 				05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */,
-				050D48C923BFF47400F8CBB3 /* CNShellStatement.swift in Sources */,
 				053BAD7B208CBF7900AC3BF0 /* CNShellUtil.swift in Sources */,
 				059C508423A7D36C0035482B /* CNCommandLine.swift in Sources */,
 				05933EE62323345300F614A2 /* CNShellProcess.swift in Sources */,
