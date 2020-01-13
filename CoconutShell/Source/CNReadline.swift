@@ -22,14 +22,16 @@ open class CNReadline
 	}
 
 	public enum Result {
-		case	none
 		case	commandLine(CNCommandLine)
 		case	escapeCode(CNEscapeCode)
+		case	empty
 	}
 
 	open func readLine(console cons: CNConsole) -> Result {
 		/* Scan input */
+		var result: Result = .empty
 		if let str = self.scan(console: cons) {
+			/* Push command into buffer */
 			switch CNEscapeCode.decode(string: str) {
 			case .ok(let codes):
 				for code in codes {
@@ -39,21 +41,20 @@ open class CNReadline
 				let msg = "[Error] " + err.description()
 				cons.error(string: msg)
 			}
-		}
-		/* Return result */
-		if let code = mCurrentBuffer.pop() {
-			if decode(escapeCode: code) {
-				return .commandLine(mCommandLines.currentCommand)
-			} else {
-				return .escapeCode(code)
+			/* Get latest command */
+			if let code = mCurrentBuffer.pop() {
+				if decode(escapeCode: code) {
+					result = .commandLine(mCommandLines.currentCommand)
+				} else {
+					result = .escapeCode(code)
+				}
 			}
-		} else {
-			return .none
 		}
+		return result
 	}
 
-	public func saveCurrentCommand(isValidCommand isvalid: Bool){
-		mCommandLines.saveCurrentCommand(isValidCommand: isvalid)
+	public func addDeteminedCommand(command cmd: String) {
+		mCommandLines.addDeterminedCommand(command: cmd)
 	}
 
 	private func decode(escapeCode code: CNEscapeCode) -> Bool {
@@ -63,6 +64,8 @@ open class CNReadline
 		case .string(let str):
 			cmdline.insert(string: str)
 			result = true
+		case .eot:
+			result = false			/* Skipped	*/
 		case .newline:
 			cmdline.determine()
 			result = true

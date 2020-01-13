@@ -15,6 +15,8 @@ public extension NSMutableAttributedString
 		case .string(let str):
 			let astr = self.attributedString(string: str, terminalInfo: tinfo)
 			result = self.write(string: astr, at: idx)
+		case .eot:
+			result = idx // ignore
 		case .newline:
 			/* Move cursor to end */
 			let idx2 = self.moveCursorToLineEnd(from: idx)
@@ -69,8 +71,7 @@ public extension NSMutableAttributedString
 		case .requestScreenSize:
 			result = nil 			// not accepted
 		case .screenSize(_, _):
-			result = idx
-			break				// ignored
+			result = idx			// ignore
 		}
 		return result
 	}

@@ -10,6 +10,16 @@ import Foundation
 
 public func testStringStream(console cons: CNConsole) -> Bool
 {
+	cons.print(string: "- Test string stream to token\n")
+	let res0 = testStringStreamToToken(console: cons)
+
+	cons.print(string: "- Test string stream to decode\n")
+	let res1 = testStringStreamToDecode(console: cons)
+	return res0 && res1
+}
+
+private func testStringStreamToToken(console cons: CNConsole) -> Bool
+{
 	let teststr = " (ab, c1, da_) : e01 > hoge fuga"
 	let stream  = CNStringStream(string: teststr)
 	cons.print(string: "[INIT] " + stream.description + "\n")
@@ -43,4 +53,37 @@ private func dumpTokens(tokens tkns: Array<CNToken>, console cons: CNConsole)
 		let typestr = token.type.description()
 		cons.print(string: typestr + "\n")
 	}
+}
+
+private func testStringStreamToDecode(console cons: CNConsole) -> Bool
+{
+	var result  = true
+
+	let teststr = " 1234a"
+	let stream  = CNStringStream(string: teststr)
+
+	stream.skipSpaces()
+	if let val = stream.geti() {
+		if val == 1234 {
+			cons.print(string: "Decoded value: \(val) ... OK\n")
+		} else {
+			cons.print(string: "[Error] Unexpected decoded value: \(val)\n")
+			result = false
+		}
+	} else {
+		cons.print(string: "[Error] No integer value\n")
+		result = false
+	}
+	if let remain = stream.toString() {
+		if remain == "a" {
+			cons.print(string: "Remained: \(remain) .. OK\n")
+		} else {
+			cons.print(string: "[Error] Unexpected: \(remain)")
+			result = false
+		}
+	} else {
+		cons.print(string: "[Error] Follower string\n")
+		result = false
+	}
+	return result
 }

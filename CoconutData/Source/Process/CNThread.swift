@@ -27,7 +27,6 @@ open class CNThread: CNProcessStream
 	private var mOutputStream:		CNFileStream
 	private var mErrorStream:		CNFileStream
 	private var mConsole:			CNFileConsole
-	private var mConfig:			CNConfig
 	private var mArguments:			Array<CNNativeValue>
 	private var mIsRunning:			Bool
 	private var mTerminationStatus:		Int32
@@ -37,16 +36,14 @@ open class CNThread: CNProcessStream
 	public var outputStream: 	CNFileStream 	{ get { return mOutputStream	}}
 	public var errorStream:  	CNFileStream	{ get { return mErrorStream 	}}
 	public var console:      	CNFileConsole	{ get { return mConsole 	}}
-	public var config:		CNConfig 	{ get { return mConfig 		}}
 	public var isRunning:	 	Bool		{ get { return mIsRunning	}}
 
-	public init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig) {
+	public init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream) {
 		mQueue			= disque
 		mSemaphore		= DispatchSemaphore(value: 0)
 		mInputStream		= instrm
 		mOutputStream		= outstrm
 		mErrorStream		= errstrm
-		mConfig			= conf
 		mArguments		= []
 		mIsRunning		= false
 		mTerminationStatus	= -1
@@ -58,18 +55,14 @@ open class CNThread: CNProcessStream
 	}
 
 	public func start(arguments args: Array<CNNativeValue>){
-		log(string: "start/start")
 		mArguments = args
 		mIsRunning = true
 		mQueue.async {
-			self.log(string: "start/async/start")
 			self.mTerminationStatus = self.main(arguments: self.mArguments)
 			self.closeStreams()
 			self.mSemaphore.signal()
 			self.mIsRunning = false
-			self.log(string: "main/async/end")
 		}
-		log(string: "start/done")
 	}
 
 	open func main(arguments args: Array<CNNativeValue>) -> Int32 {
@@ -78,9 +71,7 @@ open class CNThread: CNProcessStream
 	}
 
 	public func waitUntilExit() -> Int32 {
-		log(string: "waitUntilExit/start")
 		mSemaphore.wait()
-		log(string: "waitUntilExit/done")
 		return mTerminationStatus
 	}
 
@@ -96,16 +87,6 @@ open class CNThread: CNProcessStream
 			pipe.fileHandleForWriting.closeFile()
 		case .fileHandle(_), .null:
 			break	// Do nothing
-		}
-	}
-
-	public func log(string str: String) {
-		switch mConfig.logLevel {
-		case .detail:
-			let name = String(describing: type(of: self))
-			mConsole.print(string: "[\(name)] \(str)\n")
-		case .flow, .error, .warning:
-			break
 		}
 	}
 }

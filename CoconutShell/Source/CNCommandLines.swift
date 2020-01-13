@@ -39,11 +39,14 @@ public class CNCommandLines
 		return nil
 	}
 
-	public func saveCurrentCommand(isValidCommand isvalid: Bool) {
+	public func addDeterminedCommand(command cmdstr: String) {
+		let newcmd = CNCommandLine()
+		newcmd.insert(string: cmdstr)
+
 		/* If there is same command, remove it */
 		var dupidx: Int? = nil
 		for i in 0..<mCommandLines.count {
-			if mCommandLines[i] == mCurrentCommand {
+			if mCommandLines[i] == newcmd {
 				dupidx = i
 				break
 			}
@@ -54,9 +57,7 @@ public class CNCommandLines
 
 		/* Add command to history */
 		mCurrentCommand.resetDetermined()
-		if isvalid {
-			mCommandLines.append(mCurrentCommand)
-		}
+		mCommandLines.append(newcmd)
 	
 		/* If the count is over the limit, remove it */
 		if mCommandLines.count > mMaxCount {

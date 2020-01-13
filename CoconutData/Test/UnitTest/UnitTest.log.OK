@@ -2,6 +2,7 @@ Hello, World!
 * testPreference
 LogLevel: flow
 * testStringStream
+- Test string stream to token
 [INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]
 [STREAM-A] String(" (ab, c1, da_) : e01 ")[0:21]
 [STREAM-B] String(" hoge fuga")[0:10]
@@ -15,6 +16,9 @@ IdentifierToken(da_)
 SymbolToken())
 SymbolToken(:)
 IdentifierToken(e01)
+- Test string stream to decode
+Decoded value: 1234 ... OK
+Remained: a .. OK
 * testAttributedString
 "0123*456789"
 **** Search forward  5 -> Offset = 1
@@ -260,58 +264,28 @@ Hello, World !!
 END of process
 Process is finished with exit code: 0
 * testThread
------ testSimpleThread
-[UTSimpleThread] start/start
-[UTSimpleThread] start/done
-[UTSimpleThread] waitUntilExit/start
-[UTSimpleThread] start/async/start
-UTThread: mainOperation
-[UTSimpleThread] main/async/end
-[UTSimpleThread] waitUntilExit/done
-Wait done with exit code: 0
------ testNestedThread
-[UTNestedThread] start/start
-[UTNestedThread] start/done
-[UTNestedThread] waitUntilExit/start
-[UTNestedThread] start/async/start
-UTNestedThread0: mainOperation/start
-UTNestedThread0: mainOperation/main/start
-[UTNestedThread] start/start
-[UTNestedThread] start/done
-[UTNestedThread] start/async/start
-UTNestedThread0: mainOperation/main/waitUntilExit
-UTNestedThread1: mainOperation/start
-UTNestedThread1: mainOperation/main/start
-[UTNestedThread] waitUntilExit/start
-[UTNestedThread] start/start
-[UTNestedThread] start/done
-UTNestedThread1: mainOperation/main/waitUntilExit
-[UTNestedThread] start/async/start
-[UTNestedThread] waitUntilExit/start
-UTNestedThread2: mainOperation/start
-UTNestedThread2: mainOperation/main/start
-[UTNestedThread] start/start
-[UTNestedThread] start/done
-UTNestedThread2: mainOperation/main/waitUntilExit
-[UTNestedThread] start/async/start
-[UTNestedThread] waitUntilExit/start
-UTNestedThread3: mainOperation/start
-UTNestedThread3: mainOperation/done
-[UTNestedThread] main/async/end
-[UTNestedThread] waitUntilExit/done
-UTNestedThread2: mainOperation/main/echode=0
-UTNestedThread2: mainOperation/done
-[UTNestedThread] waitUntilExit/done
-[UTNestedThread] main/async/end
-UTNestedThread1: mainOperation/main/echode=0
-UTNestedThread1: mainOperation/done
-[UTNestedThread] main/async/end
-[UTNestedThread] waitUntilExit/done
-UTNestedThread0: mainOperation/main/echode=0
-UTNestedThread0: mainOperation/done
-[UTNestedThread] main/async/end
-[UTNestedThread] waitUntilExit/done
-Wait done with exit code: 0
+testSimpleThread: 1. Begin
+testSimpleThread: 2. MainOperation
+testSimpleThread: 3: ecode = 0
+testNestedThread: 1. Begin
+testNestedThread0: 1.mainOperation/start
+testNestedThread0: 2.1 mainOperation/main/start
+testNestedThread0: 2.2 mainOperation/main/waitUntilExit
+testNestedThread1: 1.mainOperation/start
+testNestedThread1: 2.1 mainOperation/main/start
+testNestedThread1: 2.2 mainOperation/main/waitUntilExit
+testNestedThread2: 1.mainOperation/start
+testNestedThread2: 2.1 mainOperation/main/start
+testNestedThread2: 2.2 mainOperation/main/waitUntilExit
+testNestedThread3: 1.mainOperation/start
+testNestedThread3: 3.mainOperation/done
+testNestedThread2: 2.3 mainOperation/main/echode=0
+testNestedThread2: 3.mainOperation/done
+testNestedThread1: 2.3 mainOperation/main/echode=0
+testNestedThread1: 3.mainOperation/done
+testNestedThread0: 2.3 mainOperation/main/echode=0
+testNestedThread0: 3.mainOperation/done
+testNestedThread: 2. End code: 0
 * testGraphics
 point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... OK
 size: (5.0, 5.0) -> (2.5, 2.5) -> (5.0, 5.0) ... OK

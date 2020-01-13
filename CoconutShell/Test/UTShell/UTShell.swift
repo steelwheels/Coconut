@@ -9,7 +9,7 @@ import CoconutShell
 import CoconutData
 import Foundation
 
-public class UTShellThread: CNShellThread {
+private class UTShellThread: CNShellThread {
 	public var printed = false
 
 	public override func promptString() -> String {
@@ -33,10 +33,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	let instrm  = CNFileStream.pipe(inpipe)
 	let outstrm = CNFileStream.pipe(outpipe)
 	let errstrm = CNFileStream.pipe(errpipe)
-	let config  = CNConfig(logLevel: .detail)
-	let shell   = UTShellThread(queue: queue,
-				    input: instrm, output: outstrm, error: errstrm,
-				    config: config)
+	let shell   = UTShellThread(queue: queue, input: instrm, output: outstrm, error: errstrm)
 
 	outpipe.fileHandleForReading.readabilityHandler = {
 		(_ hdl: FileHandle) -> Void in
@@ -56,6 +53,29 @@ public func testShell(console cons: CNFileConsole) -> Bool
 
 	cons.print(string: "testShell: Start\n")
 	shell.start(arguments: [])
+
+	queue.async {
+		inpipe.fileHandleForWriting.write(string: "command-1\n")
+		inpipe.fileHandleForWriting.write(string: "command-2\n")
+		inpipe.fileHandleForWriting.write(string: "command-3\n")
+		inpipe.fileHandleForWriting.write(string: "a!1b\n")
+		inpipe.fileHandleForWriting.write(string: CNEscapeCode.eot.encode())
+		inpipe.fileHandleForWriting.closeFile()
+	}
+
+	cons.print(string: "testShell: Wait until exit\n")
+	let ecode = shell.waitUntilExit()
+
+	cons.print(string: "testShell: Done with error code \(ecode)\n")
+	return true
+}
+
+/*
+
+
+public func testShell(console cons: CNFileConsole) -> Bool
+{
+
 
 	/* Check request from shell */
 	var result      = true
@@ -108,4 +128,6 @@ public func testShell(console cons: CNFileConsole) -> Bool
 
 	return result
 }
+
+*/
 

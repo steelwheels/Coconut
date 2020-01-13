@@ -13,10 +13,6 @@ private class UTReadline: CNReadline {
 	private var messages: 		Array<String>
 	private var messageIndex:	Int
 
-	public var didFinished: Bool {
-		get { return messageIndex >= messages.count }
-	}
-
 	public init(console cons: CNFileConsole, terminalInfo tinfo: CNTerminalInfo) {
 		messages = [
 			"This is first message",
@@ -38,7 +34,8 @@ private class UTReadline: CNReadline {
 			CNEscapeCode.backspace.encode(),
 			CNEscapeCode.cursorBackward(2).encode(),
 			CNEscapeCode.backspace.encode(),
-			CNEscapeCode.tab.encode()
+			CNEscapeCode.tab.encode(),
+			CNEscapeCode.eot.encode()	// End of transmission
 		]
 		messageIndex = 0
 		super.init(terminalInfo: tinfo)
@@ -63,20 +60,19 @@ public func testReadline(console cons: CNFileConsole) -> Bool
 
 	var docont = true
 	while docont {
-		if !readline.didFinished {
-			switch readline.readLine(console: cons) {
-			case .commandLine(let cmdline):
-				//if cmdline.didDetermined {
-					let (cmdstr, cmdpos) = cmdline.getAndClear()
-					cons.print(string: "CTXT: \(cmdpos) \(cmdstr)\n")
-				//}
-			case .escapeCode(let code):
+		switch readline.readLine(console: cons) {
+		case .commandLine(let cmdline):
+			let (cmdstr, cmdpos) = cmdline.getAndClear()
+			cons.print(string: "CTXT: \(cmdpos) \(cmdstr)\n")
+		case .escapeCode(let code):
+			switch code {
+			case .eot:
+				docont = false
+			default:
 				cons.print(string: "ECODE: \(code.description())\n")
-			case .none:
-				break
 			}
-		} else {
-			docont = false
+		case .empty:
+			break
 		}
 	}
 	return true

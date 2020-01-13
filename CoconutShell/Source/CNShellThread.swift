@@ -30,12 +30,12 @@ open class CNShellThread: CNThread
 	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo }}
 	public var readline: CNReadline { get { return mReadline }}
 
-	public override init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, config conf: CNConfig){
+	public override init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream){
 		mTerminalInfo	= CNTerminalInfo()
 		mReadline 	= CNReadline(terminalInfo: mTerminalInfo)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mIsCancelled	= false
-		super.init(queue: disque, input: instrm, output: outstrm, error: errstrm, config: conf)
+		super.init(queue: disque, input: instrm, output: outstrm, error: errstrm)
 
 		/* Set raw mode */
 		let _ = self.inputStream.setRawMode(enable: true)
@@ -62,12 +62,16 @@ open class CNShellThread: CNThread
 				let newline	= cmdline.string
 				let newpos	= cmdline.position
 				if determined {
+					/* Replace replay command */
+					let newcmd = replaceReplayCommand(source: newline)
+					NSLog("Replace: \(newline) -> \(newcmd)")
+
 					/* Execute command */
 					console.print(string: "\n") // Execute at new line
-					let isok = execute(command: newline)
+					let _ = execute(command: newcmd)
 
 					/* Save current command */
-					mReadline.saveCurrentCommand(isValidCommand: isok)
+					mReadline.addDeteminedCommand(command: newcmd)
 
 					/* Update history */
 					let histmgr = CNCommandHistory.shared
@@ -75,8 +79,8 @@ open class CNShellThread: CNThread
 
 					/* Reset terminal */
 					let resetstr = CNEscapeCode.setNormalAttributes.encode()
-					
 					console.print(string: resetstr)
+
 					/* Print prompt again */
 					mReadlineStatus.doPrompt	= true
 					mReadlineStatus.editingLine     = ""
@@ -114,14 +118,42 @@ open class CNShellThread: CNThread
 					mTerminalInfo.width	 = width
 					mTerminalInfo.height 	= height
 					NSLog("Update terminal info: \(width) \(height)")
+				case .eot:
+					cancel()
 				default:
 					console.error(string: "ECODE: \(code.description())\n")
 				}
-			case .none:
-				mIsCancelled = true
+			case .empty:
+				break
 			}
 		}
 		return 0
+	}
+
+	private func replaceReplayCommand(source src: String) -> String {
+		var result:	String = ""
+		var docont:	Bool   = true
+		let stream = CNStringStream(string: src)
+		repeat {
+			if let c = stream.getc() {
+				if c == "!" {
+					if let idx = stream.geti() {
+						if let repcmd = mReadline.search(byIndex: idx) {
+							result.append(repcmd)
+						} else {
+							result.append("\(idx)")
+						}
+					} else {
+						result.append("!")
+					}
+				} else {
+					result.append(c)
+				}
+			} else {
+				docont = false
+			}
+		} while(docont)
+		return result
 	}
 
 	public func cancel(){

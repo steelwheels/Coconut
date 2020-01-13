@@ -14,6 +14,7 @@ import Foundation
  */
 public enum CNEscapeCode {
 	case	string(String)
+	case	eot					/* End of transmission (CTRL-D)	*/
 	case	newline
 	case	tab
 	case	backspace				/* = moveLeft(1)		*/
@@ -46,6 +47,7 @@ public enum CNEscapeCode {
 		var result: String
 		switch self {
 		case .string(let str):				result = "string(\"\(str)\")"
+		case .eot:					result = "endOfTrans"
 		case .newline:					result = "newline"
 		case .tab:					result = "tab"
 		case .backspace:				result = "backspace"
@@ -80,6 +82,7 @@ public enum CNEscapeCode {
 		var result: String
 		switch self {
 		case .string(let str):				result = str
+		case .eot:					result = String(Character.EOT)
 		case .newline:					result = String(Character.CR)
 		case .tab:					result = String(Character.TAB)
 		case .backspace:				result = String(Character.BS)
@@ -125,6 +128,11 @@ public enum CNEscapeCode {
 		case .string(let s0):
 			switch src {
 			case .string(let s1):			result = (s0 == s1)
+			default:				break
+			}
+		case .eot:
+			switch src {
+			case .eot:				result = true
 			default:				break
 			}
 		case .newline:
@@ -360,6 +368,15 @@ public enum CNEscapeCode {
 				}
 				/* add delete */
 				result.append(.delete)
+				idx = idx0
+			case Character.EOT:
+				/* Save current sub string */
+				if substr.count > 0 {
+					result.append(CNEscapeCode.string(substr))
+					substr = ""
+				}
+				/* add delete */
+				result.append(.eot)
 				idx = idx0
 			default:
 				substr.append(c0)

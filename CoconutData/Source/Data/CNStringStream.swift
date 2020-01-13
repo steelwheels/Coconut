@@ -45,6 +45,24 @@ public class CNStringStream
 		return result
 	}
 
+	public func geti() -> Int? {
+		var intstr: String = ""
+		var docont = true
+		while docont {
+			if let c = self.getc() {
+				if c.isNumber {
+					intstr.append(c)
+				} else {
+					let _ = ungetc()
+					docont = false
+				}
+			} else {
+				docont = false
+			}
+		}
+		return intstr.count > 0 ? Int(intstr) : nil
+	}
+
 	public func ungetc() -> Character? {
 		if mString.startIndex < mStartIndex {
 			mStartIndex = mString.index(before: mStartIndex)
