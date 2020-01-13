@@ -53,8 +53,12 @@ open class CNReadline
 		return result
 	}
 
-	public func addDeteminedCommand(command cmd: String) {
-		mCommandLines.addDeterminedCommand(command: cmd)
+	public func replaceReplayCommand(source src: String) -> String {
+		return mCommandLines.replaceReplayCommand(source: src)
+	}
+
+	public func addCommand(command cmd: String) {
+		mCommandLines.addCommand(command: cmd)
 	}
 
 	private func decode(escapeCode code: CNEscapeCode) -> Bool {

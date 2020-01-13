@@ -63,15 +63,14 @@ open class CNShellThread: CNThread
 				let newpos	= cmdline.position
 				if determined {
 					/* Replace replay command */
-					let newcmd = replaceReplayCommand(source: newline)
-					NSLog("Replace: \(newline) -> \(newcmd)")
+					let newcmd = mReadline.replaceReplayCommand(source: newline)
 
 					/* Execute command */
 					console.print(string: "\n") // Execute at new line
 					let _ = execute(command: newcmd)
 
 					/* Save current command */
-					mReadline.addDeteminedCommand(command: newcmd)
+					mReadline.addCommand(command: newcmd)
 
 					/* Update history */
 					let histmgr = CNCommandHistory.shared
@@ -128,32 +127,6 @@ open class CNShellThread: CNThread
 			}
 		}
 		return 0
-	}
-
-	private func replaceReplayCommand(source src: String) -> String {
-		var result:	String = ""
-		var docont:	Bool   = true
-		let stream = CNStringStream(string: src)
-		repeat {
-			if let c = stream.getc() {
-				if c == "!" {
-					if let idx = stream.geti() {
-						if let repcmd = mReadline.search(byIndex: idx) {
-							result.append(repcmd)
-						} else {
-							result.append("\(idx)")
-						}
-					} else {
-						result.append("!")
-					}
-				} else {
-					result.append(c)
-				}
-			} else {
-				docont = false
-			}
-		} while(docont)
-		return result
 	}
 
 	public func cancel(){

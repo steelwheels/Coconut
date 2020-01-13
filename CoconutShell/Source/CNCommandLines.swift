@@ -39,9 +39,33 @@ public class CNCommandLines
 		return nil
 	}
 
-	public func addDeterminedCommand(command cmdstr: String) {
-		let newcmd = CNCommandLine()
-		newcmd.insert(string: cmdstr)
+	public func replaceReplayCommand(source src: String) -> String {
+		var result: String = ""
+		let stream = CNStringStream(string: src)
+		while true {
+			if let c = stream.getc() {
+				if c == "!" {
+					if let idx = stream.geti() {
+						if 1<=idx && idx<=mCommandLines.count {
+							let cmd = mCommandLines[idx-1]
+							result.append(cmd.string)
+						} else {
+							result.append("!\(idx)")
+						}
+						continue
+					}
+				}
+				result.append(c)
+			} else {
+				break
+			}
+		}
+		return result
+	}
+
+	public func addCommand(command cmdstr: String) {
+		/* Allocate command */
+		let newcmd = CNCommandLine(command: cmdstr)
 
 		/* If there is same command, remove it */
 		var dupidx: Int? = nil
