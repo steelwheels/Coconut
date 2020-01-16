@@ -67,6 +67,7 @@ public class CNCommandLines
 		/* Allocate command */
 		let newcmd = CNCommandLine(command: cmdstr)
 
+		#if false
 		/* If there is same command, remove it */
 		var dupidx: Int? = nil
 		for i in 0..<mCommandLines.count {
@@ -78,15 +79,18 @@ public class CNCommandLines
 		if let i = dupidx {
 			mCommandLines.remove(at: i)
 		}
+		#endif
 
 		/* Add command to history */
 		mCurrentCommand.resetDetermined()
 		mCommandLines.append(newcmd)
-	
+
+		#if false
 		/* If the count is over the limit, remove it */
 		if mCommandLines.count > mMaxCount {
 			mCommandLines.removeFirst()
 		}
+		#endif
 
 		/* Reflesh the current command */
 		mCurrentCommand = CNCommandLine()
