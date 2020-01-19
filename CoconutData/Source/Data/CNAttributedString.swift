@@ -291,4 +291,15 @@ public extension NSMutableAttributedString
 		self.deleteCharacters(in: delrange)
 		return start
 	}
+
+	func changeOverallFont(font newfont: CNFont){
+		self.beginEditing()
+		let entire = NSMakeRange(0, self.length)
+		self.enumerateAttribute(.font, in: entire, options: [], using: {
+			(anyobj, range, unsage) -> Void in
+			removeAttribute(.font, range: entire)
+			addAttribute(.font, value: newfont, range: entire)
+		})
+		self.endEditing()
+	}
 }

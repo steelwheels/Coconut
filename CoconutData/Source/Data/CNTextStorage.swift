@@ -79,9 +79,11 @@ public extension NSMutableAttributedString
 	private func attributedString(string str: String, terminalInfo tinfo: CNTerminalInfo) -> NSAttributedString {
 		let fcol = tinfo.foregroundColor.toObject()
 		let bcol = tinfo.backgroundColor.toObject()
+		let font = tinfo.font
 		let attr: [NSAttributedString.Key: Any] = [
 			NSAttributedString.Key.foregroundColor: fcol,
-			NSAttributedString.Key.backgroundColor: bcol
+			NSAttributedString.Key.backgroundColor: bcol,
+			NSAttributedString.Key.font:		font
 		]
 		return NSAttributedString(string: str, attributes: attr)
 	}
