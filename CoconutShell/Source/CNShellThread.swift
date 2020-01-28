@@ -22,19 +22,20 @@ open class CNShellThread: CNThread
 		}
 	}
 
-	private var mTerminalInfo:	CNTerminalInfo
 	private var mReadline:		CNReadline
 	private var mReadlineStatus:	ReadlineStatus
 	private var mIsCancelled:	Bool
+	private var mTerminalWidth:	Int?
+	private var mTerminalHeight:	Int?
 
-	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo }}
 	public var readline: CNReadline { get { return mReadline }}
 
 	public override init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream){
-		mTerminalInfo	= CNTerminalInfo()
-		mReadline 	= CNReadline(terminalInfo: mTerminalInfo)
+		mReadline 	= CNReadline()
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mIsCancelled	= false
+		mTerminalWidth	= nil
+		mTerminalHeight	= nil
 		super.init(queue: disque, input: instrm, output: outstrm, error: errstrm)
 
 		/* Set raw mode */
@@ -114,8 +115,8 @@ open class CNShellThread: CNThread
 			case .escapeCode(let code):
 				switch code {
 				case .screenSize(let width, let height):
-					mTerminalInfo.width	 = width
-					mTerminalInfo.height 	= height
+					self.mTerminalWidth	= width
+					self.mTerminalHeight	= height
 					NSLog("Update terminal info: \(width) \(height)")
 				case .eot:
 					cancel()

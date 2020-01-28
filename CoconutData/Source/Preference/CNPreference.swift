@@ -181,16 +181,14 @@ public class CNDocumentTypePreference
 
 public class CNTerminalPreference
 {
-	public var	width:			Int
-	public var	height:			Int
 	public var	foregroundColor:	CNColor
 	public var	backgroundColor:	CNColor
+	public var	font:			CNFont
 
 	public init() {
-		width			= 80
-		height			= 20
 		foregroundColor		= CNColor.Green
 		backgroundColor		= CNColor.Black
+		font			= CNFont.systemFont(ofSize: 12.0)
 	}
 }
 

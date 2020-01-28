@@ -9,11 +9,24 @@ import Foundation
 
 public extension NSMutableAttributedString
 {
-	func execute(index idx: Int, terminalInfo tinfo: CNTerminalInfo, escapeCode code: CNEscapeCode) -> Int? { /* -> Next index */
+	struct TextAttribute {
+		public var	foregroundColor:	CNColor
+		public var	backgroundColor:	CNColor
+		public var	font:			CNFont
+
+		public init(){
+			let pref = CNPreference.shared.terminalPreference
+			self.foregroundColor	= pref.foregroundColor
+			self.backgroundColor	= pref.backgroundColor
+			self.font 		= pref.font
+		}
+	}
+
+	func execute(index idx: Int, attribute attr: TextAttribute, escapeCode code: CNEscapeCode) -> Int? { /* -> Next index */
 		var result: Int? = nil
 		switch code {
 		case .string(let str):
-			let astr = self.attributedString(string: str, terminalInfo: tinfo)
+			let astr = self.attributedString(string: str, attribute: attr)
 			result = self.write(string: astr, at: idx)
 		case .eot:
 			result = idx // ignore
@@ -76,14 +89,11 @@ public extension NSMutableAttributedString
 		return result
 	}
 
-	private func attributedString(string str: String, terminalInfo tinfo: CNTerminalInfo) -> NSAttributedString {
-		let fcol = tinfo.foregroundColor.toObject()
-		let bcol = tinfo.backgroundColor.toObject()
-		let font = tinfo.font
+	private func attributedString(string str: String, attribute attr: TextAttribute) -> NSAttributedString {
 		let attr: [NSAttributedString.Key: Any] = [
-			NSAttributedString.Key.foregroundColor: fcol,
-			NSAttributedString.Key.backgroundColor: bcol,
-			NSAttributedString.Key.font:		font
+			NSAttributedString.Key.foregroundColor: attr.foregroundColor.toObject(),
+			NSAttributedString.Key.backgroundColor: attr.backgroundColor.toObject(),
+			NSAttributedString.Key.font:		attr.font
 		]
 		return NSAttributedString(string: str, attributes: attr)
 	}

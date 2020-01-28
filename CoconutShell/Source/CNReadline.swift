@@ -11,12 +11,10 @@ import Darwin
 
 open class CNReadline
 {
-	private var mTermInfo:		CNTerminalInfo
 	private var mCommandLines:	CNCommandLines
 	private var mCurrentBuffer:	CNQueue<CNEscapeCode>
 
-	public init(terminalInfo terminfo: CNTerminalInfo){
-		mTermInfo	= terminfo
+	public init(){
 		mCommandLines	= CNCommandLines()
 		mCurrentBuffer	= CNQueue<CNEscapeCode>()
 	}
