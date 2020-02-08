@@ -1,6 +1,15 @@
 Hello, World!
 * testPreference
 LogLevel: flow
+* testPreferenceTable
+Observe: 123
+get -> 123
+Observe: 234 at 0
+get -> 234
+Observe: 235 at 1
+get -> 235
+Observe: 236 at 2
+get -> 236
 * testStringStream
 - Test string stream to token
 [INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]

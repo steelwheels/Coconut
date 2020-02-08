@@ -15,7 +15,6 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		+ "0123456789\n"
 		+ "abcdefghij"
 	)
-	let textattr = NSTextStorage.TextAttribute()
 
 	var idx = 15
 
@@ -62,15 +61,18 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.setNormalAttributes
 	]
 	for ecode in ecodes {
-		idx = execute(string: str, index: idx, escapeCode: ecode, attribute: textattr, console: cons)
+		let fcol = CNColor.Green
+		let bcol = CNColor.Black
+		let font = CNFont.systemFont(ofSize: CNFont.systemFontSize)
+		idx = execute(string: str, index: idx, escapeCode: ecode, foregroundColor: fcol, backgroundColor: bcol, font: font, console: cons)
 	}
 
 	return true
 }
 
-private func execute(string str: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, attribute attr: NSTextStorage.TextAttribute, console cons: CNConsole) -> Int
+private func execute(string str: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, foregroundColor fcol: CNColor, backgroundColor bcol: CNColor, font fnt: CNFont, console cons: CNConsole) -> Int
 {
-	if let result = str.execute(index: idx, attribute: attr, escapeCode: ecode) {
+	if let result = str.execute(index: idx, foregroundColor: fcol, backgroundColor: bcol, font: fnt, escapeCode: ecode) {
 		cons.print(string: "- Execute:\(ecode.description())\n")
 		dump(index: result, string: str, console: cons)
 		return result

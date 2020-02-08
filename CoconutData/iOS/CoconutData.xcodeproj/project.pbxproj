@@ -19,6 +19,7 @@
 		05387F97208F79A200848EA3 /* CNReservedWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05387F96208F79A200848EA3 /* CNReservedWord.swift */; };
 		0539FB7C218A134F00EFCFFF /* CNGraphicsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0539FB7B218A134F00EFCFFF /* CNGraphicsType.swift */; };
 		053BC8F52090D0CF006CBB06 /* CNExitCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BC8F42090D0CF006CBB06 /* CNExitCode.swift */; };
+		053EFA0923EB19D3008E5838 /* CNPreferenceTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053EFA0823EB19D2008E5838 /* CNPreferenceTable.swift */; };
 		054D735F21B03CEA00950D9D /* CNNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054D735E21B03CEA00950D9D /* CNNativeValue.swift */; };
 		0554E0CB21D52A45005B8069 /* CNResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554E0CA21D52A45005B8069 /* CNResource.swift */; };
 		0564CDBD22581C7600B95048 /* CNType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0564CDBC22581C7600B95048 /* CNType.swift */; };
@@ -89,6 +90,7 @@
 		05387F96208F79A200848EA3 /* CNReservedWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReservedWord.swift; sourceTree = "<group>"; };
 		0539FB7B218A134F00EFCFFF /* CNGraphicsType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNGraphicsType.swift; sourceTree = "<group>"; };
 		053BC8F42090D0CF006CBB06 /* CNExitCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNExitCode.swift; sourceTree = "<group>"; };
+		053EFA0823EB19D2008E5838 /* CNPreferenceTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNPreferenceTable.swift; sourceTree = "<group>"; };
 		054D735E21B03CEA00950D9D /* CNNativeValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValue.swift; sourceTree = "<group>"; };
 		0554E0CA21D52A45005B8069 /* CNResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNResource.swift; sourceTree = "<group>"; };
 		0564CDBC22581C7600B95048 /* CNType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNType.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 		05B8B2BA226778A3005FFA32 /* Preference */ = {
 			isa = PBXGroup;
 			children = (
+				053EFA0823EB19D2008E5838 /* CNPreferenceTable.swift */,
 				05B8B2BB226778BC005FFA32 /* CNPreference.swift */,
 			);
 			path = Preference;
@@ -471,6 +474,7 @@
 				05B8B2BC226778BC005FFA32 /* CNPreference.swift in Sources */,
 				05037670208B2F2000D2DB37 /* CNError.swift in Sources */,
 				0532530F23AF9146003534BF /* CNTextStorage.swift in Sources */,
+				053EFA0923EB19D3008E5838 /* CNPreferenceTable.swift in Sources */,
 				05E81093208B341C00230477 /* CNAccess.swift in Sources */,
 				05995853208AF0D500DE2DC9 /* CNParser.swift in Sources */,
 				0517E1BD235E7F62002EB80C /* CNProcess.swift in Sources */,
