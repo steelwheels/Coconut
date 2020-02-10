@@ -35,6 +35,10 @@ public enum CNColor: Int32 {
 		return result
 	}
 
+	public func isEqual(to col: CNColor) -> Bool {
+		return self.rawValue == col.rawValue
+	}
+
 	#if os(OSX)
 	public func toObject() -> NSColor {
 		let result: NSColor
