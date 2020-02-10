@@ -10,6 +10,8 @@ Observe: 235 at 1
 get -> 235
 Observe: 236 at 2
 get -> 236
+Observe: L3=456
+Observe: L2=456
 * testStringStream
 - Test string stream to token
 [INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]

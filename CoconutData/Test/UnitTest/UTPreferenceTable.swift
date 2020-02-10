@@ -35,6 +35,7 @@ public func testPreferenceTable(console cons: CNConsole) -> Bool
 	testPreferenceTableSub(parameterTable: table, value: 0, console: cons)
 	testPreferenceTableSub(parameterTable: table, value: 1, console: cons)
 	testPreferenceTableSub(parameterTable: table, value: 2, console: cons)
+	testPreferenceTableMulti(parameterTable: table, console: cons)
 
 	return true
 }
@@ -58,5 +59,30 @@ private func testPreferenceTableSub(parameterTable table: CNPreferenceTable, val
 	}
 
 	table.removeObserver(listner: listner1)
+}
+
+private func testPreferenceTableMulti(parameterTable table: CNPreferenceTable, console cons: CNConsole)
+{
+	let listner2 = table.addObserver(forKey: "KEY2", callback: {
+		(_ val: Any) -> Void in
+		if let intval = val as? Int {
+			cons.print(string: "Observe: L2=\(intval)\n")
+		} else {
+			cons.print(string: "Observe: L2=nil\n")
+		}
+	})
+	let listner3 = table.addObserver(forKey: "KEY2", callback: {
+		(_ val: Any) -> Void in
+		if let intval = val as? Int {
+			cons.print(string: "Observe: L3=\(intval)\n")
+		} else {
+			cons.print(string: "Observe: L3=nil\n")
+		}
+	})
+
+	table.set(intValue: 456, forKey: "KEY2")
+
+	table.removeObserver(listner: listner2)
+	table.removeObserver(listner: listner3)
 }
 
