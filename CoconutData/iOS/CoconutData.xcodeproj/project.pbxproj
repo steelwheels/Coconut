@@ -65,6 +65,7 @@
 		05EDAD85213BE640003C9147 /* CNStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDAD84213BE640003C9147 /* CNStack.swift */; };
 		05F5DAC7208ADBD8006EB134 /* CNArrayStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5DAC5208ADBD8006EB134 /* CNArrayStream.swift */; };
 		05F5DAC8208ADBD8006EB134 /* CNStringStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */; };
+		05F9D77723F0E0390021184F /* CNFontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9D77623F0E0390021184F /* CNFontManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +139,7 @@
 		05EDAD84213BE640003C9147 /* CNStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStack.swift; sourceTree = "<group>"; };
 		05F5DAC5208ADBD8006EB134 /* CNArrayStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNArrayStream.swift; sourceTree = "<group>"; };
 		05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringStream.swift; sourceTree = "<group>"; };
+		05F9D77623F0E0390021184F /* CNFontManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFontManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 			children = (
 				05387F94208F799900848EA3 /* CNText.swift */,
 				05D10D9423D3EF3B00DF66E6 /* CNFont.swift */,
+				05F9D77623F0E0390021184F /* CNFontManager.swift */,
 			);
 			path = Text;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				05387F95208F799900848EA3 /* CNText.swift in Sources */,
 				05995851208AF0A600DE2DC9 /* CNTokenStream.swift in Sources */,
 				0588875421CBD7FA00BE14B5 /* CNNativeValueVisitor.swift in Sources */,
+				05F9D77723F0E0390021184F /* CNFontManager.swift in Sources */,
 				053BC8F52090D0CF006CBB06 /* CNExitCode.swift in Sources */,
 				0599583D208AEE2000DE2DC9 /* CNCharacter.swift in Sources */,
 				056A451823232A3600C7DCBF /* CNFileHandle.swift in Sources */,
