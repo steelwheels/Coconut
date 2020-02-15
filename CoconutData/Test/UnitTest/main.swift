@@ -15,8 +15,8 @@ cons.print(string: "Hello, World!\n")
 cons.print(string: "* testPreference\n")
 let result8 = testPreference(console: cons)
 
-cons.print(string: "* testPreferenceTable\n")
-let result23 = testPreferenceTable(console: cons)
+cons.print(string: "* fontManager\n")
+let result23 = testFontManager(console: cons)
 
 cons.print(string: "* testStringStream\n")
 let result12 = testStringStream(console: cons)

@@ -17,6 +17,19 @@ import UIKit
 
 public typealias CNFontManager = NSFontManager
 
+extension CNFontManager
+{
+	public var availableFixedPitchFonts: Array<String> {
+		get {
+			if let names = self.availableFontNames(with: .fixedPitchFontMask) {
+				return names
+			} else {
+				return []
+			}
+		}
+	}
+}
+
 #else
 
 public class CNFontManager
@@ -35,6 +48,27 @@ public class CNFontManager
 				let names = UIFont.fontNames(forFamilyName: family)
 				result.append(contentsOf: names)
 			}
+			return result
+		}
+	}
+
+	public var availableFixedPitchFonts: Array<String> {
+		get {
+			/* Reference: https://stackoverflow.com/questions/9962994/what-is-a-monospace-font-in-ios/12592984 */
+			let result: Array<String> = [
+				"Courier",
+				"Courier-Bold",
+				"Courier-BoldOblique",
+				"Courier-Oblique",
+				"CourierNewPS-BoldItalicMT",
+				"CourierNewPS-BoldMT",
+				"CourierNewPS-ItalicMT",
+				"CourierNewPSMT",
+				"Menlo-Bold",
+				"Menlo-BoldItalic",
+				"Menlo-Italic",
+				"Menlo-Regular"
+			]
 			return result
 		}
 	}
