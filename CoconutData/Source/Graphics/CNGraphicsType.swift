@@ -42,16 +42,16 @@ public enum CNAlignment: Int32 {
 }
 
 public enum CNDistribution: Int32 {
-	case fill
+	case fillProportinally
 	case fillEqually
 	case equalSpacing
 
 	public var description: String {
 		let result: String
 		switch self {
-		case .fill:		result = "fill"
-		case .fillEqually:	result = "fillEqually"
-		case .equalSpacing:	result = "equalSpacing"
+		case .fillProportinally:	result = "fillProportionally"
+		case .fillEqually:		result = "fillEqually"
+		case .equalSpacing:		result = "equalSpacing"
 		}
 		return result
 	}
