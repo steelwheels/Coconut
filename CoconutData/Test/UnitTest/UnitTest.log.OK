@@ -1,17 +1,35 @@
 Hello, World!
 * testPreference
 LogLevel: flow
-* testPreferenceTable
-Observe: 123
-get -> 123
-Observe: 234 at 0
-get -> 234
-Observe: 235 at 1
-get -> 235
-Observe: 236 at 2
-get -> 236
-Observe: L3=456
-Observe: L2=456
+* fontManager
+fixed-pitch-font: AndaleMono
+fixed-pitch-font: AppleBraille
+fixed-pitch-font: AppleBraille-Pinpoint8Dot
+fixed-pitch-font: AppleBraille-Outline6Dot
+fixed-pitch-font: AppleBraille-Outline8Dot
+fixed-pitch-font: AppleBraille-Pinpoint6Dot
+fixed-pitch-font: AppleColorEmoji
+fixed-pitch-font: Courier-Oblique
+fixed-pitch-font: Courier-BoldOblique
+fixed-pitch-font: Courier
+fixed-pitch-font: Courier-Bold
+fixed-pitch-font: CourierNewPS-BoldMT
+fixed-pitch-font: CourierNewPS-ItalicMT
+fixed-pitch-font: CourierNewPSMT
+fixed-pitch-font: CourierNewPS-BoldItalicMT
+fixed-pitch-font: GB18030Bitmap
+fixed-pitch-font: FZLTTHB--B51-0
+fixed-pitch-font: FZLTXHB--B51-0
+fixed-pitch-font: FZLTZHB--B51-0
+fixed-pitch-font: Menlo-Bold
+fixed-pitch-font: Menlo-BoldItalic
+fixed-pitch-font: Menlo-Regular
+fixed-pitch-font: Menlo-Italic
+fixed-pitch-font: Monaco
+fixed-pitch-font: Osaka-Mono
+fixed-pitch-font: JCsmPC
+fixed-pitch-font: PTMono-Regular
+fixed-pitch-font: PTMono-Bold
 * testStringStream
 - Test string stream to token
 [INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]

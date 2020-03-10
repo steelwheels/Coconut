@@ -1,5 +1,5 @@
 /**
- * @file	CNFont.h
+ * @file	CNFont.swift
  * @brief	Define CNFont class
  * @par Copyright
  *   Copyright (C) 2020 Steel Wheels Project

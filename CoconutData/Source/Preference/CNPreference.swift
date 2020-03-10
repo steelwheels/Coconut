@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 open class CNConfig
 {
 	public enum LogLevel: Int {
@@ -61,13 +60,15 @@ open class CNPreference
 {
 	public static let shared = CNPreference()
 
-	private var mTable:	Dictionary<String, AnyObject>
+	private var mTable:		Dictionary<String, CNPreferenceTable>
+	private var mUserDefaults:	UserDefaults
 
 	private init(){
-		mTable = [:]
+		mTable		= [:]
+		mUserDefaults	= UserDefaults.standard
 	}
 
-	public func get<T:AnyObject>(name nm: String, allocator alloc: () -> T) -> T {
+	public func get<T: CNPreferenceTable>(name nm: String, allocator alloc: () -> T) -> T {
 		if let anypref = mTable[nm] as? T {
 			return anypref
 		} else {
@@ -76,119 +77,42 @@ open class CNPreference
 			return newpref
 		}
 	}
-
-	public func set(name nm: String, preference pref: AnyObject){
-		mTable[nm] = pref
-	}
 }
 
-public class CNSystemPreference
+public class CNSystemPreference: CNPreferenceTable
 {
-	public var logLevel:		CNConfig.LogLevel
+	public typealias LogLevel = CNConfig.LogLevel
 
-	public init(){
-		#if DEBUG
-			logLevel = .flow
-		#else
-			logLevel = .error
-		#endif
-	}
-}
+	public let LogLevelItem	= "logLevel"
 
-public class CNDocumentTypePreference
-{
-	private var mDocumentTypes:	Dictionary<String, Array<String>>	// UTI, extension
-
-	public init() {
-		mDocumentTypes  = [:]
-		if let infodict = Bundle.main.infoDictionary {
-			/* Import document types */
-			if let imports = infodict["UTImportedTypeDeclarations"] as? Array<AnyObject> {
-				collectTypeDeclarations(typeDeclarations: imports)
-			}
-		}
+	public override init(){
+		super.init()
+		let level: LogLevel = .error
+		super.set(intValue: level.rawValue, forKey: LogLevelItem)
 	}
 
-	private func collectTypeDeclarations(typeDeclarations decls: Array<AnyObject>){
-		for decl in decls {
-			if let dict = decl as? Dictionary<String, AnyObject> {
-				if dict.count > 0 {
-					collectTypeDeclaration(typeDeclaration: dict)
-				}
-			} else {
-				NSLog("Invalid description: \(decl)")
-			}
-		}
-	}
-
-	private func collectTypeDeclaration(typeDeclaration decl: Dictionary<String, AnyObject>){
-		guard let uti = decl["UTTypeIdentifier"] as? String else {
-			NSLog("No UTTypeIdentifier")
-			return
-		}
-		guard let tags = decl["UTTypeTagSpecification"] as? Dictionary<String, AnyObject> else {
-			NSLog("No UTTypeTagSpecification")
-			return
-		}
-		guard let exts = tags["public.filename-extension"] as? Array<String> else {
-			NSLog("No public.filename-extension")
-			return
-		}
-		mDocumentTypes[uti] = exts
-	}
-
-	public var UTIs: Array<String> {
+	public var logLevel: LogLevel {
 		get {
-			return Array(mDocumentTypes.keys)
-		}
-	}
-
-	public func fileExtensions(forUTIs utis: [String]) -> [String] {
-		var result: [String] = []
-		for uti in utis {
-			if let exts = mDocumentTypes[uti] {
-				result.append(contentsOf: exts)
-			} else {
-				NSLog("Unknown UTI: \(uti)")
-			}
-		}
-		return result
-	}
-
-	public func UTIs(forExtensions exts: [String]) -> [String] {
-		var result: [String] = []
-		for ext in exts {
-			for uti in mDocumentTypes.keys {
-				if let val = mDocumentTypes[uti] {
-					if val.contains(ext) {
-						result.append(uti)
-					}
+			if let ival = super.intValue(forKey: LogLevelItem) {
+				if let level = CNConfig.LogLevel(rawValue: ival) {
+					return level
 				}
 			}
+			NSLog("No defined value")
+			return CNConfig.LogLevel.detail
 		}
-		return result
+		set(level){
+			super.set(intValue: level.rawValue, forKey: LogLevelItem)
+		}
 	}
 }
 
 extension CNPreference
 {
-	#if false
-	public var applicationPreference: CNApplicationPreference { get {
-		return get(name: "application", allocator: {
-			() -> CNApplicationPreference in return CNApplicationPreference()
-		})
-	}}
-	#endif
-
 	public var systemPreference: CNSystemPreference { get {
 		return get(name: "system", allocator: {
-			() -> CNSystemPreference in return CNSystemPreference()
-		})
-	}}
-
-	public var documentTypePreference: CNDocumentTypePreference { get {
-		return get(name: "documentType", allocator: {
-			() -> CNDocumentTypePreference in return CNDocumentTypePreference()
+			() -> CNSystemPreference in
+				return CNSystemPreference()
 		})
 	}}
 
@@ -196,5 +120,4 @@ extension CNPreference
 		CNPreference.shared.systemPreference.logLevel = conf.logLevel
 	}
 }
-
 
