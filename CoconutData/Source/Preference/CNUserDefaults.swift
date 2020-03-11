@@ -9,6 +9,18 @@ import Foundation
 
 extension UserDefaults
 {
+	public func number(forKey key: String) -> NSNumber? {
+		if let num = self.object(forKey: key) as? NSNumber {
+			return num
+		} else {
+			return nil
+		}
+	}
+
+	public func set(number num: NSNumber, forKey key: String) {
+		self.set(num, forKey: key)
+	}
+
 	public func font(forKey key: String) -> CNFont? {
 		if let dict = self.dictionary(forKey: key) {
 			if let name = dict["name"] as? String,
@@ -19,9 +31,9 @@ extension UserDefaults
 		return nil
 	}
 
-	public func set(_ font: CNFont, forKey key: String) {
-		let name = font.fontName
-		let size = font.pointSize
+	public func set(font fnt: CNFont, forKey key: String) {
+		let name = fnt.fontName
+		let size = fnt.pointSize
 		let dict: [String: Any] = ["name":name, "size":size]
 		self.set(dict, forKey: key)
 	}

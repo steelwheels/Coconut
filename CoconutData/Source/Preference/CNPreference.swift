@@ -85,8 +85,8 @@ public class CNSystemPreference: CNPreferenceTable
 
 	public let LogLevelItem	= "logLevel"
 
-	public override init(){
-		super.init()
+	public init(){
+		super.init(sectionName: "SystemPreference")
 		let level: LogLevel = .error
 		super.set(intValue: level.rawValue, forKey: LogLevelItem)
 	}

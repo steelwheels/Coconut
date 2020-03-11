@@ -9,40 +9,76 @@ import Foundation
 
 open class CNPreferenceTable
 {
+	private var mSectionName:	String
+
 	@objc private dynamic var mParameterTable:	NSMutableDictionary
 
-	public init(){
+	public init(sectionName name: String){
+		mSectionName 	= name
 		mParameterTable = NSMutableDictionary(capacity: 32)
 	}
 
-	public func _set(anyValue val: Any, forKey key: String) {
+	public func path(keyString key: String) -> String {
+		return mSectionName + "." + key
+	}
+
+	public func set(anyValue val: Any, forKey key: String) {
 		mParameterTable.setValue(val, forKey: key)
 	}
 
-	public func _anyValue(forKey key: String) -> Any? {
+	public func anyValue(forKey key: String) -> Any? {
 		return mParameterTable.value(forKey: key)
 	}
 
 	public func set(intValue val: Int, forKey key: String) {
 		let num = NSNumber(integerLiteral: val)
-		_set(anyValue: num, forKey: key)
+		set(anyValue: num, forKey: key)
 	}
 
 	public func intValue(forKey key: String) -> Int? {
-		if let val = _anyValue(forKey: key) as? NSNumber {
+		if let val = anyValue(forKey: key) as? NSNumber {
 			return val.intValue
 		} else {
 			return nil
 		}
 	}
 
+	public func storeIntValue(intValue val: Int, forKey key: String) {
+		let pathstr = path(keyString: key)
+		let num     = NSNumber(integerLiteral: val)
+		UserDefaults.standard.set(number: num, forKey: pathstr)
+	}
+
+	public func loadIntValue(forKey key: String) -> Int? {
+		let pathstr = path(keyString: key)
+		if let numobj = UserDefaults.standard.number(forKey: pathstr) {
+			return numobj.intValue
+		} else {
+			return nil
+		}
+	}
+
 	public func set(fontValue val: CNFont, forKey key: String) {
-		_set(anyValue: val, forKey: key)
+		set(anyValue: val, forKey: key)
 	}
 
 	public func fontValue(forKey key: String) -> CNFont? {
-		if let val = _anyValue(forKey: key) as? CNFont {
+		if let val = anyValue(forKey: key) as? CNFont {
 			return val
+		} else {
+			return nil
+		}
+	}
+
+	public func storeFontValue(fontValue val: CNFont, forKey key: String) {
+		let pathstr = path(keyString: key)
+		UserDefaults.standard.set(font: val, forKey: pathstr)
+	}
+
+	public func loadFontValue(forKey key: String) -> CNFont? {
+		let pathstr = path(keyString: key)
+		if let font = UserDefaults.standard.font(forKey: pathstr) {
+			return font
 		} else {
 			return nil
 		}
