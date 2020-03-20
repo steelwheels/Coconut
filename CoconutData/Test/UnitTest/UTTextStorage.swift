@@ -55,14 +55,14 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.string("inserted"),
 		.cursorBackward(5),
 		.eraceEntireLine,
-		.foregroundColor(.Red),
-		.backgroundColor(.Blue),
+		.foregroundColor(.red),
+		.backgroundColor(.blue),
 		.string("COLOR"),
 		.setNormalAttributes
 	]
 	for ecode in ecodes {
-		let fcol = CNColor.Green
-		let bcol = CNColor.Black
+		let fcol = CNColor.green
+		let bcol = CNColor.black
 		let font = CNFont.systemFont(ofSize: CNFont.systemFontSize)
 		idx = execute(string: str, index: idx, escapeCode: ecode, foregroundColor: fcol, backgroundColor: bcol, font: font, console: cons)
 	}

@@ -272,7 +272,13 @@ Get sceme from "ftp.c://yahoo.com" -> Sceme:"ftp.c" -> OK
 * testObserver
 isExecuting -> true
 * testOperation
+op0 : Done
 Wait for finish operations
+op2 : Canceled
+op1 : Done
+op0 : Check Exec Time 1 1
+op1 : Check Exec Time 1 1
+op2 : Check Exec Time 1 1
 testOperation ... Done
 * testOperationQueue
 * TEST0
@@ -299,8 +305,8 @@ testSimpleThread: 3: ecode = 0
 testNestedThread: 1. Begin
 testNestedThread0: 1.mainOperation/start
 testNestedThread0: 2.1 mainOperation/main/start
-testNestedThread0: 2.2 mainOperation/main/waitUntilExit
 testNestedThread1: 1.mainOperation/start
+testNestedThread0: 2.2 mainOperation/main/waitUntilExit
 testNestedThread1: 2.1 mainOperation/main/start
 testNestedThread1: 2.2 mainOperation/main/waitUntilExit
 testNestedThread2: 1.mainOperation/start
@@ -334,10 +340,10 @@ Same code
 eraceEntireLine
 Same code
 * dumpCode
-foregroundColor(White)
+foregroundColor(white)
 Same code
 * dumpCode
-backgroundColor(Red)
+backgroundColor(red)
 Same code
 * dumpCode
 setNormalAttributes
@@ -354,8 +360,16 @@ cursorNextLine(1)
 string(" and ")
 eraceEntireLine
 string(". Bye.")
-[31mColor message
-[0m* testTextStorage
+* testColor
+black : OK
+red : OK
+green : OK
+yellow : OK
+blue : OK
+magenta : OK
+cyan : OK
+white : OK
+* testTextStorage
 - Initial state
 _a_b_c_d_e_f_g_h_i_j_
 _0_1_2_3*4_5_6_7_8_9_
@@ -496,8 +510,8 @@ _a_b_c_d_e_f_g_h_i_j
 - Execute:eraceEntireLine
 _a_b_c_d_e_f_g_h_i_j_
 *a_b_c_d_e_f_g_h_i_j
-- Execute:foregroundColor(Red)
-- Execute:backgroundColor(Blue)
+- Execute:foregroundColor(red)
+- Execute:backgroundColor(blue)
 - Execute:string("COLOR")
 _a_b_c_d_e_f_g_h_i_j_
 _C_O_L_O_R*f_g_h_i_j

@@ -7,68 +7,96 @@
 
 import Foundation
 
-public enum CNColor: Int32 {
-	case Black	= 0
-	case Red	= 1
-	case Green	= 2
-	case Yellow	= 3
-	case Blue	= 4
-	case Magenta	= 5
-	case Cyan	= 6
-	case White	= 7
+#if os(OSX)
+public typealias CNColor = NSColor
+import Darwin.ncurses
+#else
+public typealias CNColor = UIColor
+#endif
 
-	public static let Min: CNColor = CNColor.Black
-	public static let Max: CNColor = CNColor.White
-
-	public func description() -> String {
-		let result: String
-		switch self {
-		case .Black:	result = "Black"
-		case .Red:	result = "Red"
-		case .Green:	result = "Green"
-		case .Yellow:	result = "Yellow"
-		case .Blue:	result = "Blue"
-		case .Magenta:	result = "Magenta"
-		case .Cyan:	result = "Cyan"
-		case .White:	result = "White"
+public extension CNColor
+{
+	static func color(withEscapeCode code: Int32) -> CNColor? {
+		let result: CNColor?
+		switch code {
+		case 0:		result = CNColor.black
+		case 1:		result = CNColor.red
+		case 2:		result = CNColor.green
+		case 3:		result = CNColor.yellow
+		case 4:		result = CNColor.blue
+		case 5:		result = CNColor.magenta
+		case 6:		result = CNColor.cyan
+		case 7:		result = CNColor.white
+		default:
+			NSLog("Invalid escape color code: \(code)")
+			result = nil
 		}
 		return result
 	}
 
-	public func isEqual(to col: CNColor) -> Bool {
-		return self.rawValue == col.rawValue
+	func escapeCode() -> Int32 {
+		let (red, green, blue) = self.toRGB()
+		let rbit : Int32 = red   >= 0.5 ? 1 : 0
+		let gbit : Int32 = green >= 0.5 ? 1 : 0
+		let bbit : Int32 = blue  >= 0.5 ? 1 : 0
+		let rgb  : Int32 = (bbit << 2) | (gbit << 1) | rbit
+		return rgb
+	}
+
+	func toRGB() -> (CGFloat, CGFloat, CGFloat) {
+		var red 	: CGFloat = 0.0
+		var green	: CGFloat = 0.0
+		var blue	: CGFloat = 0.0
+		var alpha	: CGFloat = 0.0
+		#if os(OSX)
+			if let color = self.usingColorSpace(.deviceRGB) {
+				color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+			} else {
+				NSLog("Failed to convert to rgb")
+			}
+		#else
+			self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+		#endif
+		return (red, green, blue)
 	}
 
 	#if os(OSX)
-	public func toObject() -> NSColor {
-		let result: NSColor
-		switch self {
-		case .Black:	result = NSColor.black
-		case .Red:	result = NSColor.red
-		case .Green:	result = NSColor.green
-		case .Yellow:	result = NSColor.yellow
-		case .Blue:	result = NSColor.blue
-		case .Magenta:	result = NSColor.magenta
-		case .Cyan:	result = NSColor.cyan
-		case .White:	result = NSColor.white
-		}
-		return result
-	}
-	#else
-	public func toObject() -> UIColor {
-		let result: UIColor
-		switch self {
-		case .Black:	result = UIColor.black
-		case .Red:	result = UIColor.red
-		case .Green:	result = UIColor.green
-		case .Yellow:	result = UIColor.yellow
-		case .Blue:	result = UIColor.blue
-		case .Magenta:	result = UIColor.magenta
-		case .Cyan:	result = UIColor.cyan
-		case .White:	result = UIColor.white
+	func toDarwinColor() -> Int32 {
+		var result: Int32
+		let code = self.escapeCode()
+		switch code {
+		case 0:	result = Darwin.COLOR_BLACK
+		case 1:	result = Darwin.COLOR_RED
+		case 2:	result = Darwin.COLOR_GREEN
+		case 3:	result = Darwin.COLOR_YELLOW
+		case 4:	result = Darwin.COLOR_BLUE
+		case 5:	result = Darwin.COLOR_MAGENTA
+		case 6:	result = Darwin.COLOR_CYAN
+		case 7:	result = Darwin.COLOR_WHITE
+		default:
+			NSLog("Invalid escape color code: \(code)")
+			result = Darwin.COLOR_BLACK
 		}
 		return result
 	}
 	#endif
+
+	var rgbName: String {
+		get {
+			let result: String
+			switch self.escapeCode() {
+			case 0:		result = "black"
+			case 1:		result = "red"
+			case 2:		result = "green"
+			case 3:		result = "yellow"
+			case 4:		result = "blue"
+			case 5:		result = "magenta"
+			case 6:		result = "cyan"
+			case 7:		result = "white"
+			default:	result = "<UNKNOWN>"
+			}
+			return result
+		}
+	}
 }
 

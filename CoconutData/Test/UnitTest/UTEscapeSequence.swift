@@ -15,8 +15,8 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 	let res2 = dumpCode(code: CNEscapeCode.cursorForward(3), console: cons)
 	let res3 = dumpCode(code: CNEscapeCode.cursorPoisition(1, 2), console: cons)
 	let res4 = dumpCode(code: CNEscapeCode.eraceEntireLine, console: cons)
-	let res6 = dumpCode(code: CNEscapeCode.foregroundColor(.White), console: cons)
-	let res7 = dumpCode(code: CNEscapeCode.backgroundColor(.Red), console: cons)
+	let res6 = dumpCode(code: CNEscapeCode.foregroundColor(.white), console: cons)
+	let res7 = dumpCode(code: CNEscapeCode.backgroundColor(.red), console: cons)
 	let res8 = dumpCode(code: CNEscapeCode.setNormalAttributes, console: cons)
 	let res9 = dumpCode(code: CNEscapeCode.requestScreenSize, console: cons)
 	let res10 = dumpCode(code: CNEscapeCode.screenSize(80, 25), console: cons)
@@ -26,7 +26,7 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 	let str  = "Hello, " + str0 + " and " + str1 + ". Bye."
 	let res5 = dumpSequence(string: str, console: cons)
 
-	cons.error(string: "Color message\n")
+	//cons.error(string: "Color message\n")
 
 	return res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10
 }

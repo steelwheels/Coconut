@@ -68,8 +68,8 @@ public enum CNEscapeCode {
 		case .eraceEntireLine:				result = "eraceEntireLine"
 		case .scrollUp:					result = "scrollUp"
 		case .scrollDown:				result = "scrollDown"
-		case .foregroundColor(let col):			result = "foregroundColor(\(col.description()))"
-		case .backgroundColor(let col):			result = "backgroundColor(\(col.description()))"
+		case .foregroundColor(let col):			result = "foregroundColor(\(col.rgbName))"
+		case .backgroundColor(let col):			result = "backgroundColor(\(col.rgbName))"
 		case .setNormalAttributes:			result = "setNormalAttributes"
 		case .requestScreenSize:			result = "requestScreenSize"
 		case .screenSize(let width, let height):	result = "screenSize(\(width), \(height))"
@@ -112,12 +112,12 @@ public enum CNEscapeCode {
 		return result
 	}
 
-	private func colorToCode(isForeground isfg: Bool, color col: CNColor) -> Int {
-		let result: Int
+	private func colorToCode(isForeground isfg: Bool, color col: CNColor) -> Int32 {
+		let result: Int32
 		if isfg {
-			result = Int(col.rawValue) + 30
+			result = col.escapeCode() + 30
 		} else {
-			result = Int(col.rawValue) + 40
+			result = col.escapeCode() + 40
 		}
 		return result
 	}
@@ -435,13 +435,13 @@ public enum CNEscapeCode {
 					/* Reset status */
 					result = .setNormalAttributes
 				} else if 30<=param && param<=37 {
-					if let col = CNColor(rawValue: Int32(param - 30)) {
+					if let col = CNColor.color(withEscapeCode: Int32(param - 30)) {
 						result = .foregroundColor(col)
 					} else {
 						throw DecodeError.unknownCommand(c)
 					}
 				} else if 40<=param && param<=47 {
-					if let col = CNColor(rawValue: Int32(param - 40)) {
+					if let col = CNColor.color(withEscapeCode: Int32(param - 40)) {
 						result = .backgroundColor(col)
 					} else {
 						throw DecodeError.unknownCommand(c)

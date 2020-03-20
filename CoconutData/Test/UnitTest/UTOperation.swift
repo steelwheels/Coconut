@@ -28,10 +28,14 @@ private class UTOperationContext: CNOperationContext
 					docont = false
 				}
 			}
+			outputFileHandle.write(string: "\(mName) : Canceled\n")
+		} else {
+			outputFileHandle.write(string: "\(mName) : Done\n")
 		}
 	}
 
 	public func checkExectime(requiredCount count: Int) -> Bool {
+		outputFileHandle.write(string: "\(mName) : Check Exec Time \(self.executionCount) \(count)\n")
 		if self.executionCount == count {
 			return true
 		}

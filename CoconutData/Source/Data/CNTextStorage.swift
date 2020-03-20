@@ -9,7 +9,7 @@ import Foundation
 
 public extension NSMutableAttributedString
 {
-	func execute(index idx: Int, foregroundColor fcol: CNColor, backgroundColor bcol: CNColor, font fnt: CNFont, escapeCode code: CNEscapeCode) -> Int? { /* -> Next index */
+	func execute(index idx: Int, foregroundColor fcol: CNColor, backgroundColor bcol: CNColor?, font fnt: CNFont, escapeCode code: CNEscapeCode) -> Int? { /* -> Next index */
 		var result: Int? = nil
 		switch code {
 		case .string(let str):
@@ -76,12 +76,14 @@ public extension NSMutableAttributedString
 		return result
 	}
 
-	private func attributedString(string str: String, foregroundColor fcol: CNColor, backgroundColor bcol: CNColor, font fnt: CNFont) -> NSAttributedString {
-		let attr: [NSAttributedString.Key: Any] = [
-			NSAttributedString.Key.foregroundColor: fcol.toObject(),
-			NSAttributedString.Key.backgroundColor: bcol.toObject(),
+	private func attributedString(string str: String, foregroundColor fcol: CNColor, backgroundColor bcol: CNColor?, font fnt: CNFont) -> NSAttributedString {
+		var attr: [NSAttributedString.Key: Any] = [
+			NSAttributedString.Key.foregroundColor: fcol,
 			NSAttributedString.Key.font:		fnt
 		]
+		if let col = bcol {
+			attr[NSAttributedString.Key.backgroundColor] = col
+		}
 		return NSAttributedString(string: str, attributes: attr)
 	}
 }

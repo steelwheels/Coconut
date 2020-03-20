@@ -96,7 +96,7 @@ public class CNFileConsole : CNConsole
 	}
 
 	public func error(string str: String){
-		let attr = CNEscapeCode.foregroundColor(.Red).encode()
+		let attr = CNEscapeCode.foregroundColor(.red).encode()
 		let rev  = CNEscapeCode.setNormalAttributes.encode()
 		errorHandle.write(string: attr + str + rev)
 	}
