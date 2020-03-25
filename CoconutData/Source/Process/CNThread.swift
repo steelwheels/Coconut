@@ -52,6 +52,13 @@ open class CNThread: CNProcessStream
 					 output: CNFileStream.streamToFileHandle(stream: outstrm, forInside: true, isInput: false),
 					 error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
 
+		/* Set raw mode */
+		let _ = self.inputStream.setRawMode(enable: true)
+	}
+
+	deinit {
+		/* Release raw mode */
+		let _ = self.inputStream.setRawMode(enable: false)
 	}
 
 	public func start(arguments args: Array<CNNativeValue>){

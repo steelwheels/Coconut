@@ -66,13 +66,13 @@ public extension FileManager
 			case .ReadAccess:
 				let fileurl = pathToURL(filePath: path)
 				let handle = try FileHandle(forReadingFrom: fileurl)
-				file = CNTextFileObject(fileHandle: handle)
+				file = CNTextFile(fileHandle: handle)
 			case .WriteAccess:
 				let handle = try fileHandleToWrite(filePath: path, withAppend: false)
-				file = CNTextFileObject(fileHandle: handle)
+				file = CNTextFile(fileHandle: handle)
 			case .AppendAccess:
 				let handle = try fileHandleToWrite(filePath: path, withAppend: true)
-				file = CNTextFileObject(fileHandle: handle)
+				file = CNTextFile(fileHandle: handle)
 			}
 			return .ok(file)
 		} catch let err as NSError {
@@ -89,13 +89,13 @@ public extension FileManager
 			switch acctyp {
 			case .ReadAccess:
 				let handle = try FileHandle(forReadingFrom: url)
-				file = CNTextFileObject(fileHandle: handle)
+				file = CNTextFile(fileHandle: handle)
 			case .WriteAccess:
 				let handle = try FileHandle(forReadingFrom: url)
-				file = CNTextFileObject(fileHandle: handle)
+				file = CNTextFile(fileHandle: handle)
 			case .AppendAccess:
 				let handle = try FileHandle(forWritingTo: url)
-				file = CNTextFileObject(fileHandle: handle)
+				file = CNTextFile(fileHandle: handle)
 			}
 			return .ok(file)
 		} catch let err as NSError {
@@ -104,11 +104,6 @@ public extension FileManager
 			let err = NSError.fileError(message: "Failed to open URL \"\(url.absoluteString)\"")
 			return .error(err)
 		}
-	}
-
-	func openFile(fileHandle handle: FileHandle) -> CNTextFile
-	{
-		return CNTextFileObject(fileHandle: handle)
 	}
 }
 

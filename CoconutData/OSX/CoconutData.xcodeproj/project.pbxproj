@@ -90,6 +90,7 @@
 		05ED11F62424B8F0000FCABE /* UTColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05ED11F52424B8F0000FCABE /* UTColor.swift */; };
 		05ED45DC23214D9700ED2852 /* CNProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05ED45DB23214D9700ED2852 /* CNProcess.swift */; };
 		05EEADB0235DEF29008B49A4 /* UTThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EEADAF235DEF29008B49A4 /* UTThread.swift */; };
+		05F2DAE724277C89002F3864 /* UTFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F2DAE624277C89002F3864 /* UTFile.swift */; };
 		05F5EA71208F793400CF98C3 /* CNText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA70208F793400CF98C3 /* CNText.swift */; };
 		05F5EA73208F794000CF98C3 /* CNReservedWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA72208F794000CF98C3 /* CNReservedWord.swift */; };
 		05F7DACD23730E1100E363E9 /* UTCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F7DACC23730E1100E363E9 /* UTCharacter.swift */; };
@@ -229,6 +230,7 @@
 		05ED11F52424B8F0000FCABE /* UTColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTColor.swift; sourceTree = "<group>"; };
 		05ED45DB23214D9700ED2852 /* CNProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNProcess.swift; sourceTree = "<group>"; };
 		05EEADAF235DEF29008B49A4 /* UTThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTThread.swift; sourceTree = "<group>"; };
+		05F2DAE624277C89002F3864 /* UTFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTFile.swift; sourceTree = "<group>"; };
 		05F5EA70208F793400CF98C3 /* CNText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNText.swift; sourceTree = "<group>"; };
 		05F5EA72208F794000CF98C3 /* CNReservedWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReservedWord.swift; sourceTree = "<group>"; };
 		05F7DACC23730E1100E363E9 /* UTCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCharacter.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 				057FF40A209DE871006EEF7B /* UTValue.swift */,
 				057C7EF620A1ED950085662E /* UTConsole.swift */,
 				05FD029023A52F5000744D8C /* UTFileHandle.swift */,
+				05F2DAE624277C89002F3864 /* UTFile.swift */,
 				052170F021022AB1001801A6 /* UTFilePath.swift */,
 				055BD39F2199C48400BF7373 /* UTObserver.swift */,
 				052087BD235C892D0084E340 /* UTProcess.swift */,
@@ -687,6 +690,7 @@
 				05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */,
 				052170F121022AB1001801A6 /* UTFilePath.swift in Sources */,
 				05F7DACD23730E1100E363E9 /* UTCharacter.swift in Sources */,
+				05F2DAE724277C89002F3864 /* UTFile.swift in Sources */,
 				057C7EF720A1ED950085662E /* UTConsole.swift in Sources */,
 				0512640921C5E1E5008B01FA /* UTDatabase.swift in Sources */,
 				05FC09B0237C29BA00667AC4 /* UTKeyBinding.swift in Sources */,

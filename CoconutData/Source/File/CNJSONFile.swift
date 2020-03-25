@@ -18,9 +18,9 @@ public class CNJSONFile {
 		}
 	}
 
-	public class func readFile(file fle : CNFile) -> (CNNativeValue?, NSError?) {
+	public class func readFile(fileHandle handle : FileHandle) -> (CNNativeValue?, NSError?) {
 		do {
-			return try read(data: fle.getData())
+			return try read(data: handle.availableData)
 		}
 		catch {
 			let error = NSError.parseError(message: "Failed to read data from file")
@@ -48,14 +48,14 @@ public class CNJSONFile {
 		}
 	}
 
-	public class func writeFile(file fle: CNFile, JSONObject srcval: CNNativeValue) -> NSError? {
+	public class func writeFile(fileHandle handle: FileHandle, JSONObject srcval: CNNativeValue) -> NSError? {
 		do {
 			let encoder = CNJSONEncoder()
 			let object  = encoder.convert(value: srcval)
 			let data = try JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions.prettyPrinted)
-			fle.put(data: data)
+			handle.write(data)
 			if let newline = String("\n").data(using: .utf8){
-				fle.put(data: newline) // Put the last newline
+				handle.write(newline) // Put the last newline
 			}
 			return nil
 		}

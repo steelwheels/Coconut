@@ -262,6 +262,33 @@ FileDescriptor = 0
 - Initial statelocal mode: <unknown>
 - Set raw mode -> Failed
 - Reset raw mode -> Failed
+* testFile
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright (C) 2018 Steel Wheels Project. All rights reserved.</string>
+	<key>NSPrincipalClass</key>
+	<string></string>
+</dict>
+</plist>
 * testFilePath
 testFilePath: Info.plist
 UTI: com.apple.property-list 
@@ -273,9 +300,9 @@ Get sceme from "ftp.c://yahoo.com" -> Sceme:"ftp.c" -> OK
 isExecuting -> true
 * testOperation
 op0 : Done
+op1 : Done
 Wait for finish operations
 op2 : Canceled
-op1 : Done
 op0 : Check Exec Time 1 1
 op1 : Check Exec Time 1 1
 op2 : Check Exec Time 1 1
@@ -305,8 +332,8 @@ testSimpleThread: 3: ecode = 0
 testNestedThread: 1. Begin
 testNestedThread0: 1.mainOperation/start
 testNestedThread0: 2.1 mainOperation/main/start
-testNestedThread1: 1.mainOperation/start
 testNestedThread0: 2.2 mainOperation/main/waitUntilExit
+testNestedThread1: 1.mainOperation/start
 testNestedThread1: 2.1 mainOperation/main/start
 testNestedThread1: 2.2 mainOperation/main/waitUntilExit
 testNestedThread2: 1.mainOperation/start

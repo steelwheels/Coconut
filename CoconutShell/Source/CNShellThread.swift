@@ -37,13 +37,6 @@ open class CNShellThread: CNThread
 		mTerminalWidth	= nil
 		mTerminalHeight	= nil
 		super.init(queue: disque, input: instrm, output: outstrm, error: errstrm)
-
-		/* Set raw mode */
-		let _ = self.inputStream.setRawMode(enable: true)
-	}
-
-	deinit {
-		let _ = self.inputStream.setRawMode(enable: false)
 	}
 
 	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {
