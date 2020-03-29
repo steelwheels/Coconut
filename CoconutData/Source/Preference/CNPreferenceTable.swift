@@ -58,6 +58,32 @@ open class CNPreferenceTable
 		}
 	}
 
+	public func set(urlValue val: URL, forKey key: String) {
+		set(anyValue: val, forKey: key)
+	}
+
+	public func urlValue(forKey key: String) -> URL? {
+		if let val = anyValue(forKey: key) as? URL {
+			return val
+		} else {
+			return nil
+		}
+	}
+
+	public func storeURLValue(urlValue val: URL, forKey key: String) {
+		let pathstr = path(keyString: key)
+		UserDefaults.standard.set(val, forKey: pathstr)
+	}
+
+	public func loadURLValue(forKey key: String) -> URL? {
+		let pathstr = path(keyString: key)
+		if let url = UserDefaults.standard.url(forKey: pathstr) {
+			return url
+		} else {
+			return nil
+		}
+	}
+
 	public func set(fontValue val: CNFont, forKey key: String) {
 		set(anyValue: val, forKey: key)
 	}
