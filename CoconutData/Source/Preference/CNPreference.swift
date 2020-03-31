@@ -107,12 +107,52 @@ public class CNSystemPreference: CNPreferenceTable
 	}
 }
 
+public class CNUserPreference: CNPreferenceTable
+{
+	public let HomeDirectoryItem		= "homeDirectory"
+
+	public init() {
+		super.init(sectionName: "UserPreference")
+		if let home = super.loadURLValue(forKey: HomeDirectoryItem) {
+			super.set(urlValue: home, forKey: HomeDirectoryItem)
+		} else {
+			#if os(OSX)
+				self.homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+			#else
+				self.homeDirectory = URL(fileURLWithPath: NSHomeDirectory())
+			#endif
+		}
+	}
+
+	public var homeDirectory: URL {
+		get {
+			if let val = super.urlValue(forKey: HomeDirectoryItem) {
+				return val
+			}
+			fatalError("Can not happen")
+		}
+		set(newval){
+			if newval != super.urlValue(forKey: HomeDirectoryItem) {
+				super.storeURLValue(urlValue: newval, forKey: HomeDirectoryItem)
+			}
+			super.set(urlValue: newval, forKey: HomeDirectoryItem)
+		}
+	}
+}
+
 extension CNPreference
 {
 	public var systemPreference: CNSystemPreference { get {
 		return get(name: "system", allocator: {
 			() -> CNSystemPreference in
 				return CNSystemPreference()
+		})
+	}}
+
+	public var userPreference: CNUserPreference { get {
+		return get(name: "user", allocator: {
+			() -> CNUserPreference in
+				return CNUserPreference()
 		})
 	}}
 
