@@ -15,6 +15,7 @@
 		053084E2219DBDD2004DB0BF /* CNOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */; };
 		0532530F23AF9146003534BF /* CNTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0532530E23AF9146003534BF /* CNTextStorage.swift */; };
 		0532D64122FC48A40031F929 /* CNEscapeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0532D64022FC48A30031F929 /* CNEscapeCode.swift */; };
+		0537923124363F9800778A68 /* CNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0537923024363F9800778A68 /* CNEnvironment.swift */; };
 		05387F95208F799900848EA3 /* CNText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05387F94208F799900848EA3 /* CNText.swift */; };
 		05387F97208F79A200848EA3 /* CNReservedWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05387F96208F79A200848EA3 /* CNReservedWord.swift */; };
 		0539FB7C218A134F00EFCFFF /* CNGraphicsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0539FB7B218A134F00EFCFFF /* CNGraphicsType.swift */; };
@@ -89,6 +90,7 @@
 		053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNOperationQueue.swift; sourceTree = "<group>"; };
 		0532530E23AF9146003534BF /* CNTextStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTextStorage.swift; sourceTree = "<group>"; };
 		0532D64022FC48A30031F929 /* CNEscapeCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNEscapeCode.swift; sourceTree = "<group>"; };
+		0537923024363F9800778A68 /* CNEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNEnvironment.swift; sourceTree = "<group>"; };
 		05387F94208F799900848EA3 /* CNText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNText.swift; sourceTree = "<group>"; };
 		05387F96208F79A200848EA3 /* CNReservedWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReservedWord.swift; sourceTree = "<group>"; };
 		0539FB7B218A134F00EFCFFF /* CNGraphicsType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNGraphicsType.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 			children = (
 				0517E1BC235E7F62002EB80C /* CNProcess.swift */,
 				058740FB208AFF6000FF2B65 /* CNThread.swift */,
+				0537923024363F9800778A68 /* CNEnvironment.swift */,
 				05C85DA722AABDD1007C5527 /* CNOperationContext.swift */,
 				05C85DA622AABDD1007C5527 /* CNOperationExecutor.swift */,
 				053084E1219DBDD2004DB0BF /* CNOperationQueue.swift */,
@@ -493,6 +496,7 @@
 				0565A9F5208B7C5600E91568 /* CNBookmark.swift in Sources */,
 				0588875621CBD7FA00BE14B5 /* CNNativeValueMatcher.swift in Sources */,
 				0565A9EA208B7B8B00E91568 /* CNFilePath.swift in Sources */,
+				0537923124363F9800778A68 /* CNEnvironment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

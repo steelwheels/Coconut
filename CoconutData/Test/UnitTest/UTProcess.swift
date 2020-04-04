@@ -10,9 +10,11 @@ import Foundation
 
 public func testProcess(console cons: CNFileConsole) -> Bool
 {
+	let env     = CNEnvironment()
 	let process = CNProcess(input:  .fileHandle(cons.inputHandle),
 				output: .fileHandle(cons.outputHandle),
 				error:  .fileHandle(cons.errorHandle),
+				environment: env,
 				terminationHander: {
 		(_ proc: Process) -> Void in
 		cons.print(string: "END of process\n")

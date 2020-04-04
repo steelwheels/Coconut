@@ -54,7 +54,7 @@ open class CNProcess: CNProcessStream
 	public var outputStream: CNFileStream	{ get { return mOutputStream	}}
 	public var errorStream: CNFileStream	{ get { return mErrorStream	}}
 
-	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, terminationHander termhdlr: TerminationHandler?) {
+	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, terminationHander termhdlr: TerminationHandler?) {
 		mStatus			= .Idle
 		mProcess		= Process()
 		mTerminationHandler	= termhdlr
@@ -70,6 +70,7 @@ open class CNProcess: CNProcessStream
 		mProcess.standardInput	= CNFileStream.streamToAny(stream: instrm)
 		mProcess.standardOutput	= CNFileStream.streamToAny(stream: outstrm)
 		mProcess.standardError	= CNFileStream.streamToAny(stream: errstrm)
+		mProcess.environment    = env.variables
 		mProcess.terminationHandler = {
 			[weak self] (process: Process) -> Void in
 			if let myself = self {
@@ -80,24 +81,6 @@ open class CNProcess: CNProcessStream
 					handler(myself.mProcess)
 				}
 			}
-		}
-		/* Update environment variables */
-		updateEnvironmentVariables()
-	}
-
-	private func updateEnvironmentVariables() {
-		let tmpurl = FileManager.default.temporaryDirectory
-
-		let newenv: Dictionary<String, String> = [
-			"TMPDIR":	tmpurl.path
-		]
-		/* Add new environment variables */
-		if var env = mProcess.environment {
-			for key in newenv.keys {
-				env[key] = newenv[key]
-			}
-		} else {
-			mProcess.environment = newenv
 		}
 	}
 

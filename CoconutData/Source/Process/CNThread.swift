@@ -26,6 +26,7 @@ open class CNThread: CNProcessStream
 	private var mInputStream:		CNFileStream
 	private var mOutputStream:		CNFileStream
 	private var mErrorStream:		CNFileStream
+	private var mEnvironment:		CNEnvironment
 	private var mConsole:			CNFileConsole
 	private var mArguments:			Array<CNNativeValue>
 	private var mIsRunning:			Bool
@@ -35,15 +36,17 @@ open class CNThread: CNProcessStream
 	public var inputStream:  	CNFileStream	{ get { return mInputStream	}}
 	public var outputStream: 	CNFileStream 	{ get { return mOutputStream	}}
 	public var errorStream:  	CNFileStream	{ get { return mErrorStream 	}}
+	public var environment:		CNEnvironment	{ get { return mEnvironment	}}
 	public var console:      	CNFileConsole	{ get { return mConsole 	}}
 	public var isRunning:	 	Bool		{ get { return mIsRunning	}}
 
-	public init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream) {
+	public init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
 		mQueue			= disque
 		mSemaphore		= DispatchSemaphore(value: 0)
 		mInputStream		= instrm
 		mOutputStream		= outstrm
 		mErrorStream		= errstrm
+		mEnvironment		= env
 		mArguments		= []
 		mIsRunning		= false
 		mTerminationStatus	= -1
