@@ -67,10 +67,11 @@ open class CNProcess: CNProcessStream
 						error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
 
 		/* Connect interface with process */
-		mProcess.standardInput	= CNFileStream.streamToAny(stream: instrm)
-		mProcess.standardOutput	= CNFileStream.streamToAny(stream: outstrm)
-		mProcess.standardError	= CNFileStream.streamToAny(stream: errstrm)
-		mProcess.environment    = env.variables
+		mProcess.standardInput		= CNFileStream.streamToAny(stream: instrm)
+		mProcess.standardOutput		= CNFileStream.streamToAny(stream: outstrm)
+		mProcess.standardError		= CNFileStream.streamToAny(stream: errstrm)
+		mProcess.environment		= env.variables
+		mProcess.currentDirectoryURL	= env.currentDirectory
 		mProcess.terminationHandler = {
 			[weak self] (process: Process) -> Void in
 			if let myself = self {

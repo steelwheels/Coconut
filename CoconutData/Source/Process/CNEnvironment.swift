@@ -12,20 +12,14 @@ public class CNEnvironment
 	private var mEnvironmentVariable: Dictionary<String, String>
 
 	public var variables: Dictionary<String, String> {
-		get {
-			var result: Dictionary<String, String> = mEnvironmentVariable
-			if let _ = mEnvironmentVariable["TMPDIR"] {
-				result["TMPDIR"] = FileManager.default.temporaryDirectory.path
-			}
-			if let _ = mEnvironmentVariable["PWD"] {
-				result["PWD"] = FileManager.default.currentDirectoryPath
-			}
-			return result
-		}
+		get { return mEnvironmentVariable }
 	}
 
 	public init(){
-		mEnvironmentVariable = [:]
+		mEnvironmentVariable = [
+			"TMPDIR" : FileManager.default.temporaryDirectory.path,
+			"PWD"    : FileManager.default.currentDirectoryPath
+		]
 	}
 
 	public func set(name nm: String, string str: String) {
@@ -41,7 +35,7 @@ public class CNEnvironment
 			if let path = get(name: "PWD") {
 				return URL(fileURLWithPath: path)
 			} else {
-				return URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+				fatalError("Can not happen (1)")
 			}
 		}
 		set(newdir){
@@ -54,7 +48,7 @@ public class CNEnvironment
 			if let path = get(name: "TMPDIR") {
 				return URL(fileURLWithPath: path)
 			} else {
-				return URL(fileURLWithPath: FileManager.default.temporaryDirectory.path)
+				fatalError("Can not happen (2)")
 			}
 		}
 		set(newdir){
