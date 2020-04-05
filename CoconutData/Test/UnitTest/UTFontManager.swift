@@ -11,10 +11,10 @@ import Foundation
 public func testFontManager(console cons: CNConsole) -> Bool
 {
 	let names = CNFontManager.shared.availableFixedPitchFonts
-	for name in names {
-		cons.print(string: "fixed-pitch-font: \(name)\n")
-	}
+	//for name in names {
+	//	cons.print(string: "fixed-pitch-font: \(name)\n")
+	//}
 	
-	return true
+	return names.count > 0
 }
 

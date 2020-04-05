@@ -51,6 +51,9 @@ let result25 = testFile(console: cons)
 cons.print(string: "* testFilePath\n")
 let result2 = testFilePath(console: cons)
 
+cons.print(string: "* testFileManager\n")
+let result26 = testFileManager(console: cons)
+
 cons.print(string: "* testObserver\n")
 let result3 = testObserver(console: cons)
 
@@ -91,7 +94,7 @@ let result = result0 && result1 && result2 && result3 && result4  && result5 &&
 	     result6 && result7 && result8 && result9 && result10 && result11 &&
 	     result12 && result13 && result14 && result15 && result17 &&
 	     result18 && result19 && result20 && result21 && result22 &&
-	     result23 && result24 && result25
+	     result23 && result24 && result25 && result26
 if result {
 	cons.print(string: "[Result] OK\n")
 	Darwin.exit(0)

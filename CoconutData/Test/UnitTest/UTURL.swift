@@ -17,6 +17,7 @@ public func testURL(console cons: CNConsole) -> Bool
 	if nullurl.isValid {
 		result = false
 	}
+
 	return result
 }
 

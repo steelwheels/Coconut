@@ -38,8 +38,14 @@ public enum CNFileAccessType {
 
 public extension FileManager
 {
+	/* If you give full path to "relpath", "base" directory will be ignored */
+	func fullPathURL(relativePath relpath: String, baseDirectory base: String) -> URL {
+		let baseurl = URL(fileURLWithPath: base, isDirectory: true)
+		return URL(fileURLWithPath: relpath, relativeTo: baseurl)
+	}
+
 	func fileExists(atURL url: URL) -> Bool {
-		return fileExists(atPath: url.absoluteString)
+		return fileExists(atPath: url.path)
 	}
 
 	func createFile(atURL url: URL, contents data: Data?, attributes attr: [FileAttributeKey:Any]?) -> Bool {
@@ -58,31 +64,7 @@ public extension FileManager
 			return .NotExist
 		}
 	}
-
-	func openFile(filePath path: String, accessType acctyp: CNFileAccessType) -> CNFileOpenResult {
-		do {
-			var file: CNTextFile
-			switch acctyp {
-			case .ReadAccess:
-				let fileurl = pathToURL(filePath: path)
-				let handle = try FileHandle(forReadingFrom: fileurl)
-				file = CNTextFile(fileHandle: handle)
-			case .WriteAccess:
-				let handle = try fileHandleToWrite(filePath: path, withAppend: false)
-				file = CNTextFile(fileHandle: handle)
-			case .AppendAccess:
-				let handle = try fileHandleToWrite(filePath: path, withAppend: true)
-				file = CNTextFile(fileHandle: handle)
-			}
-			return .ok(file)
-		} catch let err as NSError {
-			return .error(err)
-		} catch {
-			let err = NSError.fileError(message: "Failed to open file \"\(path)\"")
-			return .error(err)
-		}
-	}
-
+	
 	func openFile(URL url: URL, accessType acctyp: CNFileAccessType) -> CNFileOpenResult {
 		do {
 			var file: CNTextFile
@@ -105,42 +87,22 @@ public extension FileManager
 			return .error(err)
 		}
 	}
-}
 
-private func pathToURL(filePath path: String) -> URL {
-	let curdir = FileManager.default.currentDirectoryPath
-	let cururl = URL(fileURLWithPath: curdir, isDirectory: true)
-	return URL(fileURLWithPath: path, relativeTo: cururl)
-}
-
-private func fileHandleToWrite(filePath path: String, withAppend doappend: Bool) throws -> FileHandle
-{
-	let fmanager = FileManager.default
-	if !fmanager.fileExists(atPath: path) {
-		if !fmanager.createFile(atPath: path, contents: nil, attributes: nil) {
-			throw NSError.fileError(message: "Can not create file: \(path)")
+	/* Reference: https://stackoverflow.com/questions/10512920/mac-sandbox-testing-whether-a-file-is-accessible*/
+	func isAccessible(pathString path: String, accessType type: CNFileAccessType) -> Bool {
+		let modes: Array<Int32>
+		switch type {
+		case .ReadAccess:	modes = [R_OK]
+		case .WriteAccess:	modes = [W_OK]
+		case .AppendAccess:	modes = [R_OK, W_OK]
 		}
-	}
-	let url = pathToURL(filePath: path)
-	let handle = try FileHandle(forWritingTo: url)
-	if doappend {
-		handle.seekToEndOfFile()
-	}
-	return handle
-}
-
-private func fileHandleToWrite(URL url: URL, withAppend doappend: Bool) throws -> FileHandle
-{
-	let fmanager = FileManager.default
-	if !fmanager.fileExists(atURL: url) {
-		if !fmanager.createFile(atURL: url, contents: nil, attributes: nil) {
-			throw NSError.fileError(message: "Can not create file: \(url.absoluteString)")
+		let pathstr = NSString(string: path)
+		for mode in modes {
+			if access(pathstr.fileSystemRepresentation, mode) != 0 {
+				return false
+			}
 		}
+		return true
 	}
-	let handle = try FileHandle(forWritingTo: url)
-	if doappend {
-		handle.seekToEndOfFile()
-	}
-	return handle
 }
 

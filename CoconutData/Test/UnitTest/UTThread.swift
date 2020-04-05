@@ -10,7 +10,7 @@ import Foundation
 
 public class UTSimpleThread: CNThread {
 	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {
-		self.console.print(string: "testSimpleThread: 2. MainOperation\n")
+		//self.console.print(string: "testSimpleThread: 2. MainOperation\n")
 		return 0
 	}
 }
@@ -24,16 +24,16 @@ public class UTNestedThread: CNThread {
 	}
 
 	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {
-		self.console.print(string: "testNestedThread\(mCount): 1.mainOperation/start\n")
+		//self.console.print(string: "testNestedThread\(mCount): 1.mainOperation/start\n")
 		if mCount < 3 {
 			let newthread = UTNestedThread(queue: self.queue, input: self.inputStream, output: self.outputStream, error: self.errorStream, environment: self.environment, count: mCount + 1)
-			self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
+			//self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
 			newthread.start(arguments: [])
-			self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
+			//self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
 			let ecode = newthread.waitUntilExit()
-			self.console.print(string: "testNestedThread\(mCount): 2.3 mainOperation/main/echode=\(ecode)\n")
+			//self.console.print(string: "testNestedThread\(mCount): 2.3 mainOperation/main/echode=\(ecode)\n")
 		}
-		self.console.print(string: "testNestedThread\(mCount): 3.mainOperation/done\n")
+		//self.console.print(string: "testNestedThread\(mCount): 3.mainOperation/done\n")
 		return 0
 	}
 }

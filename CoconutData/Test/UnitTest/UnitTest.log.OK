@@ -2,34 +2,6 @@ Hello, World!
 * testPreference
 LogLevel: flow
 * fontManager
-fixed-pitch-font: AndaleMono
-fixed-pitch-font: AppleBraille
-fixed-pitch-font: AppleBraille-Pinpoint8Dot
-fixed-pitch-font: AppleBraille-Outline6Dot
-fixed-pitch-font: AppleBraille-Outline8Dot
-fixed-pitch-font: AppleBraille-Pinpoint6Dot
-fixed-pitch-font: AppleColorEmoji
-fixed-pitch-font: Courier-Oblique
-fixed-pitch-font: Courier-BoldOblique
-fixed-pitch-font: Courier
-fixed-pitch-font: Courier-Bold
-fixed-pitch-font: CourierNewPS-BoldMT
-fixed-pitch-font: CourierNewPS-ItalicMT
-fixed-pitch-font: CourierNewPSMT
-fixed-pitch-font: CourierNewPS-BoldItalicMT
-fixed-pitch-font: GB18030Bitmap
-fixed-pitch-font: FZLTTHB--B51-0
-fixed-pitch-font: FZLTXHB--B51-0
-fixed-pitch-font: FZLTZHB--B51-0
-fixed-pitch-font: Menlo-Bold
-fixed-pitch-font: Menlo-BoldItalic
-fixed-pitch-font: Menlo-Regular
-fixed-pitch-font: Menlo-Italic
-fixed-pitch-font: Monaco
-fixed-pitch-font: Osaka-Mono
-fixed-pitch-font: JCsmPC
-fixed-pitch-font: PTMono-Regular
-fixed-pitch-font: PTMono-Bold
 * testStringStream
 - Test string stream to token
 [INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]
@@ -296,16 +268,20 @@ Get sceme from "/usr/local/bin" -> <none> -> OK
 Get sceme from "https://yahoo.com" -> Sceme:"https" -> OK
 Get sceme from "https//yahoo.com" -> <none> -> OK
 Get sceme from "ftp.c://yahoo.com" -> Sceme:"ftp.c" -> OK
+* testFileManager
+Test: fileExists -> OK
+Test: fileExists -> OK
+Test: isAccessible (Read) -> OK
+Test: isAccessible (Read) -> OK
+Test: isAccessible (CurDir) -> OK
+rel: /tmp/a -> OK: url0 = /tmp/a
+rel: a.txt -> OK: url0 = /home/user/a.txt
+rel: subdir/a.txt -> OK: url0 = /home/user/subdir/a.txt
+rel: ../a.txt -> OK: url3 = /home/a.txt
 * testObserver
 isExecuting -> true
 * testOperation
-op0 : Done
-op1 : Done
 Wait for finish operations
-op2 : Canceled
-op0 : Check Exec Time 1 1
-op1 : Check Exec Time 1 1
-op2 : Check Exec Time 1 1
 testOperation ... Done
 * testOperationQueue
 * TEST0
@@ -327,26 +303,8 @@ END of process
 Process is finished with exit code: 0
 * testThread
 testSimpleThread: 1. Begin
-testSimpleThread: 2. MainOperation
 testSimpleThread: 3: ecode = 0
 testNestedThread: 1. Begin
-testNestedThread0: 1.mainOperation/start
-testNestedThread0: 2.1 mainOperation/main/start
-testNestedThread0: 2.2 mainOperation/main/waitUntilExit
-testNestedThread1: 1.mainOperation/start
-testNestedThread1: 2.1 mainOperation/main/start
-testNestedThread1: 2.2 mainOperation/main/waitUntilExit
-testNestedThread2: 1.mainOperation/start
-testNestedThread2: 2.1 mainOperation/main/start
-testNestedThread2: 2.2 mainOperation/main/waitUntilExit
-testNestedThread3: 1.mainOperation/start
-testNestedThread3: 3.mainOperation/done
-testNestedThread2: 2.3 mainOperation/main/echode=0
-testNestedThread2: 3.mainOperation/done
-testNestedThread1: 2.3 mainOperation/main/echode=0
-testNestedThread1: 3.mainOperation/done
-testNestedThread0: 2.3 mainOperation/main/echode=0
-testNestedThread0: 3.mainOperation/done
 testNestedThread: 2. End code: 0
 * testGraphics
 point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... OK

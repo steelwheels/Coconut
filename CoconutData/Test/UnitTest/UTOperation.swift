@@ -10,12 +10,21 @@ import Foundation
 
 private class UTOperationContext: CNOperationContext
 {
+	public enum State {
+		case initial
+		case done
+		case cancelled
+	}
+
+	public  var state:			State
 	private var mName:			String
 	private var mDoWaitCancel:		Bool
 
 	public required init(name nm: String, doWaitCancel dowait: Bool, input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle) {
-		mName			= nm
-		mDoWaitCancel		= dowait
+		state		= .initial
+		mName		= nm
+		mDoWaitCancel	= dowait
+
 		super.init(input: inhdl, output: outhdl, error: errhdl)
 	}
 
@@ -28,14 +37,14 @@ private class UTOperationContext: CNOperationContext
 					docont = false
 				}
 			}
-			outputFileHandle.write(string: "\(mName) : Canceled\n")
+			state = .cancelled
 		} else {
-			outputFileHandle.write(string: "\(mName) : Done\n")
+			state = .done
 		}
 	}
 
 	public func checkExectime(requiredCount count: Int) -> Bool {
-		outputFileHandle.write(string: "\(mName) : Check Exec Time \(self.executionCount) \(count)\n")
+		//outputFileHandle.write(string: "\(mName) : Check Exec Time \(self.executionCount) \(count)\n")
 		if self.executionCount == count {
 			return true
 		}

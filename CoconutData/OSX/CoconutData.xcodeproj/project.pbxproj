@@ -82,6 +82,7 @@
 		05B5BBD7209DDF8200E0981B /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05BA444423B9D67D0012C845 /* CNCommandHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BA444323B9D67D0012C845 /* CNCommandHistory.swift */; };
 		05C6A20622676796003922C9 /* CNPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C6A20522676796003922C9 /* CNPreference.swift */; };
+		05C8AC8C2439A81900196828 /* UTFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8AC8B2439A81900196828 /* UTFileManager.swift */; };
 		05CB79BE236F040800301547 /* CNQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CB79BD236F040800301547 /* CNQueue.swift */; };
 		05CB79C0236F120600301547 /* UTQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CB79BF236F120600301547 /* UTQueue.swift */; };
 		05DF713121CBD24600B6FD4F /* CNNativeValueSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */; };
@@ -223,6 +224,7 @@
 		05BA444323B9D67D0012C845 /* CNCommandHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandHistory.swift; sourceTree = "<group>"; };
 		05C52E8F20993DE600DD56B4 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		05C6A20522676796003922C9 /* CNPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPreference.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		05C8AC8B2439A81900196828 /* UTFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTFileManager.swift; sourceTree = "<group>"; };
 		05CB79BD236F040800301547 /* CNQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNQueue.swift; sourceTree = "<group>"; };
 		05CB79BF236F120600301547 /* UTQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTQueue.swift; sourceTree = "<group>"; };
 		05DF713021CBD24600B6FD4F /* CNNativeValueSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValueSelector.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				05FD029023A52F5000744D8C /* UTFileHandle.swift */,
 				05F2DAE624277C89002F3864 /* UTFile.swift */,
 				052170F021022AB1001801A6 /* UTFilePath.swift */,
+				05C8AC8B2439A81900196828 /* UTFileManager.swift */,
 				055BD39F2199C48400BF7373 /* UTObserver.swift */,
 				052087BD235C892D0084E340 /* UTProcess.swift */,
 				05EEADAF235DEF29008B49A4 /* UTThread.swift */,
@@ -692,6 +695,7 @@
 				057FF40B209DE871006EEF7B /* UTValue.swift in Sources */,
 				05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */,
 				052170F121022AB1001801A6 /* UTFilePath.swift in Sources */,
+				05C8AC8C2439A81900196828 /* UTFileManager.swift in Sources */,
 				05F7DACD23730E1100E363E9 /* UTCharacter.swift in Sources */,
 				05F2DAE724277C89002F3864 /* UTFile.swift in Sources */,
 				057C7EF720A1ED950085662E /* UTConsole.swift in Sources */,

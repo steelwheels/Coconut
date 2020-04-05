@@ -26,7 +26,7 @@ public extension URL
 			return result
 		}
 	}
-	
+
 #if os(OSX)
 	enum CNFileSelection {
 		case SelectFile

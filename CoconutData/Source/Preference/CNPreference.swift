@@ -132,10 +132,17 @@ public class CNUserPreference: CNPreferenceTable
 			fatalError("Can not happen")
 		}
 		set(newval){
-			if newval != super.urlValue(forKey: HomeDirectoryItem) {
-				super.storeURLValue(urlValue: newval, forKey: HomeDirectoryItem)
+			var isdir: ObjCBool = false
+			if FileManager.default.fileExists(atPath: newval.path, isDirectory: &isdir) {
+				if isdir.boolValue {
+					if newval != super.urlValue(forKey: HomeDirectoryItem) {
+						super.storeURLValue(urlValue: newval, forKey: HomeDirectoryItem)
+					}
+					super.set(urlValue: newval, forKey: HomeDirectoryItem)
+					return
+				}
 			}
-			super.set(urlValue: newval, forKey: HomeDirectoryItem)
+			NSLog("Invalid parameter")
 		}
 	}
 }
