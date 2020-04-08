@@ -30,6 +30,9 @@ open class CNPreferenceTable
 		return mParameterTable.value(forKey: key)
 	}
 
+	/*
+	 * Int
+	 */
 	public func set(intValue val: Int, forKey key: String) {
 		let num = NSNumber(integerLiteral: val)
 		set(anyValue: num, forKey: key)
@@ -58,32 +61,38 @@ open class CNPreferenceTable
 		}
 	}
 
-	public func set(urlValue val: URL, forKey key: String) {
+	/*
+	 * String
+	 */
+	public func set(stringValue val: String, forKey key: String) {
 		set(anyValue: val, forKey: key)
 	}
 
-	public func urlValue(forKey key: String) -> URL? {
-		if let val = anyValue(forKey: key) as? URL {
+	public func stringValue(forKey key: String) -> String? {
+		if let val = anyValue(forKey: key) as? String {
 			return val
 		} else {
 			return nil
 		}
 	}
 
-	public func storeURLValue(urlValue val: URL, forKey key: String) {
+	public func storeStringValue(stringValue val: String, forKey key: String) {
 		let pathstr = path(keyString: key)
 		UserDefaults.standard.set(val, forKey: pathstr)
 	}
 
-	public func loadURLValue(forKey key: String) -> URL? {
+	public func loadStringValue(forKey key: String) -> String? {
 		let pathstr = path(keyString: key)
-		if let url = UserDefaults.standard.url(forKey: pathstr) {
-			return url
+		if let path = UserDefaults.standard.string(forKey: pathstr) {
+			return path
 		} else {
 			return nil
 		}
 	}
 
+	/*
+	 * Font
+	 */
 	public func set(fontValue val: CNFont, forKey key: String) {
 		set(anyValue: val, forKey: key)
 	}
@@ -105,6 +114,35 @@ open class CNPreferenceTable
 		let pathstr = path(keyString: key)
 		if let font = UserDefaults.standard.font(forKey: pathstr) {
 			return font
+		} else {
+			return nil
+		}
+	}
+
+	/*
+	 * DataDictionary
+	 */
+	public func set(dataDictionaryValue val: Dictionary<String, Data>, forKey key: String) {
+		set(anyValue: val, forKey: key)
+	}
+
+	public func dataDictionaryValue(forKey key: String) -> Dictionary<String, Data>? {
+		if let val = anyValue(forKey: key) as? Dictionary<String, Data> {
+			return val
+		} else {
+			return nil
+		}
+	}
+
+	public func storeDataDictionaryValue(dataDictionaryValue val: Dictionary<String, Data>, forKey key: String) {
+		let pathstr = path(keyString: key)
+		UserDefaults.standard.set(dataDictionary: val, forKey: pathstr)
+	}
+
+	public func loadDataDictionaryValue(forKey key: String) -> Dictionary<String, Data>? {
+		let pathstr = path(keyString: key)
+		if let dict = UserDefaults.standard.dataDictionary(forKey: pathstr) {
+			return dict
 		} else {
 			return nil
 		}

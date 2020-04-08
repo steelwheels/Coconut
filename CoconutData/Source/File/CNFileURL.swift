@@ -54,9 +54,8 @@ public extension URL
 		case .OK:
 			let urls = panel.urls
 			if urls.count == 1 {
-				let preference = CNBookmarkPreference.sharedPreference
-				preference.saveToUserDefaults(URLs: urls)
-				preference.synchronize()
+				let preference = CNPreference.shared.bookmarkPreference
+				preference.add(URL: urls[0])
 				result = urls[0]
 			} else {
 				NSLog("Invalid result: \(urls)")
@@ -109,9 +108,8 @@ public extension URL
 			if result == .OK {
 				if let newurl = panel.url {
 					if callback(newurl) {
-						let preference = CNBookmarkPreference.sharedPreference
-						preference.saveToUserDefaults(URL: newurl)
-						preference.synchronize()
+						let preference = CNPreference.shared.bookmarkPreference
+						preference.add(URL: newurl)
 					}
 				}
 			}

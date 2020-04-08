@@ -30,10 +30,10 @@ public enum CNFileOpenResult {
 	case	error(_ error: NSError)
 }
 
-public enum CNFileAccessType {
-	case ReadAccess
-	case WriteAccess
-	case AppendAccess
+public enum CNFileAccessType: Int32 {
+	case ReadAccess		= 0
+	case WriteAccess	= 1
+	case AppendAccess	= 2
 }
 
 public extension FileManager
@@ -96,9 +96,24 @@ public extension FileManager
 		case .WriteAccess:	modes = [W_OK]
 		case .AppendAccess:	modes = [R_OK, W_OK]
 		}
-		let pathstr = NSString(string: path)
+
+		let result: Bool
+		let pref = CNPreference.shared.bookmarkPreference
+		if let url = pref.search(pathString: path) {
+			let issecure = url.startAccessingSecurityScopedResource()
+			result = isAccessible(pathString: url.path, accessModes: modes)
+			if issecure {
+				url.stopAccessingSecurityScopedResource()
+			}
+		} else {
+			result = isAccessible(pathString: path, accessModes: modes)
+		}
+		return result
+	}
+
+	private func isAccessible(pathString path: String, accessModes modes: Array<Int32>) -> Bool {
 		for mode in modes {
-			if access(pathstr.fileSystemRepresentation, mode) != 0 {
+			if access(path, mode) != 0 {
 				return false
 			}
 		}

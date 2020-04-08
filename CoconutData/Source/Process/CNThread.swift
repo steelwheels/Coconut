@@ -76,7 +76,7 @@ open class CNThread: CNProcessStream
 	}
 
 	open func main(arguments args: Array<CNNativeValue>) -> Int32 {
-		mConsole.error(string: "Override this method\n")
+		mConsole.error(string: "\(#file): Override this method\n")
 		return -1
 	}
 

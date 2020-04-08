@@ -21,11 +21,6 @@ public class CNFilePath
 		case ok(_ urls: [URL])
 		case error(_ error: NSError)
 	}
-
-	public class func URLForHomeDirectory() -> URL {
-		let homedir = NSHomeDirectory()
-		return URL(fileURLWithPath: homedir, isDirectory: true)
-	}
 	
 	public class func URLForBundleFile(bundleName bname: String?, fileName fname: String?, ofType type: String?) -> FilePathError {
 		let mainbundle = Bundle.main

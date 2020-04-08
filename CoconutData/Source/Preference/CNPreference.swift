@@ -113,36 +113,112 @@ public class CNUserPreference: CNPreferenceTable
 
 	public init() {
 		super.init(sectionName: "UserPreference")
-		if let home = super.loadURLValue(forKey: HomeDirectoryItem) {
-			super.set(urlValue: home, forKey: HomeDirectoryItem)
+		if let homedir = super.loadStringValue(forKey: HomeDirectoryItem) {
+			super.set(stringValue: homedir, forKey: HomeDirectoryItem)
 		} else {
+			let homedir: String
 			#if os(OSX)
-				self.homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+				homedir = FileManager.default.homeDirectoryForCurrentUser.path
 			#else
-				self.homeDirectory = URL(fileURLWithPath: NSHomeDirectory())
+				homedir = NSHomeDirectory()
 			#endif
+			super.set(stringValue: homedir, forKey: HomeDirectoryItem)
 		}
 	}
 
 	public var homeDirectory: URL {
 		get {
-			if let val = super.urlValue(forKey: HomeDirectoryItem) {
-				return val
+			if let homedir = super.stringValue(forKey: HomeDirectoryItem) {
+				let pref = CNPreference.shared.bookmarkPreference
+				if let homeurl = pref.search(pathString: homedir) {
+					return homeurl
+				} else {
+					return URL(fileURLWithPath: homedir)
+				}
 			}
 			fatalError("Can not happen")
 		}
 		set(newval){
 			var isdir: ObjCBool = false
-			if FileManager.default.fileExists(atPath: newval.path, isDirectory: &isdir) {
+			let homedir         = newval.path
+			if FileManager.default.fileExists(atPath: homedir, isDirectory: &isdir) {
 				if isdir.boolValue {
-					if newval != super.urlValue(forKey: HomeDirectoryItem) {
-						super.storeURLValue(urlValue: newval, forKey: HomeDirectoryItem)
-					}
-					super.set(urlValue: newval, forKey: HomeDirectoryItem)
+					super.storeStringValue(stringValue: homedir, forKey: HomeDirectoryItem)
+					super.set(stringValue: homedir, forKey: HomeDirectoryItem)
 					return
 				}
 			}
 			NSLog("Invalid parameter")
+		}
+	}
+}
+
+public class CNBookmarkPreference: CNPreferenceTable
+{
+	public let BookmarkItem		= "bookmark"
+
+	public init() {
+		super.init(sectionName: "BookmarkPreference")
+		if let dict = super.loadDataDictionaryValue(forKey: BookmarkItem) {
+			super.set(dataDictionaryValue: dict, forKey: BookmarkItem)
+		} else {
+			super.set(dataDictionaryValue: [:], forKey: BookmarkItem)
+		}
+	}
+
+	public func add(URL url: URL) {
+		if var dict = super.dataDictionaryValue(forKey: BookmarkItem) {
+			let data = URLToData(URL: url)
+			dict[url.path] = data
+			super.set(dataDictionaryValue: dict, forKey: BookmarkItem)
+			super.storeDataDictionaryValue(dataDictionaryValue: dict, forKey: BookmarkItem)
+		} else {
+			NSLog("Can not happen")
+		}
+	}
+
+	public func search(pathString path: String) -> URL? {
+		if let dict = super.dataDictionaryValue(forKey: BookmarkItem) {
+			if let data = dict[path] {
+				return dataToURL(bookmarkData: data)
+			}
+		}
+		return nil
+	}
+
+	public func clear() {
+		let empty: Dictionary<String, Data> = [:]
+		super.set(dataDictionaryValue: empty, forKey: BookmarkItem)
+		super.storeDataDictionaryValue(dataDictionaryValue: empty, forKey: BookmarkItem)
+	}
+
+	private func URLToData(URL url: URL) -> Data {
+		do {
+			#if os(OSX)
+				let data = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+			#else
+				let data = try url.bookmarkData(options: .suitableForBookmarkFile, includingResourceValuesForKeys: nil, relativeTo: nil)
+			#endif
+			return data
+		}
+		catch let err as NSError {
+			fatalError("\(err.description)")
+		}
+	}
+
+	private func dataToURL(bookmarkData bmdata: Data) -> URL? {
+		do {
+			var isstale: Bool = false
+			#if os(OSX)
+				let newurl = try URL(resolvingBookmarkData: bmdata, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isstale)
+			#else
+				let newurl = try URL(resolvingBookmarkData: bmdata, options: .withoutUI, relativeTo: nil, bookmarkDataIsStale: &isstale)
+			#endif
+			return newurl
+		}
+		catch {
+			NSLog("Failed to resolve bookmark")
+			return nil
 		}
 	}
 }
@@ -160,6 +236,13 @@ extension CNPreference
 		return get(name: "user", allocator: {
 			() -> CNUserPreference in
 				return CNUserPreference()
+		})
+	}}
+
+	public var bookmarkPreference: CNBookmarkPreference { get {
+		return get(name: "bookmark", allocator: {
+			() -> CNBookmarkPreference in
+				return CNBookmarkPreference()
 		})
 	}}
 

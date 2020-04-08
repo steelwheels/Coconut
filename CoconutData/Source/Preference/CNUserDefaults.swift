@@ -37,4 +37,12 @@ extension UserDefaults
 		let dict: [String: Any] = ["name":name, "size":size]
 		self.set(dict, forKey: key)
 	}
+
+	public func dataDictionary(forKey key: String) -> Dictionary<String, Data>? {
+		return self.dictionary(forKey: key) as? Dictionary<String, Data>
+	}
+
+	public func set(dataDictionary dict: Dictionary<String, Data>, forKey key: String) {
+		self.set(dict, forKey: key)
+	}
 }

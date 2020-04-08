@@ -45,7 +45,6 @@
 		0565A9EF208B7BB100E91568 /* CNFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9EC208B7BB100E91568 /* CNFileManager.swift */; };
 		0565A9F0208B7BB100E91568 /* CNFilePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9ED208B7BB100E91568 /* CNFilePath.swift */; };
 		0565A9F1208B7BB100E91568 /* CNFileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9EE208B7BB100E91568 /* CNFileURL.swift */; };
-		0565A9F3208B7C2800E91568 /* CNBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9F2208B7C2800E91568 /* CNBookmark.swift */; };
 		0565A9F7208B820900E91568 /* CNAuthorize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9F6208B820900E91568 /* CNAuthorize.swift */; };
 		0567B19D21D50DB4000C74B8 /* CNResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567B19C21D50DB4000C74B8 /* CNResource.swift */; };
 		056A4516232327B000C7DCBF /* CNFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056A4515232327B000C7DCBF /* CNFileHandle.swift */; };
@@ -183,7 +182,6 @@
 		0565A9EC208B7BB100E91568 /* CNFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFileManager.swift; sourceTree = "<group>"; };
 		0565A9ED208B7BB100E91568 /* CNFilePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFilePath.swift; sourceTree = "<group>"; };
 		0565A9EE208B7BB100E91568 /* CNFileURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFileURL.swift; sourceTree = "<group>"; };
-		0565A9F2208B7C2800E91568 /* CNBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNBookmark.swift; sourceTree = "<group>"; };
 		0565A9F6208B820900E91568 /* CNAuthorize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAuthorize.swift; sourceTree = "<group>"; };
 		0567B19C21D50DB4000C74B8 /* CNResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNResource.swift; sourceTree = "<group>"; };
 		056A4515232327B000C7DCBF /* CNFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNFileHandle.swift; sourceTree = "<group>"; };
@@ -453,7 +451,6 @@
 			children = (
 				0578DA2B2090C1C400ED852C /* CNPropertyList.swift */,
 				0565A9F6208B820900E91568 /* CNAuthorize.swift */,
-				0565A9F2208B7C2800E91568 /* CNBookmark.swift */,
 				0565A9EC208B7BB100E91568 /* CNFileManager.swift */,
 				0565A9ED208B7BB100E91568 /* CNFilePath.swift */,
 				0565A9EE208B7BB100E91568 /* CNFileURL.swift */,
@@ -769,7 +766,6 @@
 				05E81091208B33F800230477 /* CNAccess.swift in Sources */,
 				05995855208AF10300DE2DC9 /* CNParser.swift in Sources */,
 				0567B19D21D50DB4000C74B8 /* CNResource.swift in Sources */,
-				0565A9F3208B7C2800E91568 /* CNBookmark.swift in Sources */,
 				056058AE21CA8E4B00E593E2 /* CNNativeValueVisitor.swift in Sources */,
 				05A709FC241495FA00B9356A /* CNDocumentTypeManager.swift in Sources */,
 				05B50DED239A861D00CFA0B9 /* CNAttributedString.swift in Sources */,
