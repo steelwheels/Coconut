@@ -86,10 +86,19 @@ open class CNProcess: CNProcessStream
 	}
 
 	public func execute(command cmd: String) {
+		/* Enable secure access */
+		let homeurl  = CNPreference.shared.userPreference.homeDirectory
+		let issecure = homeurl.startAccessingSecurityScopedResource()
+
 		mStatus			= .Running
 		mProcess.launchPath	= "/bin/sh"
 		mProcess.arguments	= ["-c", cmd]
 		mProcess.launch()
+
+		/* Disable secure access */
+		if issecure {
+			homeurl.stopAccessingSecurityScopedResource()
+		}
 	}
 
 	public func waitUntilExit() -> Int32 {

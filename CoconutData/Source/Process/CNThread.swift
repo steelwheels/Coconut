@@ -68,10 +68,19 @@ open class CNThread: CNProcessStream
 		mArguments = args
 		mIsRunning = true
 		mQueue.async {
+			/* Enable secure access */
+			let homeurl  = CNPreference.shared.userPreference.homeDirectory
+			let issecure = homeurl.startAccessingSecurityScopedResource()
+
 			self.mTerminationStatus = self.main(arguments: self.mArguments)
 			self.closeStreams()
 			self.mSemaphore.signal()
 			self.mIsRunning = false
+
+			/* Disable secure access */
+			if issecure {
+				homeurl.stopAccessingSecurityScopedResource()
+			}
 		}
 	}
 
