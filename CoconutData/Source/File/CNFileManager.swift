@@ -39,9 +39,19 @@ public enum CNFileAccessType: Int32 {
 public extension FileManager
 {
 	/* If you give full path to "relpath", "base" directory will be ignored */
-	func fullPathURL(relativePath relpath: String, baseDirectory base: String) -> URL {
-		let baseurl = URL(fileURLWithPath: base, isDirectory: true)
-		return URL(fileURLWithPath: relpath, relativeTo: baseurl)
+	func fullPath(pathString path: String, baseURL base: URL) -> URL {
+		let fullpath: String
+		if self.isAbsolutePath(pathString: path) {
+			fullpath   = path
+		} else {
+			let newurl = URL(fileURLWithPath: path, relativeTo: base)
+			fullpath   = newurl.path
+		}
+		if let url = CNPreference.shared.bookmarkPreference.search(pathString: fullpath) {
+			return url
+		} else {
+			return URL(fileURLWithPath: fullpath)
+		}
 	}
 
 	func fileExists(atURL url: URL) -> Bool {
@@ -85,6 +95,41 @@ public extension FileManager
 		} catch {
 			let err = NSError.fileError(message: "Failed to open URL \"\(url.absoluteString)\"")
 			return .error(err)
+		}
+	}
+
+	func schemeInPath(pathString str: String) -> String? {
+		if let lastidx = str.firstIndex(of: ":") {
+			var i:String.Index = str.startIndex
+			var result: String = ""
+			while i < lastidx {
+				let c = str[i]
+				if c.isLetterOrNumber || c == "." || c == "_" {
+					result.append(c)
+				} else {
+					return nil
+				}
+				i = str.index(after: i)
+			}
+			return result
+		} else {
+			return nil
+		}
+	}
+
+	/* The absolute path is
+	 *  1. Started by '/'
+	 *  2. Started by scheme, such as file:
+	 */
+	func isAbsolutePath(pathString path: String) -> Bool {
+		if let c = path.first {
+			if c == "/" || schemeInPath(pathString: path) != nil {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return false
 		}
 	}
 

@@ -108,24 +108,5 @@ public class CNFilePath
 			return "<unknown>"
 		}
 	}
-
-	public class func schemeInString(string str: String) -> String? {
-		if let lastidx = str.firstIndex(of: ":") {
-			var i:String.Index = str.startIndex
-			var result: String = ""
-			while i < lastidx {
-				let c = str[i]
-				if c.isLetterOrNumber || c == "." || c == "_" {
-					result.append(c)
-				} else {
-					return nil
-				}
-				i = str.index(after: i)
-			}
-			return result
-		} else {
-			return nil
-		}
-	}
 }
 

@@ -274,10 +274,11 @@ Test: fileExists -> OK
 Test: isAccessible (Read) -> OK
 Test: isAccessible (Read) -> OK
 Test: isAccessible (CurDir) -> OK
-rel: /tmp/a -> OK: url0 = /tmp/a
-rel: a.txt -> OK: url0 = /home/user/a.txt
-rel: subdir/a.txt -> OK: url0 = /home/user/subdir/a.txt
-rel: ../a.txt -> OK: url3 = /home/a.txt
+home-dir: /Users/tomoo
+rel: /tmp/a -> OK
+rel: a.txt -> OK
+rel: subdir/a.txt -> OK
+rel: ../a.txt -> OK
 * testObserver
 isExecuting -> true
 * testOperation

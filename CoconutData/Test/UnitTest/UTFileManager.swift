@@ -13,9 +13,10 @@ public func testFileManager(console cons: CNConsole) -> Bool
 	var result   = true
 	let fmanager = FileManager.default
 
-	let curdir   = fmanager.currentDirectoryPath
-	let plisturl = fmanager.fullPathURL(relativePath: "./Info.plist",   baseDirectory: curdir)
-	let nonurl   = fmanager.fullPathURL(relativePath: "./Info.plist-2", baseDirectory: curdir)
+	let env		= CNEnvironment()
+	let curdir	= env.currentDirectory
+	let plisturl	= fmanager.fullPath(pathString: "./Info.plist", baseURL: curdir)
+	let nonurl	= fmanager.fullPath(pathString: "./Info.plist-2", baseURL: curdir)
 	//cons.print(string: "fullpath: \(plisturl.path)\n")
 
 	cons.print(string: "Test: fileExists -> ")
@@ -49,45 +50,49 @@ public func testFileManager(console cons: CNConsole) -> Bool
 	}
 
 	cons.print(string: "Test: isAccessible (CurDir) -> ")
-	if fmanager.isAccessible(pathString: curdir, accessType: .AppendAccess) {
+	if fmanager.isAccessible(pathString: curdir.path, accessType: .AppendAccess) {
 		cons.print(string: "OK\n")
 	} else {
 		cons.print(string: "NG -> File \(curdir) can be read\n")
 		result = false
 	}
 
-	let homedir = "/home/user"
+	let homedir = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+	cons.print(string: "home-dir: \(homedir.path)\n")
 
 	cons.print(string: "rel: /tmp/a -> ")
-	let url0 = fmanager.fullPathURL(relativePath: "/tmp/a", baseDirectory: homedir)
+	let url0 = fmanager.fullPath(pathString: "/tmp/a", baseURL: homedir)
 	if url0.path == "/tmp/a" {
-		cons.print(string: "OK: url0 = \(url0.path)\n")
+		cons.print(string: "OK\n")
 	} else {
 		cons.print(string: "NG: url0 = \(url0.path)\n")
 		result = false
 	}
 	cons.print(string: "rel: a.txt -> ")
-	let url1 = fmanager.fullPathURL(relativePath: "a.txt", baseDirectory: homedir)
-	if url1.path == "/home/user/a.txt" {
-		cons.print(string: "OK: url0 = \(url1.path)\n")
+	let url1 = fmanager.fullPath(pathString: "a.txt", baseURL: homedir)
+	let exp1 = homedir.path + "/a.txt"
+	if url1.path == exp1 {
+		cons.print(string: "OK\n")
 	} else {
-		cons.print(string: "NG: url0 = \(url1.path)\n")
+		cons.print(string: "NG: url1 = \(url1.path) <-> \(exp1)\n")
 		result = false
 	}
 	cons.print(string: "rel: subdir/a.txt -> ")
-	let url2 = fmanager.fullPathURL(relativePath: "subdir/a.txt", baseDirectory: homedir)
-	if url2.path == "/home/user/subdir/a.txt" {
-		cons.print(string: "OK: url0 = \(url2.path)\n")
+	let url2 = fmanager.fullPath(pathString: "subdir/a.txt", baseURL: homedir)
+	let exp2 = homedir.path + "/subdir/a.txt"
+	if url2.path == exp2 {
+		cons.print(string: "OK\n")
 	} else {
-		cons.print(string: "NG: url0 = \(url2.path)\n")
+		cons.print(string: "NG: url2 = \(url2.path) <-> \(exp2)\n")
 		result = false
 	}
 	cons.print(string: "rel: ../a.txt -> ")
-	let url3 = fmanager.fullPathURL(relativePath: "../a.txt", baseDirectory: homedir)
-	if url3.path == "/home/a.txt" {
-		cons.print(string: "OK: url3 = \(url3.path)\n")
+	let url3 = fmanager.fullPath(pathString: "../a.txt", baseURL: homedir)
+	let exp3 = "/Users/a.txt"
+	if url3.path == exp3 {
+		cons.print(string: "OK\n")
 	} else {
-		cons.print(string: "NG: url3 = \(url3.path)\n")
+		cons.print(string: "NG: url3 = \(url3.path) <-> \(exp3)\n")
 		result = false
 	}
 

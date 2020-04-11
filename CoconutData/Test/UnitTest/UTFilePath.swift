@@ -35,7 +35,7 @@ public func testFilePath(console cons: CNConsole) -> Bool
 private func testScemeInString(string str: String, expectedResult eval: Bool, console cons: CNConsole) -> Bool {
 	var result: Bool
 	cons.print(string: "Get sceme from \"\(str)\" -> ")
-	if let resstr = CNFilePath.schemeInString(string: str) {
+	if let resstr = FileManager.default.schemeInPath(pathString: str) {
 		cons.print(string: "Sceme:\"\(resstr)\" -> ")
 		if eval {
 			cons.print(string: "OK\n")
