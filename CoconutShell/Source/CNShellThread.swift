@@ -71,7 +71,7 @@ open class CNShellThread: CNThread
 					histmgr.set(history: mReadline.history())
 
 					/* Reset terminal */
-					let resetstr = CNEscapeCode.setNormalAttributes.encode()
+					let resetstr = CNEscapeCode.resetCharacterAttribute.encode()
 					console.print(string: resetstr)
 
 					/* Print prompt again */

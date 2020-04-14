@@ -35,9 +35,16 @@ public enum CNEscapeCode {
 	case	eraceEntireLine				/* Clear entire line				*/
 	case	scrollUp
 	case	scrollDown
-	case	foregroundColor(CNColor)
-	case	backgroundColor(CNColor)
-	case	setNormalAttributes
+	case	resetCharacterAttribute			/* Reset all arributes for character		*/
+	case	boldCharacter(Bool)			/* Set/reset bold font				*/
+	case	underlineCharacter(Bool)		/* Set/reset underline font			*/
+	case	blinkCharacter(Bool)			/* Set/reset blink font 			*/
+	case	reverseCharacter(Bool)			/* Set/reset reverse character			*/
+	case	foregroundColor(CNColor)		/* Set foreground color				*/
+	case	defaultForegroundColor			/* Set default foreground color			*/
+	case	backgroundColor(CNColor)		/* Set background color				*/
+	case	defaultBackgroundColor			/* Reset default background color		*/
+
 	case	requestScreenSize			/* Send request to receive screen size
 							 * Ps = 18 -> Report the size of the text area in characters as CSI 8 ; height ; width t
 							 */
@@ -68,9 +75,15 @@ public enum CNEscapeCode {
 		case .eraceEntireLine:				result = "eraceEntireLine"
 		case .scrollUp:					result = "scrollUp"
 		case .scrollDown:				result = "scrollDown"
+		case .resetCharacterAttribute:			result = "resetCharacterAttribute"
+		case .boldCharacter(let flag):			result = "boldCharacter(\(flag))"
+		case .underlineCharacter(let flag):		result = "underlineCharacter(\(flag))"
+		case .blinkCharacter(let flag):			result = "blinkCharacter(\(flag))"
+		case .reverseCharacter(let flag):		result = "reverseCharacter(\(flag))"
 		case .foregroundColor(let col):			result = "foregroundColor(\(col.rgbName))"
+		case .defaultForegroundColor:			result = "defaultForegroundColor"
 		case .backgroundColor(let col):			result = "backgroundColor(\(col.rgbName))"
-		case .setNormalAttributes:			result = "setNormalAttributes"
+		case .defaultBackgroundColor:			result = "defaultBackgroundColor"
 		case .requestScreenSize:			result = "requestScreenSize"
 		case .screenSize(let width, let height):	result = "screenSize(\(width), \(height))"
 		}
@@ -103,9 +116,15 @@ public enum CNEscapeCode {
 		case .eraceEntireLine:				result = "\(ESC)[2K"
 		case .scrollUp:					result = "\(ESC)M"
 		case .scrollDown:				result = "\(ESC)D"
+		case .resetCharacterAttribute:			result = "\(ESC)[0m"
+		case .boldCharacter(let flag):			result = "\(ESC)[\(flag ? 1: 22)m"
+		case .underlineCharacter(let flag):		result = "\(ESC)[\(flag ? 4: 24)m"
+		case .blinkCharacter(let flag):			result = "\(ESC)[\(flag ? 5: 25)m"
+		case .reverseCharacter(let flag):		result = "\(ESC)[\(flag ? 7: 27)m"
 		case .foregroundColor(let col):			result = "\(ESC)[\(colorToCode(isForeground: true, color: col))m"
+		case .defaultForegroundColor:			result = "\(ESC)[39m"
 		case .backgroundColor(let col):			result = "\(ESC)[\(colorToCode(isForeground: false, color: col))m"
-		case .setNormalAttributes:			result = "\(ESC)[0m"
+		case .defaultBackgroundColor:			result = "\(ESC)[49m"
 		case .requestScreenSize:			result = "\(ESC)[18;0;0t"
 		case .screenSize(let width, let height):	result = "\(ESC)[8;\(height);\(width)t"
 		}
@@ -235,9 +254,39 @@ public enum CNEscapeCode {
 			case .scrollDown:			result = true
 			default:				break
 			}
+		case .resetCharacterAttribute:
+			switch src {
+			case .resetCharacterAttribute:		result = true
+			default:				break
+			}
+		case .boldCharacter(let flag0):
+			switch src {
+			case .boldCharacter(let flag1):		result = flag0 == flag1
+			default:				break
+			}
+		case .underlineCharacter(let flag0):
+			switch src {
+			case .underlineCharacter(let flag1):	result = flag0 == flag1
+			default:				break
+			}
+		case .blinkCharacter(let flag0):
+			switch src {
+			case .blinkCharacter(let flag1):	result = flag0 == flag1
+			default:				break
+			}
+		case .reverseCharacter(let flag0):
+			switch src {
+			case .reverseCharacter(let flag1):	result = flag0 == flag1
+			default:				break
+			}
 		case .foregroundColor(let col0):
 			switch src {
 			case .foregroundColor(let col1):	result = col0 == col1
+			default:				break
+			}
+		case .defaultForegroundColor:
+			switch src {
+			case .defaultForegroundColor:		result = true
 			default:				break
 			}
 		case .backgroundColor(let col0):
@@ -245,9 +294,9 @@ public enum CNEscapeCode {
 			case .backgroundColor(let col1):	result = col0 == col1
 			default:				break
 			}
-		case .setNormalAttributes:
+		case .defaultBackgroundColor:
 			switch src {
-			case .setNormalAttributes:		result = true
+			case .defaultBackgroundColor:		result = true
 			default:				break
 			}
 		case .requestScreenSize:
@@ -321,7 +370,7 @@ public enum CNEscapeCode {
 				case "[":
 					/* Decode escape sequence */
 					let (idx2, command2) = try decodeEscapeSequence(string: src, index: idx1)
-					result.append(command2)
+					result.append(contentsOf: command2)
 					idx = idx2
 				case "D":
 					result.append(.scrollDown)
@@ -391,71 +440,54 @@ public enum CNEscapeCode {
 		return result
 	}
 
-	private static func decodeEscapeSequence(string src: String, index idx: String.Index) throws -> (String.Index, CNEscapeCode) {
+	private static func decodeEscapeSequence(string src: String, index idx: String.Index) throws -> (String.Index, Array<CNEscapeCode>) {
 		let (idx1, tokens) = try decodeStringToTokens(string: src, index: idx)
 		let tokennum       = tokens.count
 		if tokennum == 0 {
 			throw DecodeError.incompletedSequence
 		}
 
-		let result : CNEscapeCode
+		var results : Array<CNEscapeCode> = []
 		let lasttoken	= tokens[tokennum - 1]
 		if let c = lasttoken.getSymbol() {
 			switch c {
-			case "A": result = CNEscapeCode.cursorUp(try get1Parameter(from: tokens, forCommand: c))
-			case "B": result = CNEscapeCode.cursorDown(try get1Parameter(from: tokens, forCommand: c))
-			case "C": result = CNEscapeCode.cursorForward(try get1Parameter(from: tokens, forCommand: c))
-			case "D": result = CNEscapeCode.cursorBackward(try get1Parameter(from: tokens, forCommand: c))
-			case "E": result = CNEscapeCode.cursorNextLine(try get1Parameter(from: tokens, forCommand: c))
-			case "F": result = CNEscapeCode.cursorPreviousLine(try get1Parameter(from: tokens, forCommand: c))
-			case "G": result = CNEscapeCode.cursorHolizontalAbsolute(try get1Parameter(from: tokens, forCommand: c))
+			case "A": results.append(CNEscapeCode.cursorUp(try get1Parameter(from: tokens, forCommand: c)))
+			case "B": results.append(CNEscapeCode.cursorDown(try get1Parameter(from: tokens, forCommand: c)))
+			case "C": results.append(CNEscapeCode.cursorForward(try get1Parameter(from: tokens, forCommand: c)))
+			case "D": results.append(CNEscapeCode.cursorBackward(try get1Parameter(from: tokens, forCommand: c)))
+			case "E": results.append(CNEscapeCode.cursorNextLine(try get1Parameter(from: tokens, forCommand: c)))
+			case "F": results.append(CNEscapeCode.cursorPreviousLine(try get1Parameter(from: tokens, forCommand: c)))
+			case "G": results.append(CNEscapeCode.cursorHolizontalAbsolute(try get1Parameter(from: tokens, forCommand: c)))
 			case "H": let (row, col) = try get2Parameter(from: tokens, forCommand: c)
-				  result = CNEscapeCode.cursorPoisition(row, col)
+				  results.append(CNEscapeCode.cursorPoisition(row, col))
 			case "J":
 				let param = try get1Parameter(from: tokens, forCommand: c)
 				switch param {
-				case 0: result = CNEscapeCode.eraceFromCursorToEnd
-				case 1: result = CNEscapeCode.eraceFromCursorToBegin
-				case 2: result = CNEscapeCode.eraceEntireBuffer
+				case 0: results.append(CNEscapeCode.eraceFromCursorToEnd)
+				case 1: results.append(CNEscapeCode.eraceFromCursorToBegin)
+				case 2: results.append(CNEscapeCode.eraceEntireBuffer)
 				default:
 					throw DecodeError.invalidParameter(c, param)
 				}
 			case "K":
 				let param = try get1Parameter(from: tokens, forCommand: c)
 				switch param {
-				case 0: result = CNEscapeCode.eraceFromCursorToRight
-				case 1: result = CNEscapeCode.eraceFromCursorToLeft
-				case 2: result = CNEscapeCode.eraceEntireLine
+				case 0: results.append(CNEscapeCode.eraceFromCursorToRight)
+				case 1: results.append(CNEscapeCode.eraceFromCursorToLeft)
+				case 2: results.append(CNEscapeCode.eraceEntireLine)
 				default:
 					throw DecodeError.invalidParameter(c, param)
 				}
 			case "m":
-				let param = try get1Parameter(from: tokens, forCommand: c)
-				if param == 0 {
-					/* Reset status */
-					result = .setNormalAttributes
-				} else if 30<=param && param<=37 {
-					if let col = CNColor.color(withEscapeCode: Int32(param - 30)) {
-						result = .foregroundColor(col)
-					} else {
-						throw DecodeError.unknownCommand(c)
-					}
-				} else if 40<=param && param<=47 {
-					if let col = CNColor.color(withEscapeCode: Int32(param - 40)) {
-						result = .backgroundColor(col)
-					} else {
-						throw DecodeError.unknownCommand(c)
-					}
-				} else {
-					throw DecodeError.unknownCommand(c)
-				}
+				let params = try getParameters(from: tokens, count: tokennum - 1, forCommand: c)
+				results.append(contentsOf: try CNEscapeCode.decodeCharacterAttributes(parameters: params))
 			case "t":
 				let (param0, param1, param2) = try get3Parameter(from: tokens, forCommand: c)
 				switch param0 {
 				case 8:
-					result = .screenSize(param2, param1)
+					results.append(.screenSize(param2, param1))
 				case 18:
-					result = .requestScreenSize
+					results.append(.requestScreenSize)
 				default:
 					throw DecodeError.invalidParameter(c, 0)
 				}
@@ -465,7 +497,111 @@ public enum CNEscapeCode {
 		} else {
 			throw DecodeError.incompletedSequence
 		}
-		return (idx1, result)
+		return (idx1, results)
+	}
+
+	private static func decodeCharacterAttributes(parameters params: Array<Int>) throws -> Array<CNEscapeCode> {
+		var results: Array<CNEscapeCode> = []
+
+		var index: Int = 0
+		let paramnum = params.count
+		while index < paramnum {
+			let param = params[index]
+			if param == 0 {
+				/* Reset status */
+				results.append(.resetCharacterAttribute)
+				/* Next index */
+				index += 1
+			} else if param == 1 {
+				/* Reset status */
+				results.append(.boldCharacter(true))
+				/* Next index */
+				index += 1
+			} else if param == 4 {
+				/* Reset status */
+				results.append(.underlineCharacter(true))
+				/* Next index */
+				index += 1
+			} else if param == 5 {
+				/* Reset status */
+				results.append(.blinkCharacter(true))
+				/* Next index */
+				index += 1
+			} else if param == 7 {
+				/* Reset status */
+				results.append(.reverseCharacter(true))
+				/* Next index */
+				index += 1
+			} else if param == 22 {
+				/* Reset status */
+				results.append(.boldCharacter(false))
+				/* Next index */
+				index += 1
+			} else if param == 24 {
+				/* Reset status */
+				results.append(.underlineCharacter(false))
+				/* Next index */
+				index += 1
+			} else if param == 25 {
+				/* Reset status */
+				results.append(.blinkCharacter(false))
+				/* Next index */
+				index += 1
+			} else if param == 27 {
+				/* Reset status */
+				results.append(.reverseCharacter(false))
+				/* Next index */
+				index += 1
+			} else if 30<=param && param<=37 {
+				if let col = CNColor.color(withEscapeCode: Int32(param - 30)) {
+					results.append(.foregroundColor(col))
+				} else {
+					throw DecodeError.invalidParameter("m", param)
+				}
+				/* Next index */
+				index += 1
+			} else if param == 39 {
+				results.append(.defaultForegroundColor)
+				/* Next index */
+				index += 1
+			} else if 40<=param && param<=47 {
+				if let col = CNColor.color(withEscapeCode: Int32(param - 40)) {
+					results.append(.backgroundColor(col))
+				} else {
+					throw DecodeError.invalidParameter("m", param)
+				}
+				/* Next index */
+				index += 1
+			} else if param == 49 {
+				results.append(.defaultBackgroundColor)
+				/* Next index */
+				index += 1
+			} else {
+				throw DecodeError.invalidParameter("m", param)
+			}
+		}
+		return results
+	}
+
+	private static func getParameters(from tokens: Array<CNToken>, count tokennum: Int, forCommand c: Character) throws -> Array<Int> {
+		if tokennum > 0 {
+			var result: Array<Int> = []
+			for token in tokens[0..<tokennum] {
+				switch token.type {
+				case .IntToken(let val):
+					result.append(val)
+				case .SymbolToken(let c):
+					if c != ";" {
+						throw DecodeError.unexpectedCharacter(c)
+					}
+				default:
+					throw DecodeError.incompletedSequence
+				}
+			}
+			return result
+		} else {
+			return [0]
+		}
 	}
 
 	private static func get1Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> Int {

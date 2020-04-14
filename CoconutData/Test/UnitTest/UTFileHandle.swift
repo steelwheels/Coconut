@@ -13,7 +13,7 @@ public func testFileHandle(console cons: CNConsole) -> Bool
 	let hdl = FileHandle.standardInput
 	cons.print(string: "FileDescriptor = \(hdl.fileDescriptor)\n")
 
-	cons.print(string: "- Initial state")
+	cons.print(string: "- Initial state -> ")
 	printMode(fileHandle: hdl, console: cons)
 
 	cons.print(string: "- Set raw mode -> ")
@@ -36,6 +36,12 @@ public func testFileHandle(console cons: CNConsole) -> Bool
 }
 
 private func printMode(fileHandle hdl: FileHandle, console cons: CNConsole){
+	if hdl.isAtty() {
+		cons.print(string: "isatty: true,  ")
+	} else {
+		cons.print(string: "isatty: false, ")
+	}
+
 	if let mode = hdl.localMode {
 		cons.print(string: "local mode: \(mode.description)\n")
 	} else {

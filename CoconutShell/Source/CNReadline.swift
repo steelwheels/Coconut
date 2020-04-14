@@ -113,7 +113,14 @@ open class CNReadline
 			result = true
 		case .scrollUp, .scrollDown:
 			result = false			/* skipped */
-		case .foregroundColor(_), .backgroundColor(_), .setNormalAttributes:
+		case .resetCharacterAttribute,
+		     .foregroundColor(_), .defaultForegroundColor,
+		     .backgroundColor(_), .defaultBackgroundColor:
+			result = true			/* ignored */
+		case .boldCharacter(_),
+		     .blinkCharacter(_),
+		     .underlineCharacter(_),
+		     .reverseCharacter(_):
 			result = true			/* ignored */
 		case .requestScreenSize:
 			result = true			/* ignored */

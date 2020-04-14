@@ -15,10 +15,22 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 	let res2 = dumpCode(code: CNEscapeCode.cursorForward(3), console: cons)
 	let res3 = dumpCode(code: CNEscapeCode.cursorPoisition(1, 2), console: cons)
 	let res4 = dumpCode(code: CNEscapeCode.eraceEntireLine, console: cons)
-	let res6 = dumpCode(code: CNEscapeCode.foregroundColor(.white), console: cons)
-	let res7 = dumpCode(code: CNEscapeCode.backgroundColor(.red), console: cons)
-	let res8 = dumpCode(code: CNEscapeCode.setNormalAttributes, console: cons)
-	let res9 = dumpCode(code: CNEscapeCode.requestScreenSize, console: cons)
+
+	let res11 = dumpCode(code: CNEscapeCode.boldCharacter(true), console: cons)
+	let res12 = dumpCode(code: CNEscapeCode.boldCharacter(false), console: cons)
+	let res13 = dumpCode(code: CNEscapeCode.underlineCharacter(true), console: cons)
+	let res14 = dumpCode(code: CNEscapeCode.underlineCharacter(false), console: cons)
+	let res15 = dumpCode(code: CNEscapeCode.blinkCharacter(true), console: cons)
+	let res16 = dumpCode(code: CNEscapeCode.blinkCharacter(false), console: cons)
+	let res17 = dumpCode(code: CNEscapeCode.reverseCharacter(true), console: cons)
+	let res18 = dumpCode(code: CNEscapeCode.reverseCharacter(false), console: cons)
+
+	let res6  = dumpCode(code: CNEscapeCode.foregroundColor(.white), console: cons)
+	let res19 = dumpCode(code: CNEscapeCode.defaultForegroundColor, console: cons)
+	let res7  = dumpCode(code: CNEscapeCode.backgroundColor(.red), console: cons)
+	let res20 = dumpCode(code: CNEscapeCode.defaultBackgroundColor, console: cons)
+	let res8  = dumpCode(code: CNEscapeCode.resetCharacterAttribute, console: cons)
+	let res9  = dumpCode(code: CNEscapeCode.requestScreenSize, console: cons)
 	let res10 = dumpCode(code: CNEscapeCode.screenSize(80, 25), console: cons)
 
 	let str0 = CNEscapeCode.cursorNextLine(1).encode()
@@ -27,8 +39,8 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 	let res5 = dumpSequence(string: str, console: cons)
 
 	//cons.error(string: "Color message\n")
-
-	return res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10
+	return  res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 &&
+		res11 && res12 && res13 && res14 && res15 && res16 && res17 && res18 && res19 && res20
 }
 
 private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool {

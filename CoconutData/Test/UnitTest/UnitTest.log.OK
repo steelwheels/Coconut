@@ -231,7 +231,7 @@ buffer2
 after1
 * testFileHandle
 FileDescriptor = 0
-- Initial statelocal mode: <unknown>
+- Initial state -> isatty: false, local mode: <unknown>
 - Set raw mode -> Failed
 - Reset raw mode -> Failed
 * testFile
@@ -326,13 +326,43 @@ Same code
 eraceEntireLine
 Same code
 * dumpCode
+boldCharacter(true)
+Same code
+* dumpCode
+boldCharacter(false)
+Same code
+* dumpCode
+underlineCharacter(true)
+Same code
+* dumpCode
+underlineCharacter(false)
+Same code
+* dumpCode
+blinkCharacter(true)
+Same code
+* dumpCode
+blinkCharacter(false)
+Same code
+* dumpCode
+reverseCharacter(true)
+Same code
+* dumpCode
+reverseCharacter(false)
+Same code
+* dumpCode
 foregroundColor(white)
+Same code
+* dumpCode
+defaultForegroundColor
 Same code
 * dumpCode
 backgroundColor(red)
 Same code
 * dumpCode
-setNormalAttributes
+defaultBackgroundColor
+Same code
+* dumpCode
+resetCharacterAttribute
 Same code
 * dumpCode
 requestScreenSize
@@ -496,12 +526,18 @@ _a_b_c_d_e_f_g_h_i_j
 - Execute:eraceEntireLine
 _a_b_c_d_e_f_g_h_i_j_
 *a_b_c_d_e_f_g_h_i_j
+- Execute:boldCharacter(true)
+- Execute:underlineCharacter(true)
+- Execute:blinkCharacter(true)
+- Execute:reverseCharacter(true)
 - Execute:foregroundColor(red)
+- Execute:defaultForegroundColor
 - Execute:backgroundColor(blue)
+- Execute:defaultBackgroundColor
 - Execute:string("COLOR")
 _a_b_c_d_e_f_g_h_i_j_
 _C_O_L_O_R*f_g_h_i_j
-- Execute:setNormalAttributes
+- Execute:resetCharacterAttribute
 * testKeyBinding
 selectorName:insertNewline: -> [newline ]
 selectorName:insertNewlineIgnoringFieldEditor: -> [newline ]

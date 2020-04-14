@@ -130,5 +130,9 @@ extension FileHandle
 			return -1
 		}
 	}
+
+	public func isAtty() -> Bool {
+		return Darwin.isatty(self.fileDescriptor) != 0
+	}
 }
 

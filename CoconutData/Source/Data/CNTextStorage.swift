@@ -62,11 +62,23 @@ public extension NSMutableAttributedString
 			result = nil			// not accepted
 		case .scrollDown:
 			result = nil			// not accepted
+		case .resetCharacterAttribute:
+			result = nil			// not accepted
+		case .boldCharacter(_):
+			result = nil
+		case .underlineCharacter(_):
+			result = nil
+		case .blinkCharacter(_):
+			result = nil
+		case .reverseCharacter(_):
+			result = nil
 		case .foregroundColor(_):
+			result = nil
+		case .defaultForegroundColor:
 			result = nil
 		case .backgroundColor(_):
 			result = nil
-		case .setNormalAttributes:
+		case .defaultBackgroundColor:
 			result = nil
 		case .requestScreenSize:
 			result = nil 			// not accepted
