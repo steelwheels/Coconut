@@ -67,18 +67,17 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.resetCharacterAttribute
 	]
 	for ecode in ecodes {
-		let fcol = CNColor.green
-		let bcol = CNColor.black
+		let fmt  = CNStringFormat(foregroundColor: CNColor.green, backgroundColor: CNColor.black, doBold: false, doItalic: false, doUnderline: false, doReverse: false)
 		let font = CNFont.systemFont(ofSize: CNFont.systemFontSize)
-		idx = execute(string: str, index: idx, escapeCode: ecode, foregroundColor: fcol, backgroundColor: bcol, font: font, console: cons)
+		idx = execute(string: str, index: idx, escapeCode: ecode, font: font, format: fmt, console: cons)
 	}
 
 	return true
 }
 
-private func execute(string str: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, foregroundColor fcol: CNColor, backgroundColor bcol: CNColor, font fnt: CNFont, console cons: CNConsole) -> Int
+private func execute(string str: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, font fnt: CNFont, format fmt: CNStringFormat, console cons: CNConsole) -> Int
 {
-	if let result = str.execute(index: idx, foregroundColor: fcol, backgroundColor: bcol, font: fnt, escapeCode: ecode) {
+	if let result = str.execute(index: idx, font: fnt, format: fmt, escapeCode: ecode) {
 		cons.print(string: "- Execute:\(ecode.description())\n")
 		dump(index: result, string: str, console: cons)
 		return result

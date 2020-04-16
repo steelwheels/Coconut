@@ -7,7 +7,39 @@
 
 import Foundation
 
-public extension NSAttributedString {
+public struct CNStringFormat {
+	var foregroundColor	: CNColor
+	var backgroundColor	: CNColor
+	var doBold		: Bool
+	var doItalic		: Bool
+	var doUnderLine		: Bool
+	var doReverse		: Bool
+
+	public init(foregroundColor fcol: CNColor, backgroundColor bcol: CNColor, doBold bold: Bool, doItalic italic: Bool, doUnderline under: Bool, doReverse reverse: Bool) {
+		foregroundColor		= fcol
+		backgroundColor		= bcol
+		doBold			= bold
+		doItalic		= italic
+		doUnderLine		= under
+		doReverse		= reverse
+	}
+}
+
+public extension NSAttributedString
+{
+	convenience init(string str: String, font fnt: CNFont, format fmt: CNStringFormat) {
+		let newfont = CNFontManager.shared.convert(font: fnt, format: fmt)
+		var attr: [NSAttributedString.Key: Any] = [
+			NSAttributedString.Key.foregroundColor: fmt.foregroundColor,
+			NSAttributedString.Key.backgroundColor:	fmt.backgroundColor,
+			NSAttributedString.Key.font:		newfont
+		]
+		if fmt.doUnderLine {
+			attr[NSAttributedString.Key.underlineStyle] = NSNumber(integerLiteral: NSUnderlineStyle.single.rawValue)
+		}
+		self.init(string: str, attributes: attr)
+	}
+
 	func character(at index: Int) -> Character? {
 		if 0<=index && index<self.length {
 			let range  = NSRange(location: index, length: 1)

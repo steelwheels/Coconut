@@ -17,19 +17,6 @@ import UIKit
 
 public typealias CNFontManager = NSFontManager
 
-extension CNFontManager
-{
-	public var availableFixedPitchFonts: Array<String> {
-		get {
-			if let names = self.availableFontNames(with: .fixedPitchFontMask) {
-				return names
-			} else {
-				return []
-			}
-		}
-	}
-}
-
 #else
 
 public class CNFontManager
@@ -37,9 +24,15 @@ public class CNFontManager
 	public static let shared = CNFontManager()
 
 	private init() {
-		
-	}
 
+	}
+}
+
+#endif
+
+extension CNFontManager
+{
+	#if os(iOS)
 	public var availableFonts: Array<String> {
 		get {
 			var result: Array<String> = []
@@ -51,7 +44,19 @@ public class CNFontManager
 			return result
 		}
 	}
+	#endif
 
+	#if os(OSX)
+	public var availableFixedPitchFonts: Array<String> {
+		get {
+			if let names = self.availableFontNames(with: .fixedPitchFontMask) {
+				return names
+			} else {
+				return []
+			}
+		}
+	}
+	#else
 	public var availableFixedPitchFonts: Array<String> {
 		get {
 			/* Reference: https://stackoverflow.com/questions/9962994/what-is-a-monospace-font-in-ios/12592984 */
@@ -72,7 +77,33 @@ public class CNFontManager
 			return result
 		}
 	}
-}
+	#endif
 
-#endif
+	public func convert(font fnt: CNFont, format fmt: CNStringFormat) -> CNFont {
+		#if os(OSX)
+			var trait = NSFontTraitMask(rawValue: 0)
+			if fmt.doBold {
+				trait = NSFontTraitMask(rawValue: trait.rawValue | NSFontTraitMask.boldFontMask.rawValue)
+			}
+			if fmt.doItalic {
+				trait = NSFontTraitMask(rawValue: trait.rawValue | NSFontTraitMask.italicFontMask.rawValue)
+			}
+			return self.convert(fnt, toHaveTrait: trait)
+		#else
+			var trait: UInt32 = 0
+			if fmt.doBold {
+				trait |= UIFontDescriptor.SymbolicTraits.traitBold.rawValue
+			}
+			if fmt.doItalic {
+				trait |= UIFontDescriptor.SymbolicTraits.traitItalic.rawValue
+			}
+			if let desc = fnt.fontDescriptor.withSymbolicTraits(UIFontDescriptor.SymbolicTraits(rawValue: trait)) {
+				return UIFont(descriptor: desc, size: fnt.pointSize)
+			} else {
+				NSLog("Failed to convert")
+				return fnt
+			}
+		#endif
+	}
+}
 
