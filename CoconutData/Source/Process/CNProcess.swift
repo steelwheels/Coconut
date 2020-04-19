@@ -7,14 +7,19 @@
 
 import Foundation
 
-public protocol CNProcessStream
+public protocol CNProcessProtocol
 {
 	var	inputStream: 	CNFileStream { get }
 	var	outputStream:	CNFileStream { get }
 	var	errorStream:	CNFileStream { get }
+
+	var 	isRunning:	Bool { get }
+
+	func terminate()
+	func waitUntilExit() -> Int32
 }
 
-public extension CNProcessStream
+public extension CNProcessProtocol
 {
 	var inputFileHandle: FileHandle {
 		get { CNFileStream.streamToFileHandle(stream: inputStream, forInside: false, isInput: true) }
@@ -29,7 +34,7 @@ public extension CNProcessStream
 
 #if os(OSX)
 
-open class CNProcess: CNProcessStream
+open class CNProcess: CNProcessProtocol
 {
 	public typealias TerminationHandler	= (_ proc: Process) -> Void
 
@@ -50,9 +55,11 @@ open class CNProcess: CNProcessStream
 	public var status: Status { get { return mStatus }}
 	open   var terminationStatus:	Int32	    { get { return mProcess.terminationStatus			}}
 
-	public var inputStream: CNFileStream	{ get { return mInputStream	}}
-	public var outputStream: CNFileStream	{ get { return mOutputStream	}}
-	public var errorStream: CNFileStream	{ get { return mErrorStream	}}
+	public var inputStream: CNFileStream	{ get { return mInputStream		}}
+	public var outputStream: CNFileStream	{ get { return mOutputStream		}}
+	public var errorStream: CNFileStream	{ get { return mErrorStream		}}
+
+	public var isRunning: Bool		{ get { return mStatus == .Running 	}}
 
 	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, terminationHander termhdlr: TerminationHandler?) {
 		mStatus			= .Idle
@@ -105,13 +112,19 @@ open class CNProcess: CNProcessStream
 		let result: Int32
 		switch mStatus {
 		case .Idle, .Finished:
-			result = 1
+			result = mProcess.terminationStatus
 		case .Running:
 			mProcess.waitUntilExit()
 			closeStreams()
 			result = mProcess.terminationStatus
 		}
 		return result
+	}
+
+	public func terminate() {
+		if mProcess.isRunning {
+			mProcess.terminate()
+		}
 	}
 
 	private func closeStreams() {

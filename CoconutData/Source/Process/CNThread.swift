@@ -19,7 +19,7 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 	}
 }
 
-open class CNThread: CNProcessStream
+open class CNThread: CNProcessProtocol
 {
 	private var mQueue:			DispatchQueue
 	private var mSemaphore:			DispatchSemaphore
@@ -30,6 +30,7 @@ open class CNThread: CNProcessStream
 	private var mConsole:			CNFileConsole
 	private var mArguments:			Array<CNNativeValue>
 	private var mIsRunning:			Bool
+	private var mIsCancelled:		Bool
 	private var mTerminationStatus:		Int32
 
 	public var queue:		DispatchQueue	{ get { return mQueue		}}
@@ -39,6 +40,7 @@ open class CNThread: CNProcessStream
 	public var environment:		CNEnvironment	{ get { return mEnvironment	}}
 	public var console:      	CNFileConsole	{ get { return mConsole 	}}
 	public var isRunning:	 	Bool		{ get { return mIsRunning	}}
+	public var isCancelled:		Bool 		{ get { return mIsCancelled	}}
 
 	public init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
 		mQueue			= disque
@@ -49,6 +51,7 @@ open class CNThread: CNProcessStream
 		mEnvironment		= env
 		mArguments		= []
 		mIsRunning		= false
+		mIsCancelled		= false
 		mTerminationStatus	= -1
 
 		mConsole = CNFileConsole(input:  CNFileStream.streamToFileHandle(stream: instrm,  forInside: true, isInput: true),
@@ -65,17 +68,21 @@ open class CNThread: CNProcessStream
 	}
 
 	public func start(arguments args: Array<CNNativeValue>){
-		mArguments = args
-		mIsRunning = true
+		mArguments	= args
+		mIsRunning	= true
+		mIsCancelled 	= false
 		mQueue.async {
 			/* Enable secure access */
 			let homeurl  = CNPreference.shared.userPreference.homeDirectory
 			let issecure = homeurl.startAccessingSecurityScopedResource()
 
+			/* Execute main */
 			self.mTerminationStatus = self.main(arguments: self.mArguments)
+
+			/* Finalize */
+			self.mIsRunning = false
 			self.closeStreams()
 			self.mSemaphore.signal()
-			self.mIsRunning = false
 
 			/* Disable secure access */
 			if issecure {
@@ -92,6 +99,12 @@ open class CNThread: CNProcessStream
 	public func waitUntilExit() -> Int32 {
 		mSemaphore.wait()
 		return mTerminationStatus
+	}
+
+	public func terminate() {
+		if mIsRunning {
+			mIsCancelled = true
+		}
 	}
 
 	private func closeStreams() {

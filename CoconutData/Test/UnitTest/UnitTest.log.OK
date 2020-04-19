@@ -299,6 +299,7 @@ Finished1
 Done (2)
 testOperationQueue: OK
 * testProcess
+pid = 0
 Hello, World !!
 END of process
 Process is finished with exit code: 0

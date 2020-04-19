@@ -10,6 +10,7 @@ import Foundation
 public extension Character
 {
 	/* Reference: http://jkorpela.fi/chars/c0.html */
+	static var ETX		= Character("\u{03}")
 	static var EOT		= Character("\u{04}")
 	static var BS		= Character("\u{08}")
 	static var TAB		= Character("\u{09}")

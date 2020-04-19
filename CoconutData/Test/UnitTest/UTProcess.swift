@@ -10,6 +10,8 @@ import Foundation
 
 public func testProcess(console cons: CNFileConsole) -> Bool
 {
+	let manager = CNProcessManager()
+
 	let env     = CNEnvironment()
 	let process = CNProcess(input:  .fileHandle(cons.inputHandle),
 				output: .fileHandle(cons.outputHandle),
@@ -20,12 +22,16 @@ public func testProcess(console cons: CNFileConsole) -> Bool
 		cons.print(string: "END of process\n")
 	})
 
+	let pid = manager.add(groupId: 0, process: process)
+	cons.print(string: "pid = \(pid)\n")
+
 	//let input = process.inputFileHandle
 	process.execute(command: "echo \"Hello, World !!\"")
 	//input.write(string: "Hello, World !!")
 	//input.closeFile()
 
-	let ecode = process.waitUntilExit()
+	//let ecode = process.waitUntilExit()
+	let ecode = manager.waitUntilExit(groupId: 0)
 	cons.print(string: "Process is finished with exit code: \(ecode)\n")
 	return true
 }
