@@ -30,14 +30,13 @@ open class CNShellThread: CNThread
 
 	public var readline: CNReadline { get { return mReadline }}
 
-	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment){
-		let queue       = DispatchQueue(label: "CNShellThread", qos: .default, attributes: .concurrent)
+	public override init(processManager procmgr: CNProcessManager, queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment){
 		mReadline 	= CNReadline()
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mIsCancelled	= false
 		mTerminalWidth	= nil
 		mTerminalHeight	= nil
-		super.init(queue: queue, input: instrm, output: outstrm, error: errstrm, environment: env)
+		super.init(processManager: procmgr, queue: disque, input: instrm, output: outstrm, error: errstrm, environment: env)
 	}
 
 	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {

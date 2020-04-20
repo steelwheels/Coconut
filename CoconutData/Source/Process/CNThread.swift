@@ -21,6 +21,9 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 
 open class CNThread: CNProcessProtocol
 {
+	private weak var mProcessManager:	CNProcessManager?
+
+	private var mProcessId:			Int?
 	private var mQueue:			DispatchQueue
 	private var mSemaphore:			DispatchSemaphore
 	private var mInputStream:		CNFileStream
@@ -33,16 +36,23 @@ open class CNThread: CNProcessProtocol
 	private var mIsCancelled:		Bool
 	private var mTerminationStatus:		Int32
 
-	public var queue:		DispatchQueue	{ get { return mQueue		}}
-	public var inputStream:  	CNFileStream	{ get { return mInputStream	}}
-	public var outputStream: 	CNFileStream 	{ get { return mOutputStream	}}
-	public var errorStream:  	CNFileStream	{ get { return mErrorStream 	}}
-	public var environment:		CNEnvironment	{ get { return mEnvironment	}}
-	public var console:      	CNFileConsole	{ get { return mConsole 	}}
-	public var isRunning:	 	Bool		{ get { return mIsRunning	}}
-	public var isCancelled:		Bool 		{ get { return mIsCancelled	}}
+	public var processId: Int? {
+		get { return mProcessId }
+		set(pid) { mProcessId = pid}
+	}
 
-	public init(queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
+	public var processManager:	CNProcessManager?	{ get { return mProcessManager	}}
+	//public var queue:		DispatchQueue		{ get { return mQueue		}}
+	public var inputStream:  	CNFileStream		{ get { return mInputStream	}}
+	public var outputStream: 	CNFileStream 		{ get { return mOutputStream	}}
+	public var errorStream:  	CNFileStream		{ get { return mErrorStream 	}}
+	public var environment:		CNEnvironment		{ get { return mEnvironment	}}
+	public var console:      	CNFileConsole		{ get { return mConsole 	}}
+	public var isRunning:	 	Bool			{ get { return mIsRunning	}}
+	public var isCancelled:		Bool 			{ get { return mIsCancelled	}}
+
+	public init(processManager mgr: CNProcessManager, queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
+		mProcessManager		= mgr
 		mQueue			= disque
 		mSemaphore		= DispatchSemaphore(value: 0)
 		mInputStream		= instrm
@@ -65,12 +75,22 @@ open class CNThread: CNProcessProtocol
 	deinit {
 		/* Release raw mode */
 		let _ = self.inputStream.setRawMode(enable: false)
+		/* Remove from parent */
+		if let mgr = mProcessManager {
+			mgr.removeProcess(process: self)
+		}
 	}
 
 	public func start(arguments args: Array<CNNativeValue>){
 		mArguments	= args
 		mIsRunning	= true
 		mIsCancelled 	= false
+
+		/* Add to process table */
+		if let procmgr = mProcessManager {
+			self.processId = procmgr.addProcess(process: self)
+		}
+
 		mQueue.async {
 			/* Enable secure access */
 			let homeurl  = CNPreference.shared.userPreference.homeDirectory

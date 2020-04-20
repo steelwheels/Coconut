@@ -9,6 +9,9 @@ import Foundation
 
 public protocol CNProcessProtocol
 {
+	var 	processManager:	CNProcessManager? { get }
+	var 	processId:	Int? { get set }
+
 	var	inputStream: 	CNFileStream { get }
 	var	outputStream:	CNFileStream { get }
 	var	errorStream:	CNFileStream { get }
@@ -44,6 +47,8 @@ open class CNProcess: CNProcessProtocol
 		case Finished
 	}
 
+	private weak var mProcessManager:	CNProcessManager?
+	private var mProcessId:			Int?
 	private var mStatus:			Status
 	private var mProcess:			Process
 	private var mInputStream:		CNFileStream
@@ -52,16 +57,25 @@ open class CNProcess: CNProcessProtocol
 	private var mConsole:			CNConsole
 	private var mTerminationHandler:	TerminationHandler?
 
-	public var status: Status { get { return mStatus }}
-	open   var terminationStatus:	Int32	    { get { return mProcess.terminationStatus			}}
+	public var status: 		Status 		{ get { return mStatus 				}}
+	open   var terminationStatus:	Int32		{ get { return mProcess.terminationStatus	}}
 
-	public var inputStream: CNFileStream	{ get { return mInputStream		}}
-	public var outputStream: CNFileStream	{ get { return mOutputStream		}}
-	public var errorStream: CNFileStream	{ get { return mErrorStream		}}
+	public var processId: Int? {
+		get { return mProcessId }
+		set(pid) { mProcessId = pid}
+	}
+
+	public var processManager:	CNProcessManager?	{ get { return mProcessManager	}}
+	public var inputStream: 	CNFileStream		{ get { return mInputStream	}}
+	public var outputStream: 	CNFileStream		{ get { return mOutputStream	}}
+	public var errorStream: 	CNFileStream		{ get { return mErrorStream	}}
 
 	public var isRunning: Bool		{ get { return mStatus == .Running 	}}
 
-	public init(input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, terminationHander termhdlr: TerminationHandler?) {
+	public init(processManager mgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, terminationHander termhdlr: TerminationHandler?)
+	{
+		mProcessManager		= mgr
+		mProcessId		= nil
 		mStatus			= .Idle
 		mProcess		= Process()
 		mTerminationHandler	= termhdlr
@@ -92,7 +106,19 @@ open class CNProcess: CNProcessProtocol
 		}
 	}
 
+	deinit {
+		/* Remove from parent */
+		if let procmgr = mProcessManager {
+			procmgr.removeProcess(process: self)
+		}
+	}
+
 	public func execute(command cmd: String) {
+		/* Add to process table */
+		if let procmgr = mProcessManager {
+			self.processId = procmgr.addProcess(process: self)
+		}
+
 		/* Enable secure access */
 		let homeurl  = CNPreference.shared.userPreference.homeDirectory
 		let issecure = homeurl.startAccessingSecurityScopedResource()
