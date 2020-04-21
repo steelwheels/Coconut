@@ -121,7 +121,7 @@ open class CNThread: CNProcessProtocol
 		return mTerminationStatus
 	}
 
-	public func terminate() {
+	open func terminate() {
 		if mIsRunning {
 			mIsCancelled = true
 		}

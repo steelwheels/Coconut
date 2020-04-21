@@ -302,6 +302,10 @@ testOperationQueue: OK
 Hello, World !!
 END of process
 Process is finished with exit code: 0
+Execute process which can not be finished
+Terminate the process
+END of process
+Process is terminated with exit code: 15
 * testThread
 testSimpleThread: 1. Begin
 testSimpleThread: 3: ecode = 0

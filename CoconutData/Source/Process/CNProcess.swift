@@ -147,7 +147,7 @@ open class CNProcess: CNProcessProtocol
 		return result
 	}
 
-	public func terminate() {
+	open func terminate() {
 		if mProcess.isRunning {
 			mProcess.terminate()
 		}
