@@ -13,6 +13,8 @@ public class CNProcessManager
 	private var	mProcesses:		Dictionary<Int, CNProcessProtocol>
 	private var 	mChildProcessManager:	Array<CNProcessManager>
 
+	public var childProcessManagers: Array<CNProcessManager> { get { return mChildProcessManager }}
+
 	public init() {
 		mNextProcessId		= 0
 		mProcesses		= [:]
@@ -36,5 +38,18 @@ public class CNProcessManager
 
 	public func addChildManager(childManager mgr: CNProcessManager){
 		mChildProcessManager.append(mgr)
+	}
+
+	public func terminate() {
+		/* Terminate children first */
+		for child in mChildProcessManager {
+			//NSLog("\(#file): Terminate child processes")
+			child.terminate()
+		}
+		/* Terminate all processes */
+		for process in mProcesses.values {
+			//NSLog("\(#file): Terminate the processe")
+			process.terminate()
+		}
 	}
 }
