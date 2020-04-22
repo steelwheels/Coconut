@@ -32,7 +32,7 @@ public class UTNestedThread: CNThread {
 			//self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
 			newthread.start(arguments: [])
 			//self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
-			let ecode = newthread.waitUntilExit()
+			let _ = newthread.waitUntilExit()
 			//self.console.print(string: "testNestedThread\(mCount): 2.3 mainOperation/main/echode=\(ecode)\n")
 		}
 		//self.console.print(string: "testNestedThread\(mCount): 3.mainOperation/done\n")

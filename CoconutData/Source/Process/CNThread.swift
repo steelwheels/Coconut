@@ -124,6 +124,7 @@ open class CNThread: CNProcessProtocol
 	open func terminate() {
 		if mIsRunning {
 			mIsCancelled = true
+			mIsRunning   = false
 		}
 	}
 

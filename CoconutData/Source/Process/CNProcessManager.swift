@@ -11,10 +11,12 @@ public class CNProcessManager
 {
 	private var 	mNextProcessId:		Int
 	private var	mProcesses:		Dictionary<Int, CNProcessProtocol>
+	private var 	mChildProcessManager:	Array<CNProcessManager>
 
 	public init() {
-		mNextProcessId	= 0
-		mProcesses	= [:]
+		mNextProcessId		= 0
+		mProcesses		= [:]
+		mChildProcessManager	= []
 	}
 
 	public func addProcess(process proc: CNProcessProtocol) -> Int {
@@ -30,5 +32,9 @@ public class CNProcessManager
 		} else {
 			NSLog("CNProcessManager: Process with no pid")
 		}
+	}
+
+	public func addChildManager(childManager mgr: CNProcessManager){
+		mChildProcessManager.append(mgr)
 	}
 }
