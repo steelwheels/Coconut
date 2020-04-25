@@ -60,6 +60,28 @@ public extension CNColor
 		return (red, green, blue)
 	}
 
+	func toData() -> Data? {
+		do {
+			return try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+		}
+		catch let err as NSError {
+			NSLog("\(#file): \(err.description)")
+		}
+		return nil
+	}
+
+	static func decode(fromData data: Data) -> CNColor? {
+		do {
+			if let color = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [CNColor.self], from: data) as? CNColor {
+				return color
+			}
+		}
+		catch let err as NSError {
+			NSLog("\(#file): \(err.description)")
+		}
+		return nil
+	}
+
 	#if os(OSX)
 	func toDarwinColor() -> Int32 {
 		var result: Int32

@@ -148,6 +148,53 @@ open class CNPreferenceTable
 		}
 	}
 
+	/*
+	 * Color Dictionary
+	 */
+	public func set(colorDictionaryValue val: Dictionary<CNInterfaceStyle, CNColor>, forKey key: String) {
+		set(anyValue: val, forKey: key)
+	}
+
+	public func colorDictionaryValue(forKey key: String) -> Dictionary<CNInterfaceStyle, CNColor>? {
+		if let val = anyValue(forKey: key) as? Dictionary<CNInterfaceStyle, CNColor> {
+			return val
+		} else {
+			return nil
+		}
+	}
+
+	public func storeColorDictionaryValue(dataDictionaryValue val: Dictionary<CNInterfaceStyle, CNColor>, forKey key: String) {
+		let pathstr = path(keyString: key)
+
+		var stddict: Dictionary<String, Data> = [:]
+		for (key, value) in val {
+			if let data = value.toData() {
+				stddict[key.description] = data
+			}
+		}
+		UserDefaults.standard.set(stddict, forKey: pathstr)
+	}
+
+	public func loadColorDictionaryValue(forKey key: String) -> Dictionary<CNInterfaceStyle, CNColor>? {
+		let pathstr = path(keyString: key)
+		if let dict = UserDefaults.standard.dictionary(forKey: pathstr) as? Dictionary<String, Data> {
+			var result: Dictionary<CNInterfaceStyle, CNColor> = [:]
+			for (key, value) in dict {
+				if let style = CNInterfaceStyle.decode(name: key), let col = CNColor.decode(fromData: value) {
+					result[style] = col
+				} else {
+					NSLog("\(#file): Unknown interface: \(key)")
+				}
+			}
+			return result
+		} else {
+			return nil
+		}
+	}
+
+	/*
+	 * Observer
+	 */
 	public func addObserver(observer obs: NSObject, forKey key: String) {
 		mParameterTable.addObserver(obs, forKeyPath: key, options: [.new], context: nil)
 	}

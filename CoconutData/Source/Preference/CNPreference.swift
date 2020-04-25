@@ -55,6 +55,29 @@ open class CNConfig
 		logLevel = log
 	}
 }
+public enum CNInterfaceStyle: Int {
+	case light              = 0
+	case dark               = 1
+
+	public var description: String {
+		let result: String
+		switch self {
+		case .dark:	result = "dark"
+		case .light:	result = "light"
+		}
+		return result
+	}
+
+	public static func decode(name nm: String) -> CNInterfaceStyle? {
+		let style: CNInterfaceStyle?
+		switch nm {
+		case "dark":	style = .dark
+		case "light":	style = .light
+		default:	style = nil
+		}
+		return style
+	}
+}
 
 open class CNPreference
 {
@@ -83,13 +106,34 @@ public class CNSystemPreference: CNPreferenceTable
 {
 	public typealias LogLevel = CNConfig.LogLevel
 
-	public let LogLevelItem	= "logLevel"
+	public let LogLevelItem		= "logLevel"
+	public let InterfaceStyleItem	= "interfaceStrle"
 
 	public init(){
 		super.init(sectionName: "SystemPreference")
+
+		/* Set initial value */
 		let level: LogLevel = .error
 		super.set(intValue: level.rawValue, forKey: LogLevelItem)
+
+		let style = self.interfaceStyle
+		super.set(intValue: style.rawValue, forKey: InterfaceStyleItem)
+
+		/* Watch interface style switching */
+		#if os(OSX)
+			let center = DistributedNotificationCenter.default()
+			center.addObserver(self,
+					   selector: #selector(interfaceModeChanged(sender:)),
+					   name: NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"),
+					   object: nil)
+		#endif
 	}
+
+	@objc public func interfaceModeChanged(sender: NSNotification) {
+		let style = self.interfaceStyle
+		// NSLog("\(#file) interface mode changed: \(style.description)")
+		super.set(intValue: style.rawValue, forKey: InterfaceStyleItem)
+        }
 
 	public var logLevel: LogLevel {
 		get {
@@ -105,6 +149,26 @@ public class CNSystemPreference: CNPreferenceTable
 			super.set(intValue: level.rawValue, forKey: LogLevelItem)
 		}
 	}
+
+	public var interfaceStyle: CNInterfaceStyle {
+                get {
+                        let result: CNInterfaceStyle
+                        #if os(OSX)
+                                let appearance = NSApplication.shared.effectiveAppearance.name
+                                switch appearance {
+				case .aqua, .accessibilityHighContrastAqua, .accessibilityHighContrastVibrantLight, .vibrantLight:
+					result = .light
+				case .darkAqua, .accessibilityHighContrastDarkAqua, .accessibilityHighContrastVibrantDark, .vibrantDark:
+					result = .dark
+				default:
+					result = .light
+			}
+                        #else
+                                result = .light
+                        #endif
+                        return result
+                }
+        }
 }
 
 public class CNUserPreference: CNPreferenceTable
