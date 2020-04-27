@@ -11,12 +11,13 @@ import Foundation
 
 public func testProcess(console cons: CNConsole) -> Bool
 {
+	let procmgr = CNProcessManager()
 	let instrm  = CNFileStream.fileHandle(FileHandle.standardInput)
 	let outstrm = CNFileStream.fileHandle(FileHandle.standardOutput)
 	let errstrm = CNFileStream.fileHandle(FileHandle.standardError)
 	let env     = CNEnvironment()
 
-	let process = CNProcess(input: instrm, output: outstrm, error: errstrm, environment: env, terminationHander: {
+	let process = CNProcess(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, environment: env, terminationHander: {
 		(_ process: Process) -> Void in
 		cons.print(string: "[UTShell] Process finished\n")
 	})

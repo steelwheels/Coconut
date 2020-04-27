@@ -29,11 +29,13 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	let outpipe = Pipe()
 	let errpipe = Pipe()
 
+	let procmgr = CNProcessManager()
+	let queue   = DispatchQueue(label: "testShell", qos: .default, attributes: .concurrent)
 	let instrm  = CNFileStream.pipe(inpipe)
 	let outstrm = CNFileStream.pipe(outpipe)
 	let errstrm = CNFileStream.pipe(errpipe)
 	let env     = CNEnvironment()
-	let shell   = UTShellThread(input: instrm, output: outstrm, error: errstrm, environment: env)
+	let shell   = UTShellThread(processManager: procmgr, queue: queue, input: instrm, output: outstrm, error: errstrm, environment: env)
 
 	outpipe.fileHandleForReading.readabilityHandler = {
 		(_ hdl: FileHandle) -> Void in
@@ -58,6 +60,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 		inpipe.fileHandleForWriting.write(string: "command-1\n")
 		inpipe.fileHandleForWriting.write(string: "command-2\n")
 		inpipe.fileHandleForWriting.write(string: "command-3\n")
+		inpipe.fileHandleForWriting.write(string: "command-4\ncommand-5\ncommand-6\n")
 		inpipe.fileHandleForWriting.write(string: "a!1b\n")
 		inpipe.fileHandleForWriting.write(string: CNEscapeCode.eot.encode())
 		inpipe.fileHandleForWriting.closeFile()

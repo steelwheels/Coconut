@@ -50,6 +50,7 @@ public class CNCommandLine: Equatable
 			let curcmd = mCommandLine
 			let curpos = mCurrentPosition
 			replace(string: "")
+			mDidDetermined = false
 			return (curcmd, curpos)
 		} else {
 			return (mCommandLine, mCurrentPosition)

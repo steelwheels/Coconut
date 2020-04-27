@@ -35,6 +35,7 @@ private class UTReadline: CNReadline {
 			CNEscapeCode.cursorBackward(2).encode(),
 			CNEscapeCode.backspace.encode(),
 			CNEscapeCode.tab.encode(),
+			"This\ris\rmulti\rlines\nmessage.",
 			CNEscapeCode.eot.encode()	// End of transmission
 		]
 		messageIndex = 0
@@ -61,8 +62,9 @@ public func testReadline(console cons: CNFileConsole) -> Bool
 	while docont {
 		switch readline.readLine(console: cons) {
 		case .commandLine(let cmdline):
+			let det = cmdline.didDetermined
 			let (cmdstr, cmdpos) = cmdline.getAndClear()
-			cons.print(string: "CTXT: \(cmdpos) \(cmdstr)\n")
+			cons.print(string: "CMDLINE: \(cmdpos) \(cmdstr) \(det)\n")
 		case .escapeCode(let code):
 			switch code {
 			case .eot:

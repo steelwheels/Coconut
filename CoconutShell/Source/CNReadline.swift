@@ -39,13 +39,13 @@ open class CNReadline
 				let msg = "[Error] " + err.description()
 				cons.error(string: msg)
 			}
-			/* Get latest command */
-			if let code = mCurrentBuffer.pop() {
-				if decode(escapeCode: code) {
-					result = .commandLine(mCommandLines.currentCommand)
-				} else {
-					result = .escapeCode(code)
-				}
+		}
+		/* Get latest command */
+		if let code = mCurrentBuffer.pop() {
+			if decode(escapeCode: code) {
+				result = .commandLine(mCommandLines.currentCommand)
+			} else {
+				result = .escapeCode(code)
 			}
 		}
 		return result
