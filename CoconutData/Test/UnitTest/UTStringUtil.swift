@@ -25,6 +25,13 @@ public func testStringUtil(console cons: CNConsole) -> Bool
 	testDivideBySpaces(string: "12 23", console: cons)
 	testDivideBySpaces(string: " 23 34 ", console: cons)
 	testDivideBySpaces(string: " 34      4 5 ", console: cons)
+
+	testFirstWord(string: "a", console: cons)
+	testFirstWord(string: "b c d", console: cons)
+	testFirstWord(string: " e f g ", console: cons)
+	testFirstWord(string: "", console: cons)
+	testFirstWord(string: "/path/script.js `{args: \"a\"}`", console: cons)
+
 	return true
 }
 
@@ -65,5 +72,26 @@ private func testDivideBySpaces(string str: String, console cons: CNConsole) {
 		cons.print(string: "\"\(word)\" ")
 	}
 	cons.print(string: "]\n")
+}
+
+private func testFirstWord(string str: String, console cons: CNConsole)
+{
+	cons.print(string: "firstWord: \"\(str)\" => ")
+	let (first, rest) = CNStringUtil.cutFirstWord(string: str)
+
+	let firststr: String
+	if let s = first {
+		firststr = "\"\(s)\""
+	} else {
+		firststr = "<nil>"
+	}
+
+	let reststr: String
+	if let s = rest {
+		reststr = "\"\(s)\""
+	} else {
+		reststr = "<nil>"
+	}
+	cons.print(string: "(\(firststr), \(reststr))\n")
 }
 

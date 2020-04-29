@@ -154,4 +154,45 @@ public class CNStringUtil
 		}
 		return curidx
 	}
+
+	public class func skipHeadingSpaces(string str: String) -> String {
+		var idx = str.startIndex
+		let end = str.endIndex
+		if idx < end {
+			/* Skip space character */
+			while idx < end {
+				if str[idx].isWhitespace {
+					idx = str.index(after: idx)
+				} else {
+					break
+				}
+			}
+			return String(str[idx..<end])
+		} else {
+			return str
+		}
+	}
+
+	public class func cutFirstWord(string str: String) -> (String?, String?) {
+		let mstr = skipHeadingSpaces(string: str)
+		let head = mstr.startIndex
+		let end  = mstr.endIndex
+		var ptr  = head
+		if ptr < end {
+			/* Skip non space */
+			while ptr < end {
+				if !mstr[ptr].isWhitespace {
+					ptr = mstr.index(after: ptr)
+				} else {
+					let headstr = String(mstr[head..<ptr])
+					let tailstr = String(mstr[ptr..<end])
+					return (headstr, skipHeadingSpaces(string: tailstr))
+				}
+			}
+			/* Can not be divided */
+			return (mstr, nil)
+		} else {
+			return (nil, nil)
+		}
+	}
 }

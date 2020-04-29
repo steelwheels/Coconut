@@ -136,6 +136,11 @@ Delete backword 1 char ->"アイウエオ
 "12 23" => ["12" "23" ]
 " 23 34 " => ["23" "34" ]
 " 34      4 5 " => ["34" "4" "5" ]
+firstWord: "a" => ("a", <nil>)
+firstWord: "b c d" => ("b", "c d")
+firstWord: " e f g " => ("e", "f g ")
+firstWord: "" => (<nil>, <nil>)
+firstWord: "/path/script.js `{args: "a"}`" => ("/path/script.js", "`{args: "a"}`")
 * testCharacter
 "NUL":0x00 "SOH":0x01 "STX":0x02 "ETX":0x03 "EOT":0x04 "ENQ":0x05 "ACK":0x06 "BEL":0x07 
 "BS":0x08 "TAB":0x09 "LF":0x0a "VT":0x0b "FF":0x0c "CR":0x0d "SO":0x0e "SI":0x0f 
