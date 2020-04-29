@@ -31,7 +31,7 @@ open class CNThread: CNProcessProtocol
 	private var mErrorStream:		CNFileStream
 	private var mEnvironment:		CNEnvironment
 	private var mConsole:			CNFileConsole
-	private var mArguments:			Array<CNNativeValue>
+	private var mArgument:			CNNativeValue
 	private var mIsRunning:			Bool
 	private var mIsCancelled:		Bool
 	private var mTerminationStatus:		Int32
@@ -59,7 +59,7 @@ open class CNThread: CNProcessProtocol
 		mOutputStream		= outstrm
 		mErrorStream		= errstrm
 		mEnvironment		= env
-		mArguments		= []
+		mArgument		= .nullValue
 		mIsRunning		= false
 		mIsCancelled		= false
 		mTerminationStatus	= -1
@@ -81,8 +81,8 @@ open class CNThread: CNProcessProtocol
 		}
 	}
 
-	public func start(arguments args: Array<CNNativeValue>){
-		mArguments	= args
+	public func start(argument arg: CNNativeValue){
+		mArgument	= arg
 		mIsRunning	= true
 		mIsCancelled 	= false
 
@@ -97,7 +97,7 @@ open class CNThread: CNProcessProtocol
 			let issecure = homeurl.startAccessingSecurityScopedResource()
 
 			/* Execute main */
-			self.mTerminationStatus = self.main(arguments: self.mArguments)
+			self.mTerminationStatus = self.main(argument: self.mArgument)
 
 			/* Finalize */
 			self.mIsRunning = false
@@ -111,7 +111,7 @@ open class CNThread: CNProcessProtocol
 		}
 	}
 
-	open func main(arguments args: Array<CNNativeValue>) -> Int32 {
+	open func main(argument arg: CNNativeValue) -> Int32 {
 		mConsole.error(string: "\(#file): Override this method\n")
 		return -1
 	}

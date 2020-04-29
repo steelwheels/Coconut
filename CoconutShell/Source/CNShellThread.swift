@@ -39,7 +39,7 @@ open class CNShellThread: CNThread
 		super.init(processManager: procmgr, queue: disque, input: instrm, output: outstrm, error: errstrm, environment: env)
 	}
 
-	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {
+	open override func main(argument arg: CNNativeValue) -> Int32 {
 		/* Setup terminal */
 		while !mIsCancelled {
 			let BS  = CNEscapeCode.backspace.encode()

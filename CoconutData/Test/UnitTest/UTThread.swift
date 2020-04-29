@@ -9,7 +9,7 @@ import CoconutData
 import Foundation
 
 public class UTSimpleThread: CNThread {
-	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {
+	open override func main(argument arg: CNNativeValue) -> Int32 {
 		//self.console.print(string: "testSimpleThread: 2. MainOperation\n")
 		return 0
 	}
@@ -23,14 +23,14 @@ public class UTNestedThread: CNThread {
 		super.init(processManager: procmgr, queue: disque, input: instrm, output: outstrm, error: errstrm, environment: env)
 	}
 
-	open override func main(arguments args: Array<CNNativeValue>) -> Int32 {
+	open override func main(argument arg: CNNativeValue) -> Int32 {
 		let procmgr = CNProcessManager()
 		let queue   = DispatchQueue(label: "UTNestedThread", qos: .default, attributes: .concurrent)
 		//self.console.print(string: "testNestedThread\(mCount): 1.mainOperation/start\n")
 		if mCount < 3 {
 			let newthread = UTNestedThread(processManager: procmgr, queue: queue, input: self.inputStream, output: self.outputStream, error: self.errorStream, environment: self.environment, count: mCount + 1)
 			//self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
-			newthread.start(arguments: [])
+			newthread.start(argument: .nullValue)
 			//self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
 			let _ = newthread.waitUntilExit()
 			//self.console.print(string: "testNestedThread\(mCount): 2.3 mainOperation/main/echode=\(ecode)\n")
@@ -59,7 +59,7 @@ private func testSimpleThread(processManager procmgr: CNProcessManager, queue di
 				    output: 		.fileHandle(cons.outputHandle),
 				    error:  		.fileHandle(cons.errorHandle),
 				    environment: 	env)
-	thread.start(arguments: [])
+	thread.start(argument: .nullValue)
 	let ecode = thread.waitUntilExit()
 	cons.print(string: "testSimpleThread: 3: ecode = \(ecode)\n")
 	return true
@@ -75,7 +75,7 @@ private func testNestedThread(processManager procmgr: CNProcessManager, queue di
 				    error:  	.fileHandle(cons.errorHandle),
 				    environment: env,
 				    count: 	 0)
-	thread.start(arguments: [])
+	thread.start(argument: .nullValue)
 	let ecode = thread.waitUntilExit()
 	cons.print(string: "testNestedThread: 2. End code: \(ecode)\n")
 	return true
