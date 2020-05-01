@@ -79,7 +79,7 @@ public enum CNInterfaceStyle: Int {
 	}
 }
 
-open class CNPreference
+public class CNPreference
 {
 	public static let shared = CNPreference()
 
