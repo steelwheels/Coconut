@@ -164,5 +164,62 @@ public extension FileManager
 		}
 		return true
 	}
+
+	func setupFileSystem(console cons: CNConsole) -> NSError? {
+		do {
+			/* The base path is home directory */
+			let homedir = CNPreference.shared.userPreference.homeDirectory
+
+			/* Make default directories */
+			let targetdirs: Array<String> = ["Documents", "Library"]
+			for target in targetdirs {
+				let dstdir = homedir.appendingPathComponent(target)
+				switch checkFileType(pathString: dstdir.path) {
+				case .Directory, .File:
+					break // Nothing have to do
+				case .NotExist:
+					/* Make the directory */
+					cons.print(string: "Make directory: \(dstdir.path)\n")
+					try createDirectory(at: dstdir,
+							    withIntermediateDirectories: false,
+							    attributes: nil)
+				}
+			}
+			/* Copy files in source resource */
+			let srcdir   = Bundle.main.bundleURL.appendingPathComponent("Contents/Resources")
+			//cons.print(string: "Source dir: \(srcdir.path)\n")
+			for target in targetdirs {
+				let srcdir = srcdir.appendingPathComponent(target)
+				let dstdir = homedir.appendingPathComponent(target)
+				if fileExists(atURL: srcdir) {
+					switch checkFileType(pathString: srcdir.path) {
+					case .Directory:
+						let items = try contentsOfDirectory(atPath: srcdir.path)
+						for item in items {
+							let srcitem = srcdir.appendingPathComponent(item)
+							let dstitem = dstdir.appendingPathComponent(item)
+							if !fileExists(atURL: dstitem) {
+								cons.print(string: "Copy from \(srcitem.path) to \(dstitem.path)\n")
+								try copyItem(at: srcitem, to: dstitem)
+							} else {
+								cons.print(string: "The destination \(dstitem.path) is already exist\n")
+							}
+						}
+					case .File, .NotExist:
+						break
+					}
+				}
+			}
+			//cons.print(string: "Copy done\n")
+			return nil
+		} catch let err as NSError {
+			cons.error(string: "[Error] \(err.toString())")
+			return err
+		} catch {
+			let err = NSError.fileError(message: "Failed to setup file system")
+			cons.error(string: "[Error] \(err.toString())")
+			return err
+		}
+	}
 }
 
