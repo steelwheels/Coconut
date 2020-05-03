@@ -117,30 +117,6 @@ public extension URL
 	}
 #endif
 
-	static func relativePath(sourceURL src: URL, baseDirectory base: URL) -> URL {
-		let srccomp = src.pathComponents
-		let basecomp = base.pathComponents
-		let common = findLastCommonComponent(array0: srccomp, array1: basecomp)
-		if common > 0 {
-			var resultpath = ""
-			let updirs = basecomp.count - common
-			for _ in 0..<updirs {
-				resultpath = "../" + resultpath
-			}
-			var is1st : Bool = true
-			for comp in common ... srccomp.count-1 {
-				if is1st {
-					is1st = false
-				} else {
-					resultpath = resultpath + "/"
-				}
-				resultpath = resultpath + srccomp[comp]
-			}
-			return URL(fileURLWithPath: resultpath)
-		}
-		return src
-	}
-
 	func loadContents() -> NSString? {
 		var resstr: NSString? = nil
 		let issecure = startAccessingSecurityScopedResource()
@@ -156,19 +132,6 @@ public extension URL
 			stopAccessingSecurityScopedResource()
 		}
 		return resstr
-	}
-
-	private static func findLastCommonComponent(array0 s0: Array<String>, array1 s1: Array<String>) -> Int {
-		let s0count = s0.count
-		let s1count = s1.count
-		let count   = s0count < s1count ? s0count : s1count
-
-		for i in 0..<count {
-			if s0[i] != s1[i] {
-				return i
-			}
-		}
-		return count - 1
 	}
 }
 
