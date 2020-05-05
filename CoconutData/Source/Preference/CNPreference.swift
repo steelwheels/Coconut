@@ -138,7 +138,7 @@ public class CNSystemPreference: CNPreferenceTable
 
 	@objc public func interfaceModeChanged(sender: NSNotification) {
 		let style = self.interfaceStyle
-		// NSLog("\(#file) interface mode changed: \(style.description)")
+		//NSLog("\(#file) interface mode changed: \(style.description)")
 		super.set(intValue: style.rawValue, forKey: InterfaceStyleItem)
         }
 
@@ -163,17 +163,13 @@ public class CNSystemPreference: CNPreferenceTable
 
 	public var interfaceStyle: CNInterfaceStyle {
                 get {
-                        let result: CNInterfaceStyle
+			let result: CNInterfaceStyle
                         #if os(OSX)
-                                let appearance = NSApplication.shared.effectiveAppearance.name
-                                switch appearance {
-				case .aqua, .accessibilityHighContrastAqua, .accessibilityHighContrastVibrantLight, .vibrantLight:
-					result = .light
-				case .darkAqua, .accessibilityHighContrastDarkAqua, .accessibilityHighContrastVibrantDark, .vibrantDark:
+				if let _ = UserDefaults.standard.string(forKey: "AppleInterfaceStyle") {
 					result = .dark
-				default:
+				} else {
 					result = .light
-			}
+				}
                         #else
                                 result = .light
                         #endif
