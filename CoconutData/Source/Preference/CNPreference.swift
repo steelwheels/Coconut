@@ -129,11 +129,22 @@ public class CNSystemPreference: CNPreferenceTable
 		#endif
 	}
 
+	deinit {
+		#if os(OSX)
+			let center = DistributedNotificationCenter.default()
+			center.removeObserver(self)
+		#endif
+	}
+
 	@objc public func interfaceModeChanged(sender: NSNotification) {
 		let style = self.interfaceStyle
 		// NSLog("\(#file) interface mode changed: \(style.description)")
 		super.set(intValue: style.rawValue, forKey: InterfaceStyleItem)
         }
+
+	open func set(config conf: CNConfig){
+		self.logLevel = conf.logLevel
+	}
 
 	public var logLevel: LogLevel {
 		get {
@@ -309,9 +320,5 @@ extension CNPreference
 				return CNBookmarkPreference()
 		})
 	}}
-
-	open func set(config conf: CNConfig){
-		CNPreference.shared.systemPreference.logLevel = conf.logLevel
-	}
 }
 

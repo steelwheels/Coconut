@@ -12,7 +12,7 @@ public func testPreference(console cons: CNConsole) -> Bool
 {
 	let conf = CNConfig(logLevel: .flow)
 	let pref = CNPreference.shared
-	pref.set(config: conf)
+	pref.systemPreference.set(config: conf)
 
 	var result: Bool = false
 	switch pref.systemPreference.logLevel {
