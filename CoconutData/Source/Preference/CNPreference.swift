@@ -146,18 +146,13 @@ public class CNSystemPreference: CNPreferenceTable
 		self.logLevel = conf.logLevel
 	}
 
-	public var logLevel: LogLevel {
+	public var version: String {
 		get {
-			if let ival = super.intValue(forKey: LogLevelItem) {
-				if let level = CNConfig.LogLevel(rawValue: ival) {
-					return level
-				}
+			if let str = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+				return str
+			} else {
+				return "unknown"
 			}
-			NSLog("No defined value")
-			return CNConfig.LogLevel.detail
-		}
-		set(level){
-			super.set(intValue: level.rawValue, forKey: LogLevelItem)
 		}
 	}
 
@@ -176,6 +171,21 @@ public class CNSystemPreference: CNPreferenceTable
                         return result
                 }
         }
+
+	public var logLevel: LogLevel {
+		get {
+			if let ival = super.intValue(forKey: LogLevelItem) {
+				if let level = CNConfig.LogLevel(rawValue: ival) {
+					return level
+				}
+			}
+			NSLog("No defined value")
+			return CNConfig.LogLevel.detail
+		}
+		set(level){
+			super.set(intValue: level.rawValue, forKey: LogLevelItem)
+		}
+	}
 }
 
 public class CNUserPreference: CNPreferenceTable
