@@ -210,7 +210,8 @@ public extension NSAttributedString
 				curoff = 0
 			}
 			/* Get offset from given x */
-			let diff = x - curoff
+			let mx = x > 0 ? x - 1 : 0	// The start position is presented by 1
+			let diff = mx - curoff
 			if diff > 0 {
 				newidx = self.moveCursorForward(from: newidx,  number:  diff)
 			} else {
@@ -218,7 +219,7 @@ public extension NSAttributedString
 			}
 		}
 		if let y = ypos {
-			NSLog("Ignored y: \(y)")
+			NSLog("\(#file) Ignored y: \(y)")
 		}
 		return newidx
 	}

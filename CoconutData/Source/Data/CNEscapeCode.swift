@@ -458,7 +458,7 @@ public enum CNEscapeCode {
 			case "E": results.append(CNEscapeCode.cursorNextLine(try get1Parameter(from: tokens, forCommand: c)))
 			case "F": results.append(CNEscapeCode.cursorPreviousLine(try get1Parameter(from: tokens, forCommand: c)))
 			case "G": results.append(CNEscapeCode.cursorHolizontalAbsolute(try get1Parameter(from: tokens, forCommand: c)))
-			case "H": let (row, col) = try get2Parameter(from: tokens, forCommand: c)
+			case "H": let (row, col) = try get0Or2Parameter(from: tokens, forCommand: c)
 				  results.append(CNEscapeCode.cursorPoisition(row, col))
 			case "J":
 				let param = try get1Parameter(from: tokens, forCommand: c)
@@ -615,11 +615,13 @@ public enum CNEscapeCode {
 		throw DecodeError.invalidParameter(c, -1)
 	}
 
-	private static func get2Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> (Int, Int) {
+	private static func get0Or2Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> (Int, Int) {
 		if tokens.count == 4 {
 			if let p0 = tokens[0].getInt(), let p1 = tokens[2].getInt() {
 				return (p0, p1)
 			}
+		} else if tokens.count == 1 {
+			return (1, 1)	// give default values
 		}
 		throw DecodeError.invalidParameter(c, -1)
 	}
