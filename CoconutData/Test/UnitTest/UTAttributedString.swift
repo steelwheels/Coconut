@@ -8,43 +8,149 @@
 import CoconutData
 import Foundation
 
+private struct TestString {
+	var	text:		NSMutableAttributedString
+	var	index:		String.Index
+
+	public init(text txt: String, index idx: Int) {
+		let t = NSMutableAttributedString(string: txt)
+		self.text 	= t
+		self.index	= t.string.index(t.string.startIndex, offsetBy: idx)
+	}
+
+	public var string: String { get { return text.string }}
+
+	public func dump(console cons: CNConsole) {
+		var ptr = text.string.startIndex
+		let end = text.string.endIndex
+		cons.print(string: "-------- [begin]\n")
+		while ptr < end {
+			if ptr == index {
+				cons.print(string: "*")
+			} else {
+				cons.print(string: ".")
+			}
+			let c = text.string[ptr]
+			if c == " " {
+				cons.print(string: "_")
+			} else if c.isNewline {
+				cons.print(string: "$\n")
+			} else {
+				cons.print(string: "\(c)")
+			}
+			ptr = text.string.index(after: ptr)
+		}
+		if index == end {
+			cons.print(string: "*$")
+		}
+		cons.print(string: "\n-------- [end]\n")
+	}
+}
+
 public func testAttributedString(console cons: CNConsole) -> Bool
 {
-	let res0 = testSearchFunction(console: cons)
+	let vectors: Array<TestString> = [
+		TestString(text: "abc", index: 1),
+		TestString(text: "abc\ndef\nghi\n", index: 6)
+	]
+
+	var result = true
+	for vector in vectors {
+		if !testVector(vector: vector, console: cons) {
+			result = false
+		}
+	}
+
+	return result
+}
+
+private func testVector(vector src: TestString, console cons: CNConsole) -> Bool
+{
+	cons.print(string: "Start Vector Test --------------\n")
+	var vec = src
+	vec.dump(console: cons)
+
+	let cnt = vec.string.lineCount(from: vec.string.startIndex, to: vec.string.endIndex)
+	cons.print(string: "Line count = \(cnt)\n")
+
+	let hoff = vec.string.holizontalOffset(from: vec.index)
+	cons.print(string: "holizOffset = \(hoff)\n")
+
+	let hroff = vec.string.holizontalReverseOffset(from: vec.index)
+	cons.print(string: "holizReverseOffset = \(hroff)\n")
+
+	cons.print(string: "moveCursorBackward(1)\n")
+	vec.index = vec.string.moveCursorBackward(from: vec.index, number: 1)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorBackward(2)\n")
+	vec.index = vec.string.moveCursorBackward(from: vec.index, number: 2)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorForward(3)\n")
+	vec.index = vec.string.moveCursorForward(from: vec.index, number: 3)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorForward(4)\n")
+	vec.index = vec.string.moveCursorForward(from: vec.index, number: 4)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorToLineStart\n")
+	vec.index = vec.string.moveCursorToLineStart(from: vec.index)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorToLineEnd\n")
+	vec.index = vec.string.moveCursorToLineEnd(from: vec.index)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorUpOrDown(up, 1)\n")
+	vec.index = vec.string.moveCursorUpOrDown(from: vec.index, doUp: true, number: 1)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorUpOrDown(down, 2)\n")
+	vec.index = vec.string.moveCursorUpOrDown(from: vec.index, doUp: false, number: 2)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorTo(x=1)\n")
+	vec.index = vec.string.moveCursorTo(from: vec.index, x: 1)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorTo(x=0, y=1)\n")
+	vec.index = vec.string.moveCursorTo(base: vec.string.startIndex, x: 0, y: 1)
+	vec.dump(console: cons)
+
+	cons.print(string: "write(\"ABCD\")\n")
+	vec.index = vec.text.write(string: NSAttributedString(string: "ABCD"), at: vec.index)
+	vec.dump(console: cons)
+
+	cons.print(string: "moveCursorBackward(2)\n")
+	vec.index = vec.string.moveCursorBackward(from: vec.index, number: 2)
+	vec.dump(console: cons)
+
+	cons.print(string: "deleteForwardCharacters(1)\n")
+	vec.index = vec.text.deleteForwardCharacters(from: vec.index, number: 1)
+	vec.dump(console: cons)
+
+	cons.print(string: "deleteBackwardCharacters(1)\n")
+	vec.index = vec.text.deleteBackwardCharacters(from: vec.index, number: 1)
+	vec.dump(console: cons)
+
+	cons.print(string: "deleteEntireLine\n")
+	vec.index = vec.text.deleteEntireLine(from: vec.index)
+	vec.dump(console: cons)
+	
+	return true
+}
+
+/*
+public func testAttributedString(console cons: CNConsole) -> Bool
+{
 	let res1 = testMoveHolizFunction(console: cons)
 	let res2 = testMoveVertFunction(console: cons)
 	let res3 = testDeleteFunction(console: cons)
 	let res4 = testWriteFunction(console: cons)
 	let res5 = testJapaneseFunction(console: cons)
-	return res0 && res1 && res2 && res3 && res4 && res5
-}
-
-private func testSearchFunction(console cons: CNConsole) -> Bool
-{
-	let str1 = NSAttributedString(string: "0123456789")
-	printAttributedString(string: str1, cursor: 4, console: cons)
-
-	cons.print(string: "**** Search forward  5 -> ")
-	let off2 = str1.searchForward(character: "5", from: 4)
-	printOffset(offset: off2, console: cons)
-
-	cons.print(string: "**** Search forward  X -> ")
-	let off3 = str1.searchForward(character: "X", from: 4)
-	printOffset(offset: off3, console: cons)
-
-	cons.print(string: "**** Search backward 1 -> ")
-	let off4 = str1.searchBackward(character: "1", from: 4)
-	printOffset(offset: off4, console: cons)
-
-	cons.print(string: "**** Search backward 3 -> ")
-	let off5 = str1.searchBackward(character: "3", from: 4)
-	printOffset(offset: off5, console: cons)
-
-	cons.print(string: "**** Search backward X -> ")
-	let off6 = str1.searchBackward(character: "X", from: 4)
-	printOffset(offset: off6, console: cons)
-
-	return true
+	return res1 && res2 && res3 && res4 && res5
 }
 
 private func testMoveHolizFunction(console cons: CNConsole) -> Bool
@@ -58,7 +164,7 @@ private func testMoveHolizFunction(console cons: CNConsole) -> Bool
 	printAttributedString(string: str1, cursor: pos0, console: cons)
 
 	cons.print(string: "**** Move forward: 1 -> ")
-	let pos2 = str1.moveCursorForward(from: pos0, number: 1)
+	let pos2 = str1.string.moveCursorForward(from: pos0, number: 1)
 	printAttributedString(string: str1, cursor: pos2, console: cons)
 
 	cons.print(string: "**** Move forward: 10 -> ")
@@ -252,4 +358,6 @@ private func printOffset(offset ofst: Int?, console cons: CNConsole) {
 		cons.print(string: "Offset = nil\n")
 	}
 }
+
+*/
 

@@ -21,97 +21,188 @@ IdentifierToken(e01)
 Decoded value: 1234 ... OK
 Remained: a .. OK
 * testAttributedString
-"0123*456789"
-**** Search forward  5 -> Offset = 1
-**** Search forward  X -> Offset = nil
-**** Search backward 1 -> Offset = 2
-**** Search backward 3 -> Offset = 0
-**** Search backward X -> Offset = nil
-**** Original String   -> "abcdefg
-01234*56789
-abcdefg"
-**** Move forward: 1 -> "abcdefg
-012345*6789
-abcdefg"
-**** Move forward: 10 -> "abcdefg
-0123456789*
-abcdefg"
-**** Move backward: 2 -> "abcdefg
-01234567*89
-abcdefg"
-**** Move backward: 10 -> "abcdefg
-*0123456789
-abcdefg"
-Expected last position: 8
-"0123*456789"
-**** Move forward: 1 -> "01234*56789"
-**** Move forward: 10 -> "0123456789*"
-**** Move backward: 3 -> "0123456*789"
-**** Move backward: 10 -> "*0123456789"
-Expected last position: 0
-**** Original String   -> "abcdefg
-0123*456789
-abcdefg"
-**** Move down: 1(true) -> "abcdefg
-0123456789
-*abcdefg"
-**** Move down: 1(false) -> "abcdefg
-0123456789
-abcd*efg"
-**** Move up: 1(true) -> "*abcdefg
-0123456789
-abcdefg"
-**** Move up: 1(false) -> "abcd*efg
-0123456789
-abcdefg"
-**** Original String   -> "abcdefg
-01234*56789
-abcdefg"
-**** Delete forward: 1 -> "abcdefg
-01234*6789
-abcdefg"
-**** Delete backward: 1 -> "abcdefg
-0123*6789
-abcdefg"
-**** Delete forward: 10 -> "abcdefg
-0123*
-abcdefg"
-**** Delete backward: 10 -> "abcdefg
-*
-abcdefg"
-**** Delete forward: 5 -> "abcdefg
-*
-abcdefg"
-**** Delete backward: 5 -> "abcdefg
-*
-abcdefg"
-**** Delete entire-line -> "abcdefg
-*abcdefg"
-**** Original String   -> "abcdefg
-0123*456789
-abcdefg"
-**** Write String  -> "abcdefg
-0123Hello*9
-abcdefg"
-**** Write String  -> "abcdefg
-0123Hello,Good-Morning*
-abcdefg"
-**** Write String  -> "abcdefg
-0123Hello,Good-Morning,Goot-Night*
-abcdefg"
-Expected last position: 41
-**** Original String   -> "アイウエオ
-あ1い*2う3え4お5
-かきくけこ"
-Delete forward 1 char ->"アイウエオ
-あ1い*う3え4お5
-かきくけこ"
-Delete forward 1 char ->"アイウエオ
-あ1い*3え4お5
-かきくけこ"
-Delete backword 1 char ->"アイウエオ
-あ1*3え4お5
-かきくけこ"
+Start Vector Test --------------
+-------- [begin]
+.a*b.c
+-------- [end]
+Line count = 0
+holizOffset = 1
+holizReverseOffset = 2
+moveCursorBackward(1)
+-------- [begin]
+*a.b.c
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+*a.b.c
+-------- [end]
+moveCursorForward(3)
+-------- [begin]
+.a.b.c*$
+-------- [end]
+moveCursorForward(4)
+-------- [begin]
+.a.b.c*$
+-------- [end]
+moveCursorToLineStart
+-------- [begin]
+*a.b.c
+-------- [end]
+moveCursorToLineEnd
+-------- [begin]
+.a.b.c*$
+-------- [end]
+moveCursorUpOrDown(up, 1)
+-------- [begin]
+.a.b.c*$
+-------- [end]
+moveCursorUpOrDown(down, 2)
+-------- [begin]
+.a.b.c*$
+-------- [end]
+moveCursorTo(x=1)
+-------- [begin]
+.a*b.c
+-------- [end]
+moveCursorTo(x=0, y=1)
+-------- [begin]
+*a.b.c
+-------- [end]
+write("ABCD")
+-------- [begin]
+.A.B.C.D*$
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+.A.B*C.D
+-------- [end]
+deleteForwardCharacters(1)
+-------- [begin]
+.A.B*D
+-------- [end]
+deleteBackwardCharacters(1)
+-------- [begin]
+.A*D
+-------- [end]
+deleteEntireLine
+-------- [begin]
+*$
+-------- [end]
+Start Vector Test --------------
+-------- [begin]
+.a.b.c.$
+.d.e*f.$
+.g.h.i.$
+
+-------- [end]
+Line count = 3
+holizOffset = 2
+holizReverseOffset = 1
+moveCursorBackward(1)
+-------- [begin]
+.a.b.c.$
+.d*e.f.$
+.g.h.i.$
+
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+.a.b.c.$
+*d.e.f.$
+.g.h.i.$
+
+-------- [end]
+moveCursorForward(3)
+-------- [begin]
+.a.b.c.$
+.d.e.f*$
+.g.h.i.$
+
+-------- [end]
+moveCursorForward(4)
+-------- [begin]
+.a.b.c.$
+.d.e.f*$
+.g.h.i.$
+
+-------- [end]
+moveCursorToLineStart
+-------- [begin]
+.a.b.c.$
+*d.e.f.$
+.g.h.i.$
+
+-------- [end]
+moveCursorToLineEnd
+-------- [begin]
+.a.b.c.$
+.d.e.f*$
+.g.h.i.$
+
+-------- [end]
+moveCursorUpOrDown(up, 1)
+-------- [begin]
+.a.b.c*$
+.d.e.f.$
+.g.h.i.$
+
+-------- [end]
+moveCursorUpOrDown(down, 2)
+-------- [begin]
+.a.b.c.$
+.d.e.f.$
+.g.h.i*$
+
+-------- [end]
+moveCursorTo(x=1)
+-------- [begin]
+.a.b.c.$
+.d.e.f.$
+.g*h.i.$
+
+-------- [end]
+moveCursorTo(x=0, y=1)
+-------- [begin]
+.a.b.c.$
+*d.e.f.$
+.g.h.i.$
+
+-------- [end]
+write("ABCD")
+-------- [begin]
+.a.b.c.$
+.A.B.C.D*$
+.g.h.i.$
+
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+.a.b.c.$
+.A.B*C.D.$
+.g.h.i.$
+
+-------- [end]
+deleteForwardCharacters(1)
+-------- [begin]
+.a.b.c.$
+.A.B*D.$
+.g.h.i.$
+
+-------- [end]
+deleteBackwardCharacters(1)
+-------- [begin]
+.a.b.c.$
+.A*D.$
+.g.h.i.$
+
+-------- [end]
+deleteEntireLine
+-------- [begin]
+.a.b.c.$
+*$
+.g.h.i.$
+
+-------- [end]
 * testStringUtil
 "padding---"
 "0123456789"
@@ -396,145 +487,221 @@ cyan : OK
 white : OK
 * testTextStorage
 - Initial state
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3*4_5_6_7_8_9_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3*4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:string("Hello")
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o*9_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o*9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:string("Good-morning!!")
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_!*
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!*$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorBack(14)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o*G_o_o_d_-_m_o_r_n_i_n_g_!_!_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o*G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:backspace
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l*o_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:newline
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_!_
-*
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l*$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:backspace
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_!*
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l*l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:delete
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!*
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e*l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorUp(1)
-_a_b_c_d_e_f_g_h_i_j*
-_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f*g.h.i.j.$
+.0.1.2.3.H.e.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorDown(1)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G*o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e*l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorForward(1)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G_o*o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l*$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorBack(1)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G*o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e*l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorForward(20)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!*
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l*$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorBack(20)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1*2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+*0.1.2.3.H.e.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorForward(5)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l*l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H*e.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorNextLine(2)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
-_
-*a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e*f.g.h.i.j
+-------- [end]
 - Execute:cursorPreviousLine(2)
-_a_b_c_d_e_f_g_h_i_j_
-*0_1_2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H*e.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorHolizontalAbsolute(4)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3*H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3*H.e.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorHolizontalAbsolute(2)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1*2_3_H_e_l_l_o_G_o_o_d_-_m_o_r_n_i_n_g_!_
-_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1*2.3.H.e.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:eraceFromCursorToEnd
-_a_b_c_d_e_f_g_h_i_j_
-_0_1*
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1*$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:eraceFromCursorToBegin
-*
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+*$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:string("abcdefghij
 0123456789
 abcdefghij")
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_4_5_6_7_8_9_
-_a_b_c_d_e_f_g_h_i_j*
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.a.b.c.d.e.f.g.h.i.j*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorBack(5)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_4_5_6_7_8_9_
-_a_b_c_d_e*f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.a.b.c.d.e*f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:eraceEntireBuffer
-*
+-------- [begin]
+*$
+-------- [end]
 - Execute:string("abcdefghij
 0123456789
 abcdefghij")
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_4_5_6_7_8_9_
-_a_b_c_d_e_f_g_h_i_j*
+-------- [begin]
+.a.b.c.d.e.f.g.h.i.j*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorBack(5)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_4_5_6_7_8_9_
-_a_b_c_d_e*f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e*f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorUp(1)
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_4*5_6_7_8_9_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e*f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:eraceFromCursorToRight
-_a_b_c_d_e_f_g_h_i_j_
-_0_1_2_3_4*
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.a.b.c.d.e*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:eraceFromCursorToLeft
-_a_b_c_d_e_f_g_h_i_j_
-*
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:string("inserted")
-_a_b_c_d_e_f_g_h_i_j_
-_i_n_s_e_r_t_e_d*
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.i.n.s.e.r.t.e.d*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:cursorBack(5)
-_a_b_c_d_e_f_g_h_i_j_
-_i_n_s*e_r_t_e_d_
-_a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+.i.n.s*e.r.t.e.d.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:eraceEntireLine
-_a_b_c_d_e_f_g_h_i_j_
-*a_b_c_d_e_f_g_h_i_j
+-------- [begin]
+*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:boldCharacter(true)
 - Execute:underlineCharacter(true)
 - Execute:blinkCharacter(true)
@@ -544,8 +711,11 @@ _a_b_c_d_e_f_g_h_i_j_
 - Execute:backgroundColor(blue)
 - Execute:defaultBackgroundColor
 - Execute:string("COLOR")
-_a_b_c_d_e_f_g_h_i_j_
-_C_O_L_O_R*f_g_h_i_j
+-------- [begin]
+.C.O.L.O.R*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:resetCharacterAttribute
 * testKeyBinding
 selectorName:insertNewline: -> [newline ]

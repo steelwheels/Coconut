@@ -16,7 +16,7 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		+ "abcdefghij"
 	)
 
-	var idx = 15
+	var idx = str.string.index(str.string.startIndex, offsetBy: 15)
 
 	cons.print(string: "- Initial state\n")
 	dump(index: idx, string: str, console: cons)
@@ -24,6 +24,7 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 	let ecodes: Array<CNEscapeCode> = [
 		.string("Hello"),
 		.string("Good-morning!!"),
+		//.string("Good\nevening!!"),
 		.cursorBackward(14),		// len("Good-morning!!")
 		//.newline,
 		//.tab,
@@ -75,36 +76,41 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 	return true
 }
 
-private func execute(string str: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, font fnt: CNFont, format fmt: CNStringFormat, console cons: CNConsole) -> Int
+private func execute(string str: NSMutableAttributedString, index idx: String.Index, escapeCode ecode: CNEscapeCode, font fnt: CNFont, format fmt: CNStringFormat, console cons: CNConsole) -> String.Index
 {
-	if let result = str.execute(index: idx, font: fnt, format: fmt, escapeCode: ecode) {
-		cons.print(string: "- Execute:\(ecode.description())\n")
+	cons.print(string: "- Execute:\(ecode.description())\n")
+	if let result = str.execute(base: str.string.startIndex, index: idx, doInsert: false, font: fnt, format: fmt, escapeCode: ecode) {
 		dump(index: result, string: str, console: cons)
 		return result
 	} else {
-		cons.print(string: "- Execute:\(ecode.description())\n")
 		return idx
 	}
 }
 
-private func dump(index idx: Int, string str: NSAttributedString, console cons: CNConsole)
+private func dump(index idx: String.Index, string astr: NSAttributedString, console cons: CNConsole)
 {
-	let	len = str.length
-	for i in 0..<len {
-		if i == idx {
+	let str = astr.string
+	var ptr = str.startIndex
+	let end = str.endIndex
+	cons.print(string: "-------- [begin]\n")
+	while ptr < end {
+		if ptr == idx {
 			cons.print(string: "*")
 		} else {
+			cons.print(string: ".")
+		}
+		let c = str[ptr]
+		if c == " " {
 			cons.print(string: "_")
-
-		}
-		if let c = str.character(at: i) {
-			cons.print(string: "\(c)")
+		} else if c.isNewline {
+			cons.print(string: "$\n")
 		} else {
-			cons.print(string: "?")
+			cons.print(string: "\(c)")
 		}
+		ptr = str.index(after: ptr)
 	}
-	if idx == len {
-		cons.print(string: "*")
+	if idx == end {
+		cons.print(string: "*$")
 	}
-	cons.print(string: "\n")
+	cons.print(string: "\n-------- [end]\n")
 }
