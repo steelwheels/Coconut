@@ -9,6 +9,10 @@ import Foundation
 
 public class CNEnvironment
 {
+	private static var	ColmunsItem	= "COLUMNS"
+	private static var	LinesItem	= "LINES"
+
+
 	private var mEnvironmentVariable: Dictionary<String, String>
 
 	public var variables: Dictionary<String, String> {
@@ -17,8 +21,10 @@ public class CNEnvironment
 
 	public init(){
 		mEnvironmentVariable = [
-			"TMPDIR" : FileManager.default.temporaryDirectory.path,
-			"PWD"    : FileManager.default.currentDirectoryPath
+			"TMPDIR"			: FileManager.default.temporaryDirectory.path,
+			"PWD"				: FileManager.default.currentDirectoryPath,
+			CNEnvironment.ColmunsItem	: "0",
+			CNEnvironment.LinesItem		: "0"
 		]
 	}
 
@@ -53,6 +59,34 @@ public class CNEnvironment
 		}
 		set(newdir){
 			set(name: "TMPDIR", string: newdir.path)
+		}
+	}
+
+	public var columns: Int {
+		get {
+			if let str = get(name: CNEnvironment.ColmunsItem) {
+				if let val = Int(str) {
+					return val
+				}
+			}
+			fatalError("Can not happen (3)")
+		}
+		set(newval){
+			set(name: CNEnvironment.ColmunsItem, string: newval.description)
+		}
+	}
+
+	public var lines: Int {
+		get {
+			if let str = get(name: CNEnvironment.LinesItem) {
+				if let val = Int(str) {
+					return val
+				}
+			}
+			fatalError("Can not happen (4)")
+		}
+		set(newval){
+			set(name: CNEnvironment.LinesItem, string: newval.description)
 		}
 	}
 }

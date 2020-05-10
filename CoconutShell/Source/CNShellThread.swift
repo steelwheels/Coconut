@@ -25,8 +25,6 @@ open class CNShellThread: CNThread
 	private var mReadline:		CNReadline
 	private var mReadlineStatus:	ReadlineStatus
 	private var mIsCancelled:	Bool
-	private var mTerminalWidth:	Int?
-	private var mTerminalHeight:	Int?
 
 	public var readline: CNReadline { get { return mReadline }}
 
@@ -34,8 +32,6 @@ open class CNShellThread: CNThread
 		mReadline 	= CNReadline()
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mIsCancelled	= false
-		mTerminalWidth	= nil
-		mTerminalHeight	= nil
 		super.init(processManager: procmgr, queue: disque, input: instrm, output: outstrm, error: errstrm, environment: env)
 	}
 
@@ -108,9 +104,9 @@ open class CNShellThread: CNThread
 			case .escapeCode(let code):
 				switch code {
 				case .screenSize(let width, let height):
-					self.mTerminalWidth	= width
-					self.mTerminalHeight	= height
 					NSLog("Update terminal info: \(width) \(height)")
+					environment.columns	= width
+					environment.lines	= height
 				case .eot:
 					cancel()
 				default:
