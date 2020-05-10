@@ -36,6 +36,10 @@ open class CNShellThread: CNThread
 	}
 
 	open override func main(argument arg: CNNativeValue) -> Int32 {
+		/* Request updating screen size */
+		let reqsz  = CNEscapeCode.requestScreenSize
+		self.console.print(string: reqsz.encode())
+
 		/* Setup terminal */
 		while !mIsCancelled {
 			let BS  = CNEscapeCode.backspace.encode()

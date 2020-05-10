@@ -21,8 +21,8 @@ public class CNCurses
 	public var lines:   Int { get { return mEnvironment.lines	}}
 
 	public func start() {
-		let code = CNEscapeCode.selectAltScreen(true)
-		mConsole.print(string: code.encode())
+		let selalt = CNEscapeCode.selectAltScreen(true)
+		mConsole.print(string: selalt.encode())
 	}
 
 	public func end() {
