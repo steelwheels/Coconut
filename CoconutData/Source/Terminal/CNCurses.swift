@@ -21,8 +21,12 @@ public class CNCurses
 	public var lines:   Int { get { return mEnvironment.lines	}}
 
 	public func start() {
+		/* Select alternative screen */
 		let selalt = CNEscapeCode.selectAltScreen(true)
 		mConsole.print(string: selalt.encode())
+		/* Clear the buffer */
+		let erace = CNEscapeCode.eraceEntireBuffer
+		mConsole.print(string: erace.encode())
 	}
 
 	public func end() {
@@ -33,7 +37,7 @@ public class CNCurses
 	public func moveTo(x xpos: Int, y ypos: Int) {
 		let x    = max(0, min(xpos, mEnvironment.columns - 1))
 		let y    = max(0, min(ypos, mEnvironment.lines   - 1))
-		let code = CNEscapeCode.cursorPoisition(x, y)
+		let code = CNEscapeCode.cursorPoisition(y, x)
 		mConsole.print(string: code.encode())
 	}
 }

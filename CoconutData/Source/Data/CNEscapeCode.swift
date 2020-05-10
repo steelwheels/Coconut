@@ -109,7 +109,7 @@ public enum CNEscapeCode {
 		case .cursorNextLine(let n):			result = "\(ESC)[\(n)E"
 		case .cursorPreviousLine(let n):		result = "\(ESC)[\(n)F"
 		case .cursorHolizontalAbsolute(let n):		result = "\(ESC)[\(n)G"
-		case .cursorPoisition(let row, let col):	result = "\(ESC)[\(row),\(col)H"
+		case .cursorPoisition(let row, let col):	result = "\(ESC)[\(row);\(col)H"
 		case .eraceFromCursorToEnd:			result = "\(ESC)[0J"
 		case .eraceFromCursorToBegin:			result = "\(ESC)[1J"
 		case .eraceEntireBuffer:			result = "\(ESC)[2J"
