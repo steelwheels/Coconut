@@ -519,98 +519,98 @@ white : OK
 - Execute:newline
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l*$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:backspace
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l*l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:delete
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e*l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorUp(1)
 -------- [begin]
-.a.b.c.d.e.f*g.h.i.j.$
-.0.1.2.3.H.e.l.$
+.a.b.c.d.e.f.g.h.i.j.$
+*0.1.2.3.H.e.l.l.$
 .o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorDown(1)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e*l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorForward(1)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l*$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+.o*G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(1)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e*l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorForward(20)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l*$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!*$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(20)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-*0.1.2.3.H.e.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorForward(5)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H*e.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.$
+.o.G.o.o.d*-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorNextLine(2)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.$
+.0.1.2.3.H.e.l.l.$
 .o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e*f.g.h.i.j
 -------- [end]
 - Execute:cursorPreviousLine(2)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H*e.l.$
+.0.1.2.3.H*e.l.l.$
 .o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorHolizontalAbsolute(4)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3*H.e.l.$
+.0.1.2.3*H.e.l.l.$
 .o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorHolizontalAbsolute(2)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1*2.3.H.e.l.$
+.0.1*2.3.H.e.l.l.$
 .o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
@@ -717,6 +717,16 @@ abcdefghij")
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:resetCharacterAttribute
+- Execute:selectAltScreen(true)
+-------- [begin]
+*$
+-------- [end]
+- Execute:selectAltScreen(false)
+-------- [begin]
+.C.O.L.O.R*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 * testKeyBinding
 selectorName:insertNewline: -> [newline ]
 selectorName:insertNewlineIgnoringFieldEditor: -> [newline ]

@@ -65,7 +65,9 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.backgroundColor(.blue),
 		.defaultBackgroundColor,
 		.string("COLOR"),
-		.resetCharacterAttribute
+		.resetCharacterAttribute,
+		.selectAltScreen(true),
+		.selectAltScreen(false)
 	]
 	for ecode in ecodes {
 		let fmt  = CNStringFormat(foregroundColor: CNColor.green, backgroundColor: CNColor.black, doBold: false, doItalic: false, doUnderline: false, doReverse: false)

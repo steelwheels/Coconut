@@ -7,6 +7,10 @@
 
 import Foundation
 
+private var mIsAltenativeSelected:	Bool			= false
+private var mAlternativeIndex:		Int			= 0
+private var mAlternativeString:		NSAttributedString	= NSAttributedString(string: "")
+
 public extension NSMutableAttributedString
 {
 	func execute(base baseidx: String.Index, index idx: String.Index, doInsert doins: Bool, font fnt: CNFont, format fmt: CNStringFormat, escapeCode code: CNEscapeCode) -> String.Index? { /* -> Next index */
@@ -82,6 +86,23 @@ public extension NSMutableAttributedString
 			result = nil 			// not accepted
 		case .screenSize(_, _):
 			result = idx			// ignore
+		case .selectAltScreen(let doalt):
+			if mIsAltenativeSelected != doalt {
+				/* Keep current text */
+				let range   = NSRange(location: 0, length: self.length)
+				let curctxt = self.attributedSubstring(from: range)
+				let curidx  = self.string.distance(from: self.string.startIndex, to: idx)
+				/* Restor if it exist */
+				self.setAttributedString(mAlternativeString)
+				let altidx = self.string.index(self.string.startIndex, offsetBy: mAlternativeIndex)
+				/* Update */
+				mAlternativeString    = curctxt
+				mAlternativeIndex     = curidx
+				mIsAltenativeSelected = doalt
+				result = altidx
+			} else {
+				result = idx
+			}
 		}
 		return result
 	}

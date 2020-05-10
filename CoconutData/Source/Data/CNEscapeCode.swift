@@ -49,6 +49,7 @@ public enum CNEscapeCode {
 							 * Ps = 18 -> Report the size of the text area in characters as CSI 8 ; height ; width t
 							 */
 	case	screenSize(Int, Int)			/* Set screen size (Width, Height)		*/
+	case	selectAltScreen(Bool)			/* Do switch alternative screen (Yes/No) 	*/
 
 	public func description() -> String {
 		var result: String
@@ -86,6 +87,7 @@ public enum CNEscapeCode {
 		case .defaultBackgroundColor:			result = "defaultBackgroundColor"
 		case .requestScreenSize:			result = "requestScreenSize"
 		case .screenSize(let width, let height):	result = "screenSize(\(width), \(height))"
+		case .selectAltScreen(let selalt):		result = "selectAltScreen(\(selalt))"
 		}
 		return result
 	}
@@ -127,6 +129,7 @@ public enum CNEscapeCode {
 		case .defaultBackgroundColor:			result = "\(ESC)[49m"
 		case .requestScreenSize:			result = "\(ESC)[18;0;0t"
 		case .screenSize(let width, let height):	result = "\(ESC)[8;\(height);\(width)t"
+		case .selectAltScreen(let selalt):		result = selalt ? "\(ESC)[?47h" : "\(ESC)[?47l"
 		}
 		return result
 	}
@@ -310,6 +313,11 @@ public enum CNEscapeCode {
 				result = (width0 == width1) && (height0 == height1)
 			default:				break
 			}
+		case .selectAltScreen(let s0):
+			switch src {
+			case .selectAltScreen(let s1):		result = (s0 == s1)
+			default:				break
+			}
 		}
 		return result
 	}
@@ -478,6 +486,20 @@ public enum CNEscapeCode {
 				default:
 					throw DecodeError.invalidParameter(c, param)
 				}
+			case "h":
+				let param = try getDec1Parameter(from: tokens, forCommand: c)
+				switch param {
+				case 47: results.append(CNEscapeCode.selectAltScreen(true))	// XT_ALTSCRN
+				default:
+					throw DecodeError.invalidParameter(c, param)
+				}
+			case "l":
+				let param = try getDec1Parameter(from: tokens, forCommand: c)
+				switch param {
+				case 47: results.append(CNEscapeCode.selectAltScreen(false))	// XT_ALTSCRN
+				default:
+					throw DecodeError.invalidParameter(c, param)
+				}
 			case "m":
 				let params = try getParameters(from: tokens, count: tokennum - 1, forCommand: c)
 				results.append(contentsOf: try CNEscapeCode.decodeCharacterAttributes(parameters: params))
@@ -630,6 +652,17 @@ public enum CNEscapeCode {
 		if tokens.count == 6 {
 			if let p0 = tokens[0].getInt(), let p1 = tokens[2].getInt(), let p2 = tokens[4].getInt() {
 				return (p0, p1, p2)
+			}
+		}
+		throw DecodeError.invalidParameter(c, -1)
+	}
+
+	private static func getDec1Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> Int {
+		if tokens.count == 3 {
+			if tokens[0].getSymbol() == "?" {
+				if let pm = tokens[1].getInt() {
+					return pm
+				}
 			}
 		}
 		throw DecodeError.invalidParameter(c, -1)

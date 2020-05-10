@@ -125,7 +125,9 @@ open class CNReadline
 		case .requestScreenSize:
 			result = true			/* ignored */
 		case .screenSize(_, _):
-			result = false
+			result = false			/* Skipped */
+		case .selectAltScreen(_):
+			result = false			/* Skipped */
 		}
 		return result
 	}
