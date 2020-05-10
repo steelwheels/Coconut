@@ -108,7 +108,7 @@ open class CNShellThread: CNThread
 			case .escapeCode(let code):
 				switch code {
 				case .screenSize(let width, let height):
-					NSLog("Update terminal info: \(width) \(height)")
+					//NSLog("Update terminal info: \(width) \(height)")
 					environment.columns	= width
 					environment.lines	= height
 				case .eot:
