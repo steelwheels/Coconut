@@ -24,9 +24,6 @@ public class CNCurses
 		/* Select alternative screen */
 		let selalt = CNEscapeCode.selectAltScreen(true)
 		mConsole.print(string: selalt.encode())
-		/* Clear the buffer */
-		let erace = CNEscapeCode.eraceEntireBuffer
-		mConsole.print(string: erace.encode())
 	}
 
 	public func end() {

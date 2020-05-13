@@ -38,11 +38,11 @@ moveCursorBackward(2)
 -------- [end]
 moveCursorForward(3)
 -------- [begin]
-.a.b.c*$
+.a.b.c*<
 -------- [end]
 moveCursorForward(4)
 -------- [begin]
-.a.b.c*$
+.a.b.c*<
 -------- [end]
 moveCursorToLineStart
 -------- [begin]
@@ -50,15 +50,15 @@ moveCursorToLineStart
 -------- [end]
 moveCursorToLineEnd
 -------- [begin]
-.a.b.c*$
+.a.b.c*<
 -------- [end]
 moveCursorUpOrDown(up, 1)
 -------- [begin]
-.a.b.c*$
+.a.b.c*<
 -------- [end]
 moveCursorUpOrDown(down, 2)
 -------- [begin]
-.a.b.c*$
+.a.b.c*<
 -------- [end]
 moveCursorTo(x=1)
 -------- [begin]
@@ -70,7 +70,7 @@ moveCursorTo(x=0, y=1)
 -------- [end]
 write("ABCD")
 -------- [begin]
-.A.B.C.D*$
+.A.B.C.D*<
 -------- [end]
 moveCursorBackward(2)
 -------- [begin]
@@ -86,7 +86,7 @@ deleteBackwardCharacters(1)
 -------- [end]
 deleteEntireLine
 -------- [begin]
-*$
+*<
 -------- [end]
 Start Vector Test --------------
 -------- [begin]
@@ -202,6 +202,35 @@ deleteEntireLine
 *$
 .g.h.i.$
 
+-------- [end]
+*** Test padding-------- [begin]
+*a.a.a._._.$
+.b.b._._._.$
+._._._._._.$
+._._._._._.$
+._._._._._
+-------- [end]
+*** Test padding-------- [begin]
+*a.a.a._._.$
+.b.b._._._.$
+._._._._._.$
+._._._._._.$
+._._._._._
+-------- [end]
+*** Test padding-------- [begin]
+*a._._._._.$
+.-.b._._._.$
+.-.-.c._._.$
+.-.-.-.d._.$
+.-.-.-.-.e.$
+
+-------- [end]
+*** Test padding-------- [begin]
+*_._._._._.$
+._._._._._.$
+._._._._._.$
+._._._._._.$
+._._._._._
 -------- [end]
 * testStringUtil
 "padding---"
@@ -719,7 +748,16 @@ abcdefghij")
 - Execute:resetCharacterAttribute
 - Execute:selectAltScreen(true)
 -------- [begin]
-*$
+*_._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._.$
+._._._._._._._._._._._._._._._._._._._._
 -------- [end]
 - Execute:selectAltScreen(false)
 -------- [begin]

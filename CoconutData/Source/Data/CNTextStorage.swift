@@ -7,13 +7,26 @@
 
 import Foundation
 
-private var mIsAltenativeSelected:	Bool			= false
-private var mAlternativeIndex:		Int			= 0
-private var mAlternativeString:		NSAttributedString	= NSAttributedString(string: "")
+public struct CNTerminalAttribute {
+	public var 	width	: Int
+	public var	height	: Int
+
+	public var	reservedIndex:	Int
+	public var	reservedText:	NSAttributedString
+
+	public init(width widthval: Int, height heightval: Int) {
+		width		= widthval
+		height		= heightval
+
+		reservedIndex	= 0
+		reservedText	= NSAttributedString(string: "")
+	}
+}
+
 
 public extension NSMutableAttributedString
 {
-	func execute(base baseidx: String.Index, index idx: String.Index, doInsert doins: Bool, font fnt: CNFont, format fmt: CNStringFormat, escapeCode code: CNEscapeCode) -> String.Index? { /* -> Next index */
+	func execute(base baseidx: String.Index, index idx: String.Index, font fnt: CNFont, format fmt: CNStringFormat, terminalAttribute termattr: inout CNTerminalAttribute, escapeCode code: CNEscapeCode) -> String.Index? { /* -> Next index */
 		var result: String.Index?
 		switch code {
 		case .string(let str):
@@ -87,22 +100,23 @@ public extension NSMutableAttributedString
 		case .screenSize(_, _):
 			result = idx			// ignore
 		case .selectAltScreen(let doalt):
-			if mIsAltenativeSelected != doalt {
-				/* Keep current text */
-				let range   = NSRange(location: 0, length: self.length)
-				let curctxt = self.attributedSubstring(from: range)
-				let curidx  = self.string.distance(from: self.string.startIndex, to: idx)
-				/* Restor if it exist */
-				self.setAttributedString(mAlternativeString)
-				let altidx = self.string.index(self.string.startIndex, offsetBy: mAlternativeIndex)
-				/* Update */
-				mAlternativeString    = curctxt
-				mAlternativeIndex     = curidx
-				mIsAltenativeSelected = doalt
-				result = altidx
+			/* Keep current text */
+			let range   = NSRange(location: 0, length: self.length)
+			let curctxt = self.attributedSubstring(from: range)
+			let curidx  = self.string.distance(from: self.string.startIndex, to: idx)
+			/* Restore reserved text */
+			if doalt {
+				let mtext = NSMutableAttributedString(attributedString: termattr.reservedText)
+				mtext.insertPadding(width: termattr.width, height: termattr.height, format: fmt)
+				self.setAttributedString(mtext)
+				result = self.string.startIndex
 			} else {
-				result = idx
+				self.setAttributedString(termattr.reservedText)
+				result = self.string.index(self.string.startIndex, offsetBy: termattr.reservedIndex)
 			}
+			/* Reserve current text */
+			termattr.reservedText	= curctxt
+			termattr.reservedIndex	= curidx
 		}
 		return result
 	}

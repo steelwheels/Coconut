@@ -308,4 +308,56 @@ public extension NSMutableAttributedString
 		})
 		self.endEditing()
 	}
+
+	func insertPadding(width widthval: Int, height heightval: Int, format fmt: CNStringFormat) {
+		var ptr	       = self.string.startIndex
+		var lines      = 0
+		var hasnewline = false
+		while ptr < self.string.endIndex {
+			/* Characters count until newline */
+			let len = self.string.holizontalReverseOffset(from: ptr)
+			if len < widthval {
+				/* Insert spaces until newline */
+				let diff  = widthval - len
+				ptr = self.string.index(ptr, offsetBy: len)
+				let space = String(repeating: " ", count: diff)
+				self.insert(NSAttributedString(string: space), at: self.string.distance(from: self.string.startIndex, to: ptr))
+				ptr = self.string.index(ptr, offsetBy: diff)
+			} else {
+				ptr = self.string.index(ptr, offsetBy: len)
+			}
+			/* Skip newline */
+			hasnewline = false
+			if ptr < self.string.endIndex {
+				if self.string[ptr].isNewline {
+					ptr = self.string.index(after: ptr)
+					/* Count newline */
+					lines      += 1
+					hasnewline = true
+				}
+			}
+		}
+		/* Append last newline */
+		if self.string.startIndex < ptr && !hasnewline {
+			self.append(NSAttributedString(string: "\n"))
+			lines += 1
+		}
+
+		/* Appendlines */
+		if heightval > lines {
+			let diff   = heightval - lines
+			var spaces = ""
+			let line   = String(repeating: " ", count: widthval)
+			var is1st  = true
+			for  _ in 0..<diff {
+				if is1st {
+					is1st = !is1st
+				} else {
+					spaces += "\n"
+				}
+				spaces += line
+			}
+			self.append(NSAttributedString(string: spaces))
+		}
+	}
 }

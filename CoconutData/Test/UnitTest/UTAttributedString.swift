@@ -41,7 +41,7 @@ private struct TestString {
 			ptr = text.string.index(after: ptr)
 		}
 		if index == end {
-			cons.print(string: "*$")
+			cons.print(string: "*<")
 		}
 		cons.print(string: "\n-------- [end]\n")
 	}
@@ -54,14 +54,16 @@ public func testAttributedString(console cons: CNConsole) -> Bool
 		TestString(text: "abc\ndef\nghi\n", index: 6)
 	]
 
-	var result = true
+	var result0 = true
 	for vector in vectors {
 		if !testVector(vector: vector, console: cons) {
-			result = false
+			result0 = false
 		}
 	}
 
-	return result
+	let result1 = testPadding(console: cons)
+
+	return result0 && result1
 }
 
 private func testVector(vector src: TestString, console cons: CNConsole) -> Bool
@@ -140,6 +142,27 @@ private func testVector(vector src: TestString, console cons: CNConsole) -> Bool
 	vec.dump(console: cons)
 	
 	return true
+}
+
+private func testPadding(console cons: CNConsole) -> Bool
+{
+	let str1 = TestString(text: "aaa\nbb", index: 0)
+	let str2 = TestString(text: "aaa\nbb", index: 0)
+	let str3 = TestString(text: "a\n-b\n--c\n---d\n----e", index: 0)
+	let str4 = TestString(text: "", index: 0)
+	let strs = [str1, str2, str3, str4]
+
+	for str in strs {
+		cons.print(string: "*** Test padding")
+		testPadding(string: str, console: cons)
+	}
+	return true
+}
+
+private func testPadding(string str: TestString, console cons: CNConsole) {
+	let format = CNStringFormat(foregroundColor: CNColor.black, backgroundColor: CNColor.white, doBold: false, doItalic: false, doUnderline: false, doReverse: false)
+	str.text.insertPadding(width: 5, height: 5, format: format)
+	str.dump(console: cons)
 }
 
 /*

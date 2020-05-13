@@ -69,19 +69,20 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.selectAltScreen(true),
 		.selectAltScreen(false)
 	]
+	var termattr = CNTerminalAttribute(width: 20, height: 10)
 	for ecode in ecodes {
 		let fmt  = CNStringFormat(foregroundColor: CNColor.green, backgroundColor: CNColor.black, doBold: false, doItalic: false, doUnderline: false, doReverse: false)
 		let font = CNFont.systemFont(ofSize: CNFont.systemFontSize)
-		idx = execute(string: str, index: idx, escapeCode: ecode, font: font, format: fmt, console: cons)
+		idx = execute(string: str, index: idx, escapeCode: ecode, font: font, format: fmt, terminalAttribute: &termattr, console: cons)
 	}
 
 	return true
 }
 
-private func execute(string str: NSMutableAttributedString, index idx: String.Index, escapeCode ecode: CNEscapeCode, font fnt: CNFont, format fmt: CNStringFormat, console cons: CNConsole) -> String.Index
+private func execute(string str: NSMutableAttributedString, index idx: String.Index, escapeCode ecode: CNEscapeCode, font fnt: CNFont, format fmt: CNStringFormat, terminalAttribute termattr: inout CNTerminalAttribute, console cons: CNConsole) -> String.Index
 {
 	cons.print(string: "- Execute:\(ecode.description())\n")
-	if let result = str.execute(base: str.string.startIndex, index: idx, doInsert: false, font: fnt, format: fmt, escapeCode: ecode) {
+	if let result = str.execute(base: str.string.startIndex, index: idx, font: fnt, format: fmt, terminalAttribute: &termattr, escapeCode: ecode) {
 		dump(index: result, string: str, console: cons)
 		return result
 	} else {
