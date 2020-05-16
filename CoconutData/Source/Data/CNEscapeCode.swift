@@ -35,6 +35,7 @@ public enum CNEscapeCode {
 	case	eraceEntireLine				/* Clear entire line				*/
 	case	scrollUp
 	case	scrollDown
+	case	resetAll				/* Clear text, reset cursor postion and tabstop	*/
 	case	resetCharacterAttribute			/* Reset all arributes for character		*/
 	case	boldCharacter(Bool)			/* Set/reset bold font				*/
 	case	underlineCharacter(Bool)		/* Set/reset underline font			*/
@@ -76,6 +77,7 @@ public enum CNEscapeCode {
 		case .eraceEntireLine:				result = "eraceEntireLine"
 		case .scrollUp:					result = "scrollUp"
 		case .scrollDown:				result = "scrollDown"
+		case .resetAll:					result = "resetAll"
 		case .resetCharacterAttribute:			result = "resetCharacterAttribute"
 		case .boldCharacter(let flag):			result = "boldCharacter(\(flag))"
 		case .underlineCharacter(let flag):		result = "underlineCharacter(\(flag))"
@@ -118,6 +120,7 @@ public enum CNEscapeCode {
 		case .eraceEntireLine:				result = "\(ESC)[2K"
 		case .scrollUp:					result = "\(ESC)M"
 		case .scrollDown:				result = "\(ESC)D"
+		case .resetAll:					result = "\(ESC)c"
 		case .resetCharacterAttribute:			result = "\(ESC)[0m"
 		case .boldCharacter(let flag):			result = "\(ESC)[\(flag ? 1: 22)m"
 		case .underlineCharacter(let flag):		result = "\(ESC)[\(flag ? 4: 24)m"
@@ -255,6 +258,11 @@ public enum CNEscapeCode {
 		case .scrollDown:
 			switch src {
 			case .scrollDown:			result = true
+			default:				break
+			}
+		case .resetAll:
+			switch src {
+			case .resetAll:				result = true
 			default:				break
 			}
 		case .resetCharacterAttribute:

@@ -113,6 +113,9 @@ open class CNReadline
 			result = true
 		case .scrollUp, .scrollDown:
 			result = false			/* skipped */
+		case .resetAll:
+			cmdline.erace(command: .eraceEntireBuffer)
+			result = true
 		case .resetCharacterAttribute,
 		     .foregroundColor(_), .defaultForegroundColor,
 		     .backgroundColor(_), .defaultBackgroundColor:

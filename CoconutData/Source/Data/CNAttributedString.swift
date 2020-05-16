@@ -7,21 +7,43 @@
 
 import Foundation
 
-public struct CNStringFormat {
-	var foregroundColor	: CNColor
-	var backgroundColor	: CNColor
-	var doBold		: Bool
-	var doItalic		: Bool
-	var doUnderLine		: Bool
-	var doReverse		: Bool
+public struct CNStringAttribute {
+	public var 	width	: Int
+	public var	height	: Int
 
-	public init(foregroundColor fcol: CNColor, backgroundColor bcol: CNColor, doBold bold: Bool, doItalic italic: Bool, doUnderline under: Bool, doReverse reverse: Bool) {
-		foregroundColor		= fcol
-		backgroundColor		= bcol
-		doBold			= bold
-		doItalic		= italic
-		doUnderLine		= under
-		doReverse		= reverse
+	public var	foregroundColor	: CNColor
+	public var	backgroundColor	: CNColor
+
+	public var	doBold		: Bool
+	public var	doItalic	: Bool
+	public var	doUnderLine	: Bool
+	public var	doReverse	: Bool
+
+	public var	reservedIndex:	Int
+	public var	reservedText:	NSAttributedString
+
+	public init(width widthval: Int, height heightval: Int) {
+		width			= widthval
+		height			= heightval
+
+		foregroundColor		= CNColor.black
+		backgroundColor		= CNColor.white
+		doBold			= false
+		doItalic		= false
+		doUnderLine		= false
+		doReverse		= false
+
+		reservedIndex		= 0
+		reservedText		= NSAttributedString(string: "")
+	}
+
+	public mutating func reset() {
+		foregroundColor		= CNColor.black
+		backgroundColor		= CNColor.white
+		doBold			= false
+		doItalic		= false
+		doUnderLine		= false
+		doReverse		= false
 	}
 }
 
@@ -210,17 +232,20 @@ public extension String
 
 public extension NSAttributedString
 {
-	convenience init(string str: String, font fnt: CNFont, format fmt: CNStringFormat) {
-		let newfont = CNFontManager.shared.convert(font: fnt, format: fmt)
-		var attr: [NSAttributedString.Key: Any] = [
-			NSAttributedString.Key.foregroundColor: fmt.foregroundColor,
-			NSAttributedString.Key.backgroundColor:	fmt.backgroundColor,
+	convenience init(string str: String, font fnt: CNFont, attributes attr: CNStringAttribute) {
+		let newfont = CNFontManager.shared.convert(font: fnt, attribute: attr)
+
+		let fcol = attr.doReverse ? attr.backgroundColor : attr.foregroundColor
+		let bcol = attr.doReverse ? attr.foregroundColor : attr.backgroundColor
+		var attrs: [NSAttributedString.Key: Any] = [
+			NSAttributedString.Key.foregroundColor: fcol,
+			NSAttributedString.Key.backgroundColor:	bcol,
 			NSAttributedString.Key.font:		newfont
 		]
-		if fmt.doUnderLine {
-			attr[NSAttributedString.Key.underlineStyle] = NSNumber(integerLiteral: NSUnderlineStyle.single.rawValue)
+		if attr.doUnderLine {
+			attrs[NSAttributedString.Key.underlineStyle] = NSNumber(integerLiteral: NSUnderlineStyle.single.rawValue)
 		}
-		self.init(string: str, attributes: attr)
+		self.init(string: str, attributes: attrs)
 	}
 }
 
@@ -309,7 +334,7 @@ public extension NSMutableAttributedString
 		self.endEditing()
 	}
 
-	func insertPadding(width widthval: Int, height heightval: Int, format fmt: CNStringFormat) {
+	func insertPadding(width widthval: Int, height heightval: Int, attribute attr: CNStringAttribute) {
 		var ptr	       = self.string.startIndex
 		var lines      = 0
 		var hasnewline = false

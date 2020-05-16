@@ -160,8 +160,8 @@ private func testPadding(console cons: CNConsole) -> Bool
 }
 
 private func testPadding(string str: TestString, console cons: CNConsole) {
-	let format = CNStringFormat(foregroundColor: CNColor.black, backgroundColor: CNColor.white, doBold: false, doItalic: false, doUnderline: false, doReverse: false)
-	str.text.insertPadding(width: 5, height: 5, format: format)
+	let attr = CNStringAttribute(width: 80, height: 25)
+	str.text.insertPadding(width: 5, height: 5, attribute: attr)
 	str.dump(console: cons)
 }
 

@@ -7,30 +7,13 @@
 
 import Foundation
 
-public struct CNTerminalAttribute {
-	public var 	width	: Int
-	public var	height	: Int
-
-	public var	reservedIndex:	Int
-	public var	reservedText:	NSAttributedString
-
-	public init(width widthval: Int, height heightval: Int) {
-		width		= widthval
-		height		= heightval
-
-		reservedIndex	= 0
-		reservedText	= NSAttributedString(string: "")
-	}
-}
-
-
 public extension NSMutableAttributedString
 {
-	func execute(base baseidx: String.Index, index idx: String.Index, font fnt: CNFont, format fmt: CNStringFormat, terminalAttribute termattr: inout CNTerminalAttribute, escapeCode code: CNEscapeCode) -> String.Index? { /* -> Next index */
+	func execute(base baseidx: String.Index, index idx: String.Index, font fnt: CNFont, attribute attr: inout CNStringAttribute, escapeCode code: CNEscapeCode) -> String.Index? { /* -> Next index */
 		var result: String.Index?
 		switch code {
 		case .string(let str):
-			let astr = NSAttributedString(string: str, font: fnt, format: fmt)
+			let astr = NSAttributedString(string: str, font: fnt, attributes: attr)
 			result = self.write(string: astr, at: idx)
 		case .eot:
 			result = idx // ignore
@@ -77,6 +60,10 @@ public extension NSMutableAttributedString
 			result = nil			// not accepted
 		case .scrollDown:
 			result = nil			// not accepted
+		case .resetAll:
+			self.clear()
+			attr.reset()
+			result = string.startIndex
 		case .resetCharacterAttribute:
 			result = nil			// not accepted
 		case .boldCharacter(_):
@@ -106,17 +93,17 @@ public extension NSMutableAttributedString
 			let curidx  = self.string.distance(from: self.string.startIndex, to: idx)
 			/* Restore reserved text */
 			if doalt {
-				let mtext = NSMutableAttributedString(attributedString: termattr.reservedText)
-				mtext.insertPadding(width: termattr.width, height: termattr.height, format: fmt)
+				let mtext = NSMutableAttributedString(attributedString: attr.reservedText)
+				mtext.insertPadding(width: attr.width, height: attr.height, attribute: attr)
 				self.setAttributedString(mtext)
 				result = self.string.startIndex
 			} else {
-				self.setAttributedString(termattr.reservedText)
-				result = self.string.index(self.string.startIndex, offsetBy: termattr.reservedIndex)
+				self.setAttributedString(attr.reservedText)
+				result = self.string.index(self.string.startIndex, offsetBy: attr.reservedIndex)
 			}
 			/* Reserve current text */
-			termattr.reservedText	= curctxt
-			termattr.reservedIndex	= curidx
+			attr.reservedText	= curctxt
+			attr.reservedIndex	= curidx
 		}
 		return result
 	}
