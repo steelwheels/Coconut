@@ -54,7 +54,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	}
 
 	cons.print(string: "testShell: Start\n")
-	shell.start(arguments: [])
+	shell.start(argument: .nullValue)
 
 	//queue.async {
 		inpipe.fileHandleForWriting.write(string: "command-1\n")

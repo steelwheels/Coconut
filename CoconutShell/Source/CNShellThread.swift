@@ -24,13 +24,16 @@ open class CNShellThread: CNThread
 
 	private var mReadline:		CNReadline
 	private var mReadlineStatus:	ReadlineStatus
+	private var mTerminalInfo:	CNTerminalInfo
 	private var mIsCancelled:	Bool
 
 	public var readline: CNReadline { get { return mReadline }}
+	public var terminalInfo: CNTerminalInfo { get { return mTerminalInfo }}
 
 	public override init(processManager procmgr: CNProcessManager, queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment){
 		mReadline 	= CNReadline()
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
+		mTerminalInfo	= CNTerminalInfo(width: 80, height: 25)
 		mIsCancelled	= false
 		super.init(processManager: procmgr, queue: disque, input: instrm, output: outstrm, error: errstrm, environment: env)
 	}
@@ -109,8 +112,8 @@ open class CNShellThread: CNThread
 				switch code {
 				case .screenSize(let width, let height):
 					//NSLog("Update terminal info: \(width) \(height)")
-					environment.columns	= width
-					environment.lines	= height
+					mTerminalInfo.width	= width
+					mTerminalInfo.height	= height
 				case .eot:
 					cancel()
 				default:

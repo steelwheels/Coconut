@@ -25,6 +25,7 @@ Start Vector Test --------------
 -------- [begin]
 .a*b.c
 -------- [end]
+{attr: x=1, y=0}
 Line count = 0
 holizOffset = 1
 holizReverseOffset = 2
@@ -32,62 +33,77 @@ moveCursorBackward(1)
 -------- [begin]
 *a.b.c
 -------- [end]
+{attr: x=0, y=0}
 moveCursorBackward(2)
 -------- [begin]
 *a.b.c
 -------- [end]
+{attr: x=0, y=0}
 moveCursorForward(3)
 -------- [begin]
 .a.b.c*<
 -------- [end]
+{attr: x=3, y=0}
 moveCursorForward(4)
 -------- [begin]
 .a.b.c*<
 -------- [end]
+{attr: x=3, y=0}
 moveCursorToLineStart
 -------- [begin]
 *a.b.c
 -------- [end]
+{attr: x=0, y=0}
 moveCursorToLineEnd
 -------- [begin]
 .a.b.c*<
 -------- [end]
+{attr: x=3, y=0}
 moveCursorUpOrDown(up, 1)
 -------- [begin]
 .a.b.c*<
 -------- [end]
+{attr: x=3, y=0}
 moveCursorUpOrDown(down, 2)
 -------- [begin]
 .a.b.c*<
 -------- [end]
+{attr: x=3, y=0}
 moveCursorTo(x=1)
 -------- [begin]
 .a*b.c
 -------- [end]
+{attr: x=1, y=0}
 moveCursorTo(x=0, y=1)
 -------- [begin]
 *a.b.c
 -------- [end]
+{attr: x=0, y=0}
 write("ABCD")
 -------- [begin]
 .A.B.C.D*<
 -------- [end]
+{attr: x=4, y=0}
 moveCursorBackward(2)
 -------- [begin]
 .A.B*C.D
 -------- [end]
+{attr: x=2, y=0}
 deleteForwardCharacters(1)
 -------- [begin]
 .A.B*D
 -------- [end]
+{attr: x=3, y=0}
 deleteBackwardCharacters(1)
 -------- [begin]
 .A*D
 -------- [end]
+{attr: x=2, y=0}
 deleteEntireLine
 -------- [begin]
 *<
 -------- [end]
+{attr: x=2, y=-2}
 Start Vector Test --------------
 -------- [begin]
 .a.b.c.$
@@ -95,6 +111,7 @@ Start Vector Test --------------
 .g.h.i.$
 
 -------- [end]
+{attr: x=2, y=1}
 Line count = 3
 holizOffset = 2
 holizReverseOffset = 1
@@ -105,6 +122,7 @@ moveCursorBackward(1)
 .g.h.i.$
 
 -------- [end]
+{attr: x=1, y=1}
 moveCursorBackward(2)
 -------- [begin]
 .a.b.c.$
@@ -112,6 +130,7 @@ moveCursorBackward(2)
 .g.h.i.$
 
 -------- [end]
+{attr: x=0, y=1}
 moveCursorForward(3)
 -------- [begin]
 .a.b.c.$
@@ -119,6 +138,7 @@ moveCursorForward(3)
 .g.h.i.$
 
 -------- [end]
+{attr: x=3, y=1}
 moveCursorForward(4)
 -------- [begin]
 .a.b.c.$
@@ -126,6 +146,7 @@ moveCursorForward(4)
 .g.h.i.$
 
 -------- [end]
+{attr: x=3, y=1}
 moveCursorToLineStart
 -------- [begin]
 .a.b.c.$
@@ -133,6 +154,7 @@ moveCursorToLineStart
 .g.h.i.$
 
 -------- [end]
+{attr: x=0, y=1}
 moveCursorToLineEnd
 -------- [begin]
 .a.b.c.$
@@ -140,6 +162,7 @@ moveCursorToLineEnd
 .g.h.i.$
 
 -------- [end]
+{attr: x=3, y=1}
 moveCursorUpOrDown(up, 1)
 -------- [begin]
 .a.b.c*$
@@ -147,6 +170,7 @@ moveCursorUpOrDown(up, 1)
 .g.h.i.$
 
 -------- [end]
+{attr: x=3, y=0}
 moveCursorUpOrDown(down, 2)
 -------- [begin]
 .a.b.c.$
@@ -154,6 +178,7 @@ moveCursorUpOrDown(down, 2)
 .g.h.i*$
 
 -------- [end]
+{attr: x=3, y=2}
 moveCursorTo(x=1)
 -------- [begin]
 .a.b.c.$
@@ -161,6 +186,7 @@ moveCursorTo(x=1)
 .g*h.i.$
 
 -------- [end]
+{attr: x=1, y=2}
 moveCursorTo(x=0, y=1)
 -------- [begin]
 .a.b.c.$
@@ -168,6 +194,7 @@ moveCursorTo(x=0, y=1)
 .g.h.i.$
 
 -------- [end]
+{attr: x=0, y=1}
 write("ABCD")
 -------- [begin]
 .a.b.c.$
@@ -175,6 +202,7 @@ write("ABCD")
 .g.h.i.$
 
 -------- [end]
+{attr: x=4, y=1}
 moveCursorBackward(2)
 -------- [begin]
 .a.b.c.$
@@ -182,6 +210,7 @@ moveCursorBackward(2)
 .g.h.i.$
 
 -------- [end]
+{attr: x=2, y=1}
 deleteForwardCharacters(1)
 -------- [begin]
 .a.b.c.$
@@ -189,6 +218,7 @@ deleteForwardCharacters(1)
 .g.h.i.$
 
 -------- [end]
+{attr: x=3, y=1}
 deleteBackwardCharacters(1)
 -------- [begin]
 .a.b.c.$
@@ -196,6 +226,7 @@ deleteBackwardCharacters(1)
 .g.h.i.$
 
 -------- [end]
+{attr: x=2, y=1}
 deleteEntireLine
 -------- [begin]
 .a.b.c.$
@@ -203,6 +234,7 @@ deleteEntireLine
 .g.h.i.$
 
 -------- [end]
+{attr: x=2, y=-1}
 *** Test padding-------- [begin]
 *a.a.a._._.$
 .b.b._._._.$
@@ -665,7 +697,6 @@ abcdefghij")
 .a.b.c.d.e.f.g.h.i.j*$
 .0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
@@ -674,7 +705,6 @@ abcdefghij")
 .a.b.c.d.e*f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceEntireBuffer
@@ -715,20 +745,17 @@ abcdefghij")
 -------- [end]
 - Execute:string("inserted")
 -------- [begin]
-.i.n.s.e.r.t.e.d*$
-.0.1.2.3.4.5.6.7.8.9.$
+.i.n.s.e.r.t.e.d*7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
 -------- [begin]
-.i.n.s*e.r.t.e.d.$
-.0.1.2.3.4.5.6.7.8.9.$
+.i.n.s*e.r.t.e.d.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceEntireLine
 -------- [begin]
 *$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:boldCharacter(true)
@@ -741,9 +768,7 @@ abcdefghij")
 - Execute:defaultBackgroundColor
 - Execute:string("COLOR")
 -------- [begin]
-.C.O.L.O.R*$
-.0.1.2.3.4.5.6.7.8.9.$
-.a.b.c.d.e.f.g.h.i.j
+.C.O.L.O.R*e.f.g.h.i.j
 -------- [end]
 - Execute:resetCharacterAttribute
 - Execute:selectAltScreen(true)
@@ -761,9 +786,7 @@ abcdefghij")
 -------- [end]
 - Execute:selectAltScreen(false)
 -------- [begin]
-.C.O.L.O.R*$
-.0.1.2.3.4.5.6.7.8.9.$
-.a.b.c.d.e.f.g.h.i.j
+.C.O.L.O.R*e.f.g.h.i.j
 -------- [end]
 * testKeyBinding
 selectorName:insertNewline: -> [newline ]

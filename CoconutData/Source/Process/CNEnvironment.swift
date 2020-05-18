@@ -9,9 +9,8 @@ import Foundation
 
 public class CNEnvironment
 {
-	private static var	ColmunsItem	= "COLUMNS"
-	private static var	LinesItem	= "LINES"
-
+	private static var	WidthItem	= "WIDTH"
+	private static var	HeightItem	= "HEIGHT"
 
 	private var mEnvironmentVariable: Dictionary<String, String>
 
@@ -23,8 +22,8 @@ public class CNEnvironment
 		mEnvironmentVariable = [
 			"TMPDIR"			: FileManager.default.temporaryDirectory.path,
 			"PWD"				: FileManager.default.currentDirectoryPath,
-			CNEnvironment.ColmunsItem	: "0",
-			CNEnvironment.LinesItem		: "0"
+			CNEnvironment.WidthItem		: "80",
+			CNEnvironment.HeightItem	: "25"
 		]
 	}
 
@@ -62,9 +61,9 @@ public class CNEnvironment
 		}
 	}
 
-	public var columns: Int {
+	public var width: Int {
 		get {
-			if let str = get(name: CNEnvironment.ColmunsItem) {
+			if let str = get(name: CNEnvironment.WidthItem) {
 				if let val = Int(str) {
 					return val
 				}
@@ -72,13 +71,13 @@ public class CNEnvironment
 			fatalError("Can not happen (3)")
 		}
 		set(newval){
-			set(name: CNEnvironment.ColmunsItem, string: newval.description)
+			set(name: CNEnvironment.WidthItem, string: newval.description)
 		}
 	}
 
-	public var lines: Int {
+	public var height: Int {
 		get {
-			if let str = get(name: CNEnvironment.LinesItem) {
+			if let str = get(name: CNEnvironment.HeightItem) {
 				if let val = Int(str) {
 					return val
 				}
@@ -86,7 +85,7 @@ public class CNEnvironment
 			fatalError("Can not happen (4)")
 		}
 		set(newval){
-			set(name: CNEnvironment.LinesItem, string: newval.description)
+			set(name: CNEnvironment.HeightItem, string: newval.description)
 		}
 	}
 }

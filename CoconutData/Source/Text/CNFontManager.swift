@@ -79,22 +79,22 @@ extension CNFontManager
 	}
 	#endif
 
-	public func convert(font fnt: CNFont, attribute attr: CNStringAttribute) -> CNFont {
+	public func convert(font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> CNFont {
 		#if os(OSX)
 			var trait = NSFontTraitMask(rawValue: 0)
-			if attr.doBold {
+			if terminfo.doBold {
 				trait = NSFontTraitMask(rawValue: trait.rawValue | NSFontTraitMask.boldFontMask.rawValue)
 			}
-			if attr.doItalic {
+			if terminfo.doItalic {
 				trait = NSFontTraitMask(rawValue: trait.rawValue | NSFontTraitMask.italicFontMask.rawValue)
 			}
 			return self.convert(fnt, toHaveTrait: trait)
 		#else
 			var trait: UInt32 = 0
-			if attr.doBold {
+			if terminfo.doBold {
 				trait |= UIFontDescriptor.SymbolicTraits.traitBold.rawValue
 			}
-			if attr.doItalic {
+			if terminfo.doItalic {
 				trait |= UIFontDescriptor.SymbolicTraits.traitItalic.rawValue
 			}
 			if let desc = fnt.fontDescriptor.withSymbolicTraits(UIFontDescriptor.SymbolicTraits(rawValue: trait)) {

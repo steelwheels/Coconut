@@ -17,13 +17,17 @@ public class CNCurses
 		mConsole	= cons
 	}
 
-	public var columns: Int { get { return mEnvironment.columns	}}
-	public var lines:   Int { get { return mEnvironment.lines	}}
+	public var width:  Int { get { return mEnvironment.width	}}
+	public var height: Int { get { return mEnvironment.height	}}
 
 	public func start() {
 		/* Select alternative screen */
 		let selalt = CNEscapeCode.selectAltScreen(true)
 		mConsole.print(string: selalt.encode())
+
+		/* Erace buffer */
+		let erace = CNEscapeCode.eraceEntireBuffer
+		mConsole.print(string: erace.encode())
 	}
 
 	public func end() {
@@ -32,8 +36,8 @@ public class CNCurses
 	}
 
 	public func moveTo(x xpos: Int, y ypos: Int) {
-		let x    = max(0, min(xpos, mEnvironment.columns - 1))
-		let y    = max(0, min(ypos, mEnvironment.lines   - 1))
+		let x    = max(0, min(xpos, mEnvironment.width  - 1))
+		let y    = max(0, min(ypos, mEnvironment.height - 1))
 		let code = CNEscapeCode.cursorPoisition(y, x)
 		mConsole.print(string: code.encode())
 	}
