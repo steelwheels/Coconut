@@ -9,16 +9,16 @@ import Foundation
 
 public class CNCurses
 {
-	private var mEnvironment:	CNEnvironment
+	private var mTerminalInfo:	CNTerminalInfo
 	private var mConsole:		CNConsole
 
-	public init(console cons: CNConsole, environment env: CNEnvironment) {
-		mEnvironment	= env
+	public init(console cons: CNConsole, terminalInfo terminfo: CNTerminalInfo) {
+		mTerminalInfo	= terminfo
 		mConsole	= cons
 	}
 
-	public var width:  Int { get { return mEnvironment.width	}}
-	public var height: Int { get { return mEnvironment.height	}}
+	public var width:  Int { get { return mTerminalInfo.width	}}
+	public var height: Int { get { return mTerminalInfo.height	}}
 
 	public func start() {
 		/* Select alternative screen */
@@ -36,8 +36,8 @@ public class CNCurses
 	}
 
 	public func moveTo(x xpos: Int, y ypos: Int) {
-		let x    = max(0, min(xpos, mEnvironment.width  - 1))
-		let y    = max(0, min(ypos, mEnvironment.height - 1))
+		let x    = max(0, min(xpos, mTerminalInfo.width  - 1))
+		let y    = max(0, min(ypos, mTerminalInfo.height - 1))
 		let code = CNEscapeCode.cursorPoisition(y, x)
 		mConsole.print(string: code.encode())
 	}

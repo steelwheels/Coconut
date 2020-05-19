@@ -14,6 +14,8 @@ open class CNScriptThread: CNThread
 	private var mInputFileStream:	CNFileStream
 	private var mRepeaterPipe:	Pipe
 
+	public var terminalInfo: CNTerminalInfo { get { return mTerminalInfo }}
+
 	public override init(processManager mgr: CNProcessManager, queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment)
 	{
 		/* Setup terminal info */
