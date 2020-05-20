@@ -319,9 +319,20 @@ public extension NSMutableAttributedString
 		return self.string.index(index, offsetBy: str.length)
 	}
 
-	func clear(terminalInfo terminfo: CNTerminalInfo) {
+	func clear(font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) {
+		/* Clear normally */
 		let range = NSRange(location: 0, length: self.length)
 		self.deleteCharacters(in: range)
+		if terminfo.isAlternative {
+			/* Fill by spaces */
+			let space    = String(repeating: " ", count: terminfo.width)
+			let aspace   = NSAttributedString(string: space, font: fnt, terminalInfo: terminfo)
+			let anewline = NSAttributedString(string: "\n", font: fnt, terminalInfo: terminfo)
+			for i in 0..<terminfo.height {
+				if i > 0 { self.append(anewline) }
+				self.append(aspace)
+			}
+		}
 		terminfo.cursor.x = 0
 		terminfo.cursor.y = 0
 	}

@@ -54,14 +54,14 @@ public extension NSMutableAttributedString
 		case .eraceEntireLine:
 			result = self.deleteEntireLine(from: idx, terminalInfo: terminfo)
 		case .eraceEntireBuffer:
-			self.clear(terminalInfo: terminfo)
+			self.clear(font: fnt, terminalInfo: terminfo)
 			result = string.startIndex
 		case .scrollUp:
 			result = nil			// not accepted
 		case .scrollDown:
 			result = nil			// not accepted
 		case .resetAll:
-			self.clear(terminalInfo: terminfo)
+			self.clear(font: fnt, terminalInfo: terminfo)
 			terminfo.reset()
 			result = string.startIndex
 		case .resetCharacterAttribute:

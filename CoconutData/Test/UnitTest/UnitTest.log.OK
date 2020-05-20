@@ -235,29 +235,32 @@ deleteEntireLine
 
 -------- [end]
 {attr: x=2, y=-1}
-*** Test padding-------- [begin]
+*** Test padding
+-------- [begin]
 *a.a.a._._.$
 .b.b._._._.$
 ._._._._._.$
 ._._._._._.$
 ._._._._._
 -------- [end]
-*** Test padding-------- [begin]
+*** Test padding
+-------- [begin]
 *a.a.a._._.$
 .b.b._._._.$
 ._._._._._.$
 ._._._._._.$
 ._._._._._
 -------- [end]
-*** Test padding-------- [begin]
+*** Test padding
+-------- [begin]
 *a._._._._.$
 .-.b._._._.$
 .-.-.c._._.$
 .-.-.-.d._.$
-.-.-.-.-.e.$
-
+.-.-.-.-.e
 -------- [end]
-*** Test padding-------- [begin]
+*** Test padding
+-------- [begin]
 *_._._._._.$
 ._._._._._.$
 ._._._._._.$
@@ -697,6 +700,7 @@ abcdefghij")
 .a.b.c.d.e.f.g.h.i.j*$
 .0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
@@ -705,6 +709,7 @@ abcdefghij")
 .a.b.c.d.e*f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
+.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceEntireBuffer
@@ -745,17 +750,20 @@ abcdefghij")
 -------- [end]
 - Execute:string("inserted")
 -------- [begin]
-.i.n.s.e.r.t.e.d*7.8.9.$
+.i.n.s.e.r.t.e.d*$
+.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
 -------- [begin]
-.i.n.s*e.r.t.e.d.7.8.9.$
+.i.n.s*e.r.t.e.d.$
+.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceEntireLine
 -------- [begin]
 *$
+.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:boldCharacter(true)
@@ -768,7 +776,9 @@ abcdefghij")
 - Execute:defaultBackgroundColor
 - Execute:string("COLOR")
 -------- [begin]
-.C.O.L.O.R*e.f.g.h.i.j
+.C.O.L.O.R*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:resetCharacterAttribute
 - Execute:selectAltScreen(true)
@@ -786,7 +796,9 @@ abcdefghij")
 -------- [end]
 - Execute:selectAltScreen(false)
 -------- [begin]
-.C.O.L.O.R*e.f.g.h.i.j
+.C.O.L.O.R*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 * testKeyBinding
 selectorName:insertNewline: -> [newline ]
