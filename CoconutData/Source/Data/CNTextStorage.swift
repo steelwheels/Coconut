@@ -85,29 +85,36 @@ public extension NSMutableAttributedString
 		case .requestScreenSize:
 			result = nil 			// not accepted
 		case .screenSize(let width, let height):
-			terminfo.width  = width
-			terminfo.height = height
+			if terminfo.width != width || terminfo.height != height {
+				/* Update padding */
+				if terminfo.isAlternative {
+					self.resize(width: width, height: height, font: fnt, terminalInfo: terminfo)
+				}
+				terminfo.width  = width
+				terminfo.height = height
+			}
 			result = idx			// ignore
 		case .selectAltScreen(let doalt):
-			/* Keep current text */
-			let range   = NSRange(location: 0, length: self.length)
-			let curctxt = self.attributedSubstring(from: range)
-			let curidx  = self.string.distance(from: self.string.startIndex, to: idx)
-			/* Restore reserved text */
-			if doalt {
-				terminfo.isCursesMode = true
-				let mtext = NSMutableAttributedString(attributedString: terminfo.reservedText)
-				mtext.insertPadding(width: terminfo.width, height: terminfo.height, in: terminfo)
-				self.setAttributedString(mtext)
-				result = self.string.startIndex
-			} else {
-				terminfo.isCursesMode = false
+			if terminfo.isAlternative != doalt {
+				/* Keep current text */
+				let range   = NSRange(location: 0, length: self.length)
+				let curctxt = self.attributedSubstring(from: range)
+				let curidx  = self.string.distance(from: self.string.startIndex, to: idx)
+				/* Restore reserved text */
 				self.setAttributedString(terminfo.reservedText)
 				result = self.string.index(self.string.startIndex, offsetBy: terminfo.reservedIndex)
+				/* Update padding */
+				if doalt {
+					self.resize(width: terminfo.width, height: terminfo.height, font: fnt, terminalInfo: terminfo)
+				}
+				/* Reserve current text */
+				terminfo.reservedText	= curctxt
+				terminfo.reservedIndex	= curidx
+				/* Switch mode */
+				terminfo.isAlternative = doalt
+			} else {
+				result = idx
 			}
-			/* Reserve current text */
-			terminfo.reservedText	= curctxt
-			terminfo.reservedIndex	= curidx
 		}
 		return result
 	}

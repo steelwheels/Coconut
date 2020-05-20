@@ -172,18 +172,22 @@ private func testPadding(console cons: CNConsole) -> Bool
 	let str2 = TestString(text: "aaa\nbb", index: 0, xPos: 0, yPos: 0)
 	let str3 = TestString(text: "a\n-b\n--c\n---d\n----e", index: 0, xPos: 0, yPos: 0)
 	let str4 = TestString(text: "", index: 0, xPos: 0, yPos: 0)
-	let strs = [str1, str2, str3, str4]
+	//let str5 = TestString(text: "\n", index: 0, xPos: 0, yPos: 0)
+	//let str6 = TestString(text: "a", index: 0, xPos: 0, yPos: 0)
+	//let str7 = TestString(text: "a\n", index: 0, xPos: 0, yPos: 0)
+	let strs = [str1, str2, str3, str4] //, str5] //, str6, str7]
 
 	for str in strs {
-		cons.print(string: "*** Test padding")
+		cons.print(string: "*** Test padding\n")
 		testPadding(string: str, console: cons)
 	}
 	return true
 }
 
 private func testPadding(string str: TestString, console cons: CNConsole) {
-	let terminfo = CNTerminalInfo(width: 80, height: 25)
-	str.text.insertPadding(width: 5, height: 5, in: terminfo)
+	let terminfo = CNTerminalInfo(width: 5, height: 5)
+	let font     = CNFont.systemFont(ofSize: 10.0)
+	str.text.resize(width: 5, height: 5, font: font, terminalInfo: terminfo)
 	str.dump(console: cons)
 }
 

@@ -26,8 +26,8 @@ public class CNCurses
 		mConsole.print(string: selalt.encode())
 
 		/* Erace buffer */
-		let erace = CNEscapeCode.eraceEntireBuffer
-		mConsole.print(string: erace.encode())
+		//let erace = CNEscapeCode.eraceEntireBuffer
+		//mConsole.print(string: erace.encode())
 	}
 
 	public func end() {

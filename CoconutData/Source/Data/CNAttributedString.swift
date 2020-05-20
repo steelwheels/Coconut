@@ -20,7 +20,7 @@ public struct CNCursor
 
 public class CNTerminalInfo
 {
-	public var	isCursesMode	: Bool
+	public var	isAlternative	: Bool
 
 	public var 	width		: Int
 	public var	height		: Int
@@ -38,7 +38,7 @@ public class CNTerminalInfo
 	public var	reservedText:	NSAttributedString
 
 	public init(width widthval: Int, height heightval: Int) {
-		isCursesMode		= false
+		isAlternative		= false
 		width			= widthval
 		height			= heightval
 		cursor			= CNCursor(x: 0, y: 0)
@@ -117,14 +117,11 @@ public extension NSAttributedString
 		let str    = self.string
 		let end    = str.endIndex
 		while ptr < end {
-			let next = str.index(after: ptr)
-			result += 1
-			if next < end {
-				if str[next].isNewline {
-					break
-				}
+			if str[ptr].isNewline {
+				break
 			}
-			ptr = next
+			ptr = str.index(after: ptr)
+			result += 1
 		}
 		return result
 	}
@@ -393,57 +390,53 @@ public extension NSMutableAttributedString
 		self.endEditing()
 	}
 
-	func insertPadding(width widthval: Int, height heightval: Int, in terminfo: CNTerminalInfo) {
-		var ptr	       = self.string.startIndex
-		var lines      = 0
-		var hasnewline = false
-
+	func resize(width newwidth: Int, height newheight: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) {
+		var ptr	  = self.string.startIndex
+		var pos   = 0
+		var lines = 0
 		while ptr < self.string.endIndex {
-			/* Characters count until newline */
 			let len = self.distanceToLineEnd(from: ptr)
-			if len < widthval {
-				/* Insert spaces until newline */
-				let diff  = widthval - len
-				ptr = self.string.index(ptr, offsetBy: len)
-				let space = String(repeating: " ", count: diff)
-				self.insert(NSAttributedString(string: space), at: self.string.distance(from: self.string.startIndex, to: ptr))
-				ptr = self.string.index(ptr, offsetBy: diff)
+			if len > newwidth {
+				/* Cut line */
+				ptr = deleteBackwardCharacters(from: ptr, number: len - newwidth, terminalInfo: terminfo)
+			} else if len < newwidth {
+				/* Fill line */
+				let space = String(repeating: " ", count: newwidth - len)
+				let astr  = NSAttributedString(string: space, font: fnt, terminalInfo: terminfo)
+				self.insert(astr, at: pos + len)
+			}
+			if let next = moveCursorToNextLineStart(from: ptr, terminalInfo: terminfo) {
+				ptr   =  next
+				pos   += newwidth + 1 // +1 for new line
 			} else {
-				ptr = self.string.index(ptr, offsetBy: len)
+				ptr   =  self.string.endIndex
+				pos   += len
 			}
-			/* Skip newline */
-			hasnewline = false
-			if ptr < self.string.endIndex {
-				if self.string[ptr].isNewline {
-					ptr = self.string.index(after: ptr)
-					/* Count newline */
-					lines      += 1
-					hasnewline = true
-				}
-			}
-		}
-
-		/* Append last newline */
-		if self.string.startIndex < ptr && !hasnewline {
-			self.append(NSAttributedString(string: "\n"))
 			lines += 1
-		}
 
-		/* Appendlines */
-		if heightval > lines {
-			let diff   = heightval - lines
-			var spaces = ""
-			let line   = String(repeating: " ", count: widthval)
-			var is1st  = true
-			for  _ in 0..<diff {
-				if is1st {
-					is1st = !is1st
-				} else {
-					spaces += "\n"
+			if lines > newheight {
+				/* Remove rest strings */
+				if ptr < self.string.endIndex {
+					let head  = self.string.distance(from: self.string.startIndex, to: ptr)
+					let total = self.length
+					let range = NSRange(location: head, length: total - head)
+					self.deleteCharacters(in: range)
+					return /* Exit this function */
 				}
-				spaces += line
 			}
-			self.append(NSAttributedString(string: spaces))
+		}
+		if lines < newheight {
+			let space    = String(repeating: " ", count: newwidth)
+			let aspace   = NSAttributedString(string: space, font: fnt, terminalInfo: terminfo)
+			let anewline = NSAttributedString(string: "\n", font: fnt, terminalInfo: terminfo)
+			if lines == 0 {
+				self.append(aspace)
+				lines = 1
+			}
+			for _ in lines..<newheight {
+				self.append(anewline)
+				self.append(aspace)
+			}
 		}
 	}
 }
