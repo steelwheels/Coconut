@@ -26,8 +26,17 @@ open class CNReadline
 	}
 
 	open func readLine(console cons: CNConsole) -> Result {
+		/* Check command queue */
+		if let code = mCurrentBuffer.pop() {
+			let result: Result
+			if decode(escapeCode: code) {
+				result = .commandLine(mCommandLines.currentCommand)
+			} else {
+				result = .escapeCode(code)
+			}
+			return result
+		}
 		/* Scan input */
-		var result: Result = .empty
 		if let str = self.scan(console: cons) {
 			/* Push command into buffer */
 			switch CNEscapeCode.decode(string: str) {
@@ -40,15 +49,7 @@ open class CNReadline
 				cons.error(string: msg)
 			}
 		}
-		/* Get latest command */
-		if let code = mCurrentBuffer.pop() {
-			if decode(escapeCode: code) {
-				result = .commandLine(mCommandLines.currentCommand)
-			} else {
-				result = .escapeCode(code)
-			}
-		}
-		return result
+		return .empty
 	}
 
 	public func replaceReplayCommand(source src: String) -> String {
