@@ -67,6 +67,8 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.string("COLOR"),
 		.resetCharacterAttribute,
 		.selectAltScreen(true),
+		.cursorPoisition(2, 5),
+		.string("2x5"),
 		.selectAltScreen(false)
 	]
 	let terminfo = CNTerminalInfo(width: 20, height: 10)

@@ -41,7 +41,7 @@ public extension NSMutableAttributedString
 			result = self.moveCursorUpOrDown(from: idx, doUp: true, number: n, terminalInfo: terminfo)
 		case .cursorHolizontalAbsolute(let pos):
 			result = self.moveCursorTo(from: idx, x: pos, terminalInfo: terminfo)
-		case .cursorPoisition(let x, let y):
+		case .cursorPoisition(let y, let x):
 			result = self.moveCursorTo(base: baseidx, x: x, y: y, terminalInfo: terminfo)
 		case .eraceFromCursorToEnd:
 			result = self.deleteForwardAllCharacters(from: idx, terminalInfo: terminfo)
