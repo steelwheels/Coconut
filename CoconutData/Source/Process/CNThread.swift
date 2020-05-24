@@ -24,7 +24,6 @@ open class CNThread: CNProcessProtocol
 	private weak var mProcessManager:	CNProcessManager?
 
 	private var mProcessId:			Int?
-	private var mQueue:			DispatchQueue
 	private var mSemaphore:			DispatchSemaphore
 	private var mInputStream:		CNFileStream
 	private var mOutputStream:		CNFileStream
@@ -51,9 +50,8 @@ open class CNThread: CNProcessProtocol
 	public var isRunning:	 	Bool			{ get { return mIsRunning	}}
 	public var isCancelled:		Bool 			{ get { return mIsCancelled	}}
 
-	public init(processManager mgr: CNProcessManager, queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
+	public init(processManager mgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
 		mProcessManager		= mgr
-		mQueue			= disque
 		mSemaphore		= DispatchSemaphore(value: 0)
 		mInputStream		= instrm
 		mOutputStream		= outstrm
@@ -91,7 +89,7 @@ open class CNThread: CNProcessProtocol
 			self.processId = procmgr.addProcess(process: self)
 		}
 
-		mQueue.async {
+		DispatchQueue.global(qos: .background).async {
 			/* Enable secure access */
 			let homeurl  = CNPreference.shared.userPreference.homeDirectory
 			let issecure = homeurl.startAccessingSecurityScopedResource()
@@ -99,15 +97,15 @@ open class CNThread: CNProcessProtocol
 			/* Execute main */
 			self.mTerminationStatus = self.main(argument: self.mArgument)
 
-			/* Finalize */
-			self.mIsRunning = false
-			self.closeStreams()
-			self.mSemaphore.signal()
-
 			/* Disable secure access */
 			if issecure {
 				homeurl.stopAccessingSecurityScopedResource()
 			}
+
+			/* Finalize */
+			self.mIsRunning = false
+			self.closeStreams()
+			self.mSemaphore.signal()
 		}
 	}
 

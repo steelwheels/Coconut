@@ -30,12 +30,11 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	let errpipe = Pipe()
 
 	let procmgr = CNProcessManager()
-	let queue   = DispatchQueue(label: "testShell", qos: .default, attributes: .concurrent)
 	let instrm  = CNFileStream.pipe(inpipe)
 	let outstrm = CNFileStream.pipe(outpipe)
 	let errstrm = CNFileStream.pipe(errpipe)
 	let env     = CNEnvironment()
-	let shell   = UTShellThread(processManager: procmgr, queue: queue, input: instrm, output: outstrm, error: errstrm, environment: env)
+	let shell   = UTShellThread(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, environment: env)
 
 	outpipe.fileHandleForReading.readabilityHandler = {
 		(_ hdl: FileHandle) -> Void in

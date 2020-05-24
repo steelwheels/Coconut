@@ -304,22 +304,27 @@ public extension NSMutableAttributedString
 	}
 
 	func write(string str: NSAttributedString, at index: String.Index, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+		self.beginEditing()
 		let restlen  = self.distanceToLineEnd(from: index)
 		let replen   = min(str.length, restlen)
 		let writepos = self.string.distance(from: self.string.startIndex, to: index)
 		let range    = NSRange(location: writepos, length: replen)
 		self.replaceCharacters(in: range, with: str)
+		self.endEditing()
 		return self.moveCursorForward(from: index, number: str.length, terminalInfo: terminfo)
 	}
 
 	func insert(string str: NSAttributedString, at index: String.Index, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+		self.beginEditing()
 		let pos = self.string.distance(from: self.string.startIndex, to: index)
 		self.insert(str, at: pos)
 		terminfo.cursor.x += str.length
+		self.endEditing()
 		return self.string.index(index, offsetBy: str.length)
 	}
 
 	func clear(font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) {
+		self.beginEditing()
 		/* Clear normally */
 		let range = NSRange(location: 0, length: self.length)
 		self.deleteCharacters(in: range)
@@ -335,45 +340,55 @@ public extension NSMutableAttributedString
 		}
 		terminfo.cursor.x = 0
 		terminfo.cursor.y = 0
+		self.endEditing()
 	}
 
 	func deleteForwardCharacters(from index: String.Index, number num: Int, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+		self.beginEditing()
 		let lineend  = self.moveCursorForward(from: index, number: num, terminalInfo: terminfo)
 		let linepos  = self.string.distance(from: self.string.startIndex, to: index)
 		let dellen   = self.string.distance(from: index, to: lineend)
 		let delrange = NSRange(location: linepos, length: dellen)
 		self.deleteCharacters(in: delrange)
+		self.endEditing()
 		return index
 	}
 
 	func deleteForwardAllCharacters(from index: String.Index, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+		self.beginEditing()
 		let lineend  = self.moveCursorToLineEnd(from: index, terminalInfo: terminfo)
 		let linepos  = self.string.distance(from: self.string.startIndex, to: index)
 		let dellen   = self.string.distance(from: index, to: lineend)
 		let delrange = NSRange(location: linepos, length: dellen)
 		self.deleteCharacters(in: delrange)
+		self.endEditing()
 		return index
 	}
 
 	func deleteBackwardCharacters(from index: String.Index, number num: Int, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+		self.beginEditing()
 		let linestart = self.moveCursorBackward(from: index, number: num, terminalInfo: terminfo)
 		let linepos   = self.string.distance(from: self.string.startIndex, to: linestart)
 		let dellen    = self.string.distance(from: linestart, to: index)
 		let delrange = NSRange(location: linepos, length: dellen)
 		self.deleteCharacters(in: delrange)
+		self.endEditing()
 		return linestart
 	}
 
 	func deleteBackwardAllCharacters(from index: String.Index, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+		self.beginEditing()
 		let linestart = self.moveCursorToLineStart(from: index, terminalInfo: terminfo)
 		let linepos   = self.string.distance(from: self.string.startIndex, to: linestart)
 		let dellen    = self.string.distance(from: linestart, to: index)
 		let delrange = NSRange(location: linepos, length: dellen)
 		self.deleteCharacters(in: delrange)
+		self.endEditing()
 		return linestart
 	}
 
 	func deleteEntireLine(from index: String.Index, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+		self.beginEditing()
 		let linestart = self.moveCursorToLineStart(from: index, terminalInfo: terminfo)
 		var lineend   = self.moveCursorToLineEnd(from: index, terminalInfo: terminfo)
 		if lineend < self.string.endIndex {
@@ -387,6 +402,7 @@ public extension NSMutableAttributedString
 		let delrange = NSRange(location: linepos, length: dellen)
 		self.deleteCharacters(in: delrange)
 		terminfo.cursor.y -= dellen
+		self.endEditing()
 		return linestart
 	}
 
@@ -449,5 +465,37 @@ public extension NSMutableAttributedString
 				self.append(aspace)
 			}
 		}
+	}
+
+	func changeOverallTextColor(targetColor curcol: CNColor, newColor newcol: CNColor){
+		let entire = NSMakeRange(0, self.length)
+		self.beginEditing()
+		self.enumerateAttribute(.foregroundColor, in: entire, options: [], using: {
+			(anyobj, range, unsage) -> Void in
+			/* Replace current foreground color attribute by new color */
+			if let colobj = anyobj as? CNColor {
+				if colobj.isEqual(curcol) {
+					removeAttribute(.foregroundColor, range: range)
+					addAttribute(.foregroundColor, value: newcol, range: range)
+				}
+			}
+		})
+		self.endEditing()
+	}
+
+	func changeOverallBackgroundColor(targetColor curcol: CNColor, newColor newcol: CNColor){
+		let entire = NSMakeRange(0, self.length)
+		self.beginEditing()
+		self.enumerateAttribute(.backgroundColor, in: entire, options: [], using: {
+			(anyobj, range, unsage) -> Void in
+			/* Replace current background color attribute by new color */
+			if let colobj = anyobj as? CNColor {
+				if colobj.isEqual(curcol) {
+					removeAttribute(.backgroundColor, range: range)
+					addAttribute(.backgroundColor, value: newcol, range: range)
+				}
+			}
+		})
+		self.endEditing()
 	}
 }

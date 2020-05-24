@@ -11,7 +11,6 @@
 		05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051669FF23126ECC000BF46D /* CNShellThread.swift */; };
 		051AB5F421590AC400D7C71C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB5F321590AC400D7C71C /* main.swift */; };
 		05231E9A222C046A0003AE98 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
-		053995322471387600CB843E /* CNScriptThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053995312471387600CB843E /* CNScriptThread.swift */; };
 		053BAD7B208CBF7900AC3BF0 /* CNShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD75208CBF7900AC3BF0 /* CNShellUtil.swift */; };
 		053D50FF239C75D80027B067 /* UTReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D50FE239C75D70027B067 /* UTReadline.swift */; };
 		0557A9E0236E9B1F00C0D71F /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
@@ -84,7 +83,6 @@
 		051669FF23126ECC000BF46D /* CNShellThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellThread.swift; sourceTree = "<group>"; };
 		051AB5F121590AC400D7C71C /* UTShell */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UTShell; sourceTree = BUILT_PRODUCTS_DIR; };
 		051AB5F321590AC400D7C71C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		053995312471387600CB843E /* CNScriptThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNScriptThread.swift; sourceTree = "<group>"; };
 		053BAD75208CBF7900AC3BF0 /* CNShellUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellUtil.swift; sourceTree = "<group>"; };
 		053D50FE239C75D70027B067 /* UTReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTReadline.swift; sourceTree = "<group>"; };
 		056AF17C2158E261007AE91A /* UTShell.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UTShell.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,7 +181,6 @@
 				059C508123A7B0250035482B /* CNCommandLines.swift */,
 				059C508323A7D36C0035482B /* CNCommandLine.swift */,
 				05D1004F231E9F030054F81C /* CNUnixCommand.swift */,
-				053995312471387600CB843E /* CNScriptThread.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -373,7 +370,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				05D10050231E9F030054F81C /* CNUnixCommand.swift in Sources */,
-				053995322471387600CB843E /* CNScriptThread.swift in Sources */,
 				059C508223A7B0250035482B /* CNCommandLines.swift in Sources */,
 				05FC90AA239BE3A500BA16E6 /* CNReadline.swift in Sources */,
 				05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */,

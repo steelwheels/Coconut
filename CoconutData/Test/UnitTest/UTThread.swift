@@ -18,17 +18,16 @@ public class UTSimpleThread: CNThread {
 public class UTNestedThread: CNThread {
 	private var mCount:	Int
 
-	public init(processManager procmgr: CNProcessManager, queue disque: DispatchQueue, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, count cnt: Int) {
+	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, count cnt: Int) {
 		mCount = cnt
-		super.init(processManager: procmgr, queue: disque, input: instrm, output: outstrm, error: errstrm, environment: env)
+		super.init(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, environment: env)
 	}
 
 	open override func main(argument arg: CNNativeValue) -> Int32 {
 		let procmgr = CNProcessManager()
-		let queue   = DispatchQueue(label: "UTNestedThread", qos: .default, attributes: .concurrent)
 		//self.console.print(string: "testNestedThread\(mCount): 1.mainOperation/start\n")
 		if mCount < 3 {
-			let newthread = UTNestedThread(processManager: procmgr, queue: queue, input: self.inputStream, output: self.outputStream, error: self.errorStream, environment: self.environment, count: mCount + 1)
+			let newthread = UTNestedThread(processManager: procmgr, input: self.inputStream, output: self.outputStream, error: self.errorStream, environment: self.environment, count: mCount + 1)
 			//self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
 			newthread.start(argument: .nullValue)
 			//self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
@@ -43,18 +42,16 @@ public class UTNestedThread: CNThread {
 public func testThread(console cons: CNFileConsole) -> Bool
 {
 	let manager = CNProcessManager()
-	let queue   = DispatchQueue(label: "UTThread", attributes: .concurrent)
 	let env     = CNEnvironment()
-	let result0 = testSimpleThread(processManager: manager, queue: queue, environment: env, console: cons)
-	let result1 = testNestedThread(processManager: manager, queue: queue, environment: env, console: cons)
+	let result0 = testSimpleThread(processManager: manager, environment: env, console: cons)
+	let result1 = testNestedThread(processManager: manager, environment: env, console: cons)
 	return result0 && result1
 }
 
-private func testSimpleThread(processManager procmgr: CNProcessManager, queue disque: DispatchQueue, environment env: CNEnvironment, console cons: CNFileConsole) -> Bool
+private func testSimpleThread(processManager procmgr: CNProcessManager, environment env: CNEnvironment, console cons: CNFileConsole) -> Bool
 {
 	cons.print(string: "testSimpleThread: 1. Begin\n")
 	let thread = UTSimpleThread(processManager:	procmgr,
-				    queue:		disque,
 				    input:  		.fileHandle(cons.inputHandle),
 				    output: 		.fileHandle(cons.outputHandle),
 				    error:  		.fileHandle(cons.errorHandle),
@@ -65,11 +62,10 @@ private func testSimpleThread(processManager procmgr: CNProcessManager, queue di
 	return true
 }
 
-private func testNestedThread(processManager procmgr: CNProcessManager, queue disque: DispatchQueue, environment env: CNEnvironment, console cons: CNFileConsole) -> Bool
+private func testNestedThread(processManager procmgr: CNProcessManager, environment env: CNEnvironment, console cons: CNFileConsole) -> Bool
 {
 	cons.print(string: "testNestedThread: 1. Begin\n")
 	let thread = UTNestedThread(processManager: procmgr,
-				    queue:	disque,
 				    input:  	.fileHandle(cons.inputHandle),
 				    output: 	.fileHandle(cons.outputHandle),
 				    error:  	.fileHandle(cons.errorHandle),
