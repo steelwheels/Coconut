@@ -15,6 +15,19 @@ public enum CNFileStream
 	case fileHandle(FileHandle)
 	case pipe(Pipe)
 
+	public func isRawMode() -> Bool? {
+		let result: Bool?
+		switch self {
+		case .null:
+			result = nil
+		case .fileHandle(let hdl):
+			result = hdl.isRawMode()
+		case .pipe(let pipe):
+			result = pipe.fileHandleForReading.isRawMode()
+		}
+		return result
+	}
+
 	public func setRawMode(enable enbl: Bool) -> Int32 {
 		let result: Int32
 		switch self {
@@ -114,6 +127,14 @@ extension FileHandle
 			} else {
 				return nil
 			}
+		}
+	}
+
+	public func isRawMode() -> Bool? {
+		if let mode = self.localMode {
+			return !mode.icannon
+		} else {
+			return nil
 		}
 	}
 

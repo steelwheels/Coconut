@@ -31,6 +31,7 @@ open class CNThread: CNProcessProtocol
 	private var mEnvironment:		CNEnvironment
 	private var mConsole:			CNFileConsole
 	private var mArgument:			CNNativeValue
+	private var mIsRawMode:			Bool?
 	private var mIsRunning:			Bool
 	private var mIsCancelled:		Bool
 	private var mTerminationStatus:		Int32
@@ -58,6 +59,7 @@ open class CNThread: CNProcessProtocol
 		mErrorStream		= errstrm
 		mEnvironment		= env
 		mArgument		= .nullValue
+		mIsRawMode		= mInputStream.isRawMode()
 		mIsRunning		= false
 		mIsCancelled		= false
 		mTerminationStatus	= -1
@@ -67,12 +69,20 @@ open class CNThread: CNProcessProtocol
 					 error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
 
 		/* Set raw mode */
-		let _ = self.inputStream.setRawMode(enable: true)
+		if let israw = mIsRawMode {
+			if !israw {
+				let _ = mInputStream.setRawMode(enable: true)
+			}
+		}
 	}
 
 	deinit {
 		/* Release raw mode */
-		let _ = self.inputStream.setRawMode(enable: false)
+		if let israw = mIsRawMode {
+			if !israw {
+				let _ = mInputStream.setRawMode(enable: false)
+			}
+		}
 		/* Remove from parent */
 		if let mgr = mProcessManager {
 			mgr.removeProcess(process: self)
@@ -90,6 +100,7 @@ open class CNThread: CNProcessProtocol
 		}
 
 		DispatchQueue.global(qos: .background).async {
+			() -> Void in
 			/* Enable secure access */
 			let homeurl  = CNPreference.shared.userPreference.homeDirectory
 			let issecure = homeurl.startAccessingSecurityScopedResource()
