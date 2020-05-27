@@ -15,6 +15,16 @@ public class CNCurses
 	private var mBuffer:		String
 	private var mLock:		NSLock
 
+	public var foregroundColor:	CNColor {
+		get		{ return mTerminalInfo.foregroundColor		}
+		set(newcol) 	{ mTerminalInfo.foregroundColor = newcol	}
+	}
+
+	public var backgroundColor:	CNColor {
+		get 		{ return mTerminalInfo.backgroundColor 		}
+		set(newcol)	{ mTerminalInfo.backgroundColor = newcol	}
+	}
+
 	public init(console cons: CNFileConsole, terminalInfo terminfo: CNTerminalInfo) {
 		mTerminalInfo	= terminfo
 		mConsole	= cons
@@ -56,9 +66,9 @@ public class CNCurses
 	}
 
 	public func moveTo(x xpos: Int, y ypos: Int) {
-		let x    = max(0, min(xpos, mTerminalInfo.width  - 1))
-		let y    = max(0, min(ypos, mTerminalInfo.height - 1))
-		let code = CNEscapeCode.cursorPoisition(y, x)
+		let x = clip(value: xpos, min: 0, max: mTerminalInfo.width  - 1)
+		let y = clip(value: ypos, min: 0, max: mTerminalInfo.height - 1)
+		let code   = CNEscapeCode.cursorPoisition(y, x)
 		mConsole.print(string: code.encode())
 	}
 
@@ -74,5 +84,28 @@ public class CNCurses
 		}
 		mLock.unlock()
 		return result
+	}
+
+	public func fill(x xpos: Int, y ypos: Int, width wid: Int, height hgt: Int, char c: Character) {
+		let x0 = clip(value: xpos, min: 0, max: mTerminalInfo.width  - 1)
+		let y0 = clip(value: ypos, min: 0, max: mTerminalInfo.height - 1)
+
+		let x1 = clip(value: xpos + width,  min: 0, max: mTerminalInfo.width  - 1)
+		let y1 = clip(value: ypos + height, min: 0, max: mTerminalInfo.height - 1)
+
+		let len = x1 - x0
+		if len > 0 && y0 <= y1 {
+			mConsole.print(string: CNEscapeCode.foregroundColor(mTerminalInfo.foregroundColor).encode())
+			mConsole.print(string: CNEscapeCode.backgroundColor(mTerminalInfo.backgroundColor).encode())
+			let str = String(repeating: c, count: len)
+			for y in y0...y1 {
+				moveTo(x: x0, y: y)
+				mConsole.print(string: str)
+			}
+		}
+	}
+
+	private func clip(value v: Int, min minv: Int, max maxv: Int) -> Int {
+		return max(minv, min(maxv, v))
 	}
 }
