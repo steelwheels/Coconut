@@ -67,6 +67,10 @@ private class CNDirectoryResource
 		}
 	}
 
+	public func set(identifier ident: String, path pathstr: String) {
+		mFileMap[ident] = [CNFileResource(path: pathstr)]
+	}
+
 	public func pathString(identifier ident: String, index idx: Int) -> String? {
 		if let files = mFileMap[ident] {
 			if idx < files.count {
@@ -141,6 +145,10 @@ open class CNResource
 
 	public func add(category cat: String, identifier ident: String, path pathstr: String) {
 		mDirectoryResources[cat]?.add(identifier: ident, path: pathstr)
+	}
+
+	public func set(category cat: String, identifier ident: String, path pathstr: String) {
+		mDirectoryResources[cat]?.set(identifier: ident, path: pathstr)
 	}
 
 	public func count(category cat: String, identifier ident: String) -> Int? {
