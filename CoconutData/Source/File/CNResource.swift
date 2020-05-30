@@ -35,6 +35,10 @@ private class CNFileResource
 		}
 	}
 
+	public func store(content cnt: Any) {
+		mContent = cnt
+	}
+
 	public func toText() -> CNTextLine {
 		return CNTextLine(string: "\"\(mPath)\"")
 	}
@@ -69,6 +73,12 @@ private class CNDirectoryResource
 
 	public func set(identifier ident: String, path pathstr: String) {
 		mFileMap[ident] = [CNFileResource(path: pathstr)]
+	}
+
+	public func store(identifier ident: String, index idx: Int, content cnt: Any){
+		if let fmap = mFileMap[ident] {
+			fmap[idx].store(content: cnt)
+		}
 	}
 
 	public func pathString(identifier ident: String, index idx: Int) -> String? {
@@ -149,6 +159,12 @@ open class CNResource
 
 	public func set(category cat: String, identifier ident: String, path pathstr: String) {
 		mDirectoryResources[cat]?.set(identifier: ident, path: pathstr)
+	}
+
+	public func store(category cat: String, identifier ident: String, index idx: Int, content cnt: Any){
+		if let res = mDirectoryResources[cat] {
+			res.store(identifier: ident, index: idx, content: cnt)
+		}
 	}
 
 	public func count(category cat: String, identifier ident: String) -> Int? {
