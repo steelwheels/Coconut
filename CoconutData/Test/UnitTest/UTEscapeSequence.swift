@@ -13,7 +13,7 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 	let res0 = dumpSequence(string: "Hello, World !!", console: cons)
 	let res1 = dumpCode(code: CNEscapeCode.cursorUp(1), console: cons)
 	let res2 = dumpCode(code: CNEscapeCode.cursorForward(3), console: cons)
-	let res3 = dumpCode(code: CNEscapeCode.cursorPoisition(1, 2), console: cons)
+	let res3 = dumpCode(code: CNEscapeCode.cursorPosition(1, 2), console: cons)
 	let res4 = dumpCode(code: CNEscapeCode.eraceEntireLine, console: cons)
 
 	let res11 = dumpCode(code: CNEscapeCode.boldCharacter(true), console: cons)

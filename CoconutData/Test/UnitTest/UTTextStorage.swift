@@ -67,7 +67,7 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.string("COLOR"),
 		.resetCharacterAttribute,
 		.selectAltScreen(true),
-		.cursorPoisition(2, 5),
+		.cursorPosition(2, 5),
 		.string("2x5"),
 		.selectAltScreen(false)
 	]

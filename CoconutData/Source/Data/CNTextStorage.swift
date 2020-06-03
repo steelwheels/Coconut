@@ -40,9 +40,19 @@ public extension NSMutableAttributedString
 		case .cursorPreviousLine(let n):
 			result = self.moveCursorUpOrDown(from: idx, doUp: true, number: n, terminalInfo: terminfo)
 		case .cursorHolizontalAbsolute(let pos):
-			result = self.moveCursorTo(from: idx, x: pos, terminalInfo: terminfo)
-		case .cursorPoisition(let y, let x):
-			result = self.moveCursorTo(base: baseidx, x: x, y: y, terminalInfo: terminfo)
+			if pos >= 1 {
+				result = self.moveCursorTo(from: idx, x: pos-1, terminalInfo: terminfo)
+			} else {
+				NSLog("cursorHolizontalAbsolute: Underflow")
+				result = idx	// ignore
+			}
+		case .cursorPosition(let row, let column):
+			if row>=1 && column>=1 {
+				result = self.moveCursorTo(base: baseidx, x: column-1, y: row-1, terminalInfo: terminfo)
+			} else {
+				NSLog("cursorHolizontalAbsolute: Underflow")
+				result = idx	// ignore
+			}
 		case .eraceFromCursorToEnd:
 			result = self.deleteForwardAllCharacters(from: idx, terminalInfo: terminfo)
 		case .eraceFromCursorToBegin:

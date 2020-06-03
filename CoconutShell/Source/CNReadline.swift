@@ -95,7 +95,7 @@ open class CNReadline
 			result = true
 		case .cursorHolizontalAbsolute(_):
 			result = true			/* ignored */
-		case .cursorPoisition(_, _):
+		case .cursorPosition(_, _):
 			result = true			/* ignored */
 		case .eraceFromCursorToEnd:
 			result = false			/* skipped */

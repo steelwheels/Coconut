@@ -24,7 +24,7 @@ private class UTReadline: CNReadline {
 			CNEscapeCode.cursorBackward(2).encode(),
 			CNEscapeCode.cursorNextLine(5).encode(),
 			CNEscapeCode.cursorPreviousLine(6).encode(),
-			CNEscapeCode.cursorPoisition(7, 8).encode(),
+			CNEscapeCode.cursorPosition(7, 8).encode(),
 			"<INSERTED>",
 			CNEscapeCode.eraceFromCursorToBegin.encode(),
 			CNEscapeCode.eraceFromCursorToBegin.encode(),	// not changed

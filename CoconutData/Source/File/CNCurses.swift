@@ -66,9 +66,14 @@ public class CNCurses
 	}
 
 	public func moveTo(x xpos: Int, y ypos: Int) {
-		let x = clip(value: xpos, min: 0, max: mTerminalInfo.width  - 1)
-		let y = clip(value: ypos, min: 0, max: mTerminalInfo.height - 1)
-		let code   = CNEscapeCode.cursorPoisition(y, x)
+		let col  = clip(value: xpos, min: 0, max: mTerminalInfo.width  - 1)
+		let row  = clip(value: ypos, min: 0, max: mTerminalInfo.height - 1)
+		let code = CNEscapeCode.cursorPosition(row+1, col+1) // started from 1
+		mConsole.print(string: code.encode())
+	}
+
+	public func put(string str: String) {
+		let code = CNEscapeCode.string(str)
 		mConsole.print(string: code.encode())
 	}
 
@@ -86,21 +91,21 @@ public class CNCurses
 		return result
 	}
 
-	public func fill(x xpos: Int, y ypos: Int, width wid: Int, height hgt: Int, char c: Character) {
+	public func fill(x xpos: Int, y ypos: Int, width dwidth: Int, height dheight: Int, char c: Character) {
 		let x0 = clip(value: xpos, min: 0, max: mTerminalInfo.width  - 1)
 		let y0 = clip(value: ypos, min: 0, max: mTerminalInfo.height - 1)
 
-		let x1 = clip(value: xpos + width,  min: 0, max: mTerminalInfo.width  - 1)
-		let y1 = clip(value: ypos + height, min: 0, max: mTerminalInfo.height - 1)
+		let x1 = clip(value: xpos + dwidth,  min: 0, max: mTerminalInfo.width  - 1)
+		let y1 = clip(value: ypos + dheight, min: 0, max: mTerminalInfo.height - 1)
 
 		let len = x1 - x0
 		if len > 0 && y0 <= y1 {
 			mConsole.print(string: CNEscapeCode.foregroundColor(mTerminalInfo.foregroundColor).encode())
 			mConsole.print(string: CNEscapeCode.backgroundColor(mTerminalInfo.backgroundColor).encode())
 			let str = String(repeating: c, count: len)
-			for y in y0...y1 {
+			for y in y0..<y1 {
 				moveTo(x: x0, y: y)
-				mConsole.print(string: str)
+				put(string: str)
 			}
 		}
 	}

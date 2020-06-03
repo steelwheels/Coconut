@@ -25,8 +25,8 @@ public enum CNEscapeCode {
 	case	cursorBackward(Int)
 	case	cursorNextLine(Int)			/* Moves cursor to beginning of the line n	*/
 	case	cursorPreviousLine(Int)			/* Moves cursor to beginning of the line n	*/
-	case	cursorHolizontalAbsolute(Int)		/* (Column)					*/
-	case	cursorPoisition(Int, Int)		/* (Row, Column)				*/
+	case	cursorHolizontalAbsolute(Int)		/* (Column) started from 1			*/
+	case	cursorPosition(Int, Int)		/* (Row, Column) started from 1		 	*/
 	case	eraceFromCursorToEnd			/* Clear from cursor to end of buffer 		*/
 	case 	eraceFromCursorToBegin			/* Clear from begining of buffer to cursor	*/
 	case	eraceEntireBuffer			/* Clear entire buffer				*/
@@ -68,7 +68,7 @@ public enum CNEscapeCode {
 		case .cursorNextLine(let n):			result = "cursorNextLine(\(n))"
 		case .cursorPreviousLine(let n):		result = "cursorPreviousLine(\(n))"
 		case .cursorHolizontalAbsolute(let pos):	result = "cursorHolizontalAbsolute(\(pos))"
-		case .cursorPoisition(let row, let col):	result = "cursorPoisition(\(row),\(col))"
+		case .cursorPosition(let row, let col):	result = "cursorPoisition(\(row),\(col))"
 		case .eraceFromCursorToEnd:			result = "eraceFromCursorToEnd"
 		case .eraceFromCursorToBegin:			result = "eraceFromCursorToBegin"
 		case .eraceEntireBuffer:			result = "eraceEntireBuffer"
@@ -111,7 +111,7 @@ public enum CNEscapeCode {
 		case .cursorNextLine(let n):			result = "\(ESC)[\(n)E"
 		case .cursorPreviousLine(let n):		result = "\(ESC)[\(n)F"
 		case .cursorHolizontalAbsolute(let n):		result = "\(ESC)[\(n)G"
-		case .cursorPoisition(let row, let col):	result = "\(ESC)[\(row);\(col)H"
+		case .cursorPosition(let row, let col):		result = "\(ESC)[\(row);\(col)H"
 		case .eraceFromCursorToEnd:			result = "\(ESC)[0J"
 		case .eraceFromCursorToBegin:			result = "\(ESC)[1J"
 		case .eraceEntireBuffer:			result = "\(ESC)[2J"
@@ -215,9 +215,9 @@ public enum CNEscapeCode {
 			case .cursorHolizontalAbsolute(let n1):	result = (n0 == n1)
 			default:				break
 			}
-		case .cursorPoisition(let n0, let m0):
+		case .cursorPosition(let row0, let col0):
 			switch src {
-			case .cursorPoisition(let n1, let m1):	result = (n0 == n1) && (m0 == m1)
+			case .cursorPosition(let row1, let col1):	result = (row0 == row1) && (col0 == col1)
 			default:				break
 			}
 		case .eraceFromCursorToEnd:
@@ -475,7 +475,7 @@ public enum CNEscapeCode {
 			case "F": results.append(CNEscapeCode.cursorPreviousLine(try get1Parameter(from: tokens, forCommand: c)))
 			case "G": results.append(CNEscapeCode.cursorHolizontalAbsolute(try get1Parameter(from: tokens, forCommand: c)))
 			case "H": let (row, col) = try get0Or2Parameter(from: tokens, forCommand: c)
-				  results.append(CNEscapeCode.cursorPoisition(row, col))
+				  results.append(CNEscapeCode.cursorPosition(row, col))
 			case "J":
 				let param = try get1Parameter(from: tokens, forCommand: c)
 				switch param {
