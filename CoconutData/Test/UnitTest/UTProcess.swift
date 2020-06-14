@@ -10,12 +10,13 @@ import Foundation
 
 public func testProcess(console cons: CNFileConsole) -> Bool
 {
-	let res0 = testNormalProcess(console: cons)
+	let res0 = testNormalProcess(command: "echo \"Hello, World !!\"", console: cons)
+	//let res2 = testNormalProcess(command: "open -a /Applications/JSTerminal.app", console: cons)
 	let res1 = testProcessTermination(console: cons)
-	return res0 && res1
+	return res0 && res1 //&& res2
 }
 
-private func testNormalProcess(console cons: CNFileConsole) -> Bool
+private func testNormalProcess(command cmd: String, console cons: CNFileConsole) -> Bool
 {
 	let manager = CNProcessManager()
 	let env     = CNEnvironment()
@@ -33,7 +34,7 @@ private func testNormalProcess(console cons: CNFileConsole) -> Bool
 	//cons.print(string: "pid = \(pid)\n")
 
 	//let input = process.inputFileHandle
-	process.execute(command: "echo \"Hello, World !!\"")
+	process.execute(command: cmd)
 	//input.write(string: "Hello, World !!")
 	//input.closeFile()
 
