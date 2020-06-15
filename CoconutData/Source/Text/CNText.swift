@@ -15,12 +15,12 @@ public class CNText
 		dummy = 1
 	}
 
-	public func print(console cons: CNConsole)
+	public func print(console cons: CNConsole, terminal tc: String)
 	{
-		print(console: cons, indent: 0)
+		print(console: cons, terminal: tc, indent: 0)
 	}
 
-	open func print(console cons: CNConsole, indent idt: Int){
+	open func print(console cons: CNConsole, terminal tc: String, indent idt: Int){
 		fatalError("Must be override")
 	}
 
@@ -32,15 +32,11 @@ public class CNText
 		return str
 	}
 
-	public func printIndent(console cons: CNConsole, indent idt: Int){
-		cons.print(string: indentString(indent: idt))
+	open func toStrings(terminal tc: String) -> Array<String> {
+		return self.toStrings(terminal: tc, indent: 0)
 	}
 
-	open func toStrings() -> Array<String> {
-		return self.toStrings(indent: 0)
-	}
-
-	open func toStrings(indent idt: Int) -> Array<String> {
+	open func toStrings(terminal tc: String, indent idt: Int) -> Array<String> {
 		fatalError("Must be override")
 	}
 
@@ -73,13 +69,13 @@ public class CNTextLine: CNText
 		mString  = src + mString
 	}
 
-	open override func print(console cons: CNConsole, indent idt: Int){
-		printIndent(console: cons, indent: idt)
-		cons.print(string: mString + "\n")
+	open override func print(console cons: CNConsole, terminal tc: String, indent idt: Int){
+		let idtstr = indentString(indent: idt)
+		cons.print(string: idtstr + mString + tc + "\n")
 	}
 
-	public override func toStrings(indent idt: Int) -> Array<String> {
-		let str = indentString(indent: idt) + mString
+	public override func toStrings(terminal tc: String, indent idt: Int) -> Array<String> {
+		let str = indentString(indent: idt) + mString + tc
 		return [str]
 	}
 }
@@ -123,24 +119,26 @@ public class CNTextSection: CNText
 		}
 	}
 
-	open override func print(console cons: CNConsole, indent idt: Int){
+	open override func print(console cons: CNConsole, terminal tc: String, indent idt: Int){
+		let idtstr = indentString(indent: idt)
+
 		if header != "" {
-			printIndent(console: cons, indent: idt) ;
-			cons.print(string: header + "\n")
+			cons.print(string: idtstr + header + "\n")
 		}
 
+		var term: String = ""
 		let nextidt = idt + 1
 		for text in mContents {
-			text.print(console: cons, indent: nextidt)
+			text.print(console: cons, terminal:term, indent: nextidt)
+			term = tc
 		}
 
 		if footer != "" {
-			printIndent(console: cons, indent: idt) ;
-			cons.print(string: footer + "\n")
+			cons.print(string: idtstr + footer + "\n")
 		}
 	}
 
-	public override func toStrings(indent idt: Int) -> Array<String> {
+	public override func toStrings(terminal tc: String, indent idt: Int) -> Array<String> {
 		let spaces = indentString(indent: idt)
 		var result: Array<String> = []
 		if header != "" {
@@ -148,7 +146,7 @@ public class CNTextSection: CNText
 		}
 		let nextidt = idt + 1
 		for text in mContents {
-			let strs = text.toStrings(indent: nextidt)
+			let strs = text.toStrings(terminal: tc, indent: nextidt)
 			result.append(contentsOf: strs)
 		}
 		if footer != "" {

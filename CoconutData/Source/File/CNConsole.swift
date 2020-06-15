@@ -34,7 +34,7 @@ extension CNLogging
 		let place = placeString(file: filestr, line: lineval, function: funcstr)
 		log(type: logtype, entireString: desc + " at " + place + "\n")
 		if let cons = console {
-			txt.print(console: cons)
+			txt.print(console: cons, terminal: "")
 		}
 	}
 

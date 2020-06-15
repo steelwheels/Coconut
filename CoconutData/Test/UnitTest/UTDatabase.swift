@@ -73,7 +73,7 @@ private func readdb(database db: CNDatabaseProtocol, identitifer ident: String, 
 	cons.print(string: "read \"\(ident)\" -> ")
 	if let val = db.read(identifier: ident) {
 		let valtxt = val.toText()
-		valtxt.print(console: cons)
+		valtxt.print(console: cons, terminal: "")
 	} else {
 		cons.print(string: "nil\n")
 	}
@@ -81,5 +81,5 @@ private func readdb(database db: CNDatabaseProtocol, identitifer ident: String, 
 
 private func print(database db: CNDatabaseProtocol, console cons: CNConsole) {
 	let text = db.toText()
-	text.print(console: cons)
+	text.print(console: cons, terminal: "")
 }
