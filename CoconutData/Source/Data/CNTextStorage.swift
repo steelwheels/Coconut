@@ -14,62 +14,61 @@ public extension NSMutableAttributedString
 		switch code {
 		case .string(let str):
 			let astr = NSAttributedString(string: str, font: fnt, terminalInfo: terminfo)
-			result = self.write(string: astr, at: idx, terminalInfo: terminfo)
+			result = self.write(string: astr, at: idx)
 		case .eot:
 			result = idx // ignore
 		case .newline:
-			let astr = NSAttributedString(string: "\n")
-			result = self.insert(string: astr, at: idx, terminalInfo: terminfo)
+			result = self.insert(string: "\n", at: idx, font: fnt, terminalInfo: terminfo)
 		case .tab:
 			let astr = NSAttributedString(string: "\t")
-			result = self.write(string: astr, at: idx, terminalInfo: terminfo)
+			result = self.write(string: astr, at: idx)
 		case .backspace:
-			result = self.moveCursorBackward(from: idx, number: 1, terminalInfo: terminfo)
+			result = self.moveCursorBackward(from: idx, number: 1)
 		case .delete:
-			result = self.deleteBackwardCharacters(from: idx, number: 1, terminalInfo: terminfo)
+			result = self.deleteBackwardCharacters(from: idx, number: 1)
 		case .cursorUp(let n):
-			result = self.moveCursorUpOrDown(from: idx, doUp: true, number: n, terminalInfo: terminfo)
+			result = self.moveCursorUpOrDown(from: idx, doUp: true, number: n)
 		case .cursorDown(let n):
-			result = self.moveCursorUpOrDown(from: idx, doUp: false, number: n, terminalInfo: terminfo)
+			result = self.moveCursorUpOrDown(from: idx, doUp: false, number: n)
 		case .cursorForward(let n):
-			result = self.moveCursorForward(from: idx, number: n, terminalInfo: terminfo)
+			result = self.moveCursorForward(from: idx, number: n)
 		case .cursorBackward(let n):
-			result = self.moveCursorBackward(from: idx, number: n, terminalInfo: terminfo)
+			result = self.moveCursorBackward(from: idx, number: n)
 		case .cursorNextLine(let n):
-			result = self.moveCursorUpOrDown(from: idx, doUp: false, number: n, terminalInfo: terminfo)
+			result = self.moveCursorUpOrDown(from: idx, doUp: false, number: n)
 		case .cursorPreviousLine(let n):
-			result = self.moveCursorUpOrDown(from: idx, doUp: true, number: n, terminalInfo: terminfo)
+			result = self.moveCursorUpOrDown(from: idx, doUp: true, number: n)
 		case .cursorHolizontalAbsolute(let pos):
 			if pos >= 1 {
-				result = self.moveCursorTo(from: idx, x: pos-1, terminalInfo: terminfo)
+				result = self.moveCursorTo(from: idx, x: pos-1)
 			} else {
 				NSLog("cursorHolizontalAbsolute: Underflow")
 				result = idx	// ignore
 			}
 		case .cursorPosition(let row, let column):
 			if row>=1 && column>=1 {
-				result = self.moveCursorTo(base: baseidx, x: column-1, y: row-1, terminalInfo: terminfo)
+				result = self.moveCursorTo(base: baseidx, x: column-1, y: row-1)
 			} else {
 				NSLog("cursorHolizontalAbsolute: Underflow")
 				result = idx	// ignore
 			}
 		case .eraceFromCursorToEnd:
-			result = self.deleteForwardAllCharacters(from: idx, terminalInfo: terminfo)
+			result = self.deleteForwardAllCharacters(from: idx)
 		case .eraceFromCursorToBegin:
-			result = self.deleteBackwardAllCharacters(from: idx, terminalInfo: terminfo)
+			result = self.deleteBackwardAllCharacters(from: idx)
 		case .eraceFromCursorToRight:
-			result = self.deleteForwardAllCharacters(from: idx, terminalInfo: terminfo)
+			result = self.deleteForwardAllCharacters(from: idx)
 		case .eraceFromCursorToLeft:
-			result = self.deleteBackwardAllCharacters(from: idx, terminalInfo: terminfo)
+			result = self.deleteBackwardAllCharacters(from: idx)
 		case .eraceEntireLine:
-			result = self.deleteEntireLine(from: idx, terminalInfo: terminfo)
+			result = self.deleteEntireLine(from: idx)
 		case .eraceEntireBuffer:
 			self.clear(font: fnt, terminalInfo: terminfo)
 			result = string.startIndex
-		case .scrollUp:
-			result = nil			// not accepted
-		case .scrollDown:
-			result = nil			// not accepted
+		case .scrollUp(let lines):
+			result = self.scrollUp(lines: lines, font: fnt, terminalInfo: terminfo)
+		case .scrollDown(let lines):
+			result = self.scrollDown(lines: lines, font: fnt, terminalInfo: terminfo)
 		case .resetAll:
 			self.clear(font: fnt, terminalInfo: terminfo)
 			terminfo.reset()

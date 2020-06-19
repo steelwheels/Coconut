@@ -69,7 +69,11 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		.selectAltScreen(true),
 		.cursorPosition(2, 5),
 		.string("2x5"),
-		.selectAltScreen(false)
+		.selectAltScreen(false),
+		.scrollUp(2),
+		.string("\n>"),
+		.scrollDown(2),
+		.string("\n<")
 	]
 	let terminfo = CNTerminalInfo(width: 20, height: 10)
 	terminfo.foregroundColor	= CNColor.green

@@ -33,8 +33,8 @@ public enum CNEscapeCode {
 	case 	eraceFromCursorToRight			/* Clear from cursor to end of line		*/
 	case	eraceFromCursorToLeft			/* Clear from cursor to beginning of line	*/
 	case	eraceEntireLine				/* Clear entire line				*/
-	case	scrollUp
-	case	scrollDown
+	case	scrollUp(Int)				/* Scroll up n lines				*/
+	case	scrollDown(Int)				/* Scroll down n lines				*/
 	case	resetAll				/* Clear text, reset cursor postion and tabstop	*/
 	case	resetCharacterAttribute			/* Reset all arributes for character		*/
 	case	boldCharacter(Bool)			/* Set/reset bold font				*/
@@ -68,15 +68,15 @@ public enum CNEscapeCode {
 		case .cursorNextLine(let n):			result = "cursorNextLine(\(n))"
 		case .cursorPreviousLine(let n):		result = "cursorPreviousLine(\(n))"
 		case .cursorHolizontalAbsolute(let pos):	result = "cursorHolizontalAbsolute(\(pos))"
-		case .cursorPosition(let row, let col):	result = "cursorPoisition(\(row),\(col))"
+		case .cursorPosition(let row, let col):		result = "cursorPoisition(\(row),\(col))"
 		case .eraceFromCursorToEnd:			result = "eraceFromCursorToEnd"
 		case .eraceFromCursorToBegin:			result = "eraceFromCursorToBegin"
 		case .eraceEntireBuffer:			result = "eraceEntireBuffer"
 		case .eraceFromCursorToRight:			result = "eraceFromCursorToRight"
 		case .eraceFromCursorToLeft:			result = "eraceFromCursorToLeft"
 		case .eraceEntireLine:				result = "eraceEntireLine"
-		case .scrollUp:					result = "scrollUp"
-		case .scrollDown:				result = "scrollDown"
+		case .scrollUp(let lines):			result = "scrollUp(\(lines))"
+		case .scrollDown(let lines):			result = "scrollDown(\(lines))"
 		case .resetAll:					result = "resetAll"
 		case .resetCharacterAttribute:			result = "resetCharacterAttribute"
 		case .boldCharacter(let flag):			result = "boldCharacter(\(flag))"
@@ -118,8 +118,8 @@ public enum CNEscapeCode {
 		case .eraceFromCursorToRight:			result = "\(ESC)[0K"
 		case .eraceFromCursorToLeft:			result = "\(ESC)[1K"
 		case .eraceEntireLine:				result = "\(ESC)[2K"
-		case .scrollUp:					result = "\(ESC)M"
-		case .scrollDown:				result = "\(ESC)D"
+		case .scrollUp(let lines):			result = "\(ESC)[\(lines)S"
+		case .scrollDown(let lines):			result = "\(ESC)[\(lines)T"
 		case .resetAll:					result = "\(ESC)c"
 		case .resetCharacterAttribute:			result = "\(ESC)[0m"
 		case .boldCharacter(let flag):			result = "\(ESC)[\(flag ? 1: 22)m"
@@ -388,12 +388,6 @@ public enum CNEscapeCode {
 					let (idx2, command2) = try decodeEscapeSequence(string: src, index: idx1)
 					result.append(contentsOf: command2)
 					idx = idx2
-				case "D":
-					result.append(.scrollDown)
-					idx = idx1
-				case "U":
-					result.append(.scrollUp)
-					idx = idx1
 				default:
 					result.append(.string("\(c0)\(c1)"))
 					idx = idx1
@@ -494,6 +488,12 @@ public enum CNEscapeCode {
 				default:
 					throw DecodeError.invalidParameter(c, param)
 				}
+			case "S":
+				let param = try get1Parameter(from: tokens, forCommand: c)
+				results.append(CNEscapeCode.scrollUp(param))
+			case "T":
+				let param = try get1Parameter(from: tokens, forCommand: c)
+				results.append(CNEscapeCode.scrollDown(param))
 			case "h":
 				let param = try getDec1Parameter(from: tokens, forCommand: c)
 				switch param {
