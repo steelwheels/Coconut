@@ -91,7 +91,7 @@ open class CNProcess: CNProcessProtocol
 		mProcess.standardInput		= CNFileStream.streamToAny(stream: instrm)
 		mProcess.standardOutput		= CNFileStream.streamToAny(stream: outstrm)
 		mProcess.standardError		= CNFileStream.streamToAny(stream: errstrm)
-		mProcess.environment		= env.variables
+		mProcess.environment		= env.stringVariables
 		mProcess.currentDirectoryURL	= env.currentDirectory
 		mProcess.terminationHandler = {
 			[weak self] (process: Process) -> Void in

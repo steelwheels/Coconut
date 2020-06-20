@@ -14,6 +14,7 @@
 		05BBC631239BE3FB00DC73A9 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BBC62F239BE3FB00DC73A9 /* CNReadline.swift */; };
 		05C3A9B523A91FB400D54EC9 /* CNCommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C3A9B323A91FB400D54EC9 /* CNCommandLine.swift */; };
 		05C3A9B623A91FB400D54EC9 /* CNCommandLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C3A9B423A91FB400D54EC9 /* CNCommandLines.swift */; };
+		05C635C5249CD3E400BC7F3F /* CNCommandComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C635C4249CD3E400BC7F3F /* CNCommandComplementor.swift */; };
 		05C811492304D03A0032C1FA /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C811482304D03A0032C1FA /* CNShellThread.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		05BBC62F239BE3FB00DC73A9 /* CNReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReadline.swift; sourceTree = "<group>"; };
 		05C3A9B323A91FB400D54EC9 /* CNCommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLine.swift; sourceTree = "<group>"; };
 		05C3A9B423A91FB400D54EC9 /* CNCommandLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLines.swift; sourceTree = "<group>"; };
+		05C635C4249CD3E400BC7F3F /* CNCommandComplementor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandComplementor.swift; sourceTree = "<group>"; };
 		05C811482304D03A0032C1FA /* CNShellThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellThread.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,6 +62,7 @@
 				05BBC62F239BE3FB00DC73A9 /* CNReadline.swift */,
 				05C3A9B423A91FB400D54EC9 /* CNCommandLines.swift */,
 				05C3A9B323A91FB400D54EC9 /* CNCommandLine.swift */,
+				05C635C4249CD3E400BC7F3F /* CNCommandComplementor.swift */,
 				05A3B89E231EA5080092052B /* CNUnixCommand.swift */,
 			);
 			name = Source;
@@ -207,6 +210,7 @@
 				05C811492304D03A0032C1FA /* CNShellThread.swift in Sources */,
 				05C3A9B623A91FB400D54EC9 /* CNCommandLines.swift in Sources */,
 				05BBC631239BE3FB00DC73A9 /* CNReadline.swift in Sources */,
+				05C635C5249CD3E400BC7F3F /* CNCommandComplementor.swift in Sources */,
 				05A3B89F231EA5080092052B /* CNUnixCommand.swift in Sources */,
 				05C3A9B523A91FB400D54EC9 /* CNCommandLine.swift in Sources */,
 			);

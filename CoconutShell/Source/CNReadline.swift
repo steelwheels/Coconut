@@ -62,6 +62,10 @@ open class CNReadline
 
 	private func decode(escapeCode code: CNEscapeCode) -> Bool {
 		let cmdline = mCommandLines.currentCommand
+		/* Erace completion message */
+		if cmdline.isComplementing {
+			cmdline.endComplete()
+		}
 		let result: Bool
 		switch code {
 		case .string(let str):
@@ -73,7 +77,7 @@ open class CNReadline
 			cmdline.determine()
 			result = true
 		case .tab:
-			cmdline.insert(string: "\t")
+			cmdline.beginComplete()
 			result = true
 		case .backspace:
 			cmdline.moveCursor(delta: -1)

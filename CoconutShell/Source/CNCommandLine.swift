@@ -21,6 +21,7 @@ public class CNCommandLine: Equatable
 	private var	mCurrentIndex:		String.Index
 	private var 	mCurrentPosition:	Int
 	private var	mDidDetermined:		Bool
+	private var	mComplementor:		CNCommandComplementor
 
 	public var string:   String { get { return mCommandLine  }}
 	public var position: Int    { get { return mCurrentPosition }}
@@ -35,6 +36,7 @@ public class CNCommandLine: Equatable
 		mCurrentIndex	 = mCommandLine.endIndex
 		mCurrentPosition = 0
 		mDidDetermined   = false
+		mComplementor	 = CNCommandComplementor()
 	}
 
 	public func determine() {
@@ -137,6 +139,18 @@ public class CNCommandLine: Equatable
 				mCurrentPosition = 0
 			}
 		}
+	}
+
+	public var isComplementing: Bool {
+		get { return mComplementor.isComplementing }
+	}
+
+	public func beginComplete() {
+		mComplementor.beginComplement(commandLine: mCommandLine)
+	}
+
+	public func endComplete() {
+		mComplementor.endComplement()
 	}
 
 	public static func == (cmd0: CNCommandLine, cmd1: CNCommandLine) -> Bool {

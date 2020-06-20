@@ -5,6 +5,7 @@
  *   Copyright (C) 2018 Steel Wheels Project
  */
 
+import CoconutData
 import Foundation
 
 public func testObserver(console cons: CNConsole) -> Bool

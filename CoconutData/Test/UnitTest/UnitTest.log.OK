@@ -434,6 +434,7 @@ Execute process which can not be finished
 Terminate the process
 END of process
 Process is terminated with exit code: 15
+* testEnvironment
 * testThread
 testSimpleThread: 1. Begin
 testSimpleThread: 3: ecode = 0

@@ -12,81 +12,208 @@ public class CNEnvironment
 	private static var	WidthItem	= "WIDTH"
 	private static var	HeightItem	= "HEIGHT"
 
-	private var mEnvironmentVariable: Dictionary<String, String>
-
-	public var variables: Dictionary<String, String> {
-		get { return mEnvironmentVariable }
-	}
+	private var mEnvironmentVariable: Dictionary<String, CNNativeValue>
 
 	public init(){
 		mEnvironmentVariable = [
-			"TMPDIR"			: FileManager.default.temporaryDirectory.path,
-			"PWD"				: FileManager.default.currentDirectoryPath,
-			CNEnvironment.WidthItem		: "80",
-			CNEnvironment.HeightItem	: "25"
+			"TMPDIR"			: CNNativeValue.stringValue(FileManager.default.temporaryDirectory.path),
+			"PWD"				: CNNativeValue.stringValue(FileManager.default.currentDirectoryPath),
+			CNEnvironment.WidthItem		: CNNativeValue.numberValue(NSNumber(integerLiteral: 80)),
+			CNEnvironment.HeightItem	: CNNativeValue.numberValue(NSNumber(integerLiteral: 25))
 		]
+		setupPath()
 	}
 
-	public func set(name nm: String, string str: String) {
-		mEnvironmentVariable[nm] = str
+	private func setupPath() {
+		if let pathstr = ProcessInfo.processInfo.environment["PATH"] {
+			var patharr: Array<CNNativeValue> = []
+			let paths = pathstr.components(separatedBy: ":")
+			for path in paths {
+				if path.lengthOfBytes(using: .utf8) > 0 {
+					patharr.append(.stringValue(path))
+				}
+			}
+			mEnvironmentVariable["PATH"] = .arrayValue(patharr)
+		}
 	}
 
-	public func get(name nm: String) -> String? {
+	public func set(name nm: String, value val: CNNativeValue) {
+		mEnvironmentVariable[nm] = val
+	}
+
+	public func get(name nm: String) -> CNNativeValue? {
 		return mEnvironmentVariable[nm]
+	}
+
+	public func setString(name nm: String, value val: String) {
+		set(name: nm, value: .stringValue(val))
+	}
+
+	public func getString(name nm: String) -> String? {
+		if let val = get(name: nm) {
+			if let str = val.toString() {
+				return str
+			}
+		}
+		return nil
+	}
+
+	public func setInt(name nm: String, value val: Int) {
+		set(name: nm, value: .numberValue(NSNumber(integerLiteral: val)))
+	}
+
+	public func getInt(name nm: String) -> Int? {
+		if let val = get(name: nm) {
+			if let num = val.toNumber() {
+				return num.intValue
+			}
+		}
+		return nil
+	}
+
+	public func setURL(name nm: String, value val: URL) {
+		set(name: nm, value: .stringValue(val.path))
+	}
+
+	public func getURL(name nm: String) -> URL? {
+		if let val = get(name: nm) {
+			if let str = val.toString() {
+				return URL(fileURLWithPath: str)
+			}
+		}
+		return nil
+	}
+
+	public func setArray(name nm: String, value val: Array<CNNativeValue>) {
+		set(name: nm, value: .arrayValue(val))
+	}
+
+	public func getArray(name nm: String) -> Array<CNNativeValue>? {
+		if let val = get(name: nm) {
+			if let arr = val.toArray() {
+				return arr
+			}
+		}
+		return nil
+	}
+
+	public var stringVariables: Dictionary<String, String> {
+		get {
+			var result: Dictionary<String, String> = [:]
+			for (key, val) in mEnvironmentVariable {
+				if let str = valueToString(value: val) {
+					result[key] = str
+				} else {
+					let desc = val.toText().toStrings(terminal: ",")
+					NSLog("Failed to convert value to string: \(desc)")
+				}
+			}
+			return result
+		}
 	}
 
 	public var currentDirectory: URL {
 		get {
-			if let path = get(name: "PWD") {
-				return URL(fileURLWithPath: path)
+			if let url = getURL(name: "PWD") {
+				return url
 			} else {
 				fatalError("Can not happen (1)")
 			}
 		}
-		set(newdir){
-			set(name: "PWD", string: newdir.path)
+		set(url){
+			setURL(name: "PWD", value: url)
 		}
 	}
 
 	public var temporaryDirectory: URL {
 		get {
-			if let path = get(name: "TMPDIR") {
-				return URL(fileURLWithPath: path)
+			if let url = getURL(name: "TMPDIR") {
+				return url
 			} else {
 				fatalError("Can not happen (2)")
 			}
 		}
-		set(newdir){
-			set(name: "TMPDIR", string: newdir.path)
+		set(url){
+			setURL(name: "TMPDIR", value: url)
 		}
 	}
 
 	public var width: Int {
 		get {
-			if let str = get(name: CNEnvironment.WidthItem) {
-				if let val = Int(str) {
-					return val
-				}
+			if let val = getInt(name: CNEnvironment.WidthItem) {
+				return val
+			} else {
+				fatalError("Can not happen (3)")
 			}
-			fatalError("Can not happen (3)")
 		}
 		set(newval){
-			set(name: CNEnvironment.WidthItem, string: newval.description)
+			setInt(name: CNEnvironment.WidthItem, value: newval)
 		}
 	}
 
 	public var height: Int {
 		get {
-			if let str = get(name: CNEnvironment.HeightItem) {
-				if let val = Int(str) {
-					return val
-				}
+			if let val = getInt(name: CNEnvironment.HeightItem) {
+				return val
+			} else {
+				fatalError("Can not happen (4)")
 			}
-			fatalError("Can not happen (4)")
 		}
 		set(newval){
-			set(name: CNEnvironment.HeightItem, string: newval.description)
+			setInt(name: CNEnvironment.HeightItem, value: newval)
 		}
+	}
+
+	public var paths: Array<String> {
+		get {
+			if let arr = getArray(name: "PATH") {
+				var result: Array<String> = []
+				for elm in arr {
+					if let str = elm.toString() {
+						result.append(str)
+					} else {
+						NSLog("Invalid array element")
+					}
+				}
+				return result
+			}
+			return []
+		}
+		set(paths) {
+			var newarr: Array<CNNativeValue> = []
+			for path in paths {
+				newarr.append(.stringValue(path))
+			}
+			self.setArray(name: "PATH", value: newarr)
+		}
+	}
+
+	private func valueToString(value val: CNNativeValue) -> String? {
+		let result: String?
+		switch val {
+		case .numberValue(let num):	result = num.stringValue
+		case .stringValue(let str):	result = str
+		case .URLValue(let url):	result = url.path
+		case .arrayValue(let arr):
+			var arrstr: String = ""
+			var is1st:  Bool   = true
+			for elm in arr {
+				if let str = valueToString(value: elm) {
+					if is1st {
+						is1st  =  false
+					} else {
+						arrstr += ":"
+					}
+					arrstr += str
+				} else {
+					NSLog("Failed to convert to string: \(elm.toText().toStrings(terminal: ","))")
+				}
+			}
+			result = arrstr
+		default:
+			result = nil
+		}
+		return result
 	}
 }
 
