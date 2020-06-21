@@ -82,7 +82,6 @@ public class CNCommandLines
 		#endif
 
 		/* Add command to history */
-		mCurrentCommand.resetDetermined()
 		mCommandLines.append(newcmd)
 
 		#if false

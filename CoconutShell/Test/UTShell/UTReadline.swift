@@ -61,10 +61,9 @@ public func testReadline(environment env: CNEnvironment, console cons: CNFileCon
 	var docont = true
 	while docont {
 		switch readline.readLine(console: cons) {
-		case .commandLine(let cmdline):
-			let det = cmdline.didDetermined
-			let (cmdstr, cmdpos) = cmdline.getAndClear()
-			cons.print(string: "CMDLINE: \(cmdpos) \(cmdstr) \(det)\n")
+		case .commandLine(let cmdline, let determined):
+			let (cmdstr, cmdpos) = cmdline.getAndClear(didDetermined: determined)
+			cons.print(string: "CMDLINE: \(cmdpos) \(cmdstr) \(determined)\n")
 		case .escapeCode(let code):
 			switch code {
 			case .eot:
@@ -72,7 +71,7 @@ public func testReadline(environment env: CNEnvironment, console cons: CNFileCon
 			default:
 				cons.print(string: "ECODE: \(code.description())\n")
 			}
-		case .empty:
+		case .none:
 			break
 		}
 	}

@@ -54,8 +54,7 @@ open class CNShellThread: CNThread
 			}
 			/* Read command line */
 			switch mReadline.readLine(console: self.console) {
-			case .commandLine(let cmdline):
-				let determined  = cmdline.didDetermined
+			case .commandLine(let cmdline, let determined):
 				let newline	= cmdline.string
 				let newpos	= cmdline.position
 				if determined {
@@ -119,7 +118,7 @@ open class CNShellThread: CNThread
 				default:
 					console.error(string: "ECODE: \(code.description())\n")
 				}
-			case .empty:
+			case .none:
 				break
 			}
 		}

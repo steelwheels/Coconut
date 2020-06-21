@@ -13,33 +13,34 @@ open class CNReadline
 {
 	private var mEnvironment:	CNEnvironment
 	private var mCommandLines:	CNCommandLines
+	private var mComplementor:	CNCommandComplementor
 	private var mCurrentBuffer:	CNQueue<CNEscapeCode>
 
 	public init(environment env: CNEnvironment){
 		mEnvironment	= env
 		mCommandLines	= CNCommandLines()
+		mComplementor	= CNCommandComplementor()
 		mCurrentBuffer	= CNQueue<CNEscapeCode>()
 	}
 
 	public enum Result {
-		case	commandLine(CNCommandLine)
+		case	none 					// No action needed
+		case	commandLine(CNCommandLine, Bool)	// (commandline, determined)
 		case	escapeCode(CNEscapeCode)
-		case	empty
 	}
 
 	open func readLine(console cons: CNConsole) -> Result {
 		/* Check command queue */
 		if let code = mCurrentBuffer.pop() {
-			let result: Result
-			if decode(escapeCode: code) {
-				result = .commandLine(mCommandLines.currentCommand)
-			} else {
-				result = .escapeCode(code)
-			}
-			return result
+			return decode(escapeCode: code)
 		}
 		/* Scan input */
 		if let str = self.scan(console: cons) {
+			/* Erace completion message */
+			if mComplementor.isComplementing {
+				mComplementor.endComplement()
+			}
+
 			/* Push command into buffer */
 			switch CNEscapeCode.decode(string: str) {
 			case .ok(let codes):
@@ -51,7 +52,7 @@ open class CNReadline
 				cons.error(string: msg)
 			}
 		}
-		return .empty
+		return .none
 	}
 
 	public func replaceReplayCommand(source src: String) -> String {
@@ -62,82 +63,83 @@ open class CNReadline
 		mCommandLines.addCommand(command: cmd)
 	}
 
-	private func decode(escapeCode code: CNEscapeCode) -> Bool {
+	private func decode(escapeCode code: CNEscapeCode) -> Result {
 		let cmdline = mCommandLines.currentCommand
-		/* Erace completion message */
-		if cmdline.isComplementing {
-			cmdline.endComplete()
-		}
-		let result: Bool
+		let result: Result
 		switch code {
 		case .string(let str):
 			cmdline.insert(string: str)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .eot:
-			result = false			/* Skipped	*/
+			result = .escapeCode(code)
 		case .newline:
-			cmdline.determine()
-			result = true
+			result = .commandLine(cmdline, true)
 		case .tab:
-			cmdline.beginComplete()
-			result = true
+			mComplementor.beginComplement(commandString: cmdline.string, environment: mEnvironment)
+			result = .none
 		case .backspace:
 			cmdline.moveCursor(delta: -1)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .delete:
 			cmdline.erace(command: .eraceCursorLeft)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .cursorUp(let n), .cursorPreviousLine(let n):
-			let _ = mCommandLines.upCommand(count: n)
-			result = true
+			if let newcmd = mCommandLines.upCommand(count: n) {
+				result = .commandLine(newcmd, false)
+			} else {
+				result = .commandLine(cmdline, false)
+			}
 		case .cursorDown(let n), .cursorNextLine(let n):
-			let _ = mCommandLines.downCommand(count: n)
-			result = true
+			if let newcmd = mCommandLines.downCommand(count: n) {
+				result = .commandLine(newcmd, false)
+			} else {
+				result = .commandLine(cmdline, false)
+			}
 		case .cursorForward(let n):
 			cmdline.moveCursor(delta: n)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .cursorBackward(let n):
 			cmdline.moveCursor(delta: -n)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .cursorHolizontalAbsolute(_):
-			result = true			/* ignored */
+			result = .none
 		case .cursorPosition(_, _):
-			result = true			/* ignored */
+			result = .none
 		case .eraceFromCursorToEnd:
-			result = false			/* skipped */
+			result = .escapeCode(code)
 		case .eraceFromCursorToBegin:
-			result = false			/* skipped */
+			result = .escapeCode(code)
 		case .eraceEntireBuffer:
-			result = false			/* skipped */
+			result = .escapeCode(code)
 		case .eraceFromCursorToLeft:
 			cmdline.erace(command: .eraceFromCursorToBegin)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .eraceFromCursorToRight:
 			cmdline.erace(command: .eraceFromCursorToEnd)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .eraceEntireLine:
 			cmdline.erace(command: .eraceEntireBuffer)
-			result = true
+			result = .commandLine(cmdline, false)
 		case .scrollUp, .scrollDown:
-			result = false			/* skipped */
+			result = .escapeCode(code)
 		case .resetAll:
 			cmdline.erace(command: .eraceEntireBuffer)
-			result = true
+			result = .escapeCode(code)
 		case .resetCharacterAttribute,
 		     .foregroundColor(_), .defaultForegroundColor,
 		     .backgroundColor(_), .defaultBackgroundColor:
-			result = true			/* ignored */
+			result = .escapeCode(code)
 		case .boldCharacter(_),
 		     .blinkCharacter(_),
 		     .underlineCharacter(_),
 		     .reverseCharacter(_):
-			result = true			/* ignored */
+			result = .escapeCode(code)
 		case .requestScreenSize:
-			result = true			/* ignored */
+			result = .escapeCode(code)
 		case .screenSize(_, _):
-			result = false			/* Skipped */
+			result = .escapeCode(code)
 		case .selectAltScreen(_):
-			result = false			/* Skipped */
+			result = .escapeCode(code)
 		}
 		return result
 	}
