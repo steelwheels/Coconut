@@ -27,10 +27,6 @@ public class CNCommandLine: Equatable
 	public var position: Int    { get { return mCurrentPosition }}
 	public var didDetermined: Bool { get { return mDidDetermined }}
 
-	public convenience init(){
-		self.init(command: "")
-	}
-
 	public init(command cmd: String) {
 		mCommandLine	 = cmd
 		mCurrentIndex	 = mCommandLine.endIndex

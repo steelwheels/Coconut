@@ -13,7 +13,8 @@ import Darwin
 print("Hello, World!")
 
 public func main() {
-	let console = CNFileConsole()
+	let environment = CNEnvironment()
+	let console     = CNFileConsole()
 
 	console.print(string: "** testShellUtil\n")
 	let res0 = testShellUtil(console: console)
@@ -28,7 +29,7 @@ public func main() {
 	let res3 = testShell(console: console)
 
 	console.print(string: "** testReadline\n")
-	let res4 = testReadline(console: console)
+	let res4 = testReadline(environment: environment, console: console)
 
 	let result = res0 && res1 && res2 && res3 && res4
 	if result {

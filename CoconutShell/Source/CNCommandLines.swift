@@ -19,7 +19,7 @@ public class CNCommandLines
 		mCommandLines	= []
 		mMaxCount	= 32
 		mCurrentIndex	= 0
-		mCurrentCommand	= CNCommandLine()
+		mCurrentCommand	= CNCommandLine(command: "")
 	}
 
 	public var currentCommand: CNCommandLine {
@@ -93,7 +93,7 @@ public class CNCommandLines
 		#endif
 
 		/* Reflesh the current command */
-		mCurrentCommand = CNCommandLine()
+		mCurrentCommand = CNCommandLine(command: "")
 
 		/* Update index to point current command */
 		mCurrentIndex = mCommandLines.count

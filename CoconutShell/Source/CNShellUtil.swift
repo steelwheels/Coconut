@@ -88,30 +88,6 @@ public class CNShellUtil
 		return process
 	}
 	#endif
-
-	#if os(OSX)
-	private static var commandTable: Dictionary<String, String> = [:]
-
-	public class func searchCommand(commandName name: String) -> String? {
-		if let cmdpath = commandTable[name] {
-			return cmdpath
-		} else if let pathstr = ProcessInfo.processInfo.environment["PATH"] {
-			let fmanager = FileManager.default
-
-			let pathes = pathstr.components(separatedBy: ":")
-			for path in pathes {
-				let cmdpath = path + "/" + name
-				if fmanager.fileExists(atPath: cmdpath) {
-					if fmanager.isExecutableFile(atPath: cmdpath) {
-						commandTable[name] = cmdpath
-						return cmdpath
-					}
-				}
-			}
-		}
-		return nil
-	}
-	#endif
 }
 
 

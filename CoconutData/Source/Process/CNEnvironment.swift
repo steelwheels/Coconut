@@ -11,6 +11,7 @@ public class CNEnvironment
 {
 	private static var	WidthItem	= "WIDTH"
 	private static var	HeightItem	= "HEIGHT"
+	private static var 	PathItem	= "PATH"
 
 	private var mEnvironmentVariable: Dictionary<String, CNNativeValue>
 
@@ -25,7 +26,7 @@ public class CNEnvironment
 	}
 
 	private func setupPath() {
-		if let pathstr = ProcessInfo.processInfo.environment["PATH"] {
+		if let pathstr = ProcessInfo.processInfo.environment[CNEnvironment.PathItem] {
 			var patharr: Array<CNNativeValue> = []
 			let paths = pathstr.components(separatedBy: ":")
 			for path in paths {
@@ -33,7 +34,7 @@ public class CNEnvironment
 					patharr.append(.stringValue(path))
 				}
 			}
-			mEnvironmentVariable["PATH"] = .arrayValue(patharr)
+			mEnvironmentVariable[CNEnvironment.PathItem] = .arrayValue(patharr)
 		}
 	}
 
@@ -166,7 +167,7 @@ public class CNEnvironment
 
 	public var paths: Array<String> {
 		get {
-			if let arr = getArray(name: "PATH") {
+			if let arr = getArray(name: CNEnvironment.PathItem) {
 				var result: Array<String> = []
 				for elm in arr {
 					if let str = elm.toString() {
@@ -184,7 +185,7 @@ public class CNEnvironment
 			for path in paths {
 				newarr.append(.stringValue(path))
 			}
-			self.setArray(name: "PATH", value: newarr)
+			self.setArray(name:  CNEnvironment.PathItem, value: newarr)
 		}
 	}
 
