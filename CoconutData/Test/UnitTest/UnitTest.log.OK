@@ -453,6 +453,12 @@ Same code
 cursorForward(3)
 Same code
 * dumpCode
+saveCursorPosition
+Same code
+* dumpCode
+restoreCursorPosition
+Same code
+* dumpCode
 cursorPoisition(1,2)
 Same code
 * dumpCode

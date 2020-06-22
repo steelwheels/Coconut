@@ -10,11 +10,13 @@ import Foundation
 
 public func testEscapeSequence(console cons: CNConsole) -> Bool
 {
-	let res0 = dumpSequence(string: "Hello, World !!", console: cons)
-	let res1 = dumpCode(code: CNEscapeCode.cursorUp(1), console: cons)
-	let res2 = dumpCode(code: CNEscapeCode.cursorForward(3), console: cons)
-	let res3 = dumpCode(code: CNEscapeCode.cursorPosition(1, 2), console: cons)
-	let res4 = dumpCode(code: CNEscapeCode.eraceEntireLine, console: cons)
+	let res0  = dumpSequence(string: "Hello, World !!", console: cons)
+	let res1  = dumpCode(code: CNEscapeCode.cursorUp(1), console: cons)
+	let res2  = dumpCode(code: CNEscapeCode.cursorForward(3), console: cons)
+	let res21 = dumpCode(code: CNEscapeCode.saveCursorPosition, console: cons)
+	let res22 = dumpCode(code: CNEscapeCode.restoreCursorPosition, console: cons)
+	let res3  = dumpCode(code: CNEscapeCode.cursorPosition(1, 2), console: cons)
+	let res4  = dumpCode(code: CNEscapeCode.eraceEntireLine, console: cons)
 
 	let res11 = dumpCode(code: CNEscapeCode.boldCharacter(true), console: cons)
 	let res12 = dumpCode(code: CNEscapeCode.boldCharacter(false), console: cons)
@@ -40,7 +42,8 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 
 	//cons.error(string: "Color message\n")
 	return  res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 &&
-		res11 && res12 && res13 && res14 && res15 && res16 && res17 && res18 && res19 && res20
+		res11 && res12 && res13 && res14 && res15 && res16 && res17 && res18 && res19 && res20 &&
+		res21 && res22
 }
 
 private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool {

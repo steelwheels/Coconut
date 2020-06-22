@@ -45,6 +45,10 @@ public extension NSMutableAttributedString
 				NSLog("cursorHolizontalAbsolute: Underflow")
 				result = idx	// ignore
 			}
+		case .saveCursorPosition:
+			result = nil		// not accepted
+		case .restoreCursorPosition:
+			result = nil 		// not accepted
 		case .cursorPosition(let row, let column):
 			if row>=1 && column>=1 {
 				result = self.moveCursorTo(base: baseidx, x: column-1, y: row-1)

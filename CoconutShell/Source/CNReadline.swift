@@ -103,6 +103,10 @@ open class CNReadline
 			result = .commandLine(cmdline, false)
 		case .cursorHolizontalAbsolute(_):
 			result = .none
+		case .saveCursorPosition:
+			result = .escapeCode(code)
+		case .restoreCursorPosition:
+			result = .escapeCode(code)
 		case .cursorPosition(_, _):
 			result = .none
 		case .eraceFromCursorToEnd:
