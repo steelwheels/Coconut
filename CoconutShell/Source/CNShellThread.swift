@@ -53,7 +53,7 @@ open class CNShellThread: CNThread
 				mReadlineStatus.doPrompt = false
 			}
 			/* Read command line */
-			switch mReadline.readLine(console: self.console) {
+			switch mReadline.readLine(console: self.console, terminalInfo: mTerminalInfo) {
 			case .commandLine(let cmdline, let determined):
 				let newline	= cmdline.string
 				let newpos	= cmdline.position

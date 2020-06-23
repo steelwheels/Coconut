@@ -29,16 +29,16 @@ open class CNReadline
 		case	escapeCode(CNEscapeCode)
 	}
 
-	open func readLine(console cons: CNConsole) -> Result {
+	open func readLine(console cons: CNConsole, terminalInfo terminfo: CNTerminalInfo) -> Result {
 		/* Check command queue */
 		if let code = mCurrentBuffer.pop() {
-			return decode(escapeCode: code)
+			return decode(escapeCode: code, console: cons, terminalInfo: terminfo)
 		}
 		/* Scan input */
 		if let str = self.scan(console: cons) {
 			/* Erace completion message */
 			if mComplementor.isComplementing {
-				mComplementor.endComplement()
+				mComplementor.endComplement(console: cons)
 			}
 
 			/* Push command into buffer */
@@ -63,7 +63,7 @@ open class CNReadline
 		mCommandLines.addCommand(command: cmd)
 	}
 
-	private func decode(escapeCode code: CNEscapeCode) -> Result {
+	private func decode(escapeCode code: CNEscapeCode, console cons: CNConsole, terminalInfo terminfo: CNTerminalInfo) -> Result {
 		let cmdline = mCommandLines.currentCommand
 		let result: Result
 		switch code {
@@ -75,7 +75,7 @@ open class CNReadline
 		case .newline:
 			result = .commandLine(cmdline, true)
 		case .tab:
-			mComplementor.beginComplement(commandString: cmdline.string, environment: mEnvironment)
+			mComplementor.beginComplement(commandString: cmdline.string, console: cons, environment: mEnvironment, terminalInfo: terminfo)
 			result = .none
 		case .backspace:
 			cmdline.moveCursor(delta: -1)

@@ -115,8 +115,8 @@ public enum CNEscapeCode {
 		case .cursorNextLine(let n):			result = "\(ESC)[\(n)E"
 		case .cursorPreviousLine(let n):		result = "\(ESC)[\(n)F"
 		case .cursorHolizontalAbsolute(let n):		result = "\(ESC)[\(n)G"
-		case .saveCursorPosition:			result = "\(ESC)[s"
-		case .restoreCursorPosition:			result = "\(ESC)[u"
+		case .saveCursorPosition:			result = "\(ESC)7"
+		case .restoreCursorPosition:			result = "\(ESC)8"
 		case .cursorPosition(let row, let col):		result = "\(ESC)[\(row);\(col)H"
 		case .eraceFromCursorToEnd:			result = "\(ESC)[0J"
 		case .eraceFromCursorToBegin:			result = "\(ESC)[1J"
@@ -404,6 +404,12 @@ public enum CNEscapeCode {
 					let (idx2, command2) = try decodeEscapeSequence(string: src, index: idx1)
 					result.append(contentsOf: command2)
 					idx = idx2
+				case "7":
+					result.append(.saveCursorPosition)
+					idx = idx1
+				case "8":
+					result.append(.restoreCursorPosition)
+					idx = idx1
 				default:
 					result.append(.string("\(c0)\(c1)"))
 					idx = idx1
