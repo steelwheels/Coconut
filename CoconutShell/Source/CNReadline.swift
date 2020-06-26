@@ -13,13 +13,13 @@ open class CNReadline
 {
 	private var mEnvironment:	CNEnvironment
 	private var mCommandLines:	CNCommandLines
-	private var mComplementor:	CNCommandComplementor
+	private var mComplementor:	CNComplementor
 	private var mCurrentBuffer:	CNQueue<CNEscapeCode>
 
-	public init(environment env: CNEnvironment){
+	public init(complementor compl: CNComplementor, environment env: CNEnvironment){
 		mEnvironment	= env
 		mCommandLines	= CNCommandLines()
-		mComplementor	= CNCommandComplementor()
+		mComplementor	= compl
 		mCurrentBuffer	= CNQueue<CNEscapeCode>()
 	}
 
@@ -36,9 +36,10 @@ open class CNReadline
 		}
 		/* Scan input */
 		if let str = self.scan(console: cons) {
-			/* Erace completion message */
-			if mComplementor.isComplementing {
-				mComplementor.endComplement(console: cons)
+			if let replace = mComplementor.endComplement(console: cons) {
+				let orgstr = mCommandLines.currentCommand.string
+				let delta  = replace.dropFirst(orgstr.lengthOfBytes(using: .utf8))
+				mCurrentBuffer.push(.string(String(delta) + " ")) // insert space before command
 			}
 
 			/* Push command into buffer */

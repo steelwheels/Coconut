@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		050C8907208CBF350005E936 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 050C8905208CBF350005E936 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051669FF23126ECC000BF46D /* CNShellThread.swift */; };
+		0518F67324A4CD800074D71D /* UTComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0518F67224A4CD800074D71D /* UTComplementor.swift */; };
 		051AB5F421590AC400D7C71C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051AB5F321590AC400D7C71C /* main.swift */; };
 		05231E9A222C046A0003AE98 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 056AF18521590A12007AE91A /* CoconutData.framework */; };
 		053BAD7B208CBF7900AC3BF0 /* CNShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053BAD75208CBF7900AC3BF0 /* CNShellUtil.swift */; };
@@ -21,7 +22,7 @@
 		056AF18B21590A41007AE91A /* CoconutShell.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 056AF18721590A24007AE91A /* CoconutShell.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		059C508223A7B0250035482B /* CNCommandLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C508123A7B0250035482B /* CNCommandLines.swift */; };
 		059C508423A7D36C0035482B /* CNCommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059C508323A7D36C0035482B /* CNCommandLine.swift */; };
-		05C635C1249CD36400BC7F3F /* CNCommandComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C635C0249CD36400BC7F3F /* CNCommandComplementor.swift */; };
+		05C635C1249CD36400BC7F3F /* CNComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C635C0249CD36400BC7F3F /* CNComplementor.swift */; };
 		05C887D72303A5390044AC03 /* UTShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887D62303A5390044AC03 /* UTShellUtil.swift */; };
 		05C887D92303A6B60044AC03 /* UTShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C887D82303A6B60044AC03 /* UTShell.swift */; };
 		05CF20762312B0D900A8F550 /* UTProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CF20752312B0D900A8F550 /* UTProcess.swift */; };
@@ -82,6 +83,7 @@
 		050C8905208CBF350005E936 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
 		050C8906208CBF350005E936 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		051669FF23126ECC000BF46D /* CNShellThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellThread.swift; sourceTree = "<group>"; };
+		0518F67224A4CD800074D71D /* UTComplementor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTComplementor.swift; sourceTree = "<group>"; };
 		051AB5F121590AC400D7C71C /* UTShell */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UTShell; sourceTree = BUILT_PRODUCTS_DIR; };
 		051AB5F321590AC400D7C71C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		053BAD75208CBF7900AC3BF0 /* CNShellUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellUtil.swift; sourceTree = "<group>"; };
@@ -92,7 +94,7 @@
 		056AF18721590A24007AE91A /* CoconutShell.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutShell.framework; path = ../../../../Library/Frameworks/CoconutShell.framework; sourceTree = "<group>"; };
 		059C508123A7B0250035482B /* CNCommandLines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandLines.swift; sourceTree = "<group>"; };
 		059C508323A7D36C0035482B /* CNCommandLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandLine.swift; sourceTree = "<group>"; };
-		05C635C0249CD36400BC7F3F /* CNCommandComplementor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandComplementor.swift; sourceTree = "<group>"; };
+		05C635C0249CD36400BC7F3F /* CNComplementor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNComplementor.swift; sourceTree = "<group>"; };
 		05C887D62303A5390044AC03 /* UTShellUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTShellUtil.swift; sourceTree = "<group>"; };
 		05C887D82303A6B60044AC03 /* UTShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTShell.swift; sourceTree = "<group>"; };
 		05CF20752312B0D900A8F550 /* UTProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTProcess.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				05C887D82303A6B60044AC03 /* UTShell.swift */,
 				05CF20752312B0D900A8F550 /* UTProcess.swift */,
 				053D50FE239C75D70027B067 /* UTReadline.swift */,
+				0518F67224A4CD800074D71D /* UTComplementor.swift */,
 			);
 			path = UTShell;
 			sourceTree = "<group>";
@@ -182,7 +185,7 @@
 				05FC90A9239BE3A500BA16E6 /* CNReadline.swift */,
 				059C508123A7B0250035482B /* CNCommandLines.swift */,
 				059C508323A7D36C0035482B /* CNCommandLine.swift */,
-				05C635C0249CD36400BC7F3F /* CNCommandComplementor.swift */,
+				05C635C0249CD36400BC7F3F /* CNComplementor.swift */,
 				05D1004F231E9F030054F81C /* CNUnixCommand.swift */,
 			);
 			name = Source;
@@ -378,7 +381,7 @@
 				05166A0023126ECD000BF46D /* CNShellThread.swift in Sources */,
 				053BAD7B208CBF7900AC3BF0 /* CNShellUtil.swift in Sources */,
 				059C508423A7D36C0035482B /* CNCommandLine.swift in Sources */,
-				05C635C1249CD36400BC7F3F /* CNCommandComplementor.swift in Sources */,
+				05C635C1249CD36400BC7F3F /* CNComplementor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +390,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				051AB5F421590AC400D7C71C /* main.swift in Sources */,
+				0518F67324A4CD800074D71D /* UTComplementor.swift in Sources */,
 				05C887D92303A6B60044AC03 /* UTShell.swift in Sources */,
 				053D50FF239C75D80027B067 /* UTReadline.swift in Sources */,
 				05CF20762312B0D900A8F550 /* UTProcess.swift in Sources */,

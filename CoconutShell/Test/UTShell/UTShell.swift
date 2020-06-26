@@ -33,8 +33,9 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	let instrm  = CNFileStream.pipe(inpipe)
 	let outstrm = CNFileStream.pipe(outpipe)
 	let errstrm = CNFileStream.pipe(errpipe)
+	let compl   = CNComplementor()
 	let env     = CNEnvironment()
-	let shell   = UTShellThread(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, environment: env)
+	let shell   = UTShellThread(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, complementor: compl, environment: env)
 
 	outpipe.fileHandleForReading.readabilityHandler = {
 		(_ hdl: FileHandle) -> Void in

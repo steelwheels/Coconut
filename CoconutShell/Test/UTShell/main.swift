@@ -15,6 +15,7 @@ print("Hello, World!")
 public func main() {
 	let environment = CNEnvironment()
 	let console     = CNFileConsole()
+	let terminfo    = CNTerminalInfo(width: 80, height: 25)
 
 	console.print(string: "** testShellUtil\n")
 	let res0 = testShellUtil(console: console)
@@ -29,9 +30,12 @@ public func main() {
 	let res3 = testShell(console: console)
 
 	console.print(string: "** testReadline\n")
-	let res4 = testReadline(environment: environment, console: console)
+	let res4 = testReadline(environment: environment, console: console, terminalInfo: terminfo)
 
-	let result = res0 && res1 && res2 && res3 && res4
+	console.print(string: "** testComplementor\n")
+	let res5 = testComplementor(console: console, environment: environment, terminalInfo: terminfo)
+
+	let result = res0 && res1 && res2 && res3 && res4 && res5
 	if result {
 		console.print(string: "Result: OK\n")
 		Darwin.exit(0)

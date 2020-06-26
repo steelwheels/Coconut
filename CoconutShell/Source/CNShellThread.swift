@@ -30,8 +30,8 @@ open class CNShellThread: CNThread
 	public var readline: CNReadline { get { return mReadline }}
 	public var terminalInfo: CNTerminalInfo { get { return mTerminalInfo }}
 
-	public override init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment){
-		mReadline 	= CNReadline(environment: env)
+	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, complementor compl: CNComplementor, environment env: CNEnvironment){
+		mReadline 	= CNReadline(complementor: compl, environment: env)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mTerminalInfo	= CNTerminalInfo(width: 80, height: 25)
 		mIsCancelled	= false

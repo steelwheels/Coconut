@@ -13,7 +13,7 @@ private class UTReadline: CNReadline {
 	private var messages: 		Array<String>
 	private var messageIndex:	Int
 
-	public init(environment env: CNEnvironment, console cons: CNFileConsole) {
+	public init(complementor compl: CNComplementor, environment env: CNEnvironment, console cons: CNFileConsole) {
 		messages = [
 			"This is first message",
 			CNEscapeCode.cursorUp(1).encode(),
@@ -39,7 +39,7 @@ private class UTReadline: CNReadline {
 			CNEscapeCode.eot.encode()	// End of transmission
 		]
 		messageIndex = 0
-		super.init(environment: env)
+		super.init(complementor: compl, environment: env)
 	}
 
 	public override func scan(console cons: CNConsole) -> String? {
@@ -54,13 +54,14 @@ private class UTReadline: CNReadline {
 }
 
 
-public func testReadline(environment env: CNEnvironment, console cons: CNFileConsole) -> Bool
+public func testReadline(environment env: CNEnvironment, console cons: CNFileConsole, terminalInfo terminfo: CNTerminalInfo) -> Bool
 {
-	let readline = UTReadline(environment: env, console: cons)
+	let compl    = CNComplementor()
+	let readline = UTReadline(complementor: compl, environment: env, console: cons)
 
 	var docont = true
 	while docont {
-		switch readline.readLine(console: cons) {
+		switch readline.readLine(console: cons, terminalInfo: terminfo) {
 		case .commandLine(let cmdline, let determined):
 			let (cmdstr, cmdpos) = cmdline.getAndClear(didDetermined: determined)
 			cons.print(string: "CMDLINE: \(cmdpos) \(cmdstr) \(determined)\n")
