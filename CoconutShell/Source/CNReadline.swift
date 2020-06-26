@@ -79,7 +79,7 @@ open class CNReadline
 			case .matched(let newstr):
 				let orgstr = cmdline.string
 				let delta  = newstr.dropFirst(orgstr.lengthOfBytes(using: .utf8))
-				mCurrentBuffer.push(.string(String(delta) + " ")) // insert space before command
+				mCurrentBuffer.push(.string(String(delta)))
 			case .popup(_):
 				break
 			}

@@ -95,7 +95,17 @@ open class CNComplementor
 				if count == 0 {
 					return matchByCommand(commandString: word)
 				} else {
-					return matchByFilePath(filePath: word, environment: env)
+					let result: MatchResult
+					switch matchByFilePath(filePath: word, environment: env) {
+					case .none:
+						result = .none
+					case .fullMatch(let matched):
+						let head = cmdstr[cmdstr.startIndex ..< idx]
+						result = .fullMatch(head + matched)
+					case .partialMatch(let matches):
+						result = .partialMatch(matches)
+					}
+					return result
 				}
 			case .next(let next):
 				idx = next
@@ -156,7 +166,7 @@ open class CNComplementor
 		let result: MatchResult
 		switch matched.count {
 		case 0: 	result = .none
-		case 1: 	result = .fullMatch(matched[0])
+		case 1: 	result = .fullMatch(matched[0] + " ")	// space after command
 		default:	result = .partialMatch(matched)
 		}
 		return result
@@ -183,11 +193,52 @@ open class CNComplementor
 
 	private func matchByFilePath(filePath path: String, environment env: CNEnvironment) -> MatchResult {
 		let nspath   = path as NSString
-		NSLog("matchByFilePath path:\(nspath)")
 		let subdir   = nspath.deletingLastPathComponent
 		let lastcomp = nspath.lastPathComponent
-		NSLog("matchByFilePath subdir:\(subdir), last:\(lastcomp)")
+		if let dir = matchBySubdirPath(dirPath: subdir, environment: env) {
+			do {
+				let contents = try FileManager.default.contentsOfDirectory(atPath: dir)
+				var matched: Array<String> = []
+				for item in contents {
+					if item.hasPrefix(lastcomp) {
+						matched.append(item)
+					}
+				}
+				let result: MatchResult
+				switch matched.count {
+				case 0:
+					result = .none
+				case 1:
+					if subdir.isEmpty {
+						result = .fullMatch(matched[0])
+					} else {
+						result = .fullMatch(subdir + "/" + matched[0])
+					}
+				default:
+					result = .partialMatch(matched)
+				}
+				return result
+			} catch _ {
+				return .none
+			}
+		}
 		return .none
+	}
+
+	private func matchBySubdirPath(dirPath dir: String, environment env: CNEnvironment) -> String? {
+		if dir.isEmpty || dir == "." {
+			return env.currentDirectory.path
+		} else {
+			let result: String?
+			let path = env.currentDirectory.path + "/" + dir
+			switch FileManager.default.checkFileType(pathString: path) {
+			case .File, .NotExist:
+				result = nil
+			case .Directory:
+				result = path
+			}
+			return result
+		}
 	}
 
 	private func foldItems(items itms: Array<String>, terminalInfo terminfo: CNTerminalInfo) -> Array<String> {
