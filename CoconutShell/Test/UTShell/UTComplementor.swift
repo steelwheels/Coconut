@@ -31,8 +31,7 @@ public func testComplementor(console cons: CNFileConsole, environment env: CNEnv
 private func complement(string str: String, console cons: CNConsole, complementor compl: CNComplementor, environment env: CNEnvironment, terminalInfo terminfo: CNTerminalInfo)
 {
 	cons.print(string: "Test \"\(str)\" => ")
-	compl.beginComplement(commandString: str, console: cons, environment: env, terminalInfo: terminfo)
-	switch compl.complementState {
+	switch compl.beginComplement(commandString: str, console: cons, environment: env, terminalInfo: terminfo) {
 	case .none:
 		cons.print(string: "<none>\n")
 	case .matched(let str):

@@ -42,7 +42,7 @@ open class CNComplementor
 		mCommandNames		= []
 	}
 
-	public func beginComplement(commandString cmdstr: String, console cons: CNConsole, environment env: CNEnvironment, terminalInfo terminfo: CNTerminalInfo) {
+	public func beginComplement(commandString cmdstr: String, console cons: CNConsole, environment env: CNEnvironment, terminalInfo terminfo: CNTerminalInfo) -> ComplementState {
 		if mCommandNames.count == 0 {
 			updateCommandNameList(environment: env)
 		}
@@ -54,7 +54,7 @@ open class CNComplementor
 		case .partialMatch(let matched):
 			guard matched.count > 0 else {
 				mComplementState = .none
-				return
+				return mComplementState
 			}
 
 			/* Make multi column list */
@@ -71,6 +71,7 @@ open class CNComplementor
 			/* Update state*/
 			mComplementState = .popup(items.count)
 		}
+		return mComplementState
 	}
 
 	private func matchedItems(commandString cmdstr: String, environment env: CNEnvironment) -> MatchResult {
@@ -218,23 +219,20 @@ open class CNComplementor
 		return result
 	}
 
-	public func endComplement(console cons: CNConsole) -> String? {
-		let result: String?
+	public func endComplement(console cons: CNConsole) {
 		switch mComplementState {
 		case .none:
-			result = nil
-		case .matched(let str):
-			result = str
+			break
+		case .matched(_):
+			break
 		case .popup(let lines):
 			/* Scroll down */
 			cons.print(string: CNEscapeCode.scrollDown(lines).encode())
 			/* Restore current cursor position */
 			cons.print(string: CNEscapeCode.restoreCursorPosition.encode())
-			result = nil
 		}
 		/* Reset */
 		mComplementState = .none
-		return result
 	}
 
 	private func updateCommandNameList(environment env: CNEnvironment) {

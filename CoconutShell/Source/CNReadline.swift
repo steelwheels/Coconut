@@ -36,11 +36,8 @@ open class CNReadline
 		}
 		/* Scan input */
 		if let str = self.scan(console: cons) {
-			if let replace = mComplementor.endComplement(console: cons) {
-				let orgstr = mCommandLines.currentCommand.string
-				let delta  = replace.dropFirst(orgstr.lengthOfBytes(using: .utf8))
-				mCurrentBuffer.push(.string(String(delta) + " ")) // insert space before command
-			}
+			/* Finish complement */
+			mComplementor.endComplement(console: cons)
 
 			/* Push command into buffer */
 			switch CNEscapeCode.decode(string: str) {
@@ -76,7 +73,16 @@ open class CNReadline
 		case .newline:
 			result = .commandLine(cmdline, true)
 		case .tab:
-			mComplementor.beginComplement(commandString: cmdline.string, console: cons, environment: mEnvironment, terminalInfo: terminfo)
+			switch mComplementor.beginComplement(commandString: cmdline.string, console: cons, environment: mEnvironment, terminalInfo: terminfo) {
+			case .none:
+				break
+			case .matched(let newstr):
+				let orgstr = cmdline.string
+				let delta  = newstr.dropFirst(orgstr.lengthOfBytes(using: .utf8))
+				mCurrentBuffer.push(.string(String(delta) + " ")) // insert space before command
+			case .popup(_):
+				break
+			}
 			result = .none
 		case .backspace:
 			cmdline.moveCursor(delta: -1)
