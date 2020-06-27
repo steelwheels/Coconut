@@ -20,7 +20,9 @@ public func testComplementor(console cons: CNFileConsole, environment env: CNEnv
 		"test",
 		"lsof",
 		"ls file",
-		"ls file "
+		"ls file ",
+		"ls Co",
+		"ls CoconutShell.framework/V"
 	]
 	for teststr in teststrs {
 		complement(string: teststr, console: cons, complementor: compl, environment: env, terminalInfo: terminfo)

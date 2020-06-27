@@ -66,30 +66,10 @@ public class CNCommandLines
 	public func addCommand(command cmdstr: String) {
 		/* Allocate command */
 		let newcmd = CNCommandLine(command: cmdstr)
-
-		#if false
-		/* If there is same command, remove it */
-		var dupidx: Int? = nil
-		for i in 0..<mCommandLines.count {
-			if mCommandLines[i] == newcmd {
-				dupidx = i
-				break
-			}
-		}
-		if let i = dupidx {
-			mCommandLines.remove(at: i)
-		}
-		#endif
+		newcmd.moveCursor(delta: cmdstr.count)		// move cursor to last
 
 		/* Add command to history */
 		mCommandLines.append(newcmd)
-
-		#if false
-		/* If the count is over the limit, remove it */
-		if mCommandLines.count > mMaxCount {
-			mCommandLines.removeFirst()
-		}
-		#endif
 
 		/* Reflesh the current command */
 		mCurrentCommand = CNCommandLine(command: "")
@@ -100,19 +80,15 @@ public class CNCommandLines
 
 	public func upCommand(count cnt: Int) -> CNCommandLine? {
 		let previdx = mCurrentIndex - cnt
-		//NSLog("upCommand: count=\(mCommandLines.count) mCurrentIndex=\(mCurrentIndex) previdx=\(previdx), cnt=\(cnt)")
 		if 0<=previdx && previdx < mCommandLines.count {
 			mCurrentIndex = previdx
-			//NSLog("upCommand: result=\(mCommandLines[previdx].string)")
 			return mCommandLines[previdx]
 		}
-		//NSLog("upCommand: result=nil")
 		return nil
 	}
 
 	public func downCommand(count cnt: Int) -> CNCommandLine? {
 		let nextidx = mCurrentIndex + cnt
-		//NSLog("downCommand: count=\(mCommandLines.count) mCurrentIndex=\(mCurrentIndex) nextidx=\(nextidx), cnt=\(cnt)")
 		if nextidx < mCommandLines.count {
 			let result: CNCommandLine
 			if nextidx < mCommandLines.count {
@@ -121,10 +97,8 @@ public class CNCommandLines
 				result = mCurrentCommand
 			}
 			mCurrentIndex = nextidx
-			//NSLog("downCommand: result=\(result.string)")
 			return result
 		}
-		//NSLog("downCommand: result=nil")
 		return nil
 	}
 

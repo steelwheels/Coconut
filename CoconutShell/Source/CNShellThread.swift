@@ -45,9 +45,6 @@ open class CNShellThread: CNThread
 
 		/* Setup terminal */
 		while !mIsCancelled {
-			let BS  = CNEscapeCode.backspace.encode()
-			let DEL = BS + " " + BS
-
 			if mReadlineStatus.doPrompt {
 				self.console.print(string: promptString() + mReadlineStatus.editingLine)
 				mReadlineStatus.doPrompt = false
@@ -58,54 +55,9 @@ open class CNShellThread: CNThread
 				let newline	= cmdline.string
 				let newpos	= cmdline.position
 				if determined {
-					/* Replace replay command */
-					let newcmd = mReadline.replaceReplayCommand(source: newline)
-
-					/* Execute command */
-					console.print(string: "\n") // Execute at new line
-					let _ = execute(command: newcmd)
-
-					/* Save current command */
-					mReadline.addCommand(command: newcmd)
-
-					/* Update history */
-					let histmgr = CNCommandHistory.shared
-					histmgr.set(history: mReadline.history())
-
-					/* Reset terminal */
-					let resetstr = CNEscapeCode.resetCharacterAttribute.encode()
-					console.print(string: resetstr)
-
-					/* Print prompt again */
-					mReadlineStatus.doPrompt	= true
-					mReadlineStatus.editingLine     = ""
-					mReadlineStatus.editingPosition	= 0
+					determineCommandLine(newLine: newline)
 				} else {
-					/* Move cursor to end of line */
-					let forward = mReadlineStatus.editingLine.count - mReadlineStatus.editingPosition
-					let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
-					if forward > 0 {
-						console.print(string: fwdstr)
-					}
-					/* Erace current command line */
-					let curlen  = mReadlineStatus.editingLine.count
-					for _ in 0..<curlen {
-						console.print(string: DEL)
-					}
-					/* Print new command line */
-					console.print(string: newline)
-
-					/* Adjust cursor */
-					let newlen = newline.count
-					let back   = newlen - newpos
-					let bakstr = CNEscapeCode.cursorBackward(back).encode()
-					if back > 0 {
-						console.print(string: bakstr)
-					}
-
-					/* Update current line*/
-					mReadlineStatus.editingLine     = newline
-					mReadlineStatus.editingPosition = newpos
+					updateCommandLine(newLine: newline, newPosition: newpos)
 				}
 			case .escapeCode(let code):
 				switch code {
@@ -123,6 +75,65 @@ open class CNShellThread: CNThread
 			}
 		}
 		return 0
+	}
+
+	private func determineCommandLine(newLine newline: String) {
+		/* Replace replay command */
+		let newcmd = mReadline.replaceReplayCommand(source: newline)
+
+		/* Execute command */
+		console.print(string: "\n") // Execute at new line
+		let _ = execute(command: newcmd)
+
+		/* Save current command */
+		mReadline.addCommand(command: newcmd)
+
+		/* Update history */
+		let histmgr = CNCommandHistory.shared
+		histmgr.set(history: mReadline.history())
+
+		/* Reset terminal */
+		let resetstr = CNEscapeCode.resetCharacterAttribute.encode()
+		console.print(string: resetstr)
+
+		/* Print prompt again */
+		mReadlineStatus.doPrompt	= true
+		mReadlineStatus.editingLine     = ""
+		mReadlineStatus.editingPosition	= 0
+	}
+
+	private func updateCommandLine(newLine newline: String, newPosition newpos: Int) {
+		NSLog("uCL: newline=\(newline). newpos=\(newpos)")
+
+		let BS  = CNEscapeCode.backspace.encode()
+		let DEL = BS + " " + BS
+
+		/* Move cursor to end of line */
+		let forward = mReadlineStatus.editingLine.count - mReadlineStatus.editingPosition
+		if forward > 0 {
+			let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
+			console.print(string: fwdstr)
+		}
+
+		/* Erace current command line */
+		let curlen  = mReadlineStatus.editingLine.count
+		for _ in 0..<curlen {
+			console.print(string: DEL)
+		}
+		/* Print new command line */
+		console.print(string: newline)
+
+		/* Adjust cursor */
+		let newlen = newline.count
+		let back   = newlen - newpos
+		let bakstr = CNEscapeCode.cursorBackward(back).encode()
+		if back > 0 {
+			console.print(string: bakstr)
+		}
+
+		/* Update current line*/
+		mReadlineStatus.editingLine     = newline
+		mReadlineStatus.editingPosition = newpos
 	}
 
 	public func cancel(){

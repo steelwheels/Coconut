@@ -26,7 +26,7 @@ public class CNCommandLine: Equatable
 
 	public init(command cmd: String) {
 		mCommandLine	 = cmd
-		mCurrentIndex	 = mCommandLine.endIndex
+		mCurrentIndex	 = mCommandLine.startIndex
 		mCurrentPosition = 0
 	}
 
