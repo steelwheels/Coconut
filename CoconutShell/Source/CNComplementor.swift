@@ -92,21 +92,28 @@ open class CNComplementor
 			case .empty:
 				return .none
 			case .finished(let word):
+				let result0: MatchResult
 				if count == 0 {
-					return matchByCommand(commandString: word)
+					result0 = matchByCommand(commandString: word)
 				} else {
-					let result: MatchResult
-					switch matchByFilePath(filePath: word, environment: env) {
-					case .none:
-						result = .none
-					case .fullMatch(let matched):
-						let head = cmdstr[cmdstr.startIndex ..< idx]
-						result = .fullMatch(head + matched)
-					case .partialMatch(let matches):
-						result = .partialMatch(matches)
-					}
-					return result
+					result0 = matchByFilePath(filePath: word, environment: env)
 				}
+				let result1: MatchResult
+				switch result0 {
+				case .none:
+					result1 = .none
+				case .fullMatch(let matched):
+					let head = cmdstr[cmdstr.startIndex ..< idx]
+					result1 = .fullMatch(head + matched)
+				case .partialMatch(let matches):
+					if let targ = unionMatchedItems(original: word, matchedItems: matches) {
+						let head = cmdstr[cmdstr.startIndex ..< idx]
+						result1 = .fullMatch(head + targ)
+					} else {
+						result1 = .partialMatch(matches)
+					}
+				}
+				return result1
 			case .next(let next):
 				idx = next
 			}
@@ -154,6 +161,40 @@ open class CNComplementor
 				return .empty
 			}
 		}
+	}
+
+	private func unionMatchedItems(original orgstr: String, matchedItems items: Array<String>) -> String? {
+		/* Minimum length item */
+		var minlen: Int?    = nil
+		var minstr: String? = nil
+		for item in items {
+			let len = item.lengthOfBytes(using: .utf8)
+			if let m = minlen {
+				if m > len {
+					minlen = m
+					minstr = item
+				}
+			} else {
+				minlen = len
+				minstr = item
+			}
+		}
+		/* If minimum length is equald to original, print menu */
+		if let minlen = minlen, let minstr = minstr {
+			if minlen > orgstr.lengthOfBytes(using: .utf8) {
+				var hassame = true
+				for item in items {
+					if !item.hasPrefix(minstr) {
+						hassame = false
+						break
+					}
+				}
+				if hassame {
+					return minstr
+				}
+			}
+		}
+		return nil
 	}
 
 	private func matchByCommand(commandString cmdstr: String) -> MatchResult {
