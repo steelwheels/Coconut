@@ -171,7 +171,7 @@ open class CNComplementor
 			let len = item.lengthOfBytes(using: .utf8)
 			if let m = minlen {
 				if m > len {
-					minlen = m
+					minlen = len
 					minstr = item
 				}
 			} else {
@@ -181,20 +181,29 @@ open class CNComplementor
 		}
 		/* If minimum length is equald to original, print menu */
 		if let minlen = minlen, let minstr = minstr {
-			if minlen > orgstr.lengthOfBytes(using: .utf8) {
-				var hassame = true
+			var matchpos = 0
+			match_loop: for i in 0..<minlen {
+				let minc = character(in: minstr, at: i)
 				for item in items {
-					if !item.hasPrefix(minstr) {
-						hassame = false
-						break
+					let c = character(in: item, at: i)
+					if minc != c {
+						break match_loop
 					}
 				}
-				if hassame {
-					return minstr
-				}
+				matchpos = i
+			}
+			let orglen   = orgstr.lengthOfBytes(using: .utf8)
+			let matchlen = matchpos + 1
+			if matchlen > orglen {
+				return String(minstr.prefix(matchlen))
 			}
 		}
 		return nil
+	}
+
+	private func character(in str: String, at idx: Int) -> Character {
+		let index = str.index(str.startIndex, offsetBy: idx)
+		return str[index]
 	}
 
 	private func matchByCommand(commandString cmdstr: String) -> MatchResult {
