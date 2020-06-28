@@ -103,8 +103,6 @@ open class CNShellThread: CNThread
 	}
 
 	private func updateCommandLine(newLine newline: String, newPosition newpos: Int) {
-		NSLog("uCL: newline=\(newline). newpos=\(newpos)")
-
 		let BS  = CNEscapeCode.backspace.encode()
 		let DEL = BS + " " + BS
 

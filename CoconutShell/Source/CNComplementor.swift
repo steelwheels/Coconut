@@ -286,11 +286,11 @@ open class CNComplementor
 		/* Get max width */
 		var maxwidth = 0
 		for item in itms {
-			maxwidth = max(maxwidth, item.lengthOfBytes(using: .utf8))
+			maxwidth = max(maxwidth, item.lengthOfBytes(using: .utf8))	// +1 for space
 		}
 		/* Get width */
-		let colnum = Int(ceil(Double(terminfo.width) / Double(maxwidth + 1))) // +1 for space
-		let width  = terminfo.width / colnum
+		let colnum : Int = terminfo.width / (maxwidth + 1) // +1 for space
+		let width  : Int = terminfo.width / colnum
 		var result: Array<String> = []
 		for i in stride(from: 0, to: itms.count, by: colnum) {
 			var line: String = ""
