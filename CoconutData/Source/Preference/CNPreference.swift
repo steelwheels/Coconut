@@ -100,6 +100,16 @@ public class CNPreference
 			return newpref
 		}
 	}
+
+	/* This method will be accessed by sub class*/
+	public func peekTable(name nm: String) -> CNPreferenceTable? {
+		return mTable[nm]
+	}
+
+	/* This method will be accessed by sub class*/
+	public func pokeTable(name nm: String, table tbl: CNPreferenceTable) {
+		mTable[nm] = tbl
+	}
 }
 
 public class CNSystemPreference: CNPreferenceTable
