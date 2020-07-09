@@ -91,6 +91,35 @@ open class CNPreferenceTable
 	}
 
 	/*
+	 * Color
+	 */
+	public func set(colorValue val: CNColor, forKey key: String) {
+		set(anyValue: val, forKey: key)
+	}
+
+	public func colorValue(forKey key: String) -> CNColor? {
+		if let val = anyValue(forKey: key) as? CNColor {
+			return val
+		} else {
+			return nil
+		}
+	}
+
+	public func storeColorValue(colorValue val: CNColor, forKey key: String) {
+		let pathstr = path(keyString: key)
+		UserDefaults.standard.set(color: val, forKey: pathstr)
+	}
+
+	public func loadColorValue(forKey key: String) -> CNColor? {
+		let pathstr = path(keyString: key)
+		if let color = UserDefaults.standard.color(forKey: pathstr) {
+			return color
+		} else {
+			return nil
+		}
+	}
+	
+	/*
 	 * Font
 	 */
 	public func set(fontValue val: CNFont, forKey key: String) {

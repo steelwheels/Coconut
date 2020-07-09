@@ -9,6 +9,14 @@ import Foundation
 
 extension UserDefaults
 {
+	/* Apply default setting. This method will be called from
+	 * "applicationWillFinishLaunching" method on AppDelegate object
+	 */
+	public func applyDefaultSetting() {
+		self.set(true, forKey: "NSDisabledDictationMenuItem")
+		self.set(true, forKey: "NSDisabledCharacterPaletteMenuItem")
+	}
+
 	public func number(forKey key: String) -> NSNumber? {
 		if let num = self.object(forKey: key) as? NSNumber {
 			return num
@@ -44,5 +52,21 @@ extension UserDefaults
 
 	public func set(dataDictionary dict: Dictionary<String, Data>, forKey key: String) {
 		self.set(dict, forKey: key)
+	}
+
+	public func color(forKey key: String) -> CNColor? {
+		if let data = self.data(forKey: key) {
+			return CNColor.decode(fromData: data)
+		} else {
+			return nil
+		}
+	}
+
+	public func set(color col: CNColor, forKey key: String) {
+		if let data = col.toData() {
+			set(data, forKey: key)
+		} else {
+			NSLog("\(#file): Failed to encode color")
+		}
 	}
 }
