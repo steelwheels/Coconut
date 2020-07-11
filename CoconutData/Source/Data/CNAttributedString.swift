@@ -69,45 +69,57 @@ public extension NSAttributedString
 		self.init(string: str, attributes: attrs)
 	}
 
-	func lineCount(from start: String.Index, to end: String.Index) -> Int {
-		var idx     = start
-		var linenum = 0
-		let str     = self.string
-		while idx < end {
-			if str[idx].isNewline {
-				linenum += 1
-			}
-			idx = str.index(after: idx)
+	func character(at index: Int) -> Character? {
+		let str = self.string
+		if index < self.length {
+			let idx = str.index(str.startIndex, offsetBy: index)
+			return str[idx]
 		}
-		return linenum
+		return nil
 	}
 
-	func distanceFromLineStart(to index: String.Index) -> Int {
-		var result = 0
-		var ptr    = index
+	func lineCount(from start: Int, to end: Int) -> Int {
 		let str    = self.string
+		let last   = str.endIndex
+		var idx    = str.index(str.startIndex, offsetBy: start)
+		var diff   = end - start
+		var result = 0
+		while idx < last && diff > 0 {
+			if str[idx].isNewline {
+				result += 1
+			}
+			idx   = str.index(after: idx)
+			diff -= 1
+		}
+		return result
+	}
+
+	func distanceFromLineStart(to index: Int) -> Int {
+		var result = 0
+		let str    = self.string
+		var idx    = str.index(str.startIndex, offsetBy: index)
 		let start  = str.startIndex
-		while start < ptr {
-			let prev = str.index(before: ptr)
+		while start < idx {
+			let prev = str.index(before: idx)
 			if str[prev].isNewline {
 				break
 			}
-			ptr    = prev
+			idx     = prev
 			result += 1
 		}
 		return result
 	}
 
-	func distanceToLineEnd(from index: String.Index) -> Int {
+	func distanceToLineEnd(from index: Int) -> Int {
 		var result = 0
-		var ptr    = index
 		let str    = self.string
+		var idx    = str.index(str.startIndex, offsetBy: index)
 		let end    = str.endIndex
-		while ptr < end {
-			if str[ptr].isNewline {
+		while idx < end {
+			if str[idx].isNewline {
 				break
 			}
-			ptr = str.index(after: ptr)
+			idx     = str.index(after: idx)
 			result += 1
 		}
 		return result
@@ -116,104 +128,124 @@ public extension NSAttributedString
 
 public extension NSMutableAttributedString
 {
-	func moveCursorForward(from index: String.Index) -> String.Index? {
+	func moveCursorForward(from index: Int) -> Int? {
 		let str = self.string
+		let idx = str.index(str.startIndex, offsetBy: index)
 		let end = str.endIndex
-		if index < end {
-			if !str[index].isNewline {
-				return str.index(after: index)
+		if idx < end {
+			if !str[idx].isNewline {
+				return index + 1
 			}
 		}
 		return nil
 	}
 
-	func moveCursorBackward(from index: String.Index) -> String.Index? {
+	func moveCursorForward(from index: Int, number num: Int) -> Int {
+		let str    = self.string
+		var result = index
+		var idx    = str.index(str.startIndex, offsetBy: index)
+		let end    = str.endIndex
+		for _ in 0..<num {
+			if idx < end {
+				if str[idx].isNewline {
+					break
+				}
+				idx = str.index(after: idx)
+				result += 1
+			} else {
+				break
+			}
+		}
+		return result
+	}
+
+	func moveCursorToLineEnd(from index: Int) -> Int {
+		let str    = self.string
+		var result = index
+		var idx    = str.index(str.startIndex, offsetBy: index)
+		let end    = str.endIndex
+		while idx < end {
+			if str[idx].isNewline {
+				break
+			}
+			idx = str.index(after: idx)
+			result += 1
+		}
+		return result
+	}
+
+	func moveCursorBackward(from index: Int) -> Int? {
 		let str   = self.string
+		let idx   = str.index(str.startIndex, offsetBy: index)
 		let start = str.startIndex
-		if start < index {
-			let prev = str.index(before: index)
+		if start < idx {
+			let prev = str.index(before: idx)
 			if !str[prev].isNewline {
-				return prev
+				return index - 1
 			}
 		}
 		return nil
 	}
 
-	func moveCursorBackward(from index: String.Index, number num: Int) -> String.Index {
-		var ptr = index
+	func moveCursorBackward(from index: Int, number num: Int) -> Int {
+		let str    = self.string
+		var result = index
+		var idx    = str.index(str.startIndex, offsetBy: index)
+		let start  = str.startIndex
 		for _ in 0..<num {
-			if let back = moveCursorBackward(from: ptr) {
-				ptr = back
+			if start < idx {
+				let prev = str.index(before: idx)
+				if str[prev].isNewline {
+					break
+				}
+				result -= 1
+				idx     = prev
 			} else {
 				break
 			}
 		}
-		return ptr
+		return result
 	}
 
-	func moveCursorToLineStart(from index: String.Index) -> String.Index {
-		var ptr = index
-		while true {
-			if let back = moveCursorBackward(from: ptr) {
-				ptr = back
-			} else {
+	func moveCursorToLineStart(from index: Int) -> Int {
+		let str    = self.string
+		var result = index
+		var idx    = str.index(str.startIndex, offsetBy: index)
+		let start  = str.startIndex
+		while start < idx {
+			let prev = str.index(before: idx)
+			if str[prev].isNewline {
 				break
 			}
+			result -= 1
+			idx     = prev
 		}
-		return ptr
+		return result
 	}
 
-	func moveCursorForward(from index: String.Index, number num: Int) -> String.Index {
-		var ptr = index
-		for _ in 0..<num {
-			if let next = moveCursorForward(from: ptr) {
-				ptr = next
-			} else {
-				break
-			}
-		}
-		return ptr
-	}
-
-	func moveCursorToLineEnd(from index: String.Index) -> String.Index {
-		var ptr = index
-		while true {
-			if let next = moveCursorForward(from: ptr) {
-				ptr = next
-			} else {
-				break
-			}
-		}
-		return ptr
-	}
-
-	func moveCursorToPreviousLineEnd(from index: String.Index) -> String.Index? {
+	func moveCursorToPreviousLineEnd(from index: Int) -> Int? {
 		/* Move to line head */
-		let head    = moveCursorToLineStart(from: index)
+		let head = moveCursorToLineStart(from: index)
 		/* Skip previous newline */
-		let str = self.string
-		if str.startIndex < head {
-			let newidx = str.index(before: head)
-			return newidx
+		if 0 < head {
+			return head - 1
 		} else {
 			return nil
 		}
 	}
 
-	func moveCursorToNextLineStart(from index: String.Index) -> String.Index? {
+	func moveCursorToNextLineStart(from index: Int) -> Int? {
 		/* Move to line end */
-		let tail    = moveCursorToLineEnd(from: index)
+		let tail = moveCursorToLineEnd(from: index)
 		/* Skip next newline */
-		let str = self.string
-		if tail < str.endIndex {
-			let newidx = str.index(after: tail)
-			return newidx
+		if tail < self.length {
+			return tail + 1
 		} else {
 			return nil
 		}
 	}
 
-	func moveCursorUpOrDown(from idx: String.Index, doUp doup: Bool, number num: Int) -> String.Index {
+	func moveCursorUpOrDown(from idx: Int, doUp doup: Bool, number num: Int) -> Int {
 		var ptr   = idx
 		/* Keep holizontal offset */
 		let orgoff = self.distanceFromLineStart(to: ptr)
@@ -246,7 +278,7 @@ public extension NSMutableAttributedString
 		return ptr
 	}
 
-	func moveCursorTo(from index: String.Index, x xpos: Int) -> String.Index {
+	func moveCursorTo(from index: Int, x xpos: Int) -> Int {
 		let hoff = self.distanceFromLineStart(to: index)
 		if hoff < xpos {
 			return moveCursorForward(from: index, number: xpos - hoff)
@@ -257,51 +289,51 @@ public extension NSMutableAttributedString
 		}
 	}
 
-	func moveCursorTo(base baseidx: String.Index, x xpos: Int, y ypos: Int) -> String.Index {
+	func moveCursorTo(base baseidx: Int, x xpos: Int, y ypos: Int) -> Int {
 		let newidx  = moveCursorUpOrDown(from: baseidx, doUp: false, number: ypos)
 		return moveCursorTo(from: newidx, x: xpos)
 	}
 
-	func write(string str: NSAttributedString, at index: String.Index) -> String.Index {
-		self.beginEditing()
-		let restlen  = self.distanceToLineEnd(from: index)
-		let replen   = min(str.length, restlen)
-		let writepos = self.string.distance(from: self.string.startIndex, to: index)
-		let range    = NSRange(location: writepos, length: replen)
-		self.replaceCharacters(in: range, with: str)
-		self.endEditing()
-		return self.moveCursorForward(from: index, number: str.length)
-	}
-
-	func insert(string str: String, at index: String.Index, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+	func write(string str: String, at index: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
 		let astr = NSAttributedString(string: str, font: fnt, terminalInfo: terminfo)
 		self.beginEditing()
-		let pos = self.string.distance(from: self.string.startIndex, to: index)
-		self.insert(astr, at: pos)
+		/* Erace original string */
+		let restlen  = self.distanceToLineEnd(from: index)
+		self.delete(from: index, length: restlen)
+		/* Insert view string */
+		self.insert(astr, at: index)
 		self.endEditing()
-		return self.string.index(index, offsetBy: astr.length)
+		return self.moveCursorForward(from: index, number: astr.length)
 	}
 
-	func append(string str: String, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+	func insert(string str: String, at index: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
+		let astr = NSAttributedString(string: str, font: fnt, terminalInfo: terminfo)
+		self.beginEditing()
+		self.insert(astr, at: index)
+		self.endEditing()
+		return index + astr.length
+	}
+
+	func append(string str: String, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
 		let astr = NSAttributedString(string: str, font: fnt, terminalInfo: terminfo)
 		self.beginEditing()
 		self.append(astr)
 		self.endEditing()
-		return self.string.endIndex
+		return self.length
 	}
 
-	func scrollUp(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+	func scrollUp(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
 		if lns > 0 {
 			let newlines = String(repeating: "\n", count: lns)
 			return self.append(string: newlines, font: fnt, terminalInfo: terminfo)
 		} else {
-			return self.string.endIndex
+			return self.length
 		}
 	}
 
-	func scrollDown(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> String.Index {
+	func scrollDown(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
 		if lns > 0 {
-			var idx = self.string.endIndex
+			var idx = self.length
 			for _ in 0..<lns {
 				if let prev = self.moveCursorToPreviousLineEnd(from: idx) {
 					idx = prev
@@ -309,9 +341,9 @@ public extension NSMutableAttributedString
 					break
 				}
 			}
-			self.delete(from: idx, to: self.string.endIndex)
+			self.delete(from: idx, to: self.length)
 		}
-		return self.string.endIndex
+		return self.length
 	}
 
 	func clear(font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) {
@@ -332,48 +364,58 @@ public extension NSMutableAttributedString
 		self.endEditing()
 	}
 
-	func deleteForwardCharacters(from index: String.Index, number num: Int) -> String.Index {
+	func deleteForwardCharacters(from index: Int, number num: Int) -> Int {
 		let lineend  = self.moveCursorForward(from: index, number: num)
 		delete(from: index, to: lineend)
 		return index
 	}
 
-	func deleteForwardAllCharacters(from index: String.Index) -> String.Index {
+	func deleteForwardAllCharacters(from index: Int) -> Int {
 		let lineend  = self.moveCursorToLineEnd(from: index)
 		delete(from: index, to: lineend)
 		return index
 	}
 
-	func deleteBackwardCharacters(from index: String.Index, number num: Int) -> String.Index {
+	func deleteBackwardCharacters(from index: Int, number num: Int) -> Int {
 		let linestart = self.moveCursorBackward(from: index, number: num)
 		delete(from: linestart, to: index)
 		return linestart
 	}
 
-	func deleteBackwardAllCharacters(from index: String.Index) -> String.Index {
+	func deleteBackwardAllCharacters(from index: Int) -> Int {
 		let linestart = self.moveCursorToLineStart(from: index)
 		delete(from: linestart, to: index)
 		return linestart
 	}
 
-	func deleteEntireLine(from index: String.Index) -> String.Index {
+	func deleteEntireLine(from index: Int) -> Int {
 		let linestart = self.moveCursorToLineStart(from: index)
 		var lineend   = self.moveCursorToLineEnd(from: index)
-		if lineend < self.string.endIndex {
-			let next = self.string.index(after: lineend)
-			if self.string[next].isNewline {
-				lineend = next
+		if lineend < self.length - 1{
+			let next = lineend + 1
+			if let c = self.character(at: next) {
+				if c.isNewline {
+					lineend = next
+				}
 			}
 		}
 		delete(from: linestart, to: lineend)
 		return linestart
 	}
 
-	func delete(from fromidx: String.Index, to toidx: String.Index) {
-		let pos = self.string.distance(from: self.string.startIndex, to: fromidx)
-		let len = self.string.distance(from: fromidx, to: toidx)
+	func delete(from fromidx: Int, to toidx: Int) {
+		let len = toidx - fromidx
 		if len > 0 {
-			let range = NSRange(location: pos, length: len)
+			let range = NSRange(location: fromidx, length: len)
+			self.beginEditing()
+			self.deleteCharacters(in: range)
+			self.endEditing()
+		}
+	}
+
+	func delete(from fromidx: Int, length len: Int) {
+		if len > 0 {
+			let range = NSRange(location: fromidx, length: len)
 			self.beginEditing()
 			self.deleteCharacters(in: range)
 			self.endEditing()
@@ -392,10 +434,10 @@ public extension NSMutableAttributedString
 	}
 
 	func resize(width newwidth: Int, height newheight: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) {
-		var ptr	  = self.string.startIndex
+		var ptr	  = 0
 		var pos   = 0
 		var lines = 0
-		while ptr < self.string.endIndex {
+		while ptr < self.length {
 			let len = self.distanceToLineEnd(from: ptr)
 			if len > newwidth {
 				/* Cut line */
@@ -410,15 +452,15 @@ public extension NSMutableAttributedString
 				ptr   =  next
 				pos   += newwidth + 1 // +1 for new line
 			} else {
-				ptr   =  self.string.endIndex
+				ptr   =  self.length
 				pos   += len
 			}
 			lines += 1
 
 			if lines > newheight {
 				/* Remove rest strings */
-				if ptr < self.string.endIndex {
-					let head  = self.string.distance(from: self.string.startIndex, to: ptr)
+				if ptr < self.length {
+					let head  = ptr
 					let total = self.length
 					let range = NSRange(location: head, length: total - head)
 					self.deleteCharacters(in: range)

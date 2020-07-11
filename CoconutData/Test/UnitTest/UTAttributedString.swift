@@ -10,17 +10,17 @@ import Foundation
 
 private struct TestString {
 	var	text:		NSMutableAttributedString
-	var	index:		String.Index
+	var	index:		Int
 
 	public init(text txt: String, index idx: Int) {
 		let t = NSMutableAttributedString(string: txt)
 		self.text 	= t
-		self.index	= t.string.index(t.string.startIndex, offsetBy: idx)
+		self.index	= idx
 	}
 
 	public func dump(console cons: CNConsole) {
-		var ptr = text.string.startIndex
-		let end = text.string.endIndex
+		var ptr = 0
+		let end = text.length
 		cons.print(string: "-------- [begin]\n")
 		while ptr < end {
 			if ptr == index {
@@ -28,15 +28,18 @@ private struct TestString {
 			} else {
 				cons.print(string: ".")
 			}
-			let c = text.string[ptr]
-			if c == " " {
-				cons.print(string: "_")
-			} else if c.isNewline {
-				cons.print(string: "$\n")
+			if let c = text.character(at: ptr) {
+				if c == " " {
+					cons.print(string: "_")
+				} else if c.isNewline {
+					cons.print(string: "$\n")
+				} else {
+					cons.print(string: "\(c)")
+				}
 			} else {
-				cons.print(string: "\(c)")
+				cons.print(string: "Invalid-index")
 			}
-			ptr = text.string.index(after: ptr)
+			ptr += 1
 		}
 		if index == end {
 			cons.print(string: "*<")
@@ -68,10 +71,12 @@ public func testAttributedString(console cons: CNConsole) -> Bool
 private func testVector(vector src: TestString, console cons: CNConsole, terminalInfo terminfo: CNTerminalInfo) -> Bool
 {
 	cons.print(string: "Start Vector Test --------------\n")
+	let fnt = NSFont.systemFont(ofSize: 10.0)
+
 	var vec = src
 	vec.dump(console: cons)
 	
-	let cnt = vec.text.lineCount(from: vec.text.string.startIndex, to: vec.text.string.endIndex)
+	let cnt = vec.text.lineCount(from: 0, to: vec.text.string.lengthOfBytes(using: .utf8))
 	cons.print(string: "Line count = \(cnt)\n")
 
 	let hoff = vec.text.distanceFromLineStart(to: vec.index)
@@ -117,11 +122,11 @@ private func testVector(vector src: TestString, console cons: CNConsole, termina
 	vec.dump(console: cons)
 
 	cons.print(string: "moveCursorTo(x=0, y=1)\n")
-	vec.index = vec.text.moveCursorTo(base: vec.text.string.startIndex, x: 0, y: 1)
+	vec.index = vec.text.moveCursorTo(base: 0, x: 0, y: 1)
 	vec.dump(console: cons)
 
 	cons.print(string: "write(\"ABCD\")\n")
-	vec.index = vec.text.write(string: NSAttributedString(string: "ABCD"), at: vec.index)
+	vec.index = vec.text.write(string: "ABCD", at: vec.index, font: fnt, terminalInfo: terminfo)
 	vec.dump(console: cons)
 
 	cons.print(string: "moveCursorBackward(2)\n")

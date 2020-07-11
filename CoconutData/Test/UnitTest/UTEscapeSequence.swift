@@ -40,10 +40,34 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 	let str  = "Hello, " + str0 + " and " + str1 + ". Bye."
 	let res5 = dumpSequence(string: str, console: cons)
 
+	let lsstr = "Applications\r"
+		    + "Desktop\r"
+		    + "Development\r"
+		    + "Documents\r"
+		    + "Downloads\r"
+		    + "Google ドライブ\r"
+		    + "Library\r"
+		    + "Movies\r"
+		    + "Music\r"
+		    + "Pictures\r"
+		    + "Project\r"
+		    + "Public\r"
+		    + "Script\r"
+		    + "Sequrity\r"
+		    + "Shared\r"
+		    + "Sites\r"
+		    + "build\r"
+		    + "iCloud Drive（アーカイブ）\r"
+		    + "local\r"
+		    + "tmp_dir\r"
+		    + "tools\r"
+		    + "アプリケーション\r"
+	let res23  = dumpSequence(string: lsstr, console: cons)
+
 	//cons.error(string: "Color message\n")
 	return  res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 &&
 		res11 && res12 && res13 && res14 && res15 && res16 && res17 && res18 && res19 && res20 &&
-		res21 && res22
+		res21 && res22 && res23
 }
 
 private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool {

@@ -16,8 +16,7 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 		+ "abcdefghij"
 	)
 
-	var idx = str.string.index(str.string.startIndex, offsetBy: 15)
-
+	var idx = 15
 	cons.print(string: "- Initial state\n")
 	dump(index: idx, string: str, console: cons)
 
@@ -86,10 +85,10 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 	return true
 }
 
-private func execute(string str: NSMutableAttributedString, index idx: String.Index, escapeCode ecode: CNEscapeCode, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo, console cons: CNConsole) -> String.Index
+private func execute(string str: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo, console cons: CNConsole) -> Int
 {
 	cons.print(string: "- Execute:\(ecode.description())\n")
-	if let result = str.execute(base: str.string.startIndex, index: idx, font: fnt, terminalInfo: terminfo, escapeCode: ecode) {
+	if let result = str.execute(base: 0, index: idx, font: fnt, terminalInfo: terminfo, escapeCode: ecode) {
 		dump(index: result, string: str, console: cons)
 		return result
 	} else {
@@ -97,11 +96,10 @@ private func execute(string str: NSMutableAttributedString, index idx: String.In
 	}
 }
 
-private func dump(index idx: String.Index, string astr: NSAttributedString, console cons: CNConsole)
+private func dump(index idx: Int, string astr: NSAttributedString, console cons: CNConsole)
 {
-	let str = astr.string
-	var ptr = str.startIndex
-	let end = str.endIndex
+	var ptr = 0
+	let end = astr.length
 	cons.print(string: "-------- [begin]\n")
 	while ptr < end {
 		if ptr == idx {
@@ -109,15 +107,18 @@ private func dump(index idx: String.Index, string astr: NSAttributedString, cons
 		} else {
 			cons.print(string: ".")
 		}
-		let c = str[ptr]
-		if c == " " {
-			cons.print(string: "_")
-		} else if c.isNewline {
-			cons.print(string: "$\n")
+		if let c = astr.character(at: ptr) {
+			if c == " " {
+				cons.print(string: "_")
+			} else if c.isNewline {
+				cons.print(string: "$\n")
+			} else {
+				cons.print(string: "\(c)")
+			}
 		} else {
-			cons.print(string: "\(c)")
+			cons.print(string: "Invalid-index")
 		}
-		ptr = str.index(after: ptr)
+		ptr += 1
 	}
 	if idx == end {
 		cons.print(string: "*$")

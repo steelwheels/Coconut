@@ -515,6 +515,51 @@ cursorNextLine(1)
 string(" and ")
 eraceEntireLine
 string(". Bye.")
+* dumpSequence
+string("Applications")
+newline
+string("Desktop")
+newline
+string("Development")
+newline
+string("Documents")
+newline
+string("Downloads")
+newline
+string("Google ドライブ")
+newline
+string("Library")
+newline
+string("Movies")
+newline
+string("Music")
+newline
+string("Pictures")
+newline
+string("Project")
+newline
+string("Public")
+newline
+string("Script")
+newline
+string("Sequrity")
+newline
+string("Shared")
+newline
+string("Sites")
+newline
+string("build")
+newline
+string("iCloud Drive（アーカイブ）")
+newline
+string("local")
+newline
+string("tmp_dir")
+newline
+string("tools")
+newline
+string("アプリケーション")
+newline
 * testColor
 black : OK
 red : OK
@@ -534,7 +579,7 @@ white : OK
 - Execute:string("Hello")
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.o*9.$
+.0.1.2.3.H.e.l.l.o*$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("Good-morning!!")
@@ -785,7 +830,7 @@ abcdefghij")
 - Execute:string("2x5")
 -------- [begin]
 ._._._._._._._._._._._._._._._._._._._._.$
-._._._._.2.x.5*_._._._._._._._._._._._._.$
+._._._._.2.x.5*$
 ._._._._._._._._._._._._._._._._._._._._.$
 ._._._._._._._._._._._._._._._._._._._._.$
 ._._._._._._._._._._._._._._._._._._._._.$

@@ -9,19 +9,17 @@ import Foundation
 
 public extension NSMutableAttributedString
 {
-	func execute(base baseidx: String.Index, index idx: String.Index, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo, escapeCode code: CNEscapeCode) -> String.Index? { /* -> Next index */
-		var result: String.Index?
+	func execute(base baseidx: Int, index idx: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo, escapeCode code: CNEscapeCode) -> Int? { /* -> Next index */
+		var result: Int?
 		switch code {
 		case .string(let str):
-			let astr = NSAttributedString(string: str, font: fnt, terminalInfo: terminfo)
-			result = self.write(string: astr, at: idx)
+			result = self.write(string: str, at: idx, font: fnt, terminalInfo: terminfo)
 		case .eot:
 			result = idx // ignore
 		case .newline:
 			result = self.insert(string: "\n", at: idx, font: fnt, terminalInfo: terminfo)
 		case .tab:
-			let astr = NSAttributedString(string: "\t")
-			result = self.write(string: astr, at: idx)
+			result = self.write(string: "\t", at: idx, font: fnt, terminalInfo: terminfo)
 		case .backspace:
 			result = self.moveCursorBackward(from: idx, number: 1)
 		case .delete:
@@ -68,7 +66,7 @@ public extension NSMutableAttributedString
 			result = self.deleteEntireLine(from: idx)
 		case .eraceEntireBuffer:
 			self.clear(font: fnt, terminalInfo: terminfo)
-			result = string.startIndex
+			result = 0
 		case .scrollUp(let lines):
 			result = self.scrollUp(lines: lines, font: fnt, terminalInfo: terminfo)
 		case .scrollDown(let lines):
@@ -76,7 +74,7 @@ public extension NSMutableAttributedString
 		case .resetAll:
 			self.clear(font: fnt, terminalInfo: terminfo)
 			terminfo.reset()
-			result = string.startIndex
+			result = 0
 		case .resetCharacterAttribute:
 			result = nil			// not accepted
 		case .boldCharacter(_):
@@ -112,10 +110,10 @@ public extension NSMutableAttributedString
 				/* Keep current text */
 				let range   = NSRange(location: 0, length: self.length)
 				let curctxt = self.attributedSubstring(from: range)
-				let curidx  = self.string.distance(from: self.string.startIndex, to: idx)
+				let curidx  = idx
 				/* Restore reserved text */
 				self.setAttributedString(terminfo.reservedText)
-				result = self.string.index(self.string.startIndex, offsetBy: terminfo.reservedIndex)
+				result = terminfo.reservedIndex
 				/* Update padding */
 				if doalt {
 					self.resize(width: terminfo.width, height: terminfo.height, font: fnt, terminalInfo: terminfo)
