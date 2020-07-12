@@ -193,9 +193,9 @@ private enum CNValueData {
 		case .DoubleValue(let val):
 			result = 0x0600_0000 | (Int(val * 100.0) & MASK)
 		case .StringValue(let val):
-			result = 0x0700_0000 | (Int(val.lengthOfBytes(using: .utf8)) & MASK)
+			result = 0x0700_0000 | (Int(val.count) & MASK)
 		case .URLValue(let val):
-			result = 0x0800_0000 | (Int(val.absoluteString.lengthOfBytes(using: .utf8)) & MASK)
+			result = 0x0800_0000 | (Int(val.absoluteString.count) & MASK)
 		case .DateValue(let val):
 			result = 0x0900_0000 | (val.hashValue & MASK)
 		case .ArrayValue(let val):

@@ -28,13 +28,13 @@ public class CNShellUtil
 		}
 		outpipe.fileHandleForReading.readabilityHandler = {
 			(_ handle: FileHandle) -> Void in
-			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
+			if let str = String.stringFromData(data: handle.availableData) {
 				cons.print(string: str)
 			}
 		}
 		errpipe.fileHandleForReading.readabilityHandler = {
 			(_ handle: FileHandle) -> Void in
-			if let str = String(data: handle.availableData, encoding: String.Encoding.utf8) {
+			if let str = String.stringFromData(data: handle.availableData) {
 				cons.error(string: str)
 			}
 		}

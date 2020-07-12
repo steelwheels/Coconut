@@ -37,7 +37,7 @@ open class CNLogManager
 
 		mOutputPipe.fileHandleForReading.readabilityHandler = {
 			(_ hdl: FileHandle) -> Void in
-			if let str = String(data: hdl.availableData, encoding: .utf8) {
+			if let str = String.stringFromData(data: hdl.availableData) {
 				self.mLock.lock()
 					self.mText.append(.normal(str))
 					self.flush()
@@ -46,7 +46,7 @@ open class CNLogManager
 		}
 		mErrorPipe.fileHandleForReading.readabilityHandler = {
 			(_ hdl: FileHandle) -> Void in
-			if let str = String(data: hdl.availableData, encoding: .utf8) {
+			if let str = String.stringFromData(data: hdl.availableData) {
 				self.mLock.lock()
 					self.mText.append(.error(str))
 					self.flush()

@@ -30,7 +30,7 @@ public class CNEnvironment
 			var patharr: Array<CNNativeValue> = []
 			let paths = pathstr.components(separatedBy: ":")
 			for path in paths {
-				if path.lengthOfBytes(using: .utf8) > 0 {
+				if !path.isEmpty {
 					patharr.append(.stringValue(path))
 				}
 			}

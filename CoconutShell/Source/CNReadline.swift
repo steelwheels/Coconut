@@ -78,7 +78,7 @@ open class CNReadline
 				break
 			case .matched(let newstr):
 				let orgstr = cmdline.string
-				let delta  = newstr.dropFirst(orgstr.lengthOfBytes(using: .utf8))
+				let delta  = newstr.dropFirst(orgstr.count)
 				mCurrentBuffer.push(.string(String(delta)))
 			case .popup(_):
 				break

@@ -102,7 +102,7 @@ public class CNFileConsole : CNConsole
 	}
 
 	public func scan() -> String? {
-		return String(data: inputHandle.availableData, encoding: .utf8)
+		return String.stringFromData(data: inputHandle.availableData)
 	}
 }
 
@@ -214,7 +214,7 @@ public class CNPipeConsole
 		mOutputPipe.fileHandleForReading.readabilityHandler = {
 			[weak self] (_ handle: FileHandle) -> Void in
 			if let myself = self {
-				if let str = String(data: handle.availableData, encoding: .utf8) {
+				if let str = String.stringFromData(data: handle.availableData) {
 					myself.output(string: str)
 				} else {
 					NSLog("Non string data")
@@ -225,7 +225,7 @@ public class CNPipeConsole
 		mErrorPipe.fileHandleForReading.readabilityHandler = {
 			[weak self] (_ handle: FileHandle) -> Void in
 			if let myself = self {
-				if let str = String(data: handle.availableData, encoding: .utf8) {
+				if let str = String.stringFromData(data: handle.availableData){
 					myself.error(string: str)
 				} else {
 					NSLog("Non string data")

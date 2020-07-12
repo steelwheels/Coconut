@@ -40,7 +40,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	outpipe.fileHandleForReading.readabilityHandler = {
 		(_ hdl: FileHandle) -> Void in
 		let data = hdl.availableData
-		if let str = String(data: data, encoding: .utf8) {
+		if let str = String.stringFromData(data: data) {
 			cons.print(string: "UTShell/Out: \"\(str)\"\n")
 		}
 	}
@@ -48,7 +48,7 @@ public func testShell(console cons: CNFileConsole) -> Bool
 	errpipe.fileHandleForReading.readabilityHandler = {
 		(_ hdl: FileHandle) -> Void in
 		let data = hdl.availableData
-		if let str = String(data: data, encoding: .utf8) {
+		if let str = String.stringFromData(data: data) {
 			cons.print(string: "UTShell/Err: \"\(str)\"\n")
 		}
 	}

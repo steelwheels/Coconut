@@ -90,7 +90,7 @@ extension FileHandle
 	public var availableString: String {
 		get {
 			let data = self.availableData
-			if let str = String(data: data, encoding: .utf8) {
+			if let str = String.stringFromData(data: data) {
 				return str
 			} else {
 				NSLog("Failed convert at \(#file):\(#line)")

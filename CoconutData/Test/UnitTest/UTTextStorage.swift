@@ -99,7 +99,7 @@ private func execute(string str: NSMutableAttributedString, index idx: Int, esca
 private func dump(index idx: Int, string astr: NSAttributedString, console cons: CNConsole)
 {
 	var ptr = 0
-	let end = astr.length
+	let end = astr.string.count
 	cons.print(string: "-------- [begin]\n")
 	while ptr < end {
 		if ptr == idx {

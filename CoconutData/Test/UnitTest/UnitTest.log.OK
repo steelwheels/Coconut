@@ -68,21 +68,37 @@ moveCursorTo(x=0, y=1)
 -------- [begin]
 *a.b.c
 -------- [end]
+moveCursorForward(2)
+-------- [begin]
+.a.b*c
+-------- [end]
+insert("(ルート2)", 2
+-------- [begin]
+.a.b*(.ル.ー.ト.2.).c
+-------- [end]
 write("ABCD")
 -------- [begin]
-.A.B.C.D*<
+.a.b.A.B.C.D*<
 -------- [end]
 moveCursorBackward(2)
 -------- [begin]
-.A.B*C.D
+.a.b.A.B*C.D
 -------- [end]
 deleteForwardCharacters(1)
 -------- [begin]
-.A.B*D
+.a.b.A.B*D
 -------- [end]
 deleteBackwardCharacters(1)
 -------- [begin]
-.A*D
+.a.b.A*D
+-------- [end]
+delete(1 to 2)
+-------- [begin]
+*a.A.D
+-------- [end]
+delete(1 len 2)
+-------- [begin]
+*a
 -------- [end]
 deleteEntireLine
 -------- [begin]
@@ -168,39 +184,271 @@ moveCursorTo(x=0, y=1)
 .g.h.i.$
 
 -------- [end]
+moveCursorForward(2)
+-------- [begin]
+.a.b.c.$
+.d.e*f.$
+.g.h.i.$
+
+-------- [end]
+insert("(ルート2)", 6
+-------- [begin]
+.a.b.c.$
+.d.e*(.ル.ー.ト.2.).f.$
+.g.h.i.$
+
+-------- [end]
 write("ABCD")
 -------- [begin]
 .a.b.c.$
-.A.B.C.D*$
+.d.e.A.B.C.D*$
 .g.h.i.$
 
 -------- [end]
 moveCursorBackward(2)
 -------- [begin]
 .a.b.c.$
-.A.B*C.D.$
+.d.e.A.B*C.D.$
 .g.h.i.$
 
 -------- [end]
 deleteForwardCharacters(1)
 -------- [begin]
 .a.b.c.$
-.A.B*D.$
+.d.e.A.B*D.$
 .g.h.i.$
 
 -------- [end]
 deleteBackwardCharacters(1)
 -------- [begin]
 .a.b.c.$
-.A*D.$
+.d.e.A*D.$
+.g.h.i.$
+
+-------- [end]
+delete(1 to 2)
+-------- [begin]
+*a.c.$
+.d.e.A.D.$
+.g.h.i.$
+
+-------- [end]
+delete(1 len 2)
+-------- [begin]
+*a.d.e.A.D.$
 .g.h.i.$
 
 -------- [end]
 deleteEntireLine
 -------- [begin]
-.a.b.c.$
 *$
 .g.h.i.$
+
+-------- [end]
+Start Vector Test --------------
+-------- [begin]
+.ド.ラ.イ*ブ
+-------- [end]
+Line count = 0
+holizOffset = 3
+holizReverseOffset = 1
+moveCursorBackward(1)
+-------- [begin]
+.ド.ラ*イ.ブ
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+*ド.ラ.イ.ブ
+-------- [end]
+moveCursorForward(3)
+-------- [begin]
+.ド.ラ.イ*ブ
+-------- [end]
+moveCursorForward(4)
+-------- [begin]
+.ド.ラ.イ.ブ*<
+-------- [end]
+moveCursorToLineStart
+-------- [begin]
+*ド.ラ.イ.ブ
+-------- [end]
+moveCursorToLineEnd
+-------- [begin]
+.ド.ラ.イ.ブ*<
+-------- [end]
+moveCursorUpOrDown(up, 1)
+-------- [begin]
+.ド.ラ.イ.ブ*<
+-------- [end]
+moveCursorUpOrDown(down, 2)
+-------- [begin]
+.ド.ラ.イ.ブ*<
+-------- [end]
+moveCursorTo(x=1)
+-------- [begin]
+.ド*ラ.イ.ブ
+-------- [end]
+moveCursorTo(x=0, y=1)
+-------- [begin]
+*ド.ラ.イ.ブ
+-------- [end]
+moveCursorForward(2)
+-------- [begin]
+.ド.ラ*イ.ブ
+-------- [end]
+insert("(ルート2)", 2
+-------- [begin]
+.ド.ラ*(.ル.ー.ト.2.).イ.ブ
+-------- [end]
+write("ABCD")
+-------- [begin]
+.ド.ラ.A.B.C.D*<
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+.ド.ラ.A.B*C.D
+-------- [end]
+deleteForwardCharacters(1)
+-------- [begin]
+.ド.ラ.A.B*D
+-------- [end]
+deleteBackwardCharacters(1)
+-------- [begin]
+.ド.ラ.A*D
+-------- [end]
+delete(1 to 2)
+-------- [begin]
+*ド.A.D
+-------- [end]
+delete(1 len 2)
+-------- [begin]
+*ド
+-------- [end]
+deleteEntireLine
+-------- [begin]
+*<
+-------- [end]
+Start Vector Test --------------
+-------- [begin]
+.ド.ラ.イ.ブ*1.$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+Line count = 2
+holizOffset = 4
+holizReverseOffset = 1
+moveCursorBackward(1)
+-------- [begin]
+.ド.ラ.イ*ブ.1.$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+.ド*ラ.イ.ブ.1.$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorForward(3)
+-------- [begin]
+.ド.ラ.イ.ブ*1.$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorForward(4)
+-------- [begin]
+.ド.ラ.イ.ブ.1*$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorToLineStart
+-------- [begin]
+*ド.ラ.イ.ブ.1.$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorToLineEnd
+-------- [begin]
+.ド.ラ.イ.ブ.1*$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorUpOrDown(up, 1)
+-------- [begin]
+.ド.ラ.イ.ブ.1*$
+.ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorUpOrDown(down, 2)
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ.イ.ブ.2.$
+*<
+-------- [end]
+moveCursorTo(x=1)
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ.イ.ブ.2.$
+*<
+-------- [end]
+moveCursorTo(x=0, y=1)
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+*ド.ラ.イ.ブ.2.$
+
+-------- [end]
+moveCursorForward(2)
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ*イ.ブ.2.$
+
+-------- [end]
+insert("(ルート2)", 8
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ*(.ル.ー.ト.2.).イ.ブ.2.$
+
+-------- [end]
+write("ABCD")
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ.A.B.C.D*$
+
+-------- [end]
+moveCursorBackward(2)
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ.A.B*C.D.$
+
+-------- [end]
+deleteForwardCharacters(1)
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ.A.B*D.$
+
+-------- [end]
+deleteBackwardCharacters(1)
+-------- [begin]
+.ド.ラ.イ.ブ.1.$
+.ド.ラ.A*D.$
+
+-------- [end]
+delete(1 to 2)
+-------- [begin]
+*ド.イ.ブ.1.$
+.ド.ラ.A.D.$
+
+-------- [end]
+delete(1 len 2)
+-------- [begin]
+*ド.1.$
+.ド.ラ.A.D.$
+
+-------- [end]
+deleteEntireLine
+-------- [begin]
+*$
+.ド.ラ.A.D.$
 
 -------- [end]
 *** Test padding

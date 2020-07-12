@@ -63,7 +63,7 @@ public class CNTextFile
 	}
 
 	private func updateInputBuffer() {
-		if let str = String(data: mFileHandle.availableData, encoding: .utf8) {
+		if let str = String.stringFromData(data: mFileHandle.availableData) {
 			mInputBuffer.append(contentsOf: str)
 		} else {
 			NSLog("Failed to convert data into string")

@@ -20,7 +20,7 @@ private struct TestString {
 
 	public func dump(console cons: CNConsole) {
 		var ptr = 0
-		let end = text.length
+		let end = text.string.count
 		cons.print(string: "-------- [begin]\n")
 		while ptr < end {
 			if ptr == index {
@@ -52,7 +52,9 @@ public func testAttributedString(console cons: CNConsole) -> Bool
 {
 	let vectors: Array<TestString> = [
 		TestString(text: "abc", index: 1),
-		TestString(text: "abc\ndef\nghi\n", index: 6)
+		TestString(text: "abc\ndef\nghi\n", index: 6),
+		TestString(text: "ドライブ", index: 3),
+		TestString(text: "ドライブ1\nドライブ2\n", index: 4)
 	]
 
 	var result0 = true
@@ -75,8 +77,8 @@ private func testVector(vector src: TestString, console cons: CNConsole, termina
 
 	var vec = src
 	vec.dump(console: cons)
-	
-	let cnt = vec.text.lineCount(from: 0, to: vec.text.string.lengthOfBytes(using: .utf8))
+
+	let cnt = vec.text.lineCount(from: 0, to: vec.text.string.count)
 	cons.print(string: "Line count = \(cnt)\n")
 
 	let hoff = vec.text.distanceFromLineStart(to: vec.index)
@@ -125,6 +127,14 @@ private func testVector(vector src: TestString, console cons: CNConsole, termina
 	vec.index = vec.text.moveCursorTo(base: 0, x: 0, y: 1)
 	vec.dump(console: cons)
 
+	cons.print(string: "moveCursorForward(2)\n")
+	vec.index = vec.text.moveCursorForward(from: vec.index, number: 2)
+	vec.dump(console: cons)
+
+	cons.print(string: "insert(\"ドライブ\", \(vec.index)\n")
+	vec.text.insert(NSAttributedString(string: "ドライブ"), at: vec.index)
+	vec.dump(console: cons)
+
 	cons.print(string: "write(\"ABCD\")\n")
 	vec.index = vec.text.write(string: "ABCD", at: vec.index, font: fnt, terminalInfo: terminfo)
 	vec.dump(console: cons)
@@ -141,10 +151,19 @@ private func testVector(vector src: TestString, console cons: CNConsole, termina
 	vec.index = vec.text.deleteBackwardCharacters(from: vec.index, number: 1)
 	vec.dump(console: cons)
 
+	cons.print(string: "delete(1 to 2)\n")
+	vec.text.delete(from: 1, to: 2)
+	vec.index = 0
+	vec.dump(console: cons)
+
+	cons.print(string: "delete(1 len 2)\n")
+	vec.text.delete(from: 1, length: 2)
+	vec.dump(console: cons)
+
 	cons.print(string: "deleteEntireLine\n")
 	vec.index = vec.text.deleteEntireLine(from: vec.index)
 	vec.dump(console: cons)
-	
+
 	return true
 }
 

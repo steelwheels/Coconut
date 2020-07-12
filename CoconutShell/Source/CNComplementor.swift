@@ -168,7 +168,7 @@ open class CNComplementor
 		var minlen: Int?    = nil
 		var minstr: String? = nil
 		for item in items {
-			let len = item.lengthOfBytes(using: .utf8)
+			let len = item.count
 			if let m = minlen {
 				if m > len {
 					minlen = len
@@ -192,7 +192,7 @@ open class CNComplementor
 				}
 				matchpos = i
 			}
-			let orglen   = orgstr.lengthOfBytes(using: .utf8)
+			let orglen   = orgstr.count
 			let matchlen = matchpos + 1
 			if matchlen > orglen {
 				return String(minstr.prefix(matchlen))
@@ -295,7 +295,7 @@ open class CNComplementor
 		/* Get max width */
 		var maxwidth = 0
 		for item in itms {
-			maxwidth = max(maxwidth, item.lengthOfBytes(using: .utf8))	// +1 for space
+			maxwidth = max(maxwidth, item.count)
 		}
 		/* Get width */
 		let colnum : Int = terminfo.width / (maxwidth + 1) // +1 for space
@@ -308,7 +308,7 @@ open class CNComplementor
 				if idx < itms.count {
 					let item = itms[idx]
 					line += item
-					let len  = item.lengthOfBytes(using: .utf8)
+					let len  = item.count
 					let diff = width - len
 					if diff > 0 {
 						line += String(repeating: " ", count: diff)

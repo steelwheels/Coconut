@@ -19,10 +19,6 @@ public class CNStringStream
 		mEndIndex	= src.endIndex
 	}
 
-	public var count: Int {
-		get { return mString.count }
-	}
-
 	public func getc() -> Character? {
 		if mStartIndex < mEndIndex {
 			let c: Character = mString[mStartIndex]

@@ -71,7 +71,7 @@ public extension NSAttributedString
 
 	func character(at index: Int) -> Character? {
 		let str = self.string
-		if index < self.length {
+		if index < str.count {
 			let idx = str.index(str.startIndex, offsetBy: index)
 			return str[idx]
 		}
@@ -238,7 +238,7 @@ public extension NSMutableAttributedString
 		/* Move to line end */
 		let tail = moveCursorToLineEnd(from: index)
 		/* Skip next newline */
-		if tail < self.length {
+		if tail < self.string.count {
 			return tail + 1
 		} else {
 			return nil
@@ -249,6 +249,7 @@ public extension NSMutableAttributedString
 		var ptr   = idx
 		/* Keep holizontal offset */
 		let orgoff = self.distanceFromLineStart(to: ptr)
+		NSLog("mCUOD (0): \(orgoff)")
 		/* up/down num lines */
 		if doup {
 			for _ in 0..<num {
@@ -267,43 +268,53 @@ public extension NSMutableAttributedString
 				}
 			}
 		}
+		NSLog("mCUOD (1): \(ptr)")
 		/* get current offset */
 		let curoff = self.distanceFromLineStart(to: ptr)
+		NSLog("mCUOD (2): \(curoff)")
 		/* adjust holizontal offset */
 		if curoff < orgoff {
 			ptr = moveCursorForward(from: ptr, number: orgoff - curoff)
 		} else if orgoff < curoff {
 			ptr = moveCursorBackward(from: ptr, number: curoff - orgoff)
 		}
+		NSLog("mCUOD (3): \(ptr)")
 		return ptr
 	}
 
 	func moveCursorTo(from index: Int, x xpos: Int) -> Int {
+		var result: Int
 		let hoff = self.distanceFromLineStart(to: index)
 		if hoff < xpos {
-			return moveCursorForward(from: index, number: xpos - hoff)
+			result = moveCursorForward(from: index, number: xpos - hoff)
 		} else if hoff > xpos {
-			return moveCursorBackward(from: index, number: hoff - xpos)
+			result = moveCursorBackward(from: index, number: hoff - xpos)
 		} else {
-			return index
+			result = index
 		}
+		return result
 	}
 
 	func moveCursorTo(base baseidx: Int, x xpos: Int, y ypos: Int) -> Int {
-		let newidx  = moveCursorUpOrDown(from: baseidx, doUp: false, number: ypos)
-		return moveCursorTo(from: newidx, x: xpos)
+		let newidx = moveCursorUpOrDown(from: baseidx, doUp: false, number: ypos)
+		let result = moveCursorTo(from: newidx, x: xpos)
+		NSLog("moveCursorTo(base:\(baseidx), x:\(xpos), y:\(ypos)) -> \(newidx) -> \(result)")
+		return result
 	}
 
 	func write(string str: String, at index: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
 		let astr = NSAttributedString(string: str, font: fnt, terminalInfo: terminfo)
 		self.beginEditing()
-		/* Erace original string */
+		/* Get length to replace */
 		let restlen  = self.distanceToLineEnd(from: index)
-		self.delete(from: index, length: restlen)
-		/* Insert view string */
+		let replen   = min(restlen, str.count)
+		if replen > 0 {
+			self.delete(from: index, length: replen)
+		}
+		/* Insert new string */
 		self.insert(astr, at: index)
 		self.endEditing()
-		return self.moveCursorForward(from: index, number: astr.length)
+		return index + str.count
 	}
 
 	func insert(string str: String, at index: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
@@ -311,7 +322,7 @@ public extension NSMutableAttributedString
 		self.beginEditing()
 		self.insert(astr, at: index)
 		self.endEditing()
-		return index + astr.length
+		return index + str.count
 	}
 
 	func append(string str: String, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
@@ -319,7 +330,7 @@ public extension NSMutableAttributedString
 		self.beginEditing()
 		self.append(astr)
 		self.endEditing()
-		return self.length
+		return str.count
 	}
 
 	func scrollUp(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
@@ -327,13 +338,14 @@ public extension NSMutableAttributedString
 			let newlines = String(repeating: "\n", count: lns)
 			return self.append(string: newlines, font: fnt, terminalInfo: terminfo)
 		} else {
-			return self.length
+			return self.string.count
 		}
 	}
 
 	func scrollDown(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
 		if lns > 0 {
-			var idx = self.length
+			let str = self.string
+			var idx = str.count
 			for _ in 0..<lns {
 				if let prev = self.moveCursorToPreviousLineEnd(from: idx) {
 					idx = prev
@@ -341,15 +353,15 @@ public extension NSMutableAttributedString
 					break
 				}
 			}
-			self.delete(from: idx, to: self.length)
+			self.delete(from: idx, to: str.count)
 		}
-		return self.length
+		return self.string.count
 	}
 
 	func clear(font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) {
 		self.beginEditing()
 		/* Clear normally */
-		let range = NSRange(location: 0, length: self.length)
+		let range = NSRange(location: 0, length: self.string.count)
 		self.deleteCharacters(in: range)
 		if terminfo.isAlternative {
 			/* Fill by spaces */
@@ -391,7 +403,7 @@ public extension NSMutableAttributedString
 	func deleteEntireLine(from index: Int) -> Int {
 		let linestart = self.moveCursorToLineStart(from: index)
 		var lineend   = self.moveCursorToLineEnd(from: index)
-		if lineend < self.length - 1{
+		if lineend < self.string.count - 1{
 			let next = lineend + 1
 			if let c = self.character(at: next) {
 				if c.isNewline {
@@ -424,7 +436,7 @@ public extension NSMutableAttributedString
 
 	func changeOverallFont(font newfont: CNFont){
 		self.beginEditing()
-		let entire = NSMakeRange(0, self.length)
+		let entire = NSMakeRange(0, self.string.count)
 		self.enumerateAttribute(.font, in: entire, options: [], using: {
 			(anyobj, range, unsage) -> Void in
 			removeAttribute(.font, range: entire)
@@ -437,54 +449,61 @@ public extension NSMutableAttributedString
 		var ptr	  = 0
 		var pos   = 0
 		var lines = 0
-		while ptr < self.length {
+		while ptr < self.string.count {
 			let len = self.distanceToLineEnd(from: ptr)
 			if len > newwidth {
 				/* Cut line */
 				ptr = deleteBackwardCharacters(from: ptr, number: len - newwidth)
 			} else if len < newwidth {
 				/* Fill line */
-				let space = String(repeating: " ", count: newwidth - len)
+				let space = String(repeating: "_", count: newwidth - len)
 				let astr  = NSAttributedString(string: space, font: fnt, terminalInfo: terminfo)
-				self.insert(astr, at: pos + len)
+				self.beginEditing()
+					self.insert(astr, at: pos + len)
+				self.endEditing()
 			}
 			if let next = moveCursorToNextLineStart(from: ptr) {
 				ptr   =  next
 				pos   += newwidth + 1 // +1 for new line
 			} else {
-				ptr   =  self.length
+				ptr   =  self.string.count
 				pos   += len
 			}
 			lines += 1
 
 			if lines > newheight {
 				/* Remove rest strings */
-				if ptr < self.length {
+				if ptr < self.string.count {
 					let head  = ptr
-					let total = self.length
+					let total = self.string.count
 					let range = NSRange(location: head, length: total - head)
-					self.deleteCharacters(in: range)
-					return /* Exit this function */
+					self.beginEditing()
+						self.deleteCharacters(in: range)
+					self.endEditing()
 				}
 			}
 		}
 		if lines < newheight {
-			let space    = String(repeating: " ", count: newwidth)
+			let space    = String(repeating: "_", count: newwidth - 1)
 			let aspace   = NSAttributedString(string: space, font: fnt, terminalInfo: terminfo)
 			let anewline = NSAttributedString(string: "\n", font: fnt, terminalInfo: terminfo)
 			if lines == 0 {
-				self.append(aspace)
+				self.beginEditing()
+					self.append(aspace)
+				self.endEditing()
 				lines = 1
 			}
 			for _ in lines..<newheight {
-				self.append(anewline)
-				self.append(aspace)
+				self.beginEditing()
+					self.append(anewline)
+					self.append(aspace)
+				self.endEditing()
 			}
 		}
 	}
 
 	func changeOverallTextColor(targetColor curcol: CNColor, newColor newcol: CNColor){
-		let entire = NSMakeRange(0, self.length)
+		let entire = NSMakeRange(0, self.string.count)
 		self.beginEditing()
 		self.enumerateAttribute(.foregroundColor, in: entire, options: [], using: {
 			(anyobj, range, unsage) -> Void in
@@ -500,7 +519,7 @@ public extension NSMutableAttributedString
 	}
 
 	func changeOverallBackgroundColor(targetColor curcol: CNColor, newColor newcol: CNColor){
-		let entire = NSMakeRange(0, self.length)
+		let entire = NSMakeRange(0, self.string.count)
 		self.beginEditing()
 		self.enumerateAttribute(.backgroundColor, in: entire, options: [], using: {
 			(anyobj, range, unsage) -> Void in

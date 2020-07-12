@@ -108,11 +108,13 @@ public extension NSMutableAttributedString
 		case .selectAltScreen(let doalt):
 			if terminfo.isAlternative != doalt {
 				/* Keep current text */
-				let range   = NSRange(location: 0, length: self.length)
+				let range   = NSRange(location: 0, length: self.string.count)
 				let curctxt = self.attributedSubstring(from: range)
 				let curidx  = idx
 				/* Restore reserved text */
+				self.beginEditing()
 				self.setAttributedString(terminfo.reservedText)
+				self.endEditing()
 				result = terminfo.reservedIndex
 				/* Update padding */
 				if doalt {

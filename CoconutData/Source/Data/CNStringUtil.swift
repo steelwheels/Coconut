@@ -7,7 +7,14 @@
 
 import Foundation
 
-public extension String {
+public extension String
+{
+	static func stringFromData(data dat: Data) -> String? {
+		if let str = String(data: dat, encoding: .utf8) {
+			return str.precomposedStringWithCanonicalMapping
+		}
+		return nil
+	}
 
 	func pad(char c: Character, toLength len: Int, align algn: NSTextAlignment) -> String {
 		let curlen = self.count
@@ -104,7 +111,7 @@ public class CNStringUtil
 		} else if inquote {
 			return [src]
 		} else {
-			return src.components(separatedBy: CharacterSet.whitespaces).filter{ $0.lengthOfBytes(using: .utf8) > 0 }
+			return src.components(separatedBy: CharacterSet.whitespaces).filter{ $0.count > 0 }
 		}
 	}
 

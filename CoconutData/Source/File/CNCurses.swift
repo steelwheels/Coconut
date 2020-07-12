@@ -41,16 +41,18 @@ public class CNCurses
 		let selalt = CNEscapeCode.selectAltScreen(true)
 		mConsole.print(string: selalt.encode())
 
+		#if false
 		/* Erace buffer */
 		let erace = CNEscapeCode.eraceEntireBuffer
 		mConsole.print(string: erace.encode())
+		#endif
 
 		/* Replace handler */
 		mHandler = mConsole.inputHandle.readabilityHandler
 		mConsole.inputHandle.readabilityHandler = {
 			(_ hdl: FileHandle) -> Void in
 			self.mLock.lock()
-			if let str = String(data: hdl.availableData, encoding: .utf8) {
+			if let str = String.stringFromData(data: hdl.availableData){
 				self.mBuffer.append(str)
 			}
 			self.mLock.unlock()

@@ -17,7 +17,7 @@ public class CNNativeValueFile {
 		do {
 			let result: Result
 			let data = try Data(contentsOf: url)
-			if let str = String(data: data, encoding: .utf8) {
+			if let str = String.stringFromData(data: data) {
 				let parser = CNNativeValueParser()
 				let err    = parser.parse(source: str)
 				switch err {
