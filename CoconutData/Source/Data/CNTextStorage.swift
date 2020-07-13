@@ -116,9 +116,10 @@ public extension NSMutableAttributedString
 				self.setAttributedString(terminfo.reservedText)
 				self.endEditing()
 				result = terminfo.reservedIndex
-				/* Update padding */
+				/* Clear context */
 				if doalt {
-					self.resize(width: terminfo.width, height: terminfo.height, font: fnt, terminalInfo: terminfo)
+					terminfo.isAlternative = doalt // update mode before executing
+					self.clear(font: fnt, terminalInfo: terminfo)
 				}
 				/* Reserve current text */
 				terminfo.reservedText	= curctxt
