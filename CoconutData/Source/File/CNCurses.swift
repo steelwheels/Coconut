@@ -97,8 +97,8 @@ public class CNCurses
 		let x0 = clip(value: xpos, min: 0, max: mTerminalInfo.width  - 1)
 		let y0 = clip(value: ypos, min: 0, max: mTerminalInfo.height - 1)
 
-		let x1 = clip(value: xpos + dwidth,  min: 0, max: mTerminalInfo.width  - 1)
-		let y1 = clip(value: ypos + dheight, min: 0, max: mTerminalInfo.height - 1)
+		let x1 = clip(value: xpos + dwidth,  min: 0, max: mTerminalInfo.width)
+		let y1 = clip(value: ypos + dheight, min: 0, max: mTerminalInfo.height)
 
 		let len = x1 - x0
 		if len > 0 && y0 <= y1 {
