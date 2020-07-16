@@ -249,7 +249,6 @@ public extension NSMutableAttributedString
 		var ptr   = idx
 		/* Keep holizontal offset */
 		let orgoff = self.distanceFromLineStart(to: ptr)
-		NSLog("mCUOD (0): \(orgoff)")
 		/* up/down num lines */
 		if doup {
 			for _ in 0..<num {
@@ -268,17 +267,14 @@ public extension NSMutableAttributedString
 				}
 			}
 		}
-		NSLog("mCUOD (1): \(ptr)")
 		/* get current offset */
 		let curoff = self.distanceFromLineStart(to: ptr)
-		NSLog("mCUOD (2): \(curoff)")
 		/* adjust holizontal offset */
 		if curoff < orgoff {
 			ptr = moveCursorForward(from: ptr, number: orgoff - curoff)
 		} else if orgoff < curoff {
 			ptr = moveCursorBackward(from: ptr, number: curoff - orgoff)
 		}
-		NSLog("mCUOD (3): \(ptr)")
 		return ptr
 	}
 
@@ -298,7 +294,6 @@ public extension NSMutableAttributedString
 	func moveCursorTo(base baseidx: Int, x xpos: Int, y ypos: Int) -> Int {
 		let newidx = moveCursorUpOrDown(from: baseidx, doUp: false, number: ypos)
 		let result = moveCursorTo(from: newidx, x: xpos)
-		NSLog("moveCursorTo(base:\(baseidx), x:\(xpos), y:\(ypos)) -> \(newidx) -> \(result)")
 		return result
 	}
 

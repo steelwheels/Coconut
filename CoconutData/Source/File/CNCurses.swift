@@ -84,10 +84,9 @@ public class CNCurses
 		mLock.lock()
 		if let c = mBuffer.first {
 			mBuffer.removeFirst()
-			result = c
+			result  = c
 		} else {
-			Thread.sleep(forTimeInterval: 0.1)
-			result = nil
+			result  = nil
 		}
 		mLock.unlock()
 		return result
