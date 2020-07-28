@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
-<dictionary title="CoconutScript Suite Dictionary">
+<dictionary title="CoconutScript">
   <suite name="Preference Suite" code="CcPS" description="Preferencence Suites by CoconutScript">
    <class name="application" code="capp" description="The application's top-level scripting object.">
      <cocoa class="NSApplication"/>
-     <property name="preference" code="pref" type="any" access="r" description="preference text">
-      <cocoa key="preference"/>
-     </property>
+     <property name="preference" code="pref" description="Prererence object" type="integer" access="r"/>
    </class>
   </suite>
 </dictionary> 

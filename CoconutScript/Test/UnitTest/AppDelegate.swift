@@ -6,37 +6,28 @@
 //  Copyright © 2020 Steel Wheels Project. All rights reserved.
 //
 
+import CoconutScript
 import CoconutData
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
-
-
-
+class AppDelegate: CNApplicationDelegate
+{
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
+		let val: CNScriptValue = .intValue(1234)
+		self.setScriptValue(value: val, forKey: "preference")
+
 		// Insert code here to initialize your application
 		let reg = NSScriptSuiteRegistry.shared()
 		NSLog("SSR=\(reg)")
 	}
 
-	func applicationWillTerminate(_ aNotification: Notification) {
-		// Insert code here to tear down your application
+	private func setScriptValue(value val: CNScriptValue, forKey key: String) {
+		super.setValue(val.toObject(), forKey: key)
 	}
 
-	func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
-		NSLog("asd: key=\(key)")
-		return key == "preference"
-	}
-
-	public func preference() -> CNPreference {
-		NSLog("app: preference")
-		return CNPreference.shared
-	}
-
-	public override func value(forKey key: String) -> Any? {
-		NSLog("forKey: \(key)")
-		return super.value(forKey: key)
-	}
+	//func applicationWillTerminate(_ aNotification: Notification) {
+	//	// Insert code here to tear down your application
+	//}
 }
 

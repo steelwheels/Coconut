@@ -14,7 +14,7 @@
 #if os(OSX)
 public typealias CNApplicationBase	   	= NSApplication
 public typealias CNApplicationDelegateBase 	= NSApplicationDelegate
-public typealias CNApplicationDelegateSuper	= CNObject
+public typealias CNApplicationDelegateSuper	= NSObject
 #else
 public typealias CNApplicationBase	   	= UIApplication
 public typealias CNApplicationDelegateBase 	= UIApplicationDelegate
@@ -23,26 +23,40 @@ public typealias CNApplicationDelegateSuper	= UIResponder
 
 open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDelegateBase
 {
+	private var mProperties: Dictionary<String, Any>
+
 	public override init() {
+		mProperties = [:]
 		super.init()
 	}
 
-	open func applicationDidFinishLaunching(_ notification: Notification) {
-		/* Setup default objects */
-		super.setValue(CNPreference.shared, forKey: "preference")
+	public override func setValue(_ value: Any?, forKey key: String) {
+		if let v = value {
+			mProperties[key] = v
+		} else {
+			mProperties.removeValue(forKey: key)
+		}
 	}
 
-	//open func application(_ sender: CNApplicationBase, delegateHandlesKey key: String) -> Bool {
-	//	return isBuiltinKey(key: key)
-	//}
+	public override func value(forKey key: String) -> Any? {
+		if let val = mProperties[key] {
+			return val
+		} else {
+			return super.value(forKey: key)
+		}
+	}
 
-	//private func isBuiltinKey(key str: String) -> Bool {
-	//	let result: Bool
-	//	switch str {
-	//	case "preference":	result = true
-	//	default:		result = false
-	//	}
-	//	return result
-	//}
+	#if os(OSX)
+	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
+		NSLog("delegate: \(key)")
+		if let _ = mProperties[key] {
+			NSLog("true")
+			return true
+		} else {
+			NSLog("false")
+			return false
+		}
+	}
+	#endif
 }
 

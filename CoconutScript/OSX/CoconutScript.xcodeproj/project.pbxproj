@@ -7,15 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		055D882D24CC496600009DB2 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 05DB8AA224CC431500AEF82E /* CoconutScript.sdef */; };
+		0554701924CF04BF00FE5F47 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 05DB8AA224CC431500AEF82E /* CoconutScript.sdef */; };
 		057C8DA524C7271200B683F7 /* CoconutScript.h in Headers */ = {isa = PBXBuildFile; fileRef = 057C8DA324C7271200B683F7 /* CoconutScript.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B829F824C727DE0043FA01 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B829F724C727DE0043FA01 /* CoconutData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		05B82A0224C728210043FA01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B82A0124C728210043FA01 /* AppDelegate.swift */; };
 		05B82A0424C728210043FA01 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B82A0324C728210043FA01 /* ViewController.swift */; };
 		05B82A0624C728220043FA01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05B82A0524C728220043FA01 /* Assets.xcassets */; };
 		05B82A0924C728220043FA01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B82A0724C728220043FA01 /* Main.storyboard */; };
-		05BE565424CC1799007F8D3D /* CNVersionCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BE565324CC1799007F8D3D /* CNVersionCommand.swift */; };
-		05C6CD5E24CD1064003D3DD9 /* CNApplicationScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C6CD5D24CD1064003D3DD9 /* CNApplicationScripting.swift */; };
+		05C6CD5E24CD1064003D3DD9 /* CNScriptValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C6CD5D24CD1064003D3DD9 /* CNScriptValue.swift */; };
 		05EA357724CD2273000FCCB6 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B829F724C727DE0043FA01 /* CoconutData.framework */; };
 		05EA357824CD2273000FCCB6 /* CoconutData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05B829F724C727DE0043FA01 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EA357A24CD2274000FCCB6 /* CoconutScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 057C8DA024C7271200B683F7 /* CoconutScript.framework */; };
@@ -66,8 +65,7 @@
 		05B82A0824C728220043FA01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		05B82A0A24C728220043FA01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05B82A0B24C728220043FA01 /* UnitTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UnitTest.entitlements; sourceTree = "<group>"; };
-		05BE565324CC1799007F8D3D /* CNVersionCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVersionCommand.swift; sourceTree = "<group>"; };
-		05C6CD5D24CD1064003D3DD9 /* CNApplicationScripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNApplicationScripting.swift; sourceTree = "<group>"; };
+		05C6CD5D24CD1064003D3DD9 /* CNScriptValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNScriptValue.swift; sourceTree = "<group>"; };
 		05DB8AA224CC431500AEF82E /* CoconutScript.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = CoconutScript.sdef; path = ../Resource/CoconutScript.sdef; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -125,8 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				057C8DA324C7271200B683F7 /* CoconutScript.h */,
-				05C6CD5D24CD1064003D3DD9 /* CNApplicationScripting.swift */,
-				05BE565324CC1799007F8D3D /* CNVersionCommand.swift */,
+				05C6CD5D24CD1064003D3DD9 /* CNScriptValue.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -286,7 +283,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				055D882D24CC496600009DB2 /* CoconutScript.sdef in Resources */,
+				0554701924CF04BF00FE5F47 /* CoconutScript.sdef in Resources */,
 				05B82A0624C728220043FA01 /* Assets.xcassets in Resources */,
 				05B82A0924C728220043FA01 /* Main.storyboard in Resources */,
 			);
@@ -299,8 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05BE565424CC1799007F8D3D /* CNVersionCommand.swift in Sources */,
-				05C6CD5E24CD1064003D3DD9 /* CNApplicationScripting.swift in Sources */,
+				05C6CD5E24CD1064003D3DD9 /* CNScriptValue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
