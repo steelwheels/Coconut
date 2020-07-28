@@ -14,15 +14,15 @@ import Cocoa
 class AppDelegate: CNApplicationDelegate
 {
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
-		let val: CNScriptValue = .intValue(1234)
-		self.setScriptValue(value: val, forKey: "preference")
+		self.setScriptValue(value: .colorValue(.black), forKey: "foregroundColor")
+		self.setScriptValue(value: .colorValue(.white), forKey: "backgroundColor")
 
 		// Insert code here to initialize your application
 		let reg = NSScriptSuiteRegistry.shared()
 		NSLog("SSR=\(reg)")
 	}
 
-	private func setScriptValue(value val: CNScriptValue, forKey key: String) {
+	@inline(__always)  private func setScriptValue(value val: CNScriptValue, forKey key: String) {
 		super.setValue(val.toObject(), forKey: key)
 	}
 

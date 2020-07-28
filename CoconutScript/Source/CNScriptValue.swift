@@ -14,6 +14,7 @@ public enum CNScriptValue {
 	case	floatValue(Double)
 	case	dateValue(NSDate)
 	case	urlValue(URL)
+	case	colorValue(CNColor)
 	case	dictionaryValue(Dictionary<String, CNScriptValue>)
 
 	public func toObject() -> NSObject {
@@ -29,6 +30,8 @@ public enum CNScriptValue {
 			result = val
 		case .urlValue(let val):
 			result = val as NSURL
+		case .colorValue(let val):
+			result = val
 		case .dictionaryValue(let dict):
 			let result = NSMutableDictionary(capacity: 32)
 			for (key, val) in dict {
@@ -36,6 +39,20 @@ public enum CNScriptValue {
 				result.setValue(obj, forKey: key)
 			}
 			return result
+		}
+		return result
+	}
+
+	public func toCode() -> String {
+		let result: String
+		switch self {
+		case .boolValue(_):		result = "bool"
+		case .intValue(_):		result = "long"
+		case .floatValue(_):		result = "doub"
+		case .dateValue(_):		result = "ldt "
+		case .urlValue(_):		result = "file"
+		case .colorValue(_):		result = "cRGB"
+		case .dictionaryValue(_):	result = "reco"
 		}
 		return result
 	}

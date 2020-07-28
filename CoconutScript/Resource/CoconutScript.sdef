@@ -4,7 +4,11 @@
   <suite name="Preference Suite" code="CcPS" description="Preferencence Suites by CoconutScript">
    <class name="application" code="capp" description="The application's top-level scripting object.">
      <cocoa class="NSApplication"/>
-     <property name="preference" code="pref" description="Prererence object" type="integer" access="r"/>
+     <property name="foreground color" code="fgcl" description="Foreground color of the terminal" type="Color" access="rw"/>
+     <property name="background color" code="bgcl" description="Background color of the terminal" type="Color" access="rw"/>
    </class>
+   <value-type name="Color" code="cRGB">
+     <cocoa class="NSColor"/>
+   </value-type>
   </suite>
 </dictionary> 
