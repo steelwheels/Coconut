@@ -30,7 +30,7 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 		super.init()
 	}
 
-	public override func setValue(_ value: Any?, forKey key: String) {
+	open override func setValue(_ value: Any?, forKey key: String) {
 		if let v = value {
 			mProperties[key] = v
 		} else {
@@ -48,12 +48,11 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 
 	#if os(OSX)
 	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
-		NSLog("delegate: \(key)")
 		if let _ = mProperties[key] {
-			NSLog("true")
+			//NSLog("delegate: \(key) -> true")
 			return true
 		} else {
-			NSLog("false")
+			//NSLog("delegate: \(key) -> false")
 			return false
 		}
 	}
