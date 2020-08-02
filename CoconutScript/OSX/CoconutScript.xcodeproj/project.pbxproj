@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0554701924CF04BF00FE5F47 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 05DB8AA224CC431500AEF82E /* CoconutScript.sdef */; };
+		0556946C24D631190006DB9A /* CNDefinitionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0556946B24D631190006DB9A /* CNDefinitionParser.swift */; };
 		056BD73D24D02AE5003D4549 /* CoconutScript.sdef in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05DB8AA224CC431500AEF82E /* CoconutScript.sdef */; };
 		057C8DA524C7271200B683F7 /* CoconutScript.h in Headers */ = {isa = PBXBuildFile; fileRef = 057C8DA324C7271200B683F7 /* CoconutScript.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05A0A62E24D5103B00DB60E6 /* CNScriptDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A0A62D24D5103B00DB60E6 /* CNScriptDefinition.swift */; };
 		05B829F824C727DE0043FA01 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B829F724C727DE0043FA01 /* CoconutData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		05B82A0224C728210043FA01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B82A0124C728210043FA01 /* AppDelegate.swift */; };
 		05B82A0424C728210043FA01 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B82A0324C728210043FA01 /* ViewController.swift */; };
@@ -66,9 +68,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0556946B24D631190006DB9A /* CNDefinitionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDefinitionParser.swift; sourceTree = "<group>"; };
 		057C8DA024C7271200B683F7 /* CoconutScript.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutScript.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		057C8DA324C7271200B683F7 /* CoconutScript.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoconutScript.h; path = ../OSX/CoconutScript/CoconutScript.h; sourceTree = "<group>"; };
 		057C8DA424C7271200B683F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
+		05A0A62D24D5103B00DB60E6 /* CNScriptDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNScriptDefinition.swift; sourceTree = "<group>"; };
 		05B829F724C727DE0043FA01 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../Library/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		05B829FF24C728200043FA01 /* UnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B82A0124C728210043FA01 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -132,12 +136,30 @@
 			path = CoconutScript;
 			sourceTree = "<group>";
 		};
+		05A0A62B24D50F1100DB60E6 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				05C6CD5D24CD1064003D3DD9 /* CNScriptValue.swift */,
+				05D9727824D05EE8001CB3FE /* CNScribtableApplication.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		05A0A62C24D50FC300DB60E6 /* File */ = {
+			isa = PBXGroup;
+			children = (
+				05A0A62D24D5103B00DB60E6 /* CNScriptDefinition.swift */,
+				0556946B24D631190006DB9A /* CNDefinitionParser.swift */,
+			);
+			path = File;
+			sourceTree = "<group>";
+		};
 		05B829F524C727610043FA01 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				057C8DA324C7271200B683F7 /* CoconutScript.h */,
-				05C6CD5D24CD1064003D3DD9 /* CNScriptValue.swift */,
-				05D9727824D05EE8001CB3FE /* CNScribtableApplication.swift */,
+				05A0A62B24D50F1100DB60E6 /* Application */,
+				05A0A62C24D50FC300DB60E6 /* File */,
 			);
 			name = Source;
 			path = ../Source;
@@ -311,7 +333,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05A0A62E24D5103B00DB60E6 /* CNScriptDefinition.swift in Sources */,
 				05C6CD5E24CD1064003D3DD9 /* CNScriptValue.swift in Sources */,
+				0556946C24D631190006DB9A /* CNDefinitionParser.swift in Sources */,
 				05D9727924D05EE8001CB3FE /* CNScribtableApplication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
