@@ -93,6 +93,10 @@ public class CNTextSection: CNText
 		mContents.append(txt)
 	}
 
+	public func add(multiText txt: Array<CNText>) {
+		mContents.append(contentsOf: txt)
+	}
+
 	public func add(string str: String){
 		let newline = CNTextLine(string: str)
 		mContents.append(newline)

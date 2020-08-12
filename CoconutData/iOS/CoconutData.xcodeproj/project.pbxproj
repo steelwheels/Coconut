@@ -74,6 +74,7 @@
 		05F5DAC8208ADBD8006EB134 /* CNStringStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */; };
 		05F9C808244C8E6100B7E1AE /* CNProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9C807244C8E6000B7E1AE /* CNProcessManager.swift */; };
 		05F9D77723F0E0390021184F /* CNFontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9D77623F0E0390021184F /* CNFontManager.swift */; };
+		05FA3D2824E11CD300B05F94 /* CNRemoteApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FA3D2724E11CD300B05F94 /* CNRemoteApplication.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,6 +157,7 @@
 		05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringStream.swift; sourceTree = "<group>"; };
 		05F9C807244C8E6000B7E1AE /* CNProcessManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNProcessManager.swift; sourceTree = "<group>"; };
 		05F9D77623F0E0390021184F /* CNFontManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFontManager.swift; sourceTree = "<group>"; };
+		05FA3D2724E11CD300B05F94 /* CNRemoteApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNRemoteApplication.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -251,6 +253,7 @@
 				05F9C807244C8E6000B7E1AE /* CNProcessManager.swift */,
 				0517E1BC235E7F62002EB80C /* CNProcess.swift */,
 				058740FB208AFF6000FF2B65 /* CNThread.swift */,
+				05FA3D2724E11CD300B05F94 /* CNRemoteApplication.swift */,
 				0537923024363F9800778A68 /* CNEnvironment.swift */,
 				057FD578244A80F400CDBB0F /* CNSignalManager.swift */,
 				05C85DA722AABDD1007C5527 /* CNOperationContext.swift */,
@@ -501,6 +504,7 @@
 				05899938208B0059002FEAEA /* CNMath.swift in Sources */,
 				0576B323246E9AB10015A08A /* CNCurses.swift in Sources */,
 				0588875521CBD7FA00BE14B5 /* CNNativeValueMerger.swift in Sources */,
+				05FA3D2824E11CD300B05F94 /* CNRemoteApplication.swift in Sources */,
 				05C85DA922AABDD1007C5527 /* CNOperationContext.swift in Sources */,
 				05F5DAC8208ADBD8006EB134 /* CNStringStream.swift in Sources */,
 				05DF7D9B2090D4D7003B5110 /* CNStringUtil.swift in Sources */,
