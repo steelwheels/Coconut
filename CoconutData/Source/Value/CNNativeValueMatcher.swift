@@ -70,6 +70,9 @@ public class CNNativeValueMatcher: CNNativeValueVisitor
 	open override func visit(rect obj: CGRect){
 		mValueString = nil
 	}
+	open override func visit(enumType etype: String, value val: Int32) {
+		mValueString = ".\(etype)(\(val))"
+	}
 	open override func visit(dictionary obj: Dictionary<String, CNNativeValue>){
 		mValueString = nil
 	}

@@ -35,6 +35,9 @@ public class CNNativeValueSelector: CNNativeValueVisitor
 	open override func visit(date obj: Date){
 		mResult = nil
 	}
+	open override func visit(enumType etype: String, value val: Int32) {
+		mResult = nil
+	}
 	open override func visit(range obj: NSRange){
 		mResult = nil
 	}

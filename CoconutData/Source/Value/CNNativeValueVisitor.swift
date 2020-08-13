@@ -11,19 +11,20 @@ public class CNNativeValueVisitor
 {
 	public func accept(value val: CNNativeValue){
 		switch val {
-		case .nullValue:		visitNill()
-		case .numberValue(let obj):	visit(number: obj)
-		case .stringValue(let obj):	visit(string: obj)
-		case .dateValue(let obj):	visit(date: obj)
-		case .rangeValue(let obj):	visit(range: obj)
-		case .pointValue(let obj):	visit(point: obj)
-		case .sizeValue(let obj):	visit(size: obj)
-		case .rectValue(let obj):	visit(rect: obj)
-		case .dictionaryValue(let obj):	visit(dictionary: obj)
-		case .arrayValue(let obj):	visit(array: obj)
-		case .URLValue(let obj):	visit(URL: obj)
-		case .imageValue(let obj):	visit(image: obj)
-		case .anyObjectValue(let obj):	visit(anyObject: obj)
+		case .nullValue:			visitNill()
+		case .numberValue(let obj):		visit(number: obj)
+		case .stringValue(let obj):		visit(string: obj)
+		case .dateValue(let obj):		visit(date: obj)
+		case .enumValue(let type, let val):	visit(enumType: type, value: val)
+		case .rangeValue(let obj):		visit(range: obj)
+		case .pointValue(let obj):		visit(point: obj)
+		case .sizeValue(let obj):		visit(size: obj)
+		case .rectValue(let obj):		visit(rect: obj)
+		case .dictionaryValue(let obj):		visit(dictionary: obj)
+		case .arrayValue(let obj):		visit(array: obj)
+		case .URLValue(let obj):		visit(URL: obj)
+		case .imageValue(let obj):		visit(image: obj)
+		case .anyObjectValue(let obj):		visit(anyObject: obj)
 		}
 	}
 
@@ -31,6 +32,7 @@ public class CNNativeValueVisitor
 	open func visit(number obj: NSNumber){	}
 	open func visit(string obj: String){ }
 	open func visit(date obj: Date){ }
+	open func visit(enumType etype: String, value val: Int32){ }
 	open func visit(range obj: NSRange){ }
 	open func visit(point obj: CGPoint){ }
 	open func visit(size obj: CGSize){ }

@@ -55,12 +55,28 @@ open class CNRemoteApplication
 		mRunningApplication = runapp
 	}
 
+	public var name: String? {
+		get { return mRunningApplication.localizedName }
+	}
+
 	public var bundleIdentifier: String? {
 		get { return mRunningApplication.bundleIdentifier }
 	}
 
+	public func isEqual(application app: NSRunningApplication) -> Bool {
+		return mRunningApplication.isEqual(app)
+	}
+
 	public var isFinishLaunching: Bool {
 		get { return mRunningApplication.isFinishedLaunching }
+	}
+
+	public func terminate() -> Bool {
+		return mRunningApplication.terminate()
+	}
+
+	public func forceTerminate() -> Bool {
+		return mRunningApplication.forceTerminate()
 	}
 }
 

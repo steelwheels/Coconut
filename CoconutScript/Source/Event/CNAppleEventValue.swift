@@ -65,6 +65,8 @@ public extension CNNativeValue
 			result = NSAppleEventDescriptor.record()
 			result.set(descriptor: pt, forKeyword: "orgn")
 			result.set(descriptor: sz, forKeyword: "size")
+		case .enumValue(_, let val):
+			result = NSAppleEventDescriptor(enumCode: OSType(val))
 		case .dictionaryValue(let dict):
 			result = NSAppleEventDescriptor.record()
 			for (key, val) in dict {

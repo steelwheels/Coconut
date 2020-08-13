@@ -10,18 +10,22 @@ import Foundation
 
 /* Reference: http://frontierkernel.sourceforge.net/cgi-bin/lxr/source/Common/headers/macconv.h */
 public enum CNAppleEventKeyword {
+	case appleEvent
 	case coreSuite
 	case createElement
 	case objectClass
 	case propertyData
+	case quit
 
 	public func toString() -> String {
 		let result: String
 		switch self {
+		case .appleEvent:	result = "aevt"
 		case .coreSuite:	result = "core"
 		case .createElement:	result = "crel"
 		case .propertyData:	result = "prdt"
 		case .objectClass:	result = "kocl"
+		case .quit:		result = "quit"
 		}
 		return result
 	}

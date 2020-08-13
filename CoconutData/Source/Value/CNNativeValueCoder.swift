@@ -210,6 +210,10 @@ public class CNJSONEncoder: CNNativeValueVisitor
 		])
 	}
 
+	open override func visit(enumType etype: String, value val: Int32) {
+		mResult = NSNumber(value: val)
+	}
+
 	private func convertTo2Numbers(name0 nm0: String, value0 val0: Double, name1 nm1: String, value1 val1: Double) -> NSDictionary {
 		let nmstr0  = NSString(string: nm0)
 		let valnum0 = NSNumber(floatLiteral: val0)

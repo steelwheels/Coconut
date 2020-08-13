@@ -19,6 +19,7 @@ public enum CNNativeValue {
 	case pointValue(_ val: CGPoint)
 	case sizeValue(_ val: CGSize)
 	case rectValue(_ val: CGRect)
+	case enumValue(_ type: String, _ val: Int32)	// enum type name and value
 	case dictionaryValue(_ val: Dictionary<String, CNNativeValue>)
 	case arrayValue(_ val: Array<CNNativeValue>)
 	case URLValue(_ val: URL)
@@ -282,6 +283,8 @@ public enum CNNativeValue {
 			result = CNTextLine(string: "\"\(val)\"")
 		case .dateValue(let val):
 			result = CNTextLine(string: val.description)
+		case .enumValue(let type, let val):
+			result = CNTextLine(string: ".\(type)(\(val))")
 		case .rangeValue(let val):
 			result = CNTextLine(string: val.description)
 		case .pointValue(let val):
@@ -355,6 +358,8 @@ public enum CNNativeValue {
 		case .stringValue(let val):
 			result = val
 		case .dateValue(let val):
+			result = val
+		case .enumValue(_, let val):
 			result = val
 		case .rangeValue(let val):
 			let newdict: Dictionary<String, Any> = [
