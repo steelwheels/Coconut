@@ -8,52 +8,26 @@
 import CoconutData
 import Foundation
 
-/* Reference: http://frontierkernel.sourceforge.net/cgi-bin/lxr/source/Common/headers/macconv.h */
-public enum CNAppleEventKeyword {
-	case appleEvent
-	case coreSuite
-	case createElement
-	case objectClass
-	case propertyData
-	case quit
-
-	public func toString() -> String {
-		let result: String
-		switch self {
-		case .appleEvent:	result = "aevt"
-		case .coreSuite:	result = "core"
-		case .createElement:	result = "crel"
-		case .propertyData:	result = "prdt"
-		case .objectClass:	result = "kocl"
-		case .quit:		result = "quit"
-		}
-		return result
-	}
-}
-
-
 public class CNAppleEventDescriptor
 {
-	static private let keyDirectObject: OSType = 0x2D2D2D2D
-
-	private var	mEventClass:		String
-	private var	mEventID:		String
-	private var	mParameters:		Dictionary<String, CNNativeValue>
+	private var	mEventClass:		CNAppleEventKeyword
+	private var	mEventID:		CNAppleEventKeyword
+	private var	mParameters:		Dictionary<CNAppleEventKeyword, CNNativeValue>
 	private var	mDirectParameter:	CNNativeValue?
 
-	public var eventClass: String					{ get { return mEventClass	}}
-	public var eventID: String					{ get { return mEventID		}}
-	public var parameters: Dictionary<String, CNNativeValue>	{ get { return mParameters	}}
-	public var directParameter: CNNativeValue?			{ get { return mDirectParameter	}}
+	public var eventClass: CNAppleEventKeyword				{ get { return mEventClass	}}
+	public var eventID:    CNAppleEventKeyword				{ get { return mEventID		}}
+	public var parameters: Dictionary<CNAppleEventKeyword, CNNativeValue>	{ get { return mParameters	}}
+	public var directParameter: CNNativeValue?				{ get { return mDirectParameter	}}
 
-	public init(eventClass eclass: String, eventId eid: String) {
+	public init(eventClass eclass: CNAppleEventKeyword, eventId eid: CNAppleEventKeyword) {
 		mEventClass		= eclass
 		mEventID		= eid
 		mParameters		= [:]
 		mDirectParameter	= nil
 	}
 
-	public func setParameter(value val: CNNativeValue, forKeyword key: String){
+	public func setParameter(value val: CNNativeValue, forKeyword key: CNAppleEventKeyword){
 		mParameters[key] = val
 	}
 
@@ -61,9 +35,54 @@ public class CNAppleEventDescriptor
 		mDirectParameter = val
 	}
 
+	public func elementOfDirectParameter(keyword key: CNAppleEventKeyword) -> CNNativeValue? {
+		if let dirparam = mDirectParameter {
+			if let dict = dirparam.toDictionary() {
+				return dict[key.toString()]
+			}
+		}
+		return nil
+	}
+
+	public func dump(to cons: CNConsole) {
+		let txt = self.toText()
+		txt.print(console: cons, terminal: "")
+	}
+
+	private func toText() -> CNText {
+		let top = CNTextSection()
+		top.header = "apple-event-description: {" ; top.footer = "}"
+		top.add(text: CNTextLine(string: "eventClass: \(mEventClass.toString())"))
+		top.add(text: CNTextLine(string: "eventID:    \(mEventID.toString())"))
+
+		let params = CNTextSection()
+		params.header = "{" ; params.footer = "}"
+		for (key, val) in mParameters {
+			let keytxt = key.toString()
+			let valtxt = val.toText()
+			if let valline = valtxt as? CNTextLine {
+				params.add(text: CNTextLine(string: "\(keytxt) : \(valline.string)"))
+			} else if let valsec = valtxt as? CNTextSection {
+				valsec.header = "\(keytxt) : " + valsec.header
+				params.add(text: valsec)
+			}
+		}
+		if let dirparam = mDirectParameter {
+			let dirtxt = dirparam.toText()
+			if let dirline = dirtxt as? CNTextLine {
+				params.add(text: CNTextLine(string: "direct-param : \(dirline.string)"))
+			} else if let dirsec = dirtxt as? CNTextSection {
+				dirsec.header = "direct-param : " + dirsec.header
+				params.add(text: dirsec)
+			}
+		}
+		top.add(text: params)
+		return top
+	}
+
 	public func toEvent(target targ: NSAppleEventDescriptor) -> NSAppleEventDescriptor {
-		let eclass = NSAppleEventDescriptor.codeValue(code: mEventClass)
-		let eid    = NSAppleEventDescriptor.codeValue(code: mEventID)
+		let eclass = mEventClass.code()
+		let eid    = mEventID.code()
 
 		let retid:   AEReturnID	     = AEReturnID(kAutoGenerateReturnID)
 		let transid: AETransactionID = AETransactionID(kAnyTransactionID)
@@ -72,23 +91,91 @@ public class CNAppleEventDescriptor
 
 		/* Add keyword parameter */
 		for (pkey, pval) in mParameters {
-			let pdesc = pval.toEventDescriptor()
-			event.set(descriptor: pdesc, forKeyword: pkey)
+			event.setParameter(value: pval, forKeyword: pkey)
 		}
 		/* Set direct parameter */
 		if let dirval = mDirectParameter {
-			let dirdesc = dirval.toEventDescriptor()
-			event.setParam(dirdesc, forKeyword: CNAppleEventDescriptor.keyDirectObject)
+			event.setParameter(value: dirval, forKeyword: .directObject)
 		}
 
-		/* Set signature */
-		//event.setAttribute(NSAppleEventDescriptor(), forKeyword: CNReceiverApplication.keySubjectAttr)
-		/* Set condsidring */
-		//let _kAECase: OSType = 0x63617365
-		//event.setAttribute(NSAppleEventDescriptor(enumCode: _kAECase), forKeyword: CNReceiverApplication.enumConsiderations)
-		//event.setAttribute(NSAppleEventDescriptor(int32: 12451841), forKeyword: CNReceiverApplication.enumConsidsAndIgnores)
-
 		return event
+	}
+}
+
+public extension NSAppleEventDescriptor {
+
+	func toNativeDescriptor() -> CNAppleEventDescriptor? {
+		guard let eclass = CNAppleEventKeyword.encode(keyword: self.eventClass),
+		      let eid    = CNAppleEventKeyword.encode(keyword: self.eventID) else {
+			NSLog("Unknown event class or event id")
+			return nil
+		}
+
+		let result = CNAppleEventDescriptor(eventClass: eclass, eventId: eid)
+
+		if let params = self.paramDescriptor(forKeyword: CNAppleEventKeyword.directObject.code()) {
+			result.setDirectParameter(value: params.toNativeValue())
+		}
+
+		if let errn = self.paramDescriptor(forKeyword: CNAppleEventKeyword.errorNumber.code()) {
+			let numobj = NSNumber(integerLiteral: Int(errn.int32Value))
+			setParameter(value: .numberValue(numobj), forKeyword: CNAppleEventKeyword.errorNumber)
+		}
+		if let errs = self.paramDescriptor(forKeyword: CNAppleEventKeyword.errorString.code()) {
+			let msg: String
+			if let msgstr = errs.stringValue {
+				msg = msgstr
+			} else {
+				msg = "Unknown"
+			}
+			setParameter(value: .stringValue(msg), forKeyword: CNAppleEventKeyword.errorString)
+		}
+
+		return result
+	}
+
+	private func toNativeValue() -> CNNativeValue {
+		var result: CNNativeValue = .nullValue
+		if let desctype = CNAppleEventKeyword.encode(keyword: self.descriptorType) {
+			switch desctype {
+			case .enumerate:
+				let code = self.enumCodeValue
+				result = .enumValue("OSType", Int32(code))
+			case .null:
+				result = .nullValue
+			case .objectSpecifier:
+				let itemnum = self.numberOfItems
+				var dict: Dictionary<String, CNNativeValue> = [:]
+				for i in 1...itemnum {
+					let key = self.keywordForDescriptor(at: i)
+					if let word = CNAppleEventKeyword.encode(keyword: key) {
+						if let desc = self.forKeyword(key) {
+							let child = desc.toNativeValue()
+							dict[word.toString()] = child
+						} else {
+							NSLog("No value: \(key)")
+						}
+					} else {
+						NSLog("Failed to encode: \(key)")
+					}
+				}
+				result = .dictionaryValue(dict)
+			case .type:
+				let code = self.typeCodeValue
+				result = .enumValue("OSType", Int32(code))
+			case .unicodeText:
+				if let val = self.stringValue {
+					result = .stringValue(val)
+				} else {
+					NSLog("Failed to convert value: \(desctype.toString())")
+				}
+			default:
+				NSLog("Unsupported description type: \(desctype.toString())")
+			}
+		} else {
+			NSLog("Unknown description type: \(String(self.descriptorType, radix: 16))")
+		}
+		return result
 	}
 }
 

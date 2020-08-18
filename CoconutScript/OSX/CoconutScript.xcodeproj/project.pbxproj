@@ -9,11 +9,10 @@
 /* Begin PBXBuildFile section */
 		0532667624E03E2D006EB770 /* CNReceiverApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0532667524E03E2D006EB770 /* CNReceiverApplication.swift */; };
 		0532667824E04360006EB770 /* CNRemoteTextEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0532667724E04360006EB770 /* CNRemoteTextEdit.swift */; };
-		0554701924CF04BF00FE5F47 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 05DB8AA224CC431500AEF82E /* CoconutScript.sdef */; };
 		0556946C24D631190006DB9A /* CNDefinitionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0556946B24D631190006DB9A /* CNDefinitionParser.swift */; };
 		055BD1AC24E2970B00004795 /* CNAppleEventValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BD1AB24E2970B00004795 /* CNAppleEventValue.swift */; };
 		055C910D24E2B11D0066EE02 /* CNAppleEventDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C910C24E2B11D0066EE02 /* CNAppleEventDescriptor.swift */; };
-		056BD73D24D02AE5003D4549 /* CoconutScript.sdef in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05DB8AA224CC431500AEF82E /* CoconutScript.sdef */; };
+		0578B7C324E60CA5006A695A /* CNAppleEventError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0578B7C224E60CA5006A695A /* CNAppleEventError.swift */; };
 		057C8DA524C7271200B683F7 /* CoconutScript.h in Headers */ = {isa = PBXBuildFile; fileRef = 057C8DA324C7271200B683F7 /* CoconutScript.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05A0A62E24D5103B00DB60E6 /* CNScriptDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A0A62D24D5103B00DB60E6 /* CNScriptDefinition.swift */; };
 		05B829F824C727DE0043FA01 /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B829F724C727DE0043FA01 /* CoconutData.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -21,6 +20,7 @@
 		05B82A0424C728210043FA01 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B82A0324C728210043FA01 /* ViewController.swift */; };
 		05B82A0624C728220043FA01 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05B82A0524C728220043FA01 /* Assets.xcassets */; };
 		05B82A0924C728220043FA01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B82A0724C728220043FA01 /* Main.storyboard */; };
+		05BC880E24E6D918008C1D75 /* CNAppleEventQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BC880D24E6D918008C1D75 /* CNAppleEventQuery.swift */; };
 		05C6CD5E24CD1064003D3DD9 /* CNScriptValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C6CD5D24CD1064003D3DD9 /* CNScriptValue.swift */; };
 		05D03D3E24D6F53B008F649B /* CNScriptCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D03D3D24D6F53B008F649B /* CNScriptCoder.swift */; };
 		05D9727924D05EE8001CB3FE /* CNScribtableApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D9727824D05EE8001CB3FE /* CNScribtableApplication.swift */; };
@@ -48,16 +48,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		056BD73C24D02AD5003D4549 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-				056BD73D24D02AE5003D4549 /* CoconutScript.sdef in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		05EA357924CD2273000FCCB6 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -78,6 +68,7 @@
 		0556946B24D631190006DB9A /* CNDefinitionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDefinitionParser.swift; sourceTree = "<group>"; };
 		055BD1AB24E2970B00004795 /* CNAppleEventValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventValue.swift; sourceTree = "<group>"; };
 		055C910C24E2B11D0066EE02 /* CNAppleEventDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventDescriptor.swift; sourceTree = "<group>"; };
+		0578B7C224E60CA5006A695A /* CNAppleEventError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventError.swift; sourceTree = "<group>"; };
 		057C8DA024C7271200B683F7 /* CoconutScript.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutScript.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		057C8DA324C7271200B683F7 /* CoconutScript.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoconutScript.h; path = ../OSX/CoconutScript/CoconutScript.h; sourceTree = "<group>"; };
 		057C8DA424C7271200B683F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
@@ -90,10 +81,10 @@
 		05B82A0824C728220043FA01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		05B82A0A24C728220043FA01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05B82A0B24C728220043FA01 /* UnitTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UnitTest.entitlements; sourceTree = "<group>"; };
+		05BC880D24E6D918008C1D75 /* CNAppleEventQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventQuery.swift; sourceTree = "<group>"; };
 		05C6CD5D24CD1064003D3DD9 /* CNScriptValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNScriptValue.swift; sourceTree = "<group>"; };
 		05D03D3D24D6F53B008F649B /* CNScriptCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNScriptCoder.swift; sourceTree = "<group>"; };
 		05D9727824D05EE8001CB3FE /* CNScribtableApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNScribtableApplication.swift; sourceTree = "<group>"; };
-		05DB8AA224CC431500AEF82E /* CoconutScript.sdef */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = CoconutScript.sdef; path = ../Resource/CoconutScript.sdef; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +115,8 @@
 				0532667524E03E2D006EB770 /* CNReceiverApplication.swift */,
 				055BD1AB24E2970B00004795 /* CNAppleEventValue.swift */,
 				055C910C24E2B11D0066EE02 /* CNAppleEventDescriptor.swift */,
+				05BC880D24E6D918008C1D75 /* CNAppleEventQuery.swift */,
+				0578B7C224E60CA5006A695A /* CNAppleEventError.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -132,7 +125,6 @@
 			isa = PBXGroup;
 			children = (
 				05B829F524C727610043FA01 /* Source */,
-				05C565A024C87C19005B1473 /* Resource */,
 				05B82A1724C729590043FA01 /* Test */,
 				057C8DA224C7271200B683F7 /* CoconutScript */,
 				057C8DA124C7271200B683F7 /* Products */,
@@ -218,15 +210,6 @@
 			path = ../Test;
 			sourceTree = "<group>";
 		};
-		05C565A024C87C19005B1473 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				05DB8AA224CC431500AEF82E /* CoconutScript.sdef */,
-			);
-			name = Resource;
-			path = ../Resource;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -266,7 +249,6 @@
 				057C8D9B24C7271200B683F7 /* Headers */,
 				057C8D9C24C7271200B683F7 /* Sources */,
 				057C8D9D24C7271200B683F7 /* Frameworks */,
-				056BD73C24D02AD5003D4549 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -343,7 +325,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0554701924CF04BF00FE5F47 /* CoconutScript.sdef in Resources */,
 				05B82A0624C728220043FA01 /* Assets.xcassets in Resources */,
 				05B82A0924C728220043FA01 /* Main.storyboard in Resources */,
 			);
@@ -357,10 +338,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				05A0A62E24D5103B00DB60E6 /* CNScriptDefinition.swift in Sources */,
+				05BC880E24E6D918008C1D75 /* CNAppleEventQuery.swift in Sources */,
 				0532667824E04360006EB770 /* CNRemoteTextEdit.swift in Sources */,
 				05C6CD5E24CD1064003D3DD9 /* CNScriptValue.swift in Sources */,
 				0556946C24D631190006DB9A /* CNDefinitionParser.swift in Sources */,
 				055BD1AC24E2970B00004795 /* CNAppleEventValue.swift in Sources */,
+				0578B7C324E60CA5006A695A /* CNAppleEventError.swift in Sources */,
 				0532667624E03E2D006EB770 /* CNReceiverApplication.swift in Sources */,
 				055C910D24E2B11D0066EE02 /* CNAppleEventDescriptor.swift in Sources */,
 				05D03D3E24D6F53B008F649B /* CNScriptCoder.swift in Sources */,
@@ -554,7 +537,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -586,7 +569,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

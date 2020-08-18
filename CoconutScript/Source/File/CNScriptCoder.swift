@@ -118,8 +118,13 @@ public class CNScriptCoder
 			NSLog("No enumeration name")
 			return nil
 		}
+		guard let key = CNAppleEventKeyword.encode(string: code) else {
+			NSLog("Unknown code: \(code)")
+			return nil
+		}
+
 		let ename = CNScriptDefinition.normalize(string: name)
-		let value = NSAppleEventDescriptor.codeValue(code: code)
+		let value = key.code()
 		let decl  = "case \(ename)\t= 0x\(String(value, radix: 16))\t// name:\"\(name)\", code:\"\(code)\""
 		return CNTextLine(string: decl)
 	}

@@ -63,6 +63,10 @@ open class CNRemoteApplication
 		get { return mRunningApplication.bundleIdentifier }
 	}
 
+	public var processIdentifier: pid_t {
+		return mRunningApplication.processIdentifier
+	}
+
 	public func isEqual(application app: NSRunningApplication) -> Bool {
 		return mRunningApplication.isEqual(app)
 	}

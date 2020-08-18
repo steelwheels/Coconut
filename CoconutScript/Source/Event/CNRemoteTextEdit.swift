@@ -18,22 +18,32 @@ public class CNRemoteTextEdit: CNReceiverApplication
 		}
 	}
 
-	public func openDocument() {
-		let event = CNAppleEventDescriptor(eventClass: CNAppleEventKeyword.coreSuite.toString(),
-						   eventId:    CNAppleEventKeyword.createElement.toString())
-		let pval: CNNativeValue = .numberValue(NSNumber(integerLiteral: Int(NSAppleEventDescriptor.codeValue(code: "docu"))))
-		event.setParameter(value: pval, forKeyword: CNAppleEventKeyword.objectClass.toString())
+	public func documents() {
 
+	}
+
+	public func newDocument(withText text: String) -> SendEventResult {
+		let event = CNAppleEventDescriptor(eventClass: .coreSuite, eventId: .createElement)
+		let pdoc  = CNAppleEventKeyword.document.code()
+		let pval: CNNativeValue = .enumValue("OSType", Int32(pdoc))
+		event.setParameter(value: pval, forKeyword: CNAppleEventKeyword.objectClass)
 		let context: Dictionary<String, CNNativeValue> = [
-			"ctxt": .stringValue("Hello world")
+			CNAppleEventKeyword.text.toString(): .stringValue(text)
 		]
 		let dict: CNNativeValue = .dictionaryValue(context)
-		event.setParameter(value: dict, forKeyword: CNAppleEventKeyword.propertyData.toString())
+		event.setParameter(value: dict, forKeyword: CNAppleEventKeyword.propertyData)
+		return self.sendEvent(eventDescriptor: event)
+	}
 
-		if self.sendEvent(eventDescriptor: event) {
-			NSLog("send event .. done")
-		} else {
-			NSLog("send event .. failed")
-		}
+	public func getDocuments(name nm: String) -> SendEventResult {
+		let event   = CNAppleEventDescriptor(eventClass: .coreSuite, eventId: .getData)
+		let selque  = CNAppleEventQuery.selectDocument(name: nm)
+		//let propque = CNAppleEventQuery.get(property: .propertyName, from: selque)
+		//let propval = propque.toNativeValue()
+		//event.setParameter(value: propval, forKeyword: CNAppleEventKeyword.directObject)
+		event.setDirectParameter(value: selque.toNativeValue())
+		return self.sendEvent(eventDescriptor: event)
 	}
 }
+
+

@@ -46,11 +46,37 @@ class AppDelegate:  CNScriptableAppicationDelegate
 
 	private func terminalTest(console cons: CNConsole) {
 		if let app = CNRemoteTextEdit() {
-			cons.print(string: "launch ... done\n")
+			cons.print(string: "launch ... done: \(app)\n")
 			if app.start() {
 				cons.print(string: "start ... done\n")
 				cons.print(string: "isFinishLaunching ... \(app.isFinishLaunching)\n")
-				app.openDocument()
+
+				switch app.newDocument(withText: "Good morning") {
+				case .ok(let responce):
+					cons.print(string: "done\n")
+					responce.dump(to: cons)
+
+					/* Get document window name */
+					var docname = "ReadMe"
+					if let elm = responce.elementOfDirectParameter(keyword: CNAppleEventKeyword.selectData) {
+						if let str = elm.toString() {
+							cons.print(string: "Generated file name: \(str)\n")
+							docname = str
+						} else {
+							elm.toText().print(console: cons, terminal: "")
+						}
+					}
+
+					switch app.getDocuments(name: docname) {
+					case .ok(let responce):
+						cons.print(string: "done \(responce)\n")
+						responce.dump(to: cons)
+					case .error(let err):
+						cons.print(string: "failed => \(err.localizedDescription)\n")
+					}
+				case .error(let err):
+					cons.print(string: "Error (1): \(err.localizedDescription)\n")
+				}
 			} else {
 				cons.print(string: "start ... failed\n")
 			}

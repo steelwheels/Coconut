@@ -23,39 +23,17 @@ public typealias CNApplicationDelegateSuper	= UIResponder
 
 open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDelegateBase
 {
-	private var mProperties: Dictionary<String, Any>
 
 	public override init() {
-		mProperties = [:]
 		super.init()
 	}
 
-	open override func setValue(_ value: Any?, forKey key: String) {
-		if let v = value {
-			mProperties[key] = v
-		} else {
-			mProperties.removeValue(forKey: key)
-		}
+	open func applicationDidFinishLaunching(_ notification: Notification) {
+		#if os(OSX)
+			NSLog("Setup event manager")
+			let mgr = CNAppleEventManager.shared()
+			mgr.setup()
+		#endif
 	}
-
-	public override func value(forKey key: String) -> Any? {
-		if let val = mProperties[key] {
-			return val
-		} else {
-			return super.value(forKey: key)
-		}
-	}
-
-	#if os(OSX)
-	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
-		if let _ = mProperties[key] {
-			//NSLog("delegate: \(key) -> true")
-			return true
-		} else {
-			//NSLog("delegate: \(key) -> false")
-			return false
-		}
-	}
-	#endif
 }
 

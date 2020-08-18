@@ -14,6 +14,7 @@
 		05137F9122FAFFFD00FC9C65 /* CNEscapeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05137F9022FAFFFD00FC9C65 /* CNEscapeCode.swift */; };
 		05178D70232EEFFD00F35AF0 /* UTStringStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05178D6F232EEFFD00F35AF0 /* UTStringStream.swift */; };
 		051BB4B322FCF1370062F47F /* UTEscapeSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */; };
+		051CBC6A24EABEE5004E544D /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 051CBC6924EABEE5004E544D /* CoconutScript.sdef */; };
 		051D06A2219F0ABC00734AAA /* UTOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */; };
 		051FA468208B3F4400AEC734 /* CNFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051FA467208B3F4400AEC734 /* CNFile.swift */; };
 		052087BF235C89990084E340 /* UTProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052087BD235C892D0084E340 /* UTProcess.swift */; };
@@ -76,6 +77,8 @@
 		0599584C208AF07700DE2DC9 /* CNTokenStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584A208AF07700DE2DC9 /* CNTokenStream.swift */; };
 		05995855208AF10300DE2DC9 /* CNParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995854208AF10300DE2DC9 /* CNParser.swift */; };
 		059A4D5723D3E36A008BFB6D /* CNFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059A4D5623D3E36A008BFB6D /* CNFont.swift */; };
+		05A6082A24EAC37A00783928 /* CNAppleEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A6082924EAC37A00783928 /* CNAppleEventManager.swift */; };
+		05A6082C24EAC5DB00783928 /* CNAppleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A6082B24EAC5DB00783928 /* CNAppleEvent.swift */; };
 		05A6C17524362B8500666217 /* CNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A6C17424362B8500666217 /* CNEnvironment.swift */; };
 		05A709FC241495FA00B9356A /* CNDocumentTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A709FB241495FA00B9356A /* CNDocumentTypeManager.swift */; };
 		05A9C8F222F477BB000F1990 /* CNNativeStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A9C8F122F477BB000F1990 /* CNNativeStruct.swift */; };
@@ -159,6 +162,7 @@
 		05137F9022FAFFFD00FC9C65 /* CNEscapeCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNEscapeCode.swift; sourceTree = "<group>"; };
 		05178D6F232EEFFD00F35AF0 /* UTStringStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTStringStream.swift; sourceTree = "<group>"; };
 		051BB4B222FCF1370062F47F /* UTEscapeSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTEscapeSequence.swift; sourceTree = "<group>"; };
+		051CBC6924EABEE5004E544D /* CoconutScript.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CoconutScript.sdef; sourceTree = "<group>"; };
 		051D06A1219F0ABC00734AAA /* UTOperationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTOperationQueue.swift; sourceTree = "<group>"; };
 		051FA467208B3F4400AEC734 /* CNFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFile.swift; sourceTree = "<group>"; };
 		052087BD235C892D0084E340 /* UTProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTProcess.swift; sourceTree = "<group>"; };
@@ -222,6 +226,8 @@
 		0599584A208AF07700DE2DC9 /* CNTokenStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTokenStream.swift; sourceTree = "<group>"; };
 		05995854208AF10300DE2DC9 /* CNParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNParser.swift; sourceTree = "<group>"; };
 		059A4D5623D3E36A008BFB6D /* CNFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNFont.swift; sourceTree = "<group>"; };
+		05A6082924EAC37A00783928 /* CNAppleEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventManager.swift; sourceTree = "<group>"; };
+		05A6082B24EAC5DB00783928 /* CNAppleEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEvent.swift; sourceTree = "<group>"; };
 		05A6C17424362B8500666217 /* CNEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNEnvironment.swift; sourceTree = "<group>"; };
 		05A709FB241495FA00B9356A /* CNDocumentTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDocumentTypeManager.swift; sourceTree = "<group>"; };
 		05A9C8F122F477BB000F1990 /* CNNativeStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeStruct.swift; sourceTree = "<group>"; };
@@ -290,6 +296,15 @@
 				0503766C208B2EE200D2DB37 /* CNError.swift */,
 			);
 			path = Error;
+			sourceTree = "<group>";
+		};
+		051CBC6824EABEC0004E544D /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				051CBC6924EABEE5004E544D /* CoconutScript.sdef */,
+			);
+			name = Resource;
+			path = ../Resource;
 			sourceTree = "<group>";
 		};
 		052136B0208AD5E00098F1A7 /* Data */ = {
@@ -414,6 +429,15 @@
 			path = Parser;
 			sourceTree = "<group>";
 		};
+		05A6082824EAC34000783928 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				05A6082B24EAC5DB00783928 /* CNAppleEvent.swift */,
+				05A6082924EAC37A00783928 /* CNAppleEventManager.swift */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
 		05A7FE6320993A570043BC53 /* Test */ = {
 			isa = PBXGroup;
 			children = (
@@ -428,6 +452,7 @@
 			isa = PBXGroup;
 			children = (
 				05DA41CF208AD3F800EF285F /* Source */,
+				051CBC6824EABEC0004E544D /* Resource */,
 				05A7FE6320993A570043BC53 /* Test */,
 				05B2A065208AD39600D16E60 /* OSX */,
 				05B2A064208AD39600D16E60 /* Products */,
@@ -511,6 +536,7 @@
 				0503766B208B2ECF00D2DB37 /* Error */,
 				05899933208AFFFF002FEAEA /* Math */,
 				058740F7208AFF1700FF2B65 /* Process */,
+				05A6082824EAC34000783928 /* Event */,
 				05C68AAE208AFD17003C813E /* File */,
 				052136B0208AD5E00098F1A7 /* Data */,
 				05995841208AEEDD00DE2DC9 /* Value */,
@@ -687,6 +713,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				051CBC6A24EABEE5004E544D /* CoconutScript.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,6 +803,7 @@
 				0589516A23ADD3920093A3BA /* CNTextStorage.swift in Sources */,
 				0599583B208AEE0B00DE2DC9 /* CNCharacter.swift in Sources */,
 				0565A9F7208B820900E91568 /* CNAuthorize.swift in Sources */,
+				05A6082C24EAC5DB00783928 /* CNAppleEvent.swift in Sources */,
 				05E8680A23F0DF5000DC45F2 /* CNFontManager.swift in Sources */,
 				055551CC22D38AA3009E3464 /* CNGraphicsFunction.swift in Sources */,
 				051FA468208B3F4400AEC734 /* CNFile.swift in Sources */,
@@ -791,6 +819,7 @@
 				05416EAC21CAA638002E68BA /* CNNativeValueMerger.swift in Sources */,
 				055C473E24E11C1E0059CFF0 /* CNRemoteApplication.swift in Sources */,
 				05DF7D992090D4B1003B5110 /* CNStringUtil.swift in Sources */,
+				05A6082A24EAC37A00783928 /* CNAppleEventManager.swift in Sources */,
 				052136B4208AD5F30098F1A7 /* CNStringStream.swift in Sources */,
 				055BD3A22199C6D600BF7373 /* CNOperationExecutor.swift in Sources */,
 				058740F9208AFF2C00FF2B65 /* CNThread.swift in Sources */,
