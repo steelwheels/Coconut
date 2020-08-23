@@ -7,27 +7,79 @@
 
 import Foundation
 
+#if os(OSX)
+
 public enum CNEventClass: String {
 	case	coreEvent		= "core"
 
 	public func code() -> AEEventClass {
-		return stringToCode(source: self.rawValue)
+		return CNStringToFourCharCode(self.rawValue)
 	}
 }
 
 public enum CNEventID: String {
-	case	openApplication		= "oapp"
+	case	getData			= "getd"
 	case	make			= "crel"
+	case	openApplication		= "oapp"
 	case	openDocument		= "odoc"
 	case	printDocument		= "pdoc"
 	case	quitApplication		= "quit"
+	case	setData			= "setd"
 
 	public func code() -> AEEventID {
-		return stringToCode(source: self.rawValue)
+		return CNStringToFourCharCode(self.rawValue)
 	}
 }
 
-private func stringToCode(source src: String) -> FourCharCode {
+public enum CNEventDescripton: String {
+	case	directObject		= "----"
+	case	data			= "data"
+	case	format			= "form"
+	case	selectData		= "seld"
+	public func code() -> DescType {
+		return CNStringToFourCharCode(self.rawValue)
+	}
+}
+
+public enum CNEventFormat: String {
+	case property			= "prop"
+
+	public static func encode(string str: String) -> CNEventFormat? {
+		let result: CNEventFormat?
+		switch str {
+		case CNEventFormat.property.rawValue:
+			result = .property
+		default:
+			result = nil
+		}
+		return result
+	}
+}
+
+public enum CNEventObject: String {
+	case rgbColor			= "cRGB"
+	public func code() -> OSType {
+		return CNStringToFourCharCode(self.rawValue)
+	}
+}
+
+public enum CNEventProperty: String {
+	case textColor			= "ptxc"
+	case backgroundColor		= "pbcl"
+	public func code() -> OSType {
+		return CNStringToFourCharCode(self.rawValue)
+	}
+}
+
+public enum CNEventResult: String {
+	case errorCount			= "errn"
+	case errorString		= "errs"
+	public func code() -> DescType {
+		return CNStringToFourCharCode(self.rawValue)
+	}
+}
+
+public func CNStringToFourCharCode(_ src: String) -> FourCharCode {
 	var result: UInt32 = 0
 	var idx     = src.startIndex
 	let end     = src.endIndex
@@ -41,4 +93,6 @@ private func stringToCode(source src: String) -> FourCharCode {
 	}
 	return result
 }
+
+#endif // os(OSX)
 

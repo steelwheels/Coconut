@@ -106,6 +106,7 @@
 		05F5EA73208F794000CF98C3 /* CNReservedWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5EA72208F794000CF98C3 /* CNReservedWord.swift */; };
 		05F7DACD23730E1100E363E9 /* UTCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F7DACC23730E1100E363E9 /* UTCharacter.swift */; };
 		05F9C806244C89B800B7E1AE /* CNProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F9C805244C89B800B7E1AE /* CNProcessManager.swift */; };
+		05FA35CB24ED58CB0091E748 /* CNAppleEventDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FA35CA24ED58CB0091E748 /* CNAppleEventDescriptor.swift */; };
 		05FC09B0237C29BA00667AC4 /* UTKeyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC09AF237C29BA00667AC4 /* UTKeyBinding.swift */; };
 		05FD029123A52F5000744D8C /* UTFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FD029023A52F5000744D8C /* UTFileHandle.swift */; };
 /* End PBXBuildFile section */
@@ -259,6 +260,7 @@
 		05F5EA72208F794000CF98C3 /* CNReservedWord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReservedWord.swift; sourceTree = "<group>"; };
 		05F7DACC23730E1100E363E9 /* UTCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCharacter.swift; sourceTree = "<group>"; };
 		05F9C805244C89B800B7E1AE /* CNProcessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNProcessManager.swift; sourceTree = "<group>"; };
+		05FA35CA24ED58CB0091E748 /* CNAppleEventDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventDescriptor.swift; sourceTree = "<group>"; };
 		05FC09AF237C29BA00667AC4 /* UTKeyBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTKeyBinding.swift; sourceTree = "<group>"; };
 		05FD029023A52F5000744D8C /* UTFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTFileHandle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -433,6 +435,7 @@
 			isa = PBXGroup;
 			children = (
 				05A6082B24EAC5DB00783928 /* CNAppleEvent.swift */,
+				05FA35CA24ED58CB0091E748 /* CNAppleEventDescriptor.swift */,
 				05A6082924EAC37A00783928 /* CNAppleEventManager.swift */,
 			);
 			path = Event;
@@ -789,6 +792,7 @@
 				05137F9122FAFFFD00FC9C65 /* CNEscapeCode.swift in Sources */,
 				0599584C208AF07700DE2DC9 /* CNTokenStream.swift in Sources */,
 				05DF713121CBD24600B6FD4F /* CNNativeValueSelector.swift in Sources */,
+				05FA35CB24ED58CB0091E748 /* CNAppleEventDescriptor.swift in Sources */,
 				056A4516232327B000C7DCBF /* CNFileHandle.swift in Sources */,
 				0583FA272302FE7600100DAB /* CNKeyCode.swift in Sources */,
 				05226E2823EAF73100EA9623 /* CNPreferenceTable.swift in Sources */,

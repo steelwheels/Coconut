@@ -35,7 +35,7 @@ public extension CNColor
 	}
 
 	func escapeCode() -> Int32 {
-		let (red, green, blue) = self.toRGB()
+		let (red, green, blue, _) = self.toRGBA()
 		let rbit : Int32 = red   >= 0.5 ? 1 : 0
 		let gbit : Int32 = green >= 0.5 ? 1 : 0
 		let bbit : Int32 = blue  >= 0.5 ? 1 : 0
@@ -43,7 +43,7 @@ public extension CNColor
 		return rgb
 	}
 
-	func toRGB() -> (CGFloat, CGFloat, CGFloat) {
+	func toRGBA() -> (CGFloat, CGFloat, CGFloat, CGFloat) {
 		var red 	: CGFloat = 0.0
 		var green	: CGFloat = 0.0
 		var blue	: CGFloat = 0.0
@@ -57,7 +57,7 @@ public extension CNColor
 		#else
 			self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 		#endif
-		return (red, green, blue)
+		return (red, green, blue, alpha)
 	}
 
 	func toData() -> Data? {
@@ -83,6 +83,34 @@ public extension CNColor
 	}
 
 	#if os(OSX)
+	/* See CoconutScript.sdef for OSTy ep definition */
+	func toOSType() -> OSType {
+		let result: OSType
+		switch self.escapeCode() {
+		case 0:		result = CNStringToFourCharCode("blak")
+		case 1:		result = CNStringToFourCharCode("red ")
+		case 2:		result = CNStringToFourCharCode("gren")
+		case 3:		result = CNStringToFourCharCode("yell")
+		case 4:		result = CNStringToFourCharCode("blue")
+		case 5:		result = CNStringToFourCharCode("mgnt")
+		case 6:		result = CNStringToFourCharCode("cyan")
+		case 7:		result = CNStringToFourCharCode("whte")
+		default:	result = CNStringToFourCharCode("blak")		// Never chosen
+		}
+		return result
+	}
+
+	static func decode(fromOSType type: OSType) -> CNColor? {
+		for i:Int32 in 0..<8 {
+			if let col = CNColor.color(withEscapeCode: i) {
+				if col.toOSType() == type {
+					return col
+				}
+			}
+		}
+		return nil
+	}
+
 	func toDarwinColor() -> Int32 {
 		var result: Int32
 		let code = self.escapeCode()

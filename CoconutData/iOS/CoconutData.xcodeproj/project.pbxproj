@@ -67,6 +67,9 @@
 		05CEF6532496018900231FC6 /* CNNativeValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CEF6522496018900231FC6 /* CNNativeValueParser.swift */; };
 		05D10D9523D3EF3B00DF66E6 /* CNFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D10D9423D3EF3B00DF66E6 /* CNFont.swift */; };
 		05D8FC0B21CBF65A00769685 /* CNNativeValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D8FC0A21CBF65A00769685 /* CNNativeValueCoder.swift */; };
+		05DACF0824EEB28200F638EE /* CNAppleEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACF0524EEB28200F638EE /* CNAppleEventManager.swift */; };
+		05DACF0924EEB28200F638EE /* CNAppleEventDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACF0624EEB28200F638EE /* CNAppleEventDescriptor.swift */; };
+		05DACF0A24EEB28200F638EE /* CNAppleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACF0724EEB28200F638EE /* CNAppleEvent.swift */; };
 		05DF7D9B2090D4D7003B5110 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF7D9A2090D4D7003B5110 /* CNStringUtil.swift */; };
 		05E81093208B341C00230477 /* CNAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E81092208B341C00230477 /* CNAccess.swift */; };
 		05EDAD85213BE640003C9147 /* CNStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDAD84213BE640003C9147 /* CNStack.swift */; };
@@ -150,6 +153,9 @@
 		05CEF6522496018900231FC6 /* CNNativeValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueParser.swift; sourceTree = "<group>"; };
 		05D10D9423D3EF3B00DF66E6 /* CNFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFont.swift; sourceTree = "<group>"; };
 		05D8FC0A21CBF65A00769685 /* CNNativeValueCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueCoder.swift; sourceTree = "<group>"; };
+		05DACF0524EEB28200F638EE /* CNAppleEventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAppleEventManager.swift; sourceTree = "<group>"; };
+		05DACF0624EEB28200F638EE /* CNAppleEventDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAppleEventDescriptor.swift; sourceTree = "<group>"; };
+		05DACF0724EEB28200F638EE /* CNAppleEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAppleEvent.swift; sourceTree = "<group>"; };
 		05DF7D9A2090D4D7003B5110 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05E81092208B341C00230477 /* CNAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAccess.swift; sourceTree = "<group>"; };
 		05EDAD84213BE640003C9147 /* CNStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStack.swift; sourceTree = "<group>"; };
@@ -309,6 +315,7 @@
 				0503766E208B2F1000D2DB37 /* Error */,
 				05899936208B0042002FEAEA /* Math */,
 				058740FA208AFF4A00FF2B65 /* Process */,
+				05DACF0424EEB25F00F638EE /* Event */,
 				056EA8B8208AFE3F00D1DFFE /* File */,
 				0599584D208AF08700DE2DC9 /* Parser */,
 				05F5DAC4208ADBB6006EB134 /* Data */,
@@ -326,6 +333,16 @@
 				05609FBE2417DB010053214D /* CNUserDefaults.swift */,
 			);
 			path = Preference;
+			sourceTree = "<group>";
+		};
+		05DACF0424EEB25F00F638EE /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				05DACF0724EEB28200F638EE /* CNAppleEvent.swift */,
+				05DACF0624EEB28200F638EE /* CNAppleEventDescriptor.swift */,
+				05DACF0524EEB28200F638EE /* CNAppleEventManager.swift */,
+			);
+			path = Event;
 			sourceTree = "<group>";
 		};
 		05F5DAC4208ADBB6006EB134 /* Data */ = {
@@ -456,6 +473,7 @@
 			files = (
 				05B21D4A21AC3819009B0F36 /* CNDatabase.swift in Sources */,
 				0539FB7C218A134F00EFCFFF /* CNGraphicsType.swift in Sources */,
+				05DACF0A24EEB28200F638EE /* CNAppleEvent.swift in Sources */,
 				0578DA2E2090C1E800ED852C /* CNPropertyList.swift in Sources */,
 				05387F97208F79A200848EA3 /* CNReservedWord.swift in Sources */,
 				0565A9E9208B7B8B00E91568 /* CNFileManager.swift in Sources */,
@@ -506,6 +524,7 @@
 				0588875521CBD7FA00BE14B5 /* CNNativeValueMerger.swift in Sources */,
 				05FA3D2824E11CD300B05F94 /* CNRemoteApplication.swift in Sources */,
 				05C85DA922AABDD1007C5527 /* CNOperationContext.swift in Sources */,
+				05DACF0824EEB28200F638EE /* CNAppleEventManager.swift in Sources */,
 				05F5DAC8208ADBD8006EB134 /* CNStringStream.swift in Sources */,
 				05DF7D9B2090D4D7003B5110 /* CNStringUtil.swift in Sources */,
 				058740FC208AFF6000FF2B65 /* CNThread.swift in Sources */,
@@ -516,6 +535,7 @@
 				053EFA0923EB19D3008E5838 /* CNPreferenceTable.swift in Sources */,
 				057FD579244A80F400CDBB0F /* CNSignalManager.swift in Sources */,
 				05E81093208B341C00230477 /* CNAccess.swift in Sources */,
+				05DACF0924EEB28200F638EE /* CNAppleEventDescriptor.swift in Sources */,
 				05995853208AF0D500DE2DC9 /* CNParser.swift in Sources */,
 				0517E1BD235E7F62002EB80C /* CNProcess.swift in Sources */,
 				0588875621CBD7FA00BE14B5 /* CNNativeValueMatcher.swift in Sources */,
