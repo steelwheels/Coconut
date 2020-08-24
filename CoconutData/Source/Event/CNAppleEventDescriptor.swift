@@ -63,6 +63,15 @@ public extension NSAppleEventDescriptor
 		get { return self.forKeyword(CNEventDescripton.data.code()) }
 	}
 
+	var objectClass: OSType? {
+		get {
+			if let desc = self.forKeyword(CNEventDescripton.objectClass.code()) {
+				return desc.enumCodeValue
+			}
+			return nil
+		}
+	}
+
 	func setDataParameter(_ param: NSAppleEventDescriptor) {
 		self.setParam(param, forKeyword: CNEventDescripton.data.code())
 	}

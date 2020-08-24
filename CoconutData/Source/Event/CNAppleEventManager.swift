@@ -123,6 +123,24 @@ public class CNAppleEventManager
 
 	@objc private func makeEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
 		console.print(string: "mE: \(desc.description) \(rep.description)\n")
+		var haserr: Bool	= true
+		var retmsg: String?	= nil
+		if let oclass = desc.objectClass {
+			switch oclass {
+			case CNEventObject.window.code():
+				/* make document */
+				//console.print(string: "Open new window")
+				let docctrl = NSDocumentController.shared
+				docctrl.newDocument(self)
+				haserr = false
+			default:
+				break
+			}
+		}
+		if !haserr {
+			retmsg = "Failed to decode make event"
+		}
+		rep.setResult(resultValue: nil, error: retmsg)
 	}
 
 	@objc private func openDocumentEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {

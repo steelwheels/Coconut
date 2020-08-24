@@ -46,11 +46,15 @@ tell application "JSTerminal"
 end tell
 ````
 
-### open window
+#### Event descriptor
+````
+'core'\'crel'{ 'kocl':'docu', &'subj':null(), &'csig':65536 }
+````
 
 ### close window
 
 ### quit application
+The Cocoa foundation decode it automatically.
 
 #### EventDescriptor
 ````

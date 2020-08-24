@@ -35,6 +35,7 @@ public enum CNEventDescripton: String {
 	case	directObject		= "----"
 	case	data			= "data"
 	case	format			= "form"
+	case	objectClass		= "kocl"
 	case	selectData		= "seld"
 	public func code() -> DescType {
 		return CNStringToFourCharCode(self.rawValue)
@@ -58,6 +59,7 @@ public enum CNEventFormat: String {
 
 public enum CNEventObject: String {
 	case rgbColor			= "cRGB"
+	case window			= "cwin"
 	public func code() -> OSType {
 		return CNStringToFourCharCode(self.rawValue)
 	}
