@@ -52,6 +52,41 @@ end tell
 ````
 
 ### close window
+#### AppleScript (no argument)
+````
+tell application "JSTerminal"
+	close window
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'clos'{ '----':'cwin', &'subj':null(), &'csig':65536 }
+````
+
+#### AppleScript (with window name)
+````
+tell application "JSTerminal"
+	close window "a"
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'clos'{ '----':'obj '{ 'form':'name', 'want':'cwin', 'seld':'utxt'("a"), 'from':null() }, &'csig':65536 }
+````
+
+#### AppleScript (with window index)
+````
+tell application "JSTerminal"
+	close window 1
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'clos'{ '----':'obj '{ 'form':'indx', 'want':'cwin', 'seld':1, 'from':null() }, &'csig':65536 }
+````
 
 ### quit application
 The Cocoa foundation decode it automatically.

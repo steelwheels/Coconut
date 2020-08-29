@@ -36,6 +36,12 @@
 		054228A624959CA100077A3B /* CNNativeValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054228A524959CA100077A3B /* CNNativeValueParser.swift */; };
 		0543A4BE209DE1C000F5B34F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0543A4BD209DE1C000F5B34F /* main.swift */; };
 		0543A4C4209DE1DD00F5B34F /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B2A063208AD39600D16E60 /* CoconutData.framework */; };
+		0544EB8624F7942F003B6E9E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0544EB8524F7942F003B6E9E /* AppDelegate.swift */; };
+		0544EB8824F7942F003B6E9E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0544EB8724F7942F003B6E9E /* ViewController.swift */; };
+		0544EB8A24F79431003B6E9E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0544EB8924F79431003B6E9E /* Assets.xcassets */; };
+		0544EB8D24F79431003B6E9E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0544EB8B24F79431003B6E9E /* Main.storyboard */; };
+		0544EB9724F79587003B6E9E /* CoconutData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; };
+		0544EB9824F79587003B6E9E /* CoconutData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C52E8F20993DE600DD56B4 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05471B0E21CBECDE00F66B8F /* CNNativeValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05471B0D21CBECDE00F66B8F /* CNNativeValueCoder.swift */; };
 		05471B1021CBF2A200F66B8F /* UTResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05471B0F21CBF2A200F66B8F /* UTResource.swift */; };
 		054D735D21B039C700950D9D /* CNNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054D735C21B039C700950D9D /* CNNativeValue.swift */; };
@@ -54,6 +60,7 @@
 		0565A9F7208B820900E91568 /* CNAuthorize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565A9F6208B820900E91568 /* CNAuthorize.swift */; };
 		0567B19D21D50DB4000C74B8 /* CNResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0567B19C21D50DB4000C74B8 /* CNResource.swift */; };
 		056A4516232327B000C7DCBF /* CNFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056A4515232327B000C7DCBF /* CNFileHandle.swift */; };
+		056DD79624F7B07700EE5641 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 051CBC6924EABEE5004E544D /* CoconutScript.sdef */; };
 		056EA8B7208AFD6300D1DFFE /* CNConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056EA8B6208AFD6300D1DFFE /* CNConsole.swift */; };
 		0578DA2C2090C1C400ED852C /* CNPropertyList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0578DA2B2090C1C400ED852C /* CNPropertyList.swift */; };
 		057C7EF720A1ED950085662E /* UTConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057C7EF620A1ED950085662E /* UTConsole.swift */; };
@@ -77,6 +84,8 @@
 		0599584C208AF07700DE2DC9 /* CNTokenStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599584A208AF07700DE2DC9 /* CNTokenStream.swift */; };
 		05995855208AF10300DE2DC9 /* CNParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05995854208AF10300DE2DC9 /* CNParser.swift */; };
 		059A4D5723D3E36A008BFB6D /* CNFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059A4D5623D3E36A008BFB6D /* CNFont.swift */; };
+		059D856924F8CC4600DC8B1E /* CNAppleEventObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D856824F8CC4600DC8B1E /* CNAppleEventObject.swift */; };
+		059D856B24F8E0D500DC8B1E /* CNAppleEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D856A24F8E0D500DC8B1E /* CNAppleEventParser.swift */; };
 		05A6082A24EAC37A00783928 /* CNAppleEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A6082924EAC37A00783928 /* CNAppleEventManager.swift */; };
 		05A6082C24EAC5DB00783928 /* CNAppleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A6082B24EAC5DB00783928 /* CNAppleEvent.swift */; };
 		05A6C17524362B8500666217 /* CNEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A6C17424362B8500666217 /* CNEnvironment.swift */; };
@@ -119,6 +128,13 @@
 			remoteGlobalIDString = 05B5BBCD209DDF4500E0981B;
 			remoteInfo = UnitTestBundle;
 		};
+		0544EB9524F7951C003B6E9E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05F5DAB8208AD844006EB134;
+			remoteInfo = Install;
+		};
 		0567B1A221D517D0000C74B8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 05B2A05A208AD39600D16E60 /* Project object */;
@@ -143,6 +159,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		0544EB9924F79587003B6E9E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0544EB9824F79587003B6E9E /* CoconutData.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05B5BBD6209DDF6C00E0981B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -184,6 +211,13 @@
 		054228A524959CA100077A3B /* CNNativeValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueParser.swift; sourceTree = "<group>"; };
 		0543A4BB209DE1C000F5B34F /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0543A4BD209DE1C000F5B34F /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		0544EB8324F7942F003B6E9E /* CoconutEventTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoconutEventTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0544EB8524F7942F003B6E9E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0544EB8724F7942F003B6E9E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		0544EB8924F79431003B6E9E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0544EB8C24F79431003B6E9E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0544EB8E24F79431003B6E9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0544EB8F24F79431003B6E9E /* CoconutEventTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoconutEventTest.entitlements; sourceTree = "<group>"; };
 		05471B0D21CBECDE00F66B8F /* CNNativeValueCoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValueCoder.swift; sourceTree = "<group>"; };
 		05471B0F21CBF2A200F66B8F /* UTResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTResource.swift; sourceTree = "<group>"; };
 		054D735C21B039C700950D9D /* CNNativeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValue.swift; sourceTree = "<group>"; };
@@ -227,6 +261,8 @@
 		0599584A208AF07700DE2DC9 /* CNTokenStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTokenStream.swift; sourceTree = "<group>"; };
 		05995854208AF10300DE2DC9 /* CNParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNParser.swift; sourceTree = "<group>"; };
 		059A4D5623D3E36A008BFB6D /* CNFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNFont.swift; sourceTree = "<group>"; };
+		059D856824F8CC4600DC8B1E /* CNAppleEventObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventObject.swift; sourceTree = "<group>"; };
+		059D856A24F8E0D500DC8B1E /* CNAppleEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventParser.swift; sourceTree = "<group>"; };
 		05A6082924EAC37A00783928 /* CNAppleEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEventManager.swift; sourceTree = "<group>"; };
 		05A6082B24EAC5DB00783928 /* CNAppleEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAppleEvent.swift; sourceTree = "<group>"; };
 		05A6C17424362B8500666217 /* CNEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNEnvironment.swift; sourceTree = "<group>"; };
@@ -271,6 +307,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				0543A4C4209DE1DD00F5B34F /* CoconutData.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0544EB8024F7942F003B6E9E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0544EB9724F79587003B6E9E /* CoconutData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +412,19 @@
 			path = UnitTest;
 			sourceTree = "<group>";
 		};
+		0544EB8424F7942F003B6E9E /* CoconutEventTest */ = {
+			isa = PBXGroup;
+			children = (
+				0544EB8524F7942F003B6E9E /* AppDelegate.swift */,
+				0544EB8724F7942F003B6E9E /* ViewController.swift */,
+				0544EB8924F79431003B6E9E /* Assets.xcassets */,
+				0544EB8B24F79431003B6E9E /* Main.storyboard */,
+				0544EB8E24F79431003B6E9E /* Info.plist */,
+				0544EB8F24F79431003B6E9E /* CoconutEventTest.entitlements */,
+			);
+			path = CoconutEventTest;
+			sourceTree = "<group>";
+		};
 		058740F7208AFF1700FF2B65 /* Process */ = {
 			isa = PBXGroup;
 			children = (
@@ -435,6 +492,8 @@
 			isa = PBXGroup;
 			children = (
 				05A6082B24EAC5DB00783928 /* CNAppleEvent.swift */,
+				059D856824F8CC4600DC8B1E /* CNAppleEventObject.swift */,
+				059D856A24F8E0D500DC8B1E /* CNAppleEventParser.swift */,
 				05FA35CA24ED58CB0091E748 /* CNAppleEventDescriptor.swift */,
 				05A6082924EAC37A00783928 /* CNAppleEventManager.swift */,
 			);
@@ -446,6 +505,7 @@
 			children = (
 				0543A4BC209DE1C000F5B34F /* UnitTest */,
 				05B5BBCF209DDF4500E0981B /* UnitTestBundle */,
+				0544EB8424F7942F003B6E9E /* CoconutEventTest */,
 			);
 			name = Test;
 			path = ../Test;
@@ -469,6 +529,7 @@
 				05B2A063208AD39600D16E60 /* CoconutData.framework */,
 				05B5BBCE209DDF4500E0981B /* UnitTest.bundle */,
 				0543A4BB209DE1C000F5B34F /* UnitTest */,
+				0544EB8324F7942F003B6E9E /* CoconutEventTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -623,6 +684,25 @@
 			productReference = 0543A4BB209DE1C000F5B34F /* UnitTest */;
 			productType = "com.apple.product-type.tool";
 		};
+		0544EB8224F7942F003B6E9E /* CoconutEventTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0544EB9224F79431003B6E9E /* Build configuration list for PBXNativeTarget "CoconutEventTest" */;
+			buildPhases = (
+				0544EB7F24F7942F003B6E9E /* Sources */,
+				0544EB8024F7942F003B6E9E /* Frameworks */,
+				0544EB8124F7942F003B6E9E /* Resources */,
+				0544EB9924F79587003B6E9E /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0544EB9624F7951C003B6E9E /* PBXTargetDependency */,
+			);
+			name = CoconutEventTest;
+			productName = CoconutEventTest;
+			productReference = 0544EB8324F7942F003B6E9E /* CoconutEventTest.app */;
+			productType = "com.apple.product-type.application";
+		};
 		05B2A062208AD39600D16E60 /* CoconutData */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 05B2A06B208AD39600D16E60 /* Build configuration list for PBXNativeTarget "CoconutData" */;
@@ -666,13 +746,16 @@
 		05B2A05A208AD39600D16E60 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0930;
+				LastSwiftUpdateCheck = 1160;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Steel Wheels Project";
 				TargetAttributes = {
 					0543A4BA209DE1C000F5B34F = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 1020;
+					};
+					0544EB8224F7942F003B6E9E = {
+						CreatedOnToolsVersion = 11.6;
 					};
 					0567B19E21D517C4000C74B8 = {
 						CreatedOnToolsVersion = 10.1;
@@ -707,11 +790,22 @@
 				05B5BBCD209DDF4500E0981B /* UnitTestBundle */,
 				0543A4BA209DE1C000F5B34F /* UnitTest */,
 				0567B19E21D517C4000C74B8 /* check */,
+				0544EB8224F7942F003B6E9E /* CoconutEventTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0544EB8124F7942F003B6E9E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0544EB8A24F79431003B6E9E /* Assets.xcassets in Resources */,
+				0544EB8D24F79431003B6E9E /* Main.storyboard in Resources */,
+				056DD79624F7B07700EE5641 /* CoconutScript.sdef in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05B2A061208AD39600D16E60 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -765,6 +859,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0544EB7F24F7942F003B6E9E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0544EB8824F7942F003B6E9E /* ViewController.swift in Sources */,
+				0544EB8624F7942F003B6E9E /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05B2A05E208AD39600D16E60 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -814,6 +917,7 @@
 				0565A9F1208B7BB100E91568 /* CNFileURL.swift in Sources */,
 				056EA8B7208AFD6300D1DFFE /* CNConsole.swift in Sources */,
 				057D2CDF208B426100E02E71 /* CNColor.swift in Sources */,
+				059D856B24F8E0D500DC8B1E /* CNAppleEventParser.swift in Sources */,
 				05A6C17524362B8500666217 /* CNEnvironment.swift in Sources */,
 				05995843208AEEFB00DE2DC9 /* CNValue.swift in Sources */,
 				059A4D5723D3E36A008BFB6D /* CNFont.swift in Sources */,
@@ -837,6 +941,7 @@
 				05B50DED239A861D00CFA0B9 /* CNAttributedString.swift in Sources */,
 				05A9C8F222F477BB000F1990 /* CNNativeStruct.swift in Sources */,
 				0565A9F0208B7BB100E91568 /* CNFilePath.swift in Sources */,
+				059D856924F8CC4600DC8B1E /* CNAppleEventObject.swift in Sources */,
 				05F9C806244C89B800B7E1AE /* CNProcessManager.swift in Sources */,
 				05CB79BE236F040800301547 /* CNQueue.swift in Sources */,
 			);
@@ -857,6 +962,11 @@
 			target = 05B5BBCD209DDF4500E0981B /* UnitTestBundle */;
 			targetProxy = 052633A52287A08500944E3F /* PBXContainerItemProxy */;
 		};
+		0544EB9624F7951C003B6E9E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05F5DAB8208AD844006EB134 /* Install */;
+			targetProxy = 0544EB9524F7951C003B6E9E /* PBXContainerItemProxy */;
+		};
 		0567B1A321D517D0000C74B8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0543A4BA209DE1C000F5B34F /* UnitTest */;
@@ -873,6 +983,17 @@
 			targetProxy = 05F5DAC2208AD8A4006EB134 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0544EB8B24F79431003B6E9E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0544EB8C24F79431003B6E9E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		0543A4C0209DE1C000F5B34F /* Debug */ = {
@@ -905,6 +1026,62 @@
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		0544EB9024F79431003B6E9E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ../Test/CoconutEventTest/CoconutEventTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = ../Test/CoconutEventTest/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutEventTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		0544EB9124F79431003B6E9E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ../Test/CoconutEventTest/CoconutEventTest.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = TR2DNF3P93;
+				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = ../Test/CoconutEventTest/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutEventTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -1189,6 +1366,15 @@
 			buildConfigurations = (
 				0543A4C0209DE1C000F5B34F /* Debug */,
 				0543A4C1209DE1C000F5B34F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0544EB9224F79431003B6E9E /* Build configuration list for PBXNativeTarget "CoconutEventTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0544EB9024F79431003B6E9E /* Debug */,
+				0544EB9124F79431003B6E9E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

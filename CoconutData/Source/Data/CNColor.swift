@@ -87,15 +87,15 @@ public extension CNColor
 	func toOSType() -> OSType {
 		let result: OSType
 		switch self.escapeCode() {
-		case 0:		result = CNStringToFourCharCode("blak")
-		case 1:		result = CNStringToFourCharCode("red ")
-		case 2:		result = CNStringToFourCharCode("gren")
-		case 3:		result = CNStringToFourCharCode("yell")
-		case 4:		result = CNStringToFourCharCode("blue")
-		case 5:		result = CNStringToFourCharCode("mgnt")
-		case 6:		result = CNStringToFourCharCode("cyan")
-		case 7:		result = CNStringToFourCharCode("whte")
-		default:	result = CNStringToFourCharCode("blak")		// Never chosen
+		case 0:		result = CNEventCode.black.code()
+		case 1:		result = CNEventCode.red.code()
+		case 2:		result = CNEventCode.green.code()
+		case 3:		result = CNEventCode.yellow.code()
+		case 4:		result = CNEventCode.blue.code()
+		case 5:		result = CNEventCode.magenta.code()
+		case 6:		result = CNEventCode.cyan.code()
+		case 7:		result = CNEventCode.white.code()
+		default:	result = CNEventCode.black.code()
 		}
 		return result
 	}

@@ -23,7 +23,6 @@ public typealias CNApplicationDelegateSuper	= UIResponder
 
 open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDelegateBase
 {
-
 	public override init() {
 		super.init()
 	}
@@ -35,5 +34,25 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 			mgr.setup()
 		#endif
 	}
+
+	#if os(OSX)
+	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
+		NSLog("Access to the delegateHandlesKey: \(key)")
+		let mgr = CNAppleEventManager.shared()
+		return mgr.hasProperty(named: key)
+	}
+
+	open override func value(forKey key: String) -> Any? {
+		NSLog("value forKey: \(key)")
+		let mgr = CNAppleEventManager.shared()
+		return mgr.property(forKey: key)
+	}
+
+	open override func setValue(_ value: Any?, forKey key: String) {
+		NSLog("set value forKey: \(key)")
+		let mgr = CNAppleEventManager.shared()
+		mgr.setProperty(value, forKey: key)
+	}
+	#endif
 }
 

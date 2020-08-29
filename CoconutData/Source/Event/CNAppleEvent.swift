@@ -9,79 +9,73 @@ import Foundation
 
 #if os(OSX)
 
-public enum CNEventClass: String {
-	case	coreEvent		= "core"
+private var mEventCodeTable: Dictionary<CNEventCode, AEEventClass> = [:]
 
-	public func code() -> AEEventClass {
-		return CNStringToFourCharCode(self.rawValue)
-	}
-}
-
-public enum CNEventID: String {
+public enum CNEventCode: String {
+	case 	backgroundColor		= "pbcl"
+	case	black			= "blak"	// custom
+	case	blue			= "blue"	// custom
+	case	bool			= "bool"
+	case	classType		= "want"
+	case	closeDocument		= "clos"
+	case	color			= "cRGB"
+	case	core			= "core"
+	case	cyan			= "cyan"	// custom
+	case	data			= "data"
+	case	directObject		= "----"
+	case	double			= "doub"
+	case	errorCount		= "errn"
+	case	errorString		= "errs"
+	case	falseValue		= "fals"
+	case	float			= "sing"
+	case	format			= "form"
 	case	getData			= "getd"
+	case	green			= "gren"	// custom
+	case	long			= "long"
+	case	magenta			= "mgnt"	// custom
 	case	make			= "crel"
-	case	openApplication		= "oapp"
+	case	object			= "obj "
+	case	objectClass		= "kocl"
 	case	openDocument		= "odoc"
 	case	printDocument		= "pdoc"
+	case	property		= "prop"
+	case	red			= "red "	// custom
+	case	short			= "shor"
+	case	text			= "utxt"
+	case	trueValue		= "true"
+	case	window			= "cwin"
 	case	quitApplication		= "quit"
-	case	setData			= "setd"
-
-	public func code() -> AEEventID {
-		return CNStringToFourCharCode(self.rawValue)
-	}
-}
-
-public enum CNEventDescripton: String {
-	case	directObject		= "----"
-	case	data			= "data"
-	case	format			= "form"
-	case	objectClass		= "kocl"
 	case	selectData		= "seld"
-	public func code() -> DescType {
-		return CNStringToFourCharCode(self.rawValue)
+	case	setData			= "setd"
+	case 	textColor		= "ptxc"
+	case	white			= "whte"	// custom
+	case	yellow			= "yell"
+
+	public func code() -> AEEventClass {
+		if let val = mEventCodeTable[self] {
+			return val
+		} else {
+			let newval = CNStringToFourCharCode(self.rawValue)
+			mEventCodeTable[self] = newval
+			return newval
+		}
 	}
-}
 
-public enum CNEventFormat: String {
-	case property			= "prop"
-
-	public static func encode(string str: String) -> CNEventFormat? {
-		let result: CNEventFormat?
-		switch str {
-		case CNEventFormat.property.rawValue:
-			result = .property
-		default:
-			result = nil
+	public static func descriptionTypeToString(code cd: DescType) -> String {
+		var result: String = ""
+		for i in 0..<4 {
+			let val = (cd >> ((3 - i) * 8)) & 0xff
+			if let scalar = UnicodeScalar(val) {
+				result.append(Character(scalar))
+			} else {
+				result.append("?")
+			}
 		}
 		return result
 	}
 }
 
-public enum CNEventObject: String {
-	case rgbColor			= "cRGB"
-	case window			= "cwin"
-	public func code() -> OSType {
-		return CNStringToFourCharCode(self.rawValue)
-	}
-}
-
-public enum CNEventProperty: String {
-	case textColor			= "ptxc"
-	case backgroundColor		= "pbcl"
-	public func code() -> OSType {
-		return CNStringToFourCharCode(self.rawValue)
-	}
-}
-
-public enum CNEventResult: String {
-	case errorCount			= "errn"
-	case errorString		= "errs"
-	public func code() -> DescType {
-		return CNStringToFourCharCode(self.rawValue)
-	}
-}
-
-public func CNStringToFourCharCode(_ src: String) -> FourCharCode {
+private func CNStringToFourCharCode(_ src: String) -> FourCharCode {
 	var result: UInt32 = 0
 	var idx     = src.startIndex
 	let end     = src.endIndex

@@ -72,6 +72,8 @@
 		05DACF0A24EEB28200F638EE /* CNAppleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACF0724EEB28200F638EE /* CNAppleEvent.swift */; };
 		05DF7D9B2090D4D7003B5110 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DF7D9A2090D4D7003B5110 /* CNStringUtil.swift */; };
 		05E81093208B341C00230477 /* CNAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E81092208B341C00230477 /* CNAccess.swift */; };
+		05EC533E24F92358006BEA65 /* CNAppleEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EC533C24F92358006BEA65 /* CNAppleEventParser.swift */; };
+		05EC533F24F92358006BEA65 /* CNAppleEventObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EC533D24F92358006BEA65 /* CNAppleEventObject.swift */; };
 		05EDAD85213BE640003C9147 /* CNStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDAD84213BE640003C9147 /* CNStack.swift */; };
 		05F5DAC7208ADBD8006EB134 /* CNArrayStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5DAC5208ADBD8006EB134 /* CNArrayStream.swift */; };
 		05F5DAC8208ADBD8006EB134 /* CNStringStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */; };
@@ -158,6 +160,8 @@
 		05DACF0724EEB28200F638EE /* CNAppleEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAppleEvent.swift; sourceTree = "<group>"; };
 		05DF7D9A2090D4D7003B5110 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05E81092208B341C00230477 /* CNAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAccess.swift; sourceTree = "<group>"; };
+		05EC533C24F92358006BEA65 /* CNAppleEventParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAppleEventParser.swift; sourceTree = "<group>"; };
+		05EC533D24F92358006BEA65 /* CNAppleEventObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAppleEventObject.swift; sourceTree = "<group>"; };
 		05EDAD84213BE640003C9147 /* CNStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStack.swift; sourceTree = "<group>"; };
 		05F5DAC5208ADBD8006EB134 /* CNArrayStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNArrayStream.swift; sourceTree = "<group>"; };
 		05F5DAC6208ADBD8006EB134 /* CNStringStream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringStream.swift; sourceTree = "<group>"; };
@@ -339,6 +343,8 @@
 			isa = PBXGroup;
 			children = (
 				05DACF0724EEB28200F638EE /* CNAppleEvent.swift */,
+				05EC533D24F92358006BEA65 /* CNAppleEventObject.swift */,
+				05EC533C24F92358006BEA65 /* CNAppleEventParser.swift */,
 				05DACF0624EEB28200F638EE /* CNAppleEventDescriptor.swift */,
 				05DACF0524EEB28200F638EE /* CNAppleEventManager.swift */,
 			);
@@ -511,12 +517,14 @@
 				056EA8BA208AFE5600D1DFFE /* CNConsole.swift in Sources */,
 				0554E0CB21D52A45005B8069 /* CNResource.swift in Sources */,
 				05C9616322D7739800CAB51B /* CNGraphicsFunction.swift in Sources */,
+				05EC533E24F92358006BEA65 /* CNAppleEventParser.swift in Sources */,
 				05F9C808244C8E6100B7E1AE /* CNProcessManager.swift in Sources */,
 				05C85DA822AABDD1007C5527 /* CNOperationExecutor.swift in Sources */,
 				054FDF12245EA4CA0009217B /* CNLogManager.swift in Sources */,
 				050DEEA723701AD0008E1A52 /* CNQueue.swift in Sources */,
 				0532D64122FC48A40031F929 /* CNEscapeCode.swift in Sources */,
 				057D2CE1208B42B300E02E71 /* CNColor.swift in Sources */,
+				05EC533F24F92358006BEA65 /* CNAppleEventObject.swift in Sources */,
 				05995840208AEEB300DE2DC9 /* CNValue.swift in Sources */,
 				05609FBF2417DB010053214D /* CNUserDefaults.swift in Sources */,
 				05899938208B0059002FEAEA /* CNMath.swift in Sources */,
