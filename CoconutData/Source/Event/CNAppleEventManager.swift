@@ -300,7 +300,6 @@ public class CNAppleEventManager
 			}
 		case .name(let name):
 			for tmp in docs {
-				console.print(string: "Display name: \(tmp.displayName)\n")
 				if tmp.displayName == name {
 					doc = tmp
 					break
