@@ -1,6 +1,6 @@
 Hello, World!
 * testPreference
-LogLevel: flow
+LogLevel: debug
 * fontManager
 * testStringStream
 - Test string stream to token
@@ -72,33 +72,33 @@ moveCursorForward(2)
 -------- [begin]
 .a.b*c
 -------- [end]
-insert("(ルート2)", 2
+insert("ドライブ", 2
 -------- [begin]
-.a.b*(.ル.ー.ト.2.).c
+.a.b*ド.ラ.イ.ブ.c
 -------- [end]
 write("ABCD")
 -------- [begin]
-.a.b.A.B.C.D*<
+.a.b.A.B.C.D*c
 -------- [end]
 moveCursorBackward(2)
 -------- [begin]
-.a.b.A.B*C.D
+.a.b.A.B*C.D.c
 -------- [end]
 deleteForwardCharacters(1)
 -------- [begin]
-.a.b.A.B*D
+.a.b.A.B*D.c
 -------- [end]
 deleteBackwardCharacters(1)
 -------- [begin]
-.a.b.A*D
+.a.b.A*D.c
 -------- [end]
 delete(1 to 2)
 -------- [begin]
-*a.A.D
+*a.A.D.c
 -------- [end]
 delete(1 len 2)
 -------- [begin]
-*a
+*a.c
 -------- [end]
 deleteEntireLine
 -------- [begin]
@@ -191,51 +191,51 @@ moveCursorForward(2)
 .g.h.i.$
 
 -------- [end]
-insert("(ルート2)", 6
+insert("ドライブ", 6
 -------- [begin]
 .a.b.c.$
-.d.e*(.ル.ー.ト.2.).f.$
+.d.e*ド.ラ.イ.ブ.f.$
 .g.h.i.$
 
 -------- [end]
 write("ABCD")
 -------- [begin]
 .a.b.c.$
-.d.e.A.B.C.D*$
+.d.e.A.B.C.D*f.$
 .g.h.i.$
 
 -------- [end]
 moveCursorBackward(2)
 -------- [begin]
 .a.b.c.$
-.d.e.A.B*C.D.$
+.d.e.A.B*C.D.f.$
 .g.h.i.$
 
 -------- [end]
 deleteForwardCharacters(1)
 -------- [begin]
 .a.b.c.$
-.d.e.A.B*D.$
+.d.e.A.B*D.f.$
 .g.h.i.$
 
 -------- [end]
 deleteBackwardCharacters(1)
 -------- [begin]
 .a.b.c.$
-.d.e.A*D.$
+.d.e.A*D.f.$
 .g.h.i.$
 
 -------- [end]
 delete(1 to 2)
 -------- [begin]
 *a.c.$
-.d.e.A.D.$
+.d.e.A.D.f.$
 .g.h.i.$
 
 -------- [end]
 delete(1 len 2)
 -------- [begin]
-*a.d.e.A.D.$
+*a.d.e.A.D.f.$
 .g.h.i.$
 
 -------- [end]
@@ -296,33 +296,33 @@ moveCursorForward(2)
 -------- [begin]
 .ド.ラ*イ.ブ
 -------- [end]
-insert("(ルート2)", 2
+insert("ドライブ", 2
 -------- [begin]
-.ド.ラ*(.ル.ー.ト.2.).イ.ブ
+.ド.ラ*ド.ラ.イ.ブ.イ.ブ
 -------- [end]
 write("ABCD")
 -------- [begin]
-.ド.ラ.A.B.C.D*<
+.ド.ラ.A.B.C.D*イ.ブ
 -------- [end]
 moveCursorBackward(2)
 -------- [begin]
-.ド.ラ.A.B*C.D
+.ド.ラ.A.B*C.D.イ.ブ
 -------- [end]
 deleteForwardCharacters(1)
 -------- [begin]
-.ド.ラ.A.B*D
+.ド.ラ.A.B*D.イ.ブ
 -------- [end]
 deleteBackwardCharacters(1)
 -------- [begin]
-.ド.ラ.A*D
+.ド.ラ.A*D.イ.ブ
 -------- [end]
 delete(1 to 2)
 -------- [begin]
-*ド.A.D
+*ド.A.D.イ.ブ
 -------- [end]
 delete(1 len 2)
 -------- [begin]
-*ド
+*ド.イ.ブ
 -------- [end]
 deleteEntireLine
 -------- [begin]
@@ -403,69 +403,69 @@ moveCursorForward(2)
 .ド.ラ*イ.ブ.2.$
 
 -------- [end]
-insert("(ルート2)", 8
+insert("ドライブ", 8
 -------- [begin]
 .ド.ラ.イ.ブ.1.$
-.ド.ラ*(.ル.ー.ト.2.).イ.ブ.2.$
+.ド.ラ*ド.ラ.イ.ブ.イ.ブ.2.$
 
 -------- [end]
 write("ABCD")
 -------- [begin]
 .ド.ラ.イ.ブ.1.$
-.ド.ラ.A.B.C.D*$
+.ド.ラ.A.B.C.D*イ.ブ.2.$
 
 -------- [end]
 moveCursorBackward(2)
 -------- [begin]
 .ド.ラ.イ.ブ.1.$
-.ド.ラ.A.B*C.D.$
+.ド.ラ.A.B*C.D.イ.ブ.2.$
 
 -------- [end]
 deleteForwardCharacters(1)
 -------- [begin]
 .ド.ラ.イ.ブ.1.$
-.ド.ラ.A.B*D.$
+.ド.ラ.A.B*D.イ.ブ.2.$
 
 -------- [end]
 deleteBackwardCharacters(1)
 -------- [begin]
 .ド.ラ.イ.ブ.1.$
-.ド.ラ.A*D.$
+.ド.ラ.A*D.イ.ブ.2.$
 
 -------- [end]
 delete(1 to 2)
 -------- [begin]
 *ド.イ.ブ.1.$
-.ド.ラ.A.D.$
+.ド.ラ.A.D.イ.ブ.2.$
 
 -------- [end]
 delete(1 len 2)
 -------- [begin]
 *ド.1.$
-.ド.ラ.A.D.$
+.ド.ラ.A.D.イ.ブ.2.$
 
 -------- [end]
 deleteEntireLine
 -------- [begin]
 *$
-.ド.ラ.A.D.$
+.ド.ラ.A.D.イ.ブ.2.$
 
 -------- [end]
 *** Test padding
 -------- [begin]
 *a.a.a._._.$
 .b.b._._._.$
-._._._._._.$
-._._._._._.$
-._._._._._
+._._._._.$
+._._._._.$
+._._._._
 -------- [end]
 *** Test padding
 -------- [begin]
 *a.a.a._._.$
 .b.b._._._.$
-._._._._._.$
-._._._._._.$
-._._._._._
+._._._._.$
+._._._._.$
+._._._._
 -------- [end]
 *** Test padding
 -------- [begin]
@@ -477,11 +477,11 @@ deleteEntireLine
 -------- [end]
 *** Test padding
 -------- [begin]
-*_._._._._.$
-._._._._._.$
-._._._._._.$
-._._._._._.$
-._._._._._
+*_._._._.$
+._._._._.$
+._._._._.$
+._._._._.$
+._._._._
 -------- [end]
 * testStringUtil
 "padding---"
@@ -827,7 +827,7 @@ white : OK
 - Execute:string("Hello")
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.o*$
+.0.1.2.3.H.e.l.l.o*9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("Good-morning!!")
@@ -965,18 +965,18 @@ white : OK
 abcdefghij")
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.a.b.c.d.e.f.g.h.i.j*$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j*$
 .o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.a.b.c.d.e*f.g.h.i.j.$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e*f.g.h.i.j.$
 .o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
@@ -988,50 +988,50 @@ abcdefghij")
 0123456789
 abcdefghij")
 -------- [begin]
-.a.b.c.d.e.f.g.h.i.j*$
+.a.b.c.d.e.f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
-.a.b.c.d.e.f.g.h.i.j
+.a.b.c.d.e.f.g.h.i.j*$
 -------- [end]
 - Execute:cursorBack(5)
 -------- [begin]
-.a.b.c.d.e*f.g.h.i.j.$
+.a.b.c.d.e.f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
-.a.b.c.d.e.f.g.h.i.j
+.a.b.c.d.e*f.g.h.i.j
 -------- [end]
 - Execute:cursorUp(1)
 -------- [begin]
-.a.b.c.d.e*f.g.h.i.j.$
-.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4*5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceFromCursorToRight
 -------- [begin]
-.a.b.c.d.e*$
-.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4*$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceFromCursorToLeft
 -------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
 *$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("inserted")
 -------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
 .i.n.s.e.r.t.e.d*$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
 -------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
 .i.n.s*e.r.t.e.d.$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceEntireLine
 -------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
 *$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:boldCharacter(true)
@@ -1044,8 +1044,8 @@ abcdefghij")
 - Execute:defaultBackgroundColor
 - Execute:string("COLOR")
 -------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
 .C.O.L.O.R*$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:resetCharacterAttribute
@@ -1078,7 +1078,7 @@ abcdefghij")
 - Execute:string("2x5")
 -------- [begin]
 ._._._._._._._._._._._._._._._._._._._._.$
-._._._._.2.x.5*$
+._._._._.2.x.5*_._._._._._._._._._._._._.$
 ._._._._._._._._._._._._._._._._._._._._.$
 ._._._._._._._._._._._._._._._._._._._._.$
 ._._._._._._._._._._._._._._._._._._._._.$
@@ -1090,43 +1090,43 @@ abcdefghij")
 -------- [end]
 - Execute:selectAltScreen(false)
 -------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
 .C.O.L.O.R*$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:scrollUp(2)
 -------- [begin]
+.a.b*c.d.e.f.g.h.i.j.$
 .C.O.L.O.R.$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
 .$
-*$
+
 -------- [end]
 - Execute:string("
 >")
 -------- [begin]
+.a.b.$
+.>*e.f.g.h.i.j.$
 .C.O.L.O.R.$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
 .$
-*$
-.>
+
 -------- [end]
 - Execute:scrollDown(2)
 -------- [begin]
+.a.b.$
+.>.e.f.g.h.i.j.$
 .C.O.L.O.R.$
-.0.1.2.3.4.5.6.7.8.9.$
-.a.b.c.d.e.f.g.h.i.j.$
-*$
+.a.b.c.d.e.f.g.h.i.j*$
 -------- [end]
 - Execute:string("
 <")
 -------- [begin]
+.a.b.$
+.>.e.f.g.h.i.j.$
 .C.O.L.O.R.$
-.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j.$
-*$
-.<
+.<*$
 -------- [end]
 * testKeyBinding
 selectorName:insertNewline: -> [newline ]

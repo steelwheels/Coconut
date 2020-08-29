@@ -41,11 +41,8 @@ extension CNLogging
 	private func log(type loglevel: CNConfig.LogLevel, entireString str: String) {
 		let curlevel = CNPreference.shared.systemPreference.logLevel
 		if curlevel.isMatched(logLevel: loglevel) {
-			switch loglevel {
-			case .error, .warning:
-				console?.print(string: str)
-			case .flow, .detail:
-				console?.print(string: str)
+			if let cons = console {
+				cons.print(string: str)
 			}
 		}
 	}

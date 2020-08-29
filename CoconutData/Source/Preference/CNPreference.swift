@@ -10,18 +10,20 @@ import Foundation
 open class CNConfig
 {
 	public enum LogLevel: Int {
-		case error	= 0	// Error
-		case warning	= 1	// + Warning (default value)
-		case flow	= 2	// + Control flow
-		case detail	= 3	// + Precise information
+		case nolog	= 0	// No log
+		case error	= 1	// Ony error log
+		case warning	= 2	// + warning log
+		case debug	= 3	// + debug log
+		case detail	= 4	// + detail
 
 		public var description: String {
 			get {
 				let result: String
 				switch self {
+				case .nolog:	result = "nolog"
 				case .error:	result = "error"
 				case .warning:	result = "warning"
-				case .flow:	result = "flow"
+				case .debug:	result = "debug"
 				case .detail:	result = "detail"
 				}
 				return result
@@ -39,9 +41,10 @@ open class CNConfig
 		public static func decode(string str: String) -> LogLevel? {
 			let result: LogLevel?
 			switch str {
+			case "nolog":		result = .nolog
 			case "error":		result = .error
 			case "warning":		result = .warning
-			case "flow":		result = .flow
+			case "debug":		result = .debug
 			case "detail":		result = .detail
 			default:		result = nil
 			}
