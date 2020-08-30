@@ -9,6 +9,8 @@ import Foundation
 
 @objc open class CNLogManager: NSObject
 {
+	public typealias LogLevel = CNConfig.LogLevel
+
 	private enum Message {
 		case normal(String)
 		case error(String)
@@ -86,12 +88,17 @@ import Foundation
 			if let vals = change {
 				if let newval = vals[.newKey] as? Int {
 					if let newlevel = CNSystemPreference.LogLevel(rawValue: newval) {
-						console.print(string: "\(#file) Update log level: \(newlevel.description)\n")
+						updateLogLevel(logLevel: newlevel)
 					}
 				}
 			}
 		default:
 			NSLog("oV: \(String(describing: keyPath))")
 		}
+	}
+
+	/* Override this method */
+	open func updateLogLevel(logLevel lvl: LogLevel) {
+		console.print(string: "\(#file) Update log level: \(lvl.description)\n")
 	}
 }

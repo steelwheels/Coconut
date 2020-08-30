@@ -126,7 +126,7 @@ public class CNSystemPreference: CNPreferenceTable
 		super.init(sectionName: "SystemPreference")
 
 		/* Set initial value */
-		let level: LogLevel = .error
+		let level: LogLevel = .nolog
 		super.set(intValue: level.rawValue, forKey: CNSystemPreference.LogLevelItem)
 
 		let style = self.interfaceStyle
