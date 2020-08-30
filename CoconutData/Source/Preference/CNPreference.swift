@@ -119,18 +119,18 @@ public class CNSystemPreference: CNPreferenceTable
 {
 	public typealias LogLevel = CNConfig.LogLevel
 
-	public let LogLevelItem		= "logLevel"
-	public let InterfaceStyleItem	= "interfaceStrle"
+	public static let LogLevelItem		= "logLevel"
+	public static let InterfaceStyleItem	= "interfaceStrle"
 
 	public init(){
 		super.init(sectionName: "SystemPreference")
 
 		/* Set initial value */
 		let level: LogLevel = .error
-		super.set(intValue: level.rawValue, forKey: LogLevelItem)
+		super.set(intValue: level.rawValue, forKey: CNSystemPreference.LogLevelItem)
 
 		let style = self.interfaceStyle
-		super.set(intValue: style.rawValue, forKey: InterfaceStyleItem)
+		super.set(intValue: style.rawValue, forKey: CNSystemPreference.InterfaceStyleItem)
 
 		/* Watch interface style switching */
 		#if os(OSX)
@@ -152,7 +152,7 @@ public class CNSystemPreference: CNPreferenceTable
 	@objc public func interfaceModeChanged(sender: NSNotification) {
 		let style = self.interfaceStyle
 		//NSLog("\(#file) interface mode changed: \(style.description)")
-		super.set(intValue: style.rawValue, forKey: InterfaceStyleItem)
+		super.set(intValue: style.rawValue, forKey: CNSystemPreference.InterfaceStyleItem)
         }
 
 	open func set(config conf: CNConfig){
@@ -187,7 +187,7 @@ public class CNSystemPreference: CNPreferenceTable
 
 	public var logLevel: LogLevel {
 		get {
-			if let ival = super.intValue(forKey: LogLevelItem) {
+			if let ival = super.intValue(forKey: CNSystemPreference.LogLevelItem) {
 				if let level = CNConfig.LogLevel(rawValue: ival) {
 					return level
 				}
@@ -196,7 +196,7 @@ public class CNSystemPreference: CNPreferenceTable
 			return CNConfig.LogLevel.detail
 		}
 		set(level){
-			super.set(intValue: level.rawValue, forKey: LogLevelItem)
+			super.set(intValue: level.rawValue, forKey: CNSystemPreference.LogLevelItem)
 		}
 	}
 }

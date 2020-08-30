@@ -7,7 +7,7 @@
 
 import Foundation
 
-open class CNLogManager
+@objc open class CNLogManager: NSObject
 {
 	private enum Message {
 		case normal(String)
@@ -24,7 +24,7 @@ open class CNLogManager
 
 	public var console: CNFileConsole { get { return mConsole }}
 
-	public init() {
+	public override init() {
 		mInputPipe	= Pipe()
 		mOutputPipe	= Pipe()
 		mErrorPipe	= Pipe()
@@ -34,6 +34,7 @@ open class CNLogManager
 		mOutputConsole	= nil
 		mLock		= NSLock()
 		mText		= []
+		super.init()
 
 		mOutputPipe.fileHandleForReading.readabilityHandler = {
 			(_ hdl: FileHandle) -> Void in
@@ -53,6 +54,10 @@ open class CNLogManager
 				self.mLock.unlock()
 			}
 		}
+
+		/* Observe LogLevel item */
+		let syspref = CNPreference.shared.systemPreference
+		syspref.addObserver(observer: self, forKey: CNSystemPreference.LogLevelItem)
 	}
 
 	public func setOutput(console cons: CNConsole?) {
@@ -72,6 +77,21 @@ open class CNLogManager
 				}
 			}
 			mText = []
+		}
+	}
+
+	open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+		switch keyPath {
+		case CNSystemPreference.LogLevelItem:
+			if let vals = change {
+				if let newval = vals[.newKey] as? Int {
+					if let newlevel = CNSystemPreference.LogLevel(rawValue: newval) {
+						console.print(string: "\(#file) Update log level: \(newlevel.description)\n")
+					}
+				}
+			}
+		default:
+			NSLog("oV: \(String(describing: keyPath))")
 		}
 	}
 }
