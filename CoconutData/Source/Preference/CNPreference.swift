@@ -30,8 +30,8 @@ open class CNConfig
 			}
 		}
 
-		public func isMatched(logLevel level: LogLevel) -> Bool {
-			return self.rawValue >= level.rawValue
+		public func isIncluded(in level: LogLevel) -> Bool {
+			return self.rawValue <= level.rawValue
 		}
 
 		public static var defaultLevel: LogLevel {

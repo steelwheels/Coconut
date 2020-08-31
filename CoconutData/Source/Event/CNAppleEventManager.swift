@@ -24,10 +24,8 @@ public class CNAppleEventManager
 
 	private var mAppleEventManager: NSAppleEventManager
 	private var mColorTable:	Dictionary<String, CNColor>
-	public  var console:		CNConsole
 
 	public init() {
-		console = CNDefaultConsole()
 		mAppleEventManager = NSAppleEventManager.shared()
 		mColorTable	   = [:]
 	}
@@ -141,22 +139,22 @@ public class CNAppleEventManager
 			break
 		}
 		if !hasset {
-			NSLog("setProperty: [Error] Unknown key=\(key)")
+			CNLog(logLevel: .error, message: "\(#function): [Error] Unknown key=\(key)")
 		}
 	}
 
 	public func dump() {
-		console.print(string: "Message from AppleEventManager\n")
+		CNLog(logLevel: .debug, message: "Message from AppleEventManager")
 	}
 
 	@objc private func getEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
-		console.print(string: "gE(0): desc=\(desc.description)\n")
+		CNLog(logLevel: .debug, message: "gE(0): desc=\(desc.description)")
 
 		var retval: NSAppleEventDescriptor? = nil
 		var retmsg: String? = nil
 
 		if let srcdesc = desc.paramDescriptor(forKeyword: CNEventCode.directObject.code()) {
-			let parser = CNEventParser(console: console)
+			let parser = CNEventParser()
 			switch parser.parseParameter(descriptor: srcdesc) {
 			case .ok(let param):
 				if let desc = param.toDescriptor() {
@@ -170,16 +168,16 @@ public class CNAppleEventManager
 		}
 
 		rep.setResult(resultValue: retval, error: retmsg)
-		console.print(string: "gE(1): rep=\(rep.description)\n")
+		CNLog(logLevel: .debug, message: "gE(1): rep=\(rep.description)")
 	}
 
 	@objc private func setEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
-		console.print(string: "sE(0): desc=\(desc.description)\n")
+		CNLog(logLevel: .debug, message: "sE(0): desc=\(desc.description)")
 
 		var retmsg: String? = nil
 		if let srcdesc = desc.paramDescriptor(forKeyword: CNEventCode.data.code()),
 		   let dstdesc = desc.paramDescriptor(forKeyword: CNEventCode.directObject.code()) {
-			let parser = CNEventParser(console: console)
+			let parser = CNEventParser()
 			switch parser.parseParameter(descriptor: srcdesc) {
 			case .ok(let srcparam):
 				switch parser.parseParameter(descriptor: dstdesc) {
@@ -194,7 +192,7 @@ public class CNAppleEventManager
 		}
 
 		rep.setResult(resultValue: nil, error: retmsg)
-		console.print(string: "sE(1): rep=\(rep.description)\n")
+		CNLog(logLevel: .debug, message: "sE(1): rep=\(rep.description)")
 	}
 
 	private func set(destination dstparam: CNEventParameter, source srcparam: CNEventParameter) -> String? {
@@ -232,11 +230,11 @@ public class CNAppleEventManager
 	}
 
 	@objc private func makeEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
-		console.print(string: "mE(0): desc=\(desc.description)\n")
+		CNLog(logLevel: .debug, message: "mE(0): desc=\(desc.description)")
 
 		var retmsg: String?	= nil
 		if let targdesc = desc.forKeyword(CNEventCode.objectClass.code()) {
-			let parser = CNEventParser(console: console)
+			let parser = CNEventParser()
 			if let target = parser.parseMakeTarget(descriptor: targdesc) {
 				switch target {
 				case .window:
@@ -252,19 +250,19 @@ public class CNAppleEventManager
 		}
 
 		rep.setResult(resultValue: nil, error: retmsg)
-		console.print(string: "mE(1): rep=\(rep.description)\n")
+		CNLog(logLevel: .debug, message: "mE(1): rep=\(rep.description)")
 	}
 
 	@objc private func openDocumentEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
-		console.print(string: "oDE: \(desc.description) \(rep.description)\n")
+		CNLog(logLevel: .debug, message: "oDE: \(desc.description) \(rep.description)")
 	}
 
 	@objc private func closeDocumentEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
-		console.print(string: "cDE(0): desc=\(desc.description)\n")
+		CNLog(logLevel: .debug, message: "cDE(0): desc=\(desc.description)")
 
 		var retmsg: String?	= nil
 		if let srcdesc = desc.paramDescriptor(forKeyword: CNEventCode.directObject.code()) {
-			let parser = CNEventParser(console: console)
+			let parser = CNEventParser()
 			switch parser.parseParameter(descriptor: srcdesc) {
 			case .ok(let param):
 				switch param {
@@ -279,7 +277,7 @@ public class CNAppleEventManager
 		}
 
 		rep.setResult(resultValue: nil, error: retmsg)
-		console.print(string: "cDE(1): rep=\(rep.description)\n")
+		CNLog(logLevel: .debug, message: "cDE(1): rep=\(rep.description)")
 	}
 
 	private func closeWindow(index idx: CNEventIndex) -> String? {
@@ -316,11 +314,11 @@ public class CNAppleEventManager
 	}
 
 	@objc private func printDocumentEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
-		console.print(string: "pDE: \(desc.description) \(rep.description)\n")
+		CNLog(logLevel: .debug, message: "pDE: \(desc.description) \(rep.description)")
 	}
 
 	@objc private func quitApplicationEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
-		console.print(string: "qAE: \(desc.description) \(rep.description)\n")
+		CNLog(logLevel: .debug, message: "qAE: \(desc.description) \(rep.description)")
 	}
 
 }

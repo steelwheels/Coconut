@@ -16,10 +16,7 @@ public class CNEventParser
 		case error(NSError)
 	}
 
-	private var mConsole:		CNConsole
-
-	public init(console cons: CNConsole){
-		mConsole = cons
+	public init(){
 	}
 
 	public func parseParameter(descriptor desc: NSAppleEventDescriptor) -> ParseResult {

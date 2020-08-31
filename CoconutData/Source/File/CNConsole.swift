@@ -13,6 +13,7 @@ public protocol CNConsole {
 	func scan() -> String?
 }
 
+/*
 public protocol CNLogging
 {
 	var console: CNConsole?	{ get }
@@ -50,7 +51,7 @@ extension CNLogging
 	private func placeString(file filestr: String, line linestr: Int, function funcstr: String) -> String {
 		return "\(filestr)/\(linestr)/\(funcstr)\n"
 	}
-}
+}*/
 
 public class CNDefaultConsole: CNConsole
 {
