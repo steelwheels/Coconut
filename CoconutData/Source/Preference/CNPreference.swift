@@ -16,6 +16,9 @@ open class CNConfig
 		case debug	= 3	// + debug log
 		case detail	= 4	// + detail
 
+		public static let min	: Int	= LogLevel.nolog.rawValue
+		public static let max	: Int 	= LogLevel.detail.rawValue
+
 		public var description: String {
 			get {
 				let result: String
