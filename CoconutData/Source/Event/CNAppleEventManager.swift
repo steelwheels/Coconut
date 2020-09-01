@@ -114,6 +114,12 @@ public class CNAppleEventManager
 		case "backgroundColor":
 			let termpref = CNPreference.shared.terminalPreference
 			return termpref.backgroundTextColor
+		case "terminalHeight":
+			let termpref = CNPreference.shared.terminalPreference
+			return NSNumber(integerLiteral: termpref.rowNumber)
+		case "terminalWidth":
+			let termpref = CNPreference.shared.terminalPreference
+			return NSNumber(integerLiteral: termpref.columnNumber)
 		default:
 			break
 		}
@@ -133,6 +139,18 @@ public class CNAppleEventManager
 			if let col = value as? NSColor {
 				let termpref = CNPreference.shared.terminalPreference
 				termpref.backgroundTextColor = col
+				hasset = true
+			}
+		case "terminalHeight":
+			if let num = value as? NSNumber {
+				let termpref = CNPreference.shared.terminalPreference
+				termpref.rowNumber = num.intValue
+				hasset = true
+			}
+		case "terminalWidth":
+			if let num = value as? NSNumber {
+				let termpref = CNPreference.shared.terminalPreference
+				termpref.columnNumber = num.intValue
 				hasset = true
 			}
 		default:
@@ -184,10 +202,10 @@ public class CNAppleEventManager
 				case .ok(let dstparam):
 					retmsg = set(destination: dstparam, source: srcparam)
 				case .error(let err):
-					retmsg = err.description
+					retmsg = err.toString()
 				}
 			case .error(let err):
-				retmsg = err.description
+				retmsg = err.toString()
 			}
 		}
 
@@ -196,37 +214,61 @@ public class CNAppleEventManager
 	}
 
 	private func set(destination dstparam: CNEventParameter, source srcparam: CNEventParameter) -> String? {
-		var result: String?
 		switch dstparam {
 		case .preference(let dstptr):
 			let termpref = CNPreference.shared.terminalPreference
-			/* Decide source color */
-			let srccolor: CNColor?
+			/* Get source value */
+			let srcvalue: CNEventImmediate
 			switch srcparam {
 			case .color(let col):
-				srccolor = col
-			case .preference(let ptr):
-				switch ptr {
-				case .foregroundColor:	srccolor = termpref.foregroundTextColor
-				case .backgroundColor:	srccolor = termpref.backgroundTextColor
+				srcvalue = .color(col)
+			case .value(let val):
+				srcvalue = .value(val)
+			case .preference(let pref):
+				switch pref {
+				case .foregroundColor:
+					srcvalue = .color(termpref.foregroundTextColor)
+				case .backgroundColor:
+					srcvalue = .color(termpref.backgroundTextColor)
+				case .terminalHeight:
+					srcvalue = .value(CNValue(intValue: termpref.rowNumber))
+				case .terminalWidth:
+					srcvalue = .value(CNValue(intValue: termpref.columnNumber))
 				}
 			case .window(_):
-				srccolor = nil
+				return "the window object can not be source parameter"
 			}
 			/* Assign to destination */
-			if let srccol = srccolor {
-				switch dstptr {
-				case .foregroundColor:
-					termpref.foregroundTextColor = srccol
-				case .backgroundColor:
-					termpref.backgroundTextColor = srccol
+			switch dstptr {
+			case .foregroundColor:
+				if let col = srcvalue.toColor() {
+					termpref.foregroundTextColor = col
+				} else {
+					return "Color object is required to set foreground color"
+				}
+			case .backgroundColor:
+				if let col = srcvalue.toColor() {
+					termpref.backgroundTextColor = col
+				} else {
+					return "Color object is required to set foreground color"
+				}
+			case .terminalHeight:
+				if let val = srcvalue.toInt() {
+					termpref.rowNumber = val
+				} else {
+					return "Integer is required to set terminal height"
+				}
+			case .terminalWidth:
+				if let val = srcvalue.toInt() {
+					termpref.columnNumber = val
+				} else {
+					return "Integer is required to set termninal width"
 				}
 			}
-			result = nil
-		case .window(_), .color(_):
-			result = "Not writable destination"
+		case .window(_), .color(_), .value(_):
+			return "Not writable destination"
 		}
-		return result
+		return nil
 	}
 
 	@objc private func makeEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
@@ -266,7 +308,7 @@ public class CNAppleEventManager
 			switch parser.parseParameter(descriptor: srcdesc) {
 			case .ok(let param):
 				switch param {
-				case .color(_), .preference(_):
+				case .color(_), .preference(_), .value(_):
 					retmsg = "Invalid target to close: \(param.description)"
 				case .window(let index):
 					retmsg = closeWindow(index: index)

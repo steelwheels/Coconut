@@ -25,7 +25,7 @@ end tell
 'aevt'\'ansr'{ '----':'cRGB'($6...$), 'errn':0 }
 ````
 
-### set property
+### set property (color)
 #### AppleScript
 ````
 tell application "JSTerminal"
@@ -49,6 +49,32 @@ end tell
 #### Event descriptor
 ````
 'core'\'crel'{ 'kocl':'docu', &'subj':null(), &'csig':65536 }
+````
+
+### set property (terminal width)
+#### AppleScript
+````
+tell application "JSTerminal"
+	set terminal width to 100
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'setd'{ 'data':100, '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'twdt', 'from':null() }, &'csig':65536 }
+````
+
+### set property (terminal height)
+#### AppleScript
+````
+tell application "JSTerminal"
+	set terminal height to 30
+end
+````
+
+#### Event descriptor
+````
+'core'\'setd'{ 'data':30, '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'thgt', 'from':null() }, &'csig':65536 }
 ````
 
 ### close window
@@ -98,4 +124,4 @@ The Cocoa foundation decode it automatically.
 
 # Related Links
 * [Steel Wheels Project](https://steelwheels.github.io): The owner of this document.
-* [Defihtions of event ID](http://frontierkernel.sourceforge.net/cgi-bin/lxr/source/Common/headers/macconv.h): Copyright (C) 1992-2004 UserLand Software, Inc. 
+* [Defihtions of event ID](http://frontierkernel.sourceforge.net/cgi-bin/lxr/source/Common/headers/macconv.h): Copyright (C) 1992-2004 UserLand Software, Inc.

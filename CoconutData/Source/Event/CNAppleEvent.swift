@@ -41,6 +41,8 @@ public enum CNEventCode: String {
 	case	property		= "prop"
 	case	red			= "red "	// custom
 	case	short			= "shor"
+	case	terminalHeight		= "thgt"	// custom
+	case	terminalWidth		= "twdt"	// custom
 	case	text			= "utxt"
 	case	trueValue		= "true"
 	case	window			= "cwin"
@@ -75,7 +77,7 @@ public enum CNEventCode: String {
 	}
 }
 
-private func CNStringToFourCharCode(_ src: String) -> FourCharCode {
+public func CNStringToFourCharCode(_ src: String) -> FourCharCode {
 	var result: UInt32 = 0
 	var idx     = src.startIndex
 	let end     = src.endIndex

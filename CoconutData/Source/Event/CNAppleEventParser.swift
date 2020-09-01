@@ -28,11 +28,17 @@ public class CNEventParser
 				switch desc.enumCodeValue {
 				case CNEventCode.window.code():
 					return .ok(.window(.none))
+				case CNEventCode.terminalWidth.code():
+					return .ok(.preference(.terminalWidth))
+				case CNEventCode.terminalHeight.code():
+					return .ok(.preference(.terminalHeight))
 				default:
-					if let col = desc.toColor() {
+					if let val = desc.toValue() {
+						return .ok(.value(val))
+					} else if let col = desc.toColor() {
 						return .ok(.color(col))
 					} else {
-						let err = NSError.parseError(message: "Invalid format")
+						let err = NSError.parseError(message: "Invalid format: \(desc.description)")
 						return .error(err)
 					}
 				}
@@ -105,6 +111,10 @@ public class CNEventParser
 			result = .preference(.foregroundColor)
 		case CNEventCode.backgroundColor.code():
 			result = .preference(.backgroundColor)
+		case CNEventCode.terminalHeight.code():
+			result = .preference(.terminalHeight)
+		case CNEventCode.terminalWidth.code():
+			result = .preference(.terminalWidth)
 		case CNEventCode.black.code():
 			result = .color(CNColor.black)
 		case CNEventCode.red.code():
