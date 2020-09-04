@@ -15,5 +15,26 @@ class AppDelegate: CNApplicationDelegate
 	func applicationWillTerminate(_ aNotification: Notification) {
 		// Insert code here to tear down your application
 	}
+
+	override func applicationDidFinishLaunching(_ notification: Notification) {
+		super.applicationDidFinishLaunching(notification)
+
+		// open text edit
+		NSLog("open TextEdit.app")
+		if let runapp = CNRemoteApplication.launch(bundleIdentifier: "com.apple.TextEdit") {
+			let textedit = CNRemoteApplication(application: runapp)
+			if let err = textedit.activate() {
+				NSLog("Failed to activate: \(err.toString())")
+			} else {
+				if let err = textedit.makeNewDocument() {
+					NSLog("Failed to make document: \(err.toString())")
+				} else {
+					NSLog("open TextEdit.app -> done")
+				}
+			}
+		} else {
+			NSLog("Failed to launch text edit")
+		}
+	}
 }
 

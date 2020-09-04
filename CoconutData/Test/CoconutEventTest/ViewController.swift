@@ -6,6 +6,7 @@
 //  Copyright © 2020 Steel Wheels Project. All rights reserved.
 //
 
+import CoconutData
 import Cocoa
 
 class ViewController: NSViewController {

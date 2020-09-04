@@ -1,7 +1,7 @@
-# Translation resuls from AppleScript to AppleEventDescriptor
+# Contents of AppleEventDescriptor given by source AppleScript
 
 ## About this page
-This document describes about the setting of [NSAppleEventDescriptor](https://developer.apple.com/documentation/foundation/nsappleeventdescriptor) refrecting the souce code written by AppleScript.
+This document describes about the contents of [NSAppleEventDescriptor](https://developer.apple.com/documentation/foundation/nsappleeventdescriptor) with is given as execution result of source AppleScript.
 
 ## Copyright
 This document is distributed under [GNU Free Documentation License](https://www.gnu.org/licenses/fdl-1.3.en.html).
@@ -36,6 +36,18 @@ end tell
 #### Event descriptor
 ````
 'core'\'setd'{ 'data':[ 28770, 26988, 29811 ], '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'fgcl', 'from':null() }, &'csig':65536 }
+````
+### activate
+#### AppleScript
+````
+tell application "TextEdit"
+	activate
+end tell
+````
+
+#### Event descriptor
+````
+'misc'\'actv'{  }
 ````
 
 ### new window

@@ -12,6 +12,8 @@ import Foundation
 private var mEventCodeTable: Dictionary<CNEventCode, AEEventClass> = [:]
 
 public enum CNEventCode: String {
+	case	activate		= "actv"
+	case	appleEvent		= "aevt"
 	case 	backgroundColor		= "pbcl"
 	case	black			= "blak"	// custom
 	case	blue			= "blue"	// custom
@@ -22,6 +24,7 @@ public enum CNEventCode: String {
 	case	core			= "core"
 	case	cyan			= "cyan"	// custom
 	case	data			= "data"
+	case	document		= "docu"
 	case	directObject		= "----"
 	case	double			= "doub"
 	case	errorCount		= "errn"
@@ -34,13 +37,17 @@ public enum CNEventCode: String {
 	case	long			= "long"
 	case	magenta			= "mgnt"	// custom
 	case	make			= "crel"
+	case	misc			= "misc"
 	case	object			= "obj "
 	case	objectClass		= "kocl"
+	case	openApplication		= "oapp"
 	case	openDocument		= "odoc"
 	case	printDocument		= "pdoc"
 	case	property		= "prop"
 	case	red			= "red "	// custom
 	case	short			= "shor"
+	case	signatureClass		= "csig"
+	case	subject			= "subj"
 	case	terminalHeight		= "thgt"	// custom
 	case	terminalWidth		= "twdt"	// custom
 	case	text			= "utxt"
