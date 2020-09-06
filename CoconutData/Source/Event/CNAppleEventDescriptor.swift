@@ -11,6 +11,11 @@ import Foundation
 
 public extension NSAppleEventDescriptor
 {
+	static func object() -> NSAppleEventDescriptor? {
+		/* Allocate record but it has object specifier */
+		return NSAppleEventDescriptor.record().coerce(toDescriptorType: CNEventCode.object.code())
+	}
+
 	func setResult(resultValue retval: NSAppleEventDescriptor?, error str: String?){
 		if let retobj = retval {
 			self.setParam(retobj, forKeyword: CNEventCode.directObject.code())

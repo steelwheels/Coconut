@@ -29,12 +29,20 @@ class AppDelegate: CNApplicationDelegate
 				if let err = textedit.makeNewDocument() {
 					NSLog("Failed to make document: \(err.toString())")
 				} else {
-					NSLog("open TextEdit.app -> done")
+					if let err = textedit.setContext(context: "Hello, world !!") {
+						NSLog("Failed to set context: \(err.toString())")
+					} else {
+						NSLog("open TextEdit.app -> done")
+					}
 				}
 			}
 		} else {
 			NSLog("Failed to launch text edit")
 		}
+
+		//let doc0 = CNRemoteApplication.index(number: 1, of: .document)
+		//let sel0 = CNRemoteApplication.selectAllContext(of: doc0)
+		//NSLog("desc=\(sel0)")
 	}
 }
 

@@ -126,6 +126,22 @@ end tell
 'core'\'clos'{ '----':'obj '{ 'form':'indx', 'want':'cwin', 'seld':1, 'from':null() }, &'csig':65536 }
 ````
 
+### set property (text to front window)
+
+#### AppleScript
+````
+tell application "JSTerminal"
+	set text of front document to "Hello, world !!"
+end tell
+````
+
+#### Event descriptor
+`abso`($206C6C61$) = NSAppleEventDescriptor("abso", "all ")
+
+````
+'core'\'setd'{ 'data':'utxt'("Hello, world !!"), '----':'obj '{ 'form':'indx', 'want':'ctxt', 'seld':'abso'($206C6C61$), 'from':'obj '{ 'form':'indx', 'want':'docu', 'seld':1, 'from':null() } }, &'csig':65536 }
+````
+
 ### quit application
 The Cocoa foundation decode it automatically.
 
