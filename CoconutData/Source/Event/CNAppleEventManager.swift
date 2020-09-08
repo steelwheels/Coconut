@@ -64,6 +64,13 @@ public class CNAppleEventManager
 			mAppleEventManager.setEventHandler(self, andSelector: #selector(closeDocumentEvent(descriptor:reply:)), forEventClass: eclass, andEventID: eid)
 		}
 
+		/* save event */
+		if true {
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.saveDocument.code()
+			mAppleEventManager.setEventHandler(self, andSelector: #selector(saveDocumentEvent(descriptor:reply:)), forEventClass: eclass, andEventID: eid)
+		}
+
 		/* printDocument event */
 		if true {
 			let eclass	= CNEventCode.core.code()
@@ -99,7 +106,12 @@ public class CNAppleEventManager
 	}
 
 	public func hasProperty(named name: String) -> Bool {
-		return property(forKey: name) != nil
+		if property(forKey: name) != nil {
+			return true
+		} else {
+			CNLog(logLevel: .detail, message: "Inquiry about property: \(name)")
+			return false
+		}
 	}
 
 	public func property(forKey key: String) -> Any? {
@@ -121,7 +133,7 @@ public class CNAppleEventManager
 			let termpref = CNPreference.shared.terminalPreference
 			return NSNumber(integerLiteral: termpref.columnNumber)
 		default:
-			break
+			CNLog(logLevel: .error, message: "[Error] Can not get property named: \(key)")
 		}
 		return nil
 	}
@@ -157,7 +169,7 @@ public class CNAppleEventManager
 			break
 		}
 		if !hasset {
-			CNLog(logLevel: .error, message: "\(#function): [Error] Unknown key=\(key)")
+			CNLog(logLevel: .error, message: "[Error] Can not set the property named: \(key)")
 		}
 	}
 
@@ -320,6 +332,12 @@ public class CNAppleEventManager
 
 		rep.setResult(resultValue: nil, error: retmsg)
 		CNLog(logLevel: .debug, message: "cDE(1): rep=\(rep.description)")
+	}
+
+	@objc private func saveDocumentEvent(descriptor desc: NSAppleEventDescriptor, reply rep: NSAppleEventDescriptor) {
+		CNLog(logLevel: .debug, message: "sDE(0): desc=\(desc.description)")
+		rep.setResult(resultValue: nil, error: "Save command is not supported yet")
+		CNLog(logLevel: .debug, message: "sDE(1): rep=\(rep.description)")
 	}
 
 	private func closeWindow(index idx: CNEventIndex) -> String? {

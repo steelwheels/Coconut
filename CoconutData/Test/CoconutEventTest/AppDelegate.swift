@@ -29,10 +29,33 @@ class AppDelegate: CNApplicationDelegate
 				if let err = textedit.makeNewDocument() {
 					NSLog("Failed to make document: \(err.toString())")
 				} else {
-					if let err = textedit.setContext(context: "Hello, world !!") {
+					if let err = textedit.setContentOfFrontWindow(context: "Hello, world !!") {
 						NSLog("Failed to set context: \(err.toString())")
 					} else {
-						NSLog("open TextEdit.app -> done")
+						switch textedit.contentOfFrontWindow() {
+						case .ok(let str):
+							NSLog("TEXT=\(str)")
+							if let err = textedit.setNameOfFrontWindow(name: "CoconutEventTestText") {
+								NSLog("Failed to set window name: \(err.toString())")
+							} else {
+								switch textedit.nameOfFrontWindow() {
+								case .ok(let name):
+									NSLog("FileName = \(name)")
+									let savepath = NSHomeDirectory() + "/CoconutEventTest.txt"
+									let saveurl  = URL(fileURLWithPath: savepath)
+									if let err = textedit.saveToFile(fileURL: saveurl) {
+										NSLog("Failed to save file: \(saveurl.path) -> \(err.toString())")
+									} else {
+										NSLog("save file done: \(saveurl.path)")
+									}
+									NSLog("open TextEdit.app -> done")
+								case .error(let err):
+									NSLog("Failed to get name: \(err.toString())")
+								}
+		 					}
+						case .error(let err):
+							NSLog("Failed to get context: \(err.toString())")
+						}
 					}
 				}
 			}

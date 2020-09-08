@@ -7,7 +7,7 @@ This document describes about the contents of [NSAppleEventDescriptor](https://d
 This document is distributed under [GNU Free Documentation License](https://www.gnu.org/licenses/fdl-1.3.en.html).
 
 ## Translation results
-### get property
+### get property (color)
 #### AppleScript
 ````
 tell application "JSTerminal"
@@ -25,6 +25,19 @@ end tell
 'aevt'\'ansr'{ '----':'cRGB'($6...$), 'errn':0 }
 ````
 
+### get property (name of front document)
+#### AppleScript
+````
+tell application "JSTerminal"
+	set fname to name of front document
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'getd'{ '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'pnam', 'from':'obj '{ 'form':'indx', 'want':'docu', 'seld':1, 'from':null() } }, &'csig':65536 }
+````
+
 ### set property (color)
 #### AppleScript
 ````
@@ -37,6 +50,20 @@ end tell
 ````
 'core'\'setd'{ 'data':[ 28770, 26988, 29811 ], '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'fgcl', 'from':null() }, &'csig':65536 }
 ````
+
+### set property (name of front window)
+#### AppleScript
+````
+tell application "JSTerminal"
+	set name of front document to "a.txt"
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'setd'{ 'data':'utxt'("a.txt"), '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'pnam', 'from':'obj '{ 'form':'indx', 'want':'docu', 'seld':1, 'from':null() } }, &'csig':65536 }
+````
+
 ### activate
 #### AppleScript
 ````
@@ -87,6 +114,18 @@ end
 #### Event descriptor
 ````
 'core'\'setd'{ 'data':30, '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'thgt', 'from':null() }, &'csig':65536 }
+````
+
+### save document
+#### AppleScript
+````
+set fpath to (((POSIX path of (path to users folder)) & "tomoo/tmp_dir/a.txt") as POSIX file)
+save front document as text in fpath
+````
+
+#### Event descriptor
+````
+'core'\'save'{ 'fltp':'ctxt', 'kfil':"file:///Users/tomoo/tmp_dir/a.txt", '----':'obj '{ 'form':'indx', 'want':'docu', 'seld':1, 'from':null() }, &'csig':65536, &'shas':[ 'sbhs'("7bfa14215d92e5425ffa9a809aae178c74823641d59791bfc509d81ae9643600;00;00000000;00000000;00000000;0000000000000020;com.apple.app-sandbox.read-write;01;01000004;0000000204a221ab;01;/users/tomoo/tmp_dir/a.txt") ] }
 ````
 
 ### close window
@@ -140,6 +179,23 @@ end tell
 
 ````
 'core'\'setd'{ 'data':'utxt'("Hello, world !!"), '----':'obj '{ 'form':'indx', 'want':'ctxt', 'seld':'abso'($206C6C61$), 'from':'obj '{ 'form':'indx', 'want':'docu', 'seld':1, 'from':null() } }, &'csig':65536 }
+````
+
+#### AppleScript
+````
+tell application "JSTerminal"
+	set duptext to text of front document
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'crel'{ 'kocl':'docu', &'subj':null(), &'csig':65536 }
+````
+
+#### Ack from receiver
+````
+'aevt'\'ansr'{ '----':'obj '{ 'from':null(), 'want':'docu', 'form':'name', 'seld':'utxt'("RESULT_TEXT") } }
 ````
 
 ### quit application
