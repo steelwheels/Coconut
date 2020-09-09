@@ -147,6 +147,25 @@ open class CNAppleEventGenerator
 		return result
 	}
 
+	public func open(fileURL url: URL) -> NSError? {
+		let result: NSError?
+		if let appdesc = mEventDescriptor {
+			let eclass	= CNEventCode.appleEvent.code()
+			let eid		= CNEventCode.openDocument.code()
+			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			/* File URL */
+			newdesc.setDescriptor(NSAppleEventDescriptor(fileURL: url), forKeyword: CNEventCode.directObject.code())
+			/* Execute */
+			switch CNRemoteApplication.execute(descriptor: newdesc) {
+			case .ok(_):		result = nil
+			case .error(let err):	result = err
+			}
+		} else {
+			result = NSError.parseError(message: "No event descriptor")
+		}
+		return result
+	}
+
 	public func setNameOfFrontWindow(name nm: String) -> NSError? {
 		let result: NSError?
 		if let appdesc = mEventDescriptor {
@@ -238,7 +257,7 @@ open class CNAppleEventGenerator
 		return result
 	}
 
-	public func saveToFile(fileURL url: URL) -> NSError? {
+	public func save(fileURL url: URL) -> NSError? {
 		let result: NSError?
 		if let appdesc = mEventDescriptor {
 			let eclass	= CNEventCode.core.code()

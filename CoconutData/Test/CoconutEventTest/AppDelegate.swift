@@ -26,6 +26,12 @@ class AppDelegate: CNApplicationDelegate
 			if let err = textedit.activate() {
 				NSLog("Failed to activate: \(err.toString())")
 			} else {
+				let inurl = URL(fileURLWithPath: "/Users/tomoo/tmp_dir/a.txt")
+				if let err = textedit.open(fileURL: inurl) {
+					NSLog("Failed to make document: \(err.toString())")
+				}
+				return
+
 				if let err = textedit.makeNewDocument() {
 					NSLog("Failed to make document: \(err.toString())")
 				} else {
@@ -43,7 +49,7 @@ class AppDelegate: CNApplicationDelegate
 									NSLog("FileName = \(name)")
 									let savepath = NSHomeDirectory() + "/CoconutEventTest.txt"
 									let saveurl  = URL(fileURLWithPath: savepath)
-									if let err = textedit.saveToFile(fileURL: saveurl) {
+									if let err = textedit.save(fileURL: saveurl) {
 										NSLog("Failed to save file: \(saveurl.path) -> \(err.toString())")
 									} else {
 										NSLog("save file done: \(saveurl.path)")
