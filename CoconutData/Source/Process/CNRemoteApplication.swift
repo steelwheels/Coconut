@@ -386,10 +386,29 @@ open class CNAppleEventGenerator
 			//CNLog(logLevel: .debug, message: "Send event: \(desc.description)")
 			NSLog("Send event: \(desc.description)")
 			let result = try desc.sendEvent(options: .defaultOptions, timeout: 10.0)
-			return .ok(result)
+			if let err = CNAppleEventGenerator.errorInDescription(descriptor: result) {
+				return .error(err)
+			} else {
+				return .ok(result)
+			}
 		} catch let err as NSError {
 			return .error(err)
 		}
+	}
+
+	private static func errorInDescription(descriptor desc: NSAppleEventDescriptor) -> NSError? {
+		if let errndesc = desc.paramDescriptor(forKeyword: CNEventCode.errorCount.code()) {
+			NSLog("errorInDescriptor: \(desc.description)")
+			let errnum = errndesc.int32Value
+			var errstr: String = ""
+			if let errsdesc = desc.paramDescriptor(forKeyword: CNEventCode.errorString.code()) {
+				if let estr = errsdesc.stringValue {
+					errstr = estr
+				}
+			}
+			return NSError.parseError(message: "AppleEventError(\(errnum)) \(errstr)")
+		}
+		return nil
 	}
 
 	public enum Object {
