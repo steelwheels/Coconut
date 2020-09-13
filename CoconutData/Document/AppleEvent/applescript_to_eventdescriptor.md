@@ -206,6 +206,22 @@ The Cocoa foundation decode it automatically.
 `core`\`crel` {`kocl`:`cwin`, &`subj`:null(), &`csig`:65536}
 ````
 
+## Mail operation
+### Make outgoing message
+#### AppleScript
+````
+tell application "Mail"
+	make new outgoing message
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'crel'{ 'kocl':'bcke', &'subj':null(), &'csig':65536 }
+````
+
+
+
 # Related Links
 * [Steel Wheels Project](https://steelwheels.github.io): The owner of this document.
 * [Defihtions of event ID](http://frontierkernel.sourceforge.net/cgi-bin/lxr/source/Common/headers/macconv.h): Copyright (C) 1992-2004 UserLand Software, Inc.

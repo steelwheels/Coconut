@@ -24,6 +24,8 @@
 	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Please permit to use AppleEvent</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
@@ -38,7 +40,5 @@
 	<true/>
 	<key>OSAScriptingDefinition</key>
 	<string>CoconutScript.sdef</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>Please permit to use AppleEvent</string>
 </dict>
 </plist>

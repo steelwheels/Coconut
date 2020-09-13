@@ -114,47 +114,91 @@ open class CNAppleEventGenerator
 		mEventDescriptor = desc
 	}
 
-	public func activate() -> NSError? {
-		let result: NSError?
+	public func activate() -> ExecResult {
+		let result: ExecResult
 		if let appdesc = mEventDescriptor {
 			let eclass	= CNEventCode.misc.code()
 			let eid		= CNEventCode.activate.code()
 			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(_):		result = nil
-			case .error(let err):	result = err
-			}
+			result = CNRemoteApplication.execute(descriptor: newdesc)
 		} else {
-			result = NSError.parseError(message: "No event descriptor")
+			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
 		return result
 	}
 
-	public func makeNewDocument() -> NSError? {
-		let result: NSError?
+	public func version() -> ExecResult {
+		let result: ExecResult
+		if let appdesc = mEventDescriptor {
+			let eclass	= CNEventCode.application.code()
+			let eid		= CNEventCode.getData.code()
+			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			let versdesc	= NSAppleEventDescriptor(enumCode: CNEventCode.version.code())
+			CNRemoteApplication.setRefereCommand(target: newdesc, source: versdesc)
+			result = CNRemoteApplication.execute(descriptor: newdesc)
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
+		}
+		return result
+	}
+
+	public func makeNewDocument() -> ExecResult {
+		let result: ExecResult
 		if let appdesc = mEventDescriptor {
 			let eclass	= CNEventCode.core.code()
 			let eid		= CNEventCode.make.code()
 			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
 			CNRemoteApplication.setDocumentProperty(target: newdesc, name: nil)
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(_):		result = nil
-			case .error(let err):	result = err
-			}
+			result = CNRemoteApplication.execute(descriptor: newdesc)
 		} else {
-			result = NSError.parseError(message: "No event descriptor")
+			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
 		return result
 	}
 
-	public func open(fileURL url: URL) -> NSError? {
-		let result: NSError?
+	public func makeNewMail(subject substr: String) -> ExecResult {
+		let result: ExecResult
+		if let appdesc = mEventDescriptor {
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.make.code()
+			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			CNRemoteApplication.setMailProperty(target: newdesc, subject: substr)
+			switch CNRemoteApplication.execute(descriptor: newdesc) {
+			case .ok(let desc):	result = .ok(desc)
+			case .error(let err):	result = .error(err)
+			}
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
+		}
+		return result
+	}
+
+	public func open(fileURL url: URL) -> ExecResult {
+		let result: ExecResult
 		if let appdesc = mEventDescriptor {
 			let eclass	= CNEventCode.appleEvent.code()
 			let eid		= CNEventCode.openDocument.code()
 			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
 			/* File URL */
 			newdesc.setDescriptor(NSAppleEventDescriptor(fileURL: url), forKeyword: CNEventCode.directObject.code())
+			/* Execute */
+			result = CNRemoteApplication.execute(descriptor: newdesc)
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
+		}
+		return result
+	}
+
+	public func close(fileURL url: URL?) -> NSError? {
+		let result: NSError?
+		if let appdesc = mEventDescriptor {
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.closeDocument.code()
+			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			/* 'kfil':File path */
+			if let u = url {
+				newdesc.setDescriptor(NSAppleEventDescriptor(fileURL: u), forKeyword: CNEventCode.file.code())
+			}
 			/* Execute */
 			switch CNRemoteApplication.execute(descriptor: newdesc) {
 			case .ok(_):		result = nil
@@ -303,6 +347,19 @@ open class CNAppleEventGenerator
 		targ.setAttribute(namedesc, forKeyword: CNEventCode.subject.code())
 
 		// signature:65536
+		let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
+		targ.setAttribute(sigdesc, forKeyword: CNEventCode.signatureClass.code())
+	}
+
+	private static func setMailProperty(target targ: NSAppleEventDescriptor, subject substr: String) {
+		// objectType:outgoingMessage
+		let typedesc = NSAppleEventDescriptor(enumCode: CNEventCode.outgoingMessage.code())
+		targ.setParam(typedesc, forKeyword: CNEventCode.objectClass.code())
+
+		// &subject:null()
+		targ.setAttribute(NSAppleEventDescriptor(string: substr), forKeyword: CNEventCode.subject.code())
+
+		// &signature:65536
 		let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
 		targ.setAttribute(sigdesc, forKeyword: CNEventCode.signatureClass.code())
 	}

@@ -19,18 +19,61 @@ class AppDelegate: CNApplicationDelegate
 	override func applicationDidFinishLaunching(_ notification: Notification) {
 		super.applicationDidFinishLaunching(notification)
 
+		self.controlTextEdit()
+		//self.controlMail()
+	}
+
+	private func controlTextEdit() {
 		// open text edit
 		NSLog("open TextEdit.app")
-		if let runapp = CNRemoteApplication.launch(bundleIdentifier: "com.apple.TextEdit") {
-			let textedit = CNRemoteApplication(application: runapp)
-			if let err = textedit.activate() {
-				NSLog("Failed to activate: \(err.toString())")
-			} else {
-				let inurl = URL(fileURLWithPath: "/Users/tomoo/tmp_dir/a.txt")
+
+		guard let runapp = CNRemoteApplication.launch(bundleIdentifier: "com.apple.TextEdit") else {
+			NSLog("Failed to launch text edit")
+			return
+		}
+
+		let textedit = CNRemoteApplication(application: runapp)
+
+		/*
+		switch textedit.version() {
+		case .ok(let desc):
+			NSLog("version -> \(desc.description)")
+		case .error(let err):
+			NSLog("Failed to get version: \(err.toString())")
+			return
+		}*/
+
+		switch textedit.activate() {
+		case .ok(let desc):
+			NSLog("activate -> \(desc.description)")
+		case .error(let err):
+			NSLog("Failed to get version: \(err.toString())")
+			return
+		}
+
+		if let inurl = URL.openPanel(title: "Select .txt file", selection: .SelectFile, fileTypes: ["txt", "js"]) {
+			switch textedit.open(fileURL: inurl) {
+			case .ok(let desc):
+				NSLog("open -> \(desc.description)")
+			case .error(let err):
+				NSLog("Failed to open: \(err.toString())")
+				return
+			}
+		} else {
+			NSLog("Failed to select file")
+			return
+		}
+
+		/*
+				NSLog("activate -> ack \(desc.description)")
+
 				if let err = textedit.open(fileURL: inurl) {
 					NSLog("Failed to make document: \(err.toString())")
 				}
-				return
+
+				if let err = textedit.close(fileURL: nil) {
+					NSLog("Failed to close document: \(err.toString())")
+				}
 
 				if let err = textedit.makeNewDocument() {
 					NSLog("Failed to make document: \(err.toString())")
@@ -64,14 +107,36 @@ class AppDelegate: CNApplicationDelegate
 						}
 					}
 				}
-			}
-		} else {
-			NSLog("Failed to launch text edit")
-		}
+
 
 		//let doc0 = CNRemoteApplication.index(number: 1, of: .document)
 		//let sel0 = CNRemoteApplication.selectAllContext(of: doc0)
 		//NSLog("desc=\(sel0)")
+*/
+	}
+
+	private func controlMail() {
+		// open mail
+		NSLog("open Mail.app")
+		guard let runapp = CNRemoteApplication.launch(bundleIdentifier: "com.apple.mail") else {
+			NSLog("Failed to launch Mail application")
+			return
+		}
+		let mail = CNRemoteApplication(application: runapp)
+		switch mail.activate() {
+		case .ok(let desc):
+			NSLog("activate -> ack: \(desc.description)")
+		case .error(let err):
+			NSLog("Failed to activate: \(err.toString())\n")
+			return
+		}
+		switch mail.makeNewMail(subject: "Message from CoconutEventTest") {
+		case .ok(let desc):
+			NSLog("make new mail ... done: \(desc.description)")
+		case .error(let err):
+			NSLog("Failed to make new mail: \(err.toString())\n")
+			return
+		}
 	}
 }
 
