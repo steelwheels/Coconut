@@ -215,12 +215,47 @@ tell application "Mail"
 end tell
 ````
 
+````
+tell application "AppleEventChecker"
+	activate
+	set msg to make new outgoing message with properties {subject:"subject", sender:"tomoo", content:"content", visible:true, message signature:"steel.wheels.project"}
+end tell
+````
+
 #### Event descriptor
 ````
 'core'\'crel'{ 'kocl':'bcke', &'subj':null(), &'csig':65536 }
 ````
 
+````
+'core'\'crel'{ 'kocl':'bcke', 'prdt':{ 'subj':'utxt'("subject"), 'sndr':'utxt'("tomoo"), 'ctnt':'utxt'("content"), 'pvis':'true'("true"), 'tnrg':'utxt'("steel.wheels.project") }, &'subj':null(), &'csig':65536 }
+````
 
+## Safari operation
+### Open URL
+#### AppleScript
+````
+tell application "AppleEventChecker"
+	tell window 1
+		set URL of current tab to "https://steelwheels.github.io"
+	end tell
+	activate
+end tell
+````
+
+#### Event descriptor
+````
+'core'\'setd'{ 'data':'utxt'("https://steelwheels.github.io"), '----':'obj '{ 'form':'prop', 'want':'prop', 'seld':'pURL', 'from':'obj '{ 'form':'prop', 'want':'prop', 'seld':'cTab', 'from':'obj '{ 'form':'indx', 'want':'cwin', 'seld':1, 'from':null() } } }, &'csig':65536 }
+````
+
+#### AppleScript
+````
+set newtab to make new tab of front window
+````
+
+````
+'core'\'crel'{ 'kocl':'tab ', 'insh':'obj '{ 'form':'indx', 'want':'cwin', 'seld':1, 'from':null() }, &'csig':65536 }
+````
 
 # Related Links
 * [Steel Wheels Project](https://steelwheels.github.io): The owner of this document.

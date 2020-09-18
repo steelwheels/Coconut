@@ -27,6 +27,7 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 		super.init()
 	}
 
+	#if os(OSX)
 	open func applicationDidFinishLaunching(_ notification: Notification) {
 		#if os(OSX)
 			NSLog("Setup event manager")
@@ -35,7 +36,6 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 		#endif
 	}
 
-	#if os(OSX)
 	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
 		NSLog("Access to the delegateHandlesKey: \(key)")
 		let mgr = CNAppleEventManager.shared()

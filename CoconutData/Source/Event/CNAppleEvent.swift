@@ -23,10 +23,12 @@ public enum CNEventCode: String {
 	case	application		= "capp"
 	case	closeDocument		= "clos"
 	case	color			= "cRGB"
+	case	content			= "ctnt"
 	case	context			= "ctxt"
 	case	core			= "core"
 	case	make			= "crel"
 	case	signatureClass		= "csig"
+	case	windowTab		= "cTab"
 	case	window			= "cwin"
 	case	cyan			= "cyan"	// custom
 	case	data			= "data"
@@ -54,8 +56,10 @@ public enum CNEventCode: String {
 	case 	backgroundColor		= "pbcl"
 	case	printDocument		= "pdoc"
 	case	name			= "pnam"
+	case	propertyData		= "prdt"
 	case	property		= "prop"
 	case 	textColor		= "ptxc"
+	case	urlProperty		= "pURL"
 	case	visible			= "pvis"
 	case	quitApplication		= "quit"
 	case	red			= "red "	// custom

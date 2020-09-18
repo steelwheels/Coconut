@@ -23,7 +23,8 @@ install: dummy
 	  -project $(PROJECT_NAME).xcodeproj \
 	  -configuration Release \
 	  -sdk iphonesimulator \
-	  ONLY_ACTIVE_ARCH=NO DSTROOT=/ \
+	  -arch x86_64 \
+	  ONLY_ACTIVE_ARCH=YES DSTROOT=/ \
 	  INSTALL_PATH=$(INSTALL_PATH)/iphonesimulator
 
  	# Copy framework

@@ -9,7 +9,7 @@ import Foundation
 
 #if os(OSX)
 
-open class CNRemoteApplication: CNAppleEventGenerator
+open class CNRemoteApplication
 {
 	public static func launch(application appurl: URL?, document docurl: URL?) -> NSRunningApplication? {
 		do {
@@ -53,18 +53,6 @@ open class CNRemoteApplication: CNAppleEventGenerator
 
 	public init(application runapp: NSRunningApplication){
 		mRunningApplication = runapp
-		let desc: NSAppleEventDescriptor?
-		if let bident = runapp.bundleIdentifier {
-			//NSLog("init: bundle=\(bident)")
-			desc = NSAppleEventDescriptor(bundleIdentifier: bident)
-		} else if let url = runapp.bundleURL {
-			//NSLog("init: URL=\(url.absoluteString)")
-			desc = NSAppleEventDescriptor(applicationURL: url)
-		} else {
-			//NSLog("init: nil")
-			desc = nil
-		}
-		super.init(eventDescriptor: desc)
 	}
 
 	public var name: String? {
@@ -96,10 +84,8 @@ open class CNRemoteApplication: CNAppleEventGenerator
 	}
 }
 
-open class CNAppleEventGenerator
+open class CNEventReceiverApplication: CNRemoteApplication
 {
-	private var mEventDescriptor:		NSAppleEventDescriptor?
-
 	public enum ExecResult {
 		case	ok(NSAppleEventDescriptor)
 		case	error(NSError)
@@ -110,140 +96,172 @@ open class CNAppleEventGenerator
 		case	error(NSError)
 	}
 
-	public init(eventDescriptor desc: NSAppleEventDescriptor?) {
-		mEventDescriptor = desc
+	private var mApplicationDescriptor: NSAppleEventDescriptor?
+
+	public var applicationDescriptor: NSAppleEventDescriptor? {
+		get { return mApplicationDescriptor }
+	}
+
+	public override init(application runapp: NSRunningApplication){
+		let desc: NSAppleEventDescriptor?
+		if let bident = runapp.bundleIdentifier {
+			//NSLog("init: bundle=\(bident)")
+			desc = NSAppleEventDescriptor(bundleIdentifier: bident)
+		} else if let url = runapp.bundleURL {
+			//NSLog("init: URL=\(url.absoluteString)")
+			desc = NSAppleEventDescriptor(applicationURL: url)
+		} else {
+			//NSLog("init: nil")
+			desc = nil
+		}
+		mApplicationDescriptor = desc
+		super.init(application: runapp)
 	}
 
 	public func activate() -> ExecResult {
 		let result: ExecResult
-		if let appdesc = mEventDescriptor {
+		if let appdesc = applicationDescriptor {
 			let eclass	= CNEventCode.misc.code()
 			let eid		= CNEventCode.activate.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			result = CNRemoteApplication.execute(descriptor: newdesc)
+			let newdesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			result = execute(descriptor: newdesc)
 		} else {
 			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
 		return result
 	}
 
-	public func version() -> ExecResult {
-		let result: ExecResult
-		if let appdesc = mEventDescriptor {
-			let eclass	= CNEventCode.application.code()
-			let eid		= CNEventCode.getData.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			let versdesc	= NSAppleEventDescriptor(enumCode: CNEventCode.version.code())
-			CNRemoteApplication.setRefereCommand(target: newdesc, source: versdesc)
-			result = CNRemoteApplication.execute(descriptor: newdesc)
-		} else {
-			result = .error(NSError.parseError(message: "No event descriptor"))
-		}
-		return result
+	public func baseDescriptor(applicationDescriptor appdesc: NSAppleEventDescriptor, eventClass eclass: AEEventClass, eventID eid: AEEventID) -> NSAppleEventDescriptor {
+		let retid	: AEReturnID		= -1	// generate session unique id
+		let transid	: AETransactionID	= 0	// No transaction is in use
+		return NSAppleEventDescriptor(eventClass: eclass, eventID: eid, targetDescriptor: appdesc, returnID: retid, transactionID: transid)
 	}
 
-	public func makeNewDocument() -> ExecResult {
-		let result: ExecResult
-		if let appdesc = mEventDescriptor {
-			let eclass	= CNEventCode.core.code()
-			let eid		= CNEventCode.make.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			CNRemoteApplication.setDocumentProperty(target: newdesc, name: nil)
-			result = CNRemoteApplication.execute(descriptor: newdesc)
-		} else {
-			result = .error(NSError.parseError(message: "No event descriptor"))
-		}
-		return result
-	}
-
-	public func makeNewMail(subject substr: String) -> ExecResult {
-		let result: ExecResult
-		if let appdesc = mEventDescriptor {
-			let eclass	= CNEventCode.core.code()
-			let eid		= CNEventCode.make.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			CNRemoteApplication.setMailProperty(target: newdesc, subject: substr)
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(let desc):	result = .ok(desc)
-			case .error(let err):	result = .error(err)
+	public func execute(descriptor desc: NSAppleEventDescriptor) -> ExecResult {
+		do {
+			//CNLog(logLevel: .debug, message: "Send event: \(desc.description)")
+			NSLog("Send event: \(desc.description)")
+			let result = try desc.sendEvent(options: .defaultOptions, timeout: 10.0)
+			if let err = errorInDescription(descriptor: result) {
+				return .error(err)
+			} else {
+				return .ok(result)
 			}
-		} else {
-			result = .error(NSError.parseError(message: "No event descriptor"))
+		} catch let err as NSError {
+			return .error(err)
 		}
+	}
+
+	public enum Object {
+		case context
+		case document
+	}
+
+	public func selectFrontObject(number num: Int32, of object: Object) -> NSAppleEventDescriptor {
+		let objcode: CNEventCode
+		switch object {
+		case .context:	objcode = CNEventCode.context
+		case .document:	objcode = CNEventCode.document
+		}
+		guard let result = NSAppleEventDescriptor.object() else {
+			fatalError("Failed to allocate result")
+		}
+		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.index.code()), forEventCode: .format)		// 'form':'indx'
+		result.setDescriptor(NSAppleEventDescriptor(enumCode: objcode.code()), forEventCode: .classType)		// 'want':object
+		result.setDescriptor(NSAppleEventDescriptor(int32: num), forEventCode: .selectData)				// 'seld':num
+		result.setDescriptor(NSAppleEventDescriptor.null(), forEventCode: .from) 	// 'from':null
 		return result
 	}
 
-	public func open(fileURL url: URL) -> ExecResult {
+	public func selectAllContext(of srcdesc: NSAppleEventDescriptor) -> NSAppleEventDescriptor {
+		let alldesc = NSAppleEventDescriptor(enumCode: CNEventCode.all.code())
+		guard let absdesc = NSAppleEventDescriptor(descriptorType: CNEventCode.absolute.code(), data: alldesc.data) else {
+			fatalError("Failed to allocate descriptor")
+		}
+		guard let result = NSAppleEventDescriptor.object() else {
+			fatalError("Failed to allocate result")
+		}
+		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.index.code()), forEventCode: .format)		// 'form':'indx'
+		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.context.code()), forEventCode: .classType)	// 'want':'ctxt'
+		result.setDescriptor(absdesc, forEventCode: .selectData)							// 'seld':{'abso': 'all'}
+		result.setDescriptor(srcdesc, forEventCode: .from)								// 'from':object
+		return result
+	}
+
+	public func selectNameProperty(of srcdesc: NSAppleEventDescriptor) -> NSAppleEventDescriptor {
+		guard let result = NSAppleEventDescriptor.object() else {
+			fatalError("Failed to allocate result")
+		}
+		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.property.code()), forEventCode: .format)
+		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.property.code()), forEventCode: .classType)
+		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.name.code()), forEventCode: .selectData)
+		result.setDescriptor(srcdesc, forEventCode: .from)								// 'from':object
+		return result
+	}
+
+	public func setAssignment(target targ: NSAppleEventDescriptor, destination dst: NSAppleEventDescriptor, source src: NSAppleEventDescriptor) {
+		targ.setParam(src, forEventCode: .data)
+		targ.setParam(dst, forEventCode: .directObject)
+
+		// signature:65536
+		let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
+		targ.setAttribute(sigdesc, forEventCode: .signatureClass)
+	}
+
+	public func setReference(target targ: NSAppleEventDescriptor, source src: NSAppleEventDescriptor) {
+		targ.setParam(src, forEventCode: .directObject)
+
+		// signature:65536
+		let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
+		targ.setAttribute(sigdesc, forEventCode: .signatureClass)
+	}
+
+	private func errorInDescription(descriptor desc: NSAppleEventDescriptor) -> NSError? {
+		if let errndesc = desc.paramDescriptor(forKeyword: CNEventCode.errorCount.code()) {
+			NSLog("errorInDescriptor: \(desc.description)")
+			let errnum = errndesc.int32Value
+			var errstr: String = ""
+			if let errsdesc = desc.paramDescriptor(forKeyword: CNEventCode.errorString.code()) {
+				if let estr = errsdesc.stringValue {
+					errstr = estr
+				}
+			}
+			return NSError.parseError(message: "AppleEventError(\(errnum)) \(errstr)")
+		}
+		return nil
+	}
+
+	public func setNameOfFrontWindow(name nm: String) -> ExecResult {
 		let result: ExecResult
-		if let appdesc = mEventDescriptor {
-			let eclass	= CNEventCode.appleEvent.code()
-			let eid		= CNEventCode.openDocument.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			/* File URL */
-			newdesc.setDescriptor(NSAppleEventDescriptor(fileURL: url), forKeyword: CNEventCode.directObject.code())
-			/* Execute */
-			result = CNRemoteApplication.execute(descriptor: newdesc)
-		} else {
-			result = .error(NSError.parseError(message: "No event descriptor"))
-		}
-		return result
-	}
-
-	public func close(fileURL url: URL?) -> NSError? {
-		let result: NSError?
-		if let appdesc = mEventDescriptor {
-			let eclass	= CNEventCode.core.code()
-			let eid		= CNEventCode.closeDocument.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			/* 'kfil':File path */
-			if let u = url {
-				newdesc.setDescriptor(NSAppleEventDescriptor(fileURL: u), forKeyword: CNEventCode.file.code())
-			}
-			/* Execute */
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(_):		result = nil
-			case .error(let err):	result = err
-			}
-		} else {
-			result = NSError.parseError(message: "No event descriptor")
-		}
-		return result
-	}
-
-	public func setNameOfFrontWindow(name nm: String) -> NSError? {
-		let result: NSError?
-		if let appdesc = mEventDescriptor {
+		if let appdesc = applicationDescriptor {
 			let eclass	= CNEventCode.core.code()
 			let eid		= CNEventCode.setData.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
 			/* Destination */
-			let dst = CNRemoteApplication.nameProperty(of: CNRemoteApplication.frontObject(number: 1, of: .document))
+			let dst = selectNameProperty(of: selectFrontObject(number: 1, of: .document))
 			/* Source string */
 			let src  = NSAppleEventDescriptor(string: nm)
 			/* Setup command */
-			CNRemoteApplication.setAssignmentCommand(target: newdesc, destination: dst, source: src)
+			setAssignment(target: basedesc, destination: dst, source: src)
 			/* Execute */
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(_):		result = nil
-			case .error(let err):	result = err
-			}
+			result = execute(descriptor: basedesc)
 		} else {
-			result = NSError.parseError(message: "No event descriptor")
+			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
 		return result
 	}
 
 	public func nameOfFrontWindow() -> StringResult {
 		let result: StringResult
-		if let appdesc = mEventDescriptor {
+		if let appdesc = applicationDescriptor {
 			let eclass	= CNEventCode.core.code()
 			let eid		= CNEventCode.getData.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
 			/* Source */
-			let src = CNRemoteApplication.nameProperty(of: CNRemoteApplication.frontObject(number: 1, of: .document))
-			CNRemoteApplication.setRefereCommand(target: newdesc, source: src)
+			let src = selectNameProperty(of: selectFrontObject(number: 1, of: .document))
+			setReference(target: basedesc, source: src)
 			/* Execute */
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
+			switch execute(descriptor: basedesc) {
 			case .ok(let desc):
 				result = ackToString(ackDescription: desc)
 			case .error(let err):
@@ -255,84 +273,34 @@ open class CNAppleEventGenerator
 		return result
 	}
 
-	public func setContentOfFrontWindow(context ctxt: String) -> NSError? {
-		let result: NSError?
-		if let appdesc = mEventDescriptor {
-			let eclass	= CNEventCode.core.code()
-			let eid		= CNEventCode.setData.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-
-			/* Destination: context of front document */
-			let dst = CNRemoteApplication.selectAllContext(of: CNRemoteApplication.frontObject(number: 1, of: .document))
-			/* Source string */
-			let src  = NSAppleEventDescriptor(string: ctxt)
-			/* Setup command */
-			CNRemoteApplication.setAssignmentCommand(target: newdesc, destination: dst, source: src)
-			/* Execute */
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(_):		result = nil
-			case .error(let err):	result = err
+	public func ackToString(ackDescription ack: NSAppleEventDescriptor) -> StringResult {
+		//NSLog("ack-desc=\(ack.description)")
+		if let dirparam = ack.paramDescriptor(forKeyword: CNEventCode.directObject.code()) {
+			if let str = dirparam.stringValue {
+				return .ok(str)
 			}
-		} else {
-			result = NSError.parseError(message: "No event descriptor")
 		}
-		return result
+		return .error(NSError.parseError(message: "The ack does not have "))
 	}
+}
 
-	public func contentOfFrontWindow() -> StringResult {
-		let result: StringResult
-		if let appdesc = mEventDescriptor {
+public class CNTextEditApplication: CNEventReceiverApplication
+{
+	public func makeNewDocument() -> ExecResult {
+		let result: ExecResult
+		if let appdesc = self.applicationDescriptor {
 			let eclass	= CNEventCode.core.code()
-			let eid		= CNEventCode.getData.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			/* Source */
-			let src = CNRemoteApplication.selectAllContext(of: CNRemoteApplication.frontObject(number: 1, of: .document))
-			CNRemoteApplication.setRefereCommand(target: newdesc, source: src)
-			/* Execute */
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(let desc):
-				result = ackToString(ackDescription: desc)
-			case .error(let err):
-				result = .error(err)
-			}
+			let eid		= CNEventCode.make.code()
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			setDocumentProperty(target: basedesc, name: nil)
+			result = execute(descriptor: basedesc)
 		} else {
 			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
 		return result
 	}
 
-	public func save(fileURL url: URL) -> NSError? {
-		let result: NSError?
-		if let appdesc = mEventDescriptor {
-			let eclass	= CNEventCode.core.code()
-			let eid		= CNEventCode.saveDocument.code()
-			let newdesc	= newDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			/* File URL */
-			setFileLocation(target: newdesc, fileURL: url)
-			/* Source object */
-			let src = CNRemoteApplication.frontObject(number: 1, of: .document)
-			newdesc.setParam(src, forKeyword: CNEventCode.directObject.code())
-			/* signature:65536 */
-			let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
-			newdesc.setAttribute(sigdesc, forKeyword: CNEventCode.signatureClass.code())
-			/* Execute */
-			switch CNRemoteApplication.execute(descriptor: newdesc) {
-			case .ok(_):		result = nil
-			case .error(let err):	result = err
-			}
-		} else {
-			result = NSError.parseError(message: "No event descriptor")
-		}
-		return result
-	}
-
-	private func newDescriptor(applicationDescriptor appdesc: NSAppleEventDescriptor, eventClass eclass: AEEventClass, eventID eid: AEEventID) -> NSAppleEventDescriptor {
-		let retid	: AEReturnID		= -1	// generate session unique id
-		let transid	: AETransactionID	= 0	// No transaction is in use
-		return NSAppleEventDescriptor(eventClass: eclass, eventID: eid, targetDescriptor: appdesc, returnID: retid, transactionID: transid)
-	}
-
-	private static func setDocumentProperty(target targ: NSAppleEventDescriptor, name nm: String?) {
+	private func setDocumentProperty(target targ: NSAppleEventDescriptor, name nm: String?) {
 		// objectType:document
 		let typedesc = NSAppleEventDescriptor(enumCode: CNEventCode.document.code())
 		targ.setParam(typedesc, forKeyword: CNEventCode.objectClass.code())
@@ -351,128 +319,132 @@ open class CNAppleEventGenerator
 		targ.setAttribute(sigdesc, forKeyword: CNEventCode.signatureClass.code())
 	}
 
-	private static func setMailProperty(target targ: NSAppleEventDescriptor, subject substr: String) {
-		// objectType:outgoingMessage
-		let typedesc = NSAppleEventDescriptor(enumCode: CNEventCode.outgoingMessage.code())
-		targ.setParam(typedesc, forKeyword: CNEventCode.objectClass.code())
-
-		// &subject:null()
-		targ.setAttribute(NSAppleEventDescriptor(string: substr), forKeyword: CNEventCode.subject.code())
-
-		// &signature:65536
-		let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
-		targ.setAttribute(sigdesc, forKeyword: CNEventCode.signatureClass.code())
-	}
-
-	private static func setAssignmentCommand(target targ: NSAppleEventDescriptor, destination dst: NSAppleEventDescriptor, source src: NSAppleEventDescriptor) {
-		targ.setParam(src, forKeyword: CNEventCode.data.code())
-		targ.setParam(dst, forKeyword: CNEventCode.directObject.code())
-
-		// signature:65536
-		let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
-		targ.setAttribute(sigdesc, forKeyword: CNEventCode.signatureClass.code())
-	}
-
-	private static func setRefereCommand(target targ: NSAppleEventDescriptor, source src: NSAppleEventDescriptor) {
-		targ.setParam(src, forKeyword: CNEventCode.directObject.code())
-
-		// signature:65536
-		let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
-		targ.setAttribute(sigdesc, forKeyword: CNEventCode.signatureClass.code())
-	}
-
-	public static func execute(descriptor desc: NSAppleEventDescriptor) -> ExecResult {
-		do {
-			//CNLog(logLevel: .debug, message: "Send event: \(desc.description)")
-			NSLog("Send event: \(desc.description)")
-			let result = try desc.sendEvent(options: .defaultOptions, timeout: 10.0)
-			if let err = CNAppleEventGenerator.errorInDescription(descriptor: result) {
-				return .error(err)
-			} else {
-				return .ok(result)
-			}
-		} catch let err as NSError {
-			return .error(err)
+	public func open(fileURL url: URL) -> ExecResult {
+		let result: ExecResult
+		if let appdesc = applicationDescriptor {
+			let eclass	= CNEventCode.appleEvent.code()
+			let eid		= CNEventCode.openDocument.code()
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			/* File URL */
+			basedesc.setDescriptor(NSAppleEventDescriptor(fileURL: url), forEventCode: .directObject)
+			/* Execute */
+			result = execute(descriptor: basedesc)
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
-	}
-
-	private static func errorInDescription(descriptor desc: NSAppleEventDescriptor) -> NSError? {
-		if let errndesc = desc.paramDescriptor(forKeyword: CNEventCode.errorCount.code()) {
-			NSLog("errorInDescriptor: \(desc.description)")
-			let errnum = errndesc.int32Value
-			var errstr: String = ""
-			if let errsdesc = desc.paramDescriptor(forKeyword: CNEventCode.errorString.code()) {
-				if let estr = errsdesc.stringValue {
-					errstr = estr
-				}
-			}
-			return NSError.parseError(message: "AppleEventError(\(errnum)) \(errstr)")
-		}
-		return nil
-	}
-
-	public enum Object {
-		case context
-		case document
-	}
-
-	public static func selectAllContext(of srcdesc: NSAppleEventDescriptor) -> NSAppleEventDescriptor {
-		let alldesc = NSAppleEventDescriptor(enumCode: CNEventCode.all.code())
-		guard let absdesc = NSAppleEventDescriptor(descriptorType: CNEventCode.absolute.code(), data: alldesc.data) else {
-			fatalError("Failed to allocate descriptor")
-		}
-		guard let result = NSAppleEventDescriptor.object() else {
-			fatalError("Failed to allocate result")
-		}
-		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.index.code()), forKeyword: CNEventCode.format.code())		// 'form':'indx'
-		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.context.code()), forKeyword: CNEventCode.classType.code())	// 'want':'ctxt'
-		result.setDescriptor(absdesc, forKeyword: CNEventCode.selectData.code())							// 'seld':{'abso': 'all'}
-		result.setDescriptor(srcdesc, forKeyword: CNEventCode.from.code())								// 'from':object
 		return result
 	}
 
-	public static func nameProperty(of srcdesc: NSAppleEventDescriptor) -> NSAppleEventDescriptor {
-		guard let result = NSAppleEventDescriptor.object() else {
-			fatalError("Failed to allocate result")
+	public func close(fileURL url: URL?) -> ExecResult {
+		let result: ExecResult
+		if let appdesc = applicationDescriptor {
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.closeDocument.code()
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			/* 'kfil':File path */
+			if let u = url {
+				basedesc.setDescriptor(NSAppleEventDescriptor(fileURL: u), forEventCode: .file)
+			}
+			/* Execute */
+			result = execute(descriptor: basedesc)
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
-		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.property.code()), forKeyword: CNEventCode.format.code())
-		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.property.code()), forKeyword: CNEventCode.classType.code())
-		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.name.code()), forKeyword: CNEventCode.selectData.code())
-		result.setDescriptor(srcdesc, forKeyword: CNEventCode.from.code())								// 'from':object
 		return result
 	}
 
-	public static func frontObject(number num: Int32, of object: Object) -> NSAppleEventDescriptor {
-		let objcode: CNEventCode
-		switch object {
-		case .context:	objcode = CNEventCode.context
-		case .document:	objcode = CNEventCode.document
+	public func setContentOfFrontWindow(context ctxt: String) -> NSError? {
+		let result: NSError?
+		if let appdesc = applicationDescriptor {
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.setData.code()
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+
+			/* Destination: context of front document */
+			let dst = selectAllContext(of: selectFrontObject(number: 1, of: .document))
+			/* Source string */
+			let src  = NSAppleEventDescriptor(string: ctxt)
+			/* Setup command */
+			setAssignment(target: basedesc, destination: dst, source: src)
+			/* Execute */
+			switch execute(descriptor: basedesc) {
+			case .ok(_):		result = nil
+			case .error(let err):	result = err
+			}
+		} else {
+			result = NSError.parseError(message: "No event descriptor")
 		}
-		guard let result = NSAppleEventDescriptor.object() else {
-			fatalError("Failed to allocate result")
+		return result
+	}
+
+	public func contentOfFrontWindow() -> StringResult {
+		let result: StringResult
+		if let appdesc = applicationDescriptor {
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.getData.code()
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			/* Source */
+			let src = selectAllContext(of: selectFrontObject(number: 1, of: .document))
+			setReference(target: basedesc, source: src)
+			/* Execute */
+			switch execute(descriptor: basedesc) {
+			case .ok(let desc):
+				result = ackToString(ackDescription: desc)
+			case .error(let err):
+				result = .error(err)
+			}
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
-		result.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.index.code()), forKeyword: CNEventCode.format.code())		// 'form':'indx'
-		result.setDescriptor(NSAppleEventDescriptor(enumCode: objcode.code()), forKeyword: CNEventCode.classType.code())		// 'want':object
-		result.setDescriptor(NSAppleEventDescriptor(int32: num), forKeyword: CNEventCode.selectData.code())				// 'seld':num
-		result.setDescriptor(NSAppleEventDescriptor.null(), forKeyword: CNEventCode.from.code())					// 'from':null
+		return result
+	}
+
+	public func save(fileURL url: URL) -> ExecResult {
+		let result: ExecResult
+		if let appdesc = applicationDescriptor {
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.saveDocument.code()
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			/* File URL */
+			setFileLocation(target: basedesc, fileURL: url)
+			/* Source object */
+			let src = selectFrontObject(number: 1, of: .document)
+			basedesc.setParam(src, forEventCode: .directObject)
+			/* signature:65536 */
+			let sigdesc = NSAppleEventDescriptor.init(int32: 65536)
+			basedesc.setAttribute(sigdesc, forEventCode: .signatureClass)
+			/* Execute */
+			result = execute(descriptor: basedesc)
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
+		}
 		return result
 	}
 
 	private func setFileLocation(target targ: NSAppleEventDescriptor, fileURL url: URL) {
 		/* 'fltp':'ctxt' */
-		targ.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.context.code()), forKeyword: CNEventCode.fileType.code())
+		targ.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.context.code()), forEventCode: .fileType)
 		/* 'kfil':File path */
-		targ.setDescriptor(NSAppleEventDescriptor(fileURL: url), forKeyword: CNEventCode.file.code())
+		targ.setDescriptor(NSAppleEventDescriptor(fileURL: url), forEventCode: .file)
 	}
+}
 
-	private func ackToString(ackDescription ack: NSAppleEventDescriptor) -> StringResult {
-		//NSLog("ack-desc=\(ack.description)")
-		if let dirparam = ack.paramDescriptor(forKeyword: CNEventCode.directObject.code()) {
-			if let str = dirparam.stringValue {
-				return .ok(str)
-			}
+public class CNSafariApplication: CNEventReceiverApplication
+{
+	public func open(fileURL url: URL) -> ExecResult {
+		let result: ExecResult
+		if let appdesc = applicationDescriptor {
+			let eclass	= CNEventCode.appleEvent.code()
+			let eid		= CNEventCode.openDocument.code()
+			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
+			/* File URL */
+			basedesc.setDescriptor(NSAppleEventDescriptor(fileURL: url), forEventCode: .directObject)
+			/* Execute */
+			result = execute(descriptor: basedesc)
+		} else {
+			result = .error(NSError.parseError(message: "No event descriptor"))
 		}
-		return .error(NSError.parseError(message: "The ack does not have "))
+		return result
 	}
 }
 

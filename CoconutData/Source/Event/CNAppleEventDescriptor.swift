@@ -16,6 +16,18 @@ public extension NSAppleEventDescriptor
 		return NSAppleEventDescriptor.record().coerce(toDescriptorType: CNEventCode.object.code())
 	}
 
+	func setDescriptor(_ desc: NSAppleEventDescriptor, forEventCode ecode: CNEventCode) {
+		self.setDescriptor(desc, forKeyword: ecode.code())
+	}
+
+	func setParam(_ desc: NSAppleEventDescriptor, forEventCode ecode: CNEventCode) {
+		self.setParam(desc, forKeyword: ecode.code())
+	}
+
+	func setAttribute(_ desc: NSAppleEventDescriptor, forEventCode ecode: CNEventCode) {
+		self.setAttribute(desc, forKeyword: ecode.code())
+	}
+
 	func setResult(resultValue retval: NSAppleEventDescriptor?, error str: String?){
 		if let retobj = retval {
 			self.setParam(retobj, forKeyword: CNEventCode.directObject.code())

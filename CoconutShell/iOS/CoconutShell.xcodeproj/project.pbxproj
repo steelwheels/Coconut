@@ -33,7 +33,7 @@
 		0575328E2303916500EBBE13 /* CoconutData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoconutData.framework; path = ../../../../local/Frameworks/CoconutData.framework; sourceTree = "<group>"; };
 		05A3B89E231EA5080092052B /* CNUnixCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNUnixCommand.swift; sourceTree = "<group>"; };
 		05A6374823038FA30036C432 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		05A6374B23038FA30036C432 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoconutShell.h; path = ../../Source/CoconutShell.h; sourceTree = "<group>"; };
+		05A6374B23038FA30036C432 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
 		05A6374C23038FA30036C432 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05BBC62F239BE3FB00DC73A9 /* CNReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReadline.swift; sourceTree = "<group>"; };
 		05C3A9B323A91FB400D54EC9 /* CNCommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLine.swift; sourceTree = "<group>"; };
@@ -57,6 +57,7 @@
 		05753286230390DF00EBBE13 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				05A6374B23038FA30036C432 /* CoconutShell.h */,
 				05C811482304D03A0032C1FA /* CNShellThread.swift */,
 				057532892303912200EBBE13 /* CNShellUtil.swift */,
 				05BBC62F239BE3FB00DC73A9 /* CNReadline.swift */,
@@ -98,10 +99,9 @@
 		05A6374A23038FA30036C432 /* CoconutShell */ = {
 			isa = PBXGroup;
 			children = (
-				05A6374B23038FA30036C432 /* CoconutShell.h */,
 				05A6374C23038FA30036C432 /* Info.plist */,
 			);
-			path = CoconutShell;
+			name = CoconutShell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

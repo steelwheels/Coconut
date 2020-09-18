@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "05F5DAB8208AD844006EB134"
+               BlueprintIdentifier = "05F5DABC208AD891006EB134"
                BuildableName = "Install"
                BlueprintName = "Install"
                ReferencedContainer = "container:CoconutData.xcodeproj">
@@ -50,7 +50,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "05F5DAB8208AD844006EB134"
+            BlueprintIdentifier = "05F5DABC208AD891006EB134"
             BuildableName = "Install"
             BlueprintName = "Install"
             ReferencedContainer = "container:CoconutData.xcodeproj">

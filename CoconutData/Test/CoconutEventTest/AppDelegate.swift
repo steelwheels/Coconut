@@ -20,19 +20,16 @@ class AppDelegate: CNApplicationDelegate
 		super.applicationDidFinishLaunching(notification)
 
 		self.controlTextEdit()
-		//self.controlMail()
 	}
 
 	private func controlTextEdit() {
 		// open text edit
 		NSLog("open TextEdit.app")
 
-		guard let runapp = CNRemoteApplication.launch(bundleIdentifier: "com.apple.TextEdit") else {
+		guard let textedit = CNTextEditApplication() else {
 			NSLog("Failed to launch text edit")
 			return
 		}
-
-		let textedit = CNRemoteApplication(application: runapp)
 
 		/*
 		switch textedit.version() {
@@ -113,30 +110,6 @@ class AppDelegate: CNApplicationDelegate
 		//let sel0 = CNRemoteApplication.selectAllContext(of: doc0)
 		//NSLog("desc=\(sel0)")
 */
-	}
-
-	private func controlMail() {
-		// open mail
-		NSLog("open Mail.app")
-		guard let runapp = CNRemoteApplication.launch(bundleIdentifier: "com.apple.mail") else {
-			NSLog("Failed to launch Mail application")
-			return
-		}
-		let mail = CNRemoteApplication(application: runapp)
-		switch mail.activate() {
-		case .ok(let desc):
-			NSLog("activate -> ack: \(desc.description)")
-		case .error(let err):
-			NSLog("Failed to activate: \(err.toString())\n")
-			return
-		}
-		switch mail.makeNewMail(subject: "Message from CoconutEventTest") {
-		case .ok(let desc):
-			NSLog("make new mail ... done: \(desc.description)")
-		case .error(let err):
-			NSLog("Failed to make new mail: \(err.toString())\n")
-			return
-		}
 	}
 }
 
