@@ -5,9 +5,10 @@
  *   Copyright (C) 2020 Steel Wheels Project
  */
 
-import Foundation
-
 #if os(OSX)
+
+import AppKit
+import Foundation
 
 public class CNAppleEventManager
 {
@@ -142,13 +143,13 @@ public class CNAppleEventManager
 		var hasset: Bool = false
 		switch key {
 		case "foregroundColor":
-			if let col = value as? NSColor {
+			if let col = value as? CNColor {
 				let termpref = CNPreference.shared.terminalPreference
 				termpref.foregroundTextColor = col
 				hasset = true
 			}
 		case "backgroundColor":
-			if let col = value as? NSColor {
+			if let col = value as? CNColor {
 				let termpref = CNPreference.shared.terminalPreference
 				termpref.backgroundTextColor = col
 				hasset = true

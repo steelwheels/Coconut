@@ -48,6 +48,9 @@ open class CNReadline
 			case .error(let err):
 				let msg = "[Error] " + err.description()
 				cons.error(string: msg)
+			@unknown default:
+				let msg = "[Error] Uncovered switch statement"
+				cons.error(string: msg)
 			}
 		}
 		return .none
@@ -150,6 +153,8 @@ open class CNReadline
 		case .screenSize(_, _):
 			result = .escapeCode(code)
 		case .selectAltScreen(_):
+			result = .escapeCode(code)
+		@unknown default:
 			result = .escapeCode(code)
 		}
 		return result

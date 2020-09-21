@@ -5,6 +5,11 @@
  *   Copyright (C) 2019 Steel Wheels Project
  */
 
+#if os(OSX)
+import AppKit
+#else
+import UIKit
+#endif
 import Foundation
 
 public class CNTerminalInfo

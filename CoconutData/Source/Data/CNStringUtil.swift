@@ -5,7 +5,11 @@
  *   Copyright (C) 2018 Steel Wheels Project
  */
 
-import Foundation
+#if os(OSX)
+import AppKit
+#else
+import UIKit
+#endif
 
 public extension String
 {

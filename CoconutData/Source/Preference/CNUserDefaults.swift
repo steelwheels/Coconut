@@ -5,6 +5,9 @@
  *   Copyright (C) 2020 Steel Wheels Project
  */
 
+#if os(iOS)
+import UIKit
+#endif
 import Foundation
 
 extension UserDefaults

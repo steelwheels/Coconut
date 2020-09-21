@@ -5,9 +5,10 @@
  *   Copyright (C) 2020 Steel Wheels Project
  */
 
-import Foundation
-
 #if os(OSX)
+
+import AppKit
+import Foundation
 
 open class CNRemoteApplication
 {

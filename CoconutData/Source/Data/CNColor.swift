@@ -8,9 +8,11 @@
 import Foundation
 
 #if os(OSX)
+import Cocoa
 public typealias CNColor = NSColor
 import Darwin.ncurses
 #else
+import UIKit
 public typealias CNColor = UIColor
 #endif
 

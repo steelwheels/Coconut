@@ -35,8 +35,8 @@ private class UTOperationContext: CNOperationContext
 		//mConsole.print(string: "op[\(mIdentifier)] ... ")
 		if self.isCancelled {
 			self.outputFileHandle.write(string: "Canceled\(mIdentifier)\n")
-		} else if self.isFinished {
-			self.outputFileHandle.write(string: "Finished\(mIdentifier)\n")
+		//} else if self.isFinished {
+		//	self.outputFileHandle.write(string: "Finished\(mIdentifier)\n")
 		} else {
 			self.outputFileHandle.write(string: "Unknown\(mIdentifier)\n")
 		}

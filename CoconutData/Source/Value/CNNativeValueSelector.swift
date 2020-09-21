@@ -5,6 +5,9 @@
  *   Copyright (C) 2018 Steel Wheels Project
  */
 
+#if os(iOS)
+import UIKit
+#endif
 import Foundation
 
 public class CNNativeValueSelector: CNNativeValueVisitor

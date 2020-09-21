@@ -286,6 +286,8 @@ open class CNComplementor
 				result = nil
 			case .Directory:
 				result = path
+			@unknown default:
+				result = nil
 			}
 			return result
 		}
@@ -355,6 +357,8 @@ open class CNComplementor
 					NSLog("updateCommandNameList: \(errobj.toString())")
 				}
 			case .File, .NotExist:
+				break
+			@unknown default:
 				break
 			}
 		}
