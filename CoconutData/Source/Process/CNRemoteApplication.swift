@@ -156,6 +156,7 @@ open class CNEventReceiverApplication: CNRemoteApplication
 	public enum Object {
 		case context
 		case document
+		case window
 	}
 
 	public func selectFrontObject(number num: Int32, of object: Object) -> NSAppleEventDescriptor {
@@ -163,6 +164,7 @@ open class CNEventReceiverApplication: CNRemoteApplication
 		switch object {
 		case .context:	objcode = CNEventCode.context
 		case .document:	objcode = CNEventCode.document
+		case .window:	objcode = CNEventCode.window
 		}
 		guard let result = NSAppleEventDescriptor.object() else {
 			fatalError("Failed to allocate result")
@@ -219,7 +221,7 @@ open class CNEventReceiverApplication: CNRemoteApplication
 
 	private func errorInDescription(descriptor desc: NSAppleEventDescriptor) -> NSError? {
 		if let errndesc = desc.paramDescriptor(forKeyword: CNEventCode.errorCount.code()) {
-			NSLog("errorInDescriptor: \(desc.description)")
+			CNLog(logLevel: .error, message: "errorInDescriptor: \(desc.description)")
 			let errnum = errndesc.int32Value
 			var errstr: String = ""
 			if let errsdesc = desc.paramDescriptor(forKeyword: CNEventCode.errorString.code()) {
@@ -432,14 +434,20 @@ public class CNTextEditApplication: CNEventReceiverApplication
 
 public class CNSafariApplication: CNEventReceiverApplication
 {
-	public func open(fileURL url: URL) -> ExecResult {
+	public func newTab() -> ExecResult {
 		let result: ExecResult
 		if let appdesc = applicationDescriptor {
-			let eclass	= CNEventCode.appleEvent.code()
-			let eid		= CNEventCode.openDocument.code()
+			let eclass	= CNEventCode.core.code()
+			let eid		= CNEventCode.make.code()
 			let basedesc	= baseDescriptor(applicationDescriptor: appdesc, eventClass: eclass, eventID: eid)
-			/* File URL */
-			basedesc.setDescriptor(NSAppleEventDescriptor(fileURL: url), forEventCode: .directObject)
+			/* objectClass:tab */
+			basedesc.setDescriptor(NSAppleEventDescriptor(enumCode: CNEventCode.tab.code()), forEventCode: .objectClass)
+			basedesc.setAttribute(NSAppleEventDescriptor.init(int32: 65536), forEventCode: .signatureClass)
+			/* tab object [format:index, selectData:1]*/
+			let newtab = selectFrontObject(number: 1, of: .window)
+			/* insertHere:object*/
+			basedesc.setDescriptor(newtab, forEventCode: .insertHere)
+			CNLog(logLevel: .detail, message: "newTab: \(basedesc.description)")
 			/* Execute */
 			result = execute(descriptor: basedesc)
 		} else {

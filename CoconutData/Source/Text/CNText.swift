@@ -41,7 +41,7 @@ public class CNText
 	}
 
 	open func append(string src: String){
-		NSLog("Must be override")
+		fatalError("Must be override")
 	}
 
 	public final func append(text src: CNTextLine){

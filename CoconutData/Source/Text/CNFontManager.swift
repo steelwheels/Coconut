@@ -100,7 +100,7 @@ extension CNFontManager
 			if let desc = fnt.fontDescriptor.withSymbolicTraits(UIFontDescriptor.SymbolicTraits(rawValue: trait)) {
 				return UIFont(descriptor: desc, size: fnt.pointSize)
 			} else {
-				NSLog("Failed to convert")
+				CNLog(logLevel: .error, message: "Failed to convert")
 				return fnt
 			}
 		#endif

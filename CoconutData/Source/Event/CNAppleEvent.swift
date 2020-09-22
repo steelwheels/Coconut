@@ -45,6 +45,7 @@ public enum CNEventCode: String {
 	case	getData			= "getd"
 	case	green			= "gren"	// custom
 	case	index			= "indx"
+	case	insertHere		= "insh"
 	case	file 			= "kfil"
 	case	objectClass		= "kocl"
 	case	long			= "long"
@@ -69,6 +70,7 @@ public enum CNEventCode: String {
 	case	short			= "shor"
 	case	sender			= "sndr"
 	case	subject			= "subj"
+	case	tab			= "tab "
 	case	terminalHeight		= "thgt"	// custom
 	case	trueValue		= "true"
 	case	messageSignature	= "trng"
@@ -111,7 +113,7 @@ public func CNStringToFourCharCode(_ src: String) -> FourCharCode {
 		if let ascii = src[idx].asciiValue {
 			result = (result << 8) | (UInt32(ascii) & 0xff)
 		} else {
-			NSLog("Failed to convert to ascrii: \(src)")
+			CNLog(logLevel: .error, message: "Failed to convert to ascrii: \(src)")
 		}
 		idx = src.index(after: idx)
 	}

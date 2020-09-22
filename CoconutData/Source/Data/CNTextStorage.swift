@@ -40,7 +40,7 @@ public extension NSMutableAttributedString
 			if pos >= 1 {
 				result = self.moveCursorTo(from: idx, x: pos-1)
 			} else {
-				NSLog("cursorHolizontalAbsolute: Underflow")
+				CNLog(logLevel: .warning, message: "cursorHolizontalAbsolute: Underflow")
 				result = idx	// ignore
 			}
 		case .saveCursorPosition:
@@ -51,7 +51,7 @@ public extension NSMutableAttributedString
 			if row>=1 && column>=1 {
 				result = self.moveCursorTo(base: baseidx, x: column-1, y: row-1)
 			} else {
-				NSLog("cursorHolizontalAbsolute: Underflow")
+				CNLog(logLevel: .warning, message: "cursorHolizontalAbsolute: Underflow")
 				result = idx	// ignore
 			}
 		case .eraceFromCursorToEnd:

@@ -30,7 +30,7 @@ public extension CNColor
 		case 6:		result = CNColor.cyan
 		case 7:		result = CNColor.white
 		default:
-			NSLog("Invalid escape color code: \(code)")
+			CNLog(logLevel: .error, message: "Invalid escape color code: \(code)")
 			result = nil
 		}
 		return result
@@ -54,7 +54,7 @@ public extension CNColor
 			if let color = self.usingColorSpace(.deviceRGB) {
 				color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 			} else {
-				NSLog("Failed to convert to rgb")
+				CNLog(logLevel: .error, message: "Failed to convert to rgb")
 			}
 		#else
 			self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
@@ -67,7 +67,7 @@ public extension CNColor
 			return try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
 		}
 		catch let err as NSError {
-			NSLog("\(#file): \(err.description)")
+			CNLog(logLevel: .error, message: "\(#file): \(err.description)")
 		}
 		return nil
 	}
@@ -79,7 +79,7 @@ public extension CNColor
 			}
 		}
 		catch let err as NSError {
-			NSLog("\(#file): \(err.description)")
+			CNLog(logLevel: .error, message: "\(#file): \(err.description)")
 		}
 		return nil
 	}
@@ -126,7 +126,7 @@ public extension CNColor
 		case 6:	result = Darwin.COLOR_CYAN
 		case 7:	result = Darwin.COLOR_WHITE
 		default:
-			NSLog("Invalid escape color code: \(code)")
+			CNLog(logLevel: .error, message: "Invalid escape color code: \(code)")
 			result = Darwin.COLOR_BLACK
 		}
 		return result
