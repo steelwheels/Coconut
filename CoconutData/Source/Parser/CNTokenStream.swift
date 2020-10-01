@@ -147,6 +147,32 @@ public class CNTokenStream
 		}
 	}
 
+	public func getAnyInt() -> Int? {
+		if let token = mStream.get() {
+			if let val = token.getInt() {
+				return val
+			} else if let val = token.getUInt() {
+				return Int(val)
+			} else if let val = token.getDouble() {
+				return Int(val)
+			}
+		}
+		return nil
+	}
+
+	public func getAnyDouble() -> Double? {
+		if let token = mStream.get() {
+			if let val = token.getInt() {
+				return Double(val)
+			} else if let val = token.getUInt() {
+				return Double(val)
+			} else if let val = token.getDouble() {
+				return val
+			}
+		}
+		return nil
+	}
+
 	public func getString() -> String? {
 		if let token = mStream.get() {
 			return token.getString()

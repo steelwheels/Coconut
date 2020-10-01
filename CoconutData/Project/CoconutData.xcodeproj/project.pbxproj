@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		054D949A251A421F0007B488 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DC9251600A8000D1411 /* CoconutData.xcframework */; };
+		054D949B251A421F0007B488 /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DC9251600A8000D1411 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		054D94A5251A43510007B488 /* UnitTest.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05B32DBA2515FF2E000D1411 /* UnitTest.bundle */; };
 		05B32C88251501B1000D1411 /* CoconutData_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C86251501B1000D1411 /* CoconutData_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32C96251501D7000D1411 /* CoconutData_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C94251501D7000D1411 /* CoconutData_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32CA82515025E000D1411 /* CNValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9E2515025E000D1411 /* CNValueUtil.swift */; };
@@ -153,7 +156,6 @@
 		05B32D9325150946000D1411 /* CNColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7225150945000D1411 /* CNColor.swift */; };
 		05B32D9425150946000D1411 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7325150945000D1411 /* CNStringUtil.swift */; };
 		05B32D9525150946000D1411 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7325150945000D1411 /* CNStringUtil.swift */; };
-		05B32DCA251600A8000D1411 /* CoconutData.xcframework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05B32DC9251600A8000D1411 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05B32DDC2516048E000D1411 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32DDB2516048E000D1411 /* main.swift */; };
 		05B32E1B251612C0000D1411 /* UTOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32E00251612BF000D1411 /* UTOperation.swift */; };
 		05B32E1C251612C0000D1411 /* UTObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32E01251612BF000D1411 /* UTObserver.swift */; };
@@ -223,13 +225,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		05B32DC825160075000D1411 /* CopyFiles */ = {
+		054D949C251A421F0007B488 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				05B32DCA251600A8000D1411 /* CoconutData.xcframework in CopyFiles */,
+				054D949B251A421F0007B488 /* CoconutData.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		054D94A4251A431F0007B488 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(HOME)/local/Bundles/CoconutData";
+			dstSubfolderSpec = 0;
+			files = (
+				054D94A5251A43510007B488 /* UnitTest.bundle in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +258,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05224BCA251A2F1B00928CE0 /* CoconutScript.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CoconutScript.sdef; sourceTree = "<group>"; };
 		05B32C83251501B1000D1411 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B32C86251501B1000D1411 /* CoconutData_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData_macOS.h; sourceTree = "<group>"; };
 		05B32C87251501B1000D1411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -378,6 +392,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				054D949A251A421F0007B488 /* CoconutData.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,12 +406,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05224BC9251A2EF700928CE0 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				05224BCA251A2F1B00928CE0 /* CoconutScript.sdef */,
+			);
+			name = Resource;
+			path = ../Resource;
+			sourceTree = "<group>";
+		};
 		05B32C7725150057000D1411 = {
 			isa = PBXGroup;
 			children = (
 				05B32C9C25150220000D1411 /* Source */,
 				05B32C85251501B1000D1411 /* CoconutData_macOS */,
 				05B32C93251501D7000D1411 /* CoconutData_iOS */,
+				05224BC9251A2EF700928CE0 /* Resource */,
 				05B32DB52515FEAA000D1411 /* Test */,
 				05B32DCF25160323000D1411 /* Frameworks */,
 				05B32C84251501B1000D1411 /* Products */,
@@ -762,7 +787,8 @@
 				05B32DB62515FF2E000D1411 /* Sources */,
 				05B32DB72515FF2E000D1411 /* Frameworks */,
 				05B32DB82515FF2E000D1411 /* Resources */,
-				05B32DC825160075000D1411 /* CopyFiles */,
+				054D949C251A421F0007B488 /* Embed Frameworks */,
+				054D94A4251A431F0007B488 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1554,7 +1580,6 @@
 		05B32DBE2515FF2E000D1411 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1595,7 +1620,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1615,7 +1640,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UnitTestBundle;
 				PRODUCT_NAME = UnitTest;
 				SDKROOT = macosx;
-				SKIP_INSTALL = NO;
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -1623,7 +1648,6 @@
 		05B32DBF2515FF2E000D1411 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1663,6 +1687,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1677,7 +1702,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UnitTestBundle;
 				PRODUCT_NAME = UnitTest;
 				SDKROOT = macosx;
-				SKIP_INSTALL = NO;
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

@@ -27,6 +27,12 @@ public class CNObservedValueTable
 		}
 	}
 
+	public var keys: Array<String> {
+		get {
+			return Array(mObservers.keys)
+		}
+	}
+
 	public func setValue(_ val: Any, forKey key: String){
 		mValueTable.setValue(val, forKey: key)
 	}
@@ -61,6 +67,14 @@ public class CNObservedValueTable
 		}
 	}
 
+	public func countOfObservers(forKey key: String) -> Int {
+		if let listner = mObservers[key] {
+			return listner.count()
+		} else {
+			return 0
+		}
+	}
+
 	public func removeObserver(forKey key: String){
 		if let obs = mObservers[key] {
 			mValueTable.removeObserver(obs, forKeyPath: key)
@@ -75,6 +89,10 @@ private class CNListener: NSObject
 
 	public override init(){
 		mListnerFunctions = []
+	}
+
+	public func count() -> Int {
+		return mListnerFunctions.count
 	}
 
 	public func add(listenerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction){

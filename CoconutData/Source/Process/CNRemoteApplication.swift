@@ -313,7 +313,7 @@ public class CNTextEditApplication: CNEventReceiverApplication
 		if let n = nm {
 			namedesc = NSAppleEventDescriptor(string: n)
 		} else {
-			namedesc = NSAppleEventDescriptor()
+			namedesc = NSAppleEventDescriptor.null()
 		}
 		targ.setAttribute(namedesc, forKeyword: CNEventCode.subject.code())
 
