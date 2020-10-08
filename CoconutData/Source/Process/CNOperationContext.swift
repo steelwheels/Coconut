@@ -70,15 +70,15 @@ import Foundation
 	}
 
 	public func addIsExecutingListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
-		mObservedValueTable.setObserver(forKey: CNOperationContext.isExecutingItem, listnerFunction: lfunc)
+		mObservedValueTable.addObserver(forKey: CNOperationContext.isExecutingItem, listnerFunction: lfunc)
 	}
 
 	public func addIsFinishedListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
-		mObservedValueTable.setObserver(forKey: CNOperationContext.isFinishedItem, listnerFunction: lfunc)
+		mObservedValueTable.addObserver(forKey: CNOperationContext.isFinishedItem, listnerFunction: lfunc)
 	}
 
 	public func addIsCanceledListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
-		mObservedValueTable.setObserver(forKey: CNOperationContext.isCanceledItem, listnerFunction: lfunc)
+		mObservedValueTable.addObserver(forKey: CNOperationContext.isCanceledItem, listnerFunction: lfunc)
 	}
 
 	open var isExecuting: Bool {

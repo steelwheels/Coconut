@@ -14,7 +14,7 @@ public func testObserver(console cons: CNConsole) -> Bool
 	var updated = false
 
 	vtable.setValue(NSNumber(booleanLiteral: false), forKey: "isExecuting")
-	vtable.setObserver(forKey: "isExecuting", listnerFunction: {
+	vtable.addObserver(forKey: "isExecuting", listnerFunction: {
 		(_ value: Any?) -> Void in
 		if let num = value as? NSNumber {
 			cons.print(string: "isExecuting -> \(num.boolValue)\n")

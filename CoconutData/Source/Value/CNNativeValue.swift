@@ -13,6 +13,44 @@ import Foundation
 /**
  * The data to present JSValue as native data
  */
+public enum CNNativeType {
+	case	nullType
+	case	numberType
+	case	stringType
+	case	dateType
+	case	rangeType
+	case	pointType
+	case	sizeType
+	case	rectType
+	case	enumType
+	case	dictionaryType
+	case	arrayType
+	case	URLType
+	case	imageType
+	case	anyObjectType
+
+	public func toString() -> String {
+		let result: String
+		switch self {
+		case .nullType:		result = "Null"
+		case .numberType:	result = "Number"
+		case .stringType:	result = "String"
+		case .dateType:		result = "Date"
+		case .rangeType:	result = "Range"
+		case .pointType:	result = "Point"
+		case .sizeType:		result = "Size"
+		case .rectType:		result = "Rect"
+		case .enumType:		result = "Enum"
+		case .dictionaryType:	result = "Dictionary"
+		case .arrayType:	result = "Array"
+		case .URLType:		result = "URL"
+		case .imageType:	result = "Image"
+		case .anyObjectType:	result = "AnyObject"
+		}
+		return result
+	}
+}
+
 public enum CNNativeValue {
 	case nullValue
 	case numberValue(_ val: NSNumber)
@@ -28,6 +66,29 @@ public enum CNNativeValue {
 	case URLValue(_ val: URL)
 	case imageValue(_ val: CNImage)
 	case anyObjectValue(_ val: AnyObject)
+
+	public var valueType: CNNativeType {
+		get {
+			let result: CNNativeType
+			switch self {
+			case .nullValue:		result = .nullType
+			case .numberValue(_):		result = .numberType
+			case .stringValue(_):		result = .stringType
+			case .dateValue(_):		result = .dateType
+			case .rangeValue(_):		result = .rangeType
+			case .pointValue(_):		result = .pointType
+			case .sizeValue(_):		result = .sizeType
+			case .rectValue(_):		result = .rectType
+			case .enumValue(_, _):		result = .enumType
+			case .dictionaryValue(_):	result = .dictionaryType
+			case .arrayValue(_):		result = .arrayType
+			case .URLValue(_):		result = .URLType
+			case .imageValue(_):		result = .imageType
+			case .anyObjectValue(_):	result = .anyObjectType
+			}
+			return result
+		}
+	}
 
 	public func toNumber() -> NSNumber? {
 		let result: NSNumber?

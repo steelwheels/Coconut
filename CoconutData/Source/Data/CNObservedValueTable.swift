@@ -29,7 +29,12 @@ public class CNObservedValueTable
 
 	public var keys: Array<String> {
 		get {
-			return Array(mObservers.keys)
+			if let result = Array(mValueTable.allKeys) as? Array<String> {
+				return result
+			} else {
+				NSLog("[Internal error] at \(#file)")
+				return []
+			}
 		}
 	}
 
@@ -54,7 +59,7 @@ public class CNObservedValueTable
 		}
 	}
 
-	public func setObserver(forKey key: String, listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction){
+	public func addObserver(forKey key: String, listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction){
 		if let obs = mObservers[key] {
 			obs.add(listenerFunction: lfunc)
 		} else {
