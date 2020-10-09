@@ -26,6 +26,7 @@ public class CNNativeValueVisitor
 		case .dictionaryValue(let obj):		visit(dictionary: obj)
 		case .arrayValue(let obj):		visit(array: obj)
 		case .URLValue(let obj):		visit(URL: obj)
+		case .colorValue(let obj):		visit(color: obj)
 		case .imageValue(let obj):		visit(image: obj)
 		case .anyObjectValue(let obj):		visit(anyObject: obj)
 		}
@@ -43,6 +44,7 @@ public class CNNativeValueVisitor
 	open func visit(dictionary obj: Dictionary<String, CNNativeValue>){ }
 	open func visit(array obj: Array<CNNativeValue>){ }
 	open func visit(URL obj: URL){ }
+	open func visit(color obj: CNColor){ }
 	open func visit(image obj: CNImage){ }
 	open func visit(anyObject obj: AnyObject){ }
 }

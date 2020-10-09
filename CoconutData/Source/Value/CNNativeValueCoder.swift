@@ -171,6 +171,16 @@ public class CNJSONEncoder: CNNativeValueVisitor
 		mResult = NSString(string: url.absoluteString)
 	}
 
+	open override func visit(color col: CNColor){
+		let (red, green, blue, alpha) = col.toRGBA()
+		mResult = NSDictionary(dictionary: [
+			NSString(string: "red")		: NSNumber(floatLiteral: Double(red)),
+			NSString(string: "green")	: NSNumber(floatLiteral: Double(green)),
+			NSString(string: "blue")	: NSNumber(floatLiteral: Double(blue)),
+			NSString(string: "alpha")	: NSNumber(floatLiteral: Double(alpha))
+		])
+	}
+
 	open override func visit(image obj: CNImage){
 		mResult = NSString(string: "\(obj.description)")
 	}

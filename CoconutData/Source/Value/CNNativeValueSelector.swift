@@ -56,6 +56,9 @@ public class CNNativeValueSelector: CNNativeValueVisitor
 	open override func visit(URL obj: URL){
 		mResult = nil
 	}
+	open override func visit(color obj: CNColor){
+		mResult = nil
+	}
 	open override func visit(image obj: CNImage){
 		mResult = nil
 	}

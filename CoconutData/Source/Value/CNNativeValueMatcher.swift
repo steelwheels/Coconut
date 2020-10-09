@@ -85,6 +85,10 @@ public class CNNativeValueMatcher: CNNativeValueVisitor
 	open override func visit(URL obj: URL) {
 		mValueString = obj.absoluteString
 	}
+	open override func visit(color obj: CNColor) {
+		let (red, green, blue, alpha) = obj.toRGBA()
+		mValueString = "Color(red:\(red), green:\(green), blue:\(blue), alpha:\(alpha))"
+	}
 	open override func visit(image obj: CNImage) {
 		mValueString = "\(obj.description)"
 	}

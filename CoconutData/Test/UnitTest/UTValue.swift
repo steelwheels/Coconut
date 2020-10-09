@@ -27,6 +27,10 @@ private func testNativeValue(console cons: CNConsole) -> Bool
 {
 	let nval0 = CNNativeValue.numberValue(NSNumber(integerLiteral: 123))
 	dumpValue(value: nval0, console: cons)
+
+	let nval1 = CNNativeValue.colorValue(CNColor.blue)
+	dumpValue(value: nval1, console: cons)
+
 	return true
 }
 

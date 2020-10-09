@@ -26,6 +26,7 @@ public enum CNNativeType {
 	case	dictionaryType
 	case	arrayType
 	case	URLType
+	case	colorType
 	case	imageType
 	case	anyObjectType
 
@@ -44,6 +45,7 @@ public enum CNNativeType {
 		case .dictionaryType:	result = "Dictionary"
 		case .arrayType:	result = "Array"
 		case .URLType:		result = "URL"
+		case .colorType:	result = "Color"
 		case .imageType:	result = "Image"
 		case .anyObjectType:	result = "AnyObject"
 		}
@@ -64,6 +66,7 @@ public enum CNNativeValue {
 	case dictionaryValue(_ val: Dictionary<String, CNNativeValue>)
 	case arrayValue(_ val: Array<CNNativeValue>)
 	case URLValue(_ val: URL)
+	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
 	case anyObjectValue(_ val: AnyObject)
 
@@ -83,6 +86,7 @@ public enum CNNativeValue {
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
 			case .URLValue(_):		result = .URLType
+			case .colorValue(_):		result = .colorType
 			case .imageValue(_):		result = .imageType
 			case .anyObjectValue(_):	result = .anyObjectType
 			}
@@ -195,6 +199,15 @@ public enum CNNativeValue {
 		let result: URL?
 		switch self {
 		case .URLValue(let url):	result = url
+		default:			result = nil
+		}
+		return result
+	}
+
+	public func toColor() -> CNColor? {
+		let result: CNColor?
+		switch self {
+		case .colorValue(let col):	result = col
 		default:			result = nil
 		}
 		return result
@@ -391,6 +404,8 @@ public enum CNNativeValue {
 			result = sect
 		case .URLValue(let val):
 			result = CNTextLine(string: "\(val.absoluteString)")
+		case .colorValue(let val):
+			result = CNTextLine(string: "\(val.description)")
 		case .imageValue(let val):
 			#if os(OSX)
 				let name: String
@@ -465,6 +480,15 @@ public enum CNNativeValue {
 			result = newarr
 		case .URLValue(let val):
 			result = val
+		case .colorValue(let val):
+			let (red, green, blue, alpha) = val.toRGBA()
+			let col: Dictionary<String, Any> = [
+				"red"	: NSNumber(floatLiteral: Double(red  )),
+				"green"	: NSNumber(floatLiteral: Double(green)),
+				"blue"	: NSNumber(floatLiteral: Double(blue )),
+				"alpha" : NSNumber(floatLiteral: Double(alpha))
+			]
+			result = col
 		case .imageValue(let val):
 			result = val
 		case .anyObjectValue(let val):
@@ -509,6 +533,8 @@ public enum CNNativeValue {
 			result = .arrayValue(newarr)
 		} else if let val = obj as? URL {
 			result = .URLValue(val)
+		} else if let val = obj as? CNColor {
+			result = .colorValue(val)
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
 		} else {
@@ -543,10 +569,22 @@ public enum CNNativeValue {
 					return .sizeValue(CGSize(width: width, height: height))
 				}
 			}
+		} else if dict.count == 4 {
 			/* Decode rect type */
 			if let xval = dict["x"], let yval = dict["y"], let wval = dict["width"], let hval = dict["height"] {
 				if let x = xval.toNumber(), let y = yval.toNumber(), let width = wval.toNumber(), let height = hval.toNumber() {
 					return .rectValue(CGRect(x: x.doubleValue, y: y.doubleValue, width: width.doubleValue, height: height.doubleValue))
+				}
+			}
+			/* Decode color type */
+			if let rval = dict["red"], let gval = dict["green"], let bval = dict["blue"], let aval = dict["alpha"] {
+				if let rednum = rval.toNumber(), let greennum = gval.toNumber(), let bluenum = bval.toNumber(), let alphanum = aval.toNumber() {
+					let red   = CGFloat(rednum.floatValue)
+					let green = CGFloat(greennum.floatValue)
+					let blue  = CGFloat(bluenum.floatValue)
+					let alpha = CGFloat(alphanum.floatValue)
+					let color = CNColor(red: red, green: green, blue: blue, alpha: alpha)
+					return  .colorValue(color)
 				}
 			}
 		}

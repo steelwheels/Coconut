@@ -252,7 +252,7 @@
 				};
 			};
 			buildConfigurationList = 05E17F6025163D580020A138 /* Build configuration list for PBXProject "CoconutDatabase" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
