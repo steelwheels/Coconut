@@ -10,7 +10,7 @@ import Foundation
 #if os(OSX)
 import Cocoa
 public typealias CNColor = NSColor
-import Darwin.ncurses
+//import Darwin.ncurses
 #else
 import UIKit
 public typealias CNColor = UIColor
@@ -18,6 +18,17 @@ public typealias CNColor = UIColor
 
 public extension CNColor
 {
+	enum CursesColor: Int {
+		case	black	= 0
+		case	red 	= 1
+		case	green	= 2
+		case 	yellow	= 3
+		case 	blue	= 4
+		case	magenta	= 5
+		case	cyan	= 6
+		case	white	= 7
+	}
+
 	static func color(withEscapeCode code: Int32) -> CNColor? {
 		let result: CNColor?
 		switch code {
@@ -111,25 +122,6 @@ public extension CNColor
 			}
 		}
 		return nil
-	}
-
-	func toDarwinColor() -> Int32 {
-		var result: Int32
-		let code = self.escapeCode()
-		switch code {
-		case 0:	result = Darwin.COLOR_BLACK
-		case 1:	result = Darwin.COLOR_RED
-		case 2:	result = Darwin.COLOR_GREEN
-		case 3:	result = Darwin.COLOR_YELLOW
-		case 4:	result = Darwin.COLOR_BLUE
-		case 5:	result = Darwin.COLOR_MAGENTA
-		case 6:	result = Darwin.COLOR_CYAN
-		case 7:	result = Darwin.COLOR_WHITE
-		default:
-			CNLog(logLevel: .error, message: "Invalid escape color code: \(code)")
-			result = Darwin.COLOR_BLACK
-		}
-		return result
 	}
 	#endif
 
