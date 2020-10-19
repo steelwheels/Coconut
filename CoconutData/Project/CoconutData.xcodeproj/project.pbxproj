@@ -181,6 +181,8 @@
 		05B32E33251612C0000D1411 /* UTTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32E18251612C0000D1411 /* UTTextStorage.swift */; };
 		05B32E34251612C0000D1411 /* UTFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32E19251612C0000D1411 /* UTFile.swift */; };
 		05B32E35251612C0000D1411 /* UTEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32E1A251612C0000D1411 /* UTEnvironment.swift */; };
+		05D80922253DBB1E00D68414 /* CNFileSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D80921253DBB1E00D68414 /* CNFileSelector.swift */; };
+		05D80923253DBB1E00D68414 /* CNFileSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D80921253DBB1E00D68414 /* CNFileSelector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -337,6 +339,7 @@
 		05B32E19251612C0000D1411 /* UTFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTFile.swift; sourceTree = "<group>"; };
 		05B32E1A251612C0000D1411 /* UTEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTEnvironment.swift; sourceTree = "<group>"; };
 		05B32E63251626D8000D1411 /* UnitTestRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UnitTestRelease.entitlements; sourceTree = "<group>"; };
+		05D80921253DBB1E00D68414 /* CNFileSelector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNFileSelector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -529,6 +532,7 @@
 				05B32D27251508D9000D1411 /* CNFileManager.swift */,
 				05B32D1C251508D9000D1411 /* CNFilePath.swift */,
 				05B32D1E251508D9000D1411 /* CNFileURL.swift */,
+				05D80921253DBB1E00D68414 /* CNFileSelector.swift */,
 				05B32D20251508D9000D1411 /* CNLogManager.swift */,
 				05B32D1B251508D9000D1411 /* CNNativeValueFile.swift */,
 				05B32D26251508D9000D1411 /* CNPropertyList.swift */,
@@ -828,6 +832,7 @@
 				05B32CAC2515025E000D1411 /* CNNativeValueMerger.swift in Sources */,
 				05B32CAB2515025E000D1411 /* CNNativeValueSelector.swift in Sources */,
 				05B32D3D251508D9000D1411 /* CNFileHandle.swift in Sources */,
+				05D80922253DBB1E00D68414 /* CNFileSelector.swift in Sources */,
 				05B32CC6251502BE000D1411 /* CNFont.swift in Sources */,
 				05B32CC8251502BE000D1411 /* CNFontManager.swift in Sources */,
 				05B32CDB251502E6000D1411 /* CNRemoteApplication.swift in Sources */,
@@ -907,6 +912,7 @@
 				05B32CB525150299000D1411 /* CNNativeValue.swift in Sources */,
 				05B32CB625150299000D1411 /* CNNativeValueCoder.swift in Sources */,
 				05B32D3E251508D9000D1411 /* CNFileHandle.swift in Sources */,
+				05D80923253DBB1E00D68414 /* CNFileSelector.swift in Sources */,
 				05B32CC7251502BE000D1411 /* CNFont.swift in Sources */,
 				05B32CC9251502BE000D1411 /* CNFontManager.swift in Sources */,
 				05B32CDC251502E6000D1411 /* CNRemoteApplication.swift in Sources */,
