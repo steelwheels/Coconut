@@ -19,7 +19,10 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 	}
 }
 
-open class CNThread: CNProcessProtocol
+/* The instance of this class will be used as an object in JavaScript context.
+ * So this class must inherit NSObject
+ */
+@objc open class CNThread: NSObject, CNProcessProtocol
 {
 	private weak var mProcessManager:	CNProcessManager?
 
@@ -125,7 +128,7 @@ open class CNThread: CNProcessProtocol
 		return -1
 	}
 
-	public func waitUntilExit() -> Int32 {
+	open func waitUntilExit() -> Int32 {
 		mSemaphore.wait()
 		return mTerminationStatus
 	}
