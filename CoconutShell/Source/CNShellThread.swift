@@ -8,7 +8,7 @@
 import CoconutData
 import Foundation
 
-open class CNShellThread: CNThread
+@objc open class CNShellThread: CNThread
 {
 	private struct ReadlineStatus {
 		var	doPrompt	: Bool
@@ -30,7 +30,8 @@ open class CNShellThread: CNThread
 	public var readline: CNReadline { get { return mReadline }}
 	public var terminalInfo: CNTerminalInfo { get { return mTerminalInfo }}
 
-	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, complementor compl: CNComplementor, environment env: CNEnvironment){
+	public override init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment){
+		let compl	= CNComplementor()
 		mReadline 	= CNReadline(complementor: compl, environment: env)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mTerminalInfo	= CNTerminalInfo(width: 80, height: 25)
