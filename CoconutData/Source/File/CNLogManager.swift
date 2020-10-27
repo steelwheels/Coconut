@@ -75,4 +75,8 @@ public func CNLog(logLevel level: CNConfig.LogLevel, messages msgs: Array<String
 	CNLogBuffer.shared.log(logLevel: level, messages: msgs)
 }
 
+public func CNLog(logLevel level: CNConfig.LogLevel, text txt: CNText)
+{
+	CNLogBuffer.shared.log(logLevel: level, messages: txt.toStrings(terminal: ""))
+}
 
