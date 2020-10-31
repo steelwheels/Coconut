@@ -12,6 +12,8 @@ public enum CNAxis: Int32
 	case horizontal
 	case vertical
 
+	public static var typeName = "Axis"
+
 	public var description: String {
 		let result: String
 		switch self {
@@ -29,6 +31,8 @@ public enum CNAlignment: Int32 {
 	case fill
 	case center
 
+	public static var typeName = "Alignment"
+
 	public var description: String {
 		let result: String
 		switch self {
@@ -45,6 +49,8 @@ public enum CNDistribution: Int32 {
 	case fillProportinally
 	case fillEqually
 	case equalSpacing
+
+	public static var typeName = "Distribution"
 
 	public var description: String {
 		let result: String

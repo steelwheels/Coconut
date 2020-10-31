@@ -26,9 +26,7 @@
 		05A95AF42516473D00775737 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A95AE52516473D00775737 /* CoconutShell.h */; };
 		05A95AF52516473D00775737 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A95AE52516473D00775737 /* CoconutShell.h */; };
 		05A95AFA2516476000775737 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A95AF92516475F00775737 /* CoconutData.xcframework */; };
-		05A95AFB2516476000775737 /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05A95AF92516475F00775737 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05A95AFE2516477200775737 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05A95AF92516475F00775737 /* CoconutData.xcframework */; };
-		05A95AFF2516477200775737 /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05A95AF92516475F00775737 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,31 +45,6 @@
 			remoteInfo = CoconutShell_macOS;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		05A95AFC2516476000775737 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05A95AFB2516476000775737 /* CoconutData.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		05A95B002516477200775737 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05A95AFF2516477200775737 /* CoconutData.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		05A95AC42516454A00775737 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,7 +197,6 @@
 				05A95AC02516454A00775737 /* Sources */,
 				05A95AC12516454A00775737 /* Frameworks */,
 				05A95AC22516454A00775737 /* Resources */,
-				05A95AFC2516476000775737 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -243,7 +215,6 @@
 				05A95ACF2516468400775737 /* Sources */,
 				05A95AD02516468400775737 /* Frameworks */,
 				05A95AD12516468400775737 /* Resources */,
-				05A95B002516477200775737 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

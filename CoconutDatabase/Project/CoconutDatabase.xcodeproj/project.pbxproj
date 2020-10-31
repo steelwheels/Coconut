@@ -14,9 +14,7 @@
 		0505AB6825163E1D0005CFC4 /* CoconutDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */; };
 		0505AB6925163E1D0005CFC4 /* CoconutDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */; };
 		0505AB6E25163E460005CFC4 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0505AB6D25163E460005CFC4 /* CoconutData.xcframework */; };
-		0505AB6F25163E460005CFC4 /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0505AB6D25163E460005CFC4 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0505AB7225163E5C0005CFC4 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0505AB6D25163E460005CFC4 /* CoconutData.xcframework */; };
-		0505AB7325163E5C0005CFC4 /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0505AB6D25163E460005CFC4 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,31 +33,6 @@
 			remoteInfo = CoconutDatabase_iOS;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		0505AB7025163E460005CFC4 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0505AB6F25163E460005CFC4 /* CoconutData.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0505AB7425163E5C0005CFC4 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0505AB7325163E5C0005CFC4 /* CoconutData.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0505AB4A25163D980005CFC4 /* CoconutDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,7 +173,6 @@
 				0505AB4625163D980005CFC4 /* Sources */,
 				0505AB4725163D980005CFC4 /* Frameworks */,
 				0505AB4825163D980005CFC4 /* Resources */,
-				0505AB7025163E460005CFC4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -219,7 +191,6 @@
 				0505AB5625163DF40005CFC4 /* Sources */,
 				0505AB5725163DF40005CFC4 /* Frameworks */,
 				0505AB5825163DF40005CFC4 /* Resources */,
-				0505AB7425163E5C0005CFC4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
