@@ -28,12 +28,18 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 	}
 
 	#if os(OSX)
+	open func applicationWillFinishLaunching(_ notigication: Notification){
+	}
+
 	open func applicationDidFinishLaunching(_ notification: Notification) {
 		#if os(OSX)
 			NSLog("Setup event manager")
 			let mgr = CNAppleEventManager.shared()
 			mgr.setup()
 		#endif
+	}
+
+	open func applicationWillTerminate(_ aNotification: Notification) {
 	}
 
 	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {

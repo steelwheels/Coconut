@@ -1,6 +1,6 @@
 /**
- * @file	CNLogManager.swift
- * @brief	Extend CNLogManager class
+ * @file	CNLogBuffer.swift
+ * @brief	Define CNLogBuffer class
  * @par Copyright
  *   Copyright (C) 2020 Steel Wheels Project
  */
@@ -33,33 +33,36 @@ public class CNLogBuffer
 		mLock.unlock()
 	}
 
-	public func log(logLevel level: CNConfig.LogLevel, message msg: String){
+	public func log(logLevel level: CNConfig.LogLevel, messages msgs: Array<String>){
 		let curlvl = CNPreference.shared.systemPreference.logLevel
 		if level.isIncluded(in: curlvl) {
 			mLock.lock()
-			mLines.append(msg)
 			if let cons = mOutputConsole {
-				for line in mLines {
-					cons.print(string: line + "\n")
-				}
+				putLines(console: cons, lines: mLines)
+				putLines(console: cons, lines: msgs)
 				mLines = []
+			} else {
+				mLines.append(contentsOf: msgs)
 			}
 			mLock.unlock()
 		}
 	}
 
-	public func log(logLevel level: CNConfig.LogLevel, messages msgs: Array<String>){
-		let curlvl = CNPreference.shared.systemPreference.logLevel
-		if level.isIncluded(in: curlvl) {
-			mLock.lock()
-			mLines.append(contentsOf: msgs)
-			if let cons = mOutputConsole {
-				for line in mLines {
-					cons.print(string: line + "\n")
-				}
+	public func flush() {
+		mLock.lock()
+		if let cons = mOutputConsole {
+			if mLines.count > 0 {
+				putLines(console: cons, lines: mLines)
 				mLines = []
 			}
-			mLock.unlock()
+		}
+		mLock.unlock()
+	}
+
+	private func putLines(console cons: CNConsole, lines lns: Array<String>) {
+		if lns.count > 0 {
+			let str = lns.joined(separator: "\n") + "\n"
+			cons.print(string: str)
 		}
 	}
 }
@@ -67,7 +70,7 @@ public class CNLogBuffer
 
 public func CNLog(logLevel level: CNConfig.LogLevel, message msg: String)
 {
-	CNLogBuffer.shared.log(logLevel: level, message: msg)
+	CNLogBuffer.shared.log(logLevel: level, messages: [msg])
 }
 
 public func CNLog(logLevel level: CNConfig.LogLevel, messages msgs: Array<String>)
@@ -77,6 +80,7 @@ public func CNLog(logLevel level: CNConfig.LogLevel, messages msgs: Array<String
 
 public func CNLog(logLevel level: CNConfig.LogLevel, text txt: CNText)
 {
-	CNLogBuffer.shared.log(logLevel: level, messages: txt.toStrings(terminal: ""))
+	let lines = txt.toStrings(terminal: "")
+	CNLogBuffer.shared.log(logLevel: level, messages: lines)
 }
 

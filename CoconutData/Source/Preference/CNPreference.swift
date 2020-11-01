@@ -129,7 +129,7 @@ public class CNSystemPreference: CNPreferenceTable
 		super.init(sectionName: "SystemPreference")
 
 		/* Set initial value */
-		let level: LogLevel = .nolog
+		let level: LogLevel = CNConfig.LogLevel.defaultLevel
 		super.set(intValue: level.rawValue, forKey: CNSystemPreference.LogLevelItem)
 
 		let style = self.interfaceStyle
