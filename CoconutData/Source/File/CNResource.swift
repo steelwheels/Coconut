@@ -198,6 +198,12 @@ open class CNResource
 		}
 	}
 
+	public func copy(destination dres: CNResource, category cat: String) {
+		if let dir = mDirectoryResources[cat] {
+			dres.mDirectoryResources[cat] = dir
+		}
+	}
+
 	public func toText() -> CNTextSection {
 		let section = CNTextSection()
 		section.header = "{" ; section.footer = "}"
