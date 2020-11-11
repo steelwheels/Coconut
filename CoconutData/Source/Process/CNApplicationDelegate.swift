@@ -27,21 +27,17 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 		super.init()
 	}
 
-	#if os(OSX)
-	open func applicationWillFinishLaunching(_ notigication: Notification){
+	open func applicationWillFinishLaunching(_ notification: Notification) {
+		UserDefaults.standard.applyDefaultSetting()
 	}
 
 	open func applicationDidFinishLaunching(_ notification: Notification) {
-		#if os(OSX)
-			NSLog("Setup event manager")
-			let mgr = CNAppleEventManager.shared()
-			mgr.setup()
-		#endif
 	}
 
 	open func applicationWillTerminate(_ aNotification: Notification) {
 	}
 
+	#if os(OSX)
 	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
 		NSLog("Access to the delegateHandlesKey: \(key)")
 		let mgr = CNAppleEventManager.shared()

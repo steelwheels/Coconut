@@ -95,36 +95,6 @@ public extension CNColor
 		return nil
 	}
 
-	#if os(OSX)
-	/* See CoconutScript.sdef for OSTy ep definition */
-	func toOSType() -> OSType {
-		let result: OSType
-		switch self.escapeCode() {
-		case 0:		result = CNEventCode.black.code()
-		case 1:		result = CNEventCode.red.code()
-		case 2:		result = CNEventCode.green.code()
-		case 3:		result = CNEventCode.yellow.code()
-		case 4:		result = CNEventCode.blue.code()
-		case 5:		result = CNEventCode.magenta.code()
-		case 6:		result = CNEventCode.cyan.code()
-		case 7:		result = CNEventCode.white.code()
-		default:	result = CNEventCode.black.code()
-		}
-		return result
-	}
-
-	static func decode(fromOSType type: OSType) -> CNColor? {
-		for i:Int32 in 0..<8 {
-			if let col = CNColor.color(withEscapeCode: i) {
-				if col.toOSType() == type {
-					return col
-				}
-			}
-		}
-		return nil
-	}
-	#endif
-
 	var rgbName: String {
 		get {
 			let result: String
