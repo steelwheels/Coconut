@@ -77,7 +77,7 @@ public func testOperationQueue(console cons: CNFileConsole) -> Bool
 		cons.print(string: "testOperationQueue: OK\n")
 		result = true
 	} else {
-		cons.print(string: "testOperationQueue:Unexpected results\n")
+		cons.print(string: "testOperationQueue: NG\n")
 	}
 	return result
 }

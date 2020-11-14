@@ -18,6 +18,12 @@ public func testURL(console cons: CNConsole) -> Bool
 		result = false
 	}
 
+	if result {
+		cons.print(string: "testURL .. OK\n")
+	} else {
+		cons.print(string: "testURL .. NG\n")
+	}
+
 	return result
 }
 

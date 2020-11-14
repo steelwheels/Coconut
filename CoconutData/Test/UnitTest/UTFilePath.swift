@@ -13,13 +13,17 @@ public func testFilePath(console cons: CNConsole) -> Bool
 	var result0: Bool
 
 	/* URI */
-	cons.print(string: "testFilePath: Info.plist\n")
-	let url = URL(fileURLWithPath: "Info.plist")
-	if let uti = CNFilePath.UTIForFile(URL: url) {
-		cons.print(string: "UTI: \(uti) \n")
-		result0 = true
+	cons.print(string: "testFilePath: /usr/bin/ls\n")
+	if let url = URL(string: "file://usr/bin/ls") {
+		if let uti = CNFilePath.UTIForFile(URL: url) {
+			cons.print(string: "UTI: \(uti) \n")
+			result0 = true
+		} else {
+			cons.print(string: "Error: No UTI\n")
+			result0 = false
+		}
 	} else {
-		cons.print(string: "Error: No UTI\n")
+		cons.print(string: "Error: Invalid URL\n")
 		result0 = false
 	}
 
@@ -29,7 +33,14 @@ public func testFilePath(console cons: CNConsole) -> Bool
 	let result12 = testScemeInString(string: "https//yahoo.com", expectedResult: false, console: cons)
 	let result13 = testScemeInString(string: "ftp.c://yahoo.com", expectedResult: true, console: cons)
 
-	return result0 && result10 && result11 && result12 && result13
+	let result = result0 && result10 && result11 && result12 && result13
+
+	if result {
+		cons.print(string: "testFilePath .. OK\n")
+	} else {
+		cons.print(string: "testFilePath .. NG\n")
+	}
+	return result
 }
 
 private func testScemeInString(string str: String, expectedResult eval: Bool, console cons: CNConsole) -> Bool {

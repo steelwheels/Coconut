@@ -15,7 +15,14 @@ public func testStringStream(console cons: CNConsole) -> Bool
 
 	cons.print(string: "- Test string stream to decode\n")
 	let res1 = testStringStreamToDecode(console: cons)
-	return res0 && res1
+
+	let result = res0 && res1
+	if result {
+		cons.print(string: "testStringStream .. OK\n")
+	} else {
+		cons.print(string: "testStringStream .. NG\n")
+	}
+	return result
 }
 
 private func testStringStreamToToken(console cons: CNConsole) -> Bool

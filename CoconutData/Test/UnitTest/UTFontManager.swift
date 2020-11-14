@@ -14,7 +14,13 @@ public func testFontManager(console cons: CNConsole) -> Bool
 	//for name in names {
 	//	cons.print(string: "fixed-pitch-font: \(name)\n")
 	//}
-	
-	return names.count > 0
+
+	let result = names.count > 0
+	if result {
+		cons.print(string: "testFontManager .. OK\n")
+	} else {
+		cons.print(string: "testFontManager .. NG\n")
+	}
+	return result
 }
 

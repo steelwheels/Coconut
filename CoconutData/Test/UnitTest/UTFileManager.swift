@@ -15,8 +15,8 @@ public func testFileManager(console cons: CNConsole) -> Bool
 
 	let env		= CNEnvironment()
 	let curdir	= env.currentDirectory
-	let plisturl	= fmanager.fullPath(pathString: "./Info.plist", baseURL: curdir)
-	let nonurl	= fmanager.fullPath(pathString: "./Info.plist-2", baseURL: curdir)
+	let plisturl	= fmanager.fullPath(pathString: "./CoconutData.framework/Resources/Info.plist", baseURL: curdir)
+	let nonurl	= fmanager.fullPath(pathString: "./CoconutData.framework/Resources/Info.plist-2", baseURL: curdir)
 	//cons.print(string: "fullpath: \(plisturl.path)\n")
 
 	cons.print(string: "Test: fileExists -> ")
@@ -96,6 +96,11 @@ public func testFileManager(console cons: CNConsole) -> Bool
 		result = false
 	}
 
+	if result {
+		cons.print(string: "testFileManager .. OK\n")
+	} else {
+		cons.print(string: "testFileManager .. NG\n")
+	}
 	return result
 }
 

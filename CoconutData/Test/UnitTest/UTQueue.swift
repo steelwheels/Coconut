@@ -60,6 +60,12 @@ public func testQueue(console cons: CNConsole) -> Bool
 		printQueue(message: "Pop 1 more ", queue: queue, console: cons)
 	}
 
+	if result {
+		cons.print(string: "testQueue .. OK\n")
+	} else {
+		cons.print(string: "testQueue .. NG\n")
+	}
+
 	return result
 }
 

@@ -24,6 +24,12 @@ public func testPreference(console cons: CNConsole) -> Bool
 	case .detail:	cons.print(string: "LogLevel: detail\n")
 	}
 
+	if result {
+		cons.print(string: "testPreference .. OK\n")
+	} else {
+		cons.print(string: "testPreference .. NG\n")
+	}
+
 	return result
 }
 

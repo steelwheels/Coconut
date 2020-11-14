@@ -13,7 +13,14 @@ public func testValue(console cons: CNConsole) -> Bool
 	let res0 = printValue(value: CNValue(booleanValue: true), expected: "true", console: cons)
 	let res1 = printValue(value: CNValue(stringValue: "Hello, world"), expected: "Hello, world", console: cons)
 	let res2 = testNativeValue(console: cons)
-	return res0 && res1 && res2
+
+	let result = res0 && res1 && res2
+	if result {
+		cons.print(string: "testValue .. OK\n")
+	} else {
+		cons.print(string: "testValue .. NG\n")
+	}
+	return result
 }
 
 private func printValue(value val: CNValue, expected exp: String, console cons: CNConsole) -> Bool

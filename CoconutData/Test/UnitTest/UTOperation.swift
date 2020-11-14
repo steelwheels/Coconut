@@ -91,11 +91,12 @@ public func testOperation(console cons: CNFileConsole) -> Bool
 	}
 
 	if noexecs.count == 0 {
-		cons.print(string: "testOperation ... Done\n")
+		cons.print(string: "testOperation ... OK\n")
 	} else {
-		cons.print(string: "testOperation ... Fail\n")
+		cons.print(string: "testOperation ... NG\n")
 		result = false
 	}
+
 	return result
 }
 

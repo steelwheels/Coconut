@@ -13,7 +13,14 @@ public func testProcess(console cons: CNFileConsole) -> Bool
 	let res0 = testNormalProcess(command: "echo \"Hello, World !!\"", console: cons)
 	//let res2 = testNormalProcess(command: "open -a /Applications/JSTerminal.app", console: cons)
 	let res1 = testProcessTermination(console: cons)
-	return res0 && res1 //&& res2
+
+	let result = res0 && res1 //&& res2
+	if result {
+		cons.print(string: "testProcess .. OK\n")
+	} else {
+		cons.print(string: "testProcess .. NG\n")
+	}
+	return result
 }
 
 private func testNormalProcess(command cmd: String, console cons: CNFileConsole) -> Bool

@@ -25,9 +25,9 @@ private func testMapper(graphicsMapper mapper: CNGraphicsMapper, logicalSize lsi
 	cons.print(string: "point: \(l0pt.debugDescription) -> \(p0pt.debugDescription) -> \(r0pt.debugDescription) ... ")
 	let result0 = (l0pt.x == r0pt.x) && (l0pt.y == r0pt.y)
 	if result0 {
-		cons.print(string: "OK\n")
+		cons.print(string: "result0: OK\n")
 	} else {
-		cons.print(string: "NG\n")
+		cons.print(string: "result0: NG\n")
 	}
 
 	let l1sz = CGSize(width: 5.0, height: 5.0)
@@ -36,11 +36,17 @@ private func testMapper(graphicsMapper mapper: CNGraphicsMapper, logicalSize lsi
 	cons.print(string: "size: \(l1sz.debugDescription) -> \(p1sz.debugDescription) -> \(r1sz.debugDescription) ... ")
 	let result1 = (l1sz.width == r1sz.width) && (l1sz.height == r1sz.height)
 	if result1 {
-		cons.print(string: "OK\n")
+		cons.print(string: "result1: OK\n")
 	} else {
-		cons.print(string: "NG\n")
+		cons.print(string: "result1: NG\n")
 	}
 
-	return result0 && result1
+	let result = result0 && result1
+	if result {
+		cons.print(string: "testMapper .. OK\n")
+	} else {
+		cons.print(string: "testMapper .. NG\n")
+	}
+	return result
 }
 

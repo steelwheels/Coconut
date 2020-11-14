@@ -45,7 +45,14 @@ public func testThread(console cons: CNFileConsole) -> Bool
 	let env     = CNEnvironment()
 	let result0 = testSimpleThread(processManager: manager, environment: env, console: cons)
 	let result1 = testNestedThread(processManager: manager, environment: env, console: cons)
-	return result0 && result1
+
+	let result = result0 && result1
+	if result {
+		cons.print(string: "testThread .. OK\n")
+	} else {
+		cons.print(string: "testThread .. NG\n")
+	}
+	return result
 }
 
 private func testSimpleThread(processManager procmgr: CNProcessManager, environment env: CNEnvironment, console cons: CNFileConsole) -> Bool

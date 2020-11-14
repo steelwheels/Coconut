@@ -35,6 +35,11 @@ private func testColorConvert(name nm: String, color col: CNColor, console cons:
 	} else {
 		cons.print(string: "Failed to allocate: \(code)\n")
 	}
+	if result {
+		cons.print(string: "testColorConvert .. OK\n")
+	} else {
+		cons.print(string: "testColorConvert .. NG\n")
+	}
 	return result
 }
 

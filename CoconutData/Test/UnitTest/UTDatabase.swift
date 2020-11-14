@@ -12,7 +12,14 @@ public func testDatabase(console cons: CNConsole) -> Bool
 {
 	let result0 = testMainDatabase(console: cons)
 	let result1 = testRemoteDatabase(console: cons)
-	return result0 && result1
+
+	let result = result0 && result1
+	if result {
+		cons.print(string: "testDatabase .. OK\n")
+	} else {
+		cons.print(string: "testDatabase .. NG\n")
+	}
+	return result
 }
 
 private func testMainDatabase(console cons: CNConsole) -> Bool

@@ -10,7 +10,7 @@ import Foundation
 
 public func testFile(console cons: CNConsole) -> Bool
 {
-	let url    = URL(fileURLWithPath: "Info.plist")
+	let url    = URL(fileURLWithPath: "CoconutData.framework/Resources/Info.plist")
 	do {
 		let handle = try FileHandle(forReadingFrom: url)
 		let file   = CNTextFile(fileHandle: handle)
@@ -30,11 +30,14 @@ public func testFile(console cons: CNConsole) -> Bool
 				}
 			#endif
 		}
+		cons.print(string: "[Error] Failed to read Info.plist\n")
+		cons.print(string: "testFile: OK\n")
 		return true
 	}
 	catch {
-		cons.print(string: "[Error] Failed to read Info.plist")
+		cons.print(string: "[Error] Failed to read Info.plist\n")
 	}
+	cons.print(string: "testFile: NG\n")
 	return false
 }
 

@@ -34,6 +34,10 @@ public func testResource(console cons: CNConsole) -> Bool
 		cons.print(string: "[Error] Can not load resource0\n")
 		result = false
 	}
-
+	if result {
+		cons.print(string: "testResource .. OK\n")
+	} else {
+		cons.print(string: "testResource .. NG\n")
+	}
 	return result
 }

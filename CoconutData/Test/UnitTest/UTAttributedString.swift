@@ -70,7 +70,13 @@ public func testAttributedString(console cons: CNConsole) -> Bool
 
 	let result1 = testPadding(console: cons)
 
-	return result0 && result1
+	let result  = result0 && result1
+	if result {
+		cons.print(string: "testAttributedString .. OK\n")
+	} else {
+		cons.print(string: "testAttributedString .. NG\n")
+	}
+	return result
 }
 
 private func testVector(vector src: TestString, console cons: CNConsole, terminalInfo terminfo: CNTerminalInfo) -> Bool

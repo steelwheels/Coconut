@@ -64,10 +64,16 @@ public func testEscapeSequence(console cons: CNConsole) -> Bool
 		    + "アプリケーション\r"
 	let res23  = dumpSequence(string: lsstr, console: cons)
 
+	let result = res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 &&
+		     res11 && res12 && res13 && res14 && res15 && res16 && res17 && res18 && res19 && res20 &&
+		     res21 && res22 && res23
+	if result {
+		cons.print(string: "testEscapeSequence .. OK\n")
+	} else {
+		cons.print(string: "testEscapeSequence .. NG\n")
+	}
 	//cons.error(string: "Color message\n")
-	return  res0 && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 &&
-		res11 && res12 && res13 && res14 && res15 && res16 && res17 && res18 && res19 && res20 &&
-		res21 && res22 && res23
+	return  result
 }
 
 private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool {

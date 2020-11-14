@@ -26,6 +26,13 @@ public func testObserver(console cons: CNConsole) -> Bool
 
 	vtable.setValue(NSNumber(booleanLiteral: true), forKey: "isExecuting")
 
-	return updated
+	let result = updated
+	if result {
+		cons.print(string: "testObserver .. OK\n")
+	} else {
+		cons.print(string: "testObserver .. NG\n")
+	}
+
+	return result
 }
 
