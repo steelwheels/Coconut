@@ -27,15 +27,32 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 		super.init()
 	}
 
+	#if os(OSX)
 	open func applicationWillFinishLaunching(_ notification: Notification) {
 		UserDefaults.standard.applyDefaultSetting()
 	}
+	#else
+	open func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+		UserDefaults.standard.applyDefaultSetting()
+		return true
+	}
+	#endif
 
+	#if os(OSX)
 	open func applicationDidFinishLaunching(_ notification: Notification) {
 	}
+	#else
+	open func applicationDidFinishLaunching(_ application: UIApplication) {
+	}
+	#endif
 
+	#if os(OSX)
 	open func applicationWillTerminate(_ aNotification: Notification) {
 	}
+	#else
+	open func applicationWillTerminate(_ application: UIApplication) {
+	}
+	#endif
 
 	#if os(OSX)
 	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
