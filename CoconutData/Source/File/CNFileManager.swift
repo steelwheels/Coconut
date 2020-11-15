@@ -221,5 +221,20 @@ public extension FileManager
 			return err
 		}
 	}
+
+	var usersHomeDirectory: URL {
+		get {
+			let path = "/Users/" + NSUserName() + "/"
+			switch self.checkFileType(pathString: path) {
+			case .Directory:
+				if self.isAccessible(pathString: path, accessType: .ReadAccess) {
+					return URL(fileURLWithPath: path)
+				}
+			case .File, .NotExist:
+				break
+			}
+			return URL(fileURLWithPath: NSHomeDirectory())
+		}
+	}
 }
 

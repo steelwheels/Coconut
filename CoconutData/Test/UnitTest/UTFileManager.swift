@@ -57,8 +57,8 @@ public func testFileManager(console cons: CNConsole) -> Bool
 		result = false
 	}
 
-	let homedir = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
-	cons.print(string: "home-dir: \(homedir.path)\n")
+	let homedir = FileManager.default.usersHomeDirectory
+	cons.print(string: "home-dir: \(homedir.absoluteString)\n")
 
 	cons.print(string: "rel: /tmp/a -> ")
 	let url0 = fmanager.fullPath(pathString: "/tmp/a", baseURL: homedir)
@@ -95,6 +95,9 @@ public func testFileManager(console cons: CNConsole) -> Bool
 		cons.print(string: "NG: url3 = \(url3.path) <-> \(exp3)\n")
 		result = false
 	}
+
+	let url4 = fmanager.homeDirectoryForCurrentUser
+	cons.print(string: "home directory: \(url4.absoluteString)\n")
 
 	if result {
 		cons.print(string: "testFileManager .. OK\n")

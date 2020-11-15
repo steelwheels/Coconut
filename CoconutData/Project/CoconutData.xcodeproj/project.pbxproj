@@ -179,6 +179,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0580B36A25608B030041AB35 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05B32C7825150057000D1411 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 053B4EE8255FE176004B9052;
+			remoteInfo = UnitTest;
+		};
 		05B32DA2251576F6000D1411 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 05B32C7825150057000D1411 /* Project object */;
@@ -687,6 +694,7 @@
 			buildToolPath = /usr/bin/make;
 			buildWorkingDirectory = "";
 			dependencies = (
+				0580B36B25608B030041AB35 /* PBXTargetDependency */,
 			);
 			name = Check;
 			passBuildSettingsInEnvironment = 1;
@@ -1042,6 +1050,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0580B36B25608B030041AB35 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 053B4EE8255FE176004B9052 /* UnitTest */;
+			targetProxy = 0580B36A25608B030041AB35 /* PBXContainerItemProxy */;
+		};
 		05B32DA3251576F6000D1411 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 05B32C91251501D7000D1411 /* CoconutData_iOS */;

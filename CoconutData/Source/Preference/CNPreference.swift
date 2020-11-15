@@ -213,13 +213,9 @@ public class CNUserPreference: CNPreferenceTable
 		if let homedir = super.loadStringValue(forKey: HomeDirectoryItem) {
 			super.set(stringValue: homedir, forKey: HomeDirectoryItem)
 		} else {
-			let homedir: String
-			#if os(OSX)
-				homedir = FileManager.default.homeDirectoryForCurrentUser.path
-			#else
-				homedir = NSHomeDirectory()
-			#endif
-			super.set(stringValue: homedir, forKey: HomeDirectoryItem)
+			let homedir = FileManager.default.usersHomeDirectory
+			//NSLog("CNUserPreference: home=\(homedir)")
+			super.set(stringValue: homedir.path, forKey: HomeDirectoryItem)
 		}
 	}
 
@@ -228,8 +224,10 @@ public class CNUserPreference: CNPreferenceTable
 			if let homedir = super.stringValue(forKey: HomeDirectoryItem) {
 				let pref = CNPreference.shared.bookmarkPreference
 				if let homeurl = pref.search(pathString: homedir) {
+					//NSLog("get homeDirectory=\(homeurl.path)")
 					return homeurl
 				} else {
+					//NSLog("get homeDirectory=\(homedir)")
 					return URL(fileURLWithPath: homedir)
 				}
 			}

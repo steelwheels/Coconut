@@ -1,7 +1,9 @@
 Hello, World!
 * testPreference
 LogLevel: debug
+testPreference .. OK
 * fontManager
+testFontManager .. OK
 * testStringStream
 - Test string stream to token
 [INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]
@@ -20,6 +22,7 @@ IdentifierToken(e01)
 - Test string stream to decode
 Decoded value: 1234 ... OK
 Remained: a .. OK
+testStringStream .. OK
 * testAttributedString
 Start Vector Test --------------
 -------- [begin]
@@ -483,6 +486,7 @@ deleteEntireLine
 ._._._._.$
 ._._._._
 -------- [end]
+testAttributedString .. OK
 * testStringUtil
 "padding---"
 "0123456789"
@@ -531,9 +535,13 @@ firstWord: "/path/script.js `{args: "a"}`" => ("/path/script.js", "`{args: "a"}`
 "x":0x78 "y":0x79 "z":0x7a "{":0x7b "|":0x7c "}":0x7d "~":0x7e "DEL":0x7f 
 * testURL
 nullURL = file:///dev/null
+testURL .. OK
 * testValue
 exp: true -> real: true
 exp: Hello, world -> real: Hello, world
+nativeValue: type=Number, value=123
+nativeValue: type=Color, value=sRGB IEC61966-2.1 colorspace 0 0 1 1
+testValue .. OK
 * testQueue
 Initial: {1st:-1, next:0, count:0 }
 []
@@ -598,6 +606,7 @@ Pop x 16: {1st:2, next:2, count:66 }
 []
 Pop 1 more : {1st:2, next:2, count:66 }
 []
+testQueue .. OK
 * testConsole
 - put string to buffer
 - flush buffer
@@ -611,67 +620,47 @@ FileDescriptor = 0
 - Set raw mode -> Failed
 - Reset raw mode -> Failed
 * testFile
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundlePackageType</key>
-	<string>FMWK</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (C) 2018 Steel Wheels Project. All rights reserved.</string>
-	<key>NSPrincipalClass</key>
-	<string></string>
-</dict>
-</plist>
+[Error] Failed to read Info.plist
+testFile: NG
 * testFilePath
-testFilePath: Info.plist
-UTI: com.apple.property-list 
+testFilePath: /usr/bin/ls
+UTI: public.unix-executable 
 Get sceme from "/usr/local/bin" -> <none> -> OK
 Get sceme from "https://yahoo.com" -> Sceme:"https" -> OK
 Get sceme from "https//yahoo.com" -> <none> -> OK
 Get sceme from "ftp.c://yahoo.com" -> Sceme:"ftp.c" -> OK
+testFilePath .. OK
 * testFileManager
+Test: fileExists -> NG -> File /Users/tomoo/Project/Coconut/CoconutData/Project/CoconutData.framework/Resources/Info.plist is NOT exist
 Test: fileExists -> OK
-Test: fileExists -> OK
-Test: isAccessible (Read) -> OK
+Test: isAccessible (Read) -> NG -> File /Users/tomoo/Project/Coconut/CoconutData/Project/CoconutData.framework/Resources/Info.plist can not be read
 Test: isAccessible (Read) -> OK
 Test: isAccessible (CurDir) -> OK
-home-dir: /Users/tomoo
+home-dir: file:///Users/tomoo/
 rel: /tmp/a -> OK
 rel: a.txt -> OK
 rel: subdir/a.txt -> OK
 rel: ../a.txt -> OK
+home directory: file:///Users/tomoo/
+testFileManager .. NG
 * testObserver
 isExecuting -> true
+testObserver .. OK
 * testOperation
 Wait for finish operations
-testOperation ... Done
+testOperation ... OK
 * testOperationQueue
 * TEST0
-Finished0
-Finished1
+Unknown0
+Unknown1
 Done (0)
 * TEST1
-Finished0
-Finished1
+Unknown0
+Unknown1
 Done (1)
 * TEST2
-Finished0
-Finished1
+Unknown0
+Unknown1
 Done (2)
 testOperationQueue: OK
 * testProcess
@@ -682,15 +671,19 @@ Execute process which can not be finished
 Terminate the process
 END of process
 Process is terminated with exit code: 15
+testProcess .. OK
 * testEnvironment
+env("HOME") = "/Users/tomoo"
 * testThread
 testSimpleThread: 1. Begin
 testSimpleThread: 3: ecode = 0
 testNestedThread: 1. Begin
 testNestedThread: 2. End code: 0
+testThread .. OK
 * testGraphics
-point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... OK
-size: (5.0, 5.0) -> (2.5, 2.5) -> (5.0, 5.0) ... OK
+point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... result0: OK
+size: (5.0, 5.0) -> (2.5, 2.5) -> (5.0, 5.0) ... result1: OK
+testMapper .. OK
 * testEscapeSequence
 * dumpSequence
 string("Hello, World !!")
@@ -808,15 +801,24 @@ string("tools")
 newline
 string("アプリケーション")
 newline
+testEscapeSequence .. OK
 * testColor
 black : OK
+testColorConvert .. OK
 red : OK
+testColorConvert .. OK
 green : OK
+testColorConvert .. OK
 yellow : OK
+testColorConvert .. OK
 blue : OK
+testColorConvert .. OK
 magenta : OK
+testColorConvert .. OK
 cyan : OK
+testColorConvert .. OK
 white : OK
+testColorConvert .. OK
 * testTextStorage
 - Initial state
 -------- [begin]
@@ -1241,8 +1243,10 @@ read "ident2" -> "Hello"
   }
   write_cache: {
   }
+testDatabase .. OK
 * testResource
 [Path] a.num
 Load resource for file:///tmp/a.num
 [OK] Loaded => 1.23
-[Result] OK
+testResource .. OK
+[Result] NG

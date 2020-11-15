@@ -16,8 +16,10 @@ public class CNEnvironment
 	private var mEnvironmentVariable: Dictionary<String, CNNativeValue>
 
 	public init(){
+		let homedir = FileManager.default.usersHomeDirectory.path
 		mEnvironmentVariable = [
 			"TMPDIR"			: CNNativeValue.stringValue(FileManager.default.temporaryDirectory.path),
+			"HOME"				: CNNativeValue.stringValue(homedir),
 			"PWD"				: CNNativeValue.stringValue(FileManager.default.currentDirectoryPath),
 			CNEnvironment.WidthItem		: CNNativeValue.numberValue(NSNumber(integerLiteral: 80)),
 			CNEnvironment.HeightItem	: CNNativeValue.numberValue(NSNumber(integerLiteral: 25))
