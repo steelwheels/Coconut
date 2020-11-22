@@ -56,19 +56,19 @@ open class CNApplicationDelegate: CNApplicationDelegateSuper, CNApplicationDeleg
 
 	#if os(OSX)
 	open func application(_ sender: NSApplication, delegateHandlesKey key: String) -> Bool {
-		NSLog("Access to the delegateHandlesKey: \(key)")
+		//NSLog("Access to the delegateHandlesKey: \(key)")
 		let mgr = CNAppleEventManager.shared()
 		return mgr.hasProperty(named: key)
 	}
 
 	open override func value(forKey key: String) -> Any? {
-		NSLog("value forKey: \(key)")
+		//NSLog("value forKey: \(key)")
 		let mgr = CNAppleEventManager.shared()
 		return mgr.property(forKey: key)
 	}
 
 	open override func setValue(_ value: Any?, forKey key: String) {
-		NSLog("set value forKey: \(key)")
+		//NSLog("set value forKey: \(key)")
 		let mgr = CNAppleEventManager.shared()
 		mgr.setProperty(value, forKey: key)
 	}

@@ -64,10 +64,10 @@ public class CNAppleEventManager
 			return termpref.backgroundTextColor
 		case "terminalHeight":
 			let termpref = CNPreference.shared.terminalPreference
-			return NSNumber(integerLiteral: termpref.rowNumber)
+			return NSNumber(integerLiteral: termpref.height)
 		case "terminalWidth":
 			let termpref = CNPreference.shared.terminalPreference
-			return NSNumber(integerLiteral: termpref.columnNumber)
+			return NSNumber(integerLiteral: termpref.width)
 		default:
 			CNLog(logLevel: .error, message: "[Error] Can not get property named: \(key)")
 		}
@@ -92,13 +92,13 @@ public class CNAppleEventManager
 		case "terminalHeight":
 			if let num = value as? NSNumber {
 				let termpref = CNPreference.shared.terminalPreference
-				termpref.rowNumber = num.intValue
+				termpref.height = num.intValue
 				hasset = true
 			}
 		case "terminalWidth":
 			if let num = value as? NSNumber {
 				let termpref = CNPreference.shared.terminalPreference
-				termpref.columnNumber = num.intValue
+				termpref.width = num.intValue
 				hasset = true
 			}
 		default:

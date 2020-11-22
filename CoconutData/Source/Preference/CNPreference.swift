@@ -320,8 +320,8 @@ public class CNBookmarkPreference: CNPreferenceTable
 
 public class CNTerminalPreference: CNPreferenceTable
 {
-	public let ColumnNumberItem		= "colmunNumber"
-	public let RowNumberItem		= "rowNumber"
+	public let WidthItem			= "width"
+	public let HeightItem			= "height"
 	public let ForegroundTextColorItem	= "foregroundTextColor"
 	public let BackgroundTextColorItem	= "backgroundTextColor"
 	public let FontItem			= "font"
@@ -329,16 +329,16 @@ public class CNTerminalPreference: CNPreferenceTable
 	public init() {
 		super.init(sectionName: "TerminalPreference")
 
-		if let num = super.loadIntValue(forKey: ColumnNumberItem) {
-			super.set(intValue: num, forKey: ColumnNumberItem)
+		if let num = super.loadIntValue(forKey: WidthItem) {
+			super.set(intValue: num, forKey: WidthItem)
 		} else {
-			self.columnNumber = 80
+			self.width = 80
 		}
 
-		if let num = super.loadIntValue(forKey: RowNumberItem) {
-			super.set(intValue: num, forKey: RowNumberItem)
+		if let num = super.loadIntValue(forKey: HeightItem) {
+			super.set(intValue: num, forKey: HeightItem)
 		} else {
-			self.rowNumber = 25
+			self.height = 20
 		}
 
 		if let coldict = super.loadColorDictionaryValue(forKey: ForegroundTextColorItem) {
@@ -366,33 +366,35 @@ public class CNTerminalPreference: CNPreferenceTable
 		}
 	}
 
-	public var columnNumber: Int {
+	public var width: Int {
 		get {
-			if let val = super.intValue(forKey: ColumnNumberItem) {
+			if let val = super.intValue(forKey: WidthItem) {
 				return val
 			}
 			fatalError("Can not happen")
 		}
 		set(newval) {
-			if newval != super.intValue(forKey: ColumnNumberItem) {
-				super.storeIntValue(intValue: newval, forKey: ColumnNumberItem)
+			let orgval = super.intValue(forKey: WidthItem)
+			if newval != orgval {
+				super.storeIntValue(intValue: newval, forKey: WidthItem)
+				super.set(intValue: newval, forKey: WidthItem)
 			}
-			super.set(intValue: newval, forKey: ColumnNumberItem)
 		}
 	}
 
-	public var rowNumber: Int {
+	public var height: Int {
 		get {
-			if let val = super.intValue(forKey: RowNumberItem) {
+			if let val = super.intValue(forKey: HeightItem) {
 				return val
 			}
 			fatalError("Can not happen")
 		}
 		set(newval) {
-			if newval != super.intValue(forKey: RowNumberItem) {
-				super.storeIntValue(intValue: newval, forKey: RowNumberItem)
+			let orgval = super.intValue(forKey: HeightItem)
+			if newval != orgval {
+				super.storeIntValue(intValue: newval, forKey: HeightItem)
+				super.set(intValue: newval, forKey: HeightItem)
 			}
-			super.set(intValue: newval, forKey: RowNumberItem)
 		}
 	}
 

@@ -101,6 +101,7 @@ public extension NSMutableAttributedString
 				if terminfo.isAlternative {
 					self.resize(width: width, height: height, font: fnt, terminalInfo: terminfo)
 				}
+				NSLog("Update terminal size wiwdth=\(terminfo.width)->\(width) height=\(terminfo.height)->\(height)")
 				terminfo.width  = width
 				terminfo.height = height
 			}
