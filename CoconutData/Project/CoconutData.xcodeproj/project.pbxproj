@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		055BF94F255C25070004C250 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 055BF94E255C25070004C250 /* CoconutScript.sdef */; };
 		055BF950255C25070004C250 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 055BF94E255C25070004C250 /* CoconutScript.sdef */; };
+		059BA6D3256B20B500893641 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059BA6D2256B20B500893641 /* UTType.swift */; };
 		05B32C88251501B1000D1411 /* CoconutData_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C86251501B1000D1411 /* CoconutData_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32C96251501D7000D1411 /* CoconutData_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C94251501D7000D1411 /* CoconutData_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32CA82515025E000D1411 /* CNValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9E2515025E000D1411 /* CNValueUtil.swift */; };
@@ -232,6 +233,7 @@
 /* Begin PBXFileReference section */
 		053B4EE9255FE176004B9052 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		055BF94E255C25070004C250 /* CoconutScript.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CoconutScript.sdef; sourceTree = "<group>"; };
+		059BA6D2256B20B500893641 /* UTType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTType.swift; sourceTree = "<group>"; };
 		05B32C83251501B1000D1411 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B32C86251501B1000D1411 /* CoconutData_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData_macOS.h; sourceTree = "<group>"; };
 		05B32C87251501B1000D1411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 				05FC3866255FEC1D004CA79E /* UTStringUtil.swift */,
 				05FC3858255FEC1C004CA79E /* UTTextStorage.swift */,
 				05FC3860255FEC1D004CA79E /* UTThread.swift */,
+				059BA6D2256B20B500893641 /* UTType.swift */,
 				05FC3861255FEC1D004CA79E /* UTURL.swift */,
 				05FC3870255FEC1E004CA79E /* UTValue.swift */,
 			);
@@ -887,6 +890,7 @@
 				05FC3884255FEC1E004CA79E /* UTDatabase.swift in Sources */,
 				05FC3874255FEC1E004CA79E /* UTAttributedString.swift in Sources */,
 				05FC3877255FEC1E004CA79E /* UTQueue.swift in Sources */,
+				059BA6D3256B20B500893641 /* UTType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

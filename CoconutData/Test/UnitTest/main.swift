@@ -12,6 +12,9 @@ import Darwin
 let cons = CNFileConsole()
 cons.print(string: "Hello, World!\n")
 
+cons.print(string: "* testType\n")
+let result28 = testType(console: cons)
+
 cons.print(string: "* testPreference\n")
 let result8 = testPreference(console: cons)
 
