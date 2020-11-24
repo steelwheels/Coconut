@@ -224,16 +224,19 @@ public extension FileManager
 
 	var usersHomeDirectory: URL {
 		get {
-			let path = "/Users/" + NSUserName() + "/"
-			switch self.checkFileType(pathString: path) {
-			case .Directory:
-				if self.isAccessible(pathString: path, accessType: .ReadAccess) {
-					return URL(fileURLWithPath: path)
+			#if os(OSX)
+			/* https://developer.apple.com/forums/thread/107593 */
+			if let pw = getpwuid(getuid()) {
+				let url = URL(fileURLWithFileSystemRepresentation: pw.pointee.pw_dir, isDirectory: true, relativeTo: nil)
+				if isAccessible(pathString: url.path, accessType: .ReadAccess) {
+					return url
 				}
-			case .File, .NotExist:
-				break
 			}
 			return URL(fileURLWithPath: NSHomeDirectory())
+			#else
+				return URL(fileURLWithPath: NSHomeDirectory())
+			#endif
+
 		}
 	}
 }
