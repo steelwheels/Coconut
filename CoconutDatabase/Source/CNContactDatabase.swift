@@ -1,5 +1,5 @@
 /**
- * @file	CNAuthorize.swift
+ * @file	CNContactDatabase.swift
  * @brief	Define CNAuthorize class
  * @par Copyright
  *   Copyright (C) 2018 Steel Wheels Project
@@ -9,16 +9,30 @@ import CoconutData
 import Contacts
 import Foundation
 
-public class CNAddressBook
+public class CNContactDatabase
 {
+	public enum Key {
+		case	givenName
+		case	familyName
+
+		public func toString() -> String {
+			let result: String
+			switch self {
+			case .givenName:	result = CNContactGivenNameKey
+			case .familyName:	result = CNContactFamilyNameKey
+			}
+			return result
+		}
+	}
+
 	private var mState: CNAuthorizeState
+	private var mStore: CNContactStore?
 
 	public init(){
 		mState = .Undetermined
+		mStore = nil
 	}
-
-	public var state: CNAuthorizeState { get { return mState }}
-
+	
 	public func authorize() -> CNAuthorizeState {
 		if mState == .Undetermined {
 			let status = CNContactStore.authorizationStatus(for: .contacts)
@@ -45,6 +59,41 @@ public class CNAddressBook
 		}
 		return mState
 	}
+
+	public enum ReadResult {
+		case	done(Array<CNContact>)
+		case	error(NSError)
+	}
+
+	public func read(keys keyarray: Array<Key>, name nm: String) -> ReadResult {
+		if let store = mStore {
+			let predicate = CNContact.predicateForContacts(matchingName: nm)
+			do {
+				let result = try store.unifiedContacts(matching: predicate, keysToFetch: keysToFetchValue(keys: keyarray))
+				return .done(result)
+			} catch let err {
+				return .error(err as NSError)
+			}
+		} else {
+			return .error(NSError.fileError(message: "Not authorized"))
+		}
+	}
+
+	private func keysToFetchValue(keys array: Array<Key>) -> Array<CNKeyDescriptor> {
+		var result: Array<CNKeyDescriptor> = []
+		for key in array {
+			result.append(key.toString() as CNKeyDescriptor)
+		}
+		return result
+	}
+}
+
+/*
+public class CNAddressBook
+{
+
+
+	public var state: CNAuthorizeState { get { return mState }}
 
 	public func contacts() -> CNNativeValue? {
 		if mState == .Authorized {
@@ -110,4 +159,5 @@ public class CNAddressBook
 		}
 	}
 }
+*/
 

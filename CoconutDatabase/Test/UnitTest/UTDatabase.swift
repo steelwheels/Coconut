@@ -5,6 +5,7 @@
  *   Copyright (C) 2018 Steel Wheels Project
  */
 
+/*
 import CoconutData
 import Foundation
 
@@ -90,3 +91,5 @@ private func print(database db: CNDatabaseProtocol, console cons: CNConsole) {
 	let text = db.toText()
 	text.print(console: cons, terminal: "")
 }
+*/
+
