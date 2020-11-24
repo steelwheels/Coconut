@@ -63,7 +63,7 @@ import Foundation
 			case .escapeCode(let code):
 				switch code {
 				case .screenSize(let width, let height):
-					NSLog("Update shell info: \(mTerminalInfo.width)->\(width) \(mTerminalInfo.height)->\(height)")
+					//NSLog("Update shell info: \(mTerminalInfo.width)->\(width) \(mTerminalInfo.height)->\(height)")
 					mTerminalInfo.width	= width
 					mTerminalInfo.height	= height
 				case .eot:
