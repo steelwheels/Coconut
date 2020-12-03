@@ -13,46 +13,6 @@ public protocol CNConsole {
 	func scan() -> String?
 }
 
-/*
-public protocol CNLogging
-{
-	var console: CNConsole?	{ get }
-
-	func log(type logtype: CNConfig.LogLevel, string str: String, file filestr: String, line linestr: Int, function funcstr: String)
-	func log(type logtype: CNConfig.LogLevel, text   txt: CNText, file filestr: String, line linestr: Int, function funcstr: String)
-}
-
-extension CNLogging
-{
-	public func log(type logtype: CNConfig.LogLevel, string str: String, file filestr: String, line lineval: Int, function funcstr: String){
-		let desc  = "[\(logtype.description)] "
-		let place = placeString(file: filestr, line: lineval, function: funcstr)
-		log(type: logtype, entireString: desc + str + " at " + place + "\n")
-	}
-
-	public func log(type logtype: CNConfig.LogLevel, text   txt: CNText, file filestr: String, line lineval: Int, function funcstr: String){
-		let desc  = "[\(logtype.description)] "
-		let place = placeString(file: filestr, line: lineval, function: funcstr)
-		log(type: logtype, entireString: desc + " at " + place + "\n")
-		if let cons = console {
-			txt.print(console: cons, terminal: "")
-		}
-	}
-
-	private func log(type loglevel: CNConfig.LogLevel, entireString str: String) {
-		let curlevel = CNPreference.shared.systemPreference.logLevel
-		if curlevel.isMatched(logLevel: loglevel) {
-			if let cons = console {
-				cons.print(string: str)
-			}
-		}
-	}
-
-	private func placeString(file filestr: String, line linestr: Int, function funcstr: String) -> String {
-		return "\(filestr)/\(linestr)/\(funcstr)\n"
-	}
-}*/
-
 public class CNDefaultConsole: CNConsole
 {
 	public init(){

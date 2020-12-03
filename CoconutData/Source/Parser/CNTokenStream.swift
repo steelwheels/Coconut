@@ -44,11 +44,15 @@ public class CNTokenStream
 	}
 
 	public func requireReservedWord(reservedWordId rid: Int) -> Bool {
-		if let val = getReservedWord() {
-			return (val == rid)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let cid = token.getReservedWord() {
+				if cid == rid {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func getSymbol() -> Character? {
@@ -60,11 +64,15 @@ public class CNTokenStream
 	}
 
 	public func requireSymbol(symbol sym: Character) -> Bool {
-		if let val = getSymbol() {
-			return (val == sym)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getSymbol() {
+				if val == sym {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func getIdentifier() -> String? {
@@ -76,11 +84,15 @@ public class CNTokenStream
 	}
 
 	public func requireIdentifier(identifier ident: String) -> Bool {
-		if let val = getIdentifier() {
-			return (val == ident)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getIdentifier() {
+				if val == ident {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return  false
 	}
 
 	public func getBool() -> Bool? {
@@ -92,11 +104,15 @@ public class CNTokenStream
 	}
 
 	public func requireBool(value src: Bool) -> Bool {
-		if let val = getBool() {
-			return (val == src)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getBool() {
+				if val == src {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func getInt() -> Int? {
@@ -108,11 +124,15 @@ public class CNTokenStream
 	}
 
 	public func requireInt(value src: Int) -> Bool {
-		if let val = getInt() {
-			return (val == src)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getInt() {
+				if val == src {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func getUInt() -> UInt? {
@@ -124,11 +144,15 @@ public class CNTokenStream
 	}
 
 	public func requireUInt(value src: UInt) -> Bool {
-		if let val = getUInt() {
-			return (val == src)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getUInt() {
+				if val == src {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func getDouble() -> Double? {
@@ -140,11 +164,15 @@ public class CNTokenStream
 	}
 
 	public func requireDouble(value src: Double) -> Bool {
-		if let val = getDouble() {
-			return (val == src)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getDouble() {
+				if val == src {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func getAnyInt() -> Int? {
@@ -182,11 +210,15 @@ public class CNTokenStream
 	}
 
 	public func requireString(value src: String) -> Bool {
-		if let val = getString() {
-			return (val == src)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getString() {
+				if val == src {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func getText() -> String? {
@@ -198,11 +230,15 @@ public class CNTokenStream
 	}
 
 	public func requireText(value src: String) -> Bool {
-		if let val = getText() {
-			return (val == src)
-		} else {
-			return false
+		if let token = mStream.get() {
+			if let val = token.getText() {
+				if val == src {
+					return true
+				}
+			}
+			let _ = mStream.unget()
 		}
+		return false
 	}
 
 	public func unget() -> CNToken? {
