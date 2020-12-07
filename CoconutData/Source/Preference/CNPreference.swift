@@ -195,8 +195,7 @@ public class CNSystemPreference: CNPreferenceTable
 					return level
 				}
 			}
-			NSLog("No defined value")
-			return CNConfig.LogLevel.detail
+			return CNConfig.LogLevel.defaultLevel
 		}
 		set(level){
 			super.set(intValue: level.rawValue, forKey: CNSystemPreference.LogLevelItem)
