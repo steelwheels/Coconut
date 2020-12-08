@@ -34,7 +34,7 @@ open class CNConfig
 		}
 
 		public func isIncluded(in level: LogLevel) -> Bool {
-			return self.rawValue <= level.rawValue
+			return self.rawValue >= level.rawValue
 		}
 
 		public static var defaultLevel: LogLevel {

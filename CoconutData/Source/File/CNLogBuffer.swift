@@ -35,7 +35,7 @@ public class CNLogBuffer
 
 	public func log(logLevel level: CNConfig.LogLevel, messages msgs: Array<String>){
 		let curlvl = CNPreference.shared.systemPreference.logLevel
-		if level.isIncluded(in: curlvl) {
+		if curlvl.isIncluded(in: level) {
 			mLock.lock()
 			if let cons = mOutputConsole {
 				putLines(console: cons, lines: mLines)
