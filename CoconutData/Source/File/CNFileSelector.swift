@@ -24,7 +24,7 @@ public class CNFileSelector
 		mDidSelected	= false
 		/* open panel to select */
 		CNExecuteInMainThread(doSync: false, execute: {
-			URL.openPanelWithAsync(title: tstr, selection: .SelectFile, fileTypes: exts, callback: {
+			URL.openPanelWithAsync(title: tstr, type: .File, extensions: exts, callback: {
 				(_ urls: Array<URL>) -> Void in
 				if urls.count >= 1 {
 					self.mSelectedURL = urls[0]

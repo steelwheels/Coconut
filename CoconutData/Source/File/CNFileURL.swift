@@ -28,26 +28,21 @@ public extension URL
 	}
 
 #if os(OSX)
-	enum CNFileSelection {
-		case SelectFile
-		case SelectDirectory
-	}
-
-	static func openPanel(title tl: String, selection sel: CNFileSelection, fileTypes types: Array<String>) -> URL?
+	static func openPanel(title tl: String, type file: CNFileType, extensions exts: Array<String>) -> URL?
 	{
 		let panel = NSOpenPanel()
 		panel.title = tl
 
-		switch sel {
-		case .SelectFile:
+		switch file {
+		case .File, .NotExist:
 			panel.canChooseFiles       = true
 			panel.canChooseDirectories = false
-		case .SelectDirectory:
+		case .Directory:
 			panel.canChooseFiles       = false
 			panel.canChooseDirectories = true
 		}
 		panel.allowsMultipleSelection = false
-		panel.allowedFileTypes = types
+		panel.allowedFileTypes = exts
 
 		var result: URL? = nil
 		switch panel.runModal() {
@@ -69,20 +64,20 @@ public extension URL
 	}
 
 	/* Note: this method is used to open panel from the non-main thread */
-	static func openPanelWithAsync(title tl: String, selection sel: CNFileSelection, fileTypes types: Array<String>, callback cbfunc: @escaping (_ url: Array<URL>) -> Void) {
+	static func openPanelWithAsync(title tl: String, type file: CNFileType, extensions exts: Array<String>, callback cbfunc: @escaping (_ url: Array<URL>) -> Void) {
 		let panel = NSOpenPanel()
 		panel.title = tl
 
-		switch sel {
-		case .SelectFile:
+		switch file {
+		case .File, .NotExist:
 			panel.canChooseFiles       = true
 			panel.canChooseDirectories = false
-		case .SelectDirectory:
+		case .Directory:
 			panel.canChooseFiles       = false
 			panel.canChooseDirectories = true
 		}
 		panel.allowsMultipleSelection = false
-		panel.allowedFileTypes = types
+		panel.allowedFileTypes = exts
 
 		panel.begin(completionHandler: {
 			(_ responce: NSApplication.ModalResponse) -> Void in
