@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1220"
+   LastUpgradeVersion = "1230"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "05B32DD82516048E000D1411"
+               BlueprintIdentifier = "053B4EE8255FE176004B9052"
                BuildableName = "UnitTest"
                BlueprintName = "UnitTest"
                ReferencedContainer = "container:CoconutData.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "05B32DD82516048E000D1411"
+            BlueprintIdentifier = "053B4EE8255FE176004B9052"
             BuildableName = "UnitTest"
             BlueprintName = "UnitTest"
             ReferencedContainer = "container:CoconutData.xcodeproj">
@@ -61,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "05B32DD82516048E000D1411"
+            BlueprintIdentifier = "053B4EE8255FE176004B9052"
             BuildableName = "UnitTest"
             BlueprintName = "UnitTest"
             ReferencedContainer = "container:CoconutData.xcodeproj">
