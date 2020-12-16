@@ -61,6 +61,7 @@ open class CNConfig
 		logLevel = log
 	}
 }
+
 public enum CNInterfaceStyle: Int {
 	case light              = 0
 	case dark               = 1
@@ -317,6 +318,91 @@ public class CNBookmarkPreference: CNPreferenceTable
 	}
 }
 
+public class CNViewPreference: CNPreferenceTable
+{
+	public let ForegroundColorItem	= "foregroundColor"
+	public let BackgroundColorItem	= "backgroundColor"
+
+	public init() {
+		super.init(sectionName: "ViewPreference")
+
+		if let coldict = super.loadColorDictionaryValue(forKey: ForegroundColorItem) {
+			super.set(colorDictionaryValue: coldict, forKey: ForegroundColorItem)
+		} else {
+			let coldict: Dictionary<CNInterfaceStyle, CNColor> = [:]
+			super.set(colorDictionaryValue: coldict, forKey: ForegroundColorItem)
+		}
+
+		if let coldict = super.loadColorDictionaryValue(forKey: BackgroundColorItem) {
+			super.set(colorDictionaryValue: coldict, forKey: BackgroundColorItem)
+		} else {
+			let coldict: Dictionary<CNInterfaceStyle, CNColor> = [:]
+			super.set(colorDictionaryValue: coldict, forKey: BackgroundColorItem)
+		}
+	}
+
+	public var foregroundColor: CNColor {
+		get {
+			if let color = self.getColor(itemName: ForegroundColorItem) {
+				return color
+			} else {
+				let result: CNColor
+				switch CNPreference.shared.systemPreference.interfaceStyle {
+				case .dark:	result = CNColor.white
+				case .light:	result = CNColor.black
+				}
+				self.saveColor(itemName: ForegroundColorItem, color: result)
+				return result
+			}
+		}
+		set(newcol) {
+			self.saveColor(itemName: ForegroundColorItem, color: newcol)
+		}
+	}
+
+	public var backgroundColor: CNColor {
+		get {
+			if let color = self.getColor(itemName: BackgroundColorItem) {
+				return color
+			} else {
+				let result: CNColor
+				switch CNPreference.shared.systemPreference.interfaceStyle {
+				case .dark:	result = CNColor.black
+				case .light:	result = CNColor.white
+				}
+				self.saveColor(itemName: BackgroundColorItem, color: result)
+				return result
+			}
+		}
+		set(newcol) {
+			self.saveColor(itemName: BackgroundColorItem, color: newcol)
+		}
+	}
+
+	private func getColor(itemName name: String) -> CNColor? {
+		let style = CNPreference.shared.systemPreference.interfaceStyle
+		if let dict = super.colorDictionaryValue(forKey: name) {
+			if let color = dict[style] {
+				return color
+			}
+		}
+		return nil
+	}
+
+	private func saveColor(itemName name: String, color col: CNColor) {
+		let style = CNPreference.shared.systemPreference.interfaceStyle
+		if var dict = super.colorDictionaryValue(forKey: name) {
+			dict[style] = col
+			super.set(colorDictionaryValue: dict, forKey: name)
+			super.storeColorDictionaryValue(dataDictionaryValue: dict, forKey: name)
+		} else {
+			let dict: Dictionary<CNInterfaceStyle, CNColor> = [style:col]
+			super.set(colorDictionaryValue: dict, forKey: name)
+			super.storeColorDictionaryValue(dataDictionaryValue: dict, forKey: name)
+		}
+	}
+}
+
 public class CNTerminalPreference: CNPreferenceTable
 {
 	public let WidthItem			= "width"
@@ -492,6 +578,13 @@ extension CNPreference
 		return get(name: "bookmark", allocator: {
 			() -> CNBookmarkPreference in
 				return CNBookmarkPreference()
+		})
+	}}
+
+	public var viewPreference: CNViewPreference { get {
+		return get(name: "view", allocator: {
+			() -> CNViewPreference in
+				return CNViewPreference()
 		})
 	}}
 
