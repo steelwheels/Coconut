@@ -343,13 +343,21 @@ public class CNViewPreference: CNPreferenceTable
 
 	public var foregroundColor: CNColor {
 		get {
+			#if os(OSX)
+			let DarkColor  = CNColor.systemGray
+			let LightColor = CNColor.black
+			#else
+			let DarkColor  = CNColor.systemGray
+			let LightColor = CNColor.black
+			#endif
+
 			if let color = self.getColor(itemName: ForegroundColorItem) {
 				return color
 			} else {
 				let result: CNColor
 				switch CNPreference.shared.systemPreference.interfaceStyle {
-				case .dark:	result = CNColor.white
-				case .light:	result = CNColor.black
+				case .dark:	result = DarkColor
+				case .light:	result = LightColor
 				}
 				self.saveColor(itemName: ForegroundColorItem, color: result)
 				return result
@@ -362,13 +370,21 @@ public class CNViewPreference: CNPreferenceTable
 
 	public var backgroundColor: CNColor {
 		get {
+			#if os(OSX)
+			let DarkColor  = CNColor.darkGray
+			let LightColor = CNColor.white
+			#else
+			let DarkColor  = CNColor.systemGray6
+			let LightColor = CNColor.white
+			#endif
+
 			if let color = self.getColor(itemName: BackgroundColorItem) {
 				return color
 			} else {
 				let result: CNColor
 				switch CNPreference.shared.systemPreference.interfaceStyle {
-				case .dark:	result = CNColor.black
-				case .light:	result = CNColor.white
+				case .dark:	result = DarkColor
+				case .light:	result = LightColor
 				}
 				self.saveColor(itemName: BackgroundColorItem, color: result)
 				return result
