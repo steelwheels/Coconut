@@ -38,24 +38,28 @@ public class CNObservedValueTable
 		}
 	}
 
-	public func setValue(_ val: Any, forKey key: String){
+	public func setValue(_ val: NSObject, forKey key: String){
 		mValueTable.setValue(val, forKey: key)
 	}
 
-	public func value(forKey k: String) -> Any? {
-		return mValueTable.value(forKey: k)
-	}
-
-	public func setBooleanValue(_ val: Bool, forKey key: String){
-		let num = NSNumber(booleanLiteral: val)
-		setValue(num, forKey: key)
-	}
-
-	public func booleanValue(forKey k: String) -> Bool {
-		if let num = value(forKey: k) as? NSNumber {
-			return num.boolValue
+	public func value(forKey k: String) -> NSObject? {
+		if let obj =  mValueTable.value(forKey: k) as? NSObject {
+			return obj
 		} else {
-			fatalError("No object at \(#function)")
+			return nil
+		}
+	}
+
+	public func setBooleanValue(_ bval: Bool, forKey key: String){
+		let bobj = NSNumber(booleanLiteral: bval)
+		setValue(bobj, forKey: key)
+	}
+
+	public func booleanValue(forKey key: String) -> Bool? {
+		if let obj = value(forKey: key) as? NSNumber {
+			return obj.boolValue
+		} else {
+			return nil
 		}
 	}
 

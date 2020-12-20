@@ -83,7 +83,12 @@ import Foundation
 
 	open var isExecuting: Bool {
 		get {
-			return mObservedValueTable.booleanValue(forKey: CNOperationContext.isExecutingItem)
+			if let val = mObservedValueTable.booleanValue(forKey: CNOperationContext.isExecutingItem) {
+				return val
+			} else {
+				mConsole.error(string: "No isExecuting property")
+				return false
+			}
 		}
 		set(val) {
 			mObservedValueTable.setBooleanValue(val, forKey: CNOperationContext.isExecutingItem)
@@ -92,7 +97,12 @@ import Foundation
 
 	open var isFinished: Bool {
 		get {
-			return mObservedValueTable.booleanValue(forKey: CNOperationContext.isFinishedItem)
+			if let val = mObservedValueTable.booleanValue(forKey: CNOperationContext.isFinishedItem) {
+				return val
+			} else {
+				mConsole.error(string: "No isFinished property")
+				return false
+			}
 		}
 		set(val) {
 			mObservedValueTable.setBooleanValue(val, forKey: CNOperationContext.isFinishedItem)
@@ -101,7 +111,12 @@ import Foundation
 
 	open var isCancelled: Bool {
 		get {
-			return mObservedValueTable.booleanValue(forKey: CNOperationContext.isCanceledItem)
+			if let val = mObservedValueTable.booleanValue(forKey: CNOperationContext.isCanceledItem) {
+				return val
+			} else {
+				mConsole.error(string: "No isCancelled property")
+				return false
+			}
 		}
 		set(val){
 			mObservedValueTable.setBooleanValue(val, forKey: CNOperationContext.isCanceledItem)
