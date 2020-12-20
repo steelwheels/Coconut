@@ -15,16 +15,8 @@ import Foundation
  */
 public extension URL
 {
-	var isValid: Bool {
-		get {
-			let result: Bool
-			if self.absoluteString == "file:///dev/null" {
-				result = false
-			} else {
-				result = true
-			}
-			return result
-		}
+	var isNull: Bool {
+		get { return self.absoluteString == "file:///dev/null" }
 	}
 
 #if os(OSX)
