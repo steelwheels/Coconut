@@ -15,6 +15,13 @@ import Foundation
  */
 public extension URL
 {
+	static func null() -> URL {
+		guard let u = URL(string: "file:///dev/null") else {
+			fatalError("Failed to allocate null URL")
+		}
+		return u
+	}
+
 	var isNull: Bool {
 		get { return self.absoluteString == "file:///dev/null" }
 	}

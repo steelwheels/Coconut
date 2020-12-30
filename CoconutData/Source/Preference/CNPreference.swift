@@ -213,8 +213,7 @@ public class CNUserPreference: CNPreferenceTable
 		if let homedir = super.loadStringValue(forKey: HomeDirectoryItem) {
 			super.set(stringValue: homedir, forKey: HomeDirectoryItem)
 		} else {
-			let homedir = FileManager.default.usersHomeDirectory
-			//NSLog("CNUserPreference: home=\(homedir)")
+			let homedir = URL.null()
 			super.set(stringValue: homedir.path, forKey: HomeDirectoryItem)
 		}
 	}
