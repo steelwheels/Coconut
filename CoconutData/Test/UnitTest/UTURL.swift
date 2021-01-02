@@ -14,7 +14,7 @@ public func testURL(console cons: CNConsole) -> Bool
 
 	let nullurl = URL(fileURLWithPath: "/dev/null")
 	cons.print(string: "nullURL = \(nullurl.absoluteString)\n")
-	if nullurl.isValid {
+	if !nullurl.isNull {
 		result = false
 	}
 

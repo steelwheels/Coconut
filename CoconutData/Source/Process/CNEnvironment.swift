@@ -9,6 +9,8 @@ import Foundation
 
 public class CNEnvironment
 {
+	private static var	HomeItem	= "HOME"
+	private static var	PwdItem		= "PWD"
 	private static var	WidthItem	= "WIDTH"
 	private static var	HeightItem	= "HEIGHT"
 	private static var 	PathItem	= "PATH"
@@ -16,11 +18,9 @@ public class CNEnvironment
 	private var mEnvironmentVariable: Dictionary<String, CNNativeValue>
 
 	public init(){
-		let homedir = FileManager.default.usersHomeDirectory.path
 		let tpref   = CNPreference.shared.terminalPreference
 		mEnvironmentVariable = [
 			"TMPDIR"			: CNNativeValue.stringValue(FileManager.default.temporaryDirectory.path),
-			"HOME"				: CNNativeValue.stringValue(homedir),
 			"PWD"				: CNNativeValue.stringValue(FileManager.default.currentDirectoryPath),
 			CNEnvironment.WidthItem		: CNNativeValue.numberValue(NSNumber(integerLiteral: tpref.width)),
 			CNEnvironment.HeightItem	: CNNativeValue.numberValue(NSNumber(integerLiteral: tpref.height))
@@ -42,11 +42,40 @@ public class CNEnvironment
 	}
 
 	public func set(name nm: String, value val: CNNativeValue) {
-		mEnvironmentVariable[nm] = val
+
+		switch nm {
+		case CNEnvironment.HomeItem:
+			if let url = valueToDirectory(value: val) {
+				CNPreference.shared.userPreference.homeDirectory = url
+			} else {
+				let msgstr = val.toText().toStrings(terminal: "").joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid value for home directory: \(msgstr)")
+			}
+		case CNEnvironment.PwdItem:
+			if let url = valueToDirectory(value: val) {
+				FileManager.default.changeCurrentDirectoryPath(url.path)
+			} else {
+				let msgstr = val.toText().toStrings(terminal: "").joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid value for current working directory: \(msgstr)")
+			}
+		default:
+			mEnvironmentVariable[nm] = val
+		}
 	}
 
 	public func get(name nm: String) -> CNNativeValue? {
-		return mEnvironmentVariable[nm]
+		let result: CNNativeValue?
+		switch nm {
+		case CNEnvironment.HomeItem:
+			let url = CNPreference.shared.userPreference.homeDirectory
+			result = .URLValue(url)
+		case CNEnvironment.PwdItem:
+			let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+			result = .URLValue(url)
+		default:
+			result = mEnvironmentVariable[nm]
+		}
+		return result
 	}
 
 	public func setString(name nm: String, value val: String) {
@@ -76,12 +105,14 @@ public class CNEnvironment
 	}
 
 	public func setURL(name nm: String, value val: URL) {
-		set(name: nm, value: .stringValue(val.path))
+		set(name: nm, value: .URLValue(val))
 	}
 
 	public func getURL(name nm: String) -> URL? {
 		if let val = get(name: nm) {
-			if let str = val.toString() {
+			if let url = val.toURL() {
+				return url
+			} else if let str = val.toString() {
 				return URL(fileURLWithPath: str)
 			}
 		}
@@ -216,6 +247,25 @@ public class CNEnvironment
 			result = arrstr
 		default:
 			result = nil
+		}
+		return result
+	}
+
+	private func valueToDirectory(value val: CNNativeValue) -> URL? {
+		var result: URL? = nil
+		let fmgr = FileManager.default
+		if let url = val.toURL() {
+			if fmgr.fileExists(atURL: url) {
+				if fmgr.isAccessible(pathString: url.path, accessType: .ReadAccess) {
+					result = url
+				}
+			}
+		} else if let path = val.toString() {
+			if fmgr.fileExists(atPath: path) {
+				if fmgr.isAccessible(pathString: path, accessType: .ReadAccess) {
+					result = URL(fileURLWithPath: path, isDirectory: true)
+				}
+			}
 		}
 		return result
 	}
