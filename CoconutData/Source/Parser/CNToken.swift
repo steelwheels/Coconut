@@ -459,7 +459,7 @@ private class CNTokenizer
 				if !c.isWhitespace {
 					let _ = srcstream.ungetc()
 					break
-				} else if c == "\n" {
+				} else if c.isNewline {
 					mCurrentLine += 1
 				}
 			} else {
