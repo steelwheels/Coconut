@@ -41,7 +41,7 @@ public class CNTextFile
 		}
 	}
 
-	/* Buffered mode: When there are no new input, this method returns nil */
+	/* When there are no new input, this method returns nil */
 	public func getl() -> String? {
 		/* Read input into the buffer */
 		updateInputBuffer()
@@ -61,24 +61,6 @@ public class CNTextFile
 			idx = mInputBuffer.index(after: idx)
 		}
 		return nil
-	}
-
-	/* Raw mode: When there are no new input, this method wait */
-	public func input() -> String {
-		var result:	String = ""
-		var docont:	Bool   = true
-		while docont {
-			if let c = getc() {
-				if c.isNewline {
-					docont = false
-				} else {
-					result.append(c)
-				}
-			} else {
-				Thread.sleep(forTimeInterval: 0.01)
-			}
-		}
-		return result
 	}
 
 	public func isRawMode() -> Bool {

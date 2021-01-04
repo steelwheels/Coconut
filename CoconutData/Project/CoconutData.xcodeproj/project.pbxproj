@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		055BF94F255C25070004C250 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 055BF94E255C25070004C250 /* CoconutScript.sdef */; };
 		055BF950255C25070004C250 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 055BF94E255C25070004C250 /* CoconutScript.sdef */; };
+		055C85E025A1F47F0064BE93 /* CNCommandLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DC25A1F47F0064BE93 /* CNCommandLines.swift */; };
+		055C85E125A1F47F0064BE93 /* CNCommandLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DC25A1F47F0064BE93 /* CNCommandLines.swift */; };
+		055C85E225A1F47F0064BE93 /* CNCommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DD25A1F47F0064BE93 /* CNCommandLine.swift */; };
+		055C85E325A1F47F0064BE93 /* CNCommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DD25A1F47F0064BE93 /* CNCommandLine.swift */; };
+		055C85E425A1F47F0064BE93 /* CNComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DE25A1F47F0064BE93 /* CNComplementor.swift */; };
+		055C85E525A1F47F0064BE93 /* CNComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DE25A1F47F0064BE93 /* CNComplementor.swift */; };
+		055C85E625A1F47F0064BE93 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DF25A1F47F0064BE93 /* CNReadline.swift */; };
+		055C85E725A1F47F0064BE93 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DF25A1F47F0064BE93 /* CNReadline.swift */; };
 		059BA6D3256B20B500893641 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059BA6D2256B20B500893641 /* UTType.swift */; };
 		05B32C88251501B1000D1411 /* CoconutData_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C86251501B1000D1411 /* CoconutData_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32C96251501D7000D1411 /* CoconutData_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C94251501D7000D1411 /* CoconutData_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -230,6 +238,10 @@
 /* Begin PBXFileReference section */
 		053B4EE9255FE176004B9052 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		055BF94E255C25070004C250 /* CoconutScript.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CoconutScript.sdef; sourceTree = "<group>"; };
+		055C85DC25A1F47F0064BE93 /* CNCommandLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLines.swift; sourceTree = "<group>"; };
+		055C85DD25A1F47F0064BE93 /* CNCommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLine.swift; sourceTree = "<group>"; };
+		055C85DE25A1F47F0064BE93 /* CNComplementor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNComplementor.swift; sourceTree = "<group>"; };
+		055C85DF25A1F47F0064BE93 /* CNReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReadline.swift; sourceTree = "<group>"; };
 		059BA6D2256B20B500893641 /* UTType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTType.swift; sourceTree = "<group>"; };
 		05B32C83251501B1000D1411 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B32C86251501B1000D1411 /* CoconutData_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData_macOS.h; sourceTree = "<group>"; };
@@ -403,6 +415,17 @@
 			path = UnitTest;
 			sourceTree = "<group>";
 		};
+		055C85DB25A1F4650064BE93 /* CommandLine */ = {
+			isa = PBXGroup;
+			children = (
+				055C85DD25A1F47F0064BE93 /* CNCommandLine.swift */,
+				055C85DC25A1F47F0064BE93 /* CNCommandLines.swift */,
+				055C85DE25A1F47F0064BE93 /* CNComplementor.swift */,
+				055C85DF25A1F47F0064BE93 /* CNReadline.swift */,
+			);
+			path = CommandLine;
+			sourceTree = "<group>";
+		};
 		05ADE083255C24D000DA3EB6 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -457,6 +480,7 @@
 		05B32C9C25150220000D1411 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				055C85DB25A1F4650064BE93 /* CommandLine */,
 				05B32D622515092C000D1411 /* Data */,
 				05B32D592515090B000D1411 /* Error */,
 				05B32D47251508DE000D1411 /* Event */,
@@ -936,8 +960,11 @@
 				05B32CDD251502E7000D1411 /* CNProcessManager.swift in Sources */,
 				05B32D0425150368000D1411 /* CNReservedWord.swift in Sources */,
 				05B32D8625150945000D1411 /* CNStringStream.swift in Sources */,
+				055C85E025A1F47F0064BE93 /* CNCommandLines.swift in Sources */,
 				05B32D2B251508D9000D1411 /* CNFilePath.swift in Sources */,
 				05B32D8225150945000D1411 /* CNCommandHistory.swift in Sources */,
+				055C85E225A1F47F0064BE93 /* CNCommandLine.swift in Sources */,
+				055C85E625A1F47F0064BE93 /* CNReadline.swift in Sources */,
 				05B32D3F251508D9000D1411 /* CNPropertyList.swift in Sources */,
 				05B32CE9251502E7000D1411 /* CNThread.swift in Sources */,
 				05B32D5E25150926000D1411 /* CNError.swift in Sources */,
@@ -949,6 +976,7 @@
 				05B32CDF251502E7000D1411 /* CNOperationQueue.swift in Sources */,
 				05B32D8025150945000D1411 /* CNArrayStream.swift in Sources */,
 				05B32CA92515025E000D1411 /* CNNativeValueCoder.swift in Sources */,
+				055C85E425A1F47F0064BE93 /* CNComplementor.swift in Sources */,
 				05B32D39251508D9000D1411 /* CNDocumentTypeManager.swift in Sources */,
 				05B32D7A25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7425150945000D1411 /* CNCharacter.swift in Sources */,
@@ -1010,8 +1038,11 @@
 				05B32CDE251502E7000D1411 /* CNProcessManager.swift in Sources */,
 				05B32D0525150368000D1411 /* CNReservedWord.swift in Sources */,
 				05B32D8725150945000D1411 /* CNStringStream.swift in Sources */,
+				055C85E125A1F47F0064BE93 /* CNCommandLines.swift in Sources */,
 				05B32D2C251508D9000D1411 /* CNFilePath.swift in Sources */,
 				05B32D8325150945000D1411 /* CNCommandHistory.swift in Sources */,
+				055C85E325A1F47F0064BE93 /* CNCommandLine.swift in Sources */,
+				055C85E725A1F47F0064BE93 /* CNReadline.swift in Sources */,
 				05B32D40251508D9000D1411 /* CNPropertyList.swift in Sources */,
 				05B32CEA251502E7000D1411 /* CNThread.swift in Sources */,
 				05B32D5F25150926000D1411 /* CNError.swift in Sources */,
@@ -1023,6 +1054,7 @@
 				05B32CE0251502E7000D1411 /* CNOperationQueue.swift in Sources */,
 				05B32D8125150945000D1411 /* CNArrayStream.swift in Sources */,
 				05B32CBD25150299000D1411 /* CNValueUtil.swift in Sources */,
+				055C85E525A1F47F0064BE93 /* CNComplementor.swift in Sources */,
 				05B32D3A251508D9000D1411 /* CNDocumentTypeManager.swift in Sources */,
 				05B32D7B25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7525150945000D1411 /* CNCharacter.swift in Sources */,

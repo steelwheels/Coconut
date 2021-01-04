@@ -9,18 +9,10 @@
 /* Begin PBXBuildFile section */
 		05A95AC92516454A00775737 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A95AC72516454A00775737 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05A95AD72516468400775737 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A95AD52516468400775737 /* CoconutShell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05A95AE62516473D00775737 /* CNCommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95ADE2516473C00775737 /* CNCommandLine.swift */; };
-		05A95AE72516473D00775737 /* CNCommandLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95ADE2516473C00775737 /* CNCommandLine.swift */; };
 		05A95AE82516473D00775737 /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95ADF2516473C00775737 /* CNShellThread.swift */; };
 		05A95AE92516473D00775737 /* CNShellThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95ADF2516473C00775737 /* CNShellThread.swift */; };
-		05A95AEA2516473D00775737 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE02516473C00775737 /* CNReadline.swift */; };
-		05A95AEB2516473D00775737 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE02516473C00775737 /* CNReadline.swift */; };
-		05A95AEC2516473D00775737 /* CNComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE12516473C00775737 /* CNComplementor.swift */; };
-		05A95AED2516473D00775737 /* CNComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE12516473C00775737 /* CNComplementor.swift */; };
 		05A95AEE2516473D00775737 /* CNUnixCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE22516473D00775737 /* CNUnixCommand.swift */; };
 		05A95AEF2516473D00775737 /* CNUnixCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE22516473D00775737 /* CNUnixCommand.swift */; };
-		05A95AF02516473D00775737 /* CNCommandLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE32516473D00775737 /* CNCommandLines.swift */; };
-		05A95AF12516473D00775737 /* CNCommandLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE32516473D00775737 /* CNCommandLines.swift */; };
 		05A95AF22516473D00775737 /* CNShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE42516473D00775737 /* CNShellUtil.swift */; };
 		05A95AF32516473D00775737 /* CNShellUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A95AE42516473D00775737 /* CNShellUtil.swift */; };
 		05A95AF42516473D00775737 /* CoconutShell.h in Headers */ = {isa = PBXBuildFile; fileRef = 05A95AE52516473D00775737 /* CoconutShell.h */; };
@@ -53,12 +45,8 @@
 		05A95AD32516468400775737 /* CoconutShell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutShell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A95AD52516468400775737 /* CoconutShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
 		05A95AD62516468400775737 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		05A95ADE2516473C00775737 /* CNCommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLine.swift; sourceTree = "<group>"; };
 		05A95ADF2516473C00775737 /* CNShellThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellThread.swift; sourceTree = "<group>"; };
-		05A95AE02516473C00775737 /* CNReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReadline.swift; sourceTree = "<group>"; };
-		05A95AE12516473C00775737 /* CNComplementor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNComplementor.swift; sourceTree = "<group>"; };
 		05A95AE22516473D00775737 /* CNUnixCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNUnixCommand.swift; sourceTree = "<group>"; };
-		05A95AE32516473D00775737 /* CNCommandLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLines.swift; sourceTree = "<group>"; };
 		05A95AE42516473D00775737 /* CNShellUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNShellUtil.swift; sourceTree = "<group>"; };
 		05A95AE52516473D00775737 /* CoconutShell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoconutShell.h; sourceTree = "<group>"; };
 		05A95AF92516475F00775737 /* CoconutData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutData.xcframework; path = ../../../../Library/Frameworks/CoconutData.xcframework; sourceTree = "<group>"; };
@@ -125,10 +113,6 @@
 		05A95ADD2516472100775737 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				05A95ADE2516473C00775737 /* CNCommandLine.swift */,
-				05A95AE32516473D00775737 /* CNCommandLines.swift */,
-				05A95AE12516473C00775737 /* CNComplementor.swift */,
-				05A95AE02516473C00775737 /* CNReadline.swift */,
 				05A95ADF2516473C00775737 /* CNShellThread.swift */,
 				05A95AE42516473D00775737 /* CNShellUtil.swift */,
 				05A95AE22516473D00775737 /* CNUnixCommand.swift */,
@@ -288,13 +272,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05A95AF02516473D00775737 /* CNCommandLines.swift in Sources */,
 				05A95AEE2516473D00775737 /* CNUnixCommand.swift in Sources */,
 				05A95AF22516473D00775737 /* CNShellUtil.swift in Sources */,
-				05A95AE62516473D00775737 /* CNCommandLine.swift in Sources */,
-				05A95AEC2516473D00775737 /* CNComplementor.swift in Sources */,
 				05A95AE82516473D00775737 /* CNShellThread.swift in Sources */,
-				05A95AEA2516473D00775737 /* CNReadline.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,13 +282,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05A95AF12516473D00775737 /* CNCommandLines.swift in Sources */,
 				05A95AEF2516473D00775737 /* CNUnixCommand.swift in Sources */,
 				05A95AF32516473D00775737 /* CNShellUtil.swift in Sources */,
-				05A95AE72516473D00775737 /* CNCommandLine.swift in Sources */,
-				05A95AED2516473D00775737 /* CNComplementor.swift in Sources */,
 				05A95AE92516473D00775737 /* CNShellThread.swift in Sources */,
-				05A95AEB2516473D00775737 /* CNReadline.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

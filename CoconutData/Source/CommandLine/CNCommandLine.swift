@@ -5,7 +5,6 @@
  *   Copyright (C) 2019 Steel Wheels Project
  */
 
-import CoconutData
 import Foundation
 
 public class CNCommandLine: Equatable

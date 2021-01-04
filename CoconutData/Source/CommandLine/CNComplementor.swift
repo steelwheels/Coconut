@@ -5,7 +5,6 @@
  *   Copyright (C) 2019 Steel Wheels Project
  */
 
-import CoconutData
 import Foundation
 
 open class CNComplementor
@@ -286,8 +285,6 @@ open class CNComplementor
 				result = nil
 			case .Directory:
 				result = path
-			@unknown default:
-				result = nil
 			}
 			return result
 		}
@@ -357,8 +354,6 @@ open class CNComplementor
 					NSLog("updateCommandNameList: \(errobj.toString())")
 				}
 			case .File, .NotExist:
-				break
-			@unknown default:
 				break
 			}
 		}

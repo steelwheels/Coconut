@@ -73,6 +73,9 @@ import Foundation
 				}
 			case .none:
 				break
+			@unknown default:
+				NSLog("Unknown case at \(#function)")
+				cancel()
 			}
 		}
 		return 0
