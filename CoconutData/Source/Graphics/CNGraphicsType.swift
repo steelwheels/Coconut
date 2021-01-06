@@ -45,7 +45,9 @@ public enum CNAlignment: Int32 {
 	}
 }
 
+/* OSX: NSStackView.Distribution */
 public enum CNDistribution: Int32 {
+	case fill
 	case fillProportinally
 	case fillEqually
 	case equalSpacing
@@ -55,6 +57,7 @@ public enum CNDistribution: Int32 {
 	public var description: String {
 		let result: String
 		switch self {
+		case .fill:			result = "fill"
 		case .fillProportinally:	result = "fillProportionally"
 		case .fillEqually:		result = "fillEqually"
 		case .equalSpacing:		result = "equalSpacing"
