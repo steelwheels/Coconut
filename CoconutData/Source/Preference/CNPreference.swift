@@ -458,11 +458,7 @@ public class CNTerminalPreference: CNPreferenceTable
 		if let newfont = super.loadFontValue(forKey: FontItem) {
 			super.set(fontValue: newfont, forKey: FontItem)
 		} else {
-			if let newfont = CNFont(name: "Courier", size: 14.0) {
-				font = newfont
-			} else {
-				font = CNFont.monospacedDigitSystemFont(ofSize: 14.0, weight: .regular)
-			}
+			font = CNFont.monospacedSystemFont(ofSize: 16.0, weight: .regular)
 		}
 	}
 
