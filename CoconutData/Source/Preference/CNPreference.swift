@@ -130,8 +130,16 @@ public class CNSystemPreference: CNPreferenceTable
 		super.init(sectionName: "SystemPreference")
 
 		/* Set initial value */
-		let level: LogLevel = CNConfig.LogLevel.defaultLevel
-		super.set(intValue: level.rawValue, forKey: CNSystemPreference.LogLevelItem)
+		if let logval = super.loadIntValue(forKey: CNSystemPreference.LogLevelItem) {
+			if let _ = LogLevel(rawValue: logval) {
+				super.set(intValue: logval, forKey: CNSystemPreference.LogLevelItem)
+			} else {
+				NSLog("[Error] Unknown log level")
+				super.set(intValue: LogLevel.defaultLevel.rawValue, forKey: CNSystemPreference.LogLevelItem)
+			}
+		} else {
+			super.set(intValue: LogLevel.defaultLevel.rawValue, forKey: CNSystemPreference.LogLevelItem)
+		}
 
 		let style = self.interfaceStyle
 		super.set(intValue: style.rawValue, forKey: CNSystemPreference.InterfaceStyleItem)
