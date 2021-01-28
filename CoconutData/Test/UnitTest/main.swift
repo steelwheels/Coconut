@@ -75,9 +75,6 @@ let result27 = testEnvironment(console: cons)
 cons.print(string: "* testThread\n")
 let result14 = testThread(console: cons)
 
-cons.print(string: "* testGraphics\n")
-let result10 = testGraphics(console: cons)
-
 cons.print(string: "* testEscapeSequence\n")
 let result11 = testEscapeSequence(console: cons)
 
@@ -93,11 +90,18 @@ let result19 = testKeyBinding(console: cons)
 cons.print(string: "* testResource\n")
 let result7 = testResource(console: cons)
 
+cons.print(string: "* testMatrix\n")
+let result10 = testMatrix(console: cons)
+
+cons.print(string: "* testGraphicsContext\n")
+let result29 = testGraphicsContext(console: cons)
+
 let result = result0 && result1 && result2 && result3 && result4  && result5 &&
 	     result7 && result8 && result9 && result10 && result11 &&
 	     result12 && result13 && result14 && result15 && result17 &&
 	     result18 && result19 && result20 && result21 && result22 &&
-	     result23 && result24 && result25 && result26 && result27
+	     result23 && result24 && result25 && result26 && result27 &&
+	     result28 && result29
 if result {
 	cons.print(string: "[Result] OK\n")
 	Darwin.exit(0)
