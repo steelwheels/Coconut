@@ -12,7 +12,7 @@ import UIKit
 #endif
 import Foundation
 
-@objc public class CNGraphicsContext: NSObject
+public class CNGraphicsContext
 {
 	private var mCoreCotext:	CGContext?
 	private var mLogicalFrame:	CGRect
@@ -20,20 +20,23 @@ import Foundation
 
 	private var mAffineMatrix:	CNMatrix3D
 
-	public override init() {
+	public init() {
 		mCoreCotext 	= nil
 		mLogicalFrame	= CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 		mPhysicalFrame	= mLogicalFrame
 		mAffineMatrix	= CNMatrix3D()
-		super.init()
 	}
 
-	public func begin(context ctxt: CGContext, logicalFrame lframe: CGRect, physicalFrame pframe: CGRect) {
+	public var logicalFrame: CGRect { get { return mLogicalFrame }}
+
+	public func begin(context ctxt: CGContext?, logicalFrame lframe: CGRect, physicalFrame pframe: CGRect) {
 		mCoreCotext	= ctxt
 		mLogicalFrame	= lframe
 		mPhysicalFrame	= pframe
 		updateAffineMatrix()
-		ctxt.beginPath()
+		if let c = ctxt {
+			c.beginPath()
+		}
 	}
 
 	private func updateAffineMatrix() {
