@@ -239,9 +239,10 @@ private class CNTokenizer
 
 	public func tokenize(string srcstr: String) -> CNTokenizeResult {
 		do {
-			let stream = CNStringStream(string: srcstr)
-			let tokens = try stringToTokens(stream: stream)
-			return .ok(tokens)
+			let stream  = CNStringStream(string: srcstr)
+			let tokens  = try stringToTokens(stream: stream)
+			let mtokens = mergeTokens(tokens: tokens)
+			return .ok(mtokens)
 		} catch let error {
 			if let tkerr = error as? CNParseError {
 				return .error(tkerr)
@@ -465,6 +466,60 @@ private class CNTokenizer
 			} else {
 				break
 			}
+		}
+	}
+
+	private func mergeTokens(tokens srcs: Array<CNToken>) -> Array<CNToken> {
+		var result: Array<CNToken> = []
+		let num = srcs.count
+		var i   = 0 ;
+		while(i < num) {
+			let src = srcs[i]
+			var doappend = true
+			if let sym = src.getSymbol() {
+				switch sym {
+				case "+", "-":
+					if i+1 < num {
+						if let next = mergeNumberToken(symbol: sym, token: srcs[i+1]) {
+							result.append(next)
+							i += 2
+							doappend = false
+						}
+					}
+				default:
+					break
+				}
+			}
+			if doappend {
+				result.append(src)
+				i += 1
+			}
+		}
+		return result
+	}
+
+	private func mergeNumberToken(symbol sym: Character, token src: CNToken) -> CNToken? {
+		let isminus = (sym == "-")
+		if let val = src.getInt() {
+			if isminus {
+				return CNToken(type: .IntToken(-val), lineNo: src.lineNo)
+			} else {
+				return CNToken(type: .IntToken( val), lineNo: src.lineNo)
+			}
+		} else if let val = src.getUInt() {
+			if isminus {
+				return CNToken(type: .IntToken(-Int(val)), lineNo: src.lineNo)
+			} else {
+				return src
+			}
+		} else if let val = src.getDouble() {
+			if isminus {
+				return CNToken(type: .DoubleToken(-val), lineNo: src.lineNo)
+			} else {
+				return CNToken(type: .DoubleToken( val), lineNo: src.lineNo)
+			}
+		} else {
+			return nil
 		}
 	}
 }
