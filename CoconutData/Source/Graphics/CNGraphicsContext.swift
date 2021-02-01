@@ -73,7 +73,7 @@ public class CNGraphicsContext
 		}
 	}
 
-	public func setLineWidth(width val: CGFloat) {
+	public func setPenSize(width val: CGFloat) {
 		if let ctxt = mCoreCotext {
 			let pwid = logicalToPhysical(width: val)
 			//NSLog("width = \(pwid)")
