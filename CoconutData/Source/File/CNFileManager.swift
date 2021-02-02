@@ -171,7 +171,7 @@ public extension FileManager
 			let homedir = CNPreference.shared.userPreference.homeDirectory
 
 			/* Make default directories */
-			let targetdirs: Array<String> = ["Library", "Sample", "Game"]
+			let targetdirs: Array<String> = ["Sample", "Game"]
 			for target in targetdirs {
 				let dstdir = homedir.appendingPathComponent(target)
 				switch checkFileType(pathString: dstdir.path) {
