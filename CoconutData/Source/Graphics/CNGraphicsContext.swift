@@ -14,14 +14,14 @@ import Foundation
 
 public class CNGraphicsContext
 {
-	private var mCoreCotext:	CGContext?
+	private var mCoreContext:	CGContext?
 	private var mLogicalFrame:	CGRect
 	private var mPhysicalFrame:	CGRect
 
 	private var mAffineMatrix:	CNMatrix3D
 
 	public init() {
-		mCoreCotext 	= nil
+		mCoreContext 	= nil
 		mLogicalFrame	= CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
 		mPhysicalFrame	= mLogicalFrame
 		mAffineMatrix	= CNMatrix3D()
@@ -30,7 +30,7 @@ public class CNGraphicsContext
 	public var logicalFrame: CGRect { get { return mLogicalFrame }}
 
 	public func begin(context ctxt: CGContext?, logicalFrame lframe: CGRect, physicalFrame pframe: CGRect) {
-		mCoreCotext	= ctxt
+		mCoreContext	= ctxt
 		mLogicalFrame	= lframe
 		mPhysicalFrame	= pframe
 		updateAffineMatrix()
@@ -50,7 +50,7 @@ public class CNGraphicsContext
 	}
 
 	public func end() {
-		if let ctxt = mCoreCotext {
+		if let ctxt = mCoreContext {
 			ctxt.strokePath()
 		} else {
 			NSLog("No context at \(#function)")
@@ -58,7 +58,7 @@ public class CNGraphicsContext
 	}
 
 	public func setFillColor(color col: CGColor) {
-		if let ctxt = mCoreCotext {
+		if let ctxt = mCoreContext {
 			ctxt.setFillColor(col)
 		} else {
 			NSLog("No context at \(#function)")
@@ -66,7 +66,7 @@ public class CNGraphicsContext
 	}
 
 	public func setStrokeColor(color col: CGColor) {
-		if let ctxt = mCoreCotext {
+		if let ctxt = mCoreContext {
 			ctxt.setStrokeColor(col)
 		} else {
 			NSLog("No context at \(#function)")
@@ -74,7 +74,7 @@ public class CNGraphicsContext
 	}
 
 	public func setPenSize(width val: CGFloat) {
-		if let ctxt = mCoreCotext {
+		if let ctxt = mCoreContext {
 			let pwid = logicalToPhysical(width: val)
 			//NSLog("width = \(pwid)")
 			ctxt.setLineWidth(pwid)
@@ -84,7 +84,7 @@ public class CNGraphicsContext
 	}
 
 	public func move(to point: CGPoint) {
-		if let ctxt = mCoreCotext {
+		if let ctxt = mCoreContext {
 			let ppt = logicalToPhysical(point: point)
 			//NSLog("move = (\(point.x),\(point.y)) -> (\(ppt.x), \(ppt.y))")
 			ctxt.move(to: ppt)
@@ -92,10 +92,24 @@ public class CNGraphicsContext
 	}
 
 	public func line(to point: CGPoint) {
-		if let ctxt = mCoreCotext {
+		if let ctxt = mCoreContext {
 			let ppt = logicalToPhysical(point: point)
 			//NSLog("line = (\(point.x),\(point.y)) -> (\(ppt.x), \(ppt.y))")
 			ctxt.addLine(to: ppt)
+		}
+	}
+
+	public func rect(rect rct: CGRect) {
+		if let ctxt = mCoreContext {
+			let prct = logicalToPhysical(rect: rct)
+			ctxt.addRect(prct)
+		}
+	}
+
+	public func fill(rect rct: CGRect) {
+		if let ctxt = mCoreContext {
+			let prct = logicalToPhysical(rect: rct)
+			ctxt.fill(prct)
 		}
 	}
 
@@ -103,7 +117,7 @@ public class CNGraphicsContext
 		let pcenter = logicalToPhysical(point: pt)
 		let psize   = logicalToPhysical(size: CGSize(width: rad, height: rad))
 		let pbounds = CGRect(origin: pcenter, size: psize)
-		if let ctxt = mCoreCotext {
+		if let ctxt = mCoreContext {
 			ctxt.addEllipse(in: pbounds)
 		}
 	}
@@ -123,6 +137,12 @@ public class CNGraphicsContext
 		let width  = logicalToPhysical(width:  sz.width)
 		let height = logicalToPhysical(height: sz.height)
 		return CGSize(width: width, height: height)
+	}
+
+	public func logicalToPhysical(rect rct: CGRect) -> CGRect {
+		let neworg  = logicalToPhysical(point: rct.origin)
+		let newsize = logicalToPhysical(size:  rct.size)
+		return CGRect(origin: neworg, size: newsize)
 	}
 
 	public func logicalToPhysical(width val: CGFloat) -> CGFloat {
