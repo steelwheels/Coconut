@@ -18,14 +18,16 @@ public class CNBitmapContext
 
 	private var mCoreContext:	CGContext?
 	private var mPhysicalFrame:	CGRect
-	private var mLogicalSize:	CGSize
 	private var mColorTable:	Dictionary<Color, CGColor>
+	private var mWidth:		Int
+	private var mHeight:		Int
 	private var mPixelSize:		CGSize
 
 	public init() {
 		mCoreContext		= nil
 		mPhysicalFrame		= CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-		mLogicalSize		= CGSize(width: 10.0, height: 10.0)
+		mWidth			= 0
+		mHeight			= 0
 		mPixelSize		= CGSize(width: 1.0, height: 1.0)
 
 		mColorTable = [
@@ -40,15 +42,17 @@ public class CNBitmapContext
 		]
 	}
 
-	public var logicalSize: CGSize { get { return mLogicalSize }}
+	public var width:  Int { get { return mWidth	}}
+	public var height: Int { get { return mHeight	}}
 
 	public func begin(context ctxt: CGContext?, physicalFrame pframe: CGRect, width wdt: Int, height hgt: Int) {
 		assert(wdt > 0 && hgt > 0, "Invalid parameter \(wdt)x\(hgt)")
-		mCoreContext   	 = ctxt
-		mPhysicalFrame	 = pframe
-		mLogicalSize	 = CGSize(width: CGFloat(wdt), height: CGFloat(hgt))
-		mPixelSize	 = CGSize(width:  CGFloat(pframe.size.width  / CGFloat(wdt)),
-					  height: CGFloat(pframe.size.height / CGFloat(hgt)))
+		mCoreContext	= ctxt
+		mPhysicalFrame	= pframe
+		mWidth		= wdt
+		mHeight		= hgt
+		mPixelSize	= CGSize(width:  CGFloat(pframe.size.width  / CGFloat(wdt)),
+					 height: CGFloat(pframe.size.height / CGFloat(hgt)))
 	}
 
 	public func end() {
