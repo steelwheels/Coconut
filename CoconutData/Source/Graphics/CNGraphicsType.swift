@@ -66,3 +66,22 @@ public enum CNDistribution: Int32 {
 	}
 }
 
+public enum CNAnimationState: Int32 {
+	case	idle
+	case	run
+	case	pause
+
+	public static var typeName = "AnimationState"
+
+	public var description: String {
+		get {
+			let result: String
+			switch self {
+			case .idle:	result = "idle"
+			case .run:	result = "run"
+			case .pause:	result = "pause"
+			}
+			return result
+		}
+	}
+}
