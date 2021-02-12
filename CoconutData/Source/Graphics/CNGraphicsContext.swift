@@ -57,17 +57,17 @@ public class CNGraphicsContext
 		}
 	}
 
-	public func setFillColor(color col: CGColor) {
+	public func setFillColor(color col: CNColor) {
 		if let ctxt = mCoreContext {
-			ctxt.setFillColor(col)
+			ctxt.setFillColor(col.cgColor)
 		} else {
 			NSLog("No context at \(#function)")
 		}
 	}
 
-	public func setStrokeColor(color col: CGColor) {
+	public func setStrokeColor(color col: CNColor) {
 		if let ctxt = mCoreContext {
-			ctxt.setStrokeColor(col)
+			ctxt.setStrokeColor(col.cgColor)
 		} else {
 			NSLog("No context at \(#function)")
 		}

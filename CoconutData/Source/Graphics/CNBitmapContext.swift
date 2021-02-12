@@ -14,11 +14,8 @@ import Foundation
 
 public class CNBitmapContext
 {
-	public typealias Color = CNColor.CursesColor
-
 	private var mCoreContext:	CGContext?
 	private var mPhysicalFrame:	CGRect
-	private var mColorTable:	Dictionary<Color, CGColor>
 	private var mWidth:		Int
 	private var mHeight:		Int
 	private var mPixelSize:		CGSize
@@ -29,17 +26,6 @@ public class CNBitmapContext
 		mWidth			= 0
 		mHeight			= 0
 		mPixelSize		= CGSize(width: 1.0, height: 1.0)
-
-		mColorTable = [
-			Color.black:	CNColor.black.cgColor,
-			Color.red:	CNColor.red.cgColor,
-			Color.green:	CNColor.green.cgColor,
-			Color.yellow:	CNColor.yellow.cgColor,
-			Color.blue:	CNColor.blue.cgColor,
-			Color.magenta:	CNColor.magenta.cgColor,
-			Color.cyan:	CNColor.cyan.cgColor,
-			Color.white:	CNColor.white.cgColor
-		]
 	}
 
 	public var width:  Int { get { return mWidth	}}
@@ -63,11 +49,11 @@ public class CNBitmapContext
 		}
 	}
 	
-	public func set(color col: Color) {
-		if let cgcol = mColorTable[col], let ctxt = mCoreContext {
-			ctxt.setFillColor(cgcol)
+	public func set(color col: CNColor) {
+		if let ctxt = mCoreContext {
+			ctxt.setFillColor(col.cgColor)
 		} else {
-			NSLog("Unknown color at \(#function)")
+			NSLog("No context at \(#function)")
 		}
 	}
 
@@ -92,6 +78,36 @@ public class CNBitmapContext
 			ctxt.fill(rct)
 		} else {
 			NSLog("No context")
+		}
+	}
+
+	public func drawData(x xp: Int, y yp: Int, bitmap bm: CNBitmapData){
+		let xstart, xend, xoffset: Int
+		if xp >= 0 {
+			xoffset = 0
+			xstart  = xp
+			xend    = min(xp + bm.width, mWidth)
+		} else { // xp < 0
+			xoffset = -xp
+			xstart  = 0
+			xend    = min(xp + bm.width, mWidth)
+		}
+		let ystart, yend, yoffset: Int
+		if yp >= 0 {
+			yoffset = 0
+			ystart  = yp
+			yend    = min(yp + bm.height, mHeight)
+		} else {
+			yoffset = -xp
+			ystart  = 0
+			yend    = min(yp + bm.height, mHeight)
+		}
+		for x in xoffset..<xend {
+			for y in yoffset..<yend {
+				let c = bm.data[y][x]
+				set(color: c)
+				drawPoint(x: xstart + x, y: ystart + y)
+			}
 		}
 	}
 }
