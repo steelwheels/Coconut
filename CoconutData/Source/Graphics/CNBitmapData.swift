@@ -9,23 +9,26 @@ import Foundation
 
 public class CNBitmapData
 {
+	private var mPositionX:		Int
+	private var mPositionY:		Int
 	private var mWidth: 		Int
 	private var mHeight:		Int
 	private var mData:		Array<Array<CNColor>>
-	private var mBackgroundColor:	CNColor
 
+	public var positionX:		Int 			{ get { return mPositionX }}
+	public var positionY:		Int			{ get { return mPositionY }}
 	public var width:		Int			{ get { return mWidth  }}
 	public var height:		Int			{ get { return mHeight }}
 	public var data:   		Array<Array<CNColor>>	{ get { return mData }}
-	public var backgroundColor:	CNColor 		{ get { return mBackgroundColor }}
 
-	public init(width w: Int, height h: Int, backgroundColor bcol: CNColor) {
+	public init(x xpos: Int, y ypos: Int, width w: Int, height h: Int) {
+		mPositionX		= xpos
+		mPositionY		= ypos
 		mWidth			= w
 		mHeight			= h
 		mData   		= []
-		mBackgroundColor	= bcol
 		for _ in 0..<h {
-			let row = Array(repeating: bcol, count: w)
+			let row = Array(repeating: CNColor.clear, count: w)
 			mData.append(row)
 		}
 	}

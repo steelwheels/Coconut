@@ -19,6 +19,7 @@ public class CNBitmapContext
 	private var mWidth:		Int
 	private var mHeight:		Int
 	private var mPixelSize:		CGSize
+	private var mBaseBitmap:	CNBitmapData?
 
 	public init() {
 		mCoreContext		= nil
@@ -26,10 +27,14 @@ public class CNBitmapContext
 		mWidth			= 0
 		mHeight			= 0
 		mPixelSize		= CGSize(width: 1.0, height: 1.0)
+		mBaseBitmap		= nil
 	}
 
-	public var width:  Int { get { return mWidth	}}
-	public var height: Int { get { return mHeight	}}
+	public var width:       Int 		{ get { return mWidth	}}
+	public var height:      Int 		{ get { return mHeight	}}
+	public var baseBitmap:	CNBitmapData	{ get {
+		if let bm = mBaseBitmap { return bm } else { fatalError("No bitmap") }
+	}}
 
 	public func begin(context ctxt: CGContext?, physicalFrame pframe: CGRect, width wdt: Int, height hgt: Int) {
 		assert(wdt > 0 && hgt > 0, "Invalid parameter \(wdt)x\(hgt)")
@@ -39,6 +44,7 @@ public class CNBitmapContext
 		mHeight		= hgt
 		mPixelSize	= CGSize(width:  CGFloat(pframe.size.width  / CGFloat(wdt)),
 					 height: CGFloat(pframe.size.height / CGFloat(hgt)))
+		mBaseBitmap	= CNBitmapData(x: 0, y: 0, width: wdt, height: hgt)
 	}
 
 	public func end() {
@@ -48,41 +54,10 @@ public class CNBitmapContext
 			NSLog("No context at \(#function)")
 		}
 	}
-	
-	public func set(color col: CNColor) {
-		if let ctxt = mCoreContext {
-			ctxt.setFillColor(col.cgColor)
-		} else {
-			NSLog("No context at \(#function)")
-		}
-	}
 
-	public func drawPoint(x x0: Int, y y0: Int) {
-		let x   = mPixelSize.width  * CGFloat(x0)
-		let y   = mPixelSize.height * CGFloat(y0)
-		let rct = CGRect(x: x, y: y, width: mPixelSize.width, height: mPixelSize.height)
-		if let ctxt = mCoreContext {
-			ctxt.fill(rct)
-		} else {
-			NSLog("No context")
-		}
-	}
-
-	public func drawRect(x x0: Int, y y0: Int, width wdt: Int, height hgt: Int) {
-		let xorg   = mPixelSize.width  * CGFloat(x0)
-		let yorg   = mPixelSize.height * CGFloat(y0)
-		let width  = mPixelSize.width  * CGFloat(wdt)
-		let height = mPixelSize.height * CGFloat(hgt) 
-		let rct    = CGRect(x: xorg, y: yorg, width: width, height: height)
-		if let ctxt = mCoreContext {
-			ctxt.fill(rct)
-		} else {
-			NSLog("No context")
-		}
-	}
-
-	public func drawData(x xp: Int, y yp: Int, bitmap bm: CNBitmapData){
+	public func draw(bitmap bm: CNBitmapData){
 		let xstart, xend, xoffset: Int
+		let xp = bm.positionX
 		if xp >= 0 {
 			xoffset = 0
 			xstart  = xp
@@ -93,6 +68,7 @@ public class CNBitmapContext
 			xend    = min(xp + bm.width, mWidth)
 		}
 		let ystart, yend, yoffset: Int
+		let yp = bm.positionY
 		if yp >= 0 {
 			yoffset = 0
 			ystart  = yp
@@ -106,8 +82,27 @@ public class CNBitmapContext
 			for y in yoffset..<yend {
 				let c = bm.data[y][x]
 				set(color: c)
-				drawPoint(x: xstart + x, y: ystart + y)
+				draw(x: xstart + x, y: ystart + y)
 			}
+		}
+	}
+
+	private func set(color col: CNColor) {
+		if let ctxt = mCoreContext {
+			ctxt.setFillColor(col.cgColor)
+		} else {
+			NSLog("No context at \(#function)")
+		}
+	}
+
+	private func draw(x x0: Int, y y0: Int) {
+		let x   = mPixelSize.width  * CGFloat(x0)
+		let y   = mPixelSize.height * CGFloat(y0)
+		let rct = CGRect(x: x, y: y, width: mPixelSize.width, height: mPixelSize.height)
+		if let ctxt = mCoreContext {
+			ctxt.fill(rct)
+		} else {
+			NSLog("No context")
 		}
 	}
 }
