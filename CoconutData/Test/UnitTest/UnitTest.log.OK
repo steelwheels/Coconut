@@ -1,4 +1,13 @@
 Hello, World!
+* testType
+NSLayoutConstraint.Priority:
+ required:                   NSLayoutPriority(rawValue: 1000.0)
+ defaultHigh:                NSLayoutPriority(rawValue: 750.0)
+ dragThatCanResizeWindow:    NSLayoutPriority(rawValue: 510.0)
+ windowSizeStayPut:          NSLayoutPriority(rawValue: 500.0)
+ dragThatCannotResizeWindow: NSLayoutPriority(rawValue: 490.0)
+ defaultLow:                 NSLayoutPriority(rawValue: 250.0)
+ fittingSizeCompression):    NSLayoutPriority(rawValue: 50.0)
 * testPreference
 LogLevel: debug
 testPreference .. OK
@@ -533,6 +542,28 @@ firstWord: "/path/script.js `{args: "a"}`" => ("/path/script.js", "`{args: "a"}`
 "h":0x68 "i":0x69 "j":0x6a "k":0x6b "l":0x6c "m":0x6d "n":0x6e "o":0x6f 
 "p":0x70 "q":0x71 "r":0x72 "s":0x73 "t":0x74 "u":0x75 "v":0x76 "w":0x77 
 "x":0x78 "y":0x79 "z":0x7a "{":0x7b "|":0x7c "}":0x7d "~":0x7e "DEL":0x7f 
+* testToken
+Source: "hello, world !!"
+Result:
+ IdentifierToken(hello)
+ SymbolToken(,)
+ IdentifierToken(world)
+ SymbolToken(!)
+ SymbolToken(!)
+Source: "hello//comment
+world!!"
+Result:
+ IdentifierToken(hello)
+ IdentifierToken(world)
+ SymbolToken(!)
+ SymbolToken(!)
+Source: "a // comment
+"
+Result:
+ IdentifierToken(a)
+Source: "b // comment"
+Result:
+ IdentifierToken(b)
 * testURL
 nullURL = file:///dev/null
 testURL .. OK
@@ -673,17 +704,13 @@ END of process
 Process is terminated with exit code: 15
 testProcess .. OK
 * testEnvironment
-env("HOME") = "/Users/tomoo"
+env("HOME") = nil
 * testThread
 testSimpleThread: 1. Begin
 testSimpleThread: 3: ecode = 0
 testNestedThread: 1. Begin
 testNestedThread: 2. End code: 0
 testThread .. OK
-* testGraphics
-point: (10.0, 10.0) -> (5.0, 5.0) -> (10.0, 10.0) ... result0: OK
-size: (5.0, 5.0) -> (2.5, 2.5) -> (5.0, 5.0) ... result1: OK
-testMapper .. OK
 * testEscapeSequence
 * dumpSequence
 string("Hello, World !!")
@@ -1185,68 +1212,28 @@ selectorName:deleteToEndOfParagraph: -> [Error] Failed to convert to escape code
 [Error] Failed to decode keybinding: centerSelectionInVisibleArea:
 [Error] Failed to decode keybinding: transpose:
 [Error] Failed to decode keybinding: yank:
-* testDatabse
-* Main database: Initial state
-  read_cache: {
-  }
-  write_cache: {
-  }
-  main_database: {
-  }
-* Main database: add some values
-  read_cache: {
-  }
-  write_cache: {
-    ident0 : 1
-    ident1 : 1.23
-  }
-  main_database: {
-  }
-* Main database: after commit
-  read_cache: {
-  }
-  write_cache: {
-  }
-  main_database: {
-      ident0 : 1
-      ident1 : 1.23
-  }
-read "ident0" -> 1
-read "ident1" -> 1.23
-read "ident2" -> nil
-* Remote database: read
-read "ident0" -> 1
-read "ident1" -> 1.23
-read "ident2" -> nil
-  read_cache: {
-    ident0 : 1
-    ident1 : 1.23
-  }
-  write_cache: {
-  }
-* Remote database: write
-  read_cache: {
-    ident0 : 1
-    ident1 : 1.23
-  }
-  write_cache: {
-    ident2 : "Hello"
-  }
-* Remote database: commit
-read "ident0" -> 0
-read "ident1" -> 1.23
-read "ident2" -> "Hello"
-  read_cache: {
-    ident0 : 0
-    ident1 : 1.23
-    ident2 : "Hello"
-  }
-  write_cache: {
-  }
-testDatabase .. OK
 * testResource
 [Path] a.num
 Load resource for file:///tmp/a.num
 [OK] Loaded => 1.23
 testResource .. OK
+* testMatrix
+vec0 = [0.0, 0.0, 0.0]
+vec1 = [1.0, 2.0, 3.0]
+mtx0 = 
+[[1.0, 0.0, 0.0]
+ [0.0, 1.0, 0.0]
+ [0.0, 0.0, 1.0]]
+mtx1 = 
+[[2.0, 0.0, 0.0]
+ [0.0, 2.0, 0.0]
+ [0.0, 0.0, 2.0]]
+res0 = [[1.0, 0.0, 0.0]
+ [0.0, 1.0, 0.0]
+ [0.0, 0.0, 1.0]]
+res1 = [2.0, 4.0, 6.0]
+* testGraphicsContext
+(0.0, 0.0) -> (64.0, 64.0)
+(1.0, 1.0) -> (100.0, 200.0)
+(-1.0, -1.0) -> (0.0, 0.0)
 [Result] NG

@@ -17,6 +17,7 @@ public enum CNTokenType {
 	case DoubleToken(Double)
 	case StringToken(String)
 	case TextToken(String)
+	case CommentToken(String)
 
 	public func description() -> String {
 		let result: String
@@ -39,6 +40,8 @@ public enum CNTokenType {
 			result = "StringToken(\(val))"
 		case .TextToken(let val):
 			result = "TextToken(\(val))"
+		case .CommentToken(let val):
+			result = "CommentToken(\(val))"
 		}
 		return result
 	}
@@ -159,6 +162,17 @@ public struct CNToken {
 		return result
 	}
 
+	public func getComment() -> String? {
+		let result: String?
+		switch self.type {
+		case .CommentToken(let s):
+			result = s
+		default:
+			result = nil
+		}
+		return result
+	}
+
 	public func toString() -> String {
 		let result: String
 		switch self.type {
@@ -179,6 +193,8 @@ public struct CNToken {
 		case .StringToken(let val):
 			result = val
 		case .TextToken(let val):
+			result = val
+		case .CommentToken(let val):
 			result = val
 		}
 		return result
@@ -204,6 +220,8 @@ public struct CNToken {
 		case .StringToken(let val):
 			result = CNValue(stringValue: val)
 		case .TextToken(let val):
+			result = CNValue(stringValue: val)
+		case .CommentToken(let val):
 			result = CNValue(stringValue: val)
 		}
 		return result
@@ -315,6 +333,14 @@ private class CNTokenizer
 					let _ = srcstream.getc() // drop 1st character
 					return CNToken(type: .SymbolToken(c1), lineNo: mCurrentLine)
 				}
+			} else if c1 == "/" {
+				if let c2 = srcstream.peek(offset: 1) {
+					if c2 == "/" {
+						return getCommentFromStream(stream: srcstream)
+					}
+				}
+				let _ = srcstream.getc() // drop 1st character
+				return CNToken(type: .SymbolToken(c1), lineNo: mCurrentLine)
 			} else {
 				let _ = srcstream.getc() // drop 1st character
 				return CNToken(type: .SymbolToken(c1), lineNo: mCurrentLine)
@@ -435,6 +461,25 @@ private class CNTokenizer
 			throw CNParseError.TokenizeError(mCurrentLine, "Text value is not ended by %} but \"\(resstr)\" is given")
 		}
 	}
+	
+	private func getCommentFromStream(stream srcstream: CNStringStream) -> CNToken {
+		var idx      		= 2	// contains "//"
+		var docont   		= true
+		while docont {
+			if let c = srcstream.peek(offset: idx) {
+				if c == "\n" {
+					docont   = false // end of comment
+				} else {
+					idx += 1
+				}
+			} else {
+				docont = false
+			}
+		}
+		/* get skipped characters */
+		let comm = srcstream.gets(count: idx)
+		return CNToken(type: .CommentToken(comm), lineNo: mCurrentLine)
+	}
 
 	private func getAnyStringFromStream(stream srcstream: CNStringStream, matchingFunc matchfunc: (_ c:Character) -> Bool) -> String {
 		var result: String = ""
@@ -489,6 +534,10 @@ private class CNTokenizer
 				default:
 					break
 				}
+			} else if let _ = src.getComment() {
+				/* Ignore comment */
+				doappend = false
+				i += 1
 			}
 			if doappend {
 				result.append(src)

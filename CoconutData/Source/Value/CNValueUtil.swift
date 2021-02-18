@@ -29,6 +29,8 @@ public func CNTokenToValue(token tkn: CNToken) -> CNValue
 		result = CNValue(stringValue: strval)
 	case .TextToken(let txtval):
 		result = CNValue(stringValue: txtval)
+	case .CommentToken(let txtval):
+		result = CNValue(stringValue: txtval)
 	}
 	return result
 }

@@ -23,6 +23,7 @@
 		055C85E525A1F47F0064BE93 /* CNComplementor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DE25A1F47F0064BE93 /* CNComplementor.swift */; };
 		055C85E625A1F47F0064BE93 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DF25A1F47F0064BE93 /* CNReadline.swift */; };
 		055C85E725A1F47F0064BE93 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DF25A1F47F0064BE93 /* CNReadline.swift */; };
+		055C8AEB25DD62F50053510B /* UTToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C8AEA25DD62F50053510B /* UTToken.swift */; };
 		059BA6D3256B20B500893641 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059BA6D2256B20B500893641 /* UTType.swift */; };
 		05A44F0225C223350086033B /* CNGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0125C223350086033B /* CNGraphicsContext.swift */; };
 		05A44F0325C223350086033B /* CNGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0125C223350086033B /* CNGraphicsContext.swift */; };
@@ -192,6 +193,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		05239D5525DE29300024F478 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05B32C7825150057000D1411 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 05FC5C28255FF5E8006C3664;
+			remoteInfo = UnitTestBundle;
+		};
 		0580B36A25608B030041AB35 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 05B32C7825150057000D1411 /* Project object */;
@@ -252,6 +260,7 @@
 		055C85DD25A1F47F0064BE93 /* CNCommandLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNCommandLine.swift; sourceTree = "<group>"; };
 		055C85DE25A1F47F0064BE93 /* CNComplementor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNComplementor.swift; sourceTree = "<group>"; };
 		055C85DF25A1F47F0064BE93 /* CNReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReadline.swift; sourceTree = "<group>"; };
+		055C8AEA25DD62F50053510B /* UTToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTToken.swift; sourceTree = "<group>"; };
 		059BA6D2256B20B500893641 /* UTType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTType.swift; sourceTree = "<group>"; };
 		05A44F0125C223350086033B /* CNGraphicsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNGraphicsContext.swift; sourceTree = "<group>"; };
 		05A44F0D25C22B320086033B /* CNMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNMatrix.swift; sourceTree = "<group>"; };
@@ -420,6 +429,7 @@
 				05FC3866255FEC1D004CA79E /* UTStringUtil.swift */,
 				05FC3858255FEC1C004CA79E /* UTTextStorage.swift */,
 				05FC3860255FEC1D004CA79E /* UTThread.swift */,
+				055C8AEA25DD62F50053510B /* UTToken.swift */,
 				059BA6D2256B20B500893641 /* UTType.swift */,
 				05FC3861255FEC1D004CA79E /* UTURL.swift */,
 				05FC3870255FEC1E004CA79E /* UTValue.swift */,
@@ -729,6 +739,7 @@
 			buildToolPath = /usr/bin/make;
 			buildWorkingDirectory = "";
 			dependencies = (
+				05239D5625DE29300024F478 /* PBXTargetDependency */,
 				0580B36B25608B030041AB35 /* PBXTargetDependency */,
 			);
 			name = Check;
@@ -916,6 +927,7 @@
 				05FC3878255FEC1E004CA79E /* UTResource.swift in Sources */,
 				05FC388A255FEC1E004CA79E /* UTPreference.swift in Sources */,
 				05FC3883255FEC1E004CA79E /* UTOperationQueue.swift in Sources */,
+				055C8AEB25DD62F50053510B /* UTToken.swift in Sources */,
 				05FC3897255FECC2004CA79E /* main.swift in Sources */,
 				05FC387D255FEC1E004CA79E /* UTOperation.swift in Sources */,
 				05FC3881255FEC1E004CA79E /* UTStringUtil.swift in Sources */,
@@ -1098,6 +1110,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		05239D5625DE29300024F478 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 05FC5C28255FF5E8006C3664 /* UnitTestBundle */;
+			targetProxy = 05239D5525DE29300024F478 /* PBXContainerItemProxy */;
+		};
 		0580B36B25608B030041AB35 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 053B4EE8255FE176004B9052 /* UnitTest */;

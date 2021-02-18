@@ -33,6 +33,9 @@ let result15 = testStringUtil(console: cons)
 cons.print(string: "* testCharacter\n")
 let result17 = testCharacter(console: cons)
 
+cons.print(string: "* testToken\n")
+let result30 = testToken(console: cons)
+
 cons.print(string: "* testURL\n")
 let result9 = testURL(console: cons)
 
@@ -101,7 +104,7 @@ let result = result0 && result1 && result2 && result3 && result4  && result5 &&
 	     result12 && result13 && result14 && result15 && result17 &&
 	     result18 && result19 && result20 && result21 && result22 &&
 	     result23 && result24 && result25 && result26 && result27 &&
-	     result28 && result29
+	     result28 && result29 && result30
 if result {
 	cons.print(string: "[Result] OK\n")
 	Darwin.exit(0)
