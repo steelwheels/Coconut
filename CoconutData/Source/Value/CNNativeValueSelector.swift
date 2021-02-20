@@ -62,7 +62,7 @@ public class CNNativeValueSelector: CNNativeValueVisitor
 	open override func visit(image obj: CNImage){
 		mResult = nil
 	}
-	open override func visit(anyObject obj: AnyObject){
+	open override func visit(object obj: NSObject){
 		mResult = nil
 	}
 	open override func visit(dictionary obj: Dictionary<String, CNNativeValue>){

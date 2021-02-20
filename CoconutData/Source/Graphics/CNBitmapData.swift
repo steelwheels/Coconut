@@ -33,7 +33,7 @@ public class CNBitmapData
 		}
 	}
 
-	public init(intData idata: Array<Array<Int>>) {
+	public init(monoData idata: Array<Array<Int>>) {
 		mPositionX		= 0
 		mPositionY		= 0
 		mHeight			= idata.count
@@ -48,22 +48,17 @@ public class CNBitmapData
 			let row = Array(repeating: CNColor.clear, count: mWidth)
 			mData.append(row)
 		}
+		/* get color */
+		let fgcolor = CNPreference.shared.viewPreference.foregroundColor
+		let bgcolor = CNPreference.shared.viewPreference.backgroundColor
+
 		/* Copy array */
 		for y in 0..<idata.count {
 			let row = idata[y]
 			for x in 0..<row.count {
 				let ival = row[x]
-				mData[y][x] = CNBitmapData.intToColor(intValue: ival)
+				mData[y][x] = (ival != 0) ? fgcolor : bgcolor
 			}
-		}
-	}
-
-	private static func intToColor(intValue ival: Int) -> CNColor {
-		if let col = CNColor.color(withEscapeCode: Int32(ival)) {
-			return col
-		} else {
-			NSLog("Unknown color value: \(ival)")
-			return CNColor.clear
 		}
 	}
 

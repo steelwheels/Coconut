@@ -28,7 +28,7 @@ public class CNNativeValueVisitor
 		case .URLValue(let obj):		visit(URL: obj)
 		case .colorValue(let obj):		visit(color: obj)
 		case .imageValue(let obj):		visit(image: obj)
-		case .anyObjectValue(let obj):		visit(anyObject: obj)
+		case .objectValue(let obj):		visit(object: obj)
 		}
 	}
 
@@ -46,6 +46,6 @@ public class CNNativeValueVisitor
 	open func visit(URL obj: URL){ }
 	open func visit(color obj: CNColor){ }
 	open func visit(image obj: CNImage){ }
-	open func visit(anyObject obj: AnyObject){ }
+	open func visit(object obj: NSObject){ }
 }
 

@@ -28,7 +28,7 @@ public enum CNNativeType {
 	case	URLType
 	case	colorType
 	case	imageType
-	case	anyObjectType
+	case	objectType
 
 	public func toString() -> String {
 		let result: String
@@ -47,7 +47,7 @@ public enum CNNativeType {
 		case .URLType:		result = "URL"
 		case .colorType:	result = "Color"
 		case .imageType:	result = "Image"
-		case .anyObjectType:	result = "AnyObject"
+		case .objectType:	result = "Object"
 		}
 		return result
 	}
@@ -68,7 +68,7 @@ public enum CNNativeValue {
 	case URLValue(_ val: URL)
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
-	case anyObjectValue(_ val: AnyObject)
+	case objectValue(_ val: NSObject)
 
 	public var valueType: CNNativeType {
 		get {
@@ -88,7 +88,7 @@ public enum CNNativeValue {
 			case .URLValue(_):		result = .URLType
 			case .colorValue(_):		result = .colorType
 			case .imageValue(_):		result = .imageType
-			case .anyObjectValue(_):	result = .anyObjectType
+			case .objectValue(_):		result = .objectType
 			}
 			return result
 		}
@@ -222,10 +222,10 @@ public enum CNNativeValue {
 		return result
 	}
 
-	public func toAnyObject() -> AnyObject? {
-		let result: AnyObject?
+	public func toObject() -> NSObject? {
+		let result: NSObject?
 		switch self {
-		case .anyObjectValue(let obj):	result = obj
+		case .objectValue(let obj):	result = obj
 		default:			result = nil
 		}
 		return result
@@ -319,9 +319,9 @@ public enum CNNativeValue {
 		}
 	}
 
-	public func anyObjectProperty(identifier ident: String) -> AnyObject? {
+	public func objectProperty(identifier ident: String) -> NSObject? {
 		if let elm = valueProperty(identifier: ident){
-			return elm.toAnyObject()
+			return elm.toObject()
 		} else {
 			return nil
 		}
@@ -420,9 +420,9 @@ public enum CNNativeValue {
 				let size = val.size
 				result = CNTextLine(string: "{image: size:\(size.width) x \(size.height)}")
 			#endif
-		case .anyObjectValue(let val):
+		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
-			result = CNTextLine(string: "anyObject(\(classname))")
+			result = CNTextLine(string: "object(\(classname))")
 		}
 		return result
 	}
@@ -491,7 +491,7 @@ public enum CNNativeValue {
 			result = col
 		case .imageValue(let val):
 			result = val
-		case .anyObjectValue(let val):
+		case .objectValue(let val):
 			result = val
 		}
 		return result
@@ -537,8 +537,10 @@ public enum CNNativeValue {
 			result = .colorValue(val)
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
+		} else if let val = obj as? NSObject {
+			result = .objectValue(val)
 		} else {
-			result = .anyObjectValue(obj as AnyObject)
+			result = nil
 		}
 		return result
 	}

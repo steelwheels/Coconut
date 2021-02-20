@@ -185,7 +185,7 @@ public class CNJSONEncoder: CNNativeValueVisitor
 		mResult = NSString(string: "\(obj.description)")
 	}
 
-	open override func visit(anyObject obj: AnyObject){
+	open override func visit(object obj: NSObject){
 		mResult = obj
 	}
 
