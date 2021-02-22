@@ -98,7 +98,7 @@ public class CNBitmapContents
 		}
 	}
 
-	public func clear() {
+	public func clean() {
 		for y in 0..<mHeight {
 			for x in 0..<mWidth {
 				mData[y][x] = CNColor.clear

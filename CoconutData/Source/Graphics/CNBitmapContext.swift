@@ -30,8 +30,9 @@ public class CNBitmapContext
 		mContents		= CNBitmapContents(width: 1, height: 1)
 	}
 
-	public var width:       Int 		{ get { return mWidth	   }}
-	public var height:      Int 		{ get { return mHeight	   }}
+	public var width:       Int 			{ get { return mWidth	      }}
+	public var height:      Int 			{ get { return mHeight	      }}
+	public var data: 	Array<Array<CNColor>>	{ get { return mContents.data }}
 
 	public func begin(context ctxt: CGContext?, physicalFrame pframe: CGRect, width wdt: Int, height hgt: Int) {
 		assert(wdt > 0 && hgt > 0, "Invalid parameter \(wdt)x\(hgt)")
@@ -84,8 +85,8 @@ public class CNBitmapContext
 		mContents.set(x: posx, y: posy, bitmap: data)
 	}
 
-	public func clear() {
-		mContents.clear()
+	public func clean() {
+		mContents.clean()
 	}
 
 	public func get(x posx: Int, y posy: Int) -> CNColor? {
