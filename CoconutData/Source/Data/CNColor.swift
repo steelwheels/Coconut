@@ -56,6 +56,15 @@ public extension CNColor
 		return rgb
 	}
 
+	#if os(iOS)
+	var alphaComponent: CGFloat {
+		get {
+			let (_, _, _, alpha) = self.toRGBA()
+			return alpha
+		}
+	}
+	#endif
+
 	func toRGBA() -> (CGFloat, CGFloat, CGFloat, CGFloat) {
 		var red 	: CGFloat = 0.0
 		var green	: CGFloat = 0.0

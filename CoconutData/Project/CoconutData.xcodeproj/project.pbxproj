@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		051ED8E425C99269003AD1F6 /* CNBitmapContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */; };
 		051ED8E525C99269003AD1F6 /* CNBitmapContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */; };
-		053AE54B25D55D380007056B /* CNBitmapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053AE54A25D55D380007056B /* CNBitmapData.swift */; };
-		053AE54C25D55D380007056B /* CNBitmapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053AE54A25D55D380007056B /* CNBitmapData.swift */; };
+		051EE76625E24C3A006FED4D /* UTBitmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051EE76525E24C3A006FED4D /* UTBitmap.swift */; };
+		053AE54B25D55D380007056B /* CNBitmapContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053AE54A25D55D380007056B /* CNBitmapContents.swift */; };
+		053AE54C25D55D380007056B /* CNBitmapContents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053AE54A25D55D380007056B /* CNBitmapContents.swift */; };
 		0551394125CC2BD6007B1C6B /* CNTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551394025CC2BD6007B1C6B /* CNTimer.swift */; };
 		0551394225CC2BD6007B1C6B /* CNTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551394025CC2BD6007B1C6B /* CNTimer.swift */; };
 		055BF94F255C25070004C250 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 055BF94E255C25070004C250 /* CoconutScript.sdef */; };
@@ -252,7 +253,8 @@
 
 /* Begin PBXFileReference section */
 		051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapContext.swift; sourceTree = "<group>"; };
-		053AE54A25D55D380007056B /* CNBitmapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapData.swift; sourceTree = "<group>"; };
+		051EE76525E24C3A006FED4D /* UTBitmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTBitmap.swift; sourceTree = "<group>"; };
+		053AE54A25D55D380007056B /* CNBitmapContents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapContents.swift; sourceTree = "<group>"; };
 		053B4EE9255FE176004B9052 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551394025CC2BD6007B1C6B /* CNTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTimer.swift; sourceTree = "<group>"; };
 		055BF94E255C25070004C250 /* CoconutScript.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CoconutScript.sdef; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 			children = (
 				05FC3896255FECC2004CA79E /* main.swift */,
 				05FC3859255FEC1C004CA79E /* UTAttributedString.swift */,
+				051EE76525E24C3A006FED4D /* UTBitmap.swift */,
 				05FC386B255FEC1D004CA79E /* UTCharacter.swift */,
 				05FC385A255FEC1C004CA79E /* UTColor.swift */,
 				05FC3857255FEC1C004CA79E /* UTConsole.swift */,
@@ -597,7 +600,7 @@
 			isa = PBXGroup;
 			children = (
 				051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */,
-				053AE54A25D55D380007056B /* CNBitmapData.swift */,
+				053AE54A25D55D380007056B /* CNBitmapContents.swift */,
 				05A44F0125C223350086033B /* CNGraphicsContext.swift */,
 				05B32D11251508B5000D1411 /* CNGraphicsType.swift */,
 			);
@@ -918,6 +921,7 @@
 				05FC3879255FEC1E004CA79E /* UTEscapeSequence.swift in Sources */,
 				05FC388C255FEC1E004CA79E /* UTStringStream.swift in Sources */,
 				05FC3888255FEC1E004CA79E /* UTKeyBinding.swift in Sources */,
+				051EE76625E24C3A006FED4D /* UTBitmap.swift in Sources */,
 				05FC3875255FEC1E004CA79E /* UTColor.swift in Sources */,
 				05FC3885255FEC1E004CA79E /* UTFilePath.swift in Sources */,
 				05FC3887255FEC1E004CA79E /* UTProcess.swift in Sources */,
@@ -1011,7 +1015,7 @@
 				05B32D7A25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7425150945000D1411 /* CNCharacter.swift in Sources */,
 				05B32D5C25150926000D1411 /* CNExitCode.swift in Sources */,
-				053AE54B25D55D380007056B /* CNBitmapData.swift in Sources */,
+				053AE54B25D55D380007056B /* CNBitmapContents.swift in Sources */,
 				05B32CE5251502E7000D1411 /* CNApplicationDelegate.swift in Sources */,
 				05B32D2D251508D9000D1411 /* CNAuthorize.swift in Sources */,
 				05B32D29251508D9000D1411 /* CNNativeValueFile.swift in Sources */,
@@ -1092,7 +1096,7 @@
 				05B32D7B25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7525150945000D1411 /* CNCharacter.swift in Sources */,
 				05B32D5D25150926000D1411 /* CNExitCode.swift in Sources */,
-				053AE54C25D55D380007056B /* CNBitmapData.swift in Sources */,
+				053AE54C25D55D380007056B /* CNBitmapContents.swift in Sources */,
 				05B32CE6251502E7000D1411 /* CNApplicationDelegate.swift in Sources */,
 				05B32D2E251508D9000D1411 /* CNAuthorize.swift in Sources */,
 				05B32D2A251508D9000D1411 /* CNNativeValueFile.swift in Sources */,
