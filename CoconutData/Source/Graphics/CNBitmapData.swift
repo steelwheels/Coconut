@@ -1,13 +1,13 @@
 /*
- * @file	CNBitmapContents.swift
- * @brief	Define CNBitmapContents class
+ * @file	CNBitmapData.swift
+ * @brief	Define CNBitmapData class
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
 
 import Foundation
 
-public class CNBitmapContents
+public class CNBitmapData
 {
 	private var mWidth: 		Int
 	private var mHeight:		Int
@@ -15,7 +15,6 @@ public class CNBitmapContents
 
 	public var width:		Int			{ get { return mWidth  }}
 	public var height:		Int			{ get { return mHeight }}
-	public var data:   		Array<Array<CNColor>>	{ get { return mData }}
 
 	public init(width w: Int, height h: Int) {
 		mWidth			= w
@@ -27,31 +26,14 @@ public class CNBitmapContents
 		}
 	}
 
-	public init(monoData idata: Array<Array<Int>>) {
-		mHeight			= idata.count
-		var width: Int = 0
-		for row in idata {
-			width = max(width, row.count)
-		}
-		mWidth			= width
-		/* Allocate destination array */
-		mData = []
-		for _ in 0..<mHeight {
-			let row = Array(repeating: CNColor.clear, count: mWidth)
-			mData.append(row)
-		}
-		/* get color */
-		let fgcolor = CNPreference.shared.viewPreference.foregroundColor
-		let bgcolor = CNPreference.shared.viewPreference.backgroundColor
+	public init(colorData cdata: Array<Array<CNColor>>) {
+		mHeight		= cdata.count
+		mWidth		= cdata[0].count
+		mData		= cdata
+	}
 
-		/* Copy array */
-		for y in 0..<idata.count {
-			let row = idata[y]
-			for x in 0..<row.count {
-				let ival = row[x]
-				mData[y][x] = (ival != 0) ? fgcolor : bgcolor
-			}
-		}
+	public func copy() -> CNBitmapData {
+		return CNBitmapData(colorData: mData)
 	}
 
 	public func resize(width wid: Int, height hgt: Int) {
@@ -87,10 +69,10 @@ public class CNBitmapContents
 		}
 	}
 
-	public func set(x posx: Int, y posy: Int, bitmap data: Array<Array<CNColor>>){
-		let height = data.count
+	public func set(x posx: Int, y posy: Int, bitmap bm: CNBitmapData){
+		let height = bm.mData.count
 		for y in 0..<height {
-			let line  = data[y]
+			let line  = bm.mData[y]
 			let width = line.count
 			for x in 0..<width {
 				set(x: posx + x, y: posy + y, color: line[x])

@@ -1,6 +1,6 @@
 /**
  * @file	UTBitmap.swift
- * @brief	Test function for CNBitmapContext, CNBitmapContents
+ * @brief	Test function for CNBitmapContext, CNBitmapData
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
@@ -14,7 +14,7 @@ import Foundation
 public func testBitmap(console cons: CNConsole) -> Bool
 {
 	cons.print(string: "* Init state\n")
-	let base = CNBitmapContents(width: 10, height: 10)
+	let base = CNBitmapData(width: 10, height: 10)
 	dump(bitmap: base, console: cons)
 
 	cons.print(string: "* Set 3 points\n")
@@ -30,13 +30,13 @@ public func testBitmap(console cons: CNConsole) -> Bool
 		[yellow, yellow, yellow],
 		[yellow, yellow, yellow]
 	]
-	base.set(x: 4, y: 4, bitmap: data)
+	base.set(x: 4, y: 4, bitmap: CNBitmapData(colorData: data))
 	dump(bitmap: base, console: cons)
 	
 	return true
 }
 
-private func dump(bitmap bm: CNBitmapContents, console cons: CNConsole)
+private func dump(bitmap bm: CNBitmapData, console cons: CNConsole)
 {
 	let text = bm.toText()
 	text.print(console: cons, terminal: "")

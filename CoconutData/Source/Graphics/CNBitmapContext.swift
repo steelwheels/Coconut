@@ -19,7 +19,7 @@ public class CNBitmapContext
 	private var mWidth:		Int
 	private var mHeight:		Int
 	private var mPixelSize:		CGSize
-	private var mContents:		CNBitmapContents
+	private var mContents:		CNBitmapData
 
 	public init() {
 		mCoreContext		= nil
@@ -27,12 +27,12 @@ public class CNBitmapContext
 		mWidth			= 0
 		mHeight			= 0
 		mPixelSize		= CGSize(width: 1.0, height: 1.0)
-		mContents		= CNBitmapContents(width: 1, height: 1)
+		mContents		= CNBitmapData(width: 1, height: 1)
 	}
 
-	public var width:       Int 			{ get { return mWidth	      }}
-	public var height:      Int 			{ get { return mHeight	      }}
-	public var data: 	Array<Array<CNColor>>	{ get { return mContents.data }}
+	public var width:       Int 		{ get { return mWidth		}}
+	public var height:      Int 		{ get { return mHeight		}}
+	public var data: 	CNBitmapData	{ get { return mContents.copy()	}}
 
 	public func begin(context ctxt: CGContext?, physicalFrame pframe: CGRect, width wdt: Int, height hgt: Int) {
 		assert(wdt > 0 && hgt > 0, "Invalid parameter \(wdt)x\(hgt)")
@@ -59,8 +59,9 @@ public class CNBitmapContext
 		let height = mContents.height
 		for y in 0..<height {
 			for x in 0..<width {
-				let c = mContents.data[y][x]
-				draw(x: x, y: y, color: c)
+				if let c = mContents.get(x: x, y: y) {
+					draw(x: x, y: y, color: c)
+				}
 			}
 		}
 	}
@@ -81,8 +82,8 @@ public class CNBitmapContext
 		mContents.set(x: posx, y: posy, color: col)
 	}
 
-	public func set(x posx: Int, y posy: Int, bitmap data: Array<Array<CNColor>>){
-		mContents.set(x: posx, y: posy, bitmap: data)
+	public func set(x posx: Int, y posy: Int, bitmap bm: CNBitmapData){
+		mContents.set(x: posx, y: posy, bitmap: bm)
 	}
 
 	public func clean() {
