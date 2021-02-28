@@ -102,7 +102,7 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 			self.processId = procmgr.addProcess(process: self)
 		}
 
-		DispatchQueue.global(qos: .background).async {
+		DispatchQueue.global(qos: .userInitiated).async {
 			() -> Void in
 			/* Enable secure access */
 			let homeurl  = CNPreference.shared.userPreference.homeDirectory

@@ -146,8 +146,7 @@ import Foundation
 		return "$ "
 	}
 
-	open func execute(command cmd: String) -> Bool {	// -> OK/Fail
+	open func execute(command cmd: String) {
 		console.error(string: "execute: \(cmd)\n")
-		return false
 	}
 }

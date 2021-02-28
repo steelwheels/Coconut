@@ -27,11 +27,24 @@ public extension URL
 	}
 
 #if os(OSX)
-	static func openPanel(title tl: String, type file: CNFileType, extensions exts: Array<String>) -> URL?
-	{
+	static func openPanel(title tl: String, type file: CNFileType, extensions exts: Array<String>) -> URL? {
+		if Thread.isMainThread {
+			return openPanelMain(title: tl, type: file, extensions: exts)
+		} else {
+			let semaphore = DispatchSemaphore(value: 0)
+			var result: URL? = nil
+			DispatchQueue.main.async {
+				result = openPanelMain(title: tl, type: file, extensions: exts)
+				semaphore.signal()
+			}
+			semaphore.wait()
+			return result
+		}
+	}
+
+	private static func openPanelMain(title tl: String, type file: CNFileType, extensions exts: Array<String>) -> URL? {
 		let panel = NSOpenPanel()
 		panel.title = tl
-
 		switch file {
 		case .File, .NotExist:
 			panel.canChooseFiles       = true
@@ -60,33 +73,6 @@ public extension URL
 			break
 		}
 		return result
-	}
-
-	/* Note: this method is used to open panel from the non-main thread */
-	static func openPanelWithAsync(title tl: String, type file: CNFileType, extensions exts: Array<String>, callback cbfunc: @escaping (_ url: Array<URL>) -> Void) {
-		let panel = NSOpenPanel()
-		panel.title = tl
-
-		switch file {
-		case .File, .NotExist:
-			panel.canChooseFiles       = true
-			panel.canChooseDirectories = false
-		case .Directory:
-			panel.canChooseFiles       = false
-			panel.canChooseDirectories = true
-		}
-		panel.allowsMultipleSelection = false
-		panel.allowedFileTypes = exts
-
-		panel.begin(completionHandler: {
-			(_ responce: NSApplication.ModalResponse) -> Void in
-			switch responce {
-			case .OK:
-				cbfunc(panel.urls)
-			default:
-				cbfunc([])
-			}
-		})
 	}
 
 	static func savePanel(title tl: String, outputDirectory outdir: URL?, saveFileCallback callback: @escaping ((_: URL) -> Bool))
