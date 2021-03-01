@@ -45,7 +45,6 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 	}
 
 	public var processManager:	CNProcessManager?	{ get { return mProcessManager	}}
-	//public var queue:		DispatchQueue		{ get { return mQueue		}}
 	public var inputStream:  	CNFileStream		{ get { return mInputStream	}}
 	public var outputStream: 	CNFileStream 		{ get { return mOutputStream	}}
 	public var errorStream:  	CNFileStream		{ get { return mErrorStream 	}}

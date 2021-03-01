@@ -46,10 +46,9 @@ import Foundation
 
 		/* Setup terminal */
 		while !mIsCancelled {
-			if mReadlineStatus.doPrompt {
-				self.console.print(string: promptString() + mReadlineStatus.editingLine)
-				mReadlineStatus.doPrompt = false
-			}
+			/* Insert prompt */
+			insertPrompt()
+
 			/* Read command line */
 			switch mReadline.readLine(console: self.console, terminalInfo: mTerminalInfo) {
 			case .commandLine(let cmdline, let determined):
@@ -81,29 +80,46 @@ import Foundation
 		return 0
 	}
 
+	private func insertPrompt() {
+		if mReadlineStatus.doPrompt {
+			self.console.print(string: promptString() + mReadlineStatus.editingLine)
+			mReadlineStatus.doPrompt = false
+		}
+	}
+
 	private func determineCommandLine(newLine newline: String) {
 		/* Replace replay command */
 		let newcmd = mReadline.replaceReplayCommand(source: newline)
 
+		/* Allocate semaphore */
+		let semaphore = DispatchSemaphore(value: 0)
+
 		/* Execute command */
 		console.print(string: "\n") // Execute at new line
-		let _ = execute(command: newcmd)
+		execute(command: newcmd, doneCallback: {
+			() -> Void in
+			semaphore.signal()
+		})
+
+		/* Wait until the command is finised */
+		semaphore.wait()
 
 		/* Save current command */
-		mReadline.addCommand(command: newcmd)
+		let readline = self.mReadline
+		readline.addCommand(command: newcmd)
 
 		/* Update history */
 		let histmgr = CNCommandHistory.shared
-		histmgr.set(history: mReadline.history())
+		histmgr.set(history: readline.history())
 
 		/* Reset terminal */
 		let resetstr = CNEscapeCode.resetCharacterAttribute.encode()
-		console.print(string: resetstr)
+		self.console.print(string: resetstr)
 
 		/* Print prompt again */
-		mReadlineStatus.doPrompt	= true
-		mReadlineStatus.editingLine     = ""
-		mReadlineStatus.editingPosition	= 0
+		self.mReadlineStatus.doPrompt		= true
+		self.mReadlineStatus.editingLine	= ""
+		self.mReadlineStatus.editingPosition	= 0
 	}
 
 	private func updateCommandLine(newLine newline: String, newPosition newpos: Int) {
@@ -146,7 +162,8 @@ import Foundation
 		return "$ "
 	}
 
-	open func execute(command cmd: String) {
+	open func execute(command cmd: String, doneCallback cbfunc: @escaping () -> Void) {
 		console.error(string: "execute: \(cmd)\n")
+		cbfunc()
 	}
 }
