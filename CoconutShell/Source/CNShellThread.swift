@@ -32,7 +32,8 @@ import Foundation
 
 	public override init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment){
 		let compl	= CNComplementor()
-		mReadline 	= CNReadline(complementor: compl, environment: env)
+		let console	= CNFileConsole(inputStream: instrm, outputStream: outstrm, errorStream: errstrm)
+		mReadline 	= CNReadline(console: console, complementor: compl, environment: env)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mTerminalInfo	= CNTerminalInfo(width: 80, height: 25)
 		mIsCancelled	= false
@@ -50,7 +51,7 @@ import Foundation
 			insertPrompt()
 
 			/* Read command line */
-			switch mReadline.readLine(console: self.console, terminalInfo: mTerminalInfo) {
+			switch mReadline.readLine(terminalInfo: mTerminalInfo) {
 			case .commandLine(let cmdline, let determined):
 				let newline	= cmdline.string
 				let newpos	= cmdline.position
