@@ -651,6 +651,7 @@ FileDescriptor = 0
 - Set raw mode -> Failed
 - Reset raw mode -> Failed
 * testFile
+testFile: Start
 [Error] Failed to read Info.plist
 testFile: NG
 * testFilePath

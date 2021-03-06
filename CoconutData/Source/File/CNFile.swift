@@ -7,6 +7,109 @@
 
 import Foundation
 
+public class CNFile
+{
+	public static let EOF: Int	= -1
+
+	public enum Char {
+		case char(Character)
+		case endOfFile
+		case null
+	}
+
+	public enum Line {
+		case line(String)
+		case endOfFile
+		case null
+	}
+
+	private var mFileHandle:	FileHandle
+	private var mInputBuffer:	String
+	private var mInputLock:		NSLock
+	private var mReadDone:		Bool
+
+	public init(fileHandle handle: FileHandle){
+		mFileHandle	= handle
+		mInputBuffer	= ""
+		mInputLock	= NSLock()
+		mReadDone	= false
+
+		mFileHandle.readabilityHandler = {
+			[weak self] (_ hdl: FileHandle) -> Void in
+			if let myself = self {
+				myself.mInputLock.lock()
+				let data = hdl.availableData
+				if data.count > 0 {
+					if let str = String(data: data, encoding: .utf8) {
+						myself.mInputBuffer += str
+					} else {
+						NSLog("[Error] Failed to decode input at \(#function)")
+					}
+				} else {
+					myself.mReadDone = true
+				}
+				myself.mInputLock.unlock()
+			}
+		}
+	}
+
+	deinit {
+		mFileHandle.readabilityHandler = nil
+	}
+
+	public func close() {
+		mFileHandle.closeFile()
+		mReadDone = true
+	}
+
+	public var fileHandle:	FileHandle { get { return mFileHandle	}}
+	public var readDone:	Bool	   { get { return mReadDone	}}
+
+	public func getc() -> CNFile.Char {
+		var result: CNFile.Char = .null
+		mInputLock.lock()
+		if mInputBuffer.count == 0 && mReadDone {
+			result = .endOfFile
+		} else if let c = mInputBuffer.first {
+			result = .char(c)
+			mInputBuffer.removeFirst()
+		}
+		mInputLock.unlock()
+		return result
+	}
+
+	public func getl() -> CNFile.Line {
+		var result: CNFile.Line = .null
+		mInputLock.lock()
+		if mInputBuffer.count > 0 {
+			let start = mInputBuffer.startIndex
+			let end   = mInputBuffer.endIndex
+			var idx   = start
+			while idx < end {
+				let c = mInputBuffer[idx]
+				if c.isNewline {
+					let next = mInputBuffer.index(after: idx)
+					let head = mInputBuffer.prefix(upTo: next)
+					let tail = mInputBuffer.suffix(from: next)
+					mInputBuffer = String(tail)
+					result = .line(String(head))
+					break
+				}
+				idx = mInputBuffer.index(after: idx)
+			}
+		} else if mReadDone {
+			result = .endOfFile
+		}
+		mInputLock.unlock()
+		return result
+	}
+
+	public func put(string str: String) {
+		mFileHandle.write(string: str)
+	}
+}
+
+/*
 public class CNTextFile
 {
 	private var mFileHandle:	FileHandle
@@ -79,4 +182,6 @@ public class CNTextFile
 		}
 	}
 }
+
+*/
 

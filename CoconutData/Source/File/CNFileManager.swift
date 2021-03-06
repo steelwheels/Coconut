@@ -26,7 +26,7 @@ public enum CNFileType: Int32 {
 }
 
 public enum CNFileOpenResult {
-	case 	ok(_ file: CNTextFile)
+	case 	ok(_ file: CNFile)
 	case	error(_ error: NSError)
 }
 
@@ -77,17 +77,17 @@ public extension FileManager
 	
 	func openFile(URL url: URL, accessType acctyp: CNFileAccessType) -> CNFileOpenResult {
 		do {
-			var file: CNTextFile
+			var file: CNFile
 			switch acctyp {
 			case .ReadAccess:
 				let handle = try FileHandle(forReadingFrom: url)
-				file = CNTextFile(fileHandle: handle)
+				file = CNFile(fileHandle: handle)
 			case .WriteAccess:
 				let handle = try FileHandle(forReadingFrom: url)
-				file = CNTextFile(fileHandle: handle)
+				file = CNFile(fileHandle: handle)
 			case .AppendAccess:
 				let handle = try FileHandle(forWritingTo: url)
-				file = CNTextFile(fileHandle: handle)
+				file = CNFile(fileHandle: handle)
 			}
 			return .ok(file)
 		} catch let err as NSError {
