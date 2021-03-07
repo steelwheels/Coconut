@@ -13,32 +13,6 @@ public enum CNFileStream
 	case fileHandle(FileHandle)
 	case pipe(Pipe)
 
-	public func isRawMode() -> Bool? {
-		let result: Bool?
-		switch self {
-		case .null:
-			result = nil
-		case .fileHandle(let hdl):
-			result = hdl.isRawMode()
-		case .pipe(let pipe):
-			result = pipe.fileHandleForReading.isRawMode()
-		}
-		return result
-	}
-
-	public func setRawMode(enable enbl: Bool) -> Int32 {
-		let result: Int32
-		switch self {
-		case .null:
-			result = 0
-		case .fileHandle(let hdl):
-			result = hdl.setRawMode(enable: enbl)
-		case .pipe(let pipe):
-			result = pipe.fileHandleForReading.setRawMode(enable: enbl)
-		}
-		return result
-	}
-
 	public static func streamToFileHandle(stream strm: CNFileStream, forInside inside: Bool, isInput input: Bool) -> FileHandle {
 		let result: FileHandle
 		switch strm {

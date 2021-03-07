@@ -8,8 +8,7 @@ The Coconut Data Framework defines general purpose data class and functions to o
 * Xcode: 11.0
 
 ## Documents
-* [Exit code ](https://github.com/steelwheels/Coconut/blob/master/CoconutData/Document/ExitCode.md): Definition of exit code
-* [Translation resuls from AppleScript to AppleEventDescriptor](./Document/AppleEvent/applescript_to_eventdescriptor.md): The suvey of checking the apple event descriptor setting for each source AppleScript statements.
+* [Overview](https://github.com/steelwheels/Coconut/blob/master/CoconutData/Document/Overview.md): Ovewview of the implementation of CoconutData framework.
 
 ## Related Links
 * [Steel Wheels Project](https://steelwheels.github.io): The owner of this project

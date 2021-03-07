@@ -91,18 +91,9 @@ import Foundation
 		/* Replace replay command */
 		let newcmd = mReadline.replaceReplayCommand(source: newline)
 
-		/* Allocate semaphore */
-		let semaphore = DispatchSemaphore(value: 0)
-
 		/* Execute command */
 		console.print(string: "\n") // Execute at new line
-		execute(command: newcmd, doneCallback: {
-			() -> Void in
-			semaphore.signal()
-		})
-
-		/* Wait until the command is finised */
-		semaphore.wait()
+		execute(command: newcmd)
 
 		/* Save current command */
 		let readline = self.mReadline
@@ -162,8 +153,7 @@ import Foundation
 		return "$ "
 	}
 
-	open func execute(command cmd: String, doneCallback cbfunc: @escaping () -> Void) {
+	open func execute(command cmd: String) {
 		console.error(string: "execute: \(cmd)\n")
-		cbfunc()
 	}
 }

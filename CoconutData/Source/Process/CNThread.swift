@@ -19,6 +19,22 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 	}
 }
 
+public enum CNUserThreadLevel {
+	case	thread
+	case	event
+}
+
+public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @escaping () -> Void){
+	let qos: DispatchQoS.QoSClass
+	switch lvl {
+	case .thread:	qos = .userInitiated
+	case .event:	qos = .userInteractive
+	}
+	DispatchQueue.global(qos: qos).async {
+		exec()
+	}
+}
+
 /* The instance of this class will be used as an object in JavaScript context.
  * So this class must inherit NSObject
  */
@@ -34,7 +50,6 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 	private var mEnvironment:		CNEnvironment
 	private var mConsole:			CNFileConsole
 	private var mArgument:			CNNativeValue
-	private var mIsRawMode:			Bool?
 	private var mIsRunning:			Bool
 	private var mIsCancelled:		Bool
 	private var mTerminationStatus:		Int32
@@ -61,7 +76,6 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 		mErrorStream		= errstrm
 		mEnvironment		= env
 		mArgument		= .nullValue
-		mIsRawMode		= mInputStream.isRawMode()
 		mIsRunning		= false
 		mIsCancelled		= false
 		mTerminationStatus	= -1
@@ -69,22 +83,9 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 		mConsole = CNFileConsole(input:  CNFileStream.streamToFileHandle(stream: instrm,  forInside: true, isInput: true),
 					 output: CNFileStream.streamToFileHandle(stream: outstrm, forInside: true, isInput: false),
 					 error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
-
-		/* Set raw mode */
-		if let israw = mIsRawMode {
-			if !israw {
-				let _ = mInputStream.setRawMode(enable: true)
-			}
-		}
 	}
 
 	deinit {
-		/* Release raw mode */
-		if let israw = mIsRawMode {
-			if !israw {
-				let _ = mInputStream.setRawMode(enable: false)
-			}
-		}
 		/* Remove from parent */
 		if let mgr = mProcessManager {
 			mgr.removeProcess(process: self)
@@ -101,7 +102,7 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 			self.processId = procmgr.addProcess(process: self)
 		}
 
-		DispatchQueue.global(qos: .userInitiated).async {
+		CNExecuteInUserThread(level: .thread, execute: {
 			() -> Void in
 			/* Enable secure access */
 			let homeurl  = CNPreference.shared.userPreference.homeDirectory
@@ -119,7 +120,7 @@ public func CNExecuteInMainThread(doSync sync: Bool, execute exec: @escaping () 
 			self.mIsRunning = false
 			self.closeStreams()
 			self.mSemaphore.signal()
-		}
+		})
 	}
 
 	open func main(argument arg: CNNativeValue) -> Int32 {

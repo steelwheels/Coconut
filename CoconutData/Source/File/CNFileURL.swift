@@ -33,10 +33,10 @@ public extension URL
 		} else {
 			let semaphore = DispatchSemaphore(value: 0)
 			var result: URL? = nil
-			DispatchQueue.main.async {
+			CNExecuteInMainThread(doSync: false, execute: {
 				result = openPanelMain(title: tl, type: file, extensions: exts)
 				semaphore.signal()
-			}
+			})
 			semaphore.wait()
 			return result
 		}
@@ -60,17 +60,13 @@ public extension URL
 		switch panel.runModal() {
 		case .OK:
 			let urls = panel.urls
-			if urls.count == 1 {
-				let preference = CNPreference.shared.bookmarkPreference
-				preference.add(URL: urls[0])
+			if urls.count >= 1 {
 				result = urls[0]
-			} else {
-				NSLog("Invalid result: \(urls)")
 			}
 		case .cancel:
 			break
 		default:
-			break
+			NSLog("Unknown event at \(#function)")
 		}
 		return result
 	}
