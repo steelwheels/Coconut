@@ -61,6 +61,9 @@ public extension URL
 		case .OK:
 			let urls = panel.urls
 			if urls.count >= 1 {
+				/* Bookmark this folder */
+				let preference = CNPreference.shared.bookmarkPreference
+				preference.add(URL: urls[0])
 				result = urls[0]
 			}
 		case .cancel:

@@ -42,40 +42,11 @@ public class CNEnvironment
 	}
 
 	public func set(name nm: String, value val: CNNativeValue) {
-
-		switch nm {
-		case CNEnvironment.HomeItem:
-			if let url = valueToDirectory(value: val) {
-				CNPreference.shared.userPreference.homeDirectory = url
-			} else {
-				let msgstr = val.toText().toStrings(terminal: "").joined(separator: "\n")
-				CNLog(logLevel: .error, message: "Invalid value for home directory: \(msgstr)")
-			}
-		case CNEnvironment.PwdItem:
-			if let url = valueToDirectory(value: val) {
-				FileManager.default.changeCurrentDirectoryPath(url.path)
-			} else {
-				let msgstr = val.toText().toStrings(terminal: "").joined(separator: "\n")
-				CNLog(logLevel: .error, message: "Invalid value for current working directory: \(msgstr)")
-			}
-		default:
-			mEnvironmentVariable[nm] = val
-		}
+		mEnvironmentVariable[nm] = val
 	}
 
 	public func get(name nm: String) -> CNNativeValue? {
-		let result: CNNativeValue?
-		switch nm {
-		case CNEnvironment.HomeItem:
-			let url = CNPreference.shared.userPreference.homeDirectory
-			result = .URLValue(url)
-		case CNEnvironment.PwdItem:
-			let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-			result = .URLValue(url)
-		default:
-			result = mEnvironmentVariable[nm]
-		}
-		return result
+		return mEnvironmentVariable[nm]
 	}
 
 	public func setString(name nm: String, value val: String) {
