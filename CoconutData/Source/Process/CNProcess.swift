@@ -7,19 +7,48 @@
 
 import Foundation
 
+public enum CNProcessStatus {
+	case Idle
+	case Running
+	case Finished
+	case Canceled
+
+	public var isRunning: Bool {
+		let result: Bool
+		switch self {
+		case .Idle:	result = false
+		case .Running:	result = true
+		case .Finished:	result = false
+		case .Canceled:	result = false
+		}
+		return result
+	}
+
+	public var isStopped: Bool {
+		let result: Bool
+		switch self {
+		case .Idle:	result = false
+		case .Running:	result = false
+		case .Finished:	result = true
+		case .Canceled:	result = true
+		}
+		return result
+	}
+}
+
 public protocol CNProcessProtocol
 {
 	var 	processManager:	CNProcessManager? { get }
 	var 	processId:	Int? { get set }
 
-	var	inputStream: 	CNFileStream { get }
-	var	outputStream:	CNFileStream { get }
-	var	errorStream:	CNFileStream { get }
+	var	inputStream: 		CNFileStream { get }
+	var	outputStream:		CNFileStream { get }
+	var	errorStream:		CNFileStream { get }
 
-	var 	isRunning:	Bool { get }
+	var 	status:			CNProcessStatus { get }
+	var	terminationStatus:	Int32 { get }
 
 	func terminate()
-	func waitUntilExit() -> Int32
 }
 
 public extension CNProcessProtocol
@@ -41,15 +70,9 @@ open class CNProcess: CNProcessProtocol
 {
 	public typealias TerminationHandler	= (_ proc: Process) -> Void
 
-	public enum Status {
-		case Idle
-		case Running
-		case Finished
-	}
-
 	private weak var mProcessManager:	CNProcessManager?
 	private var mProcessId:			Int?
-	private var mStatus:			Status
+	private var mStatus:			CNProcessStatus
 	private var mProcess:			Process
 	private var mInputStream:		CNFileStream
 	private var mOutputStream:		CNFileStream
@@ -57,8 +80,8 @@ open class CNProcess: CNProcessProtocol
 	private var mConsole:			CNConsole
 	private var mTerminationHandler:	TerminationHandler?
 
-	public var status: 		Status 		{ get { return mStatus 				}}
-	open   var terminationStatus:	Int32		{ get { return mProcess.terminationStatus	}}
+	public var status: 		CNProcessStatus { get { return mStatus 				}}
+	public var terminationStatus:	Int32		{ get { return mProcess.terminationStatus	}}
 
 	public var processId: Int? {
 		get { return mProcessId }
@@ -69,8 +92,6 @@ open class CNProcess: CNProcessProtocol
 	public var inputStream: 	CNFileStream		{ get { return mInputStream	}}
 	public var outputStream: 	CNFileStream		{ get { return mOutputStream	}}
 	public var errorStream: 	CNFileStream		{ get { return mErrorStream	}}
-
-	public var isRunning: Bool		{ get { return mStatus == .Running 	}}
 
 	public init(processManager mgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, terminationHander termhdlr: TerminationHandler?)
 	{
@@ -132,19 +153,6 @@ open class CNProcess: CNProcessProtocol
 		if issecure {
 			homeurl.stopAccessingSecurityScopedResource()
 		}
-	}
-
-	public func waitUntilExit() -> Int32 {
-		let result: Int32
-		switch mStatus {
-		case .Idle, .Finished:
-			result = mProcess.terminationStatus
-		case .Running:
-			mProcess.waitUntilExit()
-			closeStreams()
-			result = mProcess.terminationStatus
-		}
-		return result
 	}
 
 	open func terminate() {

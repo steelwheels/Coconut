@@ -27,31 +27,26 @@ public enum CNUserThreadLevel {
 public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @escaping () -> Void){
 	let qos: DispatchQoS.QoSClass
 	switch lvl {
-	case .thread:	qos = .userInitiated
-	case .event:	qos = .userInteractive
+	case .thread:	qos = .utility
+	case .event:	qos = .userInitiated
 	}
 	DispatchQueue.global(qos: qos).async {
 		exec()
 	}
 }
 
-/* The instance of this class will be used as an object in JavaScript context.
- * So this class must inherit NSObject
- */
 @objc open class CNThread: NSObject, CNProcessProtocol
 {
 	private weak var mProcessManager:	CNProcessManager?
 
 	private var mProcessId:			Int?
-	private var mSemaphore:			DispatchSemaphore
 	private var mInputStream:		CNFileStream
 	private var mOutputStream:		CNFileStream
 	private var mErrorStream:		CNFileStream
 	private var mEnvironment:		CNEnvironment
 	private var mConsole:			CNFileConsole
 	private var mArgument:			CNNativeValue
-	private var mIsRunning:			Bool
-	private var mIsCancelled:		Bool
+	private var mStatus:			CNProcessStatus
 	private var mTerminationStatus:		Int32
 
 	public var processId: Int? {
@@ -65,19 +60,18 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 	public var errorStream:  	CNFileStream		{ get { return mErrorStream 	}}
 	public var environment:		CNEnvironment		{ get { return mEnvironment	}}
 	public var console:      	CNFileConsole		{ get { return mConsole 	}}
-	public var isRunning:	 	Bool			{ get { return mIsRunning	}}
-	public var isCancelled:		Bool 			{ get { return mIsCancelled	}}
+	public var status:		CNProcessStatus		{ get { return mStatus		}}
+
+	public var terminationStatus:	Int32			{ get { return mTerminationStatus	}}
 
 	public init(processManager mgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
 		mProcessManager		= mgr
-		mSemaphore		= DispatchSemaphore(value: 0)
 		mInputStream		= instrm
 		mOutputStream		= outstrm
 		mErrorStream		= errstrm
 		mEnvironment		= env
 		mArgument		= .nullValue
-		mIsRunning		= false
-		mIsCancelled		= false
+		mStatus			= .Idle
 		mTerminationStatus	= -1
 
 		mConsole = CNFileConsole(input:  CNFileStream.streamToFileHandle(stream: instrm,  forInside: true, isInput: true),
@@ -94,8 +88,7 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 
 	public func start(argument arg: CNNativeValue){
 		mArgument	= arg
-		mIsRunning	= true
-		mIsCancelled 	= false
+		mStatus		= .Running
 
 		/* Add to process table */
 		if let procmgr = mProcessManager {
@@ -117,9 +110,13 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 			}
 
 			/* Finalize */
-			self.mIsRunning = false
 			self.closeStreams()
-			self.mSemaphore.signal()
+			switch self.mStatus {
+			case .Running:
+				self.mStatus = .Finished
+			default:
+				break
+			}
 		})
 	}
 
@@ -128,15 +125,12 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 		return -1
 	}
 
-	open func waitUntilExit() -> Int32 {
-		mSemaphore.wait()
-		return mTerminationStatus
-	}
-
 	open func terminate() {
-		if mIsRunning {
-			mIsCancelled = true
-			mIsRunning   = false
+		switch mStatus {
+		case .Running:
+			mStatus = .Canceled
+		default:
+			break
 		}
 	}
 

@@ -14,13 +14,11 @@ public class CNFile
 	public enum Char {
 		case char(Character)
 		case endOfFile
-		case null
 	}
 
 	public enum Line {
 		case line(String)
 		case endOfFile
-		case null
 	}
 
 	private var mFileHandle:	FileHandle
@@ -47,6 +45,7 @@ public class CNFile
 					}
 				} else {
 					myself.mReadDone = true
+					myself.mFileHandle.readabilityHandler = nil
 				}
 				myself.mInputLock.unlock()
 			}
@@ -66,42 +65,41 @@ public class CNFile
 	public var readDone:	Bool	   { get { return mReadDone	}}
 
 	public func getc() -> CNFile.Char {
-		var result: CNFile.Char = .null
-		mInputLock.lock()
-		if mInputBuffer.count == 0 && mReadDone {
-			result = .endOfFile
-		} else if let c = mInputBuffer.first {
-			result = .char(c)
-			mInputBuffer.removeFirst()
+		var result: CNFile.Char = .endOfFile
+		while !mReadDone {
+			mInputLock.lock()
+			if mInputBuffer.count == 0 && mReadDone {
+				result = .endOfFile
+				break
+			} else if let c = mInputBuffer.first {
+				mInputBuffer.removeFirst()
+				result = .char(c)
+				break
+			}
+			mInputLock.unlock()
+			Thread.sleep(forTimeInterval: 0.1)
 		}
-		mInputLock.unlock()
 		return result
 	}
 
 	public func getl() -> CNFile.Line {
-		var result: CNFile.Line = .null
-		mInputLock.lock()
-		if mInputBuffer.count > 0 {
-			let start = mInputBuffer.startIndex
-			let end   = mInputBuffer.endIndex
-			var idx   = start
-			while idx < end {
-				let c = mInputBuffer[idx]
+		var buf: String = ""
+		while !mReadDone {
+			switch getc() {
+			case .char(let c):
+				buf.append(c)
 				if c.isNewline {
-					let next = mInputBuffer.index(after: idx)
-					let head = mInputBuffer.prefix(upTo: next)
-					let tail = mInputBuffer.suffix(from: next)
-					mInputBuffer = String(tail)
-					result = .line(String(head))
 					break
 				}
-				idx = mInputBuffer.index(after: idx)
+			case .endOfFile:
+				break
 			}
-		} else if mReadDone {
-			result = .endOfFile
 		}
-		mInputLock.unlock()
-		return result
+		if buf.count > 0 {
+			return .line(buf)
+		} else {
+			return .endOfFile
+		}
 	}
 
 	public func put(string str: String) {

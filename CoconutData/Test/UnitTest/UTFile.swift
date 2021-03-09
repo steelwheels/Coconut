@@ -24,8 +24,6 @@ public func testFile(console cons: CNConsole) -> Bool
 				file.close()
 			case .endOfFile:
 				docont = false
-			case .null:
-				break
 			}
 		}
 		//cons.print(string: "[Error] Failed to read Info.plist\n")

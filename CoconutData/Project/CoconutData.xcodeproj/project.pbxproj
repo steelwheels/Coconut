@@ -176,7 +176,6 @@
 		05FC387B255FEC1E004CA79E /* UTThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3860255FEC1D004CA79E /* UTThread.swift */; };
 		05FC387C255FEC1E004CA79E /* UTURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3861255FEC1D004CA79E /* UTURL.swift */; };
 		05FC387D255FEC1E004CA79E /* UTOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3862255FEC1D004CA79E /* UTOperation.swift */; };
-		05FC387E255FEC1E004CA79E /* UTFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3863255FEC1D004CA79E /* UTFileHandle.swift */; };
 		05FC387F255FEC1E004CA79E /* UTObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3864255FEC1D004CA79E /* UTObserver.swift */; };
 		05FC3880255FEC1E004CA79E /* UTFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3865255FEC1D004CA79E /* UTFile.swift */; };
 		05FC3881255FEC1E004CA79E /* UTStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3866255FEC1D004CA79E /* UTStringUtil.swift */; };
@@ -352,7 +351,6 @@
 		05FC3860255FEC1D004CA79E /* UTThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTThread.swift; sourceTree = "<group>"; };
 		05FC3861255FEC1D004CA79E /* UTURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTURL.swift; sourceTree = "<group>"; };
 		05FC3862255FEC1D004CA79E /* UTOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTOperation.swift; sourceTree = "<group>"; };
-		05FC3863255FEC1D004CA79E /* UTFileHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTFileHandle.swift; sourceTree = "<group>"; };
 		05FC3864255FEC1D004CA79E /* UTObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTObserver.swift; sourceTree = "<group>"; };
 		05FC3865255FEC1D004CA79E /* UTFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTFile.swift; sourceTree = "<group>"; };
 		05FC3866255FEC1D004CA79E /* UTStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UTStringUtil.swift; sourceTree = "<group>"; };
@@ -414,7 +412,6 @@
 				05FC3867255FEC1D004CA79E /* UTEnvironment.swift */,
 				05FC385E255FEC1D004CA79E /* UTEscapeSequence.swift */,
 				05FC3865255FEC1D004CA79E /* UTFile.swift */,
-				05FC3863255FEC1D004CA79E /* UTFileHandle.swift */,
 				05FC385B255FEC1C004CA79E /* UTFileManager.swift */,
 				05FC386A255FEC1D004CA79E /* UTFilePath.swift */,
 				05FC385F255FEC1D004CA79E /* UTFontManager.swift */,
@@ -909,7 +906,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				05FC3880255FEC1E004CA79E /* UTFile.swift in Sources */,
-				05FC387E255FEC1E004CA79E /* UTFileHandle.swift in Sources */,
 				05FC387F255FEC1E004CA79E /* UTObserver.swift in Sources */,
 				05FC3876255FEC1E004CA79E /* UTFileManager.swift in Sources */,
 				05FC3882255FEC1E004CA79E /* UTEnvironment.swift in Sources */,
