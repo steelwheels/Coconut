@@ -27,22 +27,13 @@ public extension URL
 	}
 
 #if os(OSX)
-	static func openPanel(title tl: String, type file: CNFileType, extensions exts: Array<String>) -> URL? {
-		if Thread.isMainThread {
-			return openPanelMain(title: tl, type: file, extensions: exts)
-		} else {
-			let semaphore = DispatchSemaphore(value: 0)
-			var result: URL? = nil
-			CNExecuteInMainThread(doSync: false, execute: {
-				result = openPanelMain(title: tl, type: file, extensions: exts)
-				semaphore.signal()
-			})
-			semaphore.wait()
-			return result
-		}
+	static func openPanel(title tl: String, type file: CNFileType, extensions exts: Array<String>, callback cbfunc: @escaping (_ url: URL?) -> Void) {
+		CNExecuteInMainThread(doSync: false, execute: {
+			openPanelMain(title: tl, type: file, extensions: exts, callback: cbfunc)
+		})
 	}
 
-	private static func openPanelMain(title tl: String, type file: CNFileType, extensions exts: Array<String>) -> URL? {
+	private static func openPanelMain(title tl: String, type file: CNFileType, extensions exts: Array<String>, callback cbfunc: @escaping (_ url: URL?) -> Void) {
 		let panel = NSOpenPanel()
 		panel.title = tl
 		switch file {
@@ -55,23 +46,26 @@ public extension URL
 		}
 		panel.allowsMultipleSelection = false
 		panel.allowedFileTypes = exts
-
-		var result: URL? = nil
-		switch panel.runModal() {
-		case .OK:
-			let urls = panel.urls
-			if urls.count >= 1 {
-				/* Bookmark this folder */
-				let preference = CNPreference.shared.bookmarkPreference
-				preference.add(URL: urls[0])
-				result = urls[0]
+		panel.begin(completionHandler: {
+			(_ resp: NSApplication.ModalResponse) -> Void in
+			switch resp {
+			case .OK:
+				let urls = panel.urls
+				if urls.count >= 1 {
+					/* Bookmark this folder */
+					let preference = CNPreference.shared.bookmarkPreference
+					preference.add(URL: urls[0])
+					cbfunc(urls[0])
+				} else {
+					cbfunc(nil)
+				}
+			case .cancel:
+				cbfunc(nil)
+			default:
+				NSLog("Unsupported result")
+				cbfunc(nil)
 			}
-		case .cancel:
-			break
-		default:
-			NSLog("Unknown event at \(#function)")
-		}
-		return result
+		})
 	}
 
 	static func savePanel(title tl: String, outputDirectory outdir: URL?, saveFileCallback callback: @escaping ((_: URL) -> Bool))
