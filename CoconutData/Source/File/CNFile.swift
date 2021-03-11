@@ -14,11 +14,13 @@ public class CNFile
 	public enum Char {
 		case char(Character)
 		case endOfFile
+		case null
 	}
 
 	public enum Line {
 		case line(String)
 		case endOfFile
+		case null
 	}
 
 	private var mFileHandle:	FileHandle
@@ -65,41 +67,46 @@ public class CNFile
 	public var readDone:	Bool	   { get { return mReadDone	}}
 
 	public func getc() -> CNFile.Char {
-		var result: CNFile.Char = .endOfFile
-		while !mReadDone {
-			mInputLock.lock()
-			if mInputBuffer.count == 0 && mReadDone {
-				result = .endOfFile
-				break
-			} else if let c = mInputBuffer.first {
-				mInputBuffer.removeFirst()
-				result = .char(c)
-				break
-			}
-			mInputLock.unlock()
-			Thread.sleep(forTimeInterval: 0.1)
+		var result: CNFile.Char = .null
+		mInputLock.lock()
+		if mInputBuffer.count == 0 && mReadDone {
+			result = .endOfFile
+		} else if let c = mInputBuffer.first {
+			mInputBuffer.removeFirst()
+			result = .char(c)
 		}
+		mInputLock.unlock()
 		return result
 	}
 
 	public func getl() -> CNFile.Line {
-		var buf: String = ""
-		while !mReadDone {
-			switch getc() {
-			case .char(let c):
-				buf.append(c)
+		var result: CNFile.Line = .null
+		mInputLock.lock()
+		if mInputBuffer.count == 0 && mReadDone {
+			result = .endOfFile
+		} else if mInputBuffer.count > 0 {
+			let start = mInputBuffer.startIndex
+			let end   = mInputBuffer.endIndex
+			var idx   = start
+			while idx < end {
+				let c = mInputBuffer[idx]
 				if c.isNewline {
+					let next = mInputBuffer.index(after: idx)
+					let head = mInputBuffer.prefix(upTo: next)
+					let tail = mInputBuffer.suffix(from: next)
+					mInputBuffer = String(tail)
+					result = .line(String(head))
 					break
 				}
-			case .endOfFile:
-				break
+				idx = mInputBuffer.index(after: idx)
+			}
+			/* newline is not found */
+			if mReadDone {
+				result       = .line(String(mInputBuffer))
+				mInputBuffer = ""
 			}
 		}
-		if buf.count > 0 {
-			return .line(buf)
-		} else {
-			return .endOfFile
-		}
+		return result
 	}
 
 	public func put(string str: String) {
