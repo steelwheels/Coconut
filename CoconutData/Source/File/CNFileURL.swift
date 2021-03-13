@@ -46,26 +46,23 @@ public extension URL
 		}
 		panel.allowsMultipleSelection = false
 		panel.allowedFileTypes = exts
-		panel.begin(completionHandler: {
-			(_ resp: NSApplication.ModalResponse) -> Void in
-			switch resp {
-			case .OK:
-				let urls = panel.urls
-				if urls.count >= 1 {
-					/* Bookmark this folder */
-					let preference = CNPreference.shared.bookmarkPreference
-					preference.add(URL: urls[0])
-					cbfunc(urls[0])
-				} else {
-					cbfunc(nil)
-				}
-			case .cancel:
-				cbfunc(nil)
-			default:
-				NSLog("Unsupported result")
+		switch panel.runModal() {
+		case .OK:
+			let urls = panel.urls
+			if urls.count >= 1 {
+				/* Bookmark this folder */
+				let preference = CNPreference.shared.bookmarkPreference
+				preference.add(URL: urls[0])
+				cbfunc(urls[0])
+			} else {
 				cbfunc(nil)
 			}
-		})
+		case .cancel:
+			cbfunc(nil)
+		default:
+			NSLog("Unsupported result")
+			cbfunc(nil)
+		}
 	}
 
 	static func savePanel(title tl: String, outputDirectory outdir: URL?, saveFileCallback callback: @escaping ((_: URL) -> Bool))
