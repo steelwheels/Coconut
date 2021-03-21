@@ -32,10 +32,6 @@ public class CNBitmapData
 		mData		= cdata
 	}
 
-	public func copy() -> CNBitmapData {
-		return CNBitmapData(colorData: mData)
-	}
-
 	public func resize(width wid: Int, height hgt: Int) {
 		/* If the size is not changed, do nothing */
 		if mWidth == wid && mHeight == hgt {

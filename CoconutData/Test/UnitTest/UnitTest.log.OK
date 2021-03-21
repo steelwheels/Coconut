@@ -645,11 +645,6 @@ buffer1
 buffer2
 - after buffered
 after1
-* testFileHandle
-FileDescriptor = 0
-- Initial state -> isatty: false, local mode: <unknown>
-- Set raw mode -> Failed
-- Reset raw mode -> Failed
 * testFile
 testFile: Start
 [Error] Failed to read Info.plist

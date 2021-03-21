@@ -14,68 +14,44 @@ import Foundation
 
 public class CNBitmapContext
 {
-	private var mCoreContext:	CGContext?
 	private var mPhysicalFrame:	CGRect
-	private var mWidth:		Int
-	private var mHeight:		Int
-	private var mPixelSize:		CGSize
 	private var mContents:		CNBitmapData
 
 	public init() {
-		mCoreContext		= nil
 		mPhysicalFrame		= CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-		mWidth			= 0
-		mHeight			= 0
-		mPixelSize		= CGSize(width: 1.0, height: 1.0)
 		mContents		= CNBitmapData(width: 1, height: 1)
 	}
 
-	public var width:       Int 		{ get { return mWidth		}}
-	public var height:      Int 		{ get { return mHeight		}}
-	public var data: 	CNBitmapData	{ get { return mContents.copy()	}}
+	public var width:	Int		{ get { return mContents.width  }}
+	public var height:	Int		{ get { return mContents.height }}
+	public var data: 	CNBitmapData	{ get { return mContents	}}
 
-	public func begin(context ctxt: CGContext?, physicalFrame pframe: CGRect, width wdt: Int, height hgt: Int) {
+	public func draw(context ctxt: CGContext, physicalFrame pframe: CGRect, width wdt: Int, height hgt: Int) {
 		assert(wdt > 0 && hgt > 0, "Invalid parameter \(wdt)x\(hgt)")
-		mCoreContext	= ctxt
 		mPhysicalFrame	= pframe
-		mWidth		= wdt
-		mHeight		= hgt
-		mPixelSize	= CGSize(width:  CGFloat(pframe.size.width  / CGFloat(wdt)),
-					 height: CGFloat(pframe.size.height / CGFloat(hgt)))
 		mContents.resize(width: wdt, height: hgt)
-	}
 
-	public func end() {
-		if let ctxt = mCoreContext {
-			self.draw()
-			ctxt.strokePath()
-		} else {
-			NSLog("No context at \(#function)")
-		}
-	}
-
-	private func draw(){
-		let width  = mContents.width
-		let height = mContents.height
-		for y in 0..<height {
-			for x in 0..<width {
+		/* Draw pixels */
+		let pixsize = CGSize(width:  CGFloat(pframe.size.width  / CGFloat(wdt)),
+				     height: CGFloat(pframe.size.height / CGFloat(hgt)))
+		for y in 0..<hgt {
+			for x in 0..<wdt {
 				if let c = mContents.get(x: x, y: y) {
-					draw(x: x, y: y, color: c)
+					drawElement(x: x, y: y, pixelSize: pixsize, color: c, context: ctxt)
 				}
 			}
 		}
+
+		/* Finish drawing */
+		ctxt.strokePath()
 	}
 
-	private func draw(x x0: Int, y y0: Int, color col: CNColor) {
-		let x   = mPixelSize.width  * CGFloat(x0)
-		let y   = mPixelSize.height * CGFloat(y0)
-		let rct = CGRect(x: x, y: y, width: mPixelSize.width, height: mPixelSize.height)
-		if let ctxt = mCoreContext {
-			ctxt.setFillColor(col.cgColor)
-			ctxt.fill(rct)
-		} else {
-			NSLog("No context")
-		}
+	private func drawElement(x x0: Int, y y0: Int, pixelSize pixsize: CGSize, color col: CNColor, context ctxt: CGContext) {
+		let x   = pixsize.width  * CGFloat(x0)
+		let y   = pixsize.height * CGFloat(y0)
+		let rct = CGRect(x: x, y: y, width: pixsize.width, height: pixsize.height)
+		ctxt.setFillColor(col.cgColor)
+		ctxt.fill(rct)
 	}
 
 	public func set(x posx: Int, y posy: Int, color col: CNColor) {

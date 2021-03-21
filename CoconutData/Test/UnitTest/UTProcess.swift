@@ -45,11 +45,11 @@ private func testNormalProcess(command cmd: String, console cons: CNFileConsole)
 	//input.write(string: "Hello, World !!")
 	//input.closeFile()
 
-	while !process.didFinished {
+	while process.status == .Running {
 		/* Wait until exit */
 	}
 
-	cons.print(string: "Process is finished with exit code: \(process.exitCode)\n")
+	cons.print(string: "Process is finished with exit code: \(process.terminationStatus)\n")
 	return true
 }
 
@@ -87,11 +87,11 @@ private func testProcessTermination(console cons: CNFileConsole) -> Bool
 		result = false
 	}
 
-	while !process.didFinished {
+	while process.status == .Running {
 		/* Wait until finish */
 	}
 
-	let ecode = process.exitCode
+	let ecode = process.terminationStatus
 	cons.print(string: "Process is terminated with exit code: \(ecode)\n")
 
 	return result

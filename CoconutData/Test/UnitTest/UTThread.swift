@@ -31,7 +31,7 @@ public class UTNestedThread: CNThread {
 			//self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
 			newthread.start(argument: .nullValue)
 			//self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
-			while !newthread.didFinished {
+			while newthread.status == .Running {
 				/* Wait until exit */
 			}
 			//self.console.print(string: "testNestedThread\(mCount): 2.3 mainOperation/main/echode=\(ecode)\n")
@@ -66,7 +66,7 @@ private func testSimpleThread(processManager procmgr: CNProcessManager, environm
 				    error:  		.fileHandle(cons.errorHandle),
 				    environment: 	env)
 	thread.start(argument: .nullValue)
-	while !thread.didFinished {
+	while thread.status == .Running {
 		/* wait until exit */
 	}
 	let ecode = thread.terminationStatus
@@ -84,7 +84,7 @@ private func testNestedThread(processManager procmgr: CNProcessManager, environm
 				    environment: env,
 				    count: 	 0)
 	thread.start(argument: .nullValue)
-	while !thread.didFinished {
+	while thread.status == .Running {
 		/* wait until exit */
 	}
 	let ecode = thread.terminationStatus
