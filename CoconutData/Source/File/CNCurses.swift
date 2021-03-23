@@ -9,6 +9,17 @@ import Foundation
 
 public class CNCurses
 {
+	public enum Color: Int32 {
+		case	black	= 0
+		case	red 	= 1
+		case	green	= 2
+		case 	yellow	= 3
+		case 	blue	= 4
+		case	magenta	= 5
+		case	cyan	= 6
+		case	white	= 7
+	}
+
 	private var mTerminalInfo:	CNTerminalInfo
 	private var mConsole:		CNFileConsole
 	private var mHandler:		((_ hdl: FileHandle) -> Void)?

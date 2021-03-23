@@ -12,7 +12,8 @@ import Foundation
  *  - https://qiita.com/PruneMazui/items/8a023347772620025ad6
  *  - http://www.termsys.demon.co.uk/vtansi.htm
  */
-public enum CNEscapeCode {
+public enum CNEscapeCode
+{
 	case	string(String)
 	case	eot					/* End of transmission (CTRL-D)	*/
 	case	newline
