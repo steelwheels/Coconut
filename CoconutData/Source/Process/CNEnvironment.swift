@@ -17,6 +17,10 @@ public class CNEnvironment
 
 	private var mEnvironmentVariable: Dictionary<String, CNNativeValue>
 
+	public var variableNames: Dictionary<String, CNNativeValue>.Keys {
+		get { return mEnvironmentVariable.keys }
+	}
+
 	public init(){
 		let tpref   = CNPreference.shared.terminalPreference
 		mEnvironmentVariable = [
