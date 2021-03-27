@@ -165,15 +165,14 @@ public extension FileManager
 		return true
 	}
 
-	func setupFileSystem(console cons: CNConsole) -> NSError? {
+	func installResourceFiles(targetDirectories targetdirs: Array<String>, console cons: CNConsole) -> NSError? {
 		do {
 			/* The base path is home directory */
 			let homedir = CNPreference.shared.userPreference.homeDirectory
 
 			/* Make default directories */
-			let targetdirs: Array<String> = ["Sample", "Game"]
-			for target in targetdirs {
-				let dstdir = homedir.appendingPathComponent(target)
+			for targdir in targetdirs {
+				let dstdir = homedir.appendingPathComponent(targdir)
 				switch checkFileType(pathString: dstdir.path) {
 				case .Directory, .File:
 					break // Nothing have to do
