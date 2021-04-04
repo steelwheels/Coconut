@@ -252,16 +252,13 @@ public extension NSMutableAttributedString
 
 	func moveCursorToPreviousLineStart(from index: Int, number num: Int) -> Int {
 		var curidx = index
-		NSLog("mCtPLS0: \(curidx)")
 		for _ in 0..<num {
 			if let newidx = moveCursorToPreviousLineEnd(from: curidx) {
 				curidx = newidx
-				NSLog("mCtPLS1: \(curidx)")
 			} else {
 				break
 			}
 		}
-		NSLog("mCtPLS2: \(curidx)")
 		return moveCursorToLineStart(from: curidx)
 	}
 
@@ -364,31 +361,6 @@ public extension NSMutableAttributedString
 		self.beginEditing()
 		self.append(astr)
 		self.endEditing()
-		return self.string.count
-	}
-
-	func scrollUp(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
-		if lns > 0 {
-			let newlines = String(repeating: "\n", count: lns)
-			return self.append(string: newlines, font: fnt, terminalInfo: terminfo)
-		} else {
-			return self.string.count
-		}
-	}
-
-	func scrollDown(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
-		if lns > 0 {
-			let str = self.string
-			var idx = str.count
-			for _ in 0..<lns {
-				if let prev = self.moveCursorToPreviousLineEnd(from: idx) {
-					idx = prev
-				} else {
-					break
-				}
-			}
-			self.delete(from: idx, to: str.count)
-		}
 		return self.string.count
 	}
 
