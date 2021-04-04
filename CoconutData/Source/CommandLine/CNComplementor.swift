@@ -73,6 +73,22 @@ open class CNComplementor
 		return mComplementState
 	}
 
+	public func endComplement(console cons: CNConsole) {
+		switch mComplementState {
+		case .none:
+			break
+		case .matched(_):
+			break
+		case .popup(let lines):
+			/* Scroll down */
+			cons.print(string: CNEscapeCode.scrollDown(lines).encode())
+			/* Restore current cursor position */
+			cons.print(string: CNEscapeCode.restoreCursorPosition.encode())
+		}
+		/* Reset */
+		mComplementState = .none
+	}
+
 	private func matchedItems(commandString cmdstr: String, environment env: CNEnvironment) -> MatchResult {
 		let end   = cmdstr.endIndex
 		var idx   = cmdstr.startIndex
@@ -317,22 +333,6 @@ open class CNComplementor
 			result.append(line)
 		}
 		return result
-	}
-
-	public func endComplement(console cons: CNConsole) {
-		switch mComplementState {
-		case .none:
-			break
-		case .matched(_):
-			break
-		case .popup(let lines):
-			/* Scroll down */
-			cons.print(string: CNEscapeCode.scrollDown(lines).encode())
-			/* Restore current cursor position */
-			cons.print(string: CNEscapeCode.restoreCursorPosition.encode())
-		}
-		/* Reset */
-		mComplementState = .none
 	}
 
 	private func updateCommandNameList(environment env: CNEnvironment) {

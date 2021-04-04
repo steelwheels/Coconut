@@ -250,6 +250,35 @@ public extension NSMutableAttributedString
 		}
 	}
 
+	func moveCursorToPreviousLineStart(from index: Int, number num: Int) -> Int {
+		var curidx = index
+		NSLog("mCtPLS0: \(curidx)")
+		for _ in 0..<num {
+			if let newidx = moveCursorToPreviousLineEnd(from: curidx) {
+				curidx = newidx
+				NSLog("mCtPLS1: \(curidx)")
+			} else {
+				break
+			}
+		}
+		NSLog("mCtPLS2: \(curidx)")
+		return moveCursorToLineStart(from: curidx)
+	}
+
+	func moveCursorToNextLineStart(from index: Int, number num: Int) -> (Int, Bool) {
+		var curidx    = index
+		var donewline = false
+		for _ in 0..<num {
+			if let newidx = moveCursorToNextLineStart(from: curidx) {
+				curidx = newidx
+			} else {
+				donewline = true
+				break
+			}
+		}
+		return (curidx, donewline)
+	}
+
 	func moveCursorUpOrDown(from idx: Int, doUp doup: Bool, number num: Int) -> Int {
 		var ptr   = idx
 		/* Keep holizontal offset */
@@ -296,10 +325,15 @@ public extension NSMutableAttributedString
 		return result
 	}
 
-	func moveCursorTo(base baseidx: Int, x xpos: Int, y ypos: Int) -> Int {
-		let newidx = moveCursorUpOrDown(from: baseidx, doUp: false, number: ypos)
-		let result = moveCursorTo(from: newidx, x: xpos)
-		return result
+	func moveCursorTo(x xpos: Int, y ypos: Int) -> Int {
+		var newidx: Int = 0
+		if ypos > 0 {
+			newidx = moveCursorUpOrDown(from: newidx, doUp: false, number: ypos)
+		}
+		if xpos > 0 {
+			newidx = moveCursorForward(from: newidx, number: xpos)
+		}
+		return newidx
 	}
 
 	func write(string str: String, at index: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
@@ -330,7 +364,7 @@ public extension NSMutableAttributedString
 		self.beginEditing()
 		self.append(astr)
 		self.endEditing()
-		return str.count
+		return self.string.count
 	}
 
 	func scrollUp(lines lns: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
@@ -403,11 +437,10 @@ public extension NSMutableAttributedString
 	func deleteEntireLine(from index: Int) -> Int {
 		let linestart = self.moveCursorToLineStart(from: index)
 		var lineend   = self.moveCursorToLineEnd(from: index)
-		if lineend < self.string.count - 1{
-			let next = lineend + 1
-			if let c = self.character(at: next) {
+		if lineend < self.string.count - 1 {
+			if let c = self.character(at: lineend) {
 				if c.isNewline {
-					lineend = next
+					lineend += 1
 				}
 			}
 		}

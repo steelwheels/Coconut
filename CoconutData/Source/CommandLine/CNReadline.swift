@@ -12,13 +12,13 @@ open class CNReadline
 {
 	private var mEnvironment:	CNEnvironment
 	private var mCommandLines:	CNCommandLines
-	private var mComplementor:	CNComplementor
+	//private var mComplementor:	CNComplementor
 	private var mCurrentBuffer:	CNQueue<CNEscapeCode>
 
 	public init(complementor compl: CNComplementor, environment env: CNEnvironment){
 		mEnvironment	= env
 		mCommandLines	= CNCommandLines()
-		mComplementor	= compl
+		//mComplementor	= compl
 		mCurrentBuffer	= CNQueue<CNEscapeCode>()
 	}
 
@@ -36,7 +36,7 @@ open class CNReadline
 		/* Scan input */
 		if let str = self.scan(console: cons) {
 			/* Finish complement */
-			mComplementor.endComplement(console: cons)
+			//mComplementor.endComplement(console: cons)
 
 			/* Push command into buffer */
 			switch CNEscapeCode.decode(string: str) {
@@ -72,6 +72,7 @@ open class CNReadline
 		case .newline:
 			result = .commandLine(cmdline, true)
 		case .tab:
+			/*
 			switch mComplementor.beginComplement(commandString: cmdline.string, console: cons, environment: mEnvironment, terminalInfo: terminfo) {
 			case .none:
 				break
@@ -81,8 +82,9 @@ open class CNReadline
 				mCurrentBuffer.push(.string(String(delta)))
 			case .popup(_):
 				break
-			}
+			}*/
 			result = .none
+			break
 		case .backspace:
 			cmdline.moveCursor(delta: -1)
 			result = .commandLine(cmdline, false)
