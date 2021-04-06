@@ -47,16 +47,10 @@ public class CNCurses
 	public var width:  Int { get { return mTerminalInfo.width	}}
 	public var height: Int { get { return mTerminalInfo.height	}}
 
-	public func start() {
+	public func begin() {
 		/* Select alternative screen */
 		let selalt = CNEscapeCode.selectAltScreen(true)
 		mConsole.print(string: selalt.encode())
-
-		#if false
-		/* Erace buffer */
-		let erace = CNEscapeCode.eraceEntireBuffer
-		mConsole.print(string: erace.encode())
-		#endif
 
 		/* Replace handler */
 		mHandler = mConsole.inputHandle.readabilityHandler
