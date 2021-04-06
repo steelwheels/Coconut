@@ -129,10 +129,7 @@ public extension NSAttributedString
 		}
 		return result
 	}
-}
 
-public extension NSMutableAttributedString
-{
 	func moveCursorForward(from index: Int) -> Int? {
 		let str = self.string
 		let idx = str.index(str.startIndex, offsetBy: index)
@@ -332,7 +329,10 @@ public extension NSMutableAttributedString
 		}
 		return newidx
 	}
+}
 
+public extension NSMutableAttributedString
+{
 	func write(string str: String, at index: Int, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo) -> Int {
 		let astr = NSAttributedString(string: str, font: fnt, terminalInfo: terminfo)
 		self.beginEditing()
