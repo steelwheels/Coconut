@@ -241,10 +241,12 @@ public extension NSAttributedString
 		let tail = moveCursorToLineEnd(from: index)
 		/* Skip next newline */
 		if tail < self.string.count {
-			return tail + 1
-		} else {
-			return nil
+			let next = tail + 1
+			if next < self.string.count {
+				return next
+			}
 		}
+		return nil
 	}
 
 	func moveCursorToPreviousLineStart(from index: Int, number num: Int) -> Int {
@@ -321,8 +323,10 @@ public extension NSAttributedString
 
 	func moveCursorTo(x xpos: Int, y ypos: Int) -> Int {
 		var newidx: Int = 0
+		/* Move for Y */
 		if ypos > 0 {
-			newidx = moveCursorUpOrDown(from: newidx, doUp: false, number: ypos)
+			let (next, _) = moveCursorToNextLineStart(from: newidx, number: ypos)
+			newidx = next
 		}
 		if xpos > 0 {
 			newidx = moveCursorForward(from: newidx, number: xpos)
