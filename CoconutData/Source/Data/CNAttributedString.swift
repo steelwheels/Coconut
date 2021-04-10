@@ -493,19 +493,13 @@ public extension NSMutableAttributedString
 			}
 		}
 		if lines < newheight {
-			let space    = String(repeating: "_", count: newwidth - 1)
+			let space    = String(repeating: "_", count: newwidth)
 			let aspace   = NSAttributedString(string: space, font: fnt, terminalInfo: terminfo)
 			let anewline = NSAttributedString(string: "\n", font: fnt, terminalInfo: terminfo)
-			if lines == 0 {
-				self.beginEditing()
-					self.append(aspace)
-				self.endEditing()
-				lines = 1
-			}
 			for _ in lines..<newheight {
 				self.beginEditing()
-					self.append(anewline)
 					self.append(aspace)
+					self.append(anewline)
 				self.endEditing()
 			}
 		}

@@ -30,11 +30,11 @@ import Foundation
 	public var readline: CNReadline { get { return mReadline }}
 	public var terminalInfo: CNTerminalInfo { get { return mTerminalInfo }}
 
-	public override init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment){
+	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, terminalInfo terminfo: CNTerminalInfo, environment env: CNEnvironment){
 		let compl	= CNComplementor()
 		mReadline 	= CNReadline(complementor: compl, environment: env)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
-		mTerminalInfo	= CNTerminalInfo(width: 80, height: 25)
+		mTerminalInfo	= terminfo
 		mIsCancelled	= false
 		super.init(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, environment: env)
 	}

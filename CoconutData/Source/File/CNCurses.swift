@@ -105,11 +105,12 @@ public class CNCurses
 		let y1 = clip(value: ypos + dheight, min: 0, max: mTerminalInfo.height)
 
 		let len = x1 - x0
-		if len > 0 && y0 <= y1 {
+		if len > 0 && y0 < y1 {
 			mConsole.print(string: CNEscapeCode.foregroundColor(mTerminalInfo.foregroundColor).encode())
 			mConsole.print(string: CNEscapeCode.backgroundColor(mTerminalInfo.backgroundColor).encode())
 			let str = String(repeating: c, count: len)
 			for y in y0..<y1 {
+				NSLog("CN fill moveTo(\(x0), \(y))")
 				moveTo(x: x0, y: y)
 				put(string: str)
 			}
