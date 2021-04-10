@@ -20,11 +20,13 @@ public class CNCurses
 		case	white	= 7
 	}
 
-	private var mTerminalInfo:	CNTerminalInfo
-	private var mConsole:		CNFileConsole
-	private var mHandler:		((_ hdl: FileHandle) -> Void)?
-	private var mBuffer:		String
-	private var mLock:		NSLock
+	private var mTerminalInfo:		CNTerminalInfo
+	private var mConsole:			CNFileConsole
+	private var mHandler:			((_ hdl: FileHandle) -> Void)?
+	private var mBuffer:			String
+	private var mOrgForegroundColor:	CNColor
+	private var mOrgBackgroundColor:	CNColor
+	private var mLock:			NSLock
 
 	public var foregroundColor:	CNColor {
 		get		{ return mTerminalInfo.foregroundColor		}
@@ -37,17 +39,23 @@ public class CNCurses
 	}
 
 	public init(console cons: CNFileConsole, terminalInfo terminfo: CNTerminalInfo) {
-		mTerminalInfo	= terminfo
-		mConsole	= cons
-		mHandler	= nil
-		mBuffer		= ""
-		mLock		= NSLock()
+		mTerminalInfo		= terminfo
+		mConsole		= cons
+		mHandler		= nil
+		mBuffer			= ""
+		mOrgForegroundColor	= terminfo.foregroundColor
+		mOrgBackgroundColor	= terminfo.backgroundColor
+		mLock			= NSLock()
 	}
 
 	public var width:  Int { get { return mTerminalInfo.width	}}
 	public var height: Int { get { return mTerminalInfo.height	}}
 
 	public func begin() {
+		/* Keep original colors */
+		mOrgForegroundColor = mTerminalInfo.foregroundColor
+		mOrgBackgroundColor = mTerminalInfo.backgroundColor
+
 		/* Select alternative screen */
 		let selalt = CNEscapeCode.selectAltScreen(true)
 		mConsole.print(string: selalt.encode())
@@ -65,6 +73,10 @@ public class CNCurses
 	}
 
 	public func end() {
+		/* Restore original colors */
+		mTerminalInfo.foregroundColor = mOrgForegroundColor
+		mTerminalInfo.backgroundColor = mOrgBackgroundColor
+
 		let code = CNEscapeCode.selectAltScreen(false)
 		mConsole.print(string: code.encode())
 
@@ -110,7 +122,6 @@ public class CNCurses
 			mConsole.print(string: CNEscapeCode.backgroundColor(mTerminalInfo.backgroundColor).encode())
 			let str = String(repeating: c, count: len)
 			for y in y0..<y1 {
-				NSLog("CN fill moveTo(\(x0), \(y))")
 				moveTo(x: x0, y: y)
 				put(string: str)
 			}
