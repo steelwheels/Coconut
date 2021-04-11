@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 open class CNComplementor
 {
 	public enum ComplementState {
@@ -378,4 +379,5 @@ open class CNComplementor
 		}
 	}
 }
+*/
 

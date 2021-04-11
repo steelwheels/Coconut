@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public class CNCommandLines
 {
 	private var mCommandLines:	Array<CNCommandLine>
@@ -109,4 +110,6 @@ public class CNCommandLines
 		return result
 	}
 }
+
+*/
 

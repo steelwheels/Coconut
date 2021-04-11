@@ -440,6 +440,7 @@
 				055C85DD25A1F47F0064BE93 /* CNCommandLine.swift */,
 				055C85DC25A1F47F0064BE93 /* CNCommandLines.swift */,
 				055C85DE25A1F47F0064BE93 /* CNComplementor.swift */,
+				05B32D6A25150945000D1411 /* CNCommandHistory.swift */,
 				055C85DF25A1F47F0064BE93 /* CNReadline.swift */,
 			);
 			path = CommandLine;
@@ -647,7 +648,6 @@
 				05B32D6525150945000D1411 /* CNAttributedString.swift */,
 				05B32D6325150945000D1411 /* CNCharacter.swift */,
 				05B32D7225150945000D1411 /* CNColor.swift */,
-				05B32D6A25150945000D1411 /* CNCommandHistory.swift */,
 				05B32D6425150945000D1411 /* CNEscapeCode.swift */,
 				05B32D7025150945000D1411 /* CNKeyBinding.swift */,
 				05B32D6725150945000D1411 /* CNKeyCode.swift */,

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/*
 public class CNCommandLine: Equatable
 {
 	public enum EraceCommand {
@@ -125,5 +126,5 @@ public class CNCommandLine: Equatable
 		return cmd0.string == cmd1.string
 	}
 }
-
+*/
 
