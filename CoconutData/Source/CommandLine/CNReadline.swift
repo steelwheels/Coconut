@@ -17,6 +17,9 @@ open class CNReadline
 	private var mCurrentIndex:	String.Index
 	private var mCodeQueue:		CNQueue<CNEscapeCode>
 
+	private var mHistoryCommandExpression:	NSRegularExpression
+
+
 	public enum Result {
 		case	none
 		case	string(String, Int, Bool)	// string, index, determined
@@ -28,6 +31,8 @@ open class CNReadline
 		mLine		= ""
 		mCurrentIndex	= mLine.startIndex
 		mCodeQueue	= CNQueue()
+
+		mHistoryCommandExpression = try! NSRegularExpression(pattern: #"^\s*!([0-9]+)\s*$"#, options: [])
 	}
 
 	public var history: Array<String> {
@@ -56,25 +61,9 @@ open class CNReadline
 		let result: Result
 		switch code {
 		case .string(let str):
-			/* Update the current line */
-			mLine.insert(contentsOf: str, at: mCurrentIndex)
-			/* Get the substring after current index */
-			let pstr = mLine.suffix(from: mCurrentIndex)
-			cons.print(string: String(pstr))
-			/* Forward index for inserted string */
-			mCurrentIndex = mLine.index(mCurrentIndex, offsetBy: str.count)
-			/* Rollback cursor for substring */
-			let len = pstr.count - str.count
-			if len > 0 {
-				cons.print(string: CNEscapeCode.cursorBackward(len).encode())
-			}
-			result = .none
+			result = readLine(string: str, console: cons)
 		case .newline:
-			let dist = mLine.distance(from: mLine.startIndex, to: mCurrentIndex)
-			result 		= .string(mLine, dist, true)
-			mHistory.append(command: mLine)
-			mLine  		= ""
-			mCurrentIndex	= mLine.startIndex
+			result = determineLine(console: cons)
 		case .tab:
 			result = complement()
 		case .backspace:
@@ -92,9 +81,9 @@ open class CNReadline
 			}
 			result = .none
 		case .cursorUp(let num), .cursorPreviousLine(let num):
-			result = selectHistory(delta: num)
+			result = selectHistory(delta: -num, console: cons)
 		case .cursorDown(let num), .cursorNextLine(let num):
-			result = selectHistory(delta: -num)
+			result = selectHistory(delta: +num, console: cons)
 		case .cursorForward(let delta):
 			for _ in 0..<delta {
 				if mCurrentIndex < mLine.endIndex {
@@ -122,12 +111,104 @@ open class CNReadline
 		return result
 	}
 
+	private func readLine(string str: String, console cons: CNConsole) -> Result {
+		/* Update the current line */
+		mLine.insert(contentsOf: str, at: mCurrentIndex)
+		/* Get the substring after current index */
+		let pstr = mLine.suffix(from: mCurrentIndex)
+		cons.print(string: String(pstr))
+		/* Forward index for inserted string */
+		mCurrentIndex = mLine.index(mCurrentIndex, offsetBy: str.count)
+		/* Rollback cursor for substring */
+		let len = pstr.count - str.count
+		if len > 0 {
+			cons.print(string: CNEscapeCode.cursorBackward(len).encode())
+		}
+		return .none
+	}
+
+	private func determineLine(console cons: CNConsole) -> Result {
+		/* Move cursor to the end */
+		moveCursorToEnd(console: cons)
+
+		let result: Result
+		if let repcmd = convertToHistoryCommand(string: mLine) {
+			result = replaceLine(newLine: repcmd, console: cons)
+		} else {
+			/* Normal command */
+			let dist = mLine.distance(from: mLine.startIndex, to: mCurrentIndex)
+			result 		= .string(mLine, dist, true)
+			mHistory.append(command: mLine)
+			mLine  		= ""
+			mCurrentIndex	= mLine.startIndex
+		}
+		return result
+	}
+
+	private func convertToHistoryCommand(string str: String) -> String? {// History ID
+		let matches = mHistoryCommandExpression.matches(in: str, options: [], range: NSRange(location: 0, length: str.count))
+		if matches.count > 0 {
+			let match = matches[0]
+			if match.numberOfRanges > 1 {
+				let range = match.range(at: 1)
+				let start  = str.index(str.startIndex, offsetBy: range.location)
+				let end    = str.index(start, offsetBy: range.length)
+				let pat    = String(str[start..<end])
+				if let val = Int(pat) {
+					return mHistory.command(at: val)
+				}
+			}
+		}
+		return nil
+	}
+
+	private func replaceLine(newLine newline: String, console cons: CNConsole) -> Result {
+		/* Set return value */
+		let result: Result = .string(newline, newline.count, true)
+
+		/* Reset newline */
+		mLine  		= ""
+		mCurrentIndex	= mLine.startIndex
+		return result
+	}
+
 	private func complement() -> Result {
 		return .none
 	}
 
-	private func selectHistory(delta val: Int) -> Result {
+	private func selectHistory(delta val: Int, console cons: CNConsole) -> Result {
+		if let idx = mHistory.moveIndex(delta: val) {
+			if let cmd = mHistory.command(at: idx) {
+				moveCursorToEnd(console: cons)
+				replaceCurrentLine(newLine: cmd, console: cons)
+			}
+		}
 		return .none
+	}
+
+	private func moveCursorToEnd(console cons: CNConsole) {
+		var mvcount = 0
+		while mCurrentIndex < mLine.endIndex {
+			mCurrentIndex = mLine.index(after: mCurrentIndex)
+			mvcount += 1
+		}
+		if mvcount > 0 {
+			cons.print(string: CNEscapeCode.cursorForward(mvcount).encode())
+		}
+	}
+
+	private func replaceCurrentLine(newLine str: String, console cons: CNConsole) {
+		/* Delete current line */
+		var delcode: String = ""
+		for _ in 0..<mLine.count {
+			delcode += CNEscapeCode.delete.encode()
+		}
+		cons.print(string: delcode)
+		/* Put newline */
+		cons.print(string: str)
+		/* Reset newline */
+		mLine  		= str
+		mCurrentIndex	= mLine.endIndex
 	}
 }
 

@@ -19,8 +19,34 @@ public class CNCommandHistory
 		mCommandHistory = []
 	}
 
+	public var currentIndex: Int {
+		get { return mHistoryIndex }
+	}
+
+	public func moveIndex(delta del: Int) -> Int? {
+		let cmdcnt = mCommandHistory.count
+		if  cmdcnt > 0 {
+			let nxtidx0 = mHistoryIndex + del
+			let nxtidx1 = max(0, nxtidx0)
+			let nxtidx2 = min(nxtidx1, cmdcnt - 1)
+			if mHistoryIndex != nxtidx2 {
+				mHistoryIndex = nxtidx2
+				return nxtidx2
+			}
+		}
+		return nil
+	}
+
 	public var commandHistory: Array<String> {
 		get { return mCommandHistory }
+	}
+
+	public func command(at idx: Int) -> String? {
+		if 0<=idx && idx<mCommandHistory.count {
+			return mCommandHistory[idx]
+		} else {
+			return nil
+		}
 	}
 
 	public func append(command cmd: String){
@@ -58,22 +84,4 @@ public class CNCommandHistory
 	}
 }
 
-/*
-public class CNCommandHistory
-{
-	public static var shared = CNCommandHistory()
-
-	private var mHistory:	Array<String>
-
-	public var history: Array<String> { get { return mHistory }}
-
-	private init(){
-		mHistory = []
-	}
-
-	public func set(history src: Array<String>){
-		mHistory = src
-	}
-}
-*/
 
