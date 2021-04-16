@@ -2,7 +2,7 @@
  * @file	CNAttributedString.swift
  * @brief	Extend NSAttributedString class
  * @par Copyright
- *   Copyright (C) 2019 Steel Wheels Project
+ *   Copyright (C) 2019-2021 Steel Wheels Project
  */
 
 #if os(OSX)
@@ -411,20 +411,28 @@ public extension NSMutableAttributedString
 	}
 
 	func deleteEntireLine(from index: Int) -> Int {
-		let linestart = self.moveCursorToLineStart(from: index)
+		var linestart = self.moveCursorToLineStart(from: index)
 		var lineend   = self.moveCursorToLineEnd(from: index)
-		if lineend < self.string.count - 1 {
-			if let c = self.character(at: lineend) {
+		if linestart > 0 {
+			if let c = self.character(at: linestart - 1) {
+				if c.isNewline {
+					linestart -= 1
+				}
+			}
+		} else if lineend < self.string.count - 1 {
+			if let c = self.character(at: lineend + 1) {
 				if c.isNewline {
 					lineend += 1
 				}
 			}
 		}
-		delete(from: linestart, to: lineend)
+		if linestart < lineend {
+			delete(from: linestart, to: lineend)
+		}
 		return linestart
 	}
 
-	func delete(from fromidx: Int, to toidx: Int) {
+	private func delete(from fromidx: Int, to toidx: Int) {
 		let len = toidx - fromidx
 		if len > 0 {
 			let range = NSRange(location: fromidx, length: len)
@@ -434,7 +442,7 @@ public extension NSMutableAttributedString
 		}
 	}
 
-	func delete(from fromidx: Int, length len: Int) {
+	private func delete(from fromidx: Int, length len: Int) {
 		if len > 0 {
 			let range = NSRange(location: fromidx, length: len)
 			self.beginEditing()

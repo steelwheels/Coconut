@@ -85,15 +85,79 @@ public func testTextStorage(console cons: CNConsole) -> Bool
 	return true
 }
 
-private func execute(string str: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo, console cons: CNConsole) -> Int
+private func execute(string storage: NSMutableAttributedString, index idx: Int, escapeCode ecode: CNEscapeCode, font fnt: CNFont, terminalInfo terminfo: CNTerminalInfo, console cons: CNConsole) -> Int
 {
 	cons.print(string: "- Execute:\(ecode.description())\n")
-	if let result = str.execute(base: 0, index: idx, font: fnt, terminalInfo: terminfo, escapeCode: ecode) {
-		dump(index: result, string: str, console: cons)
-		return result
-	} else {
-		return idx
+
+	var nextidx = idx
+	switch ecode {
+	case .string(let str):
+		nextidx = storage.write(string: str, at: idx, font: fnt, terminalInfo: terminfo)
+	case .eot:
+		cons.print(string: "[EOT]")
+	case .newline:
+		nextidx = storage.write(string: "\n", at: idx, font: fnt, terminalInfo: terminfo)
+	case .tab:
+		nextidx = storage.write(string: "\t", at: idx, font: fnt, terminalInfo: terminfo)
+	case .backspace:
+		if let nidx = storage.moveCursorBackward(from: 1) {
+			nextidx = nidx
+		} else {
+			cons.print(string: "[BS]")
+		}
+	case .delete:
+		nextidx = storage.deleteBackwardCharacters(from: idx, number: 1)
+	case .cursorUp(_):
+		let hpos  = storage.distanceFromLineStart(to: idx)
+		if let nidx1 = storage.moveCursorToPreviousLineEnd(from: idx) {
+			nextidx = storage.moveCursorTo(from: nidx1, x: hpos)
+		} else {
+
+		}
+	default:
+		cons.print(string: "[\(ecode.description())]")
+
 	}
+	dump(index: nextidx, string: storage, console: cons)
+	return nextidx
+
+	/*
+	case 	cursorUp(Int)
+	case 	cursorDown(Int)
+	case	cursorForward(Int)
+	case	cursorBackward(Int)
+	case	cursorNextLine(Int)			/* Moves cursor to beginning of the line n	*/
+	case	cursorPreviousLine(Int)			/* Moves cursor to beginning of the line n	*/
+	case	cursorHolizontalAbsolute(Int)		/* (Column) started from 1			*/
+	case	saveCursorPosition			/* Save current cursor position			*/
+	case	restoreCursorPosition			/* Update cursor position by saved one		*/
+	case	cursorPosition(Int, Int)		/* (Row, Column) started from 1		 	*/
+	case	eraceFromCursorToEnd			/* Clear from cursor to end of buffer 		*/
+	case 	eraceFromCursorToBegin			/* Clear from begining of buffer to cursor	*/
+	case	eraceEntireBuffer			/* Clear entire buffer				*/
+	case 	eraceFromCursorToRight			/* Clear from cursor to end of line		*/
+	case	eraceFromCursorToLeft			/* Clear from cursor to beginning of line	*/
+	case	eraceEntireLine				/* Clear entire line				*/
+	case	scrollUp(Int)				/* Scroll up n lines				*/
+	case	scrollDown(Int)				/* Scroll down n lines				*/
+	case	resetAll				/* Clear text, reset cursor postion and tabstop	*/
+	case	resetCharacterAttribute			/* Reset all arributes for character		*/
+	case	boldCharacter(Bool)			/* Set/reset bold font				*/
+	case	underlineCharacter(Bool)		/* Set/reset underline font			*/
+	case	blinkCharacter(Bool)			/* Set/reset blink font 			*/
+	case	reverseCharacter(Bool)			/* Set/reset reverse character			*/
+	case	foregroundColor(CNColor)		/* Set foreground color				*/
+	case	defaultForegroundColor			/* Set default foreground color			*/
+	case	backgroundColor(CNColor)		/* Set background color				*/
+	case	defaultBackgroundColor			/* Reset default background color		*/
+
+	case	requestScreenSize			/* Send request to receive screen size
+							 * Ps = 18 -> Report the size of the text area in characters as CSI 8 ; height ; width t
+							 */
+	case	screenSize(Int, Int)			/* Set screen size (Width, Height)		*/
+	case	selectAltScreen(Bool)			/* Do switch alternative screen (Yes/No) 	*/
+
+	*/
 }
 
 private func dump(index idx: Int, string astr: NSAttributedString, console cons: CNConsole)

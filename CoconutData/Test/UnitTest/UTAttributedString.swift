@@ -133,7 +133,7 @@ private func testVector(vector src: TestString, console cons: CNConsole, termina
 	vec.dump(console: cons)
 
 	cons.print(string: "moveCursorTo(x=0, y=1)\n")
-	vec.index = vec.text.moveCursorTo(base: 0, x: 0, y: 1)
+	vec.index = vec.text.moveCursorTo(x: 0, y: 1)
 	vec.dump(console: cons)
 
 	cons.print(string: "moveCursorForward(2)\n")

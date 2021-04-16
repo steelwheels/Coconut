@@ -22,19 +22,16 @@ import Foundation
 		}
 	}
 
-	private var mCommandHistoty:	CNCommandHistory
 	private var mReadline:		CNReadline
 	private var mReadlineStatus:	ReadlineStatus
 	private var mTerminalInfo:	CNTerminalInfo
 	private var mIsCancelled:	Bool
 
-	public var history: CNCommandHistory	{ get { return mCommandHistoty	}}
 	public var readline: CNReadline		{ get { return mReadline	}}
 	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo	}}
 
 	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, terminalInfo terminfo: CNTerminalInfo, environment env: CNEnvironment){
-		mCommandHistoty	= CNCommandHistory()
-		mReadline 	= CNReadline(commandHistory: mCommandHistoty)
+		mReadline 	= CNReadline()
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mTerminalInfo	= terminfo
 		mIsCancelled	= false

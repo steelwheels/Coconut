@@ -12,25 +12,36 @@ open class CNReadline
 {
 	public typealias ReadError = CNEscapeCode.DecodeError
 
-	private var mHistory:		CNCommandHistory
-	private var mLine:		String
-	private var mCurrentIndex:	String.Index
-	private var mCodeQueue:		CNQueue<CNEscapeCode>
-
-	private var mHistoryCommandExpression:	NSRegularExpression
-
-
 	public enum Result {
 		case	none
 		case	string(String, Int, Bool)	// string, index, determined
 		case	error(ReadError)
 	}
 
-	public init(commandHistory hist: CNCommandHistory) {
-		mHistory	= hist
+	private struct PopupLines {
+		var cursorDiff:		Int
+		var addedLines:		Int
+
+		public init(cursorDiff diff: Int, addedLines lines: Int){
+			cursorDiff	= diff
+			addedLines	= lines
+		}
+	}
+
+	private var mHistory:		CNCommandHistory
+	private var mLine:		String
+	private var mCurrentIndex:	String.Index
+	private var mCodeQueue:		CNQueue<CNEscapeCode>
+	private var mPopupLines:	PopupLines?
+
+	private var mHistoryCommandExpression:	NSRegularExpression
+
+	public init() {
+		mHistory	= CNCommandHistory()
 		mLine		= ""
 		mCurrentIndex	= mLine.startIndex
 		mCodeQueue	= CNQueue()
+		mPopupLines	= nil
 
 		mHistoryCommandExpression = try! NSRegularExpression(pattern: #"^\s*!([0-9]+)\s*$"#, options: [])
 	}
@@ -41,6 +52,12 @@ open class CNReadline
 
 	open func readLine(console cons: CNConsole) -> Result {
 		if let str = cons.scan() {
+			/* Erace popuped line if it exist */
+			if let plines = mPopupLines {
+				popLines(popupLines: plines, console: cons)
+				mPopupLines = nil
+			}
+
 			switch CNEscapeCode.decode(string: str) {
 			case .ok(let codes):
 				for code in codes {
@@ -65,7 +82,7 @@ open class CNReadline
 		case .newline:
 			result = determineLine(console: cons)
 		case .tab:
-			result = complement()
+			result = complement(console: cons)
 		case .backspace:
 			if mLine.startIndex < mCurrentIndex {
 				mCurrentIndex = mLine.index(before: mCurrentIndex)
@@ -172,7 +189,11 @@ open class CNReadline
 		return result
 	}
 
-	private func complement() -> Result {
+	private func complement(console cons: CNConsole) -> Result {
+		let lines: Array<String> = [
+			"a", "b", "c"
+		]
+		mPopupLines = pushLines(lines: lines, console: cons)
 		return .none
 	}
 
@@ -210,5 +231,33 @@ open class CNReadline
 		mLine  		= str
 		mCurrentIndex	= mLine.endIndex
 	}
+
+	private func pushLines(lines srclines: Array<String>, console cons: CNConsole) -> PopupLines {
+		/* Move to end of line */
+		let mvcnt = mLine.distance(from: mCurrentIndex, to: mLine.endIndex)
+		var ecode = CNEscapeCode.cursorForward(mvcnt).encode()
+		mCurrentIndex = mLine.endIndex
+		/* Append lines */
+		for line in srclines {
+			ecode += CNEscapeCode.string("\n" + line).encode()
+		}
+		/* Execute the code */
+		cons.print(string: ecode)
+		return PopupLines(cursorDiff: mvcnt, addedLines: srclines.count)
+	}
+
+	private func popLines(popupLines plines: PopupLines, console cons: CNConsole){
+		/* Remove lines */
+		var ecode: String = ""
+		for _ in 0..<plines.addedLines {
+			ecode += CNEscapeCode.eraceEntireLine.encode()
+		}
+		/* Restore line position */
+		ecode += CNEscapeCode.cursorBackward(plines.cursorDiff).encode()
+		mCurrentIndex = mLine.index(mCurrentIndex, offsetBy: -plines.cursorDiff)
+		/* Execute the code */
+		cons.print(string: ecode)
+	}
+
 }
 
