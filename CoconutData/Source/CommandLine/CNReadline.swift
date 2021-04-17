@@ -32,18 +32,22 @@ open class CNReadline
 	private var mLine:		String
 	private var mCurrentIndex:	String.Index
 	private var mCodeQueue:		CNQueue<CNEscapeCode>
+	private var mComplemeter:	CNCommandComplemeter
 	private var mPopupLines:	PopupLines?
 
 	private var mHistoryCommandExpression:	NSRegularExpression
 
-	public init() {
+	public init(terminalInfo terminfo: CNTerminalInfo, environment env: CNEnvironment) {
 		mHistory	= CNCommandHistory()
 		mLine		= ""
 		mCurrentIndex	= mLine.startIndex
 		mCodeQueue	= CNQueue()
+		let cmdtable	= CNCommandTable()
+		mComplemeter	= CNCommandComplemeter(terminalInfo: terminfo, commandTable: cmdtable)
 		mPopupLines	= nil
-
 		mHistoryCommandExpression = try! NSRegularExpression(pattern: #"^\s*!([0-9]+)\s*$"#, options: [])
+
+		cmdtable.read(from: env)
 	}
 
 	public var history: Array<String> {
@@ -190,10 +194,9 @@ open class CNReadline
 	}
 
 	private func complement(console cons: CNConsole) -> Result {
-		let lines: Array<String> = [
-			"a", "b", "c"
-		]
-		mPopupLines = pushLines(lines: lines, console: cons)
+		if let lines = mComplemeter.complement(string: mLine, index: mCurrentIndex) {
+			mPopupLines = pushLines(lines: lines, console: cons)
+		}
 		return .none
 	}
 

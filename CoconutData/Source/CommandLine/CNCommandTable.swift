@@ -37,14 +37,8 @@ public class CNCommandTable
 	}
 
 	public func matchPrefix(string src: String) -> Array<String> {
-		var result: Array<String> = []
 		let cmds  = mCommandTable.keys
-		for cmd in cmds {
-			if cmd.hasPrefix(src) {
-				result.append(cmd)
-			}
-		}
-		return result
+		let matched = cmds.filter { $0.hasPrefix(src) }
+		return matched.sorted()
 	}
-
 }

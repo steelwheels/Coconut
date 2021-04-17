@@ -31,7 +31,7 @@ import Foundation
 	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo	}}
 
 	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, terminalInfo terminfo: CNTerminalInfo, environment env: CNEnvironment){
-		mReadline 	= CNReadline()
+		mReadline 	= CNReadline(terminalInfo: terminfo, environment: env)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mTerminalInfo	= terminfo
 		mIsCancelled	= false
@@ -77,24 +77,9 @@ import Foundation
 	}
 
 	private func determineCommandLine(newLine newline: String) {
-		/* Replace replay command */
-		/*
-		let newcmd = mReadline.replaceReplayCommand(source: newline)
-		*/
-
 		/* Execute command */
 		console.print(string: "\n") // Execute at new line
 		execute(command: newline)
-
-		/*
-		/* Save current command */
-		let readline = self.mReadline
-		readline.addCommand(command: newcmd)
-
-		/* Update history */
-		let histmgr = CNCommandHistory.shared
-		histmgr.set(history: readline.history())
-*/
 
 		/* Reset terminal */
 		let resetstr = CNEscapeCode.resetCharacterAttribute.encode()
