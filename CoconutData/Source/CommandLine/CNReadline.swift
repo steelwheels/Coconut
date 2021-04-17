@@ -14,7 +14,7 @@ open class CNReadline
 
 	public enum Result {
 		case	none
-		case	string(String, Int, Bool)	// string, index, determined
+		case	string(String, Int)	// string, index
 		case	error(ReadError)
 	}
 
@@ -158,7 +158,7 @@ open class CNReadline
 		} else {
 			/* Normal command */
 			let dist = mLine.distance(from: mLine.startIndex, to: mCurrentIndex)
-			result 		= .string(mLine, dist, true)
+			result 		= .string(mLine, dist)
 			mHistory.append(command: mLine)
 			mLine  		= ""
 			mCurrentIndex	= mLine.startIndex
@@ -185,7 +185,7 @@ open class CNReadline
 
 	private func replaceLine(newLine newline: String, console cons: CNConsole) -> Result {
 		/* Set return value */
-		let result: Result = .string(newline, newline.count, true)
+		let result: Result = .string(newline, newline.count)
 
 		/* Reset newline */
 		mLine  		= ""
@@ -194,7 +194,12 @@ open class CNReadline
 	}
 
 	private func complement(console cons: CNConsole) -> Result {
-		if let lines = mComplemeter.complement(string: mLine, index: mCurrentIndex) {
+		switch mComplemeter.complement(string: mLine, index: mCurrentIndex) {
+		case .none:
+			break
+		case .matched(let newline):
+			replaceCurrentLine(newLine: newline, console: cons)
+		case .candidates(let lines):
 			mPopupLines = pushLines(lines: lines, console: cons)
 		}
 		return .none

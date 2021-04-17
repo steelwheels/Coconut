@@ -50,12 +50,8 @@ import Foundation
 
 			/* Read command line */
 			switch mReadline.readLine(console: self.console) {
-			case .string(let str, let pos, let determined):
-				if determined {
-					determineCommandLine(newLine: str)
-				} else {
-					updateCommandLine(newLine: str, newPosition: pos)
-				}
+			case .string(let str, let pos):
+				determineCommandLine(newLine: str)
 			case .none:
 				break
 			case .error(let err):
@@ -89,38 +85,6 @@ import Foundation
 		self.mReadlineStatus.doPrompt		= true
 		self.mReadlineStatus.editingLine	= ""
 		self.mReadlineStatus.editingPosition	= 0
-	}
-
-	private func updateCommandLine(newLine newline: String, newPosition newpos: Int) {
-		let BS  = CNEscapeCode.backspace.encode()
-		let DEL = BS + " " + BS
-
-		/* Move cursor to end of line */
-		let forward = mReadlineStatus.editingLine.count - mReadlineStatus.editingPosition
-		if forward > 0 {
-			let fwdstr  = CNEscapeCode.cursorForward(forward).encode()
-			console.print(string: fwdstr)
-		}
-
-		/* Erace current command line */
-		let curlen  = mReadlineStatus.editingLine.count
-		for _ in 0..<curlen {
-			console.print(string: DEL)
-		}
-		/* Print new command line */
-		console.print(string: newline)
-
-		/* Adjust cursor */
-		let newlen = newline.count
-		let back   = newlen - newpos
-		let bakstr = CNEscapeCode.cursorBackward(back).encode()
-		if back > 0 {
-			console.print(string: bakstr)
-		}
-
-		/* Update current line*/
-		mReadlineStatus.editingLine     = newline
-		mReadlineStatus.editingPosition = newpos
 	}
 
 	public func cancel(){

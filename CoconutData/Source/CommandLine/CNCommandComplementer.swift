@@ -9,6 +9,12 @@ import Foundation
 
 public class CNCommandComplemeter
 {
+	public enum ComplementationResult {
+		case none
+		case matched(String)
+		case candidates(Array<String>)
+	}
+
 	private var mTerminalInfo:	CNTerminalInfo
 	private var mCommandTable:	CNCommandTable
 
@@ -17,16 +23,21 @@ public class CNCommandComplemeter
 		mCommandTable	= table
 	}
 
-	public func complement(string str: String, index idx: String.Index) -> Array<String>? {
+	public func complement(string str: String, index idx: String.Index) -> ComplementationResult {
 		let line  = str.prefix(upTo: idx)
 		if line.count > 0 {
 			let words = line.components(separatedBy: .whitespaces)
 			if words.count == 1 {
-				let matched = mCommandTable.matchPrefix(string: words[0])
-				return makeTable(commands: matched)
+				let matches = mCommandTable.matchPrefix(string: words[0])
+				if matches.count > 1 {
+					let table = makeTable(commands: matches)
+					return .candidates(table)
+				} else if matches.count == 1 {
+					return .matched(matches[0] + " ")
+				}
 			}
 		}
-		return nil
+		return .none
 	}
 
 	private func makeTable(commands cmds: Array<String>) -> Array<String> {
@@ -68,7 +79,6 @@ public class CNCommandComplemeter
 				result[row].append(cmd)
 			}
 		}
-		NSLog("makeTable: \(result)")
 		return result
 	}
 }
