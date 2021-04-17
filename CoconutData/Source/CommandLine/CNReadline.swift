@@ -206,11 +206,9 @@ open class CNReadline
 	}
 
 	private func selectHistory(delta val: Int, console cons: CNConsole) -> Result {
-		if let idx = mHistory.moveIndex(delta: val) {
-			if let cmd = mHistory.command(at: idx) {
-				moveCursorToEnd(console: cons)
-				replaceCurrentLine(newLine: cmd, console: cons)
-			}
+		if let cmd = mHistory.select(delta: val, latest: mLine) {
+			moveCursorToEnd(console: cons)
+			replaceCurrentLine(newLine: cmd, console: cons)
 		}
 		return .none
 	}
