@@ -106,6 +106,7 @@ public class CNFile
 				mInputBuffer = ""
 			}
 		}
+		mInputLock.unlock()
 		return result
 	}
 

@@ -50,7 +50,7 @@ import Foundation
 
 			/* Read command line */
 			switch mReadline.readLine(console: self.console) {
-			case .string(let str, let pos):
+			case .string(let str, _):
 				determineCommandLine(newLine: str)
 			case .none:
 				break

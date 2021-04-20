@@ -2,7 +2,7 @@
  * @file	CNReadline.swift
  * @brief	Define CNReadline class
  * @par Copyright
- *   Copyright (C) 2019 Steel Wheels Project
+ *   Copyright (C) 2019-2021 Steel Wheels Project
  */
 
 import Foundation
@@ -18,6 +18,11 @@ open class CNReadline
 		case	error(ReadError)
 	}
 
+	private enum ReadMode {
+		case	input
+		case	popupLines(PopupLines)
+	}
+
 	private struct PopupLines {
 		var cursorDiff:		Int
 		var addedLines:		Int
@@ -28,23 +33,23 @@ open class CNReadline
 		}
 	}
 
+	private var mReadMode:		ReadMode
 	private var mHistory:		CNCommandHistory
 	private var mLine:		String
 	private var mCurrentIndex:	String.Index
 	private var mCodeQueue:		CNQueue<CNEscapeCode>
 	private var mComplemeter:	CNCommandComplemeter
-	private var mPopupLines:	PopupLines?
 
 	private var mHistoryCommandExpression:	NSRegularExpression
 
 	public init(terminalInfo terminfo: CNTerminalInfo, environment env: CNEnvironment) {
+		mReadMode	= .input
 		mHistory	= CNCommandHistory()
 		mLine		= ""
 		mCurrentIndex	= mLine.startIndex
 		mCodeQueue	= CNQueue()
 		let cmdtable	= CNCommandTable()
 		mComplemeter	= CNCommandComplemeter(terminalInfo: terminfo, commandTable: cmdtable)
-		mPopupLines	= nil
 		mHistoryCommandExpression = try! NSRegularExpression(pattern: #"^\s*!([0-9]+)\s*$"#, options: [])
 
 		cmdtable.read(from: env)
@@ -56,10 +61,13 @@ open class CNReadline
 
 	open func readLine(console cons: CNConsole) -> Result {
 		if let str = cons.scan() {
-			/* Erace popuped line if it exist */
-			if let plines = mPopupLines {
+			/* Erace popuped lines if it exist */
+			switch mReadMode {
+			case .input:
+				break	// Do nothing
+			case .popupLines(let plines):
 				popLines(popupLines: plines, console: cons)
-				mPopupLines = nil
+				mReadMode = .input
 			}
 
 			switch CNEscapeCode.decode(string: str) {
@@ -200,7 +208,8 @@ open class CNReadline
 		case .matched(let newline):
 			replaceCurrentLine(newLine: newline, console: cons)
 		case .candidates(let lines):
-			mPopupLines = pushLines(lines: lines, console: cons)
+			let popup = pushLines(lines: lines, console: cons)
+			mReadMode = .popupLines(popup)
 		}
 		return .none
 	}
