@@ -18,16 +18,16 @@ public class UTSimpleThread: CNThread {
 public class UTNestedThread: CNThread {
 	private var mCount:	Int
 
-	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, count cnt: Int) {
+	public init(processManager procmgr: CNProcessManager, input ifile: CNFile, output ofile: CNFile, error efile: CNFile, environment env: CNEnvironment, count cnt: Int) {
 		mCount = cnt
-		super.init(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, environment: env)
+		super.init(processManager: procmgr, input: ifile, output: ofile, error: efile, environment: env)
 	}
 
 	open override func main(argument arg: CNNativeValue) -> Int32 {
 		let procmgr = CNProcessManager()
 		//self.console.print(string: "testNestedThread\(mCount): 1.mainOperation/start\n")
 		if mCount < 3 {
-			let newthread = UTNestedThread(processManager: procmgr, input: self.inputStream, output: self.outputStream, error: self.errorStream, environment: self.environment, count: mCount + 1)
+			let newthread = UTNestedThread(processManager: procmgr, input: self.console.inputFile, output: self.console.outputFile, error: self.console.errorFile, environment: self.environment, count: mCount + 1)
 			//self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
 			newthread.start(argument: .nullValue)
 			//self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
@@ -61,9 +61,9 @@ private func testSimpleThread(processManager procmgr: CNProcessManager, environm
 {
 	cons.print(string: "testSimpleThread: 1. Begin\n")
 	let thread = UTSimpleThread(processManager:	procmgr,
-				    input:  		.fileHandle(cons.inputHandle),
-				    output: 		.fileHandle(cons.outputHandle),
-				    error:  		.fileHandle(cons.errorHandle),
+				    input:  		cons.inputFile,
+				    output: 		cons.outputFile,
+				    error:  		cons.errorFile,
 				    environment: 	env)
 	thread.start(argument: .nullValue)
 	while thread.status == .Running {
@@ -78,9 +78,9 @@ private func testNestedThread(processManager procmgr: CNProcessManager, environm
 {
 	cons.print(string: "testNestedThread: 1. Begin\n")
 	let thread = UTNestedThread(processManager: procmgr,
-				    input:  	.fileHandle(cons.inputHandle),
-				    output: 	.fileHandle(cons.outputHandle),
-				    error:  	.fileHandle(cons.errorHandle),
+				    input:  	cons.inputFile,
+				    output: 	cons.outputFile,
+				    error:  	cons.errorFile,
 				    environment: env,
 				    count: 	 0)
 	thread.start(argument: .nullValue)

@@ -160,15 +160,6 @@ private func testVector(vector src: TestString, console cons: CNConsole, termina
 	vec.index = vec.text.deleteBackwardCharacters(from: vec.index, number: 1)
 	vec.dump(console: cons)
 
-	cons.print(string: "delete(1 to 2)\n")
-	vec.text.delete(from: 1, to: 2)
-	vec.index = 0
-	vec.dump(console: cons)
-
-	cons.print(string: "delete(1 len 2)\n")
-	vec.text.delete(from: 1, length: 2)
-	vec.dump(console: cons)
-
 	cons.print(string: "deleteEntireLine\n")
 	vec.index = vec.text.deleteEntireLine(from: vec.index)
 	vec.dump(console: cons)

@@ -81,13 +81,13 @@ public extension FileManager
 			switch acctyp {
 			case .ReadAccess:
 				let handle = try FileHandle(forReadingFrom: url)
-				file = CNFile(fileHandle: handle)
+				file = CNFile(access: .reader, fileHandle: handle)
 			case .WriteAccess:
 				let handle = try FileHandle(forReadingFrom: url)
-				file = CNFile(fileHandle: handle)
+				file = CNFile(access: .writer, fileHandle: handle)
 			case .AppendAccess:
 				let handle = try FileHandle(forWritingTo: url)
-				file = CNFile(fileHandle: handle)
+				file = CNFile(access: .writer, fileHandle: handle)
 			}
 			return .ok(file)
 		} catch let err as NSError {

@@ -15,28 +15,19 @@ import Foundation
 
 	private var mObservedValueTable:	CNObservedValueTable
 	private var mParameters:		Dictionary<String, CNNativeValue>
-	private var mInputHandle:		FileHandle
-	private var mOutputHandle:		FileHandle
-	private var mErrorHandle:		FileHandle
 	private var mConsole:			CNFileConsole
 
 	public weak var ownerExecutor: 		CNOperationExecutor?
 
-	public var inputFileHandle:  FileHandle		{ get { return mInputHandle		}}
-	public var outputFileHandle: FileHandle		{ get { return mOutputHandle		}}
-	public var errorFileHandle:  FileHandle		{ get { return mErrorHandle		}}
 	public var console:    CNFileConsole		{ get { return mConsole 		}}
 
 	public var 	executionCount:		Int
 	public var	totalExecutionTime:	TimeInterval	/* [ms] */
 
-	public init(input inhdl: FileHandle, output outhdl: FileHandle, error errhdl: FileHandle) {
+	public init(input ifile: CNFile, output ofile: CNFile, error efile: CNFile) {
 		mObservedValueTable = CNObservedValueTable()
 		mParameters	    = [:]
-		mInputHandle	    = inhdl
-		mOutputHandle	    = outhdl
-		mErrorHandle 	    = errhdl
-		mConsole	    = CNFileConsole(input: inhdl, output: outhdl, error: errhdl)
+		mConsole	    = CNFileConsole(input: ifile, output: ofile, error: efile)
 		ownerExecutor	    = nil
 		executionCount	    = 0
 		totalExecutionTime  = 0.0
@@ -134,10 +125,7 @@ import Foundation
 	}
 
 	public func set(console cons: CNFileConsole) {
-		mInputHandle	= cons.inputHandle
-		mOutputHandle	= cons.outputHandle
-		mErrorHandle	= cons.errorHandle
-		mConsole	= CNFileConsole(input: mInputHandle, output: mOutputHandle, error: mErrorHandle)
+		mConsole	= cons
 	}
 }
 

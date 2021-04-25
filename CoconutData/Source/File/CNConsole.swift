@@ -33,34 +33,42 @@ public class CNDefaultConsole: CNConsole
 
 public class CNFileConsole : CNConsole
 {
-	public var inputHandle:		FileHandle
-	public var outputHandle:	FileHandle
-	public var errorHandle:		FileHandle
+	public var inputFile:		CNFile
+	public var outputFile:		CNFile
+	public var errorFile:		CNFile
 
-	public init(input ihdl: FileHandle, output ohdl: FileHandle, error ehdl: FileHandle){
-		inputHandle	= ihdl
-		outputHandle	= ohdl
-		errorHandle	= ehdl
+	public init(input ifile: CNFile, output ofile: CNFile, error efile: CNFile){
+		inputFile	= ifile
+		outputFile	= ofile
+		errorFile	= efile
 	}
 
 	public init() {
-		inputHandle	= FileHandle.standardInput
-		outputHandle	= FileHandle.standardOutput
-		errorHandle	= FileHandle.standardError
+		let files = CNStandardFiles.shared
+		inputFile	= files.input
+		outputFile	= files.output
+		errorFile	= files.error
 	}
 
 	public func print(string str: String){
-		outputHandle.write(string: str)
+		outputFile.put(string: str)
 	}
 
 	public func error(string str: String){
 		let attr = CNEscapeCode.foregroundColor(.red).encode()
 		let rev  = CNEscapeCode.resetCharacterAttribute.encode()
-		errorHandle.write(string: attr + str + rev)
+		errorFile.put(string: attr + str + rev)
 	}
 
 	public func scan() -> String? {
-		return String.stringFromData(data: inputHandle.availableData)
+		let result: String?
+		switch inputFile.gets() {
+		case .str(let s):
+			result = s
+		case .endOfFile, .null:
+			result = nil
+		}
+		return result
 	}
 }
 
@@ -105,112 +113,6 @@ public class CNIndentedConsole: CNConsole
 		}
 		mIndentValue  = idt
 		mIndentString = result
-	}
-}
-
-public class CNPipeConsole
-{
-	public typealias InputHandler	= () -> String?
-	public typealias OutputHandler	= (_ str: String) -> Void
-
-	private var mInputPipe:		Pipe
-	private var mOutputPipe:	Pipe
-	private var mErrorPipe:		Pipe
-
-	private var mInputHandler:	InputHandler?
-	private var mOutputHandler:	OutputHandler?
-	private var mErrorHandler:	OutputHandler?
-
-	private var mInterfaceConsole: CNFileConsole
-
-	public var interfaceConsole: CNFileConsole { get { return mInterfaceConsole }}
-
-	public var inputHandler: InputHandler? {
-		get { return mInputHandler }
-		set(hdl){ mInputHandler = hdl }
-	}
-
-	public var outputHandler: OutputHandler? {
-		get { return mOutputHandler }
-		set(hdl){ mOutputHandler = hdl }
-	}
-
-	public var errorHandler: OutputHandler? {
-		get { return mErrorHandler }
-		set(hdl){ mErrorHandler = hdl }
-	}
-
-	public init() {
-		mInputHandler	= nil
-		mOutputHandler	= nil
-		mErrorHandler	= nil
-
-		mInputPipe  	= Pipe()
-		mOutputPipe 	= Pipe()
-		mErrorPipe  	= Pipe()
-		mInterfaceConsole = CNFileConsole(input:  mInputPipe.fileHandleForReading,
-						  output: mOutputPipe.fileHandleForWriting,
-						  error:  mErrorPipe.fileHandleForWriting)
-
-		/* Close input */
-		mInputPipe.fileHandleForWriting.writeabilityHandler = {
-			[weak self] (_ handle: FileHandle) -> Void in
-			if let myself = self {
-				if let str = myself.input() {
-					if let data = str.data(using: .utf8) {
-						myself.mInputPipe.fileHandleForWriting.write(data)
-					} else {
-						NSLog("Failed to read data")
-					}
-				} else {
-					myself.mInputPipe.fileHandleForWriting.closeFile()
-				}
-			}
-		}
-
-		/* Connect output */
-		mOutputPipe.fileHandleForReading.readabilityHandler = {
-			[weak self] (_ handle: FileHandle) -> Void in
-			if let myself = self {
-				if let str = String.stringFromData(data: handle.availableData) {
-					myself.output(string: str)
-				} else {
-					NSLog("Non string data")
-				}
-			}
-		}
-		/* Connect error */
-		mErrorPipe.fileHandleForReading.readabilityHandler = {
-			[weak self] (_ handle: FileHandle) -> Void in
-			if let myself = self {
-				if let str = String.stringFromData(data: handle.availableData){
-					myself.error(string: str)
-				} else {
-					NSLog("Non string data")
-				}
-			}
-		}
-	}
-
-
-	private func input() -> String? {
-		if let hdl = mInputHandler {
-			return hdl()
-		} else {
-			return nil
-		}
-	}
-
-	private func output(string str: String) {
-		if let hdl = mOutputHandler {
-			hdl(str)
-		}
-	}
-
-	private func error(string str: String) {
-		if let hdl = mErrorHandler {
-			hdl(str)
-		}
 	}
 }
 

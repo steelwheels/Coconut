@@ -40,28 +40,12 @@ public protocol CNProcessProtocol
 {
 	var 	processManager:	CNProcessManager? { get }
 	var 	processId:	Int? { get set }
-
-	var	inputStream: 		CNFileStream { get }
-	var	outputStream:		CNFileStream { get }
-	var	errorStream:		CNFileStream { get }
+	var	console: 	CNFileConsole { get }
 
 	var 	status:			CNProcessStatus { get }
 	var	terminationStatus:	Int32 { get }
 
 	func terminate()
-}
-
-public extension CNProcessProtocol
-{
-	var inputFileHandle: FileHandle {
-		get { CNFileStream.streamToFileHandle(stream: inputStream, forInside: false, isInput: true) }
-	}
-	var outputFileHandle: FileHandle {
-		get { CNFileStream.streamToFileHandle(stream: outputStream, forInside: false, isInput: false) }
-	}
-	var errorFileHandle: FileHandle {
-		get { CNFileStream.streamToFileHandle(stream: errorStream, forInside: false, isInput: false) }
-	}
 }
 
 #if os(OSX)
@@ -74,12 +58,10 @@ open class CNProcess: CNProcessProtocol
 	private var mProcessId:			Int?
 	private var mStatus:			CNProcessStatus
 	private var mProcess:			Process
-	private var mInputStream:		CNFileStream
-	private var mOutputStream:		CNFileStream
-	private var mErrorStream:		CNFileStream
-	private var mConsole:			CNConsole
+	private var mConsole:			CNFileConsole
 	private var mTerminationHandler:	TerminationHandler?
 
+	public var console:		CNFileConsole	{ get { return mConsole 			}}
 	public var status: 		CNProcessStatus { get { return mStatus 				}}
 	public var terminationStatus:	Int32		{ get { return mProcess.terminationStatus	}}
 
@@ -89,29 +71,21 @@ open class CNProcess: CNProcessProtocol
 	}
 
 	public var processManager:	CNProcessManager?	{ get { return mProcessManager	}}
-	public var inputStream: 	CNFileStream		{ get { return mInputStream	}}
-	public var outputStream: 	CNFileStream		{ get { return mOutputStream	}}
-	public var errorStream: 	CNFileStream		{ get { return mErrorStream	}}
 
-	public init(processManager mgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment, terminationHander termhdlr: TerminationHandler?)
+	public init(processManager mgr: CNProcessManager, input ifile: CNFile, output ofile: CNFile, error efile: CNFile, environment env: CNEnvironment, terminationHander termhdlr: TerminationHandler?)
 	{
 		mProcessManager		= mgr
 		mProcessId		= nil
 		mStatus			= .Idle
 		mProcess		= Process()
 		mTerminationHandler	= termhdlr
+		mConsole		= CNFileConsole(input: ifile, output: ofile, error: efile)
 
-		mInputStream	= instrm
-		mOutputStream	= outstrm
-		mErrorStream	= errstrm
-		mConsole	= CNFileConsole(input:  CNFileStream.streamToFileHandle(stream: instrm,  forInside: true, isInput: true),
-						output: CNFileStream.streamToFileHandle(stream: outstrm, forInside: true, isInput: false),
-						error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
+		ifile.activateReaderHandler(enable: false)
 
-		/* Connect interface with process */
-		mProcess.standardInput		= CNFileStream.streamToAny(stream: instrm)
-		mProcess.standardOutput		= CNFileStream.streamToAny(stream: outstrm)
-		mProcess.standardError		= CNFileStream.streamToAny(stream: errstrm)
+		mProcess.standardInput		= ifile.fileHandle
+		mProcess.standardOutput		= ofile.fileHandle
+		mProcess.standardError		= efile.fileHandle
 		mProcess.environment		= env.stringVariables
 		mProcess.currentDirectoryURL	= env.currentDirectory
 		mProcess.terminationHandler = {
@@ -119,6 +93,8 @@ open class CNProcess: CNProcessProtocol
 			if let myself = self {
 				/* Update status */
 				myself.mStatus = .Finished
+				/* Restore reader handler */
+				myself.closeStreams()
 				/* Call handler */
 				if let handler = myself.mTerminationHandler {
 					handler(myself.mProcess)
@@ -161,13 +137,11 @@ open class CNProcess: CNProcessProtocol
 		}
 	}
 
+
 	private func closeStreams() {
-		if let outpipe = mProcess.standardOutput as? Pipe {
-			outpipe.fileHandleForWriting.closeFile()
-		}
-		if let errpipe = mProcess.standardError as? Pipe {
-			errpipe.fileHandleForWriting.closeFile()
-		}
+		mConsole.inputFile.activateReaderHandler(enable: true)
+		mConsole.outputFile.closeWritePipe()
+		mConsole.errorFile.closeWritePipe()
 	}
 }
 

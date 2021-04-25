@@ -28,9 +28,9 @@ private func testNormalProcess(command cmd: String, console cons: CNFileConsole)
 	let manager = CNProcessManager()
 	let env     = CNEnvironment()
 	let process = CNProcess(processManager: manager,
-				input:  .fileHandle(cons.inputHandle),
-				output: .fileHandle(cons.outputHandle),
-				error:  .fileHandle(cons.errorHandle),
+				input:  cons.inputFile,
+				output: cons.outputFile,
+				error:  cons.errorFile,
 				environment: env,
 				terminationHander: {
 		(_ proc: Process) -> Void in
@@ -60,9 +60,9 @@ private func testProcessTermination(console cons: CNFileConsole) -> Bool
 	let manager = CNProcessManager()
 	let env     = CNEnvironment()
 	let process = CNProcess(processManager: manager,
-				input:  .fileHandle(cons.inputHandle),
-				output: .fileHandle(cons.outputHandle),
-				error:  .fileHandle(cons.errorHandle),
+				input:  cons.inputFile,
+				output: cons.outputFile,
+				error:  cons.errorFile,
 				environment: env,
 				terminationHander: {
 		(_ proc: Process) -> Void in

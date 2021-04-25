@@ -30,12 +30,12 @@ import Foundation
 	public var readline: CNReadline		{ get { return mReadline	}}
 	public var terminalInfo: CNTerminalInfo	{ get { return mTerminalInfo	}}
 
-	public init(processManager procmgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, terminalInfo terminfo: CNTerminalInfo, environment env: CNEnvironment){
+	public init(processManager procmgr: CNProcessManager, input ifile: CNFile, output ofile: CNFile, error efile: CNFile, terminalInfo terminfo: CNTerminalInfo, environment env: CNEnvironment){
 		mReadline 	= CNReadline(terminalInfo: terminfo, environment: env)
 		mReadlineStatus	= ReadlineStatus(doPrompt: true)
 		mTerminalInfo	= terminfo
 		mIsCancelled	= false
-		super.init(processManager: procmgr, input: instrm, output: outstrm, error: errstrm, environment: env)
+		super.init(processManager: procmgr, input: ifile, output: ofile, error: efile, environment: env)
 	}
 
 	open override func main(argument arg: CNNativeValue) -> Int32 {

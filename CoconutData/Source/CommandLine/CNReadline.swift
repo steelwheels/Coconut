@@ -59,8 +59,9 @@ open class CNReadline
 		get { return mHistory.commandHistory }
 	}
 
-	open func readLine(console cons: CNConsole) -> Result {
-		if let str = cons.scan() {
+	open func readLine(console cons: CNFileConsole) -> Result {
+		switch cons.inputFile.gets() {
+		case .str(let str):
 			/* Erace popuped lines if it exist */
 			switch mReadMode {
 			case .input:
@@ -69,7 +70,6 @@ open class CNReadline
 				popLines(popupLines: plines, console: cons)
 				mReadMode = .input
 			}
-
 			switch CNEscapeCode.decode(string: str) {
 			case .ok(let codes):
 				for code in codes {
@@ -78,6 +78,10 @@ open class CNReadline
 			case .error(let err):
 				return .error(err)
 			}
+		case .endOfFile:
+			break
+		case .null:
+			break
 		}
 		if let code = mCodeQueue.pop() {
 			return readLine(escapeCode: code, console: cons)
@@ -273,6 +277,5 @@ open class CNReadline
 		/* Execute the code */
 		cons.print(string: ecode)
 	}
-
 }
 

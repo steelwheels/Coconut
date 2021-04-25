@@ -2,7 +2,7 @@
  * @file	CNFile.swift
  * @brief	Define CNFile, CNTextFile protocols
  * @par Copyright
- *   Copyright (C) 2017, 2018 Steel Wheels Project
+ *   Copyright (C) 2017-2021 Steel Wheels Project
  */
 
 import Foundation
@@ -10,6 +10,11 @@ import Foundation
 public class CNFile
 {
 	public static let EOF: Int	= -1
+
+	public enum Access {
+		case reader
+		case writer
+	}
 
 	public enum Char {
 		case char(Character)
@@ -23,18 +28,55 @@ public class CNFile
 		case null
 	}
 
-	private var mFileHandle:	FileHandle
+	public enum Str {
+		case str(String)
+		case endOfFile
+		case null
+	}
+
+	private enum Stream {
+		case handle(FileHandle)
+		case pipe(Pipe)
+	}
+
+	private var mAccess:		Access
+	private var mFile:		Stream
 	private var mInputBuffer:	String
 	private var mInputLock:		NSLock
 	private var mReadDone:		Bool
 
-	public init(fileHandle handle: FileHandle){
-		mFileHandle	= handle
+	public init(access acc: Access, fileHandle handle: FileHandle){
+		mAccess		= acc
+		mFile		= .handle(handle)
 		mInputBuffer	= ""
 		mInputLock	= NSLock()
 		mReadDone	= false
 
-		mFileHandle.readabilityHandler = {
+		switch acc {
+		case .reader:
+			setupCallback(fileHandle: handle)
+		case .writer:
+			break
+		}
+	}
+
+	public init(access acc: Access, pipe pip: Pipe){
+		mAccess		= acc
+		mFile		= .pipe(pip)
+		mInputBuffer	= ""
+		mInputLock	= NSLock()
+		mReadDone	= false
+
+		switch acc {
+		case .reader:
+			setupCallback(fileHandle: pip.fileHandleForReading)
+		case .writer:
+			break
+		}
+	}
+
+	private func setupCallback(fileHandle hdl: FileHandle) {
+		hdl.readabilityHandler = {
 			[weak self] (_ hdl: FileHandle) -> Void in
 			if let myself = self {
 				myself.mInputLock.lock()
@@ -47,7 +89,7 @@ public class CNFile
 					}
 				} else {
 					myself.mReadDone = true
-					myself.mFileHandle.readabilityHandler = nil
+					myself.fileHandle.readabilityHandler = nil
 				}
 				myself.mInputLock.unlock()
 			}
@@ -55,15 +97,85 @@ public class CNFile
 	}
 
 	deinit {
-		mFileHandle.readabilityHandler = nil
+		switch mAccess {
+		case .reader:
+			fileHandle.readabilityHandler = nil
+		case .writer:
+			break
+		}
 	}
 
 	public func close() {
-		mFileHandle.closeFile()
-		mReadDone = true
+		switch mAccess {
+		case .reader:
+			mReadDone = true
+			switch mFile {
+			case .handle(let hdl):
+				hdl.closeFile()
+			case .pipe(let pipe):
+				pipe.fileHandleForReading.closeFile()
+			}
+		case .writer:
+			switch mFile {
+			case .handle(let hdl):
+				hdl.closeFile()
+			case .pipe(let pipe):
+				pipe.fileHandleForWriting.closeFile()
+			}
+		}
 	}
 
-	public var fileHandle:	FileHandle { get { return mFileHandle	}}
+	public func closeWritePipe(){
+		switch mFile {
+		case .handle(_):
+			break
+		case .pipe(let pipe):
+			switch mAccess {
+			case .reader:
+				break
+			case .writer:
+				pipe.fileHandleForWriting.closeFile()
+			}
+		}
+	}
+
+	public func activateReaderHandler(enable en: Bool) {
+		switch mAccess {
+		case .reader:
+			switch mFile {
+			case .handle(let hdl):
+				if en {
+					setupCallback(fileHandle: hdl)
+				} else {
+					hdl.readabilityHandler = nil
+				}
+			case .pipe(let pipe):
+				if en {
+					setupCallback(fileHandle: pipe.fileHandleForReading)
+				} else {
+					pipe.fileHandleForReading.readabilityHandler = nil
+				}
+			}
+		case .writer:
+			break
+		}
+	}
+
+	public var fileHandle: FileHandle { get {
+		let result: FileHandle
+		switch mFile {
+		case .handle(let hdl):	result = hdl
+		case .pipe(let pipe):
+			switch mAccess {
+			case .reader:
+				result = pipe.fileHandleForReading
+			case .writer:
+				result = pipe.fileHandleForWriting
+			}
+		}
+		return result
+	}}
+
 	public var readDone:	Bool	   { get { return mReadDone	}}
 
 	public func getc() -> CNFile.Char {
@@ -74,6 +186,19 @@ public class CNFile
 		} else if let c = mInputBuffer.first {
 			mInputBuffer.removeFirst()
 			result = .char(c)
+		}
+		mInputLock.unlock()
+		return result
+	}
+
+	public func gets() -> CNFile.Str {
+		var result: CNFile.Str = .null
+		mInputLock.lock()
+		if mInputBuffer.count == 0 && mReadDone {
+			result       = .endOfFile
+		} else if mInputBuffer.count > 0 {
+			result       = .str(mInputBuffer)
+			mInputBuffer = ""
 		}
 		mInputLock.unlock()
 		return result
@@ -111,7 +236,9 @@ public class CNFile
 	}
 
 	public func put(string str: String) {
-		mFileHandle.write(string: str)
+		if let data = str.data(using: .utf8) {
+			fileHandle.write(data)
+		}
 	}
 }
 

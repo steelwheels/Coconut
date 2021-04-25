@@ -22,7 +22,6 @@ public class CNCurses
 
 	private var mTerminalInfo:		CNTerminalInfo
 	private var mConsole:			CNFileConsole
-	private var mHandler:			((_ hdl: FileHandle) -> Void)?
 	private var mBuffer:			String
 	private var mOrgForegroundColor:	CNColor
 	private var mOrgBackgroundColor:	CNColor
@@ -41,7 +40,6 @@ public class CNCurses
 	public init(console cons: CNFileConsole, terminalInfo terminfo: CNTerminalInfo) {
 		mTerminalInfo		= terminfo
 		mConsole		= cons
-		mHandler		= nil
 		mBuffer			= ""
 		mOrgForegroundColor	= terminfo.foregroundColor
 		mOrgBackgroundColor	= terminfo.backgroundColor
@@ -59,17 +57,6 @@ public class CNCurses
 		/* Select alternative screen */
 		let selalt = CNEscapeCode.selectAltScreen(true)
 		mConsole.print(string: selalt.encode())
-
-		/* Replace handler */
-		mHandler = mConsole.inputHandle.readabilityHandler
-		mConsole.inputHandle.readabilityHandler = {
-			(_ hdl: FileHandle) -> Void in
-			self.mLock.lock()
-			if let str = String.stringFromData(data: hdl.availableData){
-				self.mBuffer.append(str)
-			}
-			self.mLock.unlock()
-		}
 	}
 
 	public func end() {
@@ -79,9 +66,6 @@ public class CNCurses
 
 		let code = CNEscapeCode.selectAltScreen(false)
 		mConsole.print(string: code.encode())
-
-		/* Restore handler */
-		mConsole.inputHandle.readabilityHandler = mHandler
 	}
 
 	public func moveTo(x xpos: Int, y ypos: Int) {

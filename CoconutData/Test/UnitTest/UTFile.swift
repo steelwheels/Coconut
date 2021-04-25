@@ -14,7 +14,7 @@ public func testFile(console cons: CNConsole) -> Bool
 	do {
 		cons.print(string: "testFile: Start\n")
 		let handle = try FileHandle(forReadingFrom: url)
-		let file   = CNFile(fileHandle: handle)
+		let file   = CNFile(access: .reader, fileHandle: handle)
 		var docont = true
 		while docont {
 			switch file.getc() {

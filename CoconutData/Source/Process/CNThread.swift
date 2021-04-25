@@ -40,9 +40,6 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 	private weak var mProcessManager:	CNProcessManager?
 
 	private var mProcessId:			Int?
-	private var mInputStream:		CNFileStream
-	private var mOutputStream:		CNFileStream
-	private var mErrorStream:		CNFileStream
 	private var mEnvironment:		CNEnvironment
 	private var mConsole:			CNFileConsole
 	private var mArgument:			CNNativeValue
@@ -55,28 +52,19 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 	}
 
 	public var processManager:	CNProcessManager?	{ get { return mProcessManager	}}
-	public var inputStream:  	CNFileStream		{ get { return mInputStream	}}
-	public var outputStream: 	CNFileStream 		{ get { return mOutputStream	}}
-	public var errorStream:  	CNFileStream		{ get { return mErrorStream 	}}
 	public var environment:		CNEnvironment		{ get { return mEnvironment	}}
 	public var console:      	CNFileConsole		{ get { return mConsole 	}}
 	public var status:		CNProcessStatus		{ get { return mStatus		}}
 
 	public var terminationStatus:	Int32			{ get { return mTerminationStatus	}}
 
-	public init(processManager mgr: CNProcessManager, input instrm: CNFileStream, output outstrm: CNFileStream, error errstrm: CNFileStream, environment env: CNEnvironment) {
+	public init(processManager mgr: CNProcessManager, input infile: CNFile, output outfile: CNFile, error errfile: CNFile, environment env: CNEnvironment) {
 		mProcessManager		= mgr
-		mInputStream		= instrm
-		mOutputStream		= outstrm
-		mErrorStream		= errstrm
 		mEnvironment		= env
 		mArgument		= .nullValue
 		mStatus			= .Idle
 		mTerminationStatus	= -1
-
-		mConsole = CNFileConsole(input:  CNFileStream.streamToFileHandle(stream: instrm,  forInside: true, isInput: true),
-					 output: CNFileStream.streamToFileHandle(stream: outstrm, forInside: true, isInput: false),
-					 error:  CNFileStream.streamToFileHandle(stream: errstrm, forInside: true, isInput: false))
+		mConsole 		= CNFileConsole(input: infile, output: outfile, error: errfile)
 	}
 
 	deinit {
@@ -111,6 +99,7 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 
 			/* Finalize */
 			self.closeStreams()
+
 			switch self.mStatus {
 			case .Running:
 				self.mStatus = .Finished
@@ -135,18 +124,8 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 	}
 
 	private func closeStreams() {
-		switch mOutputStream {
-		case .pipe(let pipe):
-			pipe.fileHandleForWriting.closeFile()
-		case .fileHandle(_), .null:
-			break	// Do nothing
-		}
-		switch mErrorStream {
-		case .pipe(let pipe):
-			pipe.fileHandleForWriting.closeFile()
-		case .fileHandle(_), .null:
-			break	// Do nothing
-		}
+		mConsole.outputFile.closeWritePipe()
+		mConsole.errorFile.closeWritePipe()
 	}
 }
 
