@@ -35,8 +35,9 @@ public class CNTerminalInfo
 		width			= widthval
 		height			= heightval
 
-		foregroundColor		= CNColor.black
-		backgroundColor		= CNColor.white
+		let tpref = CNPreference.shared.terminalPreference
+		foregroundColor		= tpref.foregroundTextColor
+		backgroundColor		= tpref.backgroundTextColor
 		doBold			= false
 		doItalic		= false
 		doUnderLine		= false
@@ -47,8 +48,9 @@ public class CNTerminalInfo
 	}
 
 	public func reset() {
-		foregroundColor		= CNColor.black
-		backgroundColor		= CNColor.white
+		let tpref = CNPreference.shared.terminalPreference
+		foregroundColor		= tpref.foregroundTextColor
+		backgroundColor		= tpref.backgroundTextColor
 		doBold			= false
 		doItalic		= false
 		doUnderLine		= false
