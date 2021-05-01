@@ -9,7 +9,7 @@ import Foundation
 
 public class CNFile
 {
-	public static let EOF: Int	= -1
+	public static let EOF: Int32	= -1
 
 	public enum Access {
 		case reader
