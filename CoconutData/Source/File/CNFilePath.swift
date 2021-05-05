@@ -40,16 +40,13 @@ public class CNFilePath
 		}
 	}
 
-	public class func URLForResourceFile(fileName fname: String, fileExtension fext: String, subdirectory subdir: String?) -> URL? {
-		if let dir = subdir {
-			return Bundle.main.url(forResource: fname, withExtension: fext, subdirectory: dir)
+	public class func URLForResourceFile(fileName fname: String, fileExtension fext: String, subdirectory subdir: String?, forClass fclass: AnyClass?) -> URL? {
+		let bundle: Bundle
+		if let cls = fclass {
+			bundle = Bundle(for: cls)
 		} else {
-			return Bundle.main.url(forResource: fname, withExtension: fext)
+			bundle = Bundle.main
 		}
-	}
-
-	public class func URLForResourceFile(fileName fname: String, fileExtension fext: String, subdirectory subdir: String?, forClass fclass: AnyClass) -> URL? {
-		let bundle = Bundle(for: fclass)
 		if let dir = subdir {
 			return bundle.url(forResource: fname, withExtension: fext, subdirectory: dir)
 		} else {
@@ -57,8 +54,13 @@ public class CNFilePath
 		}
 	}
 
-	public class func URLsForResourceFiles(fileExtension fext: String, subdirectory subdir: String?, forClass fclass: AnyClass) -> FilePathsError {
-		let bundle = Bundle(for: fclass)
+	public class func URLsForResourceFiles(fileExtension fext: String, subdirectory subdir: String?, forClass fclass: AnyClass?) -> FilePathsError {
+		let bundle: Bundle
+		if let cls = fclass {
+			bundle = Bundle(for: cls)
+		} else {
+			bundle = Bundle.main
+		}
 		if let result = bundle.urls(forResourcesWithExtension: fext, subdirectory: subdir) {
 			return .ok(result)
 		} else {
