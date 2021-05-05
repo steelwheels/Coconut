@@ -1,14 +1,97 @@
 /**
- * @file	CNContactDatabase.swift
- * @brief	Define CNAuthorize class
+ * @file	CNAddressBook.swift
+ * @brief	Define CNAddressBook class
  * @par Copyright
- *   Copyright (C) 2018 Steel Wheels Project
+ *   Copyright (C) 2021Steel Wheels Project
  */
 
 import CoconutData
 import Contacts
 import Foundation
 
+public class CNAddressBook
+{
+	public enum ReadResult {
+		case contacts(Array<CNContact>)
+		case error(NSError)
+	}
+
+	private var mState:	CNAuthorizeState
+
+	public var state: CNAuthorizeState { get { return mState }}
+
+	public init(){
+		mState = .Undetermined
+	}
+
+	public func autorize() -> CNAuthorizeState {
+		switch mState {
+		case .Authorized, .Denied, .Examinating:
+			return mState
+		case .Undetermined:
+			mState = CNAddressBook.execAuthorization()
+			return mState
+		@unknown default:
+			return .Denied
+		}
+	}
+
+	static private func execAuthorization() -> CNAuthorizeState {
+		let result: CNAuthorizeState
+		let status = CNContactStore.authorizationStatus(for: .contacts)
+		switch status {
+		case .authorized:
+			result = .Authorized
+		case .denied:
+			result = .Denied
+		case .notDetermined, .restricted:
+			let store = CNContactStore()
+			var accres: CNAuthorizeState = .Denied
+			store.requestAccess(for: .contacts, completionHandler: {
+				(_ granted: Bool, _ error: Error?) -> Void in
+				if granted {
+					accres = .Authorized
+				} else {
+					accres = .Denied
+				}
+			})
+			result = accres
+		@unknown default:
+			result = .Denied
+		}
+		return result
+	}
+
+	public func read() -> ReadResult {
+		let keys = [
+			CNContactGivenNameKey,
+			CNContactMiddleNameKey,
+			CNContactFamilyNameKey,
+			CNContactEmailAddressesKey,
+			CNContactPhoneNumbersKey
+		] as Array<CNKeyDescriptor>
+
+		let result: ReadResult
+		let store   = CNContactStore()
+		let request = CNContactFetchRequest(keysToFetch: keys)
+		var contacts: Array<CNContact> = []
+		do {
+			try store.enumerateContacts(with: request, usingBlock: {
+				(contact, _) -> Void in
+				contacts.append(contact)
+			})
+			result = .contacts(contacts)
+		} catch let err as NSError {
+			result = .error(err)
+		} catch {
+			let err = NSError.fileError(message: "Abort reading contact info")
+			result = .error(err)
+		}
+		return result
+	}
+}
+
+/*
 public class CNContactDatabase
 {
 	public enum Key {
@@ -88,7 +171,6 @@ public class CNContactDatabase
 	}
 }
 
-/*
 public class CNAddressBook
 {
 
