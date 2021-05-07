@@ -47,47 +47,41 @@ public class CNAddressBook
 		case error(NSError)
 	}
 
-	private var mStore:		CNContactStore
-	private var mStatus:		CNAuthorizationStatus
-	private var mDeniedError:	NSError?
-
-	public var status: CNAuthorizationStatus { get { return mStatus }}
-
 	public init(){
-		mStore		= CNContactStore()
-		mStatus		= .notDetermined
-		mDeniedError	= nil
-		execAuthorization()
 	}
 
-	private func execAuthorization() {
+	public func read(callback: @escaping (_ status : ReadResult) -> Void){
 		let status = CNContactStore.authorizationStatus(for: .contacts)
 		switch status {
 		case .authorized:
-			mStatus = .authorized
+			callback(readContent())
 		case .denied:
-			mStatus = .denied
+			let err = NSError.fileError(message: "Access denied")
+			callback(.error(err))
 		case .restricted:
-			mStatus = .restricted
+			let err = NSError.fileError(message: "Not authorized")
+			callback(.error(err))
 		case .notDetermined:
-			mStore.requestAccess(for: .contacts, completionHandler: {
-				(_ granted: Bool, _ error: Error?) -> Void in
+			CNContactStore().requestAccess(for: .contacts, completionHandler: {
+				(granted, err) -> Void in
 				if granted {
-					self.mStatus = .authorized
+					callback(self.readContent())
 				} else {
-					self.mStatus = .denied
-				}
-				if let err = error {
-					self.mDeniedError = err as NSError
+					if let e = err as NSError? {
+						callback(.error(e))
+					} else {
+						let err = NSError.fileError(message: "Request failed")
+						callback(.error(err))
+					}
 				}
 			})
 		@unknown default:
-			mStatus = .denied
+			let err = NSError.fileError(message: "Unknown error")
+			callback(.error(err))
 		}
 	}
 
-	public func read() -> ReadResult
-	{
+	private func readContent() -> ReadResult {
 		let keys = [
 			CNContactGivenNameKey,
 			CNContactMiddleNameKey,
@@ -98,17 +92,15 @@ public class CNAddressBook
 
 		do {
 			let predicate = NSPredicate(value: true)
-			let contacts = try self.mStore.unifiedContacts(matching: predicate, keysToFetch: keys)
+			let contacts = try CNContactStore().unifiedContacts(matching: predicate, keysToFetch: keys)
 
-			let table     = CNDataTable()
+			let table = CNDataTable()
 			for contact in contacts {
 				if let record = contactToRecord(contact: contact) {
 					table.append(record: record)
 				}
 			}
 			return .table(table)
-		} catch let err as NSError {
-			return .error(err)
 		} catch {
 			let err = NSError.fileError(message: "Failed to read contacts")
 			return .error(err)
@@ -126,3 +118,55 @@ public class CNAddressBook
 		}
 	}
 }
+
+/*
+public class CNAddressBook
+{
+	public enum ReadResult {
+		case table(CNDataTable)
+		case error(NSError)
+	}
+
+	private var mStore:		CNContactStore
+	private var mStatus:		CNAuthorizationStatus
+	private var mDeniedError:	NSError?
+
+	public var status: CNAuthorizationStatus { get { return mStatus }}
+
+	public init(){
+		mStore		= CNContactStore()
+		mStatus		= .notDetermined
+	}
+
+	public func startAuthorization() {
+		let status = CNContactStore.authorizationStatus(for: .contacts)
+		switch status {
+		case .authorized:
+			mStatus = .authorized
+		case .denied:
+			mStatus = .denied
+		case .restricted:
+			mStatus = .restricted
+		case .notDetermined:
+			mStore.requestAccess(for: .contacts, completionHandler: {
+				(_ granted: Bool, _) -> Void in
+				if granted {
+					self.mStatus = .authorized
+				} else {
+					self.mStatus = .denied
+				}
+			})
+		@unknown default:
+			mStatus = .denied
+		}
+	}
+
+	public func read() -> ReadResult
+	{
+
+	}
+
+
+}
+*/
+
