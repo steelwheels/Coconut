@@ -27,7 +27,7 @@ class ViewController: NSViewController {
 				(_ status : CNAddressBook.ReadResult) -> Void in
 				switch status {
 				case .table(let table):
-					NSLog("Table")
+					NSLog("Table: \(table.records.count)")
 				case .error(let err):
 					NSLog("[Error] \(err.toString())")
 				}

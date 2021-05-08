@@ -9,6 +9,7 @@ import CoconutData
 import Contacts
 import Foundation
 
+/*
 public class CNAddressRecord: CNDataRecord
 {
 	public static let FieldCount = 1
@@ -63,16 +64,12 @@ public class CNAddressBook
 			callback(.error(err))
 		case .notDetermined:
 			CNContactStore().requestAccess(for: .contacts, completionHandler: {
-				(granted, err) -> Void in
+				(granted, _) -> Void in
 				if granted {
 					callback(self.readContent())
 				} else {
-					if let e = err as NSError? {
-						callback(.error(e))
-					} else {
-						let err = NSError.fileError(message: "Request failed")
-						callback(.error(err))
-					}
+					let err = NSError.fileError(message: "Request failed")
+					callback(.error(err))
 				}
 			})
 		@unknown default:
@@ -91,15 +88,15 @@ public class CNAddressBook
 		] as Array<CNKeyDescriptor>
 
 		do {
-			let predicate = NSPredicate(value: true)
-			let contacts = try CNContactStore().unifiedContacts(matching: predicate, keysToFetch: keys)
+			let request = CNContactFetchRequest(keysToFetch: keys)
+			let table   = CNDataTable()
 
-			let table = CNDataTable()
-			for contact in contacts {
-				if let record = contactToRecord(contact: contact) {
-					table.append(record: record)
-				}
-			}
+			try CNContactStore().enumerateContacts(with: request, usingBlock: {
+				(contact, _) -> Void in
+				let record = self.contactToRecord(contact: contact)
+				table.append(record: record)
+			})
+
 			return .table(table)
 		} catch {
 			let err = NSError.fileError(message: "Failed to read contacts")
@@ -107,66 +104,12 @@ public class CNAddressBook
 		}
 	}
 
-	private func contactToRecord(contact ctct: CNContact) -> CNAddressRecord? {
-		if ctct.isKeyAvailable(CNContactGivenNameKey) {
-			let newrect = CNAddressRecord()
-			newrect.givenName = ctct.givenName
-			NSLog("givenName = \(String(describing: newrect.givenName))")
-			return newrect
-		} else {
-			return nil
-		}
+	private func contactToRecord(contact ctct: CNContact) -> CNAddressRecord {
+		let newrect = CNAddressRecord()
+		newrect.givenName = ctct.givenName
+		NSLog("givenName = \(String(describing: newrect.givenName))")
+		return newrect
 	}
-}
-
-/*
-public class CNAddressBook
-{
-	public enum ReadResult {
-		case table(CNDataTable)
-		case error(NSError)
-	}
-
-	private var mStore:		CNContactStore
-	private var mStatus:		CNAuthorizationStatus
-	private var mDeniedError:	NSError?
-
-	public var status: CNAuthorizationStatus { get { return mStatus }}
-
-	public init(){
-		mStore		= CNContactStore()
-		mStatus		= .notDetermined
-	}
-
-	public func startAuthorization() {
-		let status = CNContactStore.authorizationStatus(for: .contacts)
-		switch status {
-		case .authorized:
-			mStatus = .authorized
-		case .denied:
-			mStatus = .denied
-		case .restricted:
-			mStatus = .restricted
-		case .notDetermined:
-			mStore.requestAccess(for: .contacts, completionHandler: {
-				(_ granted: Bool, _) -> Void in
-				if granted {
-					self.mStatus = .authorized
-				} else {
-					self.mStatus = .denied
-				}
-			})
-		@unknown default:
-			mStatus = .denied
-		}
-	}
-
-	public func read() -> ReadResult
-	{
-
-	}
-
-
 }
 */
 
