@@ -104,14 +104,6 @@ deleteBackwardCharacters(1)
 -------- [begin]
 .a.b.A*D.c
 -------- [end]
-delete(1 to 2)
--------- [begin]
-*a.A.D.c
--------- [end]
-delete(1 len 2)
--------- [begin]
-*a.c
--------- [end]
 deleteEntireLine
 -------- [begin]
 *<
@@ -238,22 +230,9 @@ deleteBackwardCharacters(1)
 .g.h.i.$
 
 -------- [end]
-delete(1 to 2)
--------- [begin]
-*a.c.$
-.d.e.A.D.f.$
-.g.h.i.$
-
--------- [end]
-delete(1 len 2)
--------- [begin]
-*a.d.e.A.D.f.$
-.g.h.i.$
-
--------- [end]
 deleteEntireLine
 -------- [begin]
-*$
+.a.b.c*$
 .g.h.i.$
 
 -------- [end]
@@ -328,14 +307,6 @@ deleteBackwardCharacters(1)
 -------- [begin]
 .ド.ラ.A*D.イ.ブ
 -------- [end]
-delete(1 to 2)
--------- [begin]
-*ド.A.D.イ.ブ
--------- [end]
-delete(1 len 2)
--------- [begin]
-*ド.イ.ブ
--------- [end]
 deleteEntireLine
 -------- [begin]
 *<
@@ -394,14 +365,14 @@ moveCursorUpOrDown(up, 1)
 moveCursorUpOrDown(down, 2)
 -------- [begin]
 .ド.ラ.イ.ブ.1.$
-.ド.ラ.イ.ブ.2.$
-*<
+.ド.ラ.イ.ブ.2*$
+
 -------- [end]
 moveCursorTo(x=1)
 -------- [begin]
 .ド.ラ.イ.ブ.1.$
-.ド.ラ.イ.ブ.2.$
-*<
+.ド*ラ.イ.ブ.2.$
+
 -------- [end]
 moveCursorTo(x=0, y=1)
 -------- [begin]
@@ -445,39 +416,26 @@ deleteBackwardCharacters(1)
 .ド.ラ.A*D.イ.ブ.2.$
 
 -------- [end]
-delete(1 to 2)
--------- [begin]
-*ド.イ.ブ.1.$
-.ド.ラ.A.D.イ.ブ.2.$
-
--------- [end]
-delete(1 len 2)
--------- [begin]
-*ド.1.$
-.ド.ラ.A.D.イ.ブ.2.$
-
--------- [end]
 deleteEntireLine
 -------- [begin]
-*$
-.ド.ラ.A.D.イ.ブ.2.$
+.ド.ラ.イ.ブ.1*$
 
 -------- [end]
 *** Test padding
 -------- [begin]
 *a.a.a._._.$
-.b.b._._._.$
-._._._._.$
-._._._._.$
-._._._._
+.b.b._._._._._._._._.$
+._._._._._.$
+._._._._._.$
+
 -------- [end]
 *** Test padding
 -------- [begin]
 *a.a.a._._.$
-.b.b._._._.$
-._._._._.$
-._._._._.$
-._._._._
+.b.b._._._._._._._._.$
+._._._._._.$
+._._._._._.$
+
 -------- [end]
 *** Test padding
 -------- [begin]
@@ -489,11 +447,12 @@ deleteEntireLine
 -------- [end]
 *** Test padding
 -------- [begin]
-*_._._._.$
-._._._._.$
-._._._._.$
-._._._._.$
-._._._._
+*_._._._._.$
+._._._._._.$
+._._._._._.$
+._._._._._.$
+._._._._._.$
+
 -------- [end]
 testAttributedString .. OK
 * testStringUtil
@@ -699,6 +658,9 @@ Terminate the process
 END of process
 Process is terminated with exit code: 15
 testProcess .. OK
+* testCommandTable
+command counts: 1501
+match-prefix: ls lsappinfo lsbom lskq lsm lsmp lsof lsvfs 
 * testEnvironment
 env("HOME") = nil
 * testThread
@@ -862,127 +824,127 @@ testColorConvert .. OK
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(14)
--------- [begin]
+[cursorBack(14)]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.o*G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!*$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:backspace
 -------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+*a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:newline
 -------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.$
+*b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:backspace
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[BS]-------- [begin]
+.$
+*b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:delete
 -------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.$
+*b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorUp(1)
 -------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-*0.1.2.3.H.e.l.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorDown(1)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[cursorDown(1)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorForward(1)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-.o*G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[cursorForward(1)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(1)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[cursorBack(1)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorForward(20)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!*$
+[cursorForward(20)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(20)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-*o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[cursorBack(20)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorForward(5)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-.o.G.o.o.d*-.m.o.r.n.i.n.g.!.!.$
+[cursorForward(5)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorNextLine(2)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H.e.l.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
-.a.b.c.d.e*f.g.h.i.j
+[cursorNextLine(2)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorPreviousLine(2)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.H*e.l.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[cursorPreviousLine(2)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorHolizontalAbsolute(4)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0.1.2*3.H.e.l.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[cursorHolizontalAbsolute(4)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorHolizontalAbsolute(2)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0*1.2.3.H.e.l.l.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[cursorHolizontalAbsolute(2)]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceFromCursorToEnd
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
-.0*$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+[eraceFromCursorToEnd]-------- [begin]
+*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceFromCursorToBegin
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
+[eraceFromCursorToBegin]-------- [begin]
 *$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("abcdefghij
@@ -990,24 +952,29 @@ testColorConvert .. OK
 abcdefghij")
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.a.b.c.d.e.f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j*$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
--------- [begin]
-.a.b.c.d.e.f.g.h.i.j.$
+[cursorBack(5)]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
-.a.b.c.d.e*f.g.h.i.j.$
-.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceEntireBuffer
--------- [begin]
-*$
+[eraceEntireBuffer]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("abcdefghij
 0123456789
@@ -1015,143 +982,293 @@ abcdefghij")
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
 .a.b.c.d.e.f.g.h.i.j*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
--------- [begin]
+[cursorBack(5)]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
 .0.1.2.3.4.5.6.7.8.9.$
-.a.b.c.d.e*f.g.h.i.j
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j*$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorUp(1)
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.4*5.6.7.8.9.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceFromCursorToRight
--------- [begin]
+[eraceFromCursorToRight]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.0.1.2.3.4*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceFromCursorToLeft
--------- [begin]
+[eraceFromCursorToLeft]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("inserted")
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.i.n.s.e.r.t.e.d*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorBack(5)
--------- [begin]
+[cursorBack(5)]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.i.n.s*e.r.t.e.d.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:eraceEntireLine
--------- [begin]
+[eraceEntireLine]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:boldCharacter(true)
+[boldCharacter(true)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:underlineCharacter(true)
+[underlineCharacter(true)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:blinkCharacter(true)
+[blinkCharacter(true)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:reverseCharacter(true)
+[reverseCharacter(true)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:foregroundColor(red)
+[foregroundColor(red)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:defaultForegroundColor
+[defaultForegroundColor]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:backgroundColor(blue)
+[backgroundColor(blue)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:defaultBackgroundColor
+[defaultBackgroundColor]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:string("COLOR")
 -------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.C.O.L.O.R*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:resetCharacterAttribute
+[resetCharacterAttribute]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
+-------- [end]
 - Execute:selectAltScreen(true)
--------- [begin]
-*_._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._
+[selectAltScreen(true)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:cursorPoisition(2,5)
--------- [begin]
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._*_._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._
+[cursorPoisition(2,5)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("2x5")
 -------- [begin]
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._.2.x.5*_._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._.$
-._._._._._._._._._._._._._._._._._._._._
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R.2.x.5*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:selectAltScreen(false)
--------- [begin]
+[selectAltScreen(false)]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.C.O.L.O.R*$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R.2.x.5*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
 .a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:scrollUp(2)
--------- [begin]
-.a.b*c.d.e.f.g.h.i.j.$
-.C.O.L.O.R.$
+[scrollUp(2)]-------- [begin]
 .a.b.c.d.e.f.g.h.i.j.$
-.$
-
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R.2.x.5*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("
 >")
 -------- [begin]
-.a.b.$
-.>*e.f.g.h.i.j.$
-.C.O.L.O.R.$
 .a.b.c.d.e.f.g.h.i.j.$
-.$
-
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R.2.x.5.$
+.>*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:scrollDown(2)
--------- [begin]
-.a.b.$
-.>.e.f.g.h.i.j.$
-.C.O.L.O.R.$
-.a.b.c.d.e.f.g.h.i.j*$
+[scrollDown(2)]-------- [begin]
+.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R.2.x.5.$
+.>*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 - Execute:string("
 <")
 -------- [begin]
-.a.b.$
-.>.e.f.g.h.i.j.$
-.C.O.L.O.R.$
 .a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.$
+.a.b.c.d.e.f.g.h.i.j.a.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.4.5.6.7.8.9.i.n.s.e.r.t.e.d.C.O.L.O.R.2.x.5.$
+.>.$
 .<*$
+.a.b.c.d.e.f.g.h.i.j.$
+.b.c.d.e.f.g.h.i.j.$
+.0.1.2.3.H.e.l.l.o.G.o.o.d.-.m.o.r.n.i.n.g.!.!.$
+.a.b.c.d.e.f.g.h.i.j
 -------- [end]
 * testKeyBinding
 selectorName:insertNewline: -> [newline ]
@@ -1287,4 +1404,40 @@ BitmapContents: {
 
   }
 }
+* testNativeValueTable
+Print records
+Record count = 10
+0: 0 1 2 3 4 
+1: 100 101 102 103 104 
+2: 200 201 202 203 204 
+3: 300 301 302 303 304 
+4: 400 401 402 403 404 
+5: 500 501 502 503 504 
+6: 600 601 602 603 604 
+7: 700 701 702 703 704 
+8: 800 801 802 803 804 
+9: 900 901 902 903 904 
+Print table
+0 100 200 300 400 500 600 700 800 900 
+1 101 201 301 401 501 601 701 801 901 
+2 102 202 302 402 502 602 702 802 902 
+3 103 203 303 403 503 603 703 803 903 
+4 104 204 304 404 504 604 704 804 904 
+Expand table
+Print table
+0 100 200 300 400 500 600 700 800 900 null null null null null 
+1 101 201 301 401 501 601 701 801 901 null null null null null 
+2 102 202 302 402 502 602 702 802 902 null null null null null 
+3 103 203 303 403 503 603 703 803 903 null null null null null 
+4 104 204 304 404 504 604 704 804 904 null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
+null null null null null null null null null null null null null null null 
 [Result] NG

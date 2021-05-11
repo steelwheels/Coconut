@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0507514326477A9F00848E00 /* UTNativeValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0507514226477A9F00848E00 /* UTNativeValueTable.swift */; };
 		0516F94526351DB60051B5A5 /* CNPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0516F94426351DB60051B5A5 /* CNPipe.swift */; };
 		0516F94626351DB60051B5A5 /* CNPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0516F94426351DB60051B5A5 /* CNPipe.swift */; };
 		051ED8E425C99269003AD1F6 /* CNBitmapContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */; };
@@ -252,6 +253,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0507514226477A9F00848E00 /* UTNativeValueTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTNativeValueTable.swift; sourceTree = "<group>"; };
 		0516F94426351DB60051B5A5 /* CNPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPipe.swift; sourceTree = "<group>"; };
 		051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapContext.swift; sourceTree = "<group>"; };
 		051EE76525E24C3A006FED4D /* UTBitmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTBitmap.swift; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				05FC385F255FEC1D004CA79E /* UTFontManager.swift */,
 				05F9A92C25C2C89400BC062E /* UTGraphicsContext.swift */,
 				05FC386D255FEC1D004CA79E /* UTKeyBinding.swift */,
+				0507514226477A9F00848E00 /* UTNativeValueTable.swift */,
 				05A44F1325C24D0D0086033B /* UTMatrix.swift */,
 				05FC3864255FEC1D004CA79E /* UTObserver.swift */,
 				05FC3862255FEC1D004CA79E /* UTOperation.swift */,
@@ -916,6 +919,7 @@
 				05A44F1425C24D0D0086033B /* UTMatrix.swift in Sources */,
 				05FC3873255FEC1E004CA79E /* UTTextStorage.swift in Sources */,
 				05FC387B255FEC1E004CA79E /* UTThread.swift in Sources */,
+				0507514326477A9F00848E00 /* UTNativeValueTable.swift in Sources */,
 				05FC3886255FEC1E004CA79E /* UTCharacter.swift in Sources */,
 				05FC3879255FEC1E004CA79E /* UTEscapeSequence.swift in Sources */,
 				05FC388C255FEC1E004CA79E /* UTStringStream.swift in Sources */,

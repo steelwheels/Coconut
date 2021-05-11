@@ -30,8 +30,8 @@ public class CNCommandTable
 					mCommandTable[fname] = pathname
 				}
 			}
-			catch let err as NSError {
-				NSLog("[Error] \(err.toString()) at \(#function)")
+			catch  {
+				// Ignore the error
 			}
 		}
 	}

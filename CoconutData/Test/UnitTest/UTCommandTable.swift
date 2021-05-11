@@ -15,10 +15,7 @@ public func testCommandTable(console cons: CNFileConsole) -> Bool
 	cmdtable.read(from: env)
 
 	let names = cmdtable.names
-	for name in names {
-		cons.print(string: name + " ")
-	}
-	cons.print(string: "\n")
+	cons.print(string: "command counts: \(names.count)\n")
 
 	let cmds = cmdtable.matchPrefix(string: "ls")
 	cons.print(string: "match-prefix: ")
