@@ -7,197 +7,158 @@
 
 import Foundation
 
-public class CNNativeValueRecord
+private class CNNativeValueTitles
+{
+	private var mTitles:		Array<String?>
+	private var mDictionary:	Dictionary<String, Int>
+
+	public var count: Int { get { return mTitles.count }}
+
+	public init(){
+		mTitles     = []
+		mDictionary = [:]
+	}
+
+	public func title(at idx: Int) -> String? {
+		if 0<=idx && idx<mTitles.count {
+			return mTitles[idx]
+		} else {
+			return nil
+		}
+	}
+
+	public func index(by title: String) -> Int? {
+		return mDictionary[title]
+	}
+
+	public func setTitle(at idx: Int, title str: String) {
+		expand(size: idx + 1)
+		mTitles[idx] = str
+		mDictionary[str] = idx
+	}
+
+	private func expand(size sz: Int){
+		let diff = sz - mTitles.count
+		if diff > 0 {
+			for _ in 0..<diff {
+				mTitles.append(nil)
+			}
+		}
+	}
+}
+
+private class CNNativeValueRecord
 {
 	private var mValues:	Array<CNNativeValue>
 
 	public var count: Int { get { return mValues.count }}
 
-	public init(){
+	public init() {
 		mValues = []
 	}
 
-	public func value(at index: Int) -> CNNativeValue? {
-		if 0<=index && index<mValues.count {
-			return mValues[index]
+	public func value(at idx: Int) -> CNNativeValue {
+		if 0<=idx && idx<mValues.count {
+			return mValues[idx]
 		} else {
-			return nil
+			return .nullValue
 		}
 	}
 
-	public func setValue(at index: Int, value val: CNNativeValue) -> Bool {
-		if 0<=index && index<mValues.count {
-			mValues[index] = val
-			return true
-		} else {
-			return false
-		}
+	public func setValue(at idx: Int, value val: CNNativeValue){
+		expand(size: idx+1)
+		mValues[idx] = val
 	}
 
-	public func appendValue(value val: CNNativeValue) -> Bool {
-		mValues.append(val)
-		return true
-	}
-
-	public func expandElements(target size: Int){
-		let diff = size - mValues.count
+	private func expand(size sz: Int){
+		let diff = sz - mValues.count
 		if diff > 0 {
 			for _ in 0..<diff {
-				if !appendValue(value: .nullValue){
-					break
-				}
+				mValues.append(.nullValue)
 			}
 		}
-	}
-
-	public func forEach(callback: (_ val: CNNativeValue) -> Void){
-		for val in mValues {
-			callback(val)
-		}
-	}
-}
-
-open class CNNativeValueColumn
-{
-	private var mTitle:		String?
-	private var mColumnIndex:	Int
-	private var mTable:		CNNativeValueTable
-
-	public var title: String?	{ get { return mTitle			}}
-	public var columnIndex: Int	{ get { return mColumnIndex		}}
-	public var count: Int 		{ get { return mTable.numberOfRecords	}}
-
-	public init(title ttl: String?, columnIndex idx: Int, table tbl: CNNativeValueTable){
-		mTitle		= ttl
-		mColumnIndex	= idx
-		mTable		= tbl
-	}
-
-	public func value(at index: Int) -> CNNativeValue? {
-		if let rec = mTable.record(at: index) {
-			return rec.value(at: mColumnIndex)
-		}
-		return nil
-	}
-
-	public func setValue(at index: Int, value val: CNNativeValue) -> Bool {
-		if let rec = mTable.record(at: index) {
-			return rec.setValue(at: mColumnIndex, value: val)
-		}
-		return false
-	}
-
-	public func forEach(callback: (_ val: CNNativeValue) -> Void){
-		mTable.forEachRecord(callback: {
-			(_ rec: CNNativeValueRecord) -> Void in
-			if let val = rec.value(at: mColumnIndex){
-				callback(val)
-			} else {
-				callback(.nullValue)
-			}
-		})
 	}
 }
 
 open class CNNativeValueTable
 {
+	private var mTitles:		CNNativeValueTitles
 	private var mRecords:		Array<CNNativeValueRecord>
-	private var mColumnTitles:	Dictionary<String, Int>
-	private var mMaxColumnNum:	Int
+	private var mMaxRowCount:	Int
+	private var mMaxColumnCount:	Int
 
-	public var numberOfRecords: Int  { get { return mRecords.count	}}
-	public var numberOfColumns: Int  { get { return mMaxColumnNum	}}
-	public var colmunTitles: Array<String> { get { return Array<String>(mColumnTitles.keys) }}
+	public var rowCount:    Int { get { return mMaxRowCount		}}
+	public var columnCount: Int { get { return mMaxColumnCount	}}
 
 	public init(){
+		mTitles		= CNNativeValueTitles()
 		mRecords	= []
-		mColumnTitles	= [:]
-		mMaxColumnNum	= 0
+		mMaxRowCount	= 0
+		mMaxColumnCount	= 0
 	}
 
-	public func set(columnTitle ttl: String, at idx: Int){
-		mColumnTitles[ttl] = idx
+	public func title(column cidx: Int) -> String {
+		if let ttl = mTitles.title(at: cidx) {
+			return ttl
+		} else {
+			let newttl = "_\(cidx)"
+			setTitle(column: cidx, title: newttl)
+			return newttl
+		}
 	}
 
-	public func columnTitle(at index: Int) -> String? {
-		for (str, idx) in mColumnTitles {
-			if idx == index {
-				return str
+	public func setTitle(column cidx: Int, title str: String){
+		mTitles.setTitle(at: cidx, title: str)
+		mMaxColumnCount = max(mMaxColumnCount, mTitles.count)
+	}
+
+	private func titleIndex(by name: String) -> Int? {
+		return mTitles.index(by: name)
+	}
+
+	public func value(column cidx: Int, row ridx: Int) -> CNNativeValue {
+		if 0<=ridx && ridx<mRecords.count {
+			return mRecords[ridx].value(at: cidx)
+		} else {
+			return .nullValue
+		}
+	}
+
+	public func value(title ttl: String, row ridx: Int) -> CNNativeValue {
+		if let cidx = titleIndex(by: ttl) {
+			if 0<=ridx && ridx<mRecords.count {
+				return mRecords[ridx].value(at: cidx)
 			}
 		}
-		return nil
+		return .nullValue
 	}
 
-	public func columnIndex(for title: String) -> Int? {
-		return mColumnTitles[title]
+	public func setValue(column cidx: Int, row ridx: Int, value val: CNNativeValue) {
+		expandRows(size: ridx + 1)
+		let rec = mRecords[ridx]
+		rec.setValue(at: cidx, value: val)
+		mMaxColumnCount = max(mMaxColumnCount, rec.count)
 	}
 
-	public func record(at idx: Int) -> CNNativeValueRecord? {
-		if 0<=idx && idx<mRecords.count {
-			return mRecords[idx]
+	public func setValue(title ttl: String, row ridx: Int, value val: CNNativeValue) {
+		if let cidx = titleIndex(by: ttl) {
+			expandRows(size: ridx + 1)
+			let rec = mRecords[ridx]
+			rec.setValue(at: cidx, value: val)
+			mMaxColumnCount = max(mMaxColumnCount, rec.count)
 		} else {
-			return nil
+			NSLog("Failed to set value at \(#function) in \(#file)")
 		}
 	}
 
-	public func setRecord(at idx: Int, record rec: CNNativeValueRecord) -> Bool {
-		if 0<=idx && idx<mRecords.count {
-			mRecords[idx]	= rec
-			mMaxColumnNum	= max(mMaxColumnNum, rec.count)
-			return true
-		} else {
-			return false
-		}
-	}
-
-	public func appendRecord(record rec: CNNativeValueRecord) -> Bool {
-		mRecords.append(rec)
-		mMaxColumnNum = max(mMaxColumnNum, rec.count)
-		return true
-	}
-
-	public func expand(horizontalSize hsize: Int, verticalSize vsize: Int){
-		/* Append records */
-		let vdiff = vsize - mRecords.count
-		if vdiff > 0 {
-			for _ in 0..<vdiff {
-				let newrec = CNNativeValueRecord()
-				if !appendRecord(record: newrec){
-					break
-				}
+	private func expandRows(size sz: Int){
+		if sz > mRecords.count {
+			let diff = sz - mRecords.count
+			for _ in 0..<diff {
+				mRecords.append(CNNativeValueRecord())
 			}
-		}
-		/* Expand target record */
-		if vsize > 0 {
-			if let rec = record(at: vsize-1) {
-				rec.expandElements(target: hsize)
-				mMaxColumnNum = max(mMaxColumnNum, hsize)
-			} else {
-				NSLog("[Error] Can not happen at \(#function)")
-			}
-		}
-	}
-
-	public func forEachRecord(callback: (_ rec: CNNativeValueRecord) -> Void){
-		for rec in mRecords {
-			callback(rec)
-		}
-	}
-
-	public func column(at colidx: Int) -> CNNativeValueColumn? {
-		if 0<=colidx && colidx<mMaxColumnNum {
-			let ttl = columnTitle(at: colidx)
-			return CNNativeValueColumn(title: ttl, columnIndex: colidx, table: self)
-		} else {
-			return nil
-		}
-	}
-
-	public func forEachColumn(callback: (_ rec: CNNativeValueColumn) -> Void){
-		for colidx in 0..<mMaxColumnNum {
-			let ttl = columnTitle(at: colidx)
-			let newcol = CNNativeValueColumn(title: ttl, columnIndex: colidx, table: self)
-			callback(newcol)
+			mMaxRowCount = max(mMaxRowCount, sz)
 		}
 	}
 }
+

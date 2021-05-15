@@ -1405,39 +1405,44 @@ BitmapContents: {
   }
 }
 * testNativeValueTable
-Print records
-Record count = 10
-0: 0 1 2 3 4 
-1: 100 101 102 103 104 
-2: 200 201 202 203 204 
-3: 300 301 302 303 304 
-4: 400 401 402 403 404 
-5: 500 501 502 503 504 
-6: 600 601 602 603 604 
-7: 700 701 702 703 704 
-8: 800 801 802 803 804 
-9: 900 901 902 903 904 
-Print table
-0 100 200 300 400 500 600 700 800 900 
-1 101 201 301 401 501 601 701 801 901 
-2 102 202 302 402 502 602 702 802 902 
-3 103 203 303 403 503 603 703 803 903 
-4 104 204 304 404 504 604 704 804 904 
-Expand table
-Print table
-0 100 200 300 400 500 600 700 800 900 null null null null null 
-1 101 201 301 401 501 601 701 801 901 null null null null null 
-2 102 202 302 402 502 602 702 802 902 null null null null null 
-3 103 203 303 403 503 603 703 803 903 null null null null null 
-4 104 204 304 404 504 604 704 804 904 null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
-null null null null null null null null null null null null null null null 
+* Initial table
+{
+  row-count:    0
+  column-count: 0
+Title: 
+}
+* Add 1st item
+{
+  row-count:    1
+  column-count: 1
+Title: [_0]
+"0/0", 
+}
+* Add 2nd item
+{
+  row-count:    2
+  column-count: 2
+Title: [_0][_1]
+"0/0", null, 
+null, "1/1", 
+}
+* Set 5x3 item
+{
+  row-count:    3
+  column-count: 5
+Title: [_0][_1][_2][_3][_4]
+"0/0", "1/0", "2/0", "3/0", "4/0", 
+"0/1", "1/1", "2/1", "3/1", "4/1", 
+"0/2", "1/2", "2/2", "3/2", "4/2", 
+}
+* Set columns
+{
+  row-count:    3
+  column-count: 6
+Title: [col0][col1][col2][col3][col4][col5]
+"0/0", "1/0", "2/0", "3/0", "4/0", null, 
+"0/1", "1/1", "2/1", "3/1", "4/1", null, 
+"0/2", "1/2", "2/2", "3/2", "4/2", null, 
+}
+ -> index == 1
 [Result] NG
