@@ -102,6 +102,9 @@ let result29 = testGraphicsContext(console: cons)
 cons.print(string: "* testBitmapContext\n")
 let result6 = testBitmap(console: cons)
 
+cons.print(string: "* testNativeValue\n")
+let result131 = testNativeValue(console: cons)
+
 cons.print(string: "* testNativeValueTable\n")
 let result16 = testNativeValueTable(console: cons)
 

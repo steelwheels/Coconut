@@ -38,16 +38,30 @@ public func testNativeValueTable(console cons: CNConsole) -> Bool
 	}
 	printTable(table: table, console: cons)
 
-	/* check index */
-	if let idx = table.titleIndex(by: "col1") {
-		if idx == 1 {
-			cons.print(string: " -> index == 1\n")
-		} else {
-			cons.print(string: "Invalid index: \(idx)")
-			result = false
-		}
-	} else {
-		cons.print(string: "The title is NOT found")
+	/* loadfunction */
+	cons.print(string: "* Load test\n")
+	if !loadTest(source: "{a: [10.0]}", console: cons) {
+		result = false
+	}
+	if !loadTest(source: "[[10.0]]", console: cons) {
+		result = false
+	}
+	if !loadTest(source: "[[\"a\", 10.0], [\"b\", 20.0]]", console: cons) {
+		result = false
+	}
+
+	return result
+}
+
+private func loadTest(source src: String, console cons: CNConsole) -> Bool {
+	let result: Bool
+	switch CNNativeValueTable.load(source: src) {
+	case .ok(let table):
+		cons.print(string: "Source: \(src):\n")
+		printTable(table: table, console: cons)
+		result = true
+	default:
+		cons.print(string: "Parse error\n")
 		result = false
 	}
 	return result
@@ -59,8 +73,8 @@ private func printTable(table tbl: CNNativeValueTable, console cons: CNConsole)
 	let colcnt = tbl.columnCount
 	cons.print(string:   "{\n"
 			   + "  row-count:    \(rowcnt)\n"
-			   + "  column-count: \(colcnt)\n")
-
+			   + "  column-count: \(colcnt)\n"
+			   + "}\n")
 	cons.print(string: "Title: ")
 	for col in 0..<colcnt {
 		let title = tbl.title(column: col)
@@ -69,88 +83,17 @@ private func printTable(table tbl: CNNativeValueTable, console cons: CNConsole)
 	cons.print(string: "\n")
 
 	for row in 0..<rowcnt {
+		cons.print(string: " \(row): ")
 		for col in 0..<colcnt {
+			if col > 0 {
+				cons.print(string: ", ")
+			}
 			let val = tbl.value(column: col, row: row)
 			let valstr = val.toText().toStrings(terminal: "").joined(separator: "\n")
-			cons.print(string: valstr + ", ")
+			cons.print(string: valstr)
 		}
 		cons.print(string: "\n")
 	}
-	cons.print(string:   "}\n")
+
 }
-
-/*
-public func testNativeValueTable(console cons: CNConsole) -> Bool
-{
-	let RECORD_NUM = 10
-	let COLUMN_NUM =  5
-
-	var result = true
-
-	let table = CNNativeValueTable()
-
-	/* setup table */
-	for i in 0..<RECORD_NUM {
-		let newrec = CNNativeValueRecord()
-		for j in 0..<COLUMN_NUM {
-			let val = CNNativeValue.numberValue(NSNumber(value: i*100 + j))
-			if !newrec.appendValue(value: val) {
-				cons.error(string: "[Error] Failed to append")
-				result = false
-			}
-		}
-		if !table.appendRecord(record: newrec){
-			cons.error(string: "[Error] Failed to append")
-			result = false
-		}
-	}
-
-	/* print records */
-	cons.print(string: "Print records\n")
-	let recnum = table.numberOfRecords
-	cons.print(string: "Record count = \(recnum)\n")
-	if recnum != RECORD_NUM {
-		cons.error(string: "[Error] Unexpected record count\n")
-		result = false
-	}
-	for i in 0..<recnum {
-		if let rec = table.record(at: i) {
-			cons.print(string: "\(i): ")
-			rec.forEach(callback: {
-				(_ val: CNNativeValue) -> Void in
-				let str = val.toText().toStrings(terminal: "").joined(separator: "\n")
-				cons.print(string: "\(str) ")
-			})
-			cons.print(string: "\n")
-		} else {
-			cons.error(string: "[Error] No record\n")
-			result = false
-		}
-	}
-
-	/* print columns */
-	printTable(table: table, console: cons)
-
-	/* Expand table */
-	cons.print(string: "Expand table\n")
-	table.expand(horizontalSize: 15, verticalSize: 15)
-	printTable(table: table, console: cons)
-
-	return result
-}
-
-private func printTable(table tbl: CNNativeValueTable, console cons: CNConsole)
-{
-	cons.print(string: "Print table\n")
-	tbl.forEachColumn(callback: {
-		(_ col: CNNativeValueColumn) -> Void in
-		col.forEach(callback: {
-			(_ val: CNNativeValue) -> Void in
-			let str = val.toText().toStrings(terminal: "").joined(separator: "\n")
-			cons.print(string: "\(str) ")
-		})
-		cons.print(string: "\n")
-	})
-}
-*/
 

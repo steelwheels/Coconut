@@ -12,7 +12,7 @@ public func testValue(console cons: CNConsole) -> Bool
 {
 	let res0 = printValue(value: CNValue(booleanValue: true), expected: "true", console: cons)
 	let res1 = printValue(value: CNValue(stringValue: "Hello, world"), expected: "Hello, world", console: cons)
-	let res2 = testNativeValue(console: cons)
+	let res2 = testNativeValue2(console: cons)
 
 	let result = res0 && res1 && res2
 	if result {
@@ -30,7 +30,7 @@ private func printValue(value val: CNValue, expected exp: String, console cons: 
 	return desc == exp
 }
 
-private func testNativeValue(console cons: CNConsole) -> Bool
+private func testNativeValue2(console cons: CNConsole) -> Bool
 {
 	let nval0 = CNNativeValue.numberValue(NSNumber(integerLiteral: 123))
 	dumpValue(value: nval0, console: cons)

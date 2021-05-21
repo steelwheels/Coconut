@@ -160,5 +160,80 @@ open class CNNativeValueTable
 			mMaxRowCount = max(mMaxRowCount, sz)
 		}
 	}
+
+	public enum LoadResult {
+		case 	ok(CNNativeValueTable)
+		case	error(CNNativeValueParser.ParseError)
+	}
+
+	public static func load(source src: String) -> LoadResult {
+		let parser = CNNativeValueParser()
+		switch parser.parse(source: src) {
+		case .ok(let val):
+			return CNNativeValueTable.load(nativeValue: val)
+		case .error(let err):
+			return .error(err)
+		}
+	}
+
+	private static func load(nativeValue val: CNNativeValue) -> LoadResult {
+		switch val {
+		case .arrayValue(let arr0):
+			var haserr	= false
+			let newtbl      = CNNativeValueTable()
+			var rowidx	= 0
+			for val in arr0	 {
+				switch val {
+				case .arrayValue(let arr1):
+					var colidx: Int = 0
+					for elm in arr1 {
+						newtbl.setValue(column: colidx, row: rowidx, value: elm)
+						colidx += 1
+					}
+				case .stringValue(_), .numberValue(_):
+					newtbl.setValue(column: 0, row: rowidx, value: val)
+				default:
+					haserr = true
+				}
+				if haserr {
+					break
+				}
+				rowidx += 1
+			}
+			if !haserr {
+				return .ok(newtbl)
+			}
+		case .dictionaryValue(let dict0):
+			var haserr	= false
+			let newtbl      = CNNativeValueTable()
+			var colidx	= 0
+			for (key, val) in dict0	 {
+				switch val {
+				case .arrayValue(let arr0):
+					var rowidx: Int = 0
+					for elm in arr0 {
+						newtbl.setTitle(column: colidx, title: key)
+						newtbl.setValue(title: key, row: rowidx, value: elm)
+						rowidx += 1
+					}
+				case .stringValue(_), .numberValue(_):
+					newtbl.setValue(title: key, row: 0, value: val)
+				default:
+					haserr = true
+				}
+				if haserr {
+					break
+				}
+				colidx += 1
+			}
+			if !haserr {
+				return .ok(newtbl)
+			}
+		default:
+			break
+		}
+		let err = CNParseError.ParseError(0, "Not 2D array format")
+		return .error(.tokenError(err))
+	}
 }
 

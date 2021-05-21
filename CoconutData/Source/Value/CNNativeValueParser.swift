@@ -79,29 +79,58 @@ public class CNNativeValueParser
 	}
 
 	private func parseObject(tokenStream stream: CNTokenStream) throws -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
-		try requireSymbol(symbol: "{", in: stream)
-
-		var is1st = true
-		parse_loop: while true {
-			if let c = checkSymbol(in: stream) {
-				if c == "}" {
-					break parse_loop
-				} else if !is1st && c == "," {
-					/* Continue */
-				} else {
-					/* Ignore */
-					let _ = stream.unget()
+		if let c = checkSymbol(in: stream) {
+			switch c {
+			case "[":
+				var result: Array<CNNativeValue> = []
+				var is1st = true
+				parse_loop: while true {
+					if let c = checkSymbol(in: stream) {
+						if c == "]" {
+							break parse_loop
+						} else if !is1st && c == "," {
+							/* Continue */
+						} else {
+							/* Ignore */
+							let _ = stream.unget()
+						}
+					}
+					let val = try parseValue(tokenStream: stream)
+					result.append(val)
+					is1st = false
 				}
+				return .arrayValue(result)
+			case "{":
+				var result: Dictionary<String, CNNativeValue> = [:]
+				var is1st = true
+				parse_loop: while true {
+					if let c = checkSymbol(in: stream) {
+						if c == "}" {
+							break parse_loop
+						} else if !is1st && c == "," {
+							/* Continue */
+						} else {
+							/* Ignore */
+							let _ = stream.unget()
+						}
+					}
+					if let (ident, val) = try parseProperty(tokenStream: stream) {
+						result[ident] = val
+					} else {
+						break parse_loop
+					}
+					is1st = false
+				}
+				return .dictionaryValue(result)
+			default:
+				break
 			}
-			if let (ident, val) = try parseProperty(tokenStream: stream) {
-				result[ident] = val
-			} else {
-				break parse_loop
-			}
-			is1st = false
 		}
-		return .dictionaryValue(result)
+		if let token = stream.get() {
+			throw ParseError.unexpectedToken(token, token.lineNo)
+		} else {
+			throw ParseError.unexpectedEndOfStream
+		}
 	}
 
 	private func parseProperty(tokenStream stream: CNTokenStream) throws -> (String, CNNativeValue)? {
