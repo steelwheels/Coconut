@@ -54,11 +54,12 @@ public func testNativeValueTable(console cons: CNConsole) -> Bool
 }
 
 private func loadTest(source src: String, console cons: CNConsole) -> Bool {
+	let tbl = CNNativeValueTable()
 	let result: Bool
-	switch CNNativeValueTable.load(source: src) {
-	case .ok(let table):
+	switch tbl.load(source: src) {
+	case .ok:
 		cons.print(string: "Source: \(src):\n")
-		printTable(table: table, console: cons)
+		printTable(table: tbl, console: cons)
 		result = true
 	default:
 		cons.print(string: "Parse error\n")
