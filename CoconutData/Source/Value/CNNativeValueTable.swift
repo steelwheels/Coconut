@@ -19,6 +19,11 @@ private class CNNativeValueTitles
 		mDictionary = [:]
 	}
 
+	public func copy(from titles: CNNativeValueTitles){
+		mTitles		= titles.mTitles
+		mDictionary	= titles.mDictionary
+	}
+
 	public func title(at idx: Int) -> String? {
 		if 0<=idx && idx<mTitles.count {
 			return mTitles[idx]
@@ -97,6 +102,13 @@ open class CNNativeValueTable
 		mMaxColumnCount	= 0
 	}
 
+	public func copy(from vtable: CNNativeValueTable){
+		self.mTitles.copy(from: vtable.mTitles)
+		self.mRecords		= vtable.mRecords
+		self.mMaxRowCount	= vtable.mMaxRowCount
+		self.mMaxColumnCount	= vtable.mMaxColumnCount
+	}
+
 	public func title(column cidx: Int) -> String {
 		if let ttl = mTitles.title(at: cidx) {
 			return ttl
@@ -112,7 +124,7 @@ open class CNNativeValueTable
 		mMaxColumnCount = max(mMaxColumnCount, mTitles.count)
 	}
 
-	private func titleIndex(by name: String) -> Int? {
+	public func titleIndex(by name: String) -> Int? {
 		return mTitles.index(by: name)
 	}
 
