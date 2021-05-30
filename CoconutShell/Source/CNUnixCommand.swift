@@ -5,6 +5,7 @@
  *   Copyright (C) 2018 Steel Wheels Project
  */
 
+import CoconutData
 import Foundation
 
 public class CNUnixCommandTable
@@ -46,7 +47,7 @@ public class CNUnixCommandTable
 						mCommandTable[cmdname] = cmdinfo
 					}
 				} catch {
-					NSLog("Can not access directory: \(cmddir)")
+					CNLog(logLevel: .error, message: "Can not access directory: \(cmddir)", atFunction: #function, inFile: #file)
 				}
 			}
 		#endif

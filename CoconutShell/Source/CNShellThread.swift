@@ -55,10 +55,10 @@ import Foundation
 			case .none:
 				break
 			case .error(let err):
-				NSLog("[Error] \(err.description()) at \(#function)")
+				CNLog(logLevel: .error, message: err.description(), atFunction: #function, inFile: #file)
 				break
 			@unknown default:
-				NSLog("Unknown case at \(#function)")
+				CNLog(logLevel: .error, message: "Unknown case", atFunction: #function, inFile: #file)
 				cancel()
 			}
 		}
