@@ -389,7 +389,7 @@ public enum CNNativeValue {
 						sect.add(text: elmtxt)
 					}
 				} else {
-					NSLog("No object")
+					CNLog(logLevel: .error, message: "No object", atFunction: #function, inFile: #file)
 					sect.add(text: CNTextLine(string: "?"))
 				}
 			}

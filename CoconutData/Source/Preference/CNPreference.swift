@@ -134,7 +134,7 @@ public class CNSystemPreference: CNPreferenceTable
 			if let _ = LogLevel(rawValue: logval) {
 				super.set(intValue: logval, forKey: CNSystemPreference.LogLevelItem)
 			} else {
-				NSLog("[Error] Unknown log level")
+				CNLog(logLevel: .error, message: "Unknown log level", atFunction: #function, inFile: #file)
 				super.set(intValue: LogLevel.defaultLevel.rawValue, forKey: CNSystemPreference.LogLevelItem)
 			}
 		} else {
@@ -163,7 +163,6 @@ public class CNSystemPreference: CNPreferenceTable
 
 	@objc public func interfaceModeChanged(sender: NSNotification) {
 		let style = self.interfaceStyle
-		//NSLog("\(#file) interface mode changed: \(style.description)")
 		super.set(intValue: style.rawValue, forKey: CNSystemPreference.InterfaceStyleItem)
         }
 
@@ -231,10 +230,8 @@ public class CNUserPreference: CNPreferenceTable
 			if let homedir = super.stringValue(forKey: HomeDirectoryItem) {
 				let pref = CNPreference.shared.bookmarkPreference
 				if let homeurl = pref.search(pathString: homedir) {
-					//NSLog("get homeDirectory=\(homeurl.path)")
 					return homeurl
 				} else {
-					//NSLog("get homeDirectory=\(homedir)")
 					return URL(fileURLWithPath: homedir)
 				}
 			}
@@ -250,7 +247,7 @@ public class CNUserPreference: CNPreferenceTable
 					return
 				}
 			}
-			NSLog("Invalid parameter")
+			CNLog(logLevel: .error, message: "Invalid parameter", atFunction: #function, inFile: #file)
 		}
 	}
 }
@@ -275,7 +272,7 @@ public class CNBookmarkPreference: CNPreferenceTable
 			super.set(dataDictionaryValue: dict, forKey: BookmarkItem)
 			super.storeDataDictionaryValue(dataDictionaryValue: dict, forKey: BookmarkItem)
 		} else {
-			NSLog("Can not happen")
+			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -319,7 +316,7 @@ public class CNBookmarkPreference: CNPreferenceTable
 			return newurl
 		}
 		catch {
-			NSLog("Failed to resolve bookmark")
+			CNLog(logLevel: .error, message: "Failed to resolve bookmark", atFunction: #function, inFile: #file)
 			return nil
 		}
 	}

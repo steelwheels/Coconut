@@ -60,12 +60,12 @@ public extension URL
 		case .cancel:
 			cbfunc(nil)
 		default:
-			NSLog("Unsupported result")
+			CNLog(logLevel: .error, message: "Unsupported result", atFunction: #function, inFile: #file)
 			cbfunc(nil)
 		}
 	}
 
-	static func savePanel(title tl: String, outputDirectory outdir: URL?, saveFileCallback callback: @escaping ((_: URL) -> Bool))
+	static func savePanel(title tl: String, outputDirectory outdir: URL?, callback cbfunc: @escaping ((_: URL?) -> Void))
 	{
 		let panel = NSSavePanel()
 		panel.title = tl
@@ -74,16 +74,34 @@ public extension URL
 		if let odir = outdir {
 			panel.directoryURL = odir
 		}
-		panel.begin(completionHandler: { (result: NSApplication.ModalResponse) -> Void in
-			if result == .OK {
-				if let newurl = panel.url {
-					if callback(newurl) {
-						let preference = CNPreference.shared.bookmarkPreference
-						preference.add(URL: newurl)
-					}
+		switch panel.runModal() {
+		case .OK:
+			if let newurl = panel.url {
+				/* Bookmark this folder */
+				let dirname = newurl.deletingLastPathComponent()
+				switch FileManager.default.checkFileType(pathString: dirname.path) {
+				case .Directory:
+					/* Add the directory to bookmark */
+					let preference = CNPreference.shared.bookmarkPreference
+					preference.add(URL: dirname)
+					CNLog(logLevel: .detail, message: "File is bookmarked", atFunction: #function, inFile: #file)
+				case .File:
+					CNLog(logLevel: .warning, message: "File is NOT bookmarked: \(dirname.path)", atFunction: #function, inFile: #file)
+					break
+				case .NotExist:
+					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
+					break
 				}
+				cbfunc(newurl)
+			} else {
+				cbfunc(nil)
 			}
-		})
+		case .cancel:
+			cbfunc(nil)
+		default:
+			CNLog(logLevel: .error, message: "Unsupported result", atFunction: #function, inFile: #file)
+			cbfunc(nil)
+		}
 	}
 #endif
 

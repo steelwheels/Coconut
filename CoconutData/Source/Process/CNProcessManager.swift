@@ -32,7 +32,7 @@ public class CNProcessManager
 		if let pid = proc.processId {
 			mProcesses.removeValue(forKey: pid)
 		} else {
-			NSLog("CNProcessManager: Process with no pid")
+			CNLog(logLevel: .error, message: "Process with no pid", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -43,12 +43,10 @@ public class CNProcessManager
 	public func terminate() {
 		/* Terminate children first */
 		for child in mChildProcessManager {
-			//NSLog("\(#file): Terminate child processes")
 			child.terminate()
 		}
 		/* Terminate all processes */
 		for process in mProcesses.values {
-			//NSLog("\(#file): Terminate the processe")
 			process.terminate()
 		}
 	}

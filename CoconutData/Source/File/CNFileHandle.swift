@@ -15,7 +15,7 @@ extension FileHandle
 		if let data = str.data(using: .utf8) {
 			self.write(data)
 		} else {
-			NSLog("Failed convert at \(#file):\(#line)")
+			CNLog(logLevel: .error, message: "Failed to convert", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -25,7 +25,7 @@ extension FileHandle
 			if let str = String.stringFromData(data: data) {
 				return str
 			} else {
-				NSLog("Failed convert at \(#file):\(#line)")
+				CNLog(logLevel: .error, message: "Failed to convert", atFunction: #function, inFile: #file)
 				return ""
 			}
 		}

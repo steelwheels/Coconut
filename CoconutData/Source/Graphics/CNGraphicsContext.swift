@@ -53,7 +53,7 @@ public class CNGraphicsContext
 		if let ctxt = mCoreContext {
 			ctxt.strokePath()
 		} else {
-			NSLog("No context at \(#function)")
+			CNLog(logLevel: .error, message: "No context", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -61,7 +61,7 @@ public class CNGraphicsContext
 		if let ctxt = mCoreContext {
 			ctxt.setFillColor(col.cgColor)
 		} else {
-			NSLog("No context at \(#function)")
+			CNLog(logLevel: .error, message: "No context", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -69,24 +69,22 @@ public class CNGraphicsContext
 		if let ctxt = mCoreContext {
 			ctxt.setStrokeColor(col.cgColor)
 		} else {
-			NSLog("No context at \(#function)")
+			CNLog(logLevel: .error, message: "No context", atFunction: #function, inFile: #file)
 		}
 	}
 
 	public func setPenSize(width val: CGFloat) {
 		if let ctxt = mCoreContext {
 			let pwid = logicalToPhysical(width: val)
-			//NSLog("width = \(pwid)")
 			ctxt.setLineWidth(pwid)
 		} else {
-			NSLog("No context at \(#function)")
+			CNLog(logLevel: .error, message: "No context", atFunction: #function, inFile: #file)
 		}
 	}
 
 	public func move(to point: CGPoint) {
 		if let ctxt = mCoreContext {
 			let ppt = logicalToPhysical(point: point)
-			//NSLog("move = (\(point.x),\(point.y)) -> (\(ppt.x), \(ppt.y))")
 			ctxt.move(to: ppt)
 		}
 	}
@@ -94,7 +92,6 @@ public class CNGraphicsContext
 	public func line(to point: CGPoint) {
 		if let ctxt = mCoreContext {
 			let ppt = logicalToPhysical(point: point)
-			//NSLog("line = (\(point.x),\(point.y)) -> (\(ppt.x), \(ppt.y))")
 			ctxt.addLine(to: ppt)
 		}
 	}

@@ -115,7 +115,7 @@ public class CNEnvironment
 					result[key] = str
 				} else {
 					let desc = val.toText().toStrings(terminal: ",")
-					NSLog("Failed to convert value to string: \(desc)")
+					CNLog(logLevel: .error, message: "Failed to convert value to string: \(desc)", atFunction: #function, inFile: #file)
 				}
 			}
 			return result
@@ -182,7 +182,7 @@ public class CNEnvironment
 					if let str = elm.toString() {
 						result.append(str)
 					} else {
-						NSLog("Invalid array element")
+						CNLog(logLevel: .error, message: "Invalid array element", atFunction: #function, inFile: #file)
 					}
 				}
 				return result
@@ -216,7 +216,7 @@ public class CNEnvironment
 					}
 					arrstr += str
 				} else {
-					NSLog("Failed to convert to string: \(elm.toText().toStrings(terminal: ","))")
+					CNLog(logLevel: .error, message: "Failed to convert to string: \(elm.toText().toStrings(terminal: ","))", atFunction: #function, inFile: #file)
 				}
 			}
 			result = arrstr

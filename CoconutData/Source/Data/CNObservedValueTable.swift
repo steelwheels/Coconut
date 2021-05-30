@@ -32,7 +32,7 @@ public class CNObservedValueTable
 			if let result = Array(mValueTable.allKeys) as? Array<String> {
 				return result
 			} else {
-				NSLog("[Internal error] at \(#file)")
+				CNLog(logLevel: .error, message: "", atFunction: #function, inFile: #file)
 				return []
 			}
 		}

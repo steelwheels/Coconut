@@ -159,7 +159,7 @@ open class CNNativeValueTable
 			rec.setValue(at: cidx, value: val)
 			mMaxColumnCount = max(mMaxColumnCount, rec.count)
 		} else {
-			NSLog("Failed to set value at \(#function) in \(#file)")
+			CNLog(logLevel: .error, message: "Failed to set value", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -252,5 +252,17 @@ open class CNNativeValueTable
 		return .error(.tokenError(err))
 	}
 
+	public func toNativeValue() -> CNNativeValue {
+		var result: Array<CNNativeValue> = []
+		for ridx in 0..<mMaxRowCount {
+			var row: Array<CNNativeValue> = []
+			for cidx in 0..<mMaxColumnCount {
+				let val = value(column: cidx, row: ridx)
+				row.append(val)
+			}
+			result.append(.arrayValue(row))
+		}
+		return .arrayValue(result)
+	}
 }
 

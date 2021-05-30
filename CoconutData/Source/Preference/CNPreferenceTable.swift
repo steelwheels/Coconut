@@ -212,7 +212,7 @@ open class CNPreferenceTable
 				if let style = CNInterfaceStyle.decode(name: key), let col = CNColor.decode(fromData: value) {
 					result[style] = col
 				} else {
-					NSLog("\(#file): Unknown interface: \(key)")
+					CNLog(logLevel: .error, message: "Unknown interface: \(key)", atFunction: #function, inFile: #file)
 				}
 			}
 			return result

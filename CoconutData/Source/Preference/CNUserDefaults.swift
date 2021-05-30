@@ -69,7 +69,7 @@ extension UserDefaults
 		if let data = col.toData() {
 			set(data, forKey: key)
 		} else {
-			NSLog("\(#file): Failed to encode color")
+			CNLog(logLevel: .error, message: "Failed to encode color", atFunction: #function, inFile: #file)
 		}
 	}
 }

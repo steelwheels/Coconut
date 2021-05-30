@@ -659,7 +659,7 @@ END of process
 Process is terminated with exit code: 15
 testProcess .. OK
 * testCommandTable
-command counts: 1501
+command counts: 1503
 match-prefix: ls lsappinfo lsbom lskq lsm lsmp lsof lsvfs 
 * testEnvironment
 env("HOME") = nil
@@ -1404,6 +1404,29 @@ BitmapContents: {
 
   }
 }
+* testNativeValue
+source: {}
+result: {
+}
+source: []
+result: [
+]
+source: [10, 20]
+result: [
+  10
+  20
+]
+source: [[10, 20], ["a", "b"]]
+result: [
+  [
+    10
+    20
+  ]
+  [
+    "a"
+    "b"
+  ]
+]
 * testNativeValueTable
 * Initial table
 {
@@ -1452,4 +1475,19 @@ Source: {a: [10.0]}:
 }
 Title: [a]
  0: 10
+Source: [[10.0]]:
+{
+  row-count:    1
+  column-count: 1
+}
+Title: [_0]
+ 0: 10
+Source: [["a", 10.0], ["b", 20.0]]:
+{
+  row-count:    2
+  column-count: 2
+}
+Title: [_0][_1]
+ 0: "a", 10
+ 1: "b", 20
 [Result] NG

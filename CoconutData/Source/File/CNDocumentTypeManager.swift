@@ -30,22 +30,22 @@ public class CNDocumentTypeManager
 					collectTypeDeclaration(typeDeclaration: dict)
 				}
 			} else {
-				NSLog("Invalid description: \(decl)")
+				CNLog(logLevel: .error, message: "Invalid declaration: \(decl)", atFunction: #function, inFile: #file)
 			}
 		}
 	}
 
 	private func collectTypeDeclaration(typeDeclaration decl: Dictionary<String, AnyObject>){
 		guard let uti = decl["UTTypeIdentifier"] as? String else {
-			NSLog("No UTTypeIdentifier")
+			CNLog(logLevel: .error, message: "No UTTypeIdentifier", atFunction: #function, inFile: #file)
 			return
 		}
 		guard let tags = decl["UTTypeTagSpecification"] as? Dictionary<String, AnyObject> else {
-			NSLog("No UTTypeTagSpecification")
+			CNLog(logLevel: .error, message: "No UTTypeTagSpecification", atFunction: #function, inFile: #file)
 			return
 		}
 		guard let exts = tags["public.filename-extension"] as? Array<String> else {
-			NSLog("No public.filename-extension")
+			CNLog(logLevel: .error, message: "No public.filename-extension", atFunction: #function, inFile: #file)
 			return
 		}
 		mDocumentTypes[uti] = exts
@@ -63,7 +63,7 @@ public class CNDocumentTypeManager
 			if let exts = mDocumentTypes[uti] {
 				result.append(contentsOf: exts)
 			} else {
-				NSLog("Unknown UTI: \(uti)")
+				CNLog(logLevel: .error, message: "Unknown UTI: \(uti)", atFunction: #function, inFile: #file)
 			}
 		}
 		return result
