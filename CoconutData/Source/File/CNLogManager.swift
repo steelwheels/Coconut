@@ -11,28 +11,47 @@ public class CNLogManager
 {
 	public static var shared	= CNLogManager()
 
-	private var mConsole:	CNConsole
-	private var mLevel:	CNConfig.LogLevel
+	private var mConsole:		CNConsole
+	private var mConsoleStack:	CNStack<CNConsole>
 
 	private init(){
-		mConsole = CNDefaultConsole()
-		mLevel	 = .warning
+		mConsole 	= CNDefaultConsole()
+		mConsoleStack	= CNStack()
+	}
+
+	public var console: CNConsole {
+		get {
+			if let cons = mConsoleStack.peek() {
+				return cons
+			} else {
+				return mConsole
+			}
+		}
+	}
+
+	public func pushConsone(console cons: CNConsole){
+		mConsoleStack.push(cons)
+	}
+
+	public func popConsole(){
+		let _ = mConsoleStack.pop()
 	}
 
 	public func log(logLevel level: CNConfig.LogLevel, message msg: String){
 		let curlvl = CNPreference.shared.systemPreference.logLevel
+		let cons   = self.console
 		if curlvl.isIncluded(in: level) {
 			switch level {
 			case .nolog:
 				break
 			case .error:
-				mConsole.error(string: "[Error  ] " + msg)
+				cons.error(string: "[Error  ] " + msg)
 			case .warning:
-				mConsole.error(string: "[Warning] " + msg)
+				cons.error(string: "[Warning] " + msg)
 			case .debug:
-				mConsole.print(string: "[Debug  ] " + msg)
+				cons.print(string: "[Debug  ] " + msg)
 			case .detail:
-				mConsole.print(string: "[Message] " + msg)
+				cons.print(string: "[Message] " + msg)
 			}
 		}
 	}
