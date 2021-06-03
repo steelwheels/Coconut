@@ -20,34 +20,15 @@ class ViewController: NSViewController {
 	override func viewDidAppear() {
 		super.viewDidAppear()
 
-		CNExecuteInUserThread(level: .thread, execute: {
-			() -> Void in
-			let adbook = CNAddressBook()
-			adbook.read(callback: {
-				(_ status : CNAddressBook.ReadResult) -> Void in
-				switch status {
-				case .table(let table):
-					NSLog("Table: \(table.records.count)")
-				case .error(let err):
-					NSLog("[Error] \(err.toString())")
-				}
-			})
-
-/*
-			adbook.startAuthorization()
-			while adbook.status == .notDetermined {
-				/* wait */
+		let adbook = CNAddressBook()
+		adbook.checkAccessibility(callback: {
+			(_ result: CNAddressBook.AutorizedStatus) -> Void in
+			switch result {
+			case .authorized:
+				NSLog("AddressBook ... authorized")
+			case .denied(let err):
+				NSLog("AddressBook ... denied: \(err.description)")
 			}
-			switch adbook.status {
-
-			}*/
-			/*
-			switch adbook.read() {
-			case .table(let table):
-				NSLog("read ... done: \(table.records.count)")
-			case .error(let err):
-				NSLog("read ... failed: \(err.toString())")
-			}*/
 		})
 	}
 

@@ -3,11 +3,51 @@
  * @brief	Define CNAddressBook class
  * @par Copyright
  *   Copyright (C) 2021Steel Wheels Project
+ * @reference
+* *     - https://qiita.com/kato-i-l/items/0d79e8dcbc15541a5b0f
  */
 
 import CoconutData
 import Contacts
 import Foundation
+
+
+public class CNAddressBook
+{
+	public init(){
+		
+	}
+
+	public enum AutorizedStatus {
+		case authorized
+		case denied(NSError)
+	}
+
+	public func checkAccessibility(callback cbfunc: @escaping (_ result: AutorizedStatus) -> Void) {
+		let status = CNContactStore.authorizationStatus(for: .contacts)
+		switch status {
+		case .authorized:
+			cbfunc(.authorized)
+		case .denied:
+			let err = NSError.fileError(message: "Access denied")
+			cbfunc(.denied(err))
+		case .notDetermined, .restricted:
+			let store = CNContactStore()
+			store.requestAccess(for: .contacts, completionHandler: {
+				(_ granted: Bool, _ error: Error?) -> Void in
+				if granted {
+					cbfunc(.authorized)
+				} else {
+					let err = NSError.fileError(message: "Access denied")
+					cbfunc(.denied(err))
+				}
+			})
+		@unknown default:
+			let err = NSError.fileError(message: "Unknown error")
+			cbfunc(.denied(err))
+		}
+	}
+}
 
 /*
 public class CNAddressRecord: CNDataRecord

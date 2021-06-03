@@ -40,29 +40,41 @@ public func testNativeValueTable(console cons: CNConsole) -> Bool
 
 	/* loadfunction */
 	cons.print(string: "* Load test\n")
-	if !loadTest(source: "{a: [10.0]}", console: cons) {
+	let text0 =     "{\n"
+		      + " headers: [\"t0\", \"t1\", \"t2\"],\n"
+		      + " data: [\n"
+		      + "  [1, 2, 3],\n"
+		      + "  [4, 5, 6]\n"
+		      + " ]\n"
+		      + "}"
+	if !loadTest(source: text0, console: cons) {
 		result = false
 	}
-	if !loadTest(source: "[[10.0]]", console: cons) {
+
+	let text1 =    "[\n"
+		     + " {a:10, b:20, c: 30},\n"
+		     + " {a:40, b:50, d: 60}\n"
+		     + "]\n"
+	if !loadTest(source: text1, console: cons) {
 		result = false
 	}
-	if !loadTest(source: "[[\"a\", 10.0], [\"b\", 20.0]]", console: cons) {
-		result = false
-	}
+	//if !loadTest(source: "[[\"a\", 10.0], [\"b\", 20.0]]", console: cons) {
+	//	result = false
+	//}
 
 	return result
 }
 
 private func loadTest(source src: String, console cons: CNConsole) -> Bool {
-	let tbl = CNNativeValueTable()
+	let newtable = CNNativeValueTable()
 	let result: Bool
-	switch tbl.load(source: src) {
+	switch newtable.load(source: src) {
 	case .ok:
 		cons.print(string: "Source: \(src):\n")
-		printTable(table: tbl, console: cons)
+		printTable(table: newtable, console: cons)
 		result = true
-	default:
-		cons.print(string: "Parse error\n")
+	case .error(let err):
+		cons.print(string: "Parse error: \(err.description)\n")
 		result = false
 	}
 	return result

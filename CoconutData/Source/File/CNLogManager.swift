@@ -45,13 +45,13 @@ public class CNLogManager
 			case .nolog:
 				break
 			case .error:
-				cons.error(string: "[Error  ] " + msg)
+				cons.error(string: "[Error  ] " + msg + "\n")
 			case .warning:
-				cons.error(string: "[Warning] " + msg)
+				cons.error(string: "[Warning] " + msg + "\n")
 			case .debug:
-				cons.print(string: "[Debug  ] " + msg)
+				cons.print(string: "[Debug  ] " + msg + "\n")
 			case .detail:
-				cons.print(string: "[Message] " + msg)
+				cons.print(string: "[Message] " + msg + "\n")
 			}
 		}
 	}

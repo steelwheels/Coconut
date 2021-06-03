@@ -69,7 +69,7 @@ public class CNAppleEventManager
 			let termpref = CNPreference.shared.terminalPreference
 			return NSNumber(integerLiteral: termpref.width)
 		default:
-			CNLog(logLevel: .error, message: "[Error] Can not get property named: \(key)")
+			CNLog(logLevel: .detail, message: "Unsupported property is required: \(key)")
 		}
 		return nil
 	}

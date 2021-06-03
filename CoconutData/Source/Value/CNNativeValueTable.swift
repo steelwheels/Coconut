@@ -92,6 +92,7 @@ open class CNNativeValueTable
 	private var mMaxRowCount:	Int
 	private var mMaxColumnCount:	Int
 
+	public var titleCount:	Int { get { return mTitles.count	}}
 	public var rowCount:    Int { get { return mMaxRowCount		}}
 	public var columnCount: Int { get { return mMaxColumnCount	}}
 
@@ -107,6 +108,13 @@ open class CNNativeValueTable
 		self.mRecords		= vtable.mRecords
 		self.mMaxRowCount	= vtable.mMaxRowCount
 		self.mMaxColumnCount	= vtable.mMaxColumnCount
+	}
+
+	public func reset() {
+		mTitles		= CNNativeValueTitles()
+		mRecords	= []
+		mMaxRowCount	= 0
+		mMaxColumnCount	= 0
 	}
 
 	public func title(column cidx: Int) -> String {
@@ -188,68 +196,111 @@ open class CNNativeValueTable
 		}
 	}
 
-	private func load(nativeValue nvalue: CNNativeValue) -> LoadResult {
-		/* Reset current content */
-		mTitles		= CNNativeValueTitles()
-		mRecords	= []
-		mMaxRowCount	= 0
-		mMaxColumnCount	= 0
-
+	public func load(nativeValue nvalue: CNNativeValue) -> LoadResult {
 		switch nvalue {
-		case .arrayValue(let arr0):
-			var haserr	= false
-			var rowidx	= 0
-			for val in arr0	 {
-				switch val {
-				case .arrayValue(let arr1):
-					var colidx: Int = 0
-					for elm in arr1 {
-						setValue(column: colidx, row: rowidx, value: elm)
-						colidx += 1
-					}
-				case .stringValue(_), .numberValue(_):
-					setValue(column: 0, row: rowidx, value: val)
-				default:
-					haserr = true
-				}
-				if haserr {
-					break
-				}
-				rowidx += 1
-			}
-			if !haserr {
-				return .ok
-			}
-		case .dictionaryValue(let dict0):
-			var haserr	= false
-			var colidx	= 0
-			for (key, val) in dict0	 {
-				switch val {
-				case .arrayValue(let arr0):
-					var rowidx: Int = 0
-					for elm in arr0 {
-						setTitle(column: colidx, title: key)
-						setValue(title: key, row: rowidx, value: elm)
-						rowidx += 1
-					}
-				case .stringValue(_), .numberValue(_):
-					setValue(title: key, row: 0, value: val)
-				default:
-					haserr = true
-				}
-				if haserr {
-					break
-				}
-				colidx += 1
-			}
-			if !haserr {
-				return .ok
-			}
+		case .dictionaryValue(let dict):
+			return load(dictionaryValue: dict)
+		case .arrayValue(let arr):
+			return load(arrayValue: arr)
 		default:
-			break
+			let err = CNParseError.ParseError(0, "Not table format")
+			return .error(.tokenError(err))
 		}
-		let err = CNParseError.ParseError(0, "Not 2D array format")
-		return .error(.tokenError(err))
+	}
+
+	private func load(dictionaryValue nvalue: Dictionary<String, CNNativeValue>) -> LoadResult {
+		/* Reset content */
+		self.reset()
+
+		if let hdrval = nvalue["headers"] {
+			switch hdrval {
+			case .arrayValue(let arr):
+				var index: Int = 0
+				for titleval in arr {
+					if let title = decodeTitle(value: titleval) {
+						if let _ = self.titleIndex(by: title) {
+							/* Already defined */
+							let err = CNParseError.ParseError(0, "Multi defined column name: \(title)")
+							return .error(.tokenError(err))
+						} else {
+							self.setTitle(column: index, title: title)
+						}
+					}
+					index += 1
+				}
+			default:
+				let err = CNParseError.ParseError(0, "Array of column titles are require")
+				return .error(.tokenError(err))
+			}
+		}
+		if let dataval = nvalue["data"] {
+			switch dataval {
+			case .arrayValue(let arr0):
+				var ridx: Int = 0
+				for rowval in arr0 {
+					switch rowval {
+					case .arrayValue(let arr1):
+						var cidx: Int = 0
+						for col in arr1 {
+							self.setValue(column: cidx, row: ridx, value: col)
+							cidx += 1
+						}
+					default:
+						let err = CNParseError.ParseError(0, "Not array data in the row \(ridx) in \"data\" section")
+						return .error(.tokenError(err))
+					}
+					ridx += 1
+				}
+			default:
+				let err = CNParseError.ParseError(0, "Not array data in \"data\" section")
+				return .error(.tokenError(err))
+			}
+		} else {
+			let err = CNParseError.ParseError(0, "No data section")
+			return .error(.tokenError(err))
+		}
+		return .ok
+	}
+
+	private func load(arrayValue nvalue: Array<CNNativeValue>) -> LoadResult {
+		/* Reset content */
+		self.reset()
+
+		var ridx: Int = 0
+		for val in nvalue {
+			switch val {
+			case .dictionaryValue(let dict):
+				for (key, val) in dict {
+					/* Set column title */
+					if let _ = self.titleIndex(by: key) {
+						/* Already exist */
+					} else {
+						self.setTitle(column: self.titleCount, title: key)
+					}
+					/* Set value */
+					self.setValue(title: key, row: ridx, value: val)
+				}
+			default:
+				let err = CNParseError.ParseError(0, "Object data is required")
+				return .error(.tokenError(err))
+			}
+			/* Update row index */
+			ridx += 1
+		}
+		return .ok
+	}
+
+	private func decodeTitle(value val: CNNativeValue) -> String? {
+		let result: String?
+		switch val {
+		case .stringValue(let str):
+			result = str
+		case .nullValue:
+			result = nil
+		default:
+			result = val.toString()
+		}
+		return result
 	}
 
 	public func toNativeValue() -> CNNativeValue {
