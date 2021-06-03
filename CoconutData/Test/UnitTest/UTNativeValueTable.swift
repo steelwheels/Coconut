@@ -82,31 +82,10 @@ private func loadTest(source src: String, console cons: CNConsole) -> Bool {
 
 private func printTable(table tbl: CNNativeValueTable, console cons: CNConsole)
 {
-	let rowcnt = tbl.rowCount
-	let colcnt = tbl.columnCount
-	cons.print(string:   "{\n"
-			   + "  row-count:    \(rowcnt)\n"
-			   + "  column-count: \(colcnt)\n"
-			   + "}\n")
-	cons.print(string: "Title: ")
-	for col in 0..<colcnt {
-		let title = tbl.title(column: col)
-		cons.print(string: "[\(title)]")
-	}
-	cons.print(string: "\n")
-
-	for row in 0..<rowcnt {
-		cons.print(string: " \(row): ")
-		for col in 0..<colcnt {
-			if col > 0 {
-				cons.print(string: ", ")
-			}
-			let val = tbl.value(column: col, row: row)
-			let valstr = val.toText().toStrings(terminal: "").joined(separator: "\n")
-			cons.print(string: valstr)
-		}
-		cons.print(string: "\n")
-	}
-
+	let value = tbl.toNativeValue(format: tbl.format)
+	let text  = value.toText().toStrings(terminal: "").joined(separator: "\n")
+	cons.print(string: "-----\n")
+	cons.print(string: text)
+	cons.print(string: "\n-----\n")
 }
 

@@ -87,16 +87,24 @@ private class CNNativeValueRecord
 
 open class CNNativeValueTable
 {
+	public enum Format {
+	case unknown
+	case sheet
+	case records
+	}
+
 	private var mTitles:		CNNativeValueTitles
 	private var mRecords:		Array<CNNativeValueRecord>
 	private var mMaxRowCount:	Int
 	private var mMaxColumnCount:	Int
 
+	public var format:	Format
 	public var titleCount:	Int { get { return mTitles.count	}}
 	public var rowCount:    Int { get { return mMaxRowCount		}}
 	public var columnCount: Int { get { return mMaxColumnCount	}}
 
 	public init(){
+		format		= .unknown
 		mTitles		= CNNativeValueTitles()
 		mRecords	= []
 		mMaxRowCount	= 0
@@ -104,6 +112,7 @@ open class CNNativeValueTable
 	}
 
 	public func copy(from vtable: CNNativeValueTable){
+		self.format 		= vtable.format
 		self.mTitles.copy(from: vtable.mTitles)
 		self.mRecords		= vtable.mRecords
 		self.mMaxRowCount	= vtable.mMaxRowCount
@@ -111,6 +120,7 @@ open class CNNativeValueTable
 	}
 
 	public func reset() {
+		format 		= .unknown
 		mTitles		= CNNativeValueTitles()
 		mRecords	= []
 		mMaxRowCount	= 0
@@ -208,11 +218,16 @@ open class CNNativeValueTable
 		}
 	}
 
+	public static let HEADER_PROPERTY = "headers"
+	public static let DATA_PROPERTY   = "data"
+
 	private func load(dictionaryValue nvalue: Dictionary<String, CNNativeValue>) -> LoadResult {
 		/* Reset content */
 		self.reset()
+		/* Set format */
+		self.format = .sheet
 
-		if let hdrval = nvalue["headers"] {
+		if let hdrval = nvalue[CNNativeValueTable.HEADER_PROPERTY] {
 			switch hdrval {
 			case .arrayValue(let arr):
 				var index: Int = 0
@@ -233,7 +248,7 @@ open class CNNativeValueTable
 				return .error(.tokenError(err))
 			}
 		}
-		if let dataval = nvalue["data"] {
+		if let dataval = nvalue[CNNativeValueTable.DATA_PROPERTY] {
 			switch dataval {
 			case .arrayValue(let arr0):
 				var ridx: Int = 0
@@ -265,6 +280,8 @@ open class CNNativeValueTable
 	private func load(arrayValue nvalue: Array<CNNativeValue>) -> LoadResult {
 		/* Reset content */
 		self.reset()
+		/* Set format */
+		self.format = .records
 
 		var ridx: Int = 0
 		for val in nvalue {
@@ -303,15 +320,56 @@ open class CNNativeValueTable
 		return result
 	}
 
-	public func toNativeValue() -> CNNativeValue {
-		var result: Array<CNNativeValue> = []
-		for ridx in 0..<mMaxRowCount {
-			var row: Array<CNNativeValue> = []
-			for cidx in 0..<mMaxColumnCount {
-				let val = value(column: cidx, row: ridx)
-				row.append(val)
+	public func toNativeValue(format form: Format) -> CNNativeValue {
+		switch form {
+		case .unknown, .sheet:
+			return toSheetValue()
+		case .records:
+			return toRecordValue()
+		}
+
+	}
+
+	private func toSheetValue() -> CNNativeValue {
+		/* Make title array */
+		var titlevals: Array<CNNativeValue> = []
+		for i in 0..<mTitles.count {
+			if let str = mTitles.title(at: i) {
+				titlevals.append(.stringValue(str))
 			}
-			result.append(.arrayValue(row))
+		}
+
+		/* Make data array */
+		var datavals: Array<CNNativeValue> = []
+		for ridx in 0..<self.rowCount {
+			var rowvals: Array<CNNativeValue> = []
+			for cidx in 0..<self.columnCount {
+				let val = self.value(column: cidx, row: ridx)
+				rowvals.append(val)
+			}
+			datavals.append(.arrayValue(rowvals))
+		}
+		var result: Dictionary<String, CNNativeValue> = [:]
+		result[CNNativeValueTable.HEADER_PROPERTY] = .arrayValue(titlevals)
+		result[CNNativeValueTable.DATA_PROPERTY]   = .arrayValue(datavals)
+		return .dictionaryValue(result)
+	}
+
+	private func toRecordValue() -> CNNativeValue {
+		var result: Array<CNNativeValue> = []
+		for ridx in 0..<self.rowCount {
+			var record: Dictionary<String, CNNativeValue> = [:]
+			for cidx in 0..<self.columnCount {
+				let title = self.title(column: cidx)
+				let val   = self.value(title: title, row: ridx)
+				switch val {
+				case .nullValue:
+					break // ignore null data
+				default:
+					record[title] = val
+				}
+			}
+			result.append(.dictionaryValue(record))
 		}
 		return .arrayValue(result)
 	}
