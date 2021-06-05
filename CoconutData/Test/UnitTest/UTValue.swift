@@ -43,6 +43,6 @@ private func testNativeValue2(console cons: CNConsole) -> Bool
 
 private func dumpValue(value val: CNNativeValue, console cons: CNConsole) {
 	let typestr = val.valueType.toString()
-	let valstr  = val.toText().toStrings(terminal: "").joined()
+	let valstr  = val.toText().toStrings().joined(separator: "\n")
 	cons.print(string: "nativeValue: type=\(typestr), value=\(valstr)\n")
 }

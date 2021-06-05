@@ -38,7 +38,7 @@ public class CNNativeValueFile {
 
 	public class func writeFile(URL url: URL, nativeValue val: CNNativeValue) -> NSError? {
 		do {
-			let lines = val.toText().toStrings(terminal: ",")
+			let lines = val.toText().toStrings()
 			let line  = lines.joined(separator: "\n")
 			if let data  = line.data(using: .utf8) {
 				try data.write(to: url)

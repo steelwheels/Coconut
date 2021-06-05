@@ -83,7 +83,7 @@ private func loadTest(source src: String, console cons: CNConsole) -> Bool {
 private func printTable(table tbl: CNNativeValueTable, console cons: CNConsole)
 {
 	let value = tbl.toNativeValue()
-	let text  = value.toText().toStrings(terminal: "").joined(separator: "\n")
+	let text  = value.toText().toStrings().joined(separator: "\n")
 	cons.print(string: "-----\n")
 	cons.print(string: text)
 	cons.print(string: "\n-----\n")

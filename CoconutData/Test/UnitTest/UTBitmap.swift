@@ -39,7 +39,8 @@ public func testBitmap(console cons: CNConsole) -> Bool
 private func dump(bitmap bm: CNBitmapData, console cons: CNConsole)
 {
 	let text = bm.toText()
-	text.print(console: cons, terminal: "")
+	let str  = text.toStrings().joined(separator: "\n")
+	cons.print(string: str + "\n")
 }
 
 

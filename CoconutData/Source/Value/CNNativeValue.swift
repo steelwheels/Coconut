@@ -381,15 +381,14 @@ public enum CNNativeValue {
 			for key in keys {
 				if let elm = val[key] {
 					let elmtxt = elm.toText()
-					if let elmline = elmtxt as? CNTextLine {
-						elmline.prepend(string: key + ": ")
-						sect.add(text: elmline)
+					if let sectxt = elmtxt as? CNTextSection {
+						sectxt.header = key + ": " + sectxt.header
 					} else {
-						sect.add(string: key + ": ")
-						sect.add(text: elmtxt)
+						elmtxt.prepend(string: key + ": ")
 					}
+					sect.add(text: elmtxt)
 				} else {
-					CNLog(logLevel: .error, message: "No object", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "No object for key: \(key)", atFunction: #function, inFile: #file)
 					sect.add(text: CNTextLine(string: "?"))
 				}
 			}

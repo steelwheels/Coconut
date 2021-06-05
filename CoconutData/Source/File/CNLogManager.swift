@@ -79,6 +79,6 @@ public func CNLog(logLevel level: CNConfig.LogLevel, messages msgs: Array<String
 
 public func CNLog(logLevel level: CNConfig.LogLevel, text txt: CNText)
 {
-	let lines = txt.toStrings(terminal: "")
+	let lines = txt.toStrings()
 	CNLog(logLevel: level, messages: lines)
 }
