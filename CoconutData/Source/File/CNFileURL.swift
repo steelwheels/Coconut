@@ -65,7 +65,13 @@ public extension URL
 		}
 	}
 
-	static func savePanel(title tl: String, outputDirectory outdir: URL?, callback cbfunc: @escaping ((_: URL?) -> Void))
+	static func savePanel(title tl: String, outputDirectory outdir: URL?, callback cbfunc: @escaping ((_: URL?) -> Void)) {
+		CNExecuteInMainThread(doSync: false, execute: {
+			self.savePanelMain(title: tl, outputDirectory: outdir, callback: cbfunc)
+		})
+	}
+
+	private static func savePanelMain(title tl: String, outputDirectory outdir: URL?, callback cbfunc: @escaping ((_: URL?) -> Void))
 	{
 		let panel = NSSavePanel()
 		panel.title = tl
@@ -77,20 +83,10 @@ public extension URL
 		switch panel.runModal() {
 		case .OK:
 			if let newurl = panel.url {
-				/* Bookmark this folder */
-				let dirname = newurl.deletingLastPathComponent()
-				switch FileManager.default.checkFileType(pathString: dirname.path) {
-				case .Directory:
-					/* Add the directory to bookmark */
+				if FileManager.default.fileExists(atURL: newurl) {
+					/* Bookmark this URL */
 					let preference = CNPreference.shared.bookmarkPreference
-					preference.add(URL: dirname)
-					CNLog(logLevel: .detail, message: "File is bookmarked", atFunction: #function, inFile: #file)
-				case .File:
-					CNLog(logLevel: .warning, message: "File is NOT bookmarked: \(dirname.path)", atFunction: #function, inFile: #file)
-					break
-				case .NotExist:
-					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-					break
+					preference.add(URL: newurl)
 				}
 				cbfunc(newurl)
 			} else {
@@ -106,20 +102,31 @@ public extension URL
 #endif
 
 	func loadContents() -> NSString? {
-		var resstr: NSString? = nil
+		var resstr: NSString?
 		let issecure = startAccessingSecurityScopedResource()
 		do {
 			resstr = try NSString(contentsOf: self, encoding: String.Encoding.utf8.rawValue)
-			if resstr == nil {
-				return nil
-			}
 		} catch {
-			return nil
+			resstr = nil
 		}
 		if issecure {
 			stopAccessingSecurityScopedResource()
 		}
 		return resstr
+	}
+
+	func storeContents(contents str: String) -> Bool {
+		var result = true
+		let issecure = startAccessingSecurityScopedResource()
+		do {
+			try str.write(toFile: self.path, atomically: false, encoding: .utf8)
+		} catch {
+			result = false
+		}
+		if issecure {
+			stopAccessingSecurityScopedResource()
+		}
+		return result
 	}
 }
 
