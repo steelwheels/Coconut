@@ -17,17 +17,17 @@ public func testNativeValueTable(console cons: CNConsole) -> Bool
 	printTable(table: table, console: cons)
 
 	cons.print(string: "* Add 1st item\n")
-	table.setValue(column: 0, row: 0, value: .stringValue("0/0"))
+	table.setValue(columnIndex: .number(0), row: 0, value: .stringValue("0/0"))
 	printTable(table: table, console: cons)
 
 	cons.print(string: "* Add 2nd item\n")
-	table.setValue(column: 1, row: 1, value: .stringValue("1/1"))
+	table.setValue(columnIndex: .number(1), row: 1, value: .stringValue("1/1"))
 	printTable(table: table, console: cons)
 
 	cons.print(string: "* Set 5x3 item\n")
 	for col in 0..<5 {
 		for row in 0..<3 {
-			table.setValue(column: col, row: row, value: .stringValue("\(col)/\(row)"))
+			table.setValue(columnIndex: .number(col), row: row, value: .stringValue("\(col)/\(row)"))
 		}
 	}
 	printTable(table: table, console: cons)

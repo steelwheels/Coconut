@@ -92,6 +92,11 @@ open class CNNativeValueTable
 	case records
 	}
 
+	public enum ColumnIndex {
+		case 	number(Int)
+		case	title(String)
+	}
+
 	private var mTitles:		CNNativeValueTitles
 	private var mFormat:		Format
 	private var mHasHeader:		Bool
@@ -151,7 +156,20 @@ open class CNNativeValueTable
 		return mTitles.index(by: name)
 	}
 
-	public func value(column cidx: Int, row ridx: Int) -> CNNativeValue {
+	public func value(columnIndex cidx: ColumnIndex, row ridx: Int) -> CNNativeValue {
+		switch cidx {
+		case .number(let num):
+			return value(column: num, row: ridx)
+		case .title(let str):
+			if let num = titleIndex(by: str) {
+				return value(column: num, row: ridx)
+			} else {
+				return .nullValue
+			}
+		}
+	}
+
+	private func value(column cidx: Int, row ridx: Int) -> CNNativeValue {
 		if 0<=ridx && ridx<mRecords.count {
 			return mRecords[ridx].value(at: cidx)
 		} else {
@@ -159,31 +177,24 @@ open class CNNativeValueTable
 		}
 	}
 
-	public func value(title ttl: String, row ridx: Int) -> CNNativeValue {
-		if let cidx = titleIndex(by: ttl) {
-			if 0<=ridx && ridx<mRecords.count {
-				return mRecords[ridx].value(at: cidx)
+	public func setValue(columnIndex cidx: ColumnIndex, row ridx: Int, value val: CNNativeValue){
+		switch cidx {
+		case .number(let num):
+			setValue(column: num, row: ridx, value: val)
+		case .title(let str):
+			if let num = titleIndex(by: str) {
+				setValue(column: num, row: ridx, value: val)
+			} else {
+				CNLog(logLevel: .error, message: "Failed to set value", atFunction: #function, inFile: #file)
 			}
 		}
-		return .nullValue
 	}
 
-	public func setValue(column cidx: Int, row ridx: Int, value val: CNNativeValue) {
+	private func setValue(column cidx: Int, row ridx: Int, value val: CNNativeValue) {
 		expandRows(size: ridx + 1)
 		let rec = mRecords[ridx]
 		rec.setValue(at: cidx, value: val)
 		mMaxColumnCount = max(mMaxColumnCount, rec.count)
-	}
-
-	public func setValue(title ttl: String, row ridx: Int, value val: CNNativeValue) {
-		if let cidx = titleIndex(by: ttl) {
-			expandRows(size: ridx + 1)
-			let rec = mRecords[ridx]
-			rec.setValue(at: cidx, value: val)
-			mMaxColumnCount = max(mMaxColumnCount, rec.count)
-		} else {
-			CNLog(logLevel: .error, message: "Failed to set value", atFunction: #function, inFile: #file)
-		}
 	}
 
 	private func expandRows(size sz: Int){
@@ -304,7 +315,7 @@ open class CNNativeValueTable
 						self.setTitle(column: self.titleCount, title: key)
 					}
 					/* Set value */
-					self.setValue(title: key, row: ridx, value: val)
+					self.setValue(columnIndex: .title(key), row: ridx, value: val)
 				}
 			default:
 				let err = CNParseError.ParseError(0, "Object data is required")
@@ -370,7 +381,7 @@ open class CNNativeValueTable
 			var record: Dictionary<String, CNNativeValue> = [:]
 			for cidx in 0..<self.columnCount {
 				let title = self.title(column: cidx)
-				let val   = self.value(title: title, row: ridx)
+				let val   = self.value(columnIndex: .title(title), row: ridx)
 				switch val {
 				case .nullValue:
 					break // ignore null data
