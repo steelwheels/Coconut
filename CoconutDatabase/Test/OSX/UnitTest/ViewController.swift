@@ -9,7 +9,9 @@ import CoconutData
 import CoconutDatabase
 import Cocoa
 
-class ViewController: NSViewController {
+class ViewController: NSViewController
+{
+	private var mAddressBook:	CNAddressBook = CNAddressBook()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -20,16 +22,24 @@ class ViewController: NSViewController {
 	override func viewDidAppear() {
 		super.viewDidAppear()
 
-		let adbook = CNAddressBook()
-		adbook.checkAccessibility(callback: {
+		mAddressBook.checkAccessibility(callback: {
 			(_ result: CNAddressBook.AutorizedStatus) -> Void in
 			switch result {
 			case .authorized:
 				NSLog("AddressBook ... authorized")
-			case .denied(let err):
-				NSLog("AddressBook ... denied: \(err.description)")
+			case .denied:
+				NSLog("AddressBook ... denied")
 			}
 		})
+
+		switch mAddressBook.readContent() {
+		case .table(let table):
+			let txt = table.toText().toStrings().joined(separator: "\n")
+			NSLog("table = \(txt)")
+		case .error(let err):
+			NSLog("error = \(err.description)")
+		}
+
 	}
 
 	override var representedObject: Any? {

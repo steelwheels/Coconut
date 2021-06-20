@@ -21,10 +21,6 @@
 		059226BE264584610083E304 /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05F21E2E264295AD00B195E9 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		059226C22645848E0083E304 /* CoconutDatabase.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C20D132642A3070021FC02 /* CoconutDatabase.xcframework */; };
 		059226C32645848E0083E304 /* CoconutDatabase.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C20D132642A3070021FC02 /* CoconutDatabase.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		05EDD28F264417A800767743 /* CNDataRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDD28E264417A800767743 /* CNDataRecord.swift */; };
-		05EDD290264417A800767743 /* CNDataRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDD28E264417A800767743 /* CNDataRecord.swift */; };
-		05EDD29826441BA300767743 /* CNDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDD29726441BA300767743 /* CNDataTable.swift */; };
-		05EDD29926441BA300767743 /* CNDataTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05EDD29726441BA300767743 /* CNDataTable.swift */; };
 		05EDD29F2644243600767743 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EDD29E2644243600767743 /* Contacts.framework */; };
 		05F21E2F264295AD00B195E9 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F21E2E264295AD00B195E9 /* CoconutData.xcframework */; };
 		05F21E30264295AD00B195E9 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F21E2E264295AD00B195E9 /* CoconutData.xcframework */; };
@@ -78,7 +74,7 @@
 		0505AB5D25163DF40005CFC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0505AB6425163E1D0005CFC4 /* CNAddressBook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNAddressBook.swift; sourceTree = "<group>"; };
 		0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoconutDatabase.h; sourceTree = "<group>"; };
-		059226A226457EE90083E304 /* UnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		059226A226457EE90083E304 /* UTAddressBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UTAddressBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		059226A426457EE90083E304 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		059226A626457EE90083E304 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		059226A826457EEA0083E304 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -86,8 +82,6 @@
 		059226AD26457EEA0083E304 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		059226AE26457EEA0083E304 /* UnitTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UnitTest.entitlements; sourceTree = "<group>"; };
 		05C20D132642A3070021FC02 /* CoconutDatabase.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutDatabase.xcframework; path = ../../../../Library/Frameworks/CoconutDatabase.xcframework; sourceTree = "<group>"; };
-		05EDD28E264417A800767743 /* CNDataRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDataRecord.swift; sourceTree = "<group>"; };
-		05EDD29726441BA300767743 /* CNDataTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDataTable.swift; sourceTree = "<group>"; };
 		05EDD29E2644243600767743 /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
 		05F21E2E264295AD00B195E9 /* CoconutData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutData.xcframework; path = ../../../../Library/Frameworks/CoconutData.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,7 +121,7 @@
 			children = (
 				0505AB4A25163D980005CFC4 /* CoconutDatabase.framework */,
 				0505AB5A25163DF40005CFC4 /* CoconutDatabase.framework */,
-				059226A226457EE90083E304 /* UnitTest.app */,
+				059226A226457EE90083E304 /* UTAddressBook.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,8 +140,6 @@
 			children = (
 				0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */,
 				0505AB6425163E1D0005CFC4 /* CNAddressBook.swift */,
-				05EDD28E264417A800767743 /* CNDataRecord.swift */,
-				05EDD29726441BA300767743 /* CNDataTable.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -293,9 +285,9 @@
 			productReference = 0505AB5A25163DF40005CFC4 /* CoconutDatabase.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		059226A126457EE90083E304 /* UnitTest */ = {
+		059226A126457EE90083E304 /* UTAddressBook */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 059226B126457EEA0083E304 /* Build configuration list for PBXNativeTarget "UnitTest" */;
+			buildConfigurationList = 059226B126457EEA0083E304 /* Build configuration list for PBXNativeTarget "UTAddressBook" */;
 			buildPhases = (
 				0592269E26457EE90083E304 /* Sources */,
 				0592269F26457EE90083E304 /* Frameworks */,
@@ -307,9 +299,9 @@
 			dependencies = (
 				059226B626457EFD0083E304 /* PBXTargetDependency */,
 			);
-			name = UnitTest;
+			name = UTAddressBook;
 			productName = UnitTest;
-			productReference = 059226A226457EE90083E304 /* UnitTest.app */;
+			productReference = 059226A226457EE90083E304 /* UTAddressBook.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -353,7 +345,7 @@
 				0505AB4925163D980005CFC4 /* CoconutDatabase_macOS */,
 				0505AB5925163DF40005CFC4 /* CoconutDatabase_iOS */,
 				0505AB7725163F6F0005CFC4 /* Install */,
-				059226A126457EE90083E304 /* UnitTest */,
+				059226A126457EE90083E304 /* UTAddressBook */,
 			);
 		};
 /* End PBXProject section */
@@ -390,8 +382,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0505AB6625163E1D0005CFC4 /* CNAddressBook.swift in Sources */,
-				05EDD29826441BA300767743 /* CNDataTable.swift in Sources */,
-				05EDD28F264417A800767743 /* CNDataRecord.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,8 +390,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0505AB6725163E1D0005CFC4 /* CNAddressBook.swift in Sources */,
-				05EDD29926441BA300767743 /* CNDataTable.swift in Sources */,
-				05EDD290264417A800767743 /* CNDataRecord.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,8 +467,8 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -564,8 +552,8 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -643,6 +631,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -682,6 +671,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutDatabase-iOS";
 				PRODUCT_NAME = CoconutDatabase;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				SUPPORTS_MACCATALYST = NO;
@@ -727,6 +717,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -760,6 +751,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutDatabase-iOS";
 				PRODUCT_NAME = CoconutDatabase;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				SUPPORTS_MACCATALYST = NO;
@@ -934,12 +926,12 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UnitTest;
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutDatabase.UTAddressBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -981,7 +973,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UnitTest;
+				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.CoconutDatabase.UTAddressBook;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -1087,7 +1079,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		059226B126457EEA0083E304 /* Build configuration list for PBXNativeTarget "UnitTest" */ = {
+		059226B126457EEA0083E304 /* Build configuration list for PBXNativeTarget "UTAddressBook" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				059226AF26457EEA0083E304 /* Debug */,

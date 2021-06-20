@@ -7,51 +7,6 @@
 
 import Foundation
 
-private class CNNativeValueTitles
-{
-	private var mTitles:		Array<String?>
-	private var mDictionary:	Dictionary<String, Int>
-
-	public var count: Int { get { return mTitles.count }}
-
-	public init(){
-		mTitles     = []
-		mDictionary = [:]
-	}
-
-	public func copy(from titles: CNNativeValueTitles){
-		mTitles		= titles.mTitles
-		mDictionary	= titles.mDictionary
-	}
-
-	public func title(at idx: Int) -> String? {
-		if 0<=idx && idx<mTitles.count {
-			return mTitles[idx]
-		} else {
-			return nil
-		}
-	}
-
-	public func index(by title: String) -> Int? {
-		return mDictionary[title]
-	}
-
-	public func setTitle(at idx: Int, title str: String) {
-		expand(size: idx + 1)
-		mTitles[idx] = str
-		mDictionary[str] = idx
-	}
-
-	private func expand(size sz: Int){
-		let diff = sz - mTitles.count
-		if diff > 0 {
-			for _ in 0..<diff {
-				mTitles.append(nil)
-			}
-		}
-	}
-}
-
 private class CNNativeValueRecord
 {
 	private var mValues:	Array<CNNativeValue>
@@ -97,7 +52,7 @@ open class CNNativeValueTable
 		case	title(String)
 	}
 
-	private var mTitles:		CNNativeValueTitles
+	private var mTitles:		Dictionary<String, Int>
 	private var mFormat:		Format
 	private var mHasHeader:		Bool
 	private var mRecords:		Array<CNNativeValueRecord>
@@ -113,7 +68,7 @@ open class CNNativeValueTable
 	public init(){
 		mFormat		= .sheet
 		mHasHeader	= false
-		mTitles		= CNNativeValueTitles()
+		mTitles		= [:]
 		mRecords	= []
 		mMaxRowCount	= 0
 		mMaxColumnCount	= 0
@@ -122,7 +77,7 @@ open class CNNativeValueTable
 	public func copy(from vtable: CNNativeValueTable){
 		self.mFormat 		= vtable.mFormat
 		self.mHasHeader		= vtable.mHasHeader
-		self.mTitles.copy(from: vtable.mTitles)
+		self.mTitles 		= vtable.mTitles
 		self.mRecords		= vtable.mRecords
 		self.mMaxRowCount	= vtable.mMaxRowCount
 		self.mMaxColumnCount	= vtable.mMaxColumnCount
@@ -131,29 +86,34 @@ open class CNNativeValueTable
 	public func reset() {
 		mFormat 	= .sheet
 		mHasHeader	= false
-		mTitles		= CNNativeValueTitles()
+		mTitles		= [:]
 		mRecords	= []
 		mMaxRowCount	= 0
 		mMaxColumnCount	= 0
 	}
 
+	private static func indexToString(index idx: Int) -> String {
+		return "\(idx)"
+	}
+
 	public func title(column cidx: Int) -> String {
-		if let ttl = mTitles.title(at: cidx) {
-			return ttl
-		} else {
-			let newttl = "_\(cidx)"
-			setTitle(column: cidx, title: newttl)
-			return newttl
+		for (title, idx) in mTitles {
+			if idx == cidx {
+				return title
+			}
 		}
+		let newttl = CNNativeValueTable.indexToString(index: cidx)
+		mTitles[newttl] = cidx
+		return newttl
 	}
 
 	public func setTitle(column cidx: Int, title str: String){
-		mTitles.setTitle(at: cidx, title: str)
+		mTitles[str]    = cidx
 		mMaxColumnCount = max(mMaxColumnCount, mTitles.count)
 	}
 
 	public func titleIndex(by name: String) -> Int? {
-		return mTitles.index(by: name)
+		return mTitles[name]
 	}
 
 	public func value(columnIndex cidx: ColumnIndex, row ridx: Int) -> CNNativeValue {
@@ -354,9 +314,8 @@ open class CNNativeValueTable
 		/* Make title array */
 		var titlevals: Array<CNNativeValue> = []
 		for i in 0..<mTitles.count {
-			if let str = mTitles.title(at: i) {
-				titlevals.append(.stringValue(str))
-			}
+			let str = self.title(column: i)
+			titlevals.append(.stringValue(str))
 		}
 
 		/* Make data array */
