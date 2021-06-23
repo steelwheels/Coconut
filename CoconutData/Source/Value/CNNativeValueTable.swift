@@ -53,7 +53,6 @@ public protocol CNNativeTableInterface
 
 	var rowCount:    Int	{ get }
 	var columnCount: Int	{ get }
-	var hasHeader:	Bool 	{ get }
 
 	func value(columnIndex cidx: CNColumnIndex, row ridx: Int) -> CNNativeValue
 	func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue)
@@ -68,20 +67,17 @@ open class CNNativeValueTable: CNNativeTableInterface
 
 	private var mTitles:		Dictionary<String, Int>
 	private var mFormat:		Format
-	private var mHasHeader:		Bool
 	private var mRecords:		Array<CNNativeValueRecord>
 	private var mMaxRowCount:	Int
 	private var mMaxColumnCount:	Int
 
 	public var format:	Format	{ get { return mFormat		}}
-	public var hasHeader:	Bool 	{ get { return mHasHeader	}}
 	public var titleCount:	Int	{ get { return mTitles.count	}}
 	public var rowCount:    Int	{ get { return mMaxRowCount	}}
 	public var columnCount: Int	{ get { return mMaxColumnCount	}}
 
 	public init(){
 		mFormat		= .sheet
-		mHasHeader	= false
 		mTitles		= [:]
 		mRecords	= []
 		mMaxRowCount	= 0
@@ -90,7 +86,6 @@ open class CNNativeValueTable: CNNativeTableInterface
 
 	public func copy(from vtable: CNNativeValueTable){
 		self.mFormat 		= vtable.mFormat
-		self.mHasHeader		= vtable.mHasHeader
 		self.mTitles 		= vtable.mTitles
 		self.mRecords		= vtable.mRecords
 		self.mMaxRowCount	= vtable.mMaxRowCount
@@ -99,7 +94,6 @@ open class CNNativeValueTable: CNNativeTableInterface
 
 	public func reset() {
 		mFormat 	= .sheet
-		mHasHeader	= false
 		mTitles		= [:]
 		mRecords	= []
 		mMaxRowCount	= 0
@@ -218,7 +212,6 @@ open class CNNativeValueTable: CNNativeTableInterface
 		self.mFormat = .sheet
 
 		if let hdrval = nvalue[CNNativeValueTable.HEADER_PROPERTY] {
-			self.mHasHeader = true
 			switch hdrval {
 			case .arrayValue(let arr):
 				var index: Int = 0
@@ -238,8 +231,6 @@ open class CNNativeValueTable: CNNativeTableInterface
 				let err = CNParseError.ParseError(0, "Array of column titles are require")
 				return .error(.tokenError(err))
 			}
-		} else {
-			self.mHasHeader = false
 		}
 		if let dataval = nvalue[CNNativeValueTable.DATA_PROPERTY] {
 			switch dataval {
@@ -275,7 +266,6 @@ open class CNNativeValueTable: CNNativeTableInterface
 		self.reset()
 		/* Set format */
 		self.mFormat = .records
-		self.mHasHeader = true
 
 		var ridx: Int = 0
 		for val in nvalue {
