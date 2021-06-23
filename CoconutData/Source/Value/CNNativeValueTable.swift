@@ -40,16 +40,30 @@ private class CNNativeValueRecord
 	}
 }
 
-open class CNNativeValueTable
+public enum CNColumnIndex {
+	case 	number(Int)
+	case	title(String)
+}
+
+public protocol CNNativeTableInterface
+{
+	func title(column cidx: Int) -> String
+	func setTitle(column cidx: Int, title str: String)
+	func titleIndex(by name: String) -> Int?
+
+	var rowCount:    Int	{ get }
+	var columnCount: Int	{ get }
+	var hasHeader:	Bool 	{ get }
+
+	func value(columnIndex cidx: CNColumnIndex, row ridx: Int) -> CNNativeValue
+	func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue)
+}
+
+open class CNNativeValueTable: CNNativeTableInterface
 {
 	public enum Format {
 	case sheet	// default
 	case records
-	}
-
-	public enum ColumnIndex {
-		case 	number(Int)
-		case	title(String)
 	}
 
 	private var mTitles:		Dictionary<String, Int>
@@ -116,7 +130,7 @@ open class CNNativeValueTable
 		return mTitles[name]
 	}
 
-	public func value(columnIndex cidx: ColumnIndex, row ridx: Int) -> CNNativeValue {
+	public func value(columnIndex cidx: CNColumnIndex, row ridx: Int) -> CNNativeValue {
 		switch cidx {
 		case .number(let num):
 			return value(column: num, row: ridx)
@@ -137,7 +151,7 @@ open class CNNativeValueTable
 		}
 	}
 
-	public func setValue(columnIndex cidx: ColumnIndex, row ridx: Int, value val: CNNativeValue){
+	public func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue){
 		switch cidx {
 		case .number(let num):
 			setValue(column: num, row: ridx, value: val)
