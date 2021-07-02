@@ -11,35 +11,35 @@ import Cocoa
 
 class ViewController: NSViewController
 {
-	private var mAddressBook:	CNAddressBook = CNAddressBook()
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		// Do any additional setup after loading the view.
+		CNPreference.shared.systemPreference.logLevel = .detail
 	}
 
 	override func viewDidAppear() {
 		super.viewDidAppear()
 
-		mAddressBook.checkAccessibility(callback: {
-			(_ result: CNAddressBook.AutorizedStatus) -> Void in
-			switch result {
-			case .authorized:
-				NSLog("AddressBook ... authorized")
-			case .denied:
-				NSLog("AddressBook ... denied")
+		let db = CNContactDatabase.shared
+		db.authorize(callback: {
+			(_ granted: Bool) -> Void in
+			if granted {
+				NSLog("Authorization: OK")
+				if db.load() {
+					NSLog("Loading ... OK")
+				} else {
+					NSLog("Loading ... Error")
+				}
+			} else {
+				NSLog("Authorization: Error")
 			}
 		})
+	}
 
-		switch mAddressBook.readContent() {
-		case .table(let table):
-			let txt = table.toText().toStrings().joined(separator: "\n")
-			NSLog("table = \(txt)")
-		case .error(let err):
-			NSLog("error = \(err.description)")
-		}
-
+	private func print(record rcd: CNContactRecord) {
+		let ident = rcd.identifier.toText().toStrings().joined(separator: "\n")
+		let fname = rcd.familyName.toText().toStrings().joined(separator: "\n")
+		NSLog("ident=\(ident), fname=\(fname)")
 	}
 
 	override var representedObject: Any? {
@@ -47,7 +47,5 @@ class ViewController: NSViewController
 		// Update the view, if already loaded.
 		}
 	}
-
-
 }
 
