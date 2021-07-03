@@ -122,5 +122,16 @@ public class CNContactDatabase: CNDatabase
 			break
 		}
 	}
+
+	public func forEach(callback cbfunc: (_ record: CNContactRecord) -> Void){
+		do {
+			try mContacts.forEach({
+				(_ record: CNContactRecord) throws -> Void in
+				cbfunc(record)
+			})
+		} catch let err as NSError {
+			CNLog(logLevel: .error, message: err.description, atFunction: #function, inFile: #file)
+		}
+	}
 }
 
