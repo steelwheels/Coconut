@@ -27,6 +27,10 @@ class ViewController: NSViewController
 				NSLog("Authorization: OK")
 				if db.load() {
 					NSLog("Loading ... OK")
+					db.forEach(callback: {
+						(_ record: CNContactRecord) -> Void in
+						self.print(record: record)
+					})
 				} else {
 					NSLog("Loading ... Error")
 				}
@@ -37,9 +41,10 @@ class ViewController: NSViewController
 	}
 
 	private func print(record rcd: CNContactRecord) {
-		let ident = rcd.identifier.toText().toStrings().joined(separator: "\n")
-		let fname = rcd.familyName.toText().toStrings().joined(separator: "\n")
-		NSLog("ident=\(ident), fname=\(fname)")
+		let ident  = rcd.identifier.toText().toStrings().joined(separator: "\n")
+		let family = rcd.familyName.toText().toStrings().joined(separator: "\n")
+		let given  = rcd.givenName.toText().toStrings().joined(separator: "\n")
+		NSLog("ident=\(ident), family=\(family), given=\(given)")
 	}
 
 	override var representedObject: Any? {
