@@ -46,7 +46,13 @@ public class CNContactDatabase: CNDatabase
 	}
 
 	public func authorize(callback cbfunc: @escaping (_ state: Bool) -> Void) {
-		guard mState == .undecided else {
+		switch mState {
+		case .accessAuthorized, .loaded:
+			cbfunc(true)
+			return
+		case .undecided:
+			break // continue
+		case .accessDenied, .loadFailed:
 			cbfunc(false)
 			return
 		}

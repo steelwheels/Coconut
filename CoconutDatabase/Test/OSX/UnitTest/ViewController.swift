@@ -19,7 +19,11 @@ class ViewController: NSViewController
 
 	override func viewDidAppear() {
 		super.viewDidAppear()
+		self.authorize()
+		self.table()
+	}
 
+	private func authorize() {
 		let db = CNContactDatabase.shared
 		db.authorize(callback: {
 			(_ granted: Bool) -> Void in
@@ -45,6 +49,34 @@ class ViewController: NSViewController
 		let family = rcd.familyName.toText().toStrings().joined(separator: "\n")
 		let given  = rcd.givenName.toText().toStrings().joined(separator: "\n")
 		NSLog("ident=\(ident), family=\(family), given=\(given)")
+	}
+
+	private func table(){
+		let table = CNContactTable()
+		table.load(callback: {
+			(_ result: Bool) -> Void in
+			if result {
+				NSLog("table: load ... OK")
+			} else {
+				NSLog("table: load ... NG")
+			}
+		})
+		let colnum = table.columnCount
+		let rownum = table.rowCount
+		NSLog("column num = \(colnum), row num = \(rownum)")
+
+		for cidx in 0..<colnum {
+			let title = table.title(column: cidx)
+			NSLog("title[\(cidx)]: \(title)")
+		}
+
+		for ridx in 0..<rownum {
+			for cidx in 0..<colnum {
+				let val = table.value(columnIndex: .number(cidx), row: ridx)
+				let str = val.toText().toStrings().joined()
+				NSLog("(\(ridx), \(cidx)): \(str)")
+			}
+		}
 	}
 
 	override var representedObject: Any? {

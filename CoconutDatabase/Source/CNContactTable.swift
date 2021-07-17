@@ -10,7 +10,22 @@ import Foundation
 
 public class CNContactTable: CNNativeTableInterface
 {
+	public typealias Property = CNContactRecord.Property
+
+	private var mProperties: 	Array<Property>
+	private var mPropertyIndices:	Dictionary<String, Int>
+
 	public init(){
+		mProperties = [
+			.givenName,
+			.middleName,
+			.familyName
+		]
+		mPropertyIndices = [:]
+		for i in 0..<mProperties.count {
+			let prop = mProperties[i]
+			mPropertyIndices[prop.toName()] = i
+		}
 	}
 
 	public func load(callback cbfunc: @escaping (_ result: Bool) -> Void)  {
@@ -33,11 +48,11 @@ public class CNContactTable: CNNativeTableInterface
 	}
 
 	public var columnCount: Int {
-		get { return CNContactRecord.Property.numberOfProperties }
+		get { return mProperties.count }
 	}
 
 	public func title(column cidx: Int) -> String {
-		if let prop = CNContactRecord.Property(rawValue: cidx) {
+		if let prop = property(columnIndex: cidx) {
 			return prop.toName()
 		} else {
 			CNLog(logLevel: .error, message: "Invalid column index", atFunction: #function, inFile: #file)
@@ -50,8 +65,8 @@ public class CNContactTable: CNNativeTableInterface
 	}
 
 	public func titleIndex(by name: String) -> Int? {
-		if let prop = CNContactRecord.stringToProperty(name: name) {
-			return prop.rawValue
+		if let idx = mPropertyIndices[name] {
+			return idx
 		} else {
 			return nil
 		}
@@ -62,12 +77,12 @@ public class CNContactTable: CNNativeTableInterface
 		if let record = db.record(at: ridx) {
 			switch cidx {
 			case .number(let num):
-				if let prop = CNContactRecord.Property(rawValue: num) {
+				if let prop = property(columnIndex: num) {
 					return record.value(forProperty: prop)
 				}
 			case .title(let title):
 				if let num = self.titleIndex(by: title) {
-					if let prop = CNContactRecord.Property(rawValue: num) {
+					if let prop = property(columnIndex: num){
 						return record.value(forProperty: prop)
 					}
 				}
@@ -80,6 +95,15 @@ public class CNContactTable: CNNativeTableInterface
 
 	public func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue) {
 		CNLog(logLevel: .warning, message: "Failed to set value: \(cidx) \(ridx)", atFunction: #function, inFile: #file)
+	}
+
+	private func property(columnIndex cidx: Int) -> Property? {
+		if 0<=cidx && cidx<mProperties.count {
+			return mProperties[cidx]
+		} else {
+			CNLog(logLevel: .error, message: "Invalid column index: \(cidx)", atFunction: #function, inFile: #file)
+			return nil
+		}
 	}
 }
 
