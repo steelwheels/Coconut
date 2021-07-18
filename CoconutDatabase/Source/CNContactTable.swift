@@ -14,9 +14,10 @@ public class CNContactTable: CNNativeTableInterface
 
 	private var mProperties: 	Array<Property>
 	private var mPropertyIndices:	Dictionary<String, Int>
-
+	private var mRowIndexMap:	Dictionary<Int, Int> 	// logical -> physical
 	public init(){
 		mProperties = [
+			.contactType,
 			.givenName,
 			.middleName,
 			.familyName
@@ -26,6 +27,7 @@ public class CNContactTable: CNNativeTableInterface
 			let prop = mProperties[i]
 			mPropertyIndices[prop.toName()] = i
 		}
+		mRowIndexMap = [0:0]
 	}
 
 	public func load(callback cbfunc: @escaping (_ result: Bool) -> Void)  {
@@ -33,7 +35,16 @@ public class CNContactTable: CNNativeTableInterface
 		db.authorize(callback: {
 			(_ granted: Bool) -> Void in
 			if granted {
-				cbfunc(db.load())
+				if db.load() {
+					/* Load done */
+					/* Make row index map */
+					for i in 0..<self.rowCount {
+						self.mRowIndexMap[i] = i
+					}
+					cbfunc(true)
+				} else {
+					cbfunc(false)
+				}
 			} else {
 				cbfunc(false)
 			}
@@ -74,7 +85,7 @@ public class CNContactTable: CNNativeTableInterface
 
 	public func value(columnIndex cidx: CNColumnIndex, row ridx: Int) -> CNNativeValue {
 		let db = CNContactDatabase.shared
-		if let record = db.record(at: ridx) {
+		if let record = db.record(at: physicalRowIndex(fromLogicalRowIndex: ridx)) {
 			switch cidx {
 			case .number(let num):
 				if let prop = property(columnIndex: num) {
@@ -103,6 +114,15 @@ public class CNContactTable: CNNativeTableInterface
 		} else {
 			CNLog(logLevel: .error, message: "Invalid column index: \(cidx)", atFunction: #function, inFile: #file)
 			return nil
+		}
+	}
+
+	private func physicalRowIndex(fromLogicalRowIndex ridx: Int) -> Int {
+		if let pridx = mRowIndexMap[ridx] {
+			return pridx
+		} else {
+			CNLog(logLevel: .error, message: "Unexpected logical row index: \(ridx)", atFunction: #function, inFile: #file)
+			return 0
 		}
 	}
 }

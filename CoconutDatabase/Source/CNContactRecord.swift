@@ -110,7 +110,7 @@ public class CNContactRecord: CNRecord
 			case .contactType:		result = "type"
 			case .namePrefix:		result = "name_prefix"
 			case .givenName:		result = "given_name"
-			case .middleName:		result = "moddile_name"
+			case .middleName:		result = "middile_name"
 			case .familyName:		result = "family_name"
 			case .previousFamilyName:	result = "previous_family_name"
 			case .nameSuffix:		result = "name_suffix"
@@ -143,6 +143,7 @@ public class CNContactRecord: CNRecord
 	private var		mContact:	CNContact
 	private static var	mStringTable:	Dictionary<String, Property>? = nil
 
+
 	public init(contact cont: CNContact) {
 		mContact	= cont
 	}
@@ -167,7 +168,17 @@ public class CNContactRecord: CNRecord
 	}
 
 	public var contactType: CNNativeValue {
-		get { return .numberValue(NSNumber(integerLiteral: mContact.contactType.rawValue)) }
+		get {
+			let str: String
+			switch mContact.contactType {
+			case .organization:	str = "organization"
+			case .person:		str = "person"
+			@unknown default:
+				CNLog(logLevel: .error, message: "Unknown contact type", atFunction: #function, inFile: #file)
+				str = "organization"
+			}
+			return .stringValue(str)
+		}
 	}
 
 	public var namePrefix: CNNativeValue {
