@@ -33,6 +33,8 @@
 		05A44F0E25C22B320086033B /* CNMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0D25C22B320086033B /* CNMatrix.swift */; };
 		05A44F0F25C22B320086033B /* CNMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0D25C22B320086033B /* CNMatrix.swift */; };
 		05A44F1425C24D0D0086033B /* UTMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F1325C24D0D0086033B /* UTMatrix.swift */; };
+		05A501B526A4203E00A992F9 /* CNNativeValueComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A501B426A4203E00A992F9 /* CNNativeValueComparator.swift */; };
+		05A501B626A4203E00A992F9 /* CNNativeValueComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A501B426A4203E00A992F9 /* CNNativeValueComparator.swift */; };
 		05B32C88251501B1000D1411 /* CoconutData_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C86251501B1000D1411 /* CoconutData_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32C96251501D7000D1411 /* CoconutData_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C94251501D7000D1411 /* CoconutData_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32CA82515025E000D1411 /* CNValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9E2515025E000D1411 /* CNValueUtil.swift */; };
@@ -271,6 +273,7 @@
 		05A44F0125C223350086033B /* CNGraphicsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNGraphicsContext.swift; sourceTree = "<group>"; };
 		05A44F0D25C22B320086033B /* CNMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNMatrix.swift; sourceTree = "<group>"; };
 		05A44F1325C24D0D0086033B /* UTMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMatrix.swift; sourceTree = "<group>"; };
+		05A501B426A4203E00A992F9 /* CNNativeValueComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNativeValueComparator.swift; sourceTree = "<group>"; };
 		05B32C83251501B1000D1411 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B32C86251501B1000D1411 /* CoconutData_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData_macOS.h; sourceTree = "<group>"; };
 		05B32C87251501B1000D1411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -534,6 +537,7 @@
 				05B32CA72515025E000D1411 /* CNNativeStruct.swift */,
 				05B32CA32515025E000D1411 /* CNNativeValue.swift */,
 				05B32C9F2515025E000D1411 /* CNNativeValueCoder.swift */,
+				05A501B426A4203E00A992F9 /* CNNativeValueComparator.swift */,
 				05B32CA42515025E000D1411 /* CNNativeValueMatcher.swift */,
 				05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */,
 				05B32CA02515025E000D1411 /* CNNativeValueParser.swift */,
@@ -998,6 +1002,7 @@
 				05B32D7825150945000D1411 /* CNAttributedString.swift in Sources */,
 				052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */,
 				05B32CAF2515025E000D1411 /* CNValue.swift in Sources */,
+				05A501B526A4203E00A992F9 /* CNNativeValueComparator.swift in Sources */,
 				0551394125CC2BD6007B1C6B /* CNTimer.swift in Sources */,
 				05B32CDD251502E7000D1411 /* CNProcessManager.swift in Sources */,
 				05B32D0425150368000D1411 /* CNReservedWord.swift in Sources */,
@@ -1079,6 +1084,7 @@
 				05B32D7925150945000D1411 /* CNAttributedString.swift in Sources */,
 				052E27D52625DCA100414C26 /* CNCommandTable.swift in Sources */,
 				05B32CBB25150299000D1411 /* CNNativeValueVisitor.swift in Sources */,
+				05A501B626A4203E00A992F9 /* CNNativeValueComparator.swift in Sources */,
 				0551394225CC2BD6007B1C6B /* CNTimer.swift in Sources */,
 				05B32CDE251502E7000D1411 /* CNProcessManager.swift in Sources */,
 				05B32D0525150368000D1411 /* CNReservedWord.swift in Sources */,

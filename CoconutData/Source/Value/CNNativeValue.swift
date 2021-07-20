@@ -13,7 +13,7 @@ import Foundation
 /**
  * The data to present JSValue as native data
  */
-public enum CNNativeType {
+public enum CNNativeType: Int {
 	case	nullType
 	case	numberType
 	case	stringType
@@ -173,6 +173,17 @@ public enum CNNativeValue {
 				result = CGRect(origin: oval, size: sval)
 			}
 		default:			result = nil
+		}
+		return result
+	}
+
+	public func toEnum() -> (String, Int32)? {
+		let result: (String, Int32)?
+		switch self {
+		case .enumValue(let typestr, let val):
+			result = (typestr, val)
+		default:
+			result = nil
 		}
 		return result
 	}

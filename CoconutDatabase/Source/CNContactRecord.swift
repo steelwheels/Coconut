@@ -140,12 +140,13 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
+	public var 		tag:		Int
 	private var		mContact:	CNContact
 	private static var	mStringTable:	Dictionary<String, Property>? = nil
 
-
 	public init(contact cont: CNContact) {
 		mContact	= cont
+		tag		= 0
 	}
 
 	public static func stringToProperty(name nm: String) -> Property? {
@@ -455,6 +456,27 @@ public class CNContactRecord: CNRecord
 
 	public func setValue(value val: CNNativeValue, byProperty prop: Property) {
 		NSLog("Failed to set value")
+	}
+
+	public func compare(_ s1: CNContactRecord, byProperty prop: Property) -> ComparisonResult {
+		let v0 = self.value(forProperty: prop)
+		let v1 = s1.value(forProperty: prop)
+		return CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
+	}
+
+	public func compare(_ s1: CNContactRecord, byProperties props: Array<Property>) -> ComparisonResult {
+		for prop in props {
+			let v0  = self.value(forProperty: prop)
+			let v1  = s1.value(forProperty: prop)
+			let res = CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
+			switch res {
+			case .orderedAscending, .orderedDescending:
+				return res
+			case .orderedSame:
+				break
+			}
+		}
+		return .orderedSame
 	}
 }
 

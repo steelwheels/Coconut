@@ -77,6 +77,15 @@ class ViewController: NSViewController
 				NSLog("(\(ridx), \(cidx)): \(str)")
 			}
 		}
+
+		NSLog("**** Sort")
+		table.sort(byProperties: [.familyName], doAscending: false)
+		let propname = CNContactRecord.Property.familyName.toName()
+		for ridx in 0..<rownum {
+			let val = table.value(columnIndex: .title(propname), row: ridx)
+			let str = val.toText().toStrings().joined()
+			NSLog("(\(ridx): \(str)")
+		}
 	}
 
 	override var representedObject: Any? {
