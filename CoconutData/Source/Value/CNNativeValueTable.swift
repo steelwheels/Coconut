@@ -30,6 +30,12 @@ private class CNNativeValueRecord
 		mValues[idx] = val
 	}
 
+	public func compare(at idx: Int, with rec: CNNativeValueRecord) -> ComparisonResult {
+		let s0 = self.value(at: idx)
+		let s1 = rec.value(at: idx)
+		return CNCompareNativeValue(nativeValue0: s0, nativeValue1: s1)
+	}
+
 	private func expand(size sz: Int){
 		let diff = sz - mValues.count
 		if diff > 0 {
@@ -56,6 +62,8 @@ public protocol CNNativeTableInterface
 
 	func value(columnIndex cidx: CNColumnIndex, row ridx: Int) -> CNNativeValue
 	func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue)
+
+	func sort(byDescriptors descs: CNSortDescriptors)
 }
 
 open class CNNativeValueTable: CNNativeTableInterface
@@ -200,6 +208,18 @@ open class CNNativeValueTable: CNNativeTableInterface
 			let err = CNParseError.ParseError(0, "Not table format")
 			return .error(.tokenError(err))
 		}
+	}
+
+	public func sort(byDescriptors desc: CNSortDescriptors) {
+		mRecords = desc.sort(source: mRecords, comparator: {
+			(_ rec0: CNNativeValueRecord, _ rec1: CNNativeValueRecord, _ key: String) -> ComparisonResult in
+			if let idx = titleIndex(by: key) {
+				return rec0.compare(at: idx, with: rec1)
+			} else {
+				CNLog(logLevel: .error, message: "Unknown title: \(key)", atFunction: #function, inFile: #file)
+				return .orderedSame
+			}
+		})
 	}
 
 	public static let HEADER_PROPERTY = "headers"
@@ -357,4 +377,7 @@ open class CNNativeValueTable: CNNativeTableInterface
 		return .arrayValue(result)
 	}
 }
+
+
+
 

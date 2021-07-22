@@ -463,20 +463,5 @@ public class CNContactRecord: CNRecord
 		let v1 = s1.value(forProperty: prop)
 		return CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
 	}
-
-	public func compare(_ s1: CNContactRecord, byProperties props: Array<Property>) -> ComparisonResult {
-		for prop in props {
-			let v0  = self.value(forProperty: prop)
-			let v1  = s1.value(forProperty: prop)
-			let res = CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
-			switch res {
-			case .orderedAscending, .orderedDescending:
-				return res
-			case .orderedSame:
-				break
-			}
-		}
-		return .orderedSame
-	}
 }
 

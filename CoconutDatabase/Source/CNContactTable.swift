@@ -121,9 +121,9 @@ public class CNContactTable: CNNativeTableInterface
 		CNLog(logLevel: .warning, message: "Failed to set value: \(cidx) \(ridx)", atFunction: #function, inFile: #file)
 	}
 
-	public func sort(byProperties props: Array<Property>, doAscending doasc: Bool){
-		let db = CNContactDatabase.shared
+	public func sort(byDescriptors descs: CNSortDescriptors){
 		/* Make array of records */
+		let db = CNContactDatabase.shared
 		var records: Array<CNContactRecord> = []
 		for i in 0..<db.recordCount {
 			if let rec = db.record(at: i) {
@@ -132,20 +132,19 @@ public class CNContactTable: CNNativeTableInterface
 			}
 		}
 		/* Sort records */
-		let newrecords = records.sorted(by: {
-			(_ rec0: CNContactRecord, _ rec1: CNContactRecord) -> Bool in
-			let result: Bool
-			switch rec0.compare(rec1, byProperties: props) {
-			case .orderedAscending:  result = doasc
-			case .orderedDescending: result = !doasc
-			case .orderedSame:	 result = false
+		records = descs.sort(source: records, comparator: {
+			(_ rec0: CNContactRecord, _ rec1: CNContactRecord, _ key: String) -> ComparisonResult in
+			if let prop = CNContactRecord.stringToProperty(name: key) {
+				return rec0.compare(rec1, byProperty: prop)
+			} else {
+				CNLog(logLevel: .error, message: "Unknown property: \(key)", atFunction: #function, inFile: #file)
+				return .orderedSame
 			}
-			return result
 		})
 		/* Make new map */
 		mRowIndexMap = [:]
-		for i in 0..<newrecords.count {
-			mRowIndexMap[i] = newrecords[i].tag
+		for i in 0..<records.count {
+			mRowIndexMap[i] = records[i].tag
 		}
 	}
 
