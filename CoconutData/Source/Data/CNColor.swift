@@ -2,7 +2,7 @@
  * @file	CNColor.swift
  * @brief	Define CNColor class
  * @par Copyright
- *   Copyright (C) 2015-2016 Steel Wheels Project
+ *   Copyright (C) 2015-2021 Steel Wheels Project
  */
 
 import Foundation
