@@ -57,6 +57,7 @@ public protocol CNNativeTableInterface
 	func setTitle(column cidx: Int, title str: String)
 	func titleIndex(by name: String) -> Int?
 
+	var isEditable:	 Bool	{ get }
 	var rowCount:    Int	{ get }
 	var columnCount: Int	{ get }
 
@@ -81,6 +82,8 @@ open class CNNativeValueTable: CNNativeTableInterface
 
 	public var format:	Format	{ get { return mFormat		}}
 	public var titleCount:	Int	{ get { return mTitles.count	}}
+
+	public var isEditable:	 Bool	{ get { return true 		}}
 	public var rowCount:    Int	{ get { return mMaxRowCount	}}
 	public var columnCount: Int	{ get { return mMaxColumnCount	}}
 

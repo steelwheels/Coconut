@@ -60,6 +60,10 @@ public class CNContactTable: CNNativeTableInterface
 		})
 	}
 
+	public var isEditable: Bool {
+		get { return true }
+	}
+
 	public var rowCount: Int {
 		get {
 			let db = CNContactDatabase.shared
