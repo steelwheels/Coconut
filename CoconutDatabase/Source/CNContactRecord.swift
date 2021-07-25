@@ -778,10 +778,14 @@ public class CNContactRecord: CNRecord
 	}
 
 	public func setValue(value val: CNNativeValue, byName name: String) {
-		guard let prop = CNContactRecord.stringToProperty(name: name) else {
+		if let prop = CNContactRecord.stringToProperty(name: name) {
+			setValue(value: val, byProperty: prop)
+		} else {
 			CNLog(logLevel: .error, message: "Unknown property: \(name)", atFunction: #function, inFile: #file)
-			return
 		}
+	}
+
+	public func setValue(value val: CNNativeValue, byProperty prop: Property) {
 		switch prop {
 		case .identifier:			CNLog(logLevel: .error, message: "Writing identifier is NOT supported", atFunction: #function, inFile: #file)
 		case .contactType:			self.contactType = val
@@ -813,10 +817,6 @@ public class CNContactRecord: CNRecord
 		case .imageDataAvailable:		CNLog(logLevel: .error, message: "Writing imageDataAvailable is NOT supported", atFunction: #function, inFile: #file)
 		case .relations:			self.relations = val
 		}
-	}
-
-	public func setValue(value val: CNNativeValue, byProperty prop: Property) {
-		NSLog("Failed to set value")
 	}
 
 	public func compare(_ s1: CNContactRecord, byProperty prop: Property) -> ComparisonResult {

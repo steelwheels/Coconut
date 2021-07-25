@@ -57,9 +57,9 @@ public protocol CNNativeTableInterface
 	func setTitle(column cidx: Int, title str: String)
 	func titleIndex(by name: String) -> Int?
 
-	var isEditable:	 Bool	{ get }
-	var rowCount:    Int	{ get }
-	var columnCount: Int	{ get }
+	var isEditable:		Bool		{ get }
+	var rowCount:		Int		{ get }
+	var columnCount:	Int		{ get }
 
 	func value(columnIndex cidx: CNColumnIndex, row ridx: Int) -> CNNativeValue
 	func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue)
@@ -93,14 +93,6 @@ open class CNNativeValueTable: CNNativeTableInterface
 		mRecords	= []
 		mMaxRowCount	= 0
 		mMaxColumnCount	= 0
-	}
-
-	public func copy(from vtable: CNNativeValueTable){
-		self.mFormat 		= vtable.mFormat
-		self.mTitles 		= vtable.mTitles
-		self.mRecords		= vtable.mRecords
-		self.mMaxRowCount	= vtable.mMaxRowCount
-		self.mMaxColumnCount	= vtable.mMaxColumnCount
 	}
 
 	public func reset() {
@@ -164,7 +156,7 @@ open class CNNativeValueTable: CNNativeTableInterface
 			if let num = titleIndex(by: str) {
 				setValue(column: num, row: ridx, value: val)
 			} else {
-				CNLog(logLevel: .error, message: "Failed to set value", atFunction: #function, inFile: #file)
+				CNLog(logLevel: .error, message: "Failed to set value: title=\(str) row:\(ridx) value=\(val)", atFunction: #function, inFile: #file)
 			}
 		}
 	}

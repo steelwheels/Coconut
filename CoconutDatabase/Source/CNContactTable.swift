@@ -10,7 +10,7 @@ import Foundation
 
 public class CNContactTable: CNNativeTableInterface
 {
-	public typealias Property = CNContactRecord.Property
+	public typealias Property	= CNContactRecord.Property
 
 	private var mProperties: 	Array<Property>
 	private var mPropertyIndices:	Dictionary<String, Int>	// name    -> physical
@@ -122,7 +122,23 @@ public class CNContactTable: CNNativeTableInterface
 	}
 
 	public func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue) {
-		CNLog(logLevel: .warning, message: "Failed to set value: \(cidx) \(ridx)", atFunction: #function, inFile: #file)
+		let db = CNContactDatabase.shared
+		if let record = db.record(at: physicalRowIndex(fromLogicalRowIndex: ridx)) {
+			switch cidx {
+			case .number(let num):
+				if let prop = property(logicalColumnIndex: num) {
+					record.setValue(value: val, byProperty: prop)
+				}
+			case .title(let title):
+				if let num = self.titleIndex(by: title) {
+					if let prop = property(logicalColumnIndex: num){
+						record.setValue(value: val, byProperty: prop)
+					}
+				}
+			@unknown default:
+				CNLog(logLevel: .error, message: "Unknown case", atFunction: #function, inFile: #file)
+			}
+		}
 	}
 
 	public func sort(byDescriptors descs: CNSortDescriptors){
