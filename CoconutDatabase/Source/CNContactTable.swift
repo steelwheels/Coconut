@@ -60,6 +60,16 @@ public class CNContactTable: CNNativeTableInterface
 		})
 	}
 
+	public func save() {
+		let db  = CNContactDatabase.shared
+		let cnt = db.recordCount
+		for i in 0..<cnt {
+			if let record = db.record(at: i) {
+				record.save()
+			}
+		}
+	}
+
 	public var isEditable: Bool {
 		get { return true }
 	}

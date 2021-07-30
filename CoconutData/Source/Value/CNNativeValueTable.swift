@@ -65,6 +65,7 @@ public protocol CNNativeTableInterface
 	func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue)
 
 	func sort(byDescriptors descs: CNSortDescriptors)
+	func save()
 }
 
 open class CNNativeValueTable: CNNativeTableInterface
@@ -304,6 +305,16 @@ open class CNNativeValueTable: CNNativeTableInterface
 			ridx += 1
 		}
 		return .ok
+	}
+
+	public func save() {
+		let val: CNNativeValue
+		switch mFormat {
+		case .records:	val = toRecordValue()
+		case .sheet:    val = toSheetValue()
+		}
+		let txt = val.toText().toStrings().joined(separator: "\n")
+		NSLog("save: \n\(txt)")
 	}
 
 	private func decodeTitle(value val: CNNativeValue) -> String? {

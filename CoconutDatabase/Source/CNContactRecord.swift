@@ -819,6 +819,24 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
+	public func save(){
+		switch mContact {
+		case .immutable(_):
+			break		// Not modified
+		case .mutable(let cont):
+			let req = CNSaveRequest()
+			req.update(cont)
+			let store = CNContactStore()
+			do {
+				try store.execute(req)
+			}
+			catch let err as NSError {
+				CNLog(logLevel: .error, message: "Failed to save record: \(err.toString())",
+				      atFunction: #function, inFile: #file)
+			}
+		}
+	}
+
 	public func compare(_ s1: CNContactRecord, byProperty prop: Property) -> ComparisonResult {
 		let v0 = self.value(forProperty: prop)
 		let v1 = s1.value(forProperty: prop)
