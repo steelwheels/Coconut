@@ -131,24 +131,26 @@ public class CNContactTable: CNNativeTableInterface
 		return .nullValue
 	}
 
-	public func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue) {
-		let db = CNContactDatabase.shared
+	public func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue) -> Bool {
+		var result = false
+		let db     = CNContactDatabase.shared
 		if let record = db.record(at: physicalRowIndex(fromLogicalRowIndex: ridx)) {
 			switch cidx {
 			case .number(let num):
 				if let prop = property(logicalColumnIndex: num) {
-					record.setValue(value: val, byProperty: prop)
+					result = record.setValue(value: val, byProperty: prop)
 				}
 			case .title(let title):
 				if let num = self.titleIndex(by: title) {
 					if let prop = property(logicalColumnIndex: num){
-						record.setValue(value: val, byProperty: prop)
+						result = record.setValue(value: val, byProperty: prop)
 					}
 				}
 			@unknown default:
 				CNLog(logLevel: .error, message: "Unknown case", atFunction: #function, inFile: #file)
 			}
 		}
+		return result
 	}
 
 	public func sort(byDescriptors descs: CNSortDescriptors){

@@ -9,7 +9,7 @@ import Foundation
 
 public protocol CNDatabase
 {
-	associatedtype RecordType: CNRecord
+	associatedtype RecordType: CNDataRecord
 
 	var recordCount: Int { get }
 

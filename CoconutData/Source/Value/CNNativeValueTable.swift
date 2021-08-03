@@ -62,7 +62,7 @@ public protocol CNNativeTableInterface
 	var columnCount:	Int		{ get }
 
 	func value(columnIndex cidx: CNColumnIndex, row ridx: Int) -> CNNativeValue
-	func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue)
+	func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue) -> Bool
 
 	func sort(byDescriptors descs: CNSortDescriptors)
 	func save()
@@ -149,24 +149,27 @@ open class CNNativeValueTable: CNNativeTableInterface
 		}
 	}
 
-	public func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue){
+	public func setValue(columnIndex cidx: CNColumnIndex, row ridx: Int, value val: CNNativeValue) -> Bool {
+		var result = false
 		switch cidx {
 		case .number(let num):
-			setValue(column: num, row: ridx, value: val)
+			result = setValue(column: num, row: ridx, value: val)
 		case .title(let str):
 			if let num = titleIndex(by: str) {
-				setValue(column: num, row: ridx, value: val)
+				result = setValue(column: num, row: ridx, value: val)
 			} else {
 				CNLog(logLevel: .error, message: "Failed to set value: title=\(str) row:\(ridx) value=\(val)", atFunction: #function, inFile: #file)
 			}
 		}
+		return result
 	}
 
-	private func setValue(column cidx: Int, row ridx: Int, value val: CNNativeValue) {
+	private func setValue(column cidx: Int, row ridx: Int, value val: CNNativeValue) -> Bool {
 		expandRows(size: ridx + 1)
 		let rec = mRecords[ridx]
 		rec.setValue(at: cidx, value: val)
 		mMaxColumnCount = max(mMaxColumnCount, rec.count)
+		return true
 	}
 
 	private func expandRows(size sz: Int){
@@ -257,7 +260,10 @@ open class CNNativeValueTable: CNNativeTableInterface
 					case .arrayValue(let arr1):
 						var cidx: Int = 0
 						for col in arr1 {
-							self.setValue(column: cidx, row: ridx, value: col)
+							if !self.setValue(column: cidx, row: ridx, value: col) {
+								let err = CNParseError.ParseError(0, "Failed to set value cidx=\(cidx), ridx=\(ridx)")
+								return .error(.tokenError(err))
+							}
 							cidx += 1
 						}
 					default:
@@ -295,7 +301,10 @@ open class CNNativeValueTable: CNNativeTableInterface
 						self.setTitle(column: self.titleCount, title: key)
 					}
 					/* Set value */
-					self.setValue(columnIndex: .title(key), row: ridx, value: val)
+					if !self.setValue(columnIndex: .title(key), row: ridx, value: val) {
+						let err = CNParseError.ParseError(0, "Failed to set value")
+						return .error(.tokenError(err))
+					}
 				}
 			default:
 				let err = CNParseError.ParseError(0, "Object data is required")

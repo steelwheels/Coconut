@@ -15,6 +15,8 @@
 		0505AB6925163E1D0005CFC4 /* CoconutDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */; };
 		053D08DD268B423D00B3FEDF /* CNContactTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D08DC268B423D00B3FEDF /* CNContactTable.swift */; };
 		053D08DE268B423D00B3FEDF /* CNContactTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D08DC268B423D00B3FEDF /* CNContactTable.swift */; };
+		055CAC3226B6D33600C4843B /* CNDataIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055CAC3126B6D33600C4843B /* CNDataIndex.swift */; };
+		055CAC3326B6D33600C4843B /* CNDataIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055CAC3126B6D33600C4843B /* CNDataIndex.swift */; };
 		059226A526457EE90083E304 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059226A426457EE90083E304 /* AppDelegate.swift */; };
 		059226A726457EE90083E304 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059226A626457EE90083E304 /* ViewController.swift */; };
 		059226A926457EEA0083E304 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 059226A826457EEA0083E304 /* Assets.xcassets */; };
@@ -25,8 +27,8 @@
 		059226C32645848E0083E304 /* CoconutDatabase.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C20D132642A3070021FC02 /* CoconutDatabase.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		059698BF2689FB1100A1C171 /* CNDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698BE2689FB1100A1C171 /* CNDatabase.swift */; };
 		059698C02689FB1100A1C171 /* CNDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698BE2689FB1100A1C171 /* CNDatabase.swift */; };
-		059698C42689FB2800A1C171 /* CNRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698C32689FB2800A1C171 /* CNRecord.swift */; };
-		059698C52689FB2800A1C171 /* CNRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698C32689FB2800A1C171 /* CNRecord.swift */; };
+		059698C42689FB2800A1C171 /* CNDataRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698C32689FB2800A1C171 /* CNDataRecord.swift */; };
+		059698C52689FB2800A1C171 /* CNDataRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698C32689FB2800A1C171 /* CNDataRecord.swift */; };
 		059698CB268A13B300A1C171 /* CNContactRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698CA268A13B300A1C171 /* CNContactRecord.swift */; };
 		059698CC268A13B300A1C171 /* CNContactRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059698CA268A13B300A1C171 /* CNContactRecord.swift */; };
 		05EDD29F2644243600767743 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EDD29E2644243600767743 /* Contacts.framework */; };
@@ -83,6 +85,7 @@
 		0505AB6425163E1D0005CFC4 /* CNContactDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNContactDatabase.swift; sourceTree = "<group>"; };
 		0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoconutDatabase.h; sourceTree = "<group>"; };
 		053D08DC268B423D00B3FEDF /* CNContactTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNContactTable.swift; sourceTree = "<group>"; };
+		055CAC3126B6D33600C4843B /* CNDataIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDataIndex.swift; sourceTree = "<group>"; };
 		059226A226457EE90083E304 /* UTAddressBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UTAddressBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		059226A426457EE90083E304 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		059226A626457EE90083E304 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -91,7 +94,7 @@
 		059226AD26457EEA0083E304 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		059226AE26457EEA0083E304 /* UnitTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UnitTest.entitlements; sourceTree = "<group>"; };
 		059698BE2689FB1100A1C171 /* CNDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDatabase.swift; sourceTree = "<group>"; };
-		059698C32689FB2800A1C171 /* CNRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRecord.swift; sourceTree = "<group>"; };
+		059698C32689FB2800A1C171 /* CNDataRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDataRecord.swift; sourceTree = "<group>"; };
 		059698CA268A13B300A1C171 /* CNContactRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNContactRecord.swift; sourceTree = "<group>"; };
 		05C20D132642A3070021FC02 /* CoconutDatabase.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutDatabase.xcframework; path = ../../../../Library/Frameworks/CoconutDatabase.xcframework; sourceTree = "<group>"; };
 		05EDD29E2644243600767743 /* Contacts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Contacts.framework; path = System/Library/Frameworks/Contacts.framework; sourceTree = SDKROOT; };
@@ -155,7 +158,8 @@
 				059698CA268A13B300A1C171 /* CNContactRecord.swift */,
 				053D08DC268B423D00B3FEDF /* CNContactTable.swift */,
 				059698BE2689FB1100A1C171 /* CNDatabase.swift */,
-				059698C32689FB2800A1C171 /* CNRecord.swift */,
+				055CAC3126B6D33600C4843B /* CNDataIndex.swift */,
+				059698C32689FB2800A1C171 /* CNDataRecord.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -400,8 +404,9 @@
 				059698CB268A13B300A1C171 /* CNContactRecord.swift in Sources */,
 				0505AB6625163E1D0005CFC4 /* CNContactDatabase.swift in Sources */,
 				053D08DD268B423D00B3FEDF /* CNContactTable.swift in Sources */,
-				059698C42689FB2800A1C171 /* CNRecord.swift in Sources */,
+				059698C42689FB2800A1C171 /* CNDataRecord.swift in Sources */,
 				059698BF2689FB1100A1C171 /* CNDatabase.swift in Sources */,
+				055CAC3226B6D33600C4843B /* CNDataIndex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,8 +417,9 @@
 				059698CC268A13B300A1C171 /* CNContactRecord.swift in Sources */,
 				0505AB6725163E1D0005CFC4 /* CNContactDatabase.swift in Sources */,
 				053D08DE268B423D00B3FEDF /* CNContactTable.swift in Sources */,
-				059698C52689FB2800A1C171 /* CNRecord.swift in Sources */,
+				059698C52689FB2800A1C171 /* CNDataRecord.swift in Sources */,
 				059698C02689FB1100A1C171 /* CNDatabase.swift in Sources */,
+				055CAC3326B6D33600C4843B /* CNDataIndex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

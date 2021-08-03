@@ -122,7 +122,7 @@ public extension CNContactRelation
 }
 
 
-public class CNContactRecord: CNRecord
+public class CNContactRecord: CNDataRecord
 {
 	public enum Property: Int {
 		/* Contact Identification */
@@ -762,7 +762,7 @@ public class CNContactRecord: CNRecord
 		get { return Property.numberOfProperties }
 	}
 
-	public func value(forName name: String) -> CNNativeValue? {
+	public func value(ofField name: String) -> CNNativeValue? {
 		if let prop = CNContactRecord.stringToProperty(name: name) {
 			let retval = value(forProperty: prop)
 			switch retval {
@@ -777,15 +777,17 @@ public class CNContactRecord: CNRecord
 		return nil
 	}
 
-	public func setValue(value val: CNNativeValue, byName name: String) {
+	public func setValue(value val: CNNativeValue, forField name: String) -> Bool {
 		if let prop = CNContactRecord.stringToProperty(name: name) {
-			setValue(value: val, byProperty: prop)
+			return setValue(value: val, byProperty: prop)
 		} else {
 			CNLog(logLevel: .error, message: "Unknown property: \(name)", atFunction: #function, inFile: #file)
+			return false
 		}
 	}
 
-	public func setValue(value val: CNNativeValue, byProperty prop: Property) {
+	public func setValue(value val: CNNativeValue, byProperty prop: Property) -> Bool {
+		var result = true
 		switch prop {
 		case .identifier:			CNLog(logLevel: .error, message: "Writing identifier is NOT supported", atFunction: #function, inFile: #file)
 		case .contactType:			self.contactType = val
@@ -813,10 +815,15 @@ public class CNContactRecord: CNRecord
 		case .dates:				self.dates = val
 		case .note:				self.note = val
 		case .imageData:			self.imageData = val
-		case .thumbnailImageData:		CNLog(logLevel: .error, message: "Writing thumbnail image is NOT supported", atFunction: #function, inFile: #file)
-		case .imageDataAvailable:		CNLog(logLevel: .error, message: "Writing imageDataAvailable is NOT supported", atFunction: #function, inFile: #file)
+		case .thumbnailImageData:
+			CNLog(logLevel: .error, message: "Writing thumbnail image is NOT supported", atFunction: #function, inFile: #file)
+			result = false
+		case .imageDataAvailable:
+			CNLog(logLevel: .error, message: "Writing imageDataAvailable is NOT supported", atFunction: #function, inFile: #file)
+			result = false
 		case .relations:			self.relations = val
 		}
+		return result
 	}
 
 	public func save(){
