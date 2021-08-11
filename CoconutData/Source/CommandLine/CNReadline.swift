@@ -10,12 +10,10 @@ import Darwin
 
 open class CNReadline
 {
-	public typealias ReadError = CNEscapeCode.DecodeError
-
 	public enum Result {
 		case	none
 		case	string(String, Int)	// string, index
-		case	error(ReadError)
+		case	error(NSError)
 	}
 
 	private enum ReadMode {

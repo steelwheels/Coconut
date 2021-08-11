@@ -98,7 +98,7 @@ private func dumpCode(code ecode: CNEscapeCode, console cons: CNConsole) -> Bool
 		}
 		result = true
 	case .error(let err):
-		cons.error(string: "[Error] \(err.description())\n")
+		cons.error(string: "[Error] \(err.toString())\n")
 		result = false
 	}
 	return result
@@ -116,7 +116,7 @@ private func dumpSequence(string src: String, console cons: CNConsole) -> Bool {
 		}
 		result = true
 	case .error(let err):
-		cons.print(string: "[Error] " + err.description() + "\n")
+		cons.print(string: "[Error] " + err.toString() + "\n")
 		result = false
 	}
 	return result

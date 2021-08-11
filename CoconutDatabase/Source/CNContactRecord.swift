@@ -9,249 +9,415 @@ import CoconutData
 import Contacts
 import Foundation
 
-public extension CNPostalAddress
+public class CNContactRecord: CNRecord
 {
-	static func makeNativeValue(street str: String, city cty: String, state stt: String, postalCode pcd: String, country cry: String) -> CNNativeValue {
-		let result: Dictionary<String, CNNativeValue> = [
-			"street":	.stringValue(str),
-			"city":		.stringValue(cty),
-			"state":	.stringValue(stt),
-			"postalCode":	.stringValue(pcd),
-			"country":	.stringValue(cty)
-		]
-		return .dictionaryValue(result)
+	private enum ContactHandle {
+		case immutable(CNContact)
+		case mutable(CNMutableContact)
 	}
 
-	func getNativeValue() -> CNNativeValue {
-		return CNPostalAddress.makeNativeValue(street:     self.street,
-						       city:       self.city,
-						       state:      self.state,
-						       postalCode: self.postalCode,
-						       country:    self.country)
-	}
-}
+	private var mContact:		ContactHandle
+	private var mFieldNames:	Dictionary<String, CNContactField>
 
-public extension CNMutablePostalAddress
-{
-	func setNativeValue(_ val: CNNativeValue){
-		if let dict = val.toDictionary() {
-			for (key, val) in dict {
-				if let str = val.toString() {
-					switch key {
-					case "street":		self.street	= str
-					case "city":		self.city	= str
-					case "state":		self.state	= str
-					case "postalCode":	self.postalCode = str
-					case "country":		self.country	= str
-					default:
-						CNLog(logLevel: .error, message: "Unknown property: \(key)", atFunction: #function, inFile: #file)
-					}
-				}
+	public init(contact ctct: CNContact){
+		mContact	= .immutable(ctct)
+		mFieldNames	= [:]
+		let num = CNContactField.numberOfFields
+		for i in 0..<num {
+			if let fld = CNContactField(rawValue: i) {
+				mFieldNames[fld.toName()] = fld
 			}
 		}
 	}
-}
 
-public extension CNInstantMessageAddress
-{
-	static func makeNativeValue(service srv: String, userName uname: String) -> CNNativeValue {
-		let result: Dictionary<String, CNNativeValue> = [
-			"service":  .stringValue(srv),
-			"username": .stringValue(uname)
-		]
-		return .dictionaryValue(result)
+	public init(mutableContext ctct: CNMutableContact){
+		mContact	= .mutable(ctct)
+		mFieldNames	= [:]
+		let num = CNContactField.numberOfFields
+		for i in 0..<num {
+			if let fld = CNContactField(rawValue: i) {
+				mFieldNames[fld.toName()] = fld
+			}
+		}
 	}
 
-	func getNativeValue() -> CNNativeValue {
-		return CNInstantMessageAddress.makeNativeValue(service:  self.service,
-							       userName: self.username)
-	}
+	public var fieldCount: Int { get {
+		return CNContactField.numberOfFields
+	}}
 
-	static func fromNativeValue(value val: CNNativeValue) -> CNInstantMessageAddress? {
-		if let dict = val.toDictionary() {
-			var service:  String? = nil
-			var username: String? = nil
-			for (key, val) in dict {
-				if let str = val.toString() {
-					switch key {
-					case "service":  service = str
-					case "username": username = str
-					default:
-						CNLog(logLevel: .error, message: "Unexpected property name: \(key)", atFunction: #function, inFile: #file)
-					}
+	public var fieldNames: Array<String> { get {
+		return CNContactField.allFieldNames
+	}}
+
+	private var contact: CNContact { get {
+		switch mContact {
+		case .immutable(let ctct):
+			return ctct
+		case .mutable(let ctct):
+			return ctct
+		}
+	}}
+
+	private var mutableContact: CNMutableContact {
+		get {
+			let result: CNMutableContact
+			switch mContact {
+			case .immutable(let cont):
+				if let newcont = cont.mutableCopy() as? CNMutableContact {
+					result = newcont
+					mContact = .mutable(newcont)
 				} else {
-					CNLog(logLevel: .error, message: "Unexpected property value", atFunction: #function, inFile: #file)
+					fatalError("Failed to allocate mutable contact")
+				}
+			case .mutable(let cont):
+				result = cont
+			}
+			return result
+		}
+	}
+
+	public func value(ofField name: String) -> CNNativeValue? {
+		if let fld = mFieldNames[name] {
+			return value(ofField: fld)
+		} else {
+			return nil
+		}
+	}
+
+	public func setValue(value val: CNNativeValue, forField name: String) -> Bool {
+		if let fld = mFieldNames[name] {
+			return setValue(value: val, forField: fld)
+		} else {
+			return false
+		}
+	}
+
+	private func value(ofField fld: CNContactField) -> CNNativeValue? {
+		var result: CNNativeValue? = nil
+		let cont = contact
+		switch fld {
+		case .identifier:
+			result = .stringValue(cont.identifier)
+		case .contactType:
+			result = cont.contactType.getNativeValue()
+		case .namePrefix:
+			result = .stringValue(cont.namePrefix)
+		case .givenName:
+			result = .stringValue(cont.givenName)
+		case .middleName:
+			result = .stringValue(cont.middleName)
+		case .familyName:
+			result = .stringValue(cont.familyName)
+		case .previousFamilyName:
+			result = .stringValue(cont.previousFamilyName)
+		case .nameSuffix:
+			result = .stringValue(cont.nameSuffix)
+		case .nickname:
+			result = .stringValue(cont.nickname)
+		case .phoneticGivenName:
+			result = .stringValue(cont.phoneticGivenName)
+		case .phoneticMiddleName:
+			result = .stringValue(cont.phoneticMiddleName)
+		case .phoneticFamilyName:
+			result = .stringValue(cont.phoneticFamilyName)
+		case .jobTitle:
+			result = .stringValue(cont.jobTitle)
+		case .departmentName:
+			result = .stringValue(cont.departmentName)
+		case .organizationName:
+			result = .stringValue(cont.organizationName)
+		case .phoneticOrganizationName:
+			result = .stringValue(cont.phoneticOrganizationName)
+		case .postalAddresses:
+			result = CNPostalAddress.makeNativeValue(addresses: cont.postalAddresses)
+		case .emailAddresses:
+			result = makeNativeValue(labeledStrings: cont.emailAddresses)
+		case .urlAddresses:
+			result = makeNativeValue(labeledStrings: cont.urlAddresses)
+		case .instantMessageAddresses:
+			result = CNInstantMessageAddress.makeNativeValue(addresses: cont.instantMessageAddresses)
+		case .phoneNumbers:
+			result = CNPhoneNumber.makeNativeValue(numbers: cont.phoneNumbers)
+		case .birthday:
+			result = makeNativeValue(dateComponents: cont.birthday)
+		case .nonGregorianBirthday:
+			result = makeNativeValue(dateComponents: cont.nonGregorianBirthday)
+		case .dates:
+			result = makeNativeValue(labeledDateComponents: cont.dates)
+		case .note:
+			result = .stringValue(cont.note)
+		case .imageData:
+			result = makeNativeValue(imageData: cont.imageData)
+		case .thumbnailImageData:
+			result = makeNativeValue(imageData: cont.thumbnailImageData)
+		case .imageDataAvailable:
+			result = .numberValue(NSNumber(booleanLiteral: cont.imageDataAvailable))
+		case .relations:
+			result = CNContactRelation.makeNativeValue(relations: cont.contactRelations)
+		}
+		return result
+	}
+
+	private func makeNativeValue(labeledStrings lstrs: Array<CNLabeledValue<NSString>>) -> CNNativeValue {
+		var result: Dictionary<String, CNNativeValue> = [:]
+		for lval in lstrs {
+			if let label = lval.label {
+				result[label] = .stringValue(lval.value as String)
+			}
+		}
+		return .dictionaryValue(result)
+	}
+
+	private func makeNativeValue(dateComponents dcomp: DateComponents?) -> CNNativeValue {
+		if let compp = dcomp {
+			if let date = compp.date {
+				return .dateValue(date)
+			}
+		}
+		return .nullValue
+	}
+
+	private func makeNativeValue(labeledDateComponents comps: Array<CNLabeledValue<NSDateComponents>>) -> CNNativeValue {
+		var result: Dictionary<String, CNNativeValue> = [:]
+		for comp in comps {
+			if let label = comp.label {
+				result[label] = makeNativeValue(dateComponents: comp.value as DateComponents)
+			}
+		}
+		return .dictionaryValue(result)
+	}
+
+	private func makeNativeValue(imageData datap: Data?) -> CNNativeValue {
+		if let data = datap {
+			if let img = CNImage(data: data) {
+				return .imageValue(img)
+			}
+		}
+		return .nullValue
+	}
+
+	private func setValue(value val: CNNativeValue, forField fld: CNContactField) -> Bool {
+		var result = false
+		let mcont  = mutableContact
+		switch fld {
+		case .identifier:
+			break
+		case .contactType:
+			if let ctype = CNContactType.fromNativeValue(value: val) {
+				mcont.contactType = ctype
+				result = true
+			}
+		case .namePrefix:
+			if let str = val.toString() {
+				mcont.namePrefix = str
+				result = true
+			}
+		case .givenName:
+			if let str = val.toString() {
+				mcont.givenName = str
+				result = true
+			}
+		case .middleName:
+			if let str = val.toString() {
+				mcont.middleName = str
+				result = true
+			}
+		case .familyName:
+			if let str = val.toString() {
+				mcont.familyName = str
+				result = true
+			}
+		case .previousFamilyName:
+			if let str = val.toString() {
+				mcont.previousFamilyName = str
+				result = true
+			}
+		case .nameSuffix:
+			if let str = val.toString() {
+				mcont.nameSuffix = str
+				result = true
+			}
+		case .nickname:
+			if let str = val.toString() {
+				mcont.nickname = str
+				result = true
+			}
+		case .phoneticGivenName:
+			if let str = val.toString() {
+				mcont.phoneticGivenName = str
+				result = true
+			}
+		case .phoneticMiddleName:
+			if let str = val.toString() {
+				mcont.phoneticMiddleName = str
+				result = true
+			}
+		case .phoneticFamilyName:
+			if let str = val.toString() {
+				mcont.phoneticFamilyName = str
+				result = true
+			}
+		case .jobTitle:
+			if let str = val.toString() {
+				mcont.jobTitle = str
+				result = true
+			}
+		case .departmentName:
+			if let str = val.toString() {
+				mcont.departmentName = str
+				result = true
+			}
+		case .organizationName:
+			if let str = val.toString() {
+				mcont.organizationName = str
+				result = true
+			}
+		case .phoneticOrganizationName:
+			if let str = val.toString() {
+				mcont.phoneticOrganizationName = str
+				result = true
+			}
+		case .postalAddresses:
+			mcont.postalAddresses = CNPostalAddress.decodePostalAddresses(value: val)
+			result = true
+		case .emailAddresses:
+			if let addrs = decodeLabeledString(value: val) {
+				mcont.emailAddresses = addrs
+				result = true
+			}
+		case .urlAddresses:
+			if let addrs = decodeLabeledString(value: val) {
+				mcont.urlAddresses = addrs
+				result = true
+			}
+		case .instantMessageAddresses:
+			mcont.instantMessageAddresses = CNInstantMessageAddress.decodeInstantMessageAddresses(value: val)
+			result = true
+		case .phoneNumbers:
+			mcont.phoneNumbers = CNPhoneNumber.decodePhoneNumbers(value: val)
+			result = true
+		case .birthday:
+			if let date = val.toDate() {
+				mcont.birthday = dateToComponent(date: date)
+				result = true
+			}
+		case .nonGregorianBirthday:
+			if let date = val.toDate() {
+				mcont.nonGregorianBirthday = dateToComponent(date: date)
+				result = true
+			}
+		case .dates:
+			if let dates = decodeLabeledDateComponent(value: val) {
+				mcont.dates = dates
+				result = true
+			}
+		case .note:
+			if let str = val.toString() {
+				mcont.note = str
+				result = true
+			}
+		case .imageData:
+			if let img = val.toImage() {
+				mcont.imageData = img.pngData()
+			}
+		case .thumbnailImageData:
+			break
+		case .imageDataAvailable:
+			break
+		case .relations:
+			mcont.contactRelations = CNContactRelation.decodeRelations(value: val)
+			result = true
+		}
+		if !result {
+			CNLog(logLevel: .error, message: "Failed to set property: \(fld.toName())", atFunction: #function, inFile: #file)
+		}
+		return result
+	}
+
+	private func decodeLabeledString(value val: CNNativeValue) -> Array<CNLabeledValue<NSString>>? {
+		if let dict = val.toDictionary() {
+			var result: Array<CNLabeledValue<NSString>> = []
+			for (key, val) in dict {
+				if let valstr = val.toString() {
+					let labstr = CNLabeledValue(label: key, value: valstr as NSString)
+					result.append(labstr)
 				}
 			}
-			return CNInstantMessageAddress(username: username ?? "", service: service ?? "")
-		} else {
-			CNLog(logLevel: .error, message: "Unexpected source value", atFunction: #function, inFile: #file)
-			return nil
-		}
-	}
-}
-
-public extension CNPhoneNumber
-{
-	func getNativeValue() -> CNNativeValue {
-		return .stringValue(self.stringValue)
-	}
-
-	static func fromNativeValue(value val: CNNativeValue) -> CNPhoneNumber? {
-		if let str = val.toString() {
-			return CNPhoneNumber(stringValue: str)
+			return result
 		} else {
 			return nil
 		}
 	}
-}
 
-public extension CNContactRelation
-{
-	func getNativeValue() -> CNNativeValue {
-		return .stringValue(self.name)
-	}
-
-	static func fromNativeValue(value val: CNNativeValue) -> CNContactRelation? {
-		if let str = val.toString() {
-			return CNContactRelation(name: str)
+	private func decodeLabeledDateComponent(value val: CNNativeValue) -> Array<CNLabeledValue<NSDateComponents>>? {
+		if let dict = val.toDictionary() {
+			var result: Array<CNLabeledValue<NSDateComponents>> = []
+			for (key, val) in dict {
+				if let date = val.toDate() {
+					let comp = dateToComponent(date: date)
+					let labstr = CNLabeledValue(label: key, value: comp as NSDateComponents)
+					result.append(labstr)
+				}
+			}
+			return result
 		} else {
 			return nil
 		}
 	}
-}
 
+	private func dateToComponent(date src: Date) -> DateComponents {
+		return Calendar.current.dateComponents(in: TimeZone.current, from: src)
+	}
 
-public class CNContactRecord: CNDataRecord
-{
-	public enum Property: Int {
-		/* Contact Identification */
-		case identifier				= 0
-		case contactType			= 1
-		/* Name */
-		case namePrefix				= 2
-		case givenName				= 3
-		case middleName				= 4
-		case familyName				= 5
-		case previousFamilyName			= 6
-		case nameSuffix				= 7
-		case nickname				= 8
-		case phoneticGivenName			= 9
-		case phoneticMiddleName			= 10
-		case phoneticFamilyName			= 11
-		/* Work */
-		case jobTitle				= 12
-		case departmentName			= 13
-		case organizationName			= 14
-		case phoneticOrganizationName		= 15
-		/* Addresses */
-		case postalAddresses			= 16
-		case emailAddresses			= 17
-		case urlAddresses			= 18
-		case instantMessageAddresses		= 19
-		/* Phone */
-		case phoneNumbers			= 20
-		/* Birthday */
-		case birthday				= 21
-		case nonGregorianBirthday		= 22
-		case dates				= 23
-		/* Notes */
-		case note				= 24
-		/* Images */
-		case imageData				= 25
-		case thumbnailImageData			= 26
-		case imageDataAvailable			= 27
-		/* Relation ships */
-		case relations				= 28
-
-		public static var numberOfProperties: Int {
-			get { return CNContactRecord.Property.relations.rawValue + 1 }
+	public func save(){
+		switch mContact {
+		case .immutable(_):
+			break		// Not modified
+		case .mutable(let cont):
+			let req = CNSaveRequest()
+			req.update(cont)
+			let store = CNContactStore()
+			do {
+				try store.execute(req)
+			}
+			catch let err as NSError {
+				CNLog(logLevel: .error, message: "Failed to save record: \(err.toString())",
+				      atFunction: #function, inFile: #file)
+			}
 		}
+	}
 
-		public static var allProperties: Array<Property> {
-			get {
-				var result: Array<Property> = []
-				for i in 0..<numberOfProperties {
-					if let prop = Property(rawValue: i) {
-						result.append(prop)
+	public func compare(_ s1: CNContactRecord, byField fld: String) -> ComparisonResult {
+		let v0 = self.value(ofField: fld) ?? .nullValue
+		let v1 = s1.value(ofField:   fld) ?? .nullValue
+		return CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
+	}
+
+	public func toNativeValue() -> CNNativeValue {
+		var result: Dictionary<String, CNNativeValue> = [:]
+		let allfield = CNContactField.allFields
+		for field in allfield {
+			if let val = self.value(ofField: field) {
+				switch val {
+				case .nullValue:
+					break // ignore
+				case .stringValue(let str):
+					if !str.isEmpty {
+						result[field.toName()] = val
 					}
+				default:
+					result[field.toName()] = val
 				}
-				return result
 			}
 		}
-
-		public func toKey() -> String {
-			let result: String
-			switch self {
-			case .identifier:		result = CNContactIdentifierKey
-			case .contactType:		result = CNContactTypeKey
-			case .namePrefix:		result = CNContactNamePrefixKey
-			case .givenName:		result = CNContactGivenNameKey
-			case .middleName:		result = CNContactMiddleNameKey
-			case .familyName:		result = CNContactFamilyNameKey
-			case .previousFamilyName:	result = CNContactPreviousFamilyNameKey
-			case .nameSuffix:		result = CNContactNameSuffixKey
-			case .nickname:			result = CNContactNicknameKey
-			case .phoneticGivenName:	result = CNContactPhoneticGivenNameKey
-			case .phoneticMiddleName:	result = CNContactPhoneticMiddleNameKey
-			case .phoneticFamilyName:	result = CNContactPhoneticFamilyNameKey
-			case .jobTitle:			result = CNContactJobTitleKey
-			case .departmentName:		result = CNContactDepartmentNameKey
-			case .organizationName:		result = CNContactOrganizationNameKey
-			case .phoneticOrganizationName:	result = CNContactPhoneticOrganizationNameKey
-			case .postalAddresses:		result = CNContactPostalAddressesKey
-			case .emailAddresses:		result = CNContactEmailAddressesKey
-			case .urlAddresses:		result = CNContactUrlAddressesKey
-			case .instantMessageAddresses:	result = CNContactInstantMessageAddressesKey
-			case .phoneNumbers:		result = CNContactPhoneNumbersKey
-			case .birthday:			result = CNContactBirthdayKey
-			case .nonGregorianBirthday:	result = CNContactNonGregorianBirthdayKey
-			case .dates:			result = CNContactDatesKey
-			case .note:			result = CNContactNoteKey
-			case .imageData:		result = CNContactImageDataKey
-			case .thumbnailImageData:	result = CNContactThumbnailImageDataKey
-			case .imageDataAvailable:	result = CNContactImageDataAvailableKey
-			case .relations:		result = CNContactRelationsKey
-			}
-			return result
-		}
-
-		public func toName() -> String {
-			let result: String
-			switch self {
-			case .identifier:		result = "identifier"
-			case .contactType:		result = "contact_type"
-			case .namePrefix:		result = "name_prefix"
-			case .givenName:		result = "given_name"
-			case .middleName:		result = "middile_name"
-			case .familyName:		result = "family_name"
-			case .previousFamilyName:	result = "previous_family_name"
-			case .nameSuffix:		result = "name_suffix"
-			case .nickname:			result = "nickname"
-			case .phoneticGivenName:	result = "phonetic_given_name"
-			case .phoneticMiddleName:	result = "phonetic_middle_name"
-			case .phoneticFamilyName:	result = "phonetic_family_name"
-			case .jobTitle:			result = "job_title"
-			case .departmentName:		result = "department_name"
-			case .organizationName:		result = "organization_name"
-			case .phoneticOrganizationName:	result = "phonetic_organization_name"
-			case .postalAddresses:		result = "postal_address"
-			case .emailAddresses:		result = "email_address"
-			case .urlAddresses:		result = "url_address"
-			case .instantMessageAddresses:	result = "instant_message_addresses"
-			case .phoneNumbers:		result = "phone_numbers"
-			case .birthday:			result = "birthday"
-			case .nonGregorianBirthday:	result = "non_gregorian_birthday"
-			case .dates:			result = "dates"
-			case .note:			result = "note"
-			case .imageData:		result = "image_data"
-			case .thumbnailImageData:	result = "thumbnail_image_data"
-			case .imageDataAvailable:	result = "image_data_available"
-			case .relations:		result = "relations"
-			}
-			return result
-		}
+		return .dictionaryValue(result)
 	}
+}
+
+/*
+public class CNContactRecord: CNRecord
+{
+	
 
 	/*
 	 * mStringTable: Convert property-name to property type
@@ -272,10 +438,7 @@ public class CNContactRecord: CNDataRecord
 		}
 	}
 
-	private enum ContactHandle {
-		case immutable(CNContact)
-		case mutable(CNMutableContact)
-	}
+
 
 	public var 		tag:		Int
 	private var		mContact:	ContactHandle
@@ -312,6 +475,10 @@ public class CNContactRecord: CNDataRecord
 			}
 			return result
 		}
+	}
+
+	public var itemCount: Int {
+		get { return Property.numberOfProperties }
 	}
 
 	public var identifier: CNNativeValue {
@@ -681,15 +848,6 @@ public class CNContactRecord: CNDataRecord
 		get { return imageToValue(date: contactForRead.thumbnailImageData) }
 	}
 
-	private func imageToValue(date dat: Data?) -> CNNativeValue {
-		if let data = dat {
-			if let img = CNImage(data: data) {
-				return .imageValue(img)
-			}
-		}
-		return .nullValue
-	}
-
 	public var imageDataAvailable: CNNativeValue {
 		get { return .numberValue(NSNumber(booleanLiteral: contactForRead.imageDataAvailable)) }
 	}
@@ -722,7 +880,22 @@ public class CNContactRecord: CNDataRecord
 		}
 	}
 
-	public func value(forProperty prop: Property) -> CNNativeValue {
+	public func value(ofField name: String) -> CNNativeValue? {
+		if let prop = CNContactRecord.stringToProperty(name: name) {
+			let retval = value(forProperty: prop)
+			switch retval {
+			case .nullValue:
+				return nil
+			default:
+				return retval
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Unknown property: \(name)", atFunction: #function, inFile: #file)
+		}
+		return nil
+	}
+
+	private func value(forProperty prop: Property) -> CNNativeValue {
 		let result: CNNativeValue
 		switch prop {
 		case .identifier:		result = self.identifier
@@ -758,25 +931,6 @@ public class CNContactRecord: CNDataRecord
 		return result
 	}
 
-	public var itemCount: Int {
-		get { return Property.numberOfProperties }
-	}
-
-	public func value(ofField name: String) -> CNNativeValue? {
-		if let prop = CNContactRecord.stringToProperty(name: name) {
-			let retval = value(forProperty: prop)
-			switch retval {
-			case .nullValue:
-				return nil
-			default:
-				return retval
-			}
-		} else {
-			CNLog(logLevel: .error, message: "Unknown property: \(name)", atFunction: #function, inFile: #file)
-		}
-		return nil
-	}
-
 	public func setValue(value val: CNNativeValue, forField name: String) -> Bool {
 		if let prop = CNContactRecord.stringToProperty(name: name) {
 			return setValue(value: val, byProperty: prop)
@@ -786,7 +940,7 @@ public class CNContactRecord: CNDataRecord
 		}
 	}
 
-	public func setValue(value val: CNNativeValue, byProperty prop: Property) -> Bool {
+	private func setValue(value val: CNNativeValue, byProperty prop: Property) -> Bool {
 		var result = true
 		switch prop {
 		case .identifier:			CNLog(logLevel: .error, message: "Writing identifier is NOT supported", atFunction: #function, inFile: #file)
@@ -826,28 +980,8 @@ public class CNContactRecord: CNDataRecord
 		return result
 	}
 
-	public func save(){
-		switch mContact {
-		case .immutable(_):
-			break		// Not modified
-		case .mutable(let cont):
-			let req = CNSaveRequest()
-			req.update(cont)
-			let store = CNContactStore()
-			do {
-				try store.execute(req)
-			}
-			catch let err as NSError {
-				CNLog(logLevel: .error, message: "Failed to save record: \(err.toString())",
-				      atFunction: #function, inFile: #file)
-			}
-		}
-	}
 
-	public func compare(_ s1: CNContactRecord, byProperty prop: Property) -> ComparisonResult {
-		let v0 = self.value(forProperty: prop)
-		let v1 = s1.value(forProperty: prop)
-		return CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
-	}
 }
+
+*/
 

@@ -8,6 +8,7 @@
 import CoconutData
 import Foundation
 
+/*
 public class CNContactTable: CNNativeTableInterface
 {
 	public typealias Property	= CNContactRecord.Property
@@ -207,4 +208,5 @@ public class CNContactTable: CNNativeTableInterface
 		}
 	}
 }
+*/
 

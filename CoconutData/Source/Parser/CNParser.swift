@@ -7,32 +7,6 @@
 
 import Foundation
 
-public enum CNParseError: Error
-{
-	case NoError
-	case TokenizeError(Int, String)
-	case ParseError(Int, String)
-
-	public func description() -> String {
-		let result: String
-		switch self {
-		case .NoError:
-			result = "No error"
-		case .TokenizeError(let lineno, let message):
-			result = "Error: \(message) at line \(lineno)"
-		case .ParseError(let lineno, let message):
-			var linedesc: String
-			if lineno > 0 {
-				linedesc = " at line \(lineno)"
-			} else {
-				linedesc = ""
-			}
-			result = "Error: \(message)" + linedesc
-		}
-		return result
-	}
-}
-
 public struct CNParserConfig
 {
 	private var mAllowIdentiferHasPeriod	: Bool

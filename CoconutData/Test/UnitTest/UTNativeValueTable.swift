@@ -10,28 +10,30 @@ import Foundation
 
 public func testNativeValueTable(console cons: CNConsole) -> Bool
 {
-	var result = true
-
 	let table = CNNativeValueTable()
 	cons.print(string: "* Initial table\n")
 	printTable(table: table, console: cons)
 
 	cons.print(string: "* Add 1st item\n")
-	table.setValue(columnIndex: .number(0), row: 0, value: .stringValue("0/0"))
+	let res0 = setTable(table: table, column: "c0", row: 0, value: .stringValue("0/0"))
 	printTable(table: table, console: cons)
 
 	cons.print(string: "* Add 2nd item\n")
-	table.setValue(columnIndex: .number(1), row: 1, value: .stringValue("1/1"))
+	let res1 = setTable(table: table, column: "c1", row: 1, value: .stringValue("1/1"))
 	printTable(table: table, console: cons)
 
 	cons.print(string: "* Set 5x3 item\n")
+	var res2 = true
 	for col in 0..<5 {
 		for row in 0..<3 {
-			table.setValue(columnIndex: .number(col), row: row, value: .stringValue("\(col)/\(row)"))
+			if !setTable(table: table, column: "c\(col)", row: row, value: .stringValue("\(col)/\(row)")) {
+				res2 = false
+			}
 		}
 	}
 	printTable(table: table, console: cons)
 
+	/*
 	cons.print(string: "* Set columns\n")
 	for col in 0..<6 {
 		table.setTitle(column: col, title: "col\(col)")
@@ -60,9 +62,27 @@ public func testNativeValueTable(console cons: CNConsole) -> Bool
 	}
 	//if !loadTest(source: "[[\"a\", 10.0], [\"b\", 20.0]]", console: cons) {
 	//	result = false
-	//}
+	//}*/
 
-	return result
+	return res0 && res1 && res2
+}
+
+private func setTable(table tbl: CNNativeValueTable, column cname: String, row ridx: Int, value val: CNNativeValue) -> Bool
+{
+	let rec: CNRecord
+	if let r = tbl.record(at: ridx) {
+		rec = r
+	} else {
+		let newrec = tbl.newRecord()
+		tbl.append(record: newrec)
+		rec = newrec
+	}
+	if rec.setValue(value: val, forField: cname) {
+		return true
+	} else {
+		NSLog("Failed to set value")
+		return false
+	}
 }
 
 private func loadTest(source src: String, console cons: CNConsole) -> Bool {

@@ -11,31 +11,7 @@ public class CNNativeValueParser
 {
 	public enum Result {
 		case ok(CNNativeValue)
-		case error(ParseError)
-	}
-
-	public enum ParseError: Error {
-		case tokenError(CNParseError)
-		case unknownError
-		case unexpectedEndOfStream
-		case unexpectedToken(CNToken, Int)
-		case unexpectedSymbol(Character, Character, Int)	// given, required, line
-
-		public var description: String {
-			get {
-				let result: String
-				switch self {
-				case .tokenError(let err):	result = err.description()
-				case .unknownError:		result = "Unknown error"
-				case .unexpectedEndOfStream:	result = "Unexpected end of token"
-				case .unexpectedToken(let token, let lineno):
-					result = "Unexpected token \"\(token.toString())\" at line \(lineno)"
-				case .unexpectedSymbol(let real, let exp, let lineno):
-					result = "Char \"\(exp)\" is expected but \"\(real)\" is given at line \(lineno)"
-				}
-				return result
-			}
-		}
+		case error(NSError)
 	}
 
 	public init(){
@@ -56,15 +32,15 @@ public class CNNativeValueParser
 					let obj = try parseObject(tokenStream: CNTokenStream(source: tokens))
 					result = .ok(obj)
 				} else {
-					result = .error(.unexpectedEndOfStream)
+					result = .error(NSError.parseError(message: "Unexpected end of stream", location: #function))
 				}
-			} catch let err as ParseError {
+			} catch let err as NSError {
 				result = .error(err)
 			} catch {
-				result = .error(.unknownError)
+				result = .error(NSError.parseError(message: "Unknown error", location: #function))
 			}
 		case .error(let err):
-			result = .error(.tokenError(err))
+			result = .error(err)
 		}
 		return result
 	}
@@ -127,9 +103,9 @@ public class CNNativeValueParser
 			}
 		}
 		if let token = stream.get() {
-			throw ParseError.unexpectedToken(token, token.lineNo)
+			throw NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function)
 		} else {
-			throw ParseError.unexpectedEndOfStream
+			throw NSError.parseError(message: "Unexpected end of token", location: #function)
 		}
 	}
 
@@ -152,7 +128,7 @@ public class CNNativeValueParser
 					let _   = stream.unget()
 					result = try parseObject(tokenStream: stream)
 				} else {
-					throw ParseError.unexpectedToken(token, token.lineNo)
+					throw NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function)
 				}
 			} else {
 				switch token.type {
@@ -162,12 +138,12 @@ public class CNNativeValueParser
 				case .DoubleToken(let value):	result = .numberValue(NSNumber(value: value))
 				case .StringToken(let value):	result = .stringValue(value)
 				case .TextToken(let value):	result = .stringValue(value)
-				default: throw ParseError.unexpectedToken(token, token.lineNo)
+				default: throw NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function)
 				}
 			}
 			return result
 		} else {
-			throw ParseError.unexpectedEndOfStream
+			throw NSError.parseError(message: "Unexpected end of stream", location: #function)
 		}
 	}
 
@@ -195,12 +171,14 @@ public class CNNativeValueParser
 	private func requireSymbol(symbol sym: Character, in stream: CNTokenStream) throws {
 		if let token = stream.get() {
 			if let c = token.getSymbol() {
-				if c != sym { throw ParseError.unexpectedSymbol(c, sym, token.lineNo) }
+				if c != sym {
+					throw NSError.parseError(message: "Unexpected symbol \(c)", location: #function)
+				}
 			} else {
-				throw ParseError.unexpectedToken(token, token.lineNo)
+				throw NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function)
 			}
 		} else {
-			throw ParseError.unexpectedEndOfStream
+			throw NSError.parseError(message: "Unexpected end of stream", location: #function)
 		}
 	}
 

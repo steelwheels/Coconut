@@ -47,7 +47,7 @@ private func testStringStreamToToken(console cons: CNConsole) -> Bool
 		dumpTokens(tokens: tokens, console: cons)
 		result = true
 	case .error(let err):
-		cons.print(string: "[Error] " + err.description() + "\n")
+		cons.print(string: "[Error] " + err.toString() + "\n")
 		result = false
 	}
 	return result

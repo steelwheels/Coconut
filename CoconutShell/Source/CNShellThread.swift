@@ -55,7 +55,7 @@ import Foundation
 			case .none:
 				break
 			case .error(let err):
-				CNLog(logLevel: .error, message: err.description(), atFunction: #function, inFile: #file)
+				CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
 				break
 			@unknown default:
 				CNLog(logLevel: .error, message: "Unknown case", atFunction: #function, inFile: #file)

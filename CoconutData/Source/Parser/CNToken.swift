@@ -230,7 +230,7 @@ public struct CNToken {
 
 public enum CNTokenizeResult {
 	case ok(Array<CNToken>)
-	case error(CNParseError)
+	case error(NSError)
 }
 
 public func CNStringToToken(string srcstr: String, config conf: CNParserConfig) -> CNTokenizeResult
@@ -262,11 +262,7 @@ private class CNTokenizer
 			let mtokens = mergeTokens(tokens: tokens)
 			return .ok(mtokens)
 		} catch let error {
-			if let tkerr = error as? CNParseError {
-				return .error(tkerr)
-			} else {
-				fatalError("Unknown error")
-			}
+			return .error(error as NSError)
 		}
 	}
 
@@ -275,11 +271,7 @@ private class CNTokenizer
 			let tokens = try stringToTokens(stream: srcstrm)
 			return .ok(tokens)
 		} catch let error {
-			if let tkerr = error as? CNParseError {
-				return .error(tkerr)
-			} else {
-				fatalError("Unknown error")
-			}
+			return .error(error as NSError)
 		}
 	}
 
@@ -367,13 +359,13 @@ private class CNTokenizer
 			if let value = Double(resstr) {
 				return CNToken(type:.DoubleToken(value), lineNo: mCurrentLine)
 			} else {
-				throw CNParseError.TokenizeError(mCurrentLine, "Double value is expected but \"\(resstr)\" is given")
+				throw NSError.parseError(message: "Double value is expected but \"\(resstr)\" is given", location: #function)
 			}
 		} else {
 			if let value = UInt(resstr, radix: 10) {
 				return CNToken(type: .UIntToken(value), lineNo: mCurrentLine)
 			} else {
-				throw CNParseError.TokenizeError(mCurrentLine, "Integer value is expected but \"\(resstr)\" is given")
+				throw NSError.parseError(message: "Integer value is expected but \"\(resstr)\" is given", location: #function)
 			}
 		}
 	}
@@ -391,7 +383,7 @@ private class CNTokenizer
 		if let value = UInt(resstr, radix: 16) {
 			return CNToken(type: .UIntToken(value), lineNo: mCurrentLine)
 		} else {
-			throw CNParseError.TokenizeError(mCurrentLine, "Hex integer value is expected but \"\(resstr)\" is given")
+			throw NSError.parseError(message: "Hex integer value is expected but \"\(resstr)\" is given at \(mCurrentLine)", location: #function)
 		}
 	}
 
@@ -432,7 +424,7 @@ private class CNTokenizer
 			let _ = srcstream.getc() // drop last "
 			return CNToken(type: .StringToken(resstr), lineNo: mCurrentLine)
 		} else {
-			throw CNParseError.TokenizeError(mCurrentLine, "String value is not ended by \" but \"\(resstr)\" is given")
+			throw NSError.parseError(message: "String value is not ended by \" but \"\(resstr)\" is given", location: #function)
 		}
 	}
 
@@ -458,7 +450,7 @@ private class CNTokenizer
 			let _ = srcstream.getc() // drop last %
 			return CNToken(type: .TextToken(String(substr)), lineNo: mCurrentLine)
 		} else {
-			throw CNParseError.TokenizeError(mCurrentLine, "Text value is not ended by %} but \"\(resstr)\" is given")
+			throw NSError.parseError(message: "Text value is not ended by %} but \"\(resstr)\" is given at \(mCurrentLine)", location: #function)
 		}
 	}
 	

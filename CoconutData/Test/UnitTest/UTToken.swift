@@ -38,7 +38,7 @@ private func testTokenToString(source src: String, console cons: CNConsole) -> B
 			cons.print(string: " \(token.description)\n")
 		}
 	case .error(let err):
-		cons.print(string: "Error: \(err.description())\n")
+		cons.print(string: "Error: \(err.toString())\n")
 		result = false
 	}
 	return result

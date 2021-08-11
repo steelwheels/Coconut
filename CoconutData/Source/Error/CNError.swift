@@ -80,6 +80,18 @@ public extension NSError
 		return error
 	}
 
+	class func unknownError() -> NSError {
+		let userinfo = [NSLocalizedDescriptionKey: "Unknown error"]
+		let error = NSError(domain: self.domain(), code: CNErrorCode.UnknownError.rawValue, userInfo: userinfo)
+		return error
+	}
+
+	class func unknownError(location l: NSString) -> NSError {
+		let userinfo = [NSLocalizedDescriptionKey: NSString(string: "Unknown error"), self.errorLocationKey(): l]
+		let error = NSError(domain: self.domain(), code: CNErrorCode.UnknownError.rawValue, userInfo: userinfo)
+		return error
+	}
+
 	var errorCode: CNErrorCode {
 		get {
 			if let ecode = CNErrorCode(rawValue: code) {

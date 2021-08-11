@@ -347,39 +347,19 @@ public enum CNEscapeCode
 		return result
 	}
 
-	public enum DecodeError: Error {
-		case unknownError
-		case incompletedSequence
-		case unexpectedCharacter(Character)
-		case unknownCommand(Character)		// command
-		case invalidParameter(Character, Int)	// command, parameter
-
-		public func description() -> String {
-			let result: String
-			switch self {
-			case .unknownError:			result = "Unknown error"
-			case .incompletedSequence:		result = "Incomplete sequence"
-			case .unexpectedCharacter(let c):	result = "Unexpected character: \(c)"
-			case .unknownCommand(let c):		result = "Unknown command: \(c)"
-			case .invalidParameter(let c, let p):	result = "Invalid code: \(c), parameter: \(p)"
-			}
-			return result
-		}
-	}
-
 	public enum DecodeResult {
 		case	ok(Array<CNEscapeCode>)
-		case	error(DecodeError)
+		case	error(NSError)
 	}
 
 	public static func decode(string src: String) -> DecodeResult {
 		do {
 			let result = try decodeString(string: src)
 			return .ok(result)
-		} catch let err as DecodeError {
+		} catch let err as NSError {
 			return .error(err)
 		} catch {
-			return .error(.unknownError)
+			return .error(NSError.unknownError())
 		}
 	}
 
@@ -477,7 +457,7 @@ public enum CNEscapeCode
 		let (idx1, tokens) = try decodeStringToTokens(string: src, index: idx)
 		let tokennum       = tokens.count
 		if tokennum == 0 {
-			throw DecodeError.incompletedSequence
+			throw incompleteSequenceError()
 		}
 
 		var results : Array<CNEscapeCode> = []
@@ -500,7 +480,7 @@ public enum CNEscapeCode
 				case 1: results.append(CNEscapeCode.eraceFromCursorToBegin)
 				case 2: results.append(CNEscapeCode.eraceEntireBuffer)
 				default:
-					throw DecodeError.invalidParameter(c, param)
+					throw invalidCommandAndParameterError(command: c, parameter: param)
 				}
 			case "K":
 				let param = try get1Parameter(from: tokens, forCommand: c)
@@ -509,7 +489,7 @@ public enum CNEscapeCode
 				case 1: results.append(CNEscapeCode.eraceFromCursorToLeft)
 				case 2: results.append(CNEscapeCode.eraceEntireLine)
 				default:
-					throw DecodeError.invalidParameter(c, param)
+					throw invalidCommandAndParameterError(command: c, parameter: param)
 				}
 			case "S":
 				let param = try get1Parameter(from: tokens, forCommand: c)
@@ -522,14 +502,14 @@ public enum CNEscapeCode
 				switch param {
 				case 47: results.append(CNEscapeCode.selectAltScreen(true))	// XT_ALTSCRN
 				default:
-					throw DecodeError.invalidParameter(c, param)
+					throw invalidCommandAndParameterError(command: c, parameter: param)
 				}
 			case "l":
 				let param = try getDec1Parameter(from: tokens, forCommand: c)
 				switch param {
 				case 47: results.append(CNEscapeCode.selectAltScreen(false))	// XT_ALTSCRN
 				default:
-					throw DecodeError.invalidParameter(c, param)
+					throw invalidCommandAndParameterError(command: c, parameter: param)
 				}
 			case "m":
 				let params = try getParameters(from: tokens, count: tokennum - 1, forCommand: c)
@@ -544,15 +524,15 @@ public enum CNEscapeCode
 				case 18:
 					results.append(.requestScreenSize)
 				default:
-					throw DecodeError.invalidParameter(c, 0)
+					throw invalidCommandAndParameterError(command: c, parameter: param0)
 				}
 			case "u":
 				results.append(.restoreCursorPosition)
 			default:
-				throw DecodeError.unknownCommand(c)
+				throw unknownCommandError(command: c)
 			}
 		} else {
-			throw DecodeError.incompletedSequence
+			throw incompleteSequenceError()
 		}
 		return (idx1, results)
 	}
@@ -613,7 +593,7 @@ public enum CNEscapeCode
 				if let col = CNColor.color(withEscapeCode: Int32(param - 30)) {
 					results.append(.foregroundColor(col))
 				} else {
-					throw DecodeError.invalidParameter("m", param)
+					throw invalidCommandAndParameterError(command: "m", parameter: param)
 				}
 				/* Next index */
 				index += 1
@@ -625,7 +605,7 @@ public enum CNEscapeCode
 				if let col = CNColor.color(withEscapeCode: Int32(param - 40)) {
 					results.append(.backgroundColor(col))
 				} else {
-					throw DecodeError.invalidParameter("m", param)
+					throw invalidCommandAndParameterError(command: "m", parameter: param)
 				}
 				/* Next index */
 				index += 1
@@ -634,7 +614,7 @@ public enum CNEscapeCode
 				/* Next index */
 				index += 1
 			} else {
-				throw DecodeError.invalidParameter("m", param)
+				throw invalidCommandAndParameterError(command: "m", parameter: param)
 			}
 		}
 		return results
@@ -649,10 +629,10 @@ public enum CNEscapeCode
 					result.append(val)
 				case .SymbolToken(let c):
 					if c != ";" {
-						throw DecodeError.unexpectedCharacter(c)
+						throw unexpectedCharacterError(char: c)
 					}
 				default:
-					throw DecodeError.incompletedSequence
+					throw incompleteSequenceError()
 				}
 			}
 			return result
@@ -669,7 +649,7 @@ public enum CNEscapeCode
 				return param
 			}
 		}
-		throw DecodeError.invalidParameter(c, -1)
+		throw invalidCommandAndParameterError(command: c, parameter: -1)
 	}
 
 	private static func get0Or2Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> (Int, Int) {
@@ -680,7 +660,7 @@ public enum CNEscapeCode
 		} else if tokens.count == 1 {
 			return (1, 1)	// give default values
 		}
-		throw DecodeError.invalidParameter(c, -1)
+		throw invalidCommandAndParameterError(command: c, parameter: -1)
 	}
 
 	private static func get3Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> (Int, Int, Int) {
@@ -689,7 +669,7 @@ public enum CNEscapeCode
 				return (p0, p1, p2)
 			}
 		}
-		throw DecodeError.invalidParameter(c, -1)
+		throw invalidCommandAndParameterError(command: c, parameter: -1)
 	}
 
 	private static func getDec1Parameter(from tokens: Array<CNToken>, forCommand c: Character) throws -> Int {
@@ -700,7 +680,7 @@ public enum CNEscapeCode
 				}
 			}
 		}
-		throw DecodeError.invalidParameter(c, -1)
+		throw invalidCommandAndParameterError(command: c, parameter: -1)
 	}
 
 	private static func decodeStringToTokens(string src: String, index idx: String.Index) throws -> (String.Index, Array<CNToken>) {
@@ -754,12 +734,29 @@ public enum CNEscapeCode
 		if idx < src.endIndex {
 			return (src[idx], src.index(after: idx))
 		} else {
-			throw DecodeError.incompletedSequence
+			throw incompleteSequenceError()
 		}
 	}
 
 	private func hex(_ v: Int) -> String {
 		return String(v, radix: 16)
+	}
+
+	private static func incompleteSequenceError() -> NSError {
+		return NSError.parseError(message: "Incomplete sequence")
+	}
+
+	private static func unexpectedCharacterError(char c: Character) -> NSError {
+		return NSError.parseError(message: "Unexpected character: \(c)")
+	}
+
+	private static func unknownCommandError(command cmd: Character) -> NSError {
+		return NSError.parseError(message: "Unknown command: \(cmd)")
+	}
+
+	private static func invalidCommandAndParameterError(command cmd: Character, parameter param: Int) -> NSError {
+		let paramstr = param > 0 ? ", paramter: \(param)" : ""
+		return NSError.parseError(message: "Invalid command: \(cmd)" + paramstr)
 	}
 }
 
