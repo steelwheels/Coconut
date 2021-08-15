@@ -46,7 +46,7 @@ public class CNContactRecord: CNRecord
 	}}
 
 	public var fieldNames: Array<String> { get {
-		return CNContactField.allFieldNames
+		return Array(mFieldNames.keys)
 	}}
 
 	private var contact: CNContact { get {
