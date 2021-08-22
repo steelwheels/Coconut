@@ -392,26 +392,6 @@ public class CNContactRecord: CNRecord
 		let v1 = s1.value(ofField:   fld) ?? .nullValue
 		return CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
 	}
-
-	public func toNativeValue() -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
-		let allfield = CNContactField.allFields
-		for field in allfield {
-			if let val = self.value(ofField: field) {
-				switch val {
-				case .nullValue:
-					break // ignore
-				case .stringValue(let str):
-					if !str.isEmpty {
-						result[field.toName()] = val
-					}
-				default:
-					result[field.toName()] = val
-				}
-			}
-		}
-		return .dictionaryValue(result)
-	}
 }
 
 

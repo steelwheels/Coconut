@@ -15,7 +15,6 @@ public protocol CNRecord
 	func value(ofField name: String) -> CNNativeValue?
 	func setValue(value val: CNNativeValue, forField name: String) -> Bool
 
-	func toNativeValue() -> CNNativeValue
 	func save()
 }
 
@@ -36,7 +35,6 @@ public protocol CNTable
 	func forEach(callback cbfunc: (_ record: CNRecord) -> Void)
 
 	func sort(byDescriptors descs: CNSortDescriptors)
-	func toNativeValue() -> CNNativeValue
 	func save()
 }
 
@@ -46,18 +44,6 @@ extension CNRecord
 		let s0 = self.value(ofField: name) ?? .nullValue
 		let s1 = rec.value(ofField: name)  ?? .nullValue
 		return CNCompareNativeValue(nativeValue0: s0, nativeValue1: s1)
-	}
-}
-
-extension CNTable
-{
-	public func toNativeValue() -> CNNativeValue {
-		var result: Array<CNNativeValue> = []
-		self.forEach(callback: {
-			(_ rec: CNRecord) -> Void in
-			result.append(rec.toNativeValue())
-		})
-		return .arrayValue(result)
 	}
 }
 
