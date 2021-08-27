@@ -15,6 +15,7 @@ public class CNNativeValueVisitor
 	public func accept(value val: CNNativeValue){
 		switch val {
 		case .nullValue:			visitNill()
+		case .boolValue(let obj):		visit(bool: obj)
 		case .numberValue(let obj):		visit(number: obj)
 		case .stringValue(let obj):		visit(string: obj)
 		case .dateValue(let obj):		visit(date: obj)
@@ -33,6 +34,7 @@ public class CNNativeValueVisitor
 	}
 
 	open func visitNill(){	}
+	open func visit(bool obj: Bool){	}
 	open func visit(number obj: NSNumber){	}
 	open func visit(string obj: String){ }
 	open func visit(date obj: Date){ }

@@ -159,6 +159,10 @@ public class CNJSONEncoder: CNNativeValueVisitor
 		mResult = NSNull()
 	}
 
+	open override func visit(bool obj: Bool) {
+		mResult = NSNumber(booleanLiteral: obj)
+	}
+
 	open override func visit(number obj: NSNumber){
 		mResult = obj
 	}

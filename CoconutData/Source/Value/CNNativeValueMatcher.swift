@@ -52,6 +52,9 @@ public class CNNativeValueMatcher: CNNativeValueVisitor
 	open override func visitNill(){
 		mValueString = nil
 	}
+	open override func visit(bool obj: Bool) {
+		mValueString = "\(obj)"
+	}
 	open override func visit(number obj: NSNumber){
 		mValueString = obj.description(withLocale: nil)
 	}

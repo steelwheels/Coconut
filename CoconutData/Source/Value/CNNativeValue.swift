@@ -15,6 +15,7 @@ import Foundation
  */
 public enum CNNativeType: Int {
 	case	nullType
+	case	boolType
 	case	numberType
 	case	stringType
 	case	dateType
@@ -34,6 +35,7 @@ public enum CNNativeType: Int {
 		let result: String
 		switch self {
 		case .nullType:		result = "Null"
+		case .boolType:		result = "Bool"
 		case .numberType:	result = "Number"
 		case .stringType:	result = "String"
 		case .dateType:		result = "Date"
@@ -55,6 +57,7 @@ public enum CNNativeType: Int {
 
 public enum CNNativeValue {
 	case nullValue
+	case boolValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
 	case stringValue(_ val: String)
 	case dateValue(_ val: Date)
@@ -75,6 +78,7 @@ public enum CNNativeValue {
 			let result: CNNativeType
 			switch self {
 			case .nullValue:		result = .nullType
+			case .boolValue(_):		result = .boolType
 			case .numberValue(_):		result = .numberType
 			case .stringValue(_):		result = .stringType
 			case .dateValue(_):		result = .dateType
@@ -92,6 +96,15 @@ public enum CNNativeValue {
 			}
 			return result
 		}
+	}
+
+	public func toBool() -> Bool? {
+		let result: Bool?
+		switch self {
+		case .boolValue(let val):	result = val
+		default:			result = nil
+		}
+		return result
 	}
 
 	public func toNumber() -> NSNumber? {
@@ -242,6 +255,14 @@ public enum CNNativeValue {
 		return result
 	}
 
+	public func boolProperty(identifier ident: String) ->  Bool? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toBool()
+		} else {
+			return nil
+		}
+	}
+
 	public func numberProperty(identifier ident: String) -> NSNumber? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toNumber()
@@ -365,6 +386,8 @@ public enum CNNativeValue {
 		switch self {
 		case .nullValue:
 			result = CNTextLine(string: "null")
+		case .boolValue(let val):
+			result = CNTextLine(string: "\(val)")
 		case .numberValue(let val):
 			result = CNTextLine(string: val.description)
 		case .stringValue(let val):
@@ -442,6 +465,8 @@ public enum CNNativeValue {
 		switch self {
 		case .nullValue:
 			result = NSNull()
+		case .boolValue(let val):
+			result = val
 		case .numberValue(let val):
 			result = val
 		case .stringValue(let val):

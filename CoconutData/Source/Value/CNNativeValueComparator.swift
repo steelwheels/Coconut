@@ -43,6 +43,10 @@ public func CNCompareNativeValue(nativeValue0 val0: CNNativeValue, nativeValue1 
 	switch val0.valueType {
 	case .nullType:
 		result = .orderedSame
+	case .boolType:
+		if let s0 = val0.toBool(), let s1 = val1.toBool() {
+			result = compare(bool0: s0, bool1: s1)
+		}
 	case .numberType:
 		if let s0 = val0.toNumber(), let s1 = val1.toNumber() {
 			result = s0.compare(s1)
@@ -116,6 +120,18 @@ public func CNCompareNativeValue(nativeValue0 val0: CNNativeValue, nativeValue1 
 		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		return .orderedAscending
 	}
+}
+
+private func compare(bool0 s0: Bool, bool1 s1: Bool) -> ComparisonResult {
+	let result: ComparisonResult
+	if s0 == s1 {
+		result = .orderedSame
+	} else if s0 { // s0:true,  s1: false
+		result = .orderedDescending
+	} else {       // s0:false, s1: true
+		result = .orderedAscending
+	}
+	return result
 }
 
 private func compare(range0 s0: NSRange, range1 s1: NSRange) -> ComparisonResult {
