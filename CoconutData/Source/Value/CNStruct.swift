@@ -1,13 +1,13 @@
 /*
- * @file	CNNativeStruct.swift
- * @brief	Define CNNativeStruct class
+ * @file	CNStruct.swift
+ * @brief	Define CNStruct class
  * @par Copyright
- *   Copyright (C) 2019 Steel Wheels Project
+ *   Copyright (C) 2019, 2021 Steel Wheels Project
  */
 
 import Foundation
 
-open class CNNativeStruct
+open class CNStruct
 {
 	private var mStructName:	String
 	private var mMembers:		Dictionary<String, CNNativeValue>
