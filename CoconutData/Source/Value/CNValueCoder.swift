@@ -138,7 +138,7 @@ public class CNJSONDecoder
 	}
 }
 
-public class CNJSONEncoder: CNNativeValueVisitor
+public class CNJSONEncoder: CNValueVisitor
 {
 	private var mResult: AnyObject?
 

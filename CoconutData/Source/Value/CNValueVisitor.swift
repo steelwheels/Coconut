@@ -1,6 +1,6 @@
 /*
- * @file	CNNativeValueVisitor.swift
- * @brief	Define CNNativeValueVisitor class
+ * @file	CNValueVisitor.swift
+ * @brief	Define CNValueVisitor class
  * @par Copyright
  *   Copyright (C) 2018 Steel Wheels Project
  */
@@ -10,7 +10,7 @@ import UIKit
 #endif
 import Foundation
 
-public class CNNativeValueVisitor
+public class CNValueVisitor
 {
 	public func accept(value val: CNNativeValue){
 		switch val {
