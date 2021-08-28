@@ -39,7 +39,7 @@
 		05A501B626A4203E00A992F9 /* CNNativeValueComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A501B426A4203E00A992F9 /* CNNativeValueComparator.swift */; };
 		05B32C88251501B1000D1411 /* CoconutData_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C86251501B1000D1411 /* CoconutData_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32C96251501D7000D1411 /* CoconutData_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C94251501D7000D1411 /* CoconutData_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05B32CA92515025E000D1411 /* CNNativeValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9F2515025E000D1411 /* CNNativeValueCoder.swift */; };
+		05B32CA92515025E000D1411 /* CNValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9F2515025E000D1411 /* CNValueCoder.swift */; };
 		05B32CAA2515025E000D1411 /* CNNativeValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA02515025E000D1411 /* CNNativeValueParser.swift */; };
 		05B32CAC2515025E000D1411 /* CNNativeValueMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */; };
 		05B32CAD2515025E000D1411 /* CNNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA32515025E000D1411 /* CNNativeValue.swift */; };
@@ -48,7 +48,7 @@
 		05B32CB12515025E000D1411 /* CNStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA72515025E000D1411 /* CNStruct.swift */; };
 		05B32CB425150299000D1411 /* CNStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA72515025E000D1411 /* CNStruct.swift */; };
 		05B32CB525150299000D1411 /* CNNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA32515025E000D1411 /* CNNativeValue.swift */; };
-		05B32CB625150299000D1411 /* CNNativeValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9F2515025E000D1411 /* CNNativeValueCoder.swift */; };
+		05B32CB625150299000D1411 /* CNValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9F2515025E000D1411 /* CNValueCoder.swift */; };
 		05B32CB725150299000D1411 /* CNNativeValueMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA42515025E000D1411 /* CNNativeValueMatcher.swift */; };
 		05B32CB825150299000D1411 /* CNNativeValueMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */; };
 		05B32CB925150299000D1411 /* CNNativeValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA02515025E000D1411 /* CNNativeValueParser.swift */; };
@@ -279,7 +279,7 @@
 		05B32C92251501D7000D1411 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B32C94251501D7000D1411 /* CoconutData_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData_iOS.h; sourceTree = "<group>"; };
 		05B32C95251501D7000D1411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		05B32C9F2515025E000D1411 /* CNNativeValueCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueCoder.swift; sourceTree = "<group>"; };
+		05B32C9F2515025E000D1411 /* CNValueCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValueCoder.swift; sourceTree = "<group>"; };
 		05B32CA02515025E000D1411 /* CNNativeValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueParser.swift; sourceTree = "<group>"; };
 		05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueMerger.swift; sourceTree = "<group>"; };
 		05B32CA32515025E000D1411 /* CNNativeValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValue.swift; sourceTree = "<group>"; };
@@ -533,7 +533,7 @@
 			children = (
 				05B32CA72515025E000D1411 /* CNStruct.swift */,
 				05B32CA32515025E000D1411 /* CNNativeValue.swift */,
-				05B32C9F2515025E000D1411 /* CNNativeValueCoder.swift */,
+				05B32C9F2515025E000D1411 /* CNValueCoder.swift */,
 				05A501B426A4203E00A992F9 /* CNNativeValueComparator.swift */,
 				05B32CA42515025E000D1411 /* CNNativeValueMatcher.swift */,
 				05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */,
@@ -1016,7 +1016,7 @@
 				05B32CD9251502E6000D1411 /* CNOperationExecutor.swift in Sources */,
 				05B32CDF251502E7000D1411 /* CNOperationQueue.swift in Sources */,
 				05B32D8025150945000D1411 /* CNArrayStream.swift in Sources */,
-				05B32CA92515025E000D1411 /* CNNativeValueCoder.swift in Sources */,
+				05B32CA92515025E000D1411 /* CNValueCoder.swift in Sources */,
 				05B32D39251508D9000D1411 /* CNDocumentTypeManager.swift in Sources */,
 				05B32D7A25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7425150945000D1411 /* CNCharacter.swift in Sources */,
@@ -1044,7 +1044,7 @@
 				05B32D7F25150945000D1411 /* CNQueue.swift in Sources */,
 				05B32D38251508D9000D1411 /* CNCurses.swift in Sources */,
 				05B32CB525150299000D1411 /* CNNativeValue.swift in Sources */,
-				05B32CB625150299000D1411 /* CNNativeValueCoder.swift in Sources */,
+				05B32CB625150299000D1411 /* CNValueCoder.swift in Sources */,
 				05BEE0EF2634E02100178484 /* CNStandardFiles.swift in Sources */,
 				05B32D3E251508D9000D1411 /* CNFileHandle.swift in Sources */,
 				051ED8E525C99269003AD1F6 /* CNBitmapContext.swift in Sources */,

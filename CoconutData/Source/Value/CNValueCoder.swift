@@ -1,8 +1,8 @@
 /*
- * @file	CNNativeValueCoder.swift
- * @brief	Define CNNativeValueCoder class
+ * @file	CNValueCoder.swift
+ * @brief	Define CNValueCoder class
  * @par Copyright
- *   Copyright (C) 2018 Steel Wheels Project
+ *   Copyright (C) 2018,2021 Steel Wheels Project
  */
 
 #if os(iOS)
