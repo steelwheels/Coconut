@@ -39,13 +39,11 @@
 		05A501B626A4203E00A992F9 /* CNNativeValueComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A501B426A4203E00A992F9 /* CNNativeValueComparator.swift */; };
 		05B32C88251501B1000D1411 /* CoconutData_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C86251501B1000D1411 /* CoconutData_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B32C96251501D7000D1411 /* CoconutData_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C94251501D7000D1411 /* CoconutData_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05B32CA82515025E000D1411 /* CNValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9E2515025E000D1411 /* CNValueUtil.swift */; };
 		05B32CA92515025E000D1411 /* CNNativeValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9F2515025E000D1411 /* CNNativeValueCoder.swift */; };
 		05B32CAA2515025E000D1411 /* CNNativeValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA02515025E000D1411 /* CNNativeValueParser.swift */; };
 		05B32CAC2515025E000D1411 /* CNNativeValueMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */; };
 		05B32CAD2515025E000D1411 /* CNNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA32515025E000D1411 /* CNNativeValue.swift */; };
 		05B32CAE2515025E000D1411 /* CNNativeValueMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA42515025E000D1411 /* CNNativeValueMatcher.swift */; };
-		05B32CAF2515025E000D1411 /* CNValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA52515025E000D1411 /* CNValue.swift */; };
 		05B32CB02515025E000D1411 /* CNNativeValueVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA62515025E000D1411 /* CNNativeValueVisitor.swift */; };
 		05B32CB12515025E000D1411 /* CNNativeStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA72515025E000D1411 /* CNNativeStruct.swift */; };
 		05B32CB425150299000D1411 /* CNNativeStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA72515025E000D1411 /* CNNativeStruct.swift */; };
@@ -55,8 +53,6 @@
 		05B32CB825150299000D1411 /* CNNativeValueMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */; };
 		05B32CB925150299000D1411 /* CNNativeValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA02515025E000D1411 /* CNNativeValueParser.swift */; };
 		05B32CBB25150299000D1411 /* CNNativeValueVisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA62515025E000D1411 /* CNNativeValueVisitor.swift */; };
-		05B32CBC25150299000D1411 /* CNValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CA52515025E000D1411 /* CNValue.swift */; };
-		05B32CBD25150299000D1411 /* CNValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32C9E2515025E000D1411 /* CNValueUtil.swift */; };
 		05B32CC4251502BE000D1411 /* CNText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CC1251502BE000D1411 /* CNText.swift */; };
 		05B32CC5251502BE000D1411 /* CNText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CC1251502BE000D1411 /* CNText.swift */; };
 		05B32CC6251502BE000D1411 /* CNFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32CC2251502BE000D1411 /* CNFont.swift */; };
@@ -283,13 +279,11 @@
 		05B32C92251501D7000D1411 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B32C94251501D7000D1411 /* CoconutData_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData_iOS.h; sourceTree = "<group>"; };
 		05B32C95251501D7000D1411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		05B32C9E2515025E000D1411 /* CNValueUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValueUtil.swift; sourceTree = "<group>"; };
 		05B32C9F2515025E000D1411 /* CNNativeValueCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueCoder.swift; sourceTree = "<group>"; };
 		05B32CA02515025E000D1411 /* CNNativeValueParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueParser.swift; sourceTree = "<group>"; };
 		05B32CA22515025E000D1411 /* CNNativeValueMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueMerger.swift; sourceTree = "<group>"; };
 		05B32CA32515025E000D1411 /* CNNativeValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValue.swift; sourceTree = "<group>"; };
 		05B32CA42515025E000D1411 /* CNNativeValueMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueMatcher.swift; sourceTree = "<group>"; };
-		05B32CA52515025E000D1411 /* CNValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValue.swift; sourceTree = "<group>"; };
 		05B32CA62515025E000D1411 /* CNNativeValueVisitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeValueVisitor.swift; sourceTree = "<group>"; };
 		05B32CA72515025E000D1411 /* CNNativeStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNNativeStruct.swift; sourceTree = "<group>"; };
 		05B32CC1251502BE000D1411 /* CNText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNText.swift; sourceTree = "<group>"; };
@@ -546,8 +540,6 @@
 				05B32CA02515025E000D1411 /* CNNativeValueParser.swift */,
 				05F969AF26467E7E00E676C5 /* CNNativeValueTable.swift */,
 				05B32CA62515025E000D1411 /* CNNativeValueVisitor.swift */,
-				05B32CA52515025E000D1411 /* CNValue.swift */,
-				05B32C9E2515025E000D1411 /* CNValueUtil.swift */,
 			);
 			path = Value;
 			sourceTree = "<group>";
@@ -990,7 +982,6 @@
 				057588E72629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */,
 				05B32D35251508D9000D1411 /* CNAccess.swift in Sources */,
 				05B32D7625150945000D1411 /* CNEscapeCode.swift in Sources */,
-				05B32CA82515025E000D1411 /* CNValueUtil.swift in Sources */,
 				05B32D7C25150945000D1411 /* CNKeyCode.swift in Sources */,
 				05B32D3B251508D9000D1411 /* CNResource.swift in Sources */,
 				05B32D41251508D9000D1411 /* CNFileManager.swift in Sources */,
@@ -1004,7 +995,6 @@
 				05B32D0025150368000D1411 /* CNToken.swift in Sources */,
 				05B32D7825150945000D1411 /* CNAttributedString.swift in Sources */,
 				052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */,
-				05B32CAF2515025E000D1411 /* CNValue.swift in Sources */,
 				05A501B526A4203E00A992F9 /* CNNativeValueComparator.swift in Sources */,
 				057623E026A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */,
 				0551394125CC2BD6007B1C6B /* CNTimer.swift in Sources */,
@@ -1102,14 +1092,12 @@
 				05B32CEA251502E7000D1411 /* CNThread.swift in Sources */,
 				05B32D5F25150926000D1411 /* CNError.swift in Sources */,
 				05A44F0F25C22B320086033B /* CNMatrix.swift in Sources */,
-				05B32CBC25150299000D1411 /* CNValue.swift in Sources */,
 				05F969B126467E7E00E676C5 /* CNNativeValueTable.swift in Sources */,
 				05B32D17251508B5000D1411 /* CNGraphicsType.swift in Sources */,
 				05B32D8F25150946000D1411 /* CNKeyBinding.swift in Sources */,
 				05B32CDA251502E6000D1411 /* CNOperationExecutor.swift in Sources */,
 				05B32CE0251502E7000D1411 /* CNOperationQueue.swift in Sources */,
 				05B32D8125150945000D1411 /* CNArrayStream.swift in Sources */,
-				05B32CBD25150299000D1411 /* CNValueUtil.swift in Sources */,
 				05B32D3A251508D9000D1411 /* CNDocumentTypeManager.swift in Sources */,
 				05B32D7B25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7525150945000D1411 /* CNCharacter.swift in Sources */,
