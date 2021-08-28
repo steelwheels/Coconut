@@ -42,7 +42,7 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 	private var mProcessId:			Int?
 	private var mEnvironment:		CNEnvironment
 	private var mConsole:			CNFileConsole
-	private var mArgument:			CNNativeValue
+	private var mArgument:			CNValue
 	private var mStatus:			CNProcessStatus
 	private var mTerminationStatus:		Int32
 
@@ -74,7 +74,7 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 		}
 	}
 
-	public func start(argument arg: CNNativeValue){
+	public func start(argument arg: CNValue){
 		mArgument	= arg
 		mStatus		= .Running
 
@@ -109,7 +109,7 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 		})
 	}
 
-	open func main(argument arg: CNNativeValue) -> Int32 {
+	open func main(argument arg: CNValue) -> Int32 {
 		mConsole.error(string: "\(#file): Override this method\n")
 		return -1
 	}

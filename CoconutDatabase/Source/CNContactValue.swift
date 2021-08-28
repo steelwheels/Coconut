@@ -11,8 +11,8 @@ import Foundation
 
 public extension CNPostalAddress
 {
-	static func makeNativeValue(street str: String, city cty: String, state stt: String, postalCode pcd: String, country cry: String) -> CNNativeValue {
-		let result: Dictionary<String, CNNativeValue> = [
+	static func makeNativeValue(street str: String, city cty: String, state stt: String, postalCode pcd: String, country cry: String) -> CNValue {
+		let result: Dictionary<String, CNValue> = [
 			"street":	.stringValue(str),
 			"city":		.stringValue(cty),
 			"state":	.stringValue(stt),
@@ -22,8 +22,8 @@ public extension CNPostalAddress
 		return .dictionaryValue(result)
 	}
 
-	static func makeNativeValue(addresses addrs: Array<CNLabeledValue<CNPostalAddress>>) -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
+	static func makeNativeValue(addresses addrs: Array<CNLabeledValue<CNPostalAddress>>) -> CNValue {
+		var result: Dictionary<String, CNValue> = [:]
 		for lvals in addrs {
 			if let label = lvals.label {
 				let addr  = lvals.value
@@ -33,7 +33,7 @@ public extension CNPostalAddress
 		return .dictionaryValue(result)
 	}
 
-	func getNativeValue() -> CNNativeValue {
+	func getNativeValue() -> CNValue {
 		return CNPostalAddress.makeNativeValue(street:     self.street,
 						       city:       self.city,
 						       state:      self.state,
@@ -41,7 +41,7 @@ public extension CNPostalAddress
 						       country:    self.country)
 	}
 
-	static func decodePostalAddresses(value val: CNNativeValue) -> Array<CNLabeledValue<CNPostalAddress>> {
+	static func decodePostalAddresses(value val: CNValue) -> Array<CNLabeledValue<CNPostalAddress>> {
 		var result: Array<CNLabeledValue<CNPostalAddress>> = []
 		if let dict = val.toDictionary() {
 			for (key, val) in dict {
@@ -58,7 +58,7 @@ public extension CNPostalAddress
 
 public extension CNMutablePostalAddress
 {
-	func setNativeValue(_ val: CNNativeValue){
+	func setNativeValue(_ val: CNValue){
 		if let dict = val.toDictionary() {
 			for (key, val) in dict {
 				if let str = val.toString() {
@@ -79,16 +79,16 @@ public extension CNMutablePostalAddress
 
 public extension CNInstantMessageAddress
 {
-	static func makeNativeValue(service srv: String, userName uname: String) -> CNNativeValue {
-		let result: Dictionary<String, CNNativeValue> = [
+	static func makeNativeValue(service srv: String, userName uname: String) -> CNValue {
+		let result: Dictionary<String, CNValue> = [
 			"service":  .stringValue(srv),
 			"username": .stringValue(uname)
 		]
 		return .dictionaryValue(result)
 	}
 
-	static func makeNativeValue(addresses addrs: Array<CNLabeledValue<CNInstantMessageAddress>>) -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
+	static func makeNativeValue(addresses addrs: Array<CNLabeledValue<CNInstantMessageAddress>>) -> CNValue {
+		var result: Dictionary<String, CNValue> = [:]
 		for lvals in addrs {
 			if let label = lvals.label {
 				let addr  = lvals.value
@@ -98,12 +98,12 @@ public extension CNInstantMessageAddress
 		return .dictionaryValue(result)
 	}
 
-	func getNativeValue() -> CNNativeValue {
+	func getNativeValue() -> CNValue {
 		return CNInstantMessageAddress.makeNativeValue(service:  self.service,
 							       userName: self.username)
 	}
 
-	static func decodeInstantMessageAddresses(value val: CNNativeValue) -> Array<CNLabeledValue<CNInstantMessageAddress>> {
+	static func decodeInstantMessageAddresses(value val: CNValue) -> Array<CNLabeledValue<CNInstantMessageAddress>> {
 		var result: Array<CNLabeledValue<CNInstantMessageAddress>> = []
 		if let dict = val.toDictionary() {
 			for (key, val) in dict {
@@ -116,7 +116,7 @@ public extension CNInstantMessageAddress
 		return result
 	}
 
-	static func fromNativeValue(value val: CNNativeValue) -> CNInstantMessageAddress? {
+	static func fromNativeValue(value val: CNValue) -> CNInstantMessageAddress? {
 		if let dict = val.toDictionary() {
 			var service:  String? = nil
 			var username: String? = nil
@@ -142,12 +142,12 @@ public extension CNInstantMessageAddress
 
 public extension CNPhoneNumber
 {
-	func getNativeValue() -> CNNativeValue {
+	func getNativeValue() -> CNValue {
 		return .stringValue(self.stringValue)
 	}
 
-	static func makeNativeValue(numbers nums: Array<CNLabeledValue<CNPhoneNumber>>) -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
+	static func makeNativeValue(numbers nums: Array<CNLabeledValue<CNPhoneNumber>>) -> CNValue {
+		var result: Dictionary<String, CNValue> = [:]
 		for lvals in nums {
 			if let label = lvals.label {
 				let num  = lvals.value
@@ -157,7 +157,7 @@ public extension CNPhoneNumber
 		return .dictionaryValue(result)
 	}
 
-	static func decodePhoneNumbers(value val: CNNativeValue) -> Array<CNLabeledValue<CNPhoneNumber>> {
+	static func decodePhoneNumbers(value val: CNValue) -> Array<CNLabeledValue<CNPhoneNumber>> {
 		var result: Array<CNLabeledValue<CNPhoneNumber>> = []
 		if let dict = val.toDictionary() {
 			for (key, val) in dict {
@@ -170,7 +170,7 @@ public extension CNPhoneNumber
 		return result
 	}
 
-	static func fromNativeValue(value val: CNNativeValue) -> CNPhoneNumber? {
+	static func fromNativeValue(value val: CNValue) -> CNPhoneNumber? {
 		if let str = val.toString() {
 			return CNPhoneNumber(stringValue: str)
 		} else {
@@ -181,12 +181,12 @@ public extension CNPhoneNumber
 
 public extension CNContactRelation
 {
-	func getNativeValue() -> CNNativeValue {
+	func getNativeValue() -> CNValue {
 		return .stringValue(self.name)
 	}
 
-	static func makeNativeValue(relations rels: Array<CNLabeledValue<CNContactRelation>>) -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
+	static func makeNativeValue(relations rels: Array<CNLabeledValue<CNContactRelation>>) -> CNValue {
+		var result: Dictionary<String, CNValue> = [:]
 		for lvals in rels {
 			if let label = lvals.label {
 				let rel  = lvals.value
@@ -196,7 +196,7 @@ public extension CNContactRelation
 		return .dictionaryValue(result)
 	}
 
-	static func decodeRelations(value val: CNNativeValue) -> Array<CNLabeledValue<CNContactRelation>> {
+	static func decodeRelations(value val: CNValue) -> Array<CNLabeledValue<CNContactRelation>> {
 		var result: Array<CNLabeledValue<CNContactRelation>> = []
 		if let dict = val.toDictionary() {
 			for (key, val) in dict {
@@ -209,7 +209,7 @@ public extension CNContactRelation
 		return result
 	}
 
-	static func fromNativeValue(value val: CNNativeValue) -> CNContactRelation? {
+	static func fromNativeValue(value val: CNValue) -> CNContactRelation? {
 		if let str = val.toString() {
 			return CNContactRelation(name: str)
 		} else {
@@ -223,7 +223,7 @@ public extension CNContactType
 	private static let OrganizationItem	= "organization"
 	private static let PersonItem		= "person"
 
-	func getNativeValue() -> CNNativeValue {
+	func getNativeValue() -> CNValue {
 		let str: String
 		switch self {
 		case .organization:	str = CNContactType.OrganizationItem
@@ -235,7 +235,7 @@ public extension CNContactType
 		return .stringValue(str)
 	}
 
-	static func fromNativeValue(value val: CNNativeValue) -> CNContactType? {
+	static func fromNativeValue(value val: CNValue) -> CNContactType? {
 		if let str = val.toString() {
 			var result: CNContactType? = nil
 			switch str {

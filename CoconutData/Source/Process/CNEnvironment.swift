@@ -15,26 +15,26 @@ public class CNEnvironment
 	private static var	HeightItem	= "HEIGHT"
 	private static var 	PathItem	= "PATH"
 
-	private var mEnvironmentVariable: Dictionary<String, CNNativeValue>
+	private var mEnvironmentVariable: Dictionary<String, CNValue>
 
-	public var variableNames: Dictionary<String, CNNativeValue>.Keys {
+	public var variableNames: Dictionary<String, CNValue>.Keys {
 		get { return mEnvironmentVariable.keys }
 	}
 
 	public init(){
 		let tpref   = CNPreference.shared.terminalPreference
 		mEnvironmentVariable = [
-			"TMPDIR"			: CNNativeValue.stringValue(FileManager.default.temporaryDirectory.path),
-			"PWD"				: CNNativeValue.stringValue(FileManager.default.currentDirectoryPath),
-			CNEnvironment.WidthItem		: CNNativeValue.numberValue(NSNumber(integerLiteral: tpref.width)),
-			CNEnvironment.HeightItem	: CNNativeValue.numberValue(NSNumber(integerLiteral: tpref.height))
+			"TMPDIR"			: CNValue.stringValue(FileManager.default.temporaryDirectory.path),
+			"PWD"				: CNValue.stringValue(FileManager.default.currentDirectoryPath),
+			CNEnvironment.WidthItem		: CNValue.numberValue(NSNumber(integerLiteral: tpref.width)),
+			CNEnvironment.HeightItem	: CNValue.numberValue(NSNumber(integerLiteral: tpref.height))
 		]
 		setupPath()
 	}
 
 	private func setupPath() {
 		if let pathstr = ProcessInfo.processInfo.environment[CNEnvironment.PathItem] {
-			var patharr: Array<CNNativeValue> = []
+			var patharr: Array<CNValue> = []
 			let paths = pathstr.components(separatedBy: ":")
 			for path in paths {
 				if !path.isEmpty {
@@ -45,11 +45,11 @@ public class CNEnvironment
 		}
 	}
 
-	public func set(name nm: String, value val: CNNativeValue) {
+	public func set(name nm: String, value val: CNValue) {
 		mEnvironmentVariable[nm] = val
 	}
 
-	public func get(name nm: String) -> CNNativeValue? {
+	public func get(name nm: String) -> CNValue? {
 		return mEnvironmentVariable[nm]
 	}
 
@@ -94,11 +94,11 @@ public class CNEnvironment
 		return nil
 	}
 
-	public func setArray(name nm: String, value val: Array<CNNativeValue>) {
+	public func setArray(name nm: String, value val: Array<CNValue>) {
 		set(name: nm, value: .arrayValue(val))
 	}
 
-	public func getArray(name nm: String) -> Array<CNNativeValue>? {
+	public func getArray(name nm: String) -> Array<CNValue>? {
 		if let val = get(name: nm) {
 			if let arr = val.toArray() {
 				return arr
@@ -190,7 +190,7 @@ public class CNEnvironment
 			return []
 		}
 		set(paths) {
-			var newarr: Array<CNNativeValue> = []
+			var newarr: Array<CNValue> = []
 			for path in paths {
 				newarr.append(.stringValue(path))
 			}
@@ -198,7 +198,7 @@ public class CNEnvironment
 		}
 	}
 
-	private func valueToString(value val: CNNativeValue) -> String? {
+	private func valueToString(value val: CNValue) -> String? {
 		let result: String?
 		switch val {
 		case .numberValue(let num):	result = num.stringValue
@@ -226,7 +226,7 @@ public class CNEnvironment
 		return result
 	}
 
-	private func valueToDirectory(value val: CNNativeValue) -> URL? {
+	private func valueToDirectory(value val: CNValue) -> URL? {
 		var result: URL? = nil
 		let fmgr = FileManager.default
 		if let url = val.toURL() {

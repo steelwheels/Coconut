@@ -10,7 +10,7 @@ import Foundation
 public class CNValueParser
 {
 	public enum Result {
-		case ok(CNNativeValue)
+		case ok(CNValue)
 		case error(NSError)
 	}
 
@@ -54,11 +54,11 @@ public class CNValueParser
 		return result
 	}
 
-	private func parseObject(tokenStream stream: CNTokenStream) throws -> CNNativeValue {
+	private func parseObject(tokenStream stream: CNTokenStream) throws -> CNValue {
 		if let c = checkSymbol(in: stream) {
 			switch c {
 			case "[":
-				var result: Array<CNNativeValue> = []
+				var result: Array<CNValue> = []
 				var is1st = true
 				parse_loop: while true {
 					if let c = checkSymbol(in: stream) {
@@ -77,7 +77,7 @@ public class CNValueParser
 				}
 				return .arrayValue(result)
 			case "{":
-				var result: Dictionary<String, CNNativeValue> = [:]
+				var result: Dictionary<String, CNValue> = [:]
 				var is1st = true
 				parse_loop: while true {
 					if let c = checkSymbol(in: stream) {
@@ -109,7 +109,7 @@ public class CNValueParser
 		}
 	}
 
-	private func parseProperty(tokenStream stream: CNTokenStream) throws -> (String, CNNativeValue)? {
+	private func parseProperty(tokenStream stream: CNTokenStream) throws -> (String, CNValue)? {
 		if let ident = checkIdentifier(in: stream) {
 			try requireSymbol(symbol: ":", in: stream)
 			let value = try parseValue(tokenStream: stream)
@@ -118,9 +118,9 @@ public class CNValueParser
 		return nil
 	}
 
-	public func parseValue(tokenStream stream: CNTokenStream) throws -> CNNativeValue {
+	public func parseValue(tokenStream stream: CNTokenStream) throws -> CNValue {
 		if let token = stream.get() {
-			let result: CNNativeValue
+			let result: CNValue
 			if let c = token.getSymbol() {
 				if c == "[" {
 					result = try parseArrayValue(tokenStream: stream)
@@ -147,8 +147,8 @@ public class CNValueParser
 		}
 	}
 
-	public func parseArrayValue(tokenStream stream: CNTokenStream) throws -> CNNativeValue {
-		var vals: Array<CNNativeValue> = []
+	public func parseArrayValue(tokenStream stream: CNTokenStream) throws -> CNValue {
+		var vals: Array<CNValue> = []
 		var is1st = true
 		parse_loop: while true {
 			if let c = checkSymbol(in: stream) {

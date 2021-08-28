@@ -12,8 +12,8 @@ public protocol CNRecord
 	var fieldCount: Int { get }
 	var fieldNames: Array<String> { get }
 
-	func value(ofField name: String) -> CNNativeValue?
-	func setValue(value val: CNNativeValue, forField name: String) -> Bool
+	func value(ofField name: String) -> CNValue?
+	func setValue(value val: CNValue, forField name: String) -> Bool
 
 	func save()
 }
@@ -49,8 +49,8 @@ extension CNRecord
 
 extension CNTable
 {
-	public func toNativeValue() -> CNNativeValue {
-		var result: Array<CNNativeValue> = []
+	public func toNativeValue() -> CNValue {
+		var result: Array<CNValue> = []
 		self.forEach(callback: {
 			(_ record: CNRecord) -> Void in
 			if let rec = record as? CNValueRecord {
@@ -63,7 +63,7 @@ extension CNTable
 
 public class CNValueRecord: CNRecord
 {
-	private var mValues:	Dictionary<String, CNNativeValue>
+	private var mValues:	Dictionary<String, CNValue>
 
 	public init(){
 		mValues		= [:]
@@ -77,16 +77,16 @@ public class CNValueRecord: CNRecord
 		return Array(mValues.keys)
 	}}
 
-	public func value(ofField name: String) -> CNNativeValue? {
+	public func value(ofField name: String) -> CNValue? {
 		return mValues[name]
 	}
 
-	public func setValue(value val: CNNativeValue, forField name: String) -> Bool {
+	public func setValue(value val: CNValue, forField name: String) -> Bool {
 		mValues[name] = val
 		return true
 	}
 
-	public func toNativeValue() -> CNNativeValue {
+	public func toNativeValue() -> CNValue {
 		return .dictionaryValue(mValues)
 	}
 
@@ -167,7 +167,7 @@ public class CNValueTable: CNTable
 		}
 	}
 
-	public func load(nativeValue nvalue: CNNativeValue) -> CNTableLoadResult {
+	public func load(nativeValue nvalue: CNValue) -> CNTableLoadResult {
 		switch nvalue {
 		case .arrayValue(let arr):
 			return load(arrayValue: arr)
@@ -181,7 +181,7 @@ public class CNValueTable: CNTable
 	public static let DATA_PROPERTY   = "data"
 
 
-	private func load(arrayValue nvalue: Array<CNNativeValue>) -> CNTableLoadResult {
+	private func load(arrayValue nvalue: Array<CNValue>) -> CNTableLoadResult {
 		/* Reset content */
 		self.reset()
 		var ridx: Int = 0

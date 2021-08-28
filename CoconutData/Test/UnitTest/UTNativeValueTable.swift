@@ -67,7 +67,7 @@ public func testNativeValueTable(console cons: CNConsole) -> Bool
 	return res0 && res1 && res2
 }
 
-private func setTable(table tbl: CNValueTable, column cname: String, row ridx: Int, value val: CNNativeValue) -> Bool
+private func setTable(table tbl: CNValueTable, column cname: String, row ridx: Int, value val: CNValue) -> Bool
 {
 	let rec: CNRecord
 	if let r = tbl.record(at: ridx) {

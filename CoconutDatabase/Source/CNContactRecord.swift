@@ -76,7 +76,7 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
-	public func value(ofField name: String) -> CNNativeValue? {
+	public func value(ofField name: String) -> CNValue? {
 		if let fld = mFieldNames[name] {
 			return value(ofField: fld)
 		} else {
@@ -84,7 +84,7 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
-	public func setValue(value val: CNNativeValue, forField name: String) -> Bool {
+	public func setValue(value val: CNValue, forField name: String) -> Bool {
 		if let fld = mFieldNames[name] {
 			return setValue(value: val, forField: fld)
 		} else {
@@ -92,8 +92,8 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
-	private func value(ofField fld: CNContactField) -> CNNativeValue? {
-		var result: CNNativeValue? = nil
+	private func value(ofField fld: CNContactField) -> CNValue? {
+		var result: CNValue? = nil
 		let cont = contact
 		switch fld {
 		case .identifier:
@@ -158,8 +158,8 @@ public class CNContactRecord: CNRecord
 		return result
 	}
 
-	private func makeNativeValue(labeledStrings lstrs: Array<CNLabeledValue<NSString>>) -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
+	private func makeNativeValue(labeledStrings lstrs: Array<CNLabeledValue<NSString>>) -> CNValue {
+		var result: Dictionary<String, CNValue> = [:]
 		for lval in lstrs {
 			if let label = lval.label {
 				result[label] = .stringValue(lval.value as String)
@@ -168,7 +168,7 @@ public class CNContactRecord: CNRecord
 		return .dictionaryValue(result)
 	}
 
-	private func makeNativeValue(dateComponents dcomp: DateComponents?) -> CNNativeValue {
+	private func makeNativeValue(dateComponents dcomp: DateComponents?) -> CNValue {
 		if let compp = dcomp {
 			if let date = compp.date {
 				return .dateValue(date)
@@ -177,8 +177,8 @@ public class CNContactRecord: CNRecord
 		return .nullValue
 	}
 
-	private func makeNativeValue(labeledDateComponents comps: Array<CNLabeledValue<NSDateComponents>>) -> CNNativeValue {
-		var result: Dictionary<String, CNNativeValue> = [:]
+	private func makeNativeValue(labeledDateComponents comps: Array<CNLabeledValue<NSDateComponents>>) -> CNValue {
+		var result: Dictionary<String, CNValue> = [:]
 		for comp in comps {
 			if let label = comp.label {
 				result[label] = makeNativeValue(dateComponents: comp.value as DateComponents)
@@ -187,7 +187,7 @@ public class CNContactRecord: CNRecord
 		return .dictionaryValue(result)
 	}
 
-	private func makeNativeValue(imageData datap: Data?) -> CNNativeValue {
+	private func makeNativeValue(imageData datap: Data?) -> CNValue {
 		if let data = datap {
 			if let img = CNImage(data: data) {
 				return .imageValue(img)
@@ -196,7 +196,7 @@ public class CNContactRecord: CNRecord
 		return .nullValue
 	}
 
-	private func setValue(value val: CNNativeValue, forField fld: CNContactField) -> Bool {
+	private func setValue(value val: CNValue, forField fld: CNContactField) -> Bool {
 		var result = false
 		let mcont  = mutableContact
 		switch fld {
@@ -334,7 +334,7 @@ public class CNContactRecord: CNRecord
 		return result
 	}
 
-	private func decodeLabeledString(value val: CNNativeValue) -> Array<CNLabeledValue<NSString>>? {
+	private func decodeLabeledString(value val: CNValue) -> Array<CNLabeledValue<NSString>>? {
 		if let dict = val.toDictionary() {
 			var result: Array<CNLabeledValue<NSString>> = []
 			for (key, val) in dict {
@@ -349,7 +349,7 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
-	private func decodeLabeledDateComponent(value val: CNNativeValue) -> Array<CNLabeledValue<NSDateComponents>>? {
+	private func decodeLabeledDateComponent(value val: CNValue) -> Array<CNLabeledValue<NSDateComponents>>? {
 		if let dict = val.toDictionary() {
 			var result: Array<CNLabeledValue<NSDateComponents>> = []
 			for (key, val) in dict {

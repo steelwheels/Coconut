@@ -29,7 +29,7 @@ public func CNCompareValueType(type0 t0: CNValueType, type1 t1: CNValueType) -> 
 	return compare(int0: t0.rawValue, int1: t1.rawValue)
 }
 
-public func CNCompareValue(nativeValue0 val0: CNNativeValue, nativeValue1 val1: CNNativeValue) -> ComparisonResult
+public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValue) -> ComparisonResult
 {
 	switch CNCompareValueType(type0: val0.valueType, type1: val1.valueType){
 	case .orderedAscending:
@@ -225,7 +225,7 @@ private func compare(color0 s0: CNColor, color1 s1: CNColor) -> ComparisonResult
 	return .orderedSame
 }
 
-private func compare(array0 s0: Array<CNNativeValue>, array1 s1: Array<CNNativeValue>) -> ComparisonResult {
+private func compare(array0 s0: Array<CNValue>, array1 s1: Array<CNValue>) -> ComparisonResult {
 	switch compare(int0: s0.count, int1: s1.count) {
 	case .orderedAscending:
 		return .orderedAscending
@@ -247,7 +247,7 @@ private func compare(array0 s0: Array<CNNativeValue>, array1 s1: Array<CNNativeV
 	return .orderedSame
 }
 
-private func compare(dictionary0 s0: Dictionary<String, CNNativeValue>, dictionary1 s1: Dictionary<String, CNNativeValue>) -> ComparisonResult {
+private func compare(dictionary0 s0: Dictionary<String, CNValue>, dictionary1 s1: Dictionary<String, CNValue>) -> ComparisonResult {
 	let keys0 = s0.keys
 	let keys1 = s1.keys
 	switch compare(int0: keys0.count, int1: keys1.count){

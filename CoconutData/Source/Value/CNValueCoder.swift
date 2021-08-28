@@ -12,25 +12,25 @@ import Foundation
 
 public class CNJSONDecoder
 {
-	public func convert(object obj: Any) -> (CNNativeValue?, NSError?) {
+	public func convert(object obj: Any) -> (CNValue?, NSError?) {
 		if let dict = obj as? NSDictionary {
 			return convert(dictionary: dict)
 		} else if let arr = obj as? NSArray {
 			return convert(array: arr)
 		} else if let num = obj as? NSNumber {
-			let val: CNNativeValue = .numberValue(num)
+			let val: CNValue = .numberValue(num)
 			return (val, nil)
 		} else if let str = obj as? NSString {
-			let val: CNNativeValue = .stringValue(String(str))
+			let val: CNValue = .stringValue(String(str))
 			return (val, nil)
 		} else if let url = obj as? URL {
-			let val: CNNativeValue = .URLValue(url)
+			let val: CNValue = .URLValue(url)
 			return (val, nil)
 		} else if let image = obj as? CNImage {
-			let val: CNNativeValue = .imageValue(image)
+			let val: CNValue = .imageValue(image)
 			return (val, nil)
 		} else if let _ = obj as? NSNull {
-			let val: CNNativeValue = .nullValue
+			let val: CNValue = .nullValue
 			return (val, nil)
 		} else {
 			let error = NSError.parseError(message: "Unknown object at \(#function)")
@@ -38,17 +38,17 @@ public class CNJSONDecoder
 		}
 	}
 
-	private func convert(dictionary obj: NSDictionary) -> (CNNativeValue?, NSError?) {
+	private func convert(dictionary obj: NSDictionary) -> (CNValue?, NSError?) {
 		if let rect = convertToRect(dictionary: obj) {
-			return (CNNativeValue.rectValue(rect), nil)
+			return (CNValue.rectValue(rect), nil)
 		} else if let point = convertToPoint(dictionary: obj) {
-			return (CNNativeValue.pointValue(point), nil)
+			return (CNValue.pointValue(point), nil)
 		} else if let size = convertToSize(dictionary: obj) {
-			return (CNNativeValue.sizeValue(size), nil)
+			return (CNValue.sizeValue(size), nil)
 		} else if let range = convertToRange(dictionary: obj) {
-			return (CNNativeValue.rangeValue(range), nil)
+			return (CNValue.rangeValue(range), nil)
 		} else if let keys = obj.allKeys as? Array<NSString> {
-			var result: Dictionary<String, CNNativeValue> = [:]
+			var result: Dictionary<String, CNValue> = [:]
 			for key in keys {
 				let ident = String(key)
 				if let val = obj.value(forKey: ident) {
@@ -62,7 +62,7 @@ public class CNJSONDecoder
 					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 				}
 			}
-			return (CNNativeValue.dictionaryValue(result), nil)
+			return (CNValue.dictionaryValue(result), nil)
 		} else {
 			let error = NSError.parseError(message: "Failed to convert dictionary \(#function)")
 			return (nil, error)
@@ -124,8 +124,8 @@ public class CNJSONDecoder
 		return nil
 	}
 
-	private func convert(array obj: NSArray) -> (CNNativeValue?, NSError?) {
-		var result: Array<CNNativeValue> = []
+	private func convert(array obj: NSArray) -> (CNValue?, NSError?) {
+		var result: Array<CNValue> = []
 		for value in Array(obj) {
 			let (elmval, err) = convert(object: value)
 			if let elmobj = elmval {
@@ -134,7 +134,7 @@ public class CNJSONDecoder
 				return (nil, err!)
 			}
 		}
-		return (CNNativeValue.arrayValue(result), nil)
+		return (CNValue.arrayValue(result), nil)
 	}
 }
 
@@ -146,7 +146,7 @@ public class CNJSONEncoder: CNValueVisitor
 		mResult = nil
 	}
 
-	public func convert(value val: CNNativeValue) -> AnyObject {
+	public func convert(value val: CNValue) -> AnyObject {
 		accept(value: val)
 		if let result = mResult {
 			return result
@@ -242,7 +242,7 @@ public class CNJSONEncoder: CNValueVisitor
 		])
 	}
 
-	open override func visit(dictionary obj: Dictionary<String, CNNativeValue>){
+	open override func visit(dictionary obj: Dictionary<String, CNValue>){
 		let newdict = NSMutableDictionary(capacity: 32)
 		for (key, val) in obj {
 			accept(value: val)
@@ -256,7 +256,7 @@ public class CNJSONEncoder: CNValueVisitor
 		mResult = newdict
 	}
 
-	open override func visit(array obj: Array<CNNativeValue>){
+	open override func visit(array obj: Array<CNValue>){
 		let newarr = NSMutableArray(capacity: 32)
 		for val in obj {
 			accept(value: val)

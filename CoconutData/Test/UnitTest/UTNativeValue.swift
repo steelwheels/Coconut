@@ -1,6 +1,6 @@
 /**
  * @file	UTNativeValue.swift
- * @brief	Test function for CNNativeValue datastructure
+ * @brief	Test function for CNValue datastructure
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
@@ -52,7 +52,7 @@ private func compareValues(console cons: CNConsole) -> Bool {
 	return result
 }
 
-private func compareValue(value0 val0: CNNativeValue, value1 val1: CNNativeValue, expected exp: ComparisonResult, console cons: CNConsole) -> Bool {
+private func compareValue(value0 val0: CNValue, value1 val1: CNValue, expected exp: ComparisonResult, console cons: CNConsole) -> Bool {
 	cons.print(string: "Compare \(val0.toText().toStrings().joined()) and \(val1.toText().toStrings().joined()) ... ")
 	let res = CNCompareValue(nativeValue0: val0, nativeValue1: val1)
 	cons.print(string: " \(res.toString()) -> ")

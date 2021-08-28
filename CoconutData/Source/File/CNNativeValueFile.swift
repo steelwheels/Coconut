@@ -7,9 +7,9 @@
 
 import Foundation
 
-public class CNNativeValueFile {
+public class CNValueFile {
 	public enum Result {
-		case ok(CNNativeValue)
+		case ok(CNValue)
 		case error(NSError)
 	}
 
@@ -36,7 +36,7 @@ public class CNNativeValueFile {
 		}
 	}
 
-	public class func writeFile(URL url: URL, nativeValue val: CNNativeValue) -> NSError? {
+	public class func writeFile(URL url: URL, nativeValue val: CNValue) -> NSError? {
 		do {
 			let lines = val.toText().toStrings()
 			let line  = lines.joined(separator: "\n")

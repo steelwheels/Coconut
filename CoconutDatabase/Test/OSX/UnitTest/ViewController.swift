@@ -122,7 +122,7 @@ class ViewController: NSViewController
 		}
 	}
 
-	private func printElement(elementName name: String, value val: CNNativeValue){
+	private func printElement(elementName name: String, value val: CNValue){
 		let valstr = val.toText().toStrings().joined(separator: "\n")
 		NSLog("element: \(name), value: \(valstr)")
 	}

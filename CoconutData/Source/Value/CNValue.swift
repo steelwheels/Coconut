@@ -1,6 +1,6 @@
 /*
- * @file	CNNativeValue.swift
- * @brief	Define CNNativeValue class
+ * @file	CNValue.swift
+ * @brief	Define CNValue class
  * @par Copyright
  *   Copyright (C) 2017 Steel Wheels Project
  */
@@ -56,7 +56,7 @@ public enum CNValueType: Int
 	}}
 }
 
-public enum CNNativeValue {
+public enum CNValue {
 	case nullValue
 	case boolValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
@@ -67,8 +67,8 @@ public enum CNNativeValue {
 	case sizeValue(_ val: CGSize)
 	case rectValue(_ val: CGRect)
 	case enumValue(_ type: String, _ val: Int32)	// enum type name and value
-	case dictionaryValue(_ val: Dictionary<String, CNNativeValue>)
-	case arrayValue(_ val: Array<CNNativeValue>)
+	case dictionaryValue(_ val: Dictionary<String, CNValue>)
+	case arrayValue(_ val: Array<CNValue>)
 	case URLValue(_ val: URL)
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
@@ -202,8 +202,8 @@ public enum CNNativeValue {
 		return result
 	}
 
-	public func toDictionary() -> Dictionary<String, CNNativeValue>? {
-		let result: Dictionary<String, CNNativeValue>?
+	public func toDictionary() -> Dictionary<String, CNValue>? {
+		let result: Dictionary<String, CNValue>?
 		switch self {
 		case .dictionaryValue(let obj):	result = obj
 		default:			result = nil
@@ -211,8 +211,8 @@ public enum CNNativeValue {
 		return result
 	}
 
-	public func toArray() -> Array<CNNativeValue>? {
-		let result: Array<CNNativeValue>?
+	public func toArray() -> Array<CNValue>? {
+		let result: Array<CNValue>?
 		switch self {
 		case .arrayValue(let obj):	result = obj
 		default:			result = nil
@@ -320,7 +320,7 @@ public enum CNNativeValue {
 		}
 	}
 
-	public func dictionaryProperty(identifier ident: String) -> Dictionary<String, CNNativeValue>? {
+	public func dictionaryProperty(identifier ident: String) -> Dictionary<String, CNValue>? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toDictionary()
 		} else {
@@ -328,7 +328,7 @@ public enum CNNativeValue {
 		}
 	}
 
-	public func arrayProperty(identifier ident: String) -> Array<CNNativeValue>? {
+	public func arrayProperty(identifier ident: String) -> Array<CNValue>? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toArray()
 		} else {
@@ -360,8 +360,8 @@ public enum CNNativeValue {
 		}
 	}
 
-	public func valueProperty(identifier ident: String) -> CNNativeValue? {
-		let result: CNNativeValue?
+	public func valueProperty(identifier ident: String) -> CNValue? {
+		let result: CNValue?
 		switch self {
 		case .dictionaryValue(let dict):
 			result = dict[ident]
@@ -533,8 +533,8 @@ public enum CNNativeValue {
 		return result
 	}
 
-	public static func anyToValue(object obj: Any) -> CNNativeValue? {
-		var result: CNNativeValue? = nil
+	public static func anyToValue(object obj: Any) -> CNValue? {
+		var result: CNValue? = nil
 		if let _ = obj as? NSNull {
 			result = .nullValue
 		} else if let val = obj as? NSNumber {
@@ -552,7 +552,7 @@ public enum CNNativeValue {
 		} else if let val = obj as? CGRect {
 			result = .rectValue(val)
 		} else if let val = obj as? Dictionary<String, Any> {
-			var newdict: Dictionary<String, CNNativeValue> = [:]
+			var newdict: Dictionary<String, CNValue> = [:]
 			for (key, elm) in val {
 				if let child = anyToValue(object: elm) {
 					newdict[key] = child
@@ -560,7 +560,7 @@ public enum CNNativeValue {
 			}
 			result = dictionaryToValue(dictionary: newdict)
 		} else if let val = obj as? Array<Any> {
-			var newarr: Array<CNNativeValue> = []
+			var newarr: Array<CNValue> = []
 			for elm in val {
 				if let child = anyToValue(object: elm) {
 					newarr.append(child)
@@ -581,7 +581,7 @@ public enum CNNativeValue {
 		return result
 	}
 
-	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNNativeValue>) -> CNNativeValue {
+	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue {
 		if dict.count == 2 {
 			/* Range type */
 			if let locval = dict["location"], let lenval = dict["length"] {

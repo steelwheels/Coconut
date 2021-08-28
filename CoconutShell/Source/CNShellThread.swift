@@ -38,7 +38,7 @@ import Foundation
 		super.init(processManager: procmgr, input: ifile, output: ofile, error: efile, environment: env)
 	}
 
-	open override func main(argument arg: CNNativeValue) -> Int32 {
+	open override func main(argument arg: CNValue) -> Int32 {
 		/* Request updating screen size */
 		let reqsz  = CNEscapeCode.requestScreenSize
 		self.console.print(string: reqsz.encode())

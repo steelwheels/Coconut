@@ -14,7 +14,7 @@ import Foundation
 	public static let isCanceledItem	= "isCanceled"
 
 	private var mObservedValueTable:	CNObservedValueTable
-	private var mParameters:		Dictionary<String, CNNativeValue>
+	private var mParameters:		Dictionary<String, CNValue>
 	private var mConsole:			CNFileConsole
 
 	public weak var ownerExecutor: 		CNOperationExecutor?
@@ -46,11 +46,11 @@ import Foundation
 		return Array(mParameters.keys)
 	}
 
-	open func setParameter(name nm: String, value val: CNNativeValue){
+	open func setParameter(name nm: String, value val: CNValue){
 		mParameters[nm] = val
 	}
 
-	open func parameter(name nm: String) -> CNNativeValue? {
+	open func parameter(name nm: String) -> CNValue? {
 		return mParameters[nm]
 	}
 

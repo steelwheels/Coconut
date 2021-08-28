@@ -12,7 +12,7 @@ import Foundation
 
 public class CNValueVisitor
 {
-	public func accept(value val: CNNativeValue){
+	public func accept(value val: CNValue){
 		switch val {
 		case .nullValue:			visitNill()
 		case .boolValue(let obj):		visit(bool: obj)
@@ -43,8 +43,8 @@ public class CNValueVisitor
 	open func visit(point obj: CGPoint){ }
 	open func visit(size obj: CGSize){ }
 	open func visit(rect obj: CGRect){ }
-	open func visit(dictionary obj: Dictionary<String, CNNativeValue>){ }
-	open func visit(array obj: Array<CNNativeValue>){ }
+	open func visit(dictionary obj: Dictionary<String, CNValue>){ }
+	open func visit(array obj: Array<CNValue>){ }
 	open func visit(URL obj: URL){ }
 	open func visit(color obj: CNColor){ }
 	open func visit(image obj: CNImage){ }

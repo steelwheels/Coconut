@@ -9,7 +9,7 @@ import CoconutData
 import Foundation
 
 public class UTSimpleThread: CNThread {
-	open override func main(argument arg: CNNativeValue) -> Int32 {
+	open override func main(argument arg: CNValue) -> Int32 {
 		//self.console.print(string: "testSimpleThread: 2. MainOperation\n")
 		return 0
 	}
@@ -23,7 +23,7 @@ public class UTNestedThread: CNThread {
 		super.init(processManager: procmgr, input: ifile, output: ofile, error: efile, environment: env)
 	}
 
-	open override func main(argument arg: CNNativeValue) -> Int32 {
+	open override func main(argument arg: CNValue) -> Int32 {
 		let procmgr = CNProcessManager()
 		//self.console.print(string: "testNestedThread\(mCount): 1.mainOperation/start\n")
 		if mCount < 3 {
