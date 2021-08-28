@@ -18,7 +18,7 @@ public class CNNativeValueFile {
 			let result: Result
 			let data = try Data(contentsOf: url)
 			if let str = String.stringFromData(data: data) {
-				let parser = CNNativeValueParser()
+				let parser = CNValueParser()
 				let err    = parser.parse(source: str)
 				switch err {
 				case .ok(let value):

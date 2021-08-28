@@ -53,7 +53,7 @@ extension CNTable
 		var result: Array<CNNativeValue> = []
 		self.forEach(callback: {
 			(_ record: CNRecord) -> Void in
-			if let rec = record as? CNNativeValueRecord {
+			if let rec = record as? CNValueRecord {
 				result.append(rec.toNativeValue())
 			}
 		})
@@ -61,7 +61,7 @@ extension CNTable
 	}
 }
 
-public class CNNativeValueRecord: CNRecord
+public class CNValueRecord: CNRecord
 {
 	private var mValues:	Dictionary<String, CNNativeValue>
 
@@ -97,7 +97,7 @@ public class CNNativeValueRecord: CNRecord
 
 public class CNNativeValueTable: CNTable
 {
-	private var mRecords:		Array<CNNativeValueRecord>
+	private var mRecords:		Array<CNValueRecord>
 
 	public init() {
 		mRecords 	= []
@@ -108,7 +108,7 @@ public class CNNativeValueTable: CNTable
 	}}
 
 	public func newRecord() -> CNRecord {
-		return CNNativeValueRecord()
+		return CNValueRecord()
 	}
 
 	public func record(at row: Int) -> CNRecord? {
@@ -120,7 +120,7 @@ public class CNNativeValueTable: CNTable
 	}
 
 	public func append(record rcd: CNRecord) {
-		if let nrcd = rcd as? CNNativeValueRecord {
+		if let nrcd = rcd as? CNValueRecord {
 			mRecords.append(nrcd)
 		} else {
 			CNLog(logLevel: .error, message: "Unexpected record type", atFunction: #function, inFile: #file)
@@ -140,7 +140,7 @@ public class CNNativeValueTable: CNTable
 
 	public func sort(byDescriptors desc: CNSortDescriptors) {
 		mRecords = desc.sort(source: mRecords, comparator: {
-			(_ rec0: CNNativeValueRecord, _ rec1: CNNativeValueRecord, _ key: String) -> ComparisonResult in
+			(_ rec0: CNValueRecord, _ rec1: CNValueRecord, _ key: String) -> ComparisonResult in
 			return rec0.compare(forField: key, with: rec1)
 		})
 	}
@@ -158,7 +158,7 @@ public class CNNativeValueTable: CNTable
 	}
 
 	public func load(source src: String) -> CNTableLoadResult {
-		let parser = CNNativeValueParser()
+		let parser = CNValueParser()
 		switch parser.parse(source: src) {
 		case .ok(let val):
 			return load(nativeValue: val)
@@ -188,7 +188,7 @@ public class CNNativeValueTable: CNTable
 		for val in nvalue {
 			switch val {
 			case .dictionaryValue(let dict):
-				let newrec = CNNativeValueRecord()
+				let newrec = CNValueRecord()
 				for (key, val) in dict {
 					if !newrec.setValue(value: val, forField: key){
 						CNLog(logLevel: .error, message: "Failed to setup record", atFunction: #function, inFile: #file)

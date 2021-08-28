@@ -1,13 +1,13 @@
 /**
- * @file	CNNaviveValueParser.swift
- * @brief	Define CNNativeValueParser class
+ * @file	CNValueParser.swift
+ * @brief	Define CNValueParser class
  * @par Copyright
  *   Copyright (C) 2020 Steel Wheels Project
  */
 
 import Foundation
 
-public class CNNativeValueParser
+public class CNValueParser
 {
 	public enum Result {
 		case ok(CNNativeValue)

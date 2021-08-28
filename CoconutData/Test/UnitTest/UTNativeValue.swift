@@ -22,7 +22,7 @@ public func testNativeValue(console cons: CNConsole) -> Bool
 
 private func parseValue(string str: String, console cons: CNConsole) -> Bool {
 	cons.print(string: "source: \(str)\n")
-	let parser = CNNativeValueParser()
+	let parser = CNValueParser()
 
 	let result: Bool
 	switch parser.parse(source: str) {

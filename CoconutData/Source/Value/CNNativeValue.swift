@@ -31,7 +31,7 @@ public enum CNNativeType: Int {
 	case	imageType
 	case	objectType
 
-	public func toString() -> String {
+	public var description: String { get {
 		let result: String
 		switch self {
 		case .nullType:		result = "Null"
@@ -52,7 +52,7 @@ public enum CNNativeType: Int {
 		case .objectType:	result = "Object"
 		}
 		return result
-	}
+	}}
 }
 
 public enum CNNativeValue {
