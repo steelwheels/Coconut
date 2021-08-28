@@ -1,6 +1,6 @@
 /**
  * @file	UTNativeValueTable.swift
- * @brief	Test function for CNNativeValueTable datastructure
+ * @brief	Test function for CNValueTable datastructure
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
@@ -10,7 +10,7 @@ import Foundation
 
 public func testNativeValueTable(console cons: CNConsole) -> Bool
 {
-	let table = CNNativeValueTable()
+	let table = CNValueTable()
 	cons.print(string: "* Initial table\n")
 	printTable(table: table, console: cons)
 
@@ -67,7 +67,7 @@ public func testNativeValueTable(console cons: CNConsole) -> Bool
 	return res0 && res1 && res2
 }
 
-private func setTable(table tbl: CNNativeValueTable, column cname: String, row ridx: Int, value val: CNNativeValue) -> Bool
+private func setTable(table tbl: CNValueTable, column cname: String, row ridx: Int, value val: CNNativeValue) -> Bool
 {
 	let rec: CNRecord
 	if let r = tbl.record(at: ridx) {
@@ -86,7 +86,7 @@ private func setTable(table tbl: CNNativeValueTable, column cname: String, row r
 }
 
 private func loadTest(source src: String, console cons: CNConsole) -> Bool {
-	let newtable = CNNativeValueTable()
+	let newtable = CNValueTable()
 	let result: Bool
 	switch newtable.load(source: src) {
 	case .ok:
@@ -100,7 +100,7 @@ private func loadTest(source src: String, console cons: CNConsole) -> Bool {
 	return result
 }
 
-private func printTable(table tbl: CNNativeValueTable, console cons: CNConsole)
+private func printTable(table tbl: CNValueTable, console cons: CNConsole)
 {
 	let value = tbl.toNativeValue()
 	let text  = value.toText().toStrings().joined(separator: "\n")

@@ -1,6 +1,6 @@
 /**
- * @file	CNNaviveValueTable.swift
- * @brief	Define CNNativeValueTable class
+ * @file	CNValueTable.swift
+ * @brief	Define CNValueTable class
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
@@ -95,7 +95,7 @@ public class CNValueRecord: CNRecord
 	}
 }
 
-public class CNNativeValueTable: CNTable
+public class CNValueTable: CNTable
 {
 	private var mRecords:		Array<CNValueRecord>
 
