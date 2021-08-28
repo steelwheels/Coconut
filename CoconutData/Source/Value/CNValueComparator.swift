@@ -25,7 +25,7 @@ public extension ComparisonResult
 	}
 }
 
-public func CNCompareValueType(type0 t0: CNNativeType, type1 t1: CNNativeType) -> ComparisonResult {
+public func CNCompareValueType(type0 t0: CNValueType, type1 t1: CNValueType) -> ComparisonResult {
 	return compare(int0: t0.rawValue, int1: t1.rawValue)
 }
 

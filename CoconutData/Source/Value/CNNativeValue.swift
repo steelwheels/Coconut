@@ -13,7 +13,8 @@ import Foundation
 /**
  * The data to present JSValue as native data
  */
-public enum CNNativeType: Int {
+public enum CNValueType: Int
+{
 	case	nullType
 	case	boolType
 	case	numberType
@@ -73,9 +74,9 @@ public enum CNNativeValue {
 	case imageValue(_ val: CNImage)
 	case objectValue(_ val: NSObject)
 
-	public var valueType: CNNativeType {
+	public var valueType: CNValueType {
 		get {
-			let result: CNNativeType
+			let result: CNValueType
 			switch self {
 			case .nullValue:		result = .nullType
 			case .boolValue(_):		result = .boolType
