@@ -47,6 +47,20 @@ extension CNRecord
 	}
 }
 
+extension CNTable
+{
+	public func toNativeValue() -> CNNativeValue {
+		var result: Array<CNNativeValue> = []
+		self.forEach(callback: {
+			(_ record: CNRecord) -> Void in
+			if let rec = record as? CNNativeValueRecord {
+				result.append(rec.toNativeValue())
+			}
+		})
+		return .arrayValue(result)
+	}
+}
+
 public class CNNativeValueRecord: CNRecord
 {
 	private var mValues:	Dictionary<String, CNNativeValue>

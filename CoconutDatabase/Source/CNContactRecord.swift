@@ -390,7 +390,7 @@ public class CNContactRecord: CNRecord
 	public func compare(_ s1: CNContactRecord, byField fld: String) -> ComparisonResult {
 		let v0 = self.value(ofField: fld) ?? .nullValue
 		let v1 = s1.value(ofField:   fld) ?? .nullValue
-		return CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1)
+		return CNCompareValue(nativeValue0: v0, nativeValue1: v1)
 	}
 }
 

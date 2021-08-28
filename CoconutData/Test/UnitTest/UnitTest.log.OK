@@ -526,12 +526,6 @@ Result:
 * testURL
 nullURL = file:///dev/null
 testURL .. OK
-* testValue
-exp: true -> real: true
-exp: Hello, world -> real: Hello, world
-nativeValue: type=Number, value=123
-nativeValue: type=Color, value=sRGB IEC61966-2.1 colorspace 0 0 1 1
-testValue .. OK
 * testQueue
 Initial: {1st:-1, next:0, count:0 }
 []
@@ -651,15 +645,15 @@ Done (2)
 testOperationQueue: OK
 * testProcess
 Hello, World !!
-END of process
 Process is finished with exit code: 0
+END of process
 Execute process which can not be finished
 Terminate the process
 END of process
 Process is terminated with exit code: 15
 testProcess .. OK
 * testCommandTable
-command counts: 1503
+command counts: 1501
 match-prefix: ls lsappinfo lsbom lskq lsm lsmp lsof lsvfs 
 * testEnvironment
 env("HOME") = nil
@@ -1427,159 +1421,58 @@ result: [
     "b"
   ]
 ]
+Compare null and null ...  equal(==) -> OK
+Compare 1.23 and 1.23 ...  equal(==) -> OK
+Compare 1.23 and 12.3 ...  ascending(<) -> OK
+Compare 0 and 12.3 ...  ascending(<) -> OK
 * testNativeValueTable
 * Initial table
 -----
-{
-  data: [
-  ], 
-  headers: [
-  ]
-}
+[
+]
 -----
 * Add 1st item
 -----
-{
-  data: [
-    [
-      "0/0"
-    ]
-  ], 
-  headers: [
-  ]
-}
+[
+  {
+    c0: "0/0"
+  }
+]
 -----
 * Add 2nd item
 -----
-{
-  data: [
-    [
-      "0/0", 
-      null
-    ], 
-    [
-      null, 
-      "1/1"
-    ]
-  ], 
-  headers: [
-  ]
-}
+[
+  {
+    c0: "0/0"
+  }, 
+  {
+    c1: "1/1"
+  }
+]
 -----
 * Set 5x3 item
 -----
-{
-  data: [
-    [
-      "0/0", 
-      "1/0", 
-      "2/0", 
-      "3/0", 
-      "4/0"
-    ], 
-    [
-      "0/1", 
-      "1/1", 
-      "2/1", 
-      "3/1", 
-      "4/1"
-    ], 
-    [
-      "0/2", 
-      "1/2", 
-      "2/2", 
-      "3/2", 
-      "4/2"
-    ]
-  ], 
-  headers: [
-  ]
-}
------
-* Set columns
------
-{
-  data: [
-    [
-      "0/0", 
-      "1/0", 
-      "2/0", 
-      "3/0", 
-      "4/0", 
-      null
-    ], 
-    [
-      "0/1", 
-      "1/1", 
-      "2/1", 
-      "3/1", 
-      "4/1", 
-      null
-    ], 
-    [
-      "0/2", 
-      "1/2", 
-      "2/2", 
-      "3/2", 
-      "4/2", 
-      null
-    ]
-  ], 
-  headers: [
-    "col0", 
-    "col1", 
-    "col2", 
-    "col3", 
-    "col4", 
-    "col5"
-  ]
-}
------
-* Load test
-Source: {
- headers: ["t0", "t1", "t2"],
- data: [
-  [1, 2, 3],
-  [4, 5, 6]
- ]
-}:
------
-{
-  data: [
-    [
-      1, 
-      2, 
-      3
-    ], 
-    [
-      4, 
-      5, 
-      6
-    ]
-  ], 
-  headers: [
-    "t0", 
-    "t1", 
-    "t2"
-  ]
-}
------
-Source: [
- {a:10, b:20, c: 30},
- {a:40, b:50, d: 60}
-]
-:
------
 [
   {
-    a: 10, 
-    b: 20, 
-    c: 30
+    c0: "0/0", 
+    c1: "1/0", 
+    c2: "2/0", 
+    c3: "3/0", 
+    c4: "4/0"
   }, 
   {
-    a: 40, 
-    b: 50, 
-    d: 60
+    c0: "0/1", 
+    c1: "1/1", 
+    c2: "2/1", 
+    c3: "3/1", 
+    c4: "4/1"
+  }, 
+  {
+    c0: "0/2", 
+    c1: "1/2", 
+    c2: "2/2", 
+    c3: "3/2", 
+    c4: "4/2"
   }
 ]
 -----
