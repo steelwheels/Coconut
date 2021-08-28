@@ -1,8 +1,8 @@
 /*
- * @file	CNNativeValueComparator.swift
- * @brief	Define CNNativeValueComparator class
+ * @file	CNValueComparator.swift
+ * @brief	Define CNValueComparator class
  * @par Copyright
- *   Copyright (C) 2018 Steel Wheels Project
+ *   Copyright (C) 2018, 2021 Steel Wheels Project
  */
 
 #if os(OSX)
@@ -12,7 +12,8 @@ import UIKit
 #endif
 import Foundation
 
-public extension ComparisonResult {
+public extension ComparisonResult
+{
 	func toString() -> String {
 		let result: String
 		switch self {
@@ -24,13 +25,13 @@ public extension ComparisonResult {
 	}
 }
 
-public func CNCompareNativeValueType(type0 t0: CNNativeType, type1 t1: CNNativeType) -> ComparisonResult {
+public func CNCompareValueType(type0 t0: CNNativeType, type1 t1: CNNativeType) -> ComparisonResult {
 	return compare(int0: t0.rawValue, int1: t1.rawValue)
 }
 
-public func CNCompareNativeValue(nativeValue0 val0: CNNativeValue, nativeValue1 val1: CNNativeValue) -> ComparisonResult
+public func CNCompareValue(nativeValue0 val0: CNNativeValue, nativeValue1 val1: CNNativeValue) -> ComparisonResult
 {
-	switch CNCompareNativeValueType(type0: val0.valueType, type1: val1.valueType){
+	switch CNCompareValueType(type0: val0.valueType, type1: val1.valueType){
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:
@@ -234,7 +235,7 @@ private func compare(array0 s0: Array<CNNativeValue>, array1 s1: Array<CNNativeV
 		break
 	}
 	for i in 0..<s0.count {
-		switch CNCompareNativeValue(nativeValue0: s0[i], nativeValue1: s1[i]) {
+		switch CNCompareValue(nativeValue0: s0[i], nativeValue1: s1[i]) {
 		case .orderedAscending:
 			return .orderedAscending
 		case .orderedDescending:
@@ -272,7 +273,7 @@ private func compare(dictionary0 s0: Dictionary<String, CNNativeValue>, dictiona
 	for i in 0..<skeys0.count {
 		let key = skeys0[i]
 		if let v0 = s0[key], let v1 = s1[key] {
-			switch CNCompareNativeValue(nativeValue0: v0, nativeValue1: v1) {
+			switch CNCompareValue(nativeValue0: v0, nativeValue1: v1) {
 			case .orderedAscending:
 				return .orderedAscending
 			case .orderedDescending:

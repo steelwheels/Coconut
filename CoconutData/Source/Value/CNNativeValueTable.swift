@@ -43,7 +43,7 @@ extension CNRecord
 	public func compare(forField name: String, with rec: CNRecord) -> ComparisonResult {
 		let s0 = self.value(ofField: name) ?? .nullValue
 		let s1 = rec.value(ofField: name)  ?? .nullValue
-		return CNCompareNativeValue(nativeValue0: s0, nativeValue1: s1)
+		return CNCompareValue(nativeValue0: s0, nativeValue1: s1)
 	}
 }
 
