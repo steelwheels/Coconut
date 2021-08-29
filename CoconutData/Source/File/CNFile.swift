@@ -105,6 +105,21 @@ public class CNFile
 		}
 	}
 
+	public static func open(access acc: Access, for url: URL) -> CNFile? {
+		do {
+			let handle: FileHandle
+			switch acc {
+			case .reader:
+				handle = try FileHandle(forReadingFrom: url)
+			case .writer:
+				handle = try FileHandle(forWritingTo: url)
+			}
+			return CNFile(access: acc, fileHandle: handle)
+		} catch {
+			return nil
+		}
+	}
+
 	public func close() {
 		switch mAccess {
 		case .reader:
