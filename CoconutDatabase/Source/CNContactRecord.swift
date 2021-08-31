@@ -49,6 +49,20 @@ public class CNContactRecord: CNRecord
 		return Array(mFieldNames.keys)
 	}}
 
+	public var filledFieldNames: Array<String> { get {
+		var result: Array<String> = []
+		for key in mFieldNames.keys {
+			if let field = mFieldNames[key] {
+				if let val = value(ofField: field) {
+					if !val.isEmpty() {
+						result.append(key)
+					}
+				}
+			}
+		}
+		return result
+	}}
+
 	private var contact: CNContact { get {
 		switch mContact {
 		case .immutable(let ctct):

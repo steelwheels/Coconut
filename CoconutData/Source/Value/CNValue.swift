@@ -382,6 +382,25 @@ public enum CNValue {
 		return result
 	}
 
+	public func isEmpty() -> Bool {
+		let result: Bool
+		switch self {
+		case .nullValue:
+			result = true
+		case .boolValue(_), .numberValue(_), .dateValue(_), .rangeValue(_), .pointValue(_),
+		     .sizeValue(_), .rectValue(_), .enumValue(_, _), .URLValue(_), .colorValue(_),
+		     .imageValue(_), .objectValue(_):
+			result = false
+		case .stringValue(let str):
+			result = str.isEmpty
+		case .dictionaryValue(let dict):
+			result = dict.count == 0
+		case .arrayValue(let arr):
+			result = arr.count == 0
+		}
+		return result
+	}
+
 	public func toText() -> CNText {
 		let result: CNText
 		switch self {
