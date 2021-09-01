@@ -15,6 +15,7 @@ public protocol CNRecord
 	func value(ofField name: String) -> CNValue?
 	func setValue(value val: CNValue, forField name: String) -> Bool
 
+	var isDirty: Bool { get }
 	func save()
 }
 
@@ -49,6 +50,19 @@ extension CNRecord
 
 extension CNTable
 {
+	public var isDirty: Bool { get {
+		var result = false
+		for i in 0..<self.recordCount {
+			if let rec = self.record(at: i) {
+				if rec.isDirty {
+					result = true
+					break
+				}
+			}
+		}
+		return result
+	}}
+
 	public func toNativeValue() -> CNValue {
 		var result: Array<CNValue> = []
 		self.forEach(callback: {
@@ -64,9 +78,11 @@ extension CNTable
 public class CNValueRecord: CNRecord
 {
 	private var mValues:	Dictionary<String, CNValue>
+	private var mIsDirty:	Bool
 
 	public init(){
 		mValues		= [:]
+		mIsDirty	= false
 	}
 
 	public var fieldCount: Int { get {
@@ -77,12 +93,15 @@ public class CNValueRecord: CNRecord
 		return Array(mValues.keys)
 	}}
 
+	public var isDirty: Bool { get { return mIsDirty }}
+
 	public func value(ofField name: String) -> CNValue? {
 		return mValues[name]
 	}
 
 	public func setValue(value val: CNValue, forField name: String) -> Bool {
 		mValues[name] = val
+		mIsDirty = true
 		return true
 	}
 
@@ -92,6 +111,7 @@ public class CNValueRecord: CNRecord
 
 	public func save(){
 		CNLog(logLevel: .error, message: "Save is not supported", atFunction: #function, inFile: #file)
+		mIsDirty = false
 	}
 }
 

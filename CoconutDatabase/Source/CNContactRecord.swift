@@ -18,10 +18,12 @@ public class CNContactRecord: CNRecord
 
 	private var mContact:		ContactHandle
 	private var mFieldNames:	Dictionary<String, CNContactField>
+	private var mIsDirty:		Bool
 
 	public init(contact ctct: CNContact){
 		mContact	= .immutable(ctct)
 		mFieldNames	= [:]
+		mIsDirty	= true
 		let num = CNContactField.numberOfFields
 		for i in 0..<num {
 			if let fld = CNContactField(rawValue: i) {
@@ -33,6 +35,7 @@ public class CNContactRecord: CNRecord
 	public init(mutableContext ctct: CNMutableContact){
 		mContact	= .mutable(ctct)
 		mFieldNames	= [:]
+		mIsDirty	= true
 		let num = CNContactField.numberOfFields
 		for i in 0..<num {
 			if let fld = CNContactField(rawValue: i) {
@@ -47,6 +50,10 @@ public class CNContactRecord: CNRecord
 
 	public var fieldNames: Array<String> { get {
 		return Array(mFieldNames.keys)
+	}}
+
+	public var isDirty: Bool { get {
+		return mIsDirty
 	}}
 
 	public var filledFieldNames: Array<String> { get {
@@ -100,6 +107,7 @@ public class CNContactRecord: CNRecord
 
 	public func setValue(value val: CNValue, forField name: String) -> Bool {
 		if let fld = mFieldNames[name] {
+			mIsDirty = true
 			return setValue(value: val, forField: fld)
 		} else {
 			return false
@@ -393,6 +401,7 @@ public class CNContactRecord: CNRecord
 			let store = CNContactStore()
 			do {
 				try store.execute(req)
+				mIsDirty = false
 			}
 			catch let err as NSError {
 				CNLog(logLevel: .error, message: "Failed to save record: \(err.toString())",
