@@ -645,8 +645,8 @@ Done (2)
 testOperationQueue: OK
 * testProcess
 Hello, World !!
-Process is finished with exit code: 0
 END of process
+Process is finished with exit code: 0
 Execute process which can not be finished
 Terminate the process
 END of process
@@ -1346,56 +1346,53 @@ res1 = [2.0, 4.0, 6.0]
 * testBitmapContext
 * Init state
 BitmapContents: {
-  width:  10, 
-  height: 10, 
+  width:  10
+  height: 10
   data: {
     ----------
-----------
-----------
-----------
-----------
-----------
-----------
-----------
-----------
-----------
-
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
   }
 }
 * Set 3 points
 BitmapContents: {
-  width:  10, 
-  height: 10, 
+  width:  10
+  height: 10
   data: {
     ----------
--r--------
---g-------
----b------
-----------
-----------
-----------
-----------
-----------
-----------
-
+    -r--------
+    --g-------
+    ---b------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
+    ----------
   }
 }
 * Set 3x3 bitmap
 BitmapContents: {
-  width:  10, 
-  height: 10, 
+  width:  10
+  height: 10
   data: {
     ----------
--r--------
---g-------
----b------
-----yyy---
-----yyy---
-----yyy---
-----------
-----------
-----------
-
+    -r--------
+    --g-------
+    ---b------
+    ----yyy---
+    ----yyy---
+    ----yyy---
+    ----------
+    ----------
+    ----------
   }
 }
 * testNativeValue
@@ -1407,17 +1404,17 @@ result: [
 ]
 source: [10, 20]
 result: [
-  10, 
+  10
   20
 ]
 source: [[10, 20], ["a", "b"]]
 result: [
   [
-    10, 
+    10
     20
-  ], 
+  ]
   [
-    "a", 
+    "a"
     "b"
   ]
 ]
@@ -1444,7 +1441,7 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 [
   {
     c0: "0/0"
-  }, 
+  }
   {
     c1: "1/1"
   }
@@ -1454,24 +1451,24 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 -----
 [
   {
-    c0: "0/0", 
-    c1: "1/0", 
-    c2: "2/0", 
-    c3: "3/0", 
+    c0: "0/0"
+    c1: "1/0"
+    c2: "2/0"
+    c3: "3/0"
     c4: "4/0"
-  }, 
+  }
   {
-    c0: "0/1", 
-    c1: "1/1", 
-    c2: "2/1", 
-    c3: "3/1", 
+    c0: "0/1"
+    c1: "1/1"
+    c2: "2/1"
+    c3: "3/1"
     c4: "4/1"
-  }, 
+  }
   {
-    c0: "0/2", 
-    c1: "1/2", 
-    c2: "2/2", 
-    c3: "3/2", 
+    c0: "0/2"
+    c1: "1/2"
+    c2: "2/2"
+    c3: "3/2"
     c4: "4/2"
   }
 ]

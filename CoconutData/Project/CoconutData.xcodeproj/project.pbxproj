@@ -13,6 +13,7 @@
 		051ED8E425C99269003AD1F6 /* CNBitmapContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */; };
 		051ED8E525C99269003AD1F6 /* CNBitmapContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */; };
 		051EE76625E24C3A006FED4D /* UTBitmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051EE76525E24C3A006FED4D /* UTBitmap.swift */; };
+		05252C5B26E782A50026230C /* UTText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05252C5A26E782A50026230C /* UTText.swift */; };
 		052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
 		052E27D52625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
 		052E27E02625E5EF00414C26 /* UTCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27DF2625E5EF00414C26 /* UTCommandTable.swift */; };
@@ -253,6 +254,7 @@
 		0516F94426351DB60051B5A5 /* CNPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPipe.swift; sourceTree = "<group>"; };
 		051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapContext.swift; sourceTree = "<group>"; };
 		051EE76525E24C3A006FED4D /* UTBitmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTBitmap.swift; sourceTree = "<group>"; };
+		05252C5A26E782A50026230C /* UTText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTText.swift; sourceTree = "<group>"; };
 		052E27D32625DCA100414C26 /* CNCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandTable.swift; sourceTree = "<group>"; };
 		052E27DF2625E5EF00414C26 /* UTCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCommandTable.swift; sourceTree = "<group>"; };
 		053AE54A25D55D380007056B /* CNBitmapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapData.swift; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 				05FC385D255FEC1D004CA79E /* UTResource.swift */,
 				05FC3871255FEC1E004CA79E /* UTStringStream.swift */,
 				05FC3866255FEC1D004CA79E /* UTStringUtil.swift */,
+				05252C5A26E782A50026230C /* UTText.swift */,
 				05FC3858255FEC1C004CA79E /* UTTextStorage.swift */,
 				05FC3860255FEC1D004CA79E /* UTThread.swift */,
 				055C8AEA25DD62F50053510B /* UTToken.swift */,
@@ -909,6 +912,7 @@
 				05FC3882255FEC1E004CA79E /* UTEnvironment.swift in Sources */,
 				05FC3872255FEC1E004CA79E /* UTConsole.swift in Sources */,
 				05A44F1425C24D0D0086033B /* UTMatrix.swift in Sources */,
+				05252C5B26E782A50026230C /* UTText.swift in Sources */,
 				05FC3873255FEC1E004CA79E /* UTTextStorage.swift in Sources */,
 				05FC387B255FEC1E004CA79E /* UTThread.swift in Sources */,
 				0507514326477A9F00848E00 /* UTNativeValueTable.swift in Sources */,

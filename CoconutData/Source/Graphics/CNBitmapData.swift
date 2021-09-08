@@ -102,7 +102,7 @@ public class CNBitmapData
 		let data = CNTextSection()
 		data.header = "data: {" ; data.footer = "}"
 		for line in mData {
-			data.append(text: lineToText(line: line))
+			data.add(text: lineToText(line: line))
 		}
 		result.add(text: data)
 
