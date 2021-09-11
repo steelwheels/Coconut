@@ -121,7 +121,7 @@ public class CNContactRecord: CNRecord
 		case .identifier:
 			result = .stringValue(cont.identifier)
 		case .contactType:
-			result = cont.contactType.getNativeValue()
+			result = cont.contactType.encode()
 		case .namePrefix:
 			result = .stringValue(cont.namePrefix)
 		case .givenName:
@@ -151,71 +151,33 @@ public class CNContactRecord: CNRecord
 		case .phoneticOrganizationName:
 			result = .stringValue(cont.phoneticOrganizationName)
 		case .postalAddresses:
-			result = CNPostalAddress.makeNativeValue(addresses: cont.postalAddresses)
+			result = CNPostalAddress.encode(addresses: cont.postalAddresses)
 		case .emailAddresses:
-			result = makeNativeValue(labeledStrings: cont.emailAddresses)
+			result = CNLabeledStrings.encode(labeledStrings: cont.emailAddresses)
 		case .urlAddresses:
-			result = makeNativeValue(labeledStrings: cont.urlAddresses)
+			result = CNLabeledStrings.encode(labeledStrings: cont.urlAddresses)
 		case .instantMessageAddresses:
-			result = CNInstantMessageAddress.makeNativeValue(addresses: cont.instantMessageAddresses)
+			result = CNLabeledInstantMessageAddresses.encode(addresses: cont.instantMessageAddresses)
 		case .phoneNumbers:
-			result = CNPhoneNumber.makeNativeValue(numbers: cont.phoneNumbers)
+			result = CNPhoneNumber.encode(numbers: cont.phoneNumbers)
 		case .birthday:
-			result = makeNativeValue(dateComponents: cont.birthday)
+			result = CNContactDate.encode(dateComponents: cont.birthday)
 		case .nonGregorianBirthday:
-			result = makeNativeValue(dateComponents: cont.nonGregorianBirthday)
+			result = CNContactDate.encode(dateComponents: cont.nonGregorianBirthday)
 		case .dates:
-			result = makeNativeValue(labeledDateComponents: cont.dates)
+			result = CNLabeledDates.encode(labeledDateComponents: cont.dates)
 		case .note:
 			result = .stringValue(cont.note)
 		case .imageData:
-			result = makeNativeValue(imageData: cont.imageData)
+			result = CNContactImage.encode(imageData: cont.imageData)
 		case .thumbnailImageData:
-			result = makeNativeValue(imageData: cont.thumbnailImageData)
+			result = CNContactImage.encode(imageData: cont.thumbnailImageData)
 		case .imageDataAvailable:
 			result = .numberValue(NSNumber(booleanLiteral: cont.imageDataAvailable))
 		case .relations:
-			result = CNContactRelation.makeNativeValue(relations: cont.contactRelations)
+			result = CNContactRelation.encode(relations: cont.contactRelations)
 		}
 		return result
-	}
-
-	private func makeNativeValue(labeledStrings lstrs: Array<CNLabeledValue<NSString>>) -> CNValue {
-		var result: Dictionary<String, CNValue> = [:]
-		for lval in lstrs {
-			if let label = lval.label {
-				result[label] = .stringValue(lval.value as String)
-			}
-		}
-		return .dictionaryValue(result)
-	}
-
-	private func makeNativeValue(dateComponents dcomp: DateComponents?) -> CNValue {
-		if let compp = dcomp {
-			if let date = compp.date {
-				return .dateValue(date)
-			}
-		}
-		return .nullValue
-	}
-
-	private func makeNativeValue(labeledDateComponents comps: Array<CNLabeledValue<NSDateComponents>>) -> CNValue {
-		var result: Dictionary<String, CNValue> = [:]
-		for comp in comps {
-			if let label = comp.label {
-				result[label] = makeNativeValue(dateComponents: comp.value as DateComponents)
-			}
-		}
-		return .dictionaryValue(result)
-	}
-
-	private func makeNativeValue(imageData datap: Data?) -> CNValue {
-		if let data = datap {
-			if let img = CNImage(data: data) {
-				return .imageValue(img)
-			}
-		}
-		return .nullValue
 	}
 
 	private func setValue(value val: CNValue, forField fld: CNContactField) -> Bool {
@@ -225,7 +187,7 @@ public class CNContactRecord: CNRecord
 		case .identifier:
 			break
 		case .contactType:
-			if let ctype = CNContactType.fromNativeValue(value: val) {
+			if let ctype = CNContactType.decode(value: val) {
 				mcont.contactType = ctype
 				result = true
 			}
@@ -300,36 +262,36 @@ public class CNContactRecord: CNRecord
 				result = true
 			}
 		case .postalAddresses:
-			mcont.postalAddresses = CNPostalAddress.decodePostalAddresses(value: val)
+			mcont.postalAddresses = CNPostalAddress.decode(value: val)
 			result = true
 		case .emailAddresses:
-			if let addrs = decodeLabeledString(value: val) {
+			if let addrs = CNLabeledStrings.decode(value: val) {
 				mcont.emailAddresses = addrs
 				result = true
 			}
 		case .urlAddresses:
-			if let addrs = decodeLabeledString(value: val) {
+			if let addrs = CNLabeledStrings.decode(value: val) {
 				mcont.urlAddresses = addrs
 				result = true
 			}
 		case .instantMessageAddresses:
-			mcont.instantMessageAddresses = CNInstantMessageAddress.decodeInstantMessageAddresses(value: val)
+			mcont.instantMessageAddresses = CNLabeledInstantMessageAddresses.decode(value: val)
 			result = true
 		case .phoneNumbers:
-			mcont.phoneNumbers = CNPhoneNumber.decodePhoneNumbers(value: val)
+			mcont.phoneNumbers = CNPhoneNumber.decode(value: val)
 			result = true
 		case .birthday:
 			if let date = val.toDate() {
-				mcont.birthday = dateToComponent(date: date)
+				mcont.birthday = CNContactDate.decode(date: date)
 				result = true
 			}
 		case .nonGregorianBirthday:
 			if let date = val.toDate() {
-				mcont.nonGregorianBirthday = dateToComponent(date: date)
+				mcont.nonGregorianBirthday = CNContactDate.decode(date: date)
 				result = true
 			}
 		case .dates:
-			if let dates = decodeLabeledDateComponent(value: val) {
+			if let dates = CNLabeledDates.decode(value: val) {
 				mcont.dates = dates
 				result = true
 			}
@@ -347,7 +309,7 @@ public class CNContactRecord: CNRecord
 		case .imageDataAvailable:
 			break
 		case .relations:
-			mcont.contactRelations = CNContactRelation.decodeRelations(value: val)
+			mcont.contactRelations = CNContactRelation.decode(value: val)
 			result = true
 		}
 		if !result {
@@ -355,42 +317,7 @@ public class CNContactRecord: CNRecord
 		}
 		return result
 	}
-
-	private func decodeLabeledString(value val: CNValue) -> Array<CNLabeledValue<NSString>>? {
-		if let dict = val.toDictionary() {
-			var result: Array<CNLabeledValue<NSString>> = []
-			for (key, val) in dict {
-				if let valstr = val.toString() {
-					let labstr = CNLabeledValue(label: key, value: valstr as NSString)
-					result.append(labstr)
-				}
-			}
-			return result
-		} else {
-			return nil
-		}
-	}
-
-	private func decodeLabeledDateComponent(value val: CNValue) -> Array<CNLabeledValue<NSDateComponents>>? {
-		if let dict = val.toDictionary() {
-			var result: Array<CNLabeledValue<NSDateComponents>> = []
-			for (key, val) in dict {
-				if let date = val.toDate() {
-					let comp = dateToComponent(date: date)
-					let labstr = CNLabeledValue(label: key, value: comp as NSDateComponents)
-					result.append(labstr)
-				}
-			}
-			return result
-		} else {
-			return nil
-		}
-	}
-
-	private func dateToComponent(date src: Date) -> DateComponents {
-		return Calendar.current.dateComponents(in: TimeZone.current, from: src)
-	}
-
+	
 	public func save(){
 		switch mContact {
 		case .immutable(_):
