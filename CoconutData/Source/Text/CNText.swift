@@ -28,15 +28,15 @@ public extension CNText
 		}
 		return str
 	}
+}
 
-	func adjustString(string str: String, length len: Int) -> String {
-		var newstr = str
-		let rest   = len - str.utf8.count
-		for _ in 0..<rest {
-			newstr += " "
-		}
-		return newstr
+private func adjustString(string str: String, length len: Int) -> String {
+	var newstr = str
+	let rest   = len - str.utf8.count
+	for _ in 0..<rest {
+		newstr += " "
 	}
+	return newstr
 }
 
 private func split(string src: String) -> Array<String> {
@@ -58,6 +58,16 @@ public class CNTextLine: CNText
 
 	public init(string src: String){
 		mLines = split(string: src)
+	}
+
+	public var lineCount: Int { get { return mLines.count }}
+
+	public func line(at index: Int) -> String? {
+		if 0<=index && index<mLines.count {
+			return mLines[index]
+		} else {
+			return nil
+		}
 	}
 
 	public func set(string src: String){
@@ -89,6 +99,15 @@ public class CNTextLine: CNText
 		}
 	}
 
+	public var width: Int { get {
+		var result: Int = 0
+		mLines.forEach({
+			(_ line: String) -> Void in
+			result = max(result, line.utf8.count)
+		})
+		return result
+	}}
+
 	public func toStrings(indent idt: Int) -> Array<String> {
 		let spaces = indentString(indent: idt)
 		var result: Array<String> = []
@@ -112,7 +131,7 @@ public class CNTextSection: CNText
 		self.mContents	= []
 	}
 
-	public var count: Int { get { return mContents.count }}
+	public var contentCount: Int { get { return mContents.count }}
 
 	public func add(text src: CNText){
 		mContents.append(src)
@@ -162,26 +181,77 @@ public class CNTextSection: CNText
 
 public class CNTextRecord
 {
-	private var mColumns: Array<Array<String>>
+	private var mColumns: Array<CNTextLine>
 
 	public init(){
 		mColumns = []
 	}
 
-	public var count: Int { get { return mColumns.count }}
+	public var columnCount: Int { get { return mColumns.count }}
 
-	public var columns: Array<Array<String>> {
+	public var columns: Array<CNTextLine> {
 		get { return mColumns }
 	}
 
+	/*
+	public func forEachColumn(_ efunc: (_ column: CNTextLine) -> Void){
+		mColumns.forEach({
+			(_ column: CNTextLine) -> Void in
+			efunc(column)
+		})
+	}*/
+
 	public func append(string src: String) {
-		let lines = split(string: src)
-		mColumns.append(lines)
+		append(line: CNTextLine(string: src))
+	}
+
+	public func append(line src: CNTextLine) {
+		mColumns.append(src)
 	}
 
 	public func prepend(string src: String) {
-		let lines = split(string: src)
-		mColumns.insert(lines, at: 0)
+		mColumns.insert(CNTextLine(string: src), at: 0)
+	}
+
+	public func prepend(line src: CNTextLine) {
+		mColumns.insert(src, at: 0)
+	}
+
+	public var widths: Array<Int> { get {
+		var result: Array<Int> = []
+		mColumns.forEach({
+			(_ column: CNTextLine) -> Void in
+			result.append(column.width)
+		})
+		return result
+	}}
+
+	public var maxLineCount: Int { get {
+		var result: Int = 0
+		mColumns.forEach({
+			(_ column: CNTextLine) -> Void in
+			result = max(result, column.lineCount)
+		})
+		return result
+	}}
+
+	public func toStrings(widths widthvals: Array<Int>) -> Array<String> {
+		var result: Array<String> = []
+		for lindex in 0..<self.maxLineCount {
+			var line: String = ""
+			for cindex in 0..<mColumns.count {
+				let column = mColumns[cindex]
+				let colstr: String
+				if let str = column.line(at: lindex) {
+					colstr = str
+				} else {
+					colstr = ""
+				}
+				line += adjustString(string: colstr, length: widthvals[cindex] + 1)
+			}
+			result.append(line)
+		}
+		return result
 	}
 }
 
@@ -228,51 +298,41 @@ public class CNTextTable: CNText
 		}
 	}
 
+	public var maxColumnCount: Int { get {
+		var result: Int = 0
+		mRecords.forEach({
+			(_ rec: CNTextRecord) -> Void in
+			result = max(result, rec.columnCount)
+		})
+		return result
+	}}
+
 	public func toStrings(indent idt: Int) -> Array<String> {
 		/* Get max column num */
-		var colnum: Int = 0
-		for rec in mRecords {
-			colnum = max(colnum, rec.count)
-		}
+		let maxcolnum = self.maxColumnCount
 
 		/* Initialize column width */
-		var width: Array<Int> = Array(repeating: 0, count: colnum)
+		var widths: Array<Int> = Array(repeating: 0, count: maxcolnum)
 
 		/* Get max width for each column */
-		for rec in mRecords {
-			for i in 0..<rec.count {
-				for line in rec.columns[i] {
-					let len = line.utf8.count
-					width[i] = max(width[i], len)
-				}
+		mRecords.forEach({
+			(_ rec: CNTextRecord) -> Void in
+			for i in 0..<rec.columnCount {
+				let col  = rec.columns[i]
+				widths[i] = max(widths[i], col.width)
 			}
-		}
+		})
 
+		/* make lines */
 		let spaces = indentString(indent: idt)
 		var results: Array<String> = []
-		for rec in mRecords {
-			/* Get max line numbers in the record */
-			var linenum = 0
-			for i in 0..<rec.count {
-				linenum = max(linenum, rec.columns[i].count)
+		mRecords.forEach({
+			(_ rec: CNTextRecord) -> Void in
+			let lines = rec.toStrings(widths: widths)
+			for line in lines {
+				results.append(spaces + line)
 			}
-
-			var lines: Array<String> = []
-			for lidx in 0..<linenum {
-				var line: String = spaces
-				for col in 0..<rec.count {
-					let column: String
-					if lidx < rec.columns[col].count {
-						column = rec.columns[col][lidx]
-					} else {
-						column = ""
-					}
-					line += adjustString(string: column, length: width[col] + 1)
-				}
-				lines.append(line)
-			}
-			results.append(contentsOf: lines)
-		}
+		})
 		return results
 	}
 }

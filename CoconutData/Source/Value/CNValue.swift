@@ -419,34 +419,13 @@ public enum CNValue {
 		case .rangeValue(let val):
 			result = CNTextLine(string: val.description)
 		case .pointValue(let val):
-			result = CNTextLine(string: "{x:\(val.x), y:\(val.y)}")
+			result = pointToText(rect: val)
 		case .sizeValue(let val):
-			result = CNTextLine(string: "{width:\(val.width), height:\(val.height)}")
+			result = sizeToText(size: val)
 		case .rectValue(let val):
-			let x      = val.origin.x
-			let y      = val.origin.y
-			let width  = val.size.width
-			let height = val.size.height
-			result = CNTextLine(string: "{x:\(x), y:\(y), width:\(width), height:\(height)}")
+			result = rectToText(rect: val)
 		case .dictionaryValue(let val):
-			let sect = CNTextSection()
-			sect.header = "{" ; sect.footer = "}"
-			let keys = val.keys.sorted()
-			for key in keys {
-				if let elm = val[key] {
-					let elmtxt = elm.toText()
-					if let sectxt = elmtxt as? CNTextSection {
-						sectxt.header = key + ": " + sectxt.header
-					} else {
-						elmtxt.prepend(string: key + ": ")
-					}
-					sect.add(text: elmtxt)
-				} else {
-					CNLog(logLevel: .error, message: "No object for key: \(key)", atFunction: #function, inFile: #file)
-					sect.add(text: CNTextLine(string: "?"))
-				}
-			}
-			result = sect
+			result = dictionaryToText(dictionary: val)
 		case .arrayValue(let val):
 			let sect = CNTextSection()
 			sect.header = "[" ; sect.footer = "]"
@@ -478,6 +457,92 @@ public enum CNValue {
 			result = CNTextLine(string: "object(\(classname))")
 		}
 		return result
+	}
+
+	private func pointToText(rect val: CGPoint) -> CNTextTable {
+		let x      = val.x
+		let y      = val.y
+
+		let table  = CNTextTable()
+
+		let rec0   = CNTextRecord()
+		rec0.append(string: "x")
+		rec0.append(string: "\(x)")
+		table.add(record: rec0)
+
+		let rec1   = CNTextRecord()
+		rec1.append(string: "y")
+		rec1.append(string: "\(y)")
+		table.add(record: rec1)
+
+		return table
+	}
+
+	private func sizeToText(size val: CGSize) -> CNTextTable {
+		let width  = val.width
+		let height = val.height
+
+		let table  = CNTextTable()
+
+		let rec0   = CNTextRecord()
+		rec0.append(string: "width")
+		rec0.append(string: "\(width)")
+		table.add(record: rec0)
+
+		let rec1   = CNTextRecord()
+		rec1.append(string: "height")
+		rec1.append(string: "\(height)")
+		table.add(record: rec1)
+
+		return table
+	}
+
+	private func rectToText(rect val: CGRect) -> CNTextTable {
+		let x      = val.origin.x
+		let y      = val.origin.y
+		let width  = val.size.width
+		let height = val.size.height
+
+		let table  = CNTextTable()
+
+		let rec0   = CNTextRecord()
+		rec0.append(string: "x")
+		rec0.append(string: "\(x)")
+		table.add(record: rec0)
+
+		let rec1   = CNTextRecord()
+		rec1.append(string: "y")
+		rec1.append(string: "\(y)")
+		table.add(record: rec1)
+
+		let rec2   = CNTextRecord()
+		rec2.append(string: "width")
+		rec2.append(string: "\(width)")
+		table.add(record: rec2)
+
+		let rec3   = CNTextRecord()
+		rec3.append(string: "height")
+		rec3.append(string: "\(height)")
+		table.add(record: rec3)
+
+		return table
+	}
+
+	private func dictionaryToText(dictionary dict: Dictionary<String, CNValue>) -> CNTextSection {
+		let sect = CNTextSection()
+		sect.header = "{" ; sect.footer = "}"
+		let table = CNTextTable()
+		for (key, val) in dict {
+			let record = CNTextRecord()
+			record.append(string: key)
+			let txt   = val.toText()
+			let lines = txt.toStrings()
+			record.append(string: lines.joined(separator: "\n"))
+			table.add(record: record)
+		}
+		sect.add(text: table)
+
+		return sect
 	}
 
 	public func toAny() -> Any {
