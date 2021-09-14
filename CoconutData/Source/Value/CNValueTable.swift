@@ -90,7 +90,7 @@ public class CNValueRecord: CNRecord
 	}}
 
 	public var fieldNames: Array<String> { get {
-		return Array(mValues.keys)
+		return Array(mValues.keys.sorted())
 	}}
 
 	public var isDirty: Bool { get { return mIsDirty }}
