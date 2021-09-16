@@ -625,7 +625,9 @@ home directory: file:///Users/tomoo/
 testFileManager .. NG
 * testObserver
 isExecuting -> true
-testObserver .. OK
+testObserver (d) .. OK
+[0] -> true
+testObserver (a) .. OK
 * testOperation
 Wait for finish operations
 testOperation ... OK
@@ -645,8 +647,8 @@ Done (2)
 testOperationQueue: OK
 * testProcess
 Hello, World !!
-END of process
 Process is finished with exit code: 0
+END of process
 Execute process which can not be finished
 Terminate the process
 END of process
@@ -1432,7 +1434,7 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 -----
 [
   {
-    c0: "0/0"
+    c0 "0/0" 
   }
 ]
 -----
@@ -1440,10 +1442,10 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 -----
 [
   {
-    c0: "0/0"
+    c0 "0/0" 
   }
   {
-    c1: "1/1"
+    c1 "1/1" 
   }
 ]
 -----
@@ -1451,26 +1453,35 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 -----
 [
   {
-    c0: "0/0"
-    c1: "1/0"
-    c2: "2/0"
-    c3: "3/0"
-    c4: "4/0"
+    c0 "0/0" 
+    c1 "1/0" 
+    c2 "2/0" 
+    c3 "3/0" 
+    c4 "4/0" 
   }
   {
-    c0: "0/1"
-    c1: "1/1"
-    c2: "2/1"
-    c3: "3/1"
-    c4: "4/1"
+    c0 "0/1" 
+    c1 "1/1" 
+    c2 "2/1" 
+    c3 "3/1" 
+    c4 "4/1" 
   }
   {
-    c0: "0/2"
-    c1: "1/2"
-    c2: "2/2"
-    c3: "3/2"
-    c4: "4/2"
+    c0 "0/2" 
+    c1 "1/2" 
+    c2 "2/2" 
+    c3 "3/2" 
+    c4 "4/2" 
   }
 ]
 -----
+* testText
+Result of toString:
+header: {
+  EXP:1 + 1= 2
+  A0  A1  A2  
+  B08 B09 B10 
+  C2  C0      
+      C1      
+}
 [Result] NG

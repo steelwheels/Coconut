@@ -13,7 +13,7 @@ import Foundation
 	public static let isFinishedItem	= "isFinished"
 	public static let isCanceledItem	= "isCanceled"
 
-	private var mObservedValueTable:	CNObservedValueTable
+	private var mObserverDictionary:	CNObserverDictionary
 	private var mParameters:		Dictionary<String, CNValue>
 	private var mConsole:			CNFileConsole
 
@@ -25,7 +25,7 @@ import Foundation
 	public var	totalExecutionTime:	TimeInterval	/* [ms] */
 
 	public init(input ifile: CNFile, output ofile: CNFile, error efile: CNFile) {
-		mObservedValueTable = CNObservedValueTable()
+		mObserverDictionary = CNObserverDictionary()
 		mParameters	    = [:]
 		mConsole	    = CNFileConsole(input: ifile, output: ofile, error: efile)
 		ownerExecutor	    = nil
@@ -37,9 +37,9 @@ import Foundation
 
 	deinit {
 		ownerExecutor = nil
-		mObservedValueTable.removeObserver(forKey: CNOperationContext.isExecutingItem)
-		mObservedValueTable.removeObserver(forKey: CNOperationContext.isFinishedItem)
-		mObservedValueTable.removeObserver(forKey: CNOperationContext.isCanceledItem)
+		mObserverDictionary.removeObserver(forKey: CNOperationContext.isExecutingItem)
+		mObserverDictionary.removeObserver(forKey: CNOperationContext.isFinishedItem)
+		mObserverDictionary.removeObserver(forKey: CNOperationContext.isCanceledItem)
 	}
 
 	public func parameterNames() -> Array<String> {
@@ -55,26 +55,26 @@ import Foundation
 	}
 
 	public func reset(){
-		mObservedValueTable.setBooleanValue(false, forKey: CNOperationContext.isExecutingItem)
-		mObservedValueTable.setBooleanValue(false, forKey: CNOperationContext.isFinishedItem)
-		mObservedValueTable.setBooleanValue(false, forKey: CNOperationContext.isCanceledItem)
+		mObserverDictionary.setBooleanValue(false, forKey: CNOperationContext.isExecutingItem)
+		mObserverDictionary.setBooleanValue(false, forKey: CNOperationContext.isFinishedItem)
+		mObserverDictionary.setBooleanValue(false, forKey: CNOperationContext.isCanceledItem)
 	}
 
-	public func addIsExecutingListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
-		mObservedValueTable.addObserver(forKey: CNOperationContext.isExecutingItem, listnerFunction: lfunc)
+	public func addIsExecutingListener(listnerFunction lfunc: @escaping CNObserverDictionary.ListenerFunction) {
+		mObserverDictionary.addObserver(forKey: CNOperationContext.isExecutingItem, listnerFunction: lfunc)
 	}
 
-	public func addIsFinishedListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
-		mObservedValueTable.addObserver(forKey: CNOperationContext.isFinishedItem, listnerFunction: lfunc)
+	public func addIsFinishedListener(listnerFunction lfunc: @escaping CNObserverDictionary.ListenerFunction) {
+		mObserverDictionary.addObserver(forKey: CNOperationContext.isFinishedItem, listnerFunction: lfunc)
 	}
 
-	public func addIsCanceledListener(listnerFunction lfunc: @escaping CNObservedValueTable.ListenerFunction) {
-		mObservedValueTable.addObserver(forKey: CNOperationContext.isCanceledItem, listnerFunction: lfunc)
+	public func addIsCanceledListener(listnerFunction lfunc: @escaping CNObserverDictionary.ListenerFunction) {
+		mObserverDictionary.addObserver(forKey: CNOperationContext.isCanceledItem, listnerFunction: lfunc)
 	}
 
 	open var isExecuting: Bool {
 		get {
-			if let val = mObservedValueTable.booleanValue(forKey: CNOperationContext.isExecutingItem) {
+			if let val = mObserverDictionary.booleanValue(forKey: CNOperationContext.isExecutingItem) {
 				return val
 			} else {
 				mConsole.error(string: "No isExecuting property")
@@ -82,13 +82,13 @@ import Foundation
 			}
 		}
 		set(val) {
-			mObservedValueTable.setBooleanValue(val, forKey: CNOperationContext.isExecutingItem)
+			mObserverDictionary.setBooleanValue(val, forKey: CNOperationContext.isExecutingItem)
 		}
 	}
 
 	open var isFinished: Bool {
 		get {
-			if let val = mObservedValueTable.booleanValue(forKey: CNOperationContext.isFinishedItem) {
+			if let val = mObserverDictionary.booleanValue(forKey: CNOperationContext.isFinishedItem) {
 				return val
 			} else {
 				mConsole.error(string: "No isFinished property")
@@ -96,13 +96,13 @@ import Foundation
 			}
 		}
 		set(val) {
-			mObservedValueTable.setBooleanValue(val, forKey: CNOperationContext.isFinishedItem)
+			mObserverDictionary.setBooleanValue(val, forKey: CNOperationContext.isFinishedItem)
 		}
 	}
 
 	open var isCancelled: Bool {
 		get {
-			if let val = mObservedValueTable.booleanValue(forKey: CNOperationContext.isCanceledItem) {
+			if let val = mObserverDictionary.booleanValue(forKey: CNOperationContext.isCanceledItem) {
 				return val
 			} else {
 				mConsole.error(string: "No isCancelled property")
@@ -110,7 +110,7 @@ import Foundation
 			}
 		}
 		set(val){
-			mObservedValueTable.setBooleanValue(val, forKey: CNOperationContext.isCanceledItem)
+			mObserverDictionary.setBooleanValue(val, forKey: CNOperationContext.isCanceledItem)
 		}
 	}
 

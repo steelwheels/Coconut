@@ -532,13 +532,17 @@ public enum CNValue {
 		let sect = CNTextSection()
 		sect.header = "{" ; sect.footer = "}"
 		let table = CNTextTable()
-		for (key, val) in dict {
-			let record = CNTextRecord()
-			record.append(string: key)
-			let txt   = val.toText()
-			let lines = txt.toStrings()
-			record.append(string: lines.joined(separator: "\n"))
-			table.add(record: record)
+
+		let keys = dict.keys.sorted()
+		for key in keys {
+			if let val = dict[key] {
+				let record = CNTextRecord()
+				record.append(string: key)
+				let txt   = val.toText()
+				let lines = txt.toStrings()
+				record.append(string: lines.joined(separator: "\n"))
+				table.add(record: record)
+			}
 		}
 		sect.add(text: table)
 
