@@ -55,13 +55,10 @@ public class CNValueFile {
 		let err    = parser.parse(source: str)
 		switch err {
 		case .ok(let value):
-			NSLog("r5")
 			result = .ok(value)
 		case .error(let err):
-			NSLog("r6")
 			result = .error(NSError.parseError(message: err.description))
 		}
-		NSLog("r7")
 		return result
 	}
 

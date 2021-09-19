@@ -45,6 +45,10 @@ public class CNContactDatabase: CNTable
 		return mContacts.count
 	}}
 
+	public var fieldNames: Array<String> { get {
+		return CNContactField.allFieldNames
+	}}
+
 	public func newRecord() -> CNRecord {
 		return CNContactRecord(mutableContext: CNMutableContact())
 	}

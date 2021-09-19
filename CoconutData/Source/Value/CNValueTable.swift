@@ -27,6 +27,7 @@ public enum CNTableLoadResult {
 public protocol CNTable
 {
 	var recordCount: Int { get }
+	var fieldNames: Array<String> { get }
 
 	func load(URL url: URL?) -> CNTableLoadResult
 
@@ -118,13 +119,37 @@ public class CNValueRecord: CNRecord
 public class CNValueTable: CNTable
 {
 	private var mRecords:		Array<CNValueRecord>
+	private var mFieldNames:	Array<String>
 
 	public init() {
 		mRecords 	= []
+		mFieldNames	= []
 	}
 
 	public var recordCount: Int { get {
 		return mRecords.count
+	}}
+
+	private var mPreviousRecordCount: Int = 0
+
+	public var fieldNames: Array<String> { get {
+		if mPreviousRecordCount != mRecords.count {
+			var newnames: Array<String> = []
+			self.forEach(callback: {
+				(_ record: CNRecord) -> Void in
+				let names = record.fieldNames
+				for name in names {
+					if let _ = newnames.firstIndex(of: name) {
+						/* Already stored */
+					} else {
+						newnames.append(name)
+					}
+				}
+			})
+			mFieldNames = newnames
+			mPreviousRecordCount = mRecords.count
+		}
+		return mFieldNames
 	}}
 
 	public func newRecord() -> CNRecord {
