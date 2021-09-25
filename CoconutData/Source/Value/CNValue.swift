@@ -54,6 +54,18 @@ public enum CNValueType: Int
 		}
 		return result
 	}}
+
+	public func compare(_ dst: CNValueType) -> ComparisonResult {
+		let srcv = self.rawValue
+		let dstv = dst.rawValue
+		if srcv > dstv {
+			return .orderedDescending
+		} else if srcv == dstv {
+			return .orderedSame
+		} else {
+			return .orderedAscending
+		}
+	}
 }
 
 public enum CNValue {

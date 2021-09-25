@@ -25,13 +25,9 @@ public extension ComparisonResult
 	}
 }
 
-public func CNCompareValueType(type0 t0: CNValueType, type1 t1: CNValueType) -> ComparisonResult {
-	return compare(int0: t0.rawValue, int1: t1.rawValue)
-}
-
 public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValue) -> ComparisonResult
 {
-	switch CNCompareValueType(type0: val0.valueType, type1: val1.valueType){
+	switch val0.valueType.compare(val1.valueType) {
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:
