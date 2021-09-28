@@ -66,6 +66,17 @@ public enum CNValueType: Int
 			return .orderedAscending
 		}
 	}
+
+	public static func isScaler(type typ: CNValueType) -> Bool {
+		let result: Bool
+		switch typ {
+		case .nullType, .boolType, .numberType, .stringType, .dateType, .URLType, .imageType, .objectType:
+			result = true
+		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType:
+			result = false
+		}
+		return result
+	}
 }
 
 public enum CNValue {
@@ -421,11 +432,11 @@ public enum CNValue {
 		case .boolValue(let val):
 			result = CNTextLine(string: "\(val)")
 		case .numberValue(let val):
-			result = CNTextLine(string: val.description)
+			result = CNTextLine(string: val.stringValue)
 		case .stringValue(let val):
-			result = CNTextLine(string: "\"\(val)\"")
+			result = CNTextLine(string: val)
 		case .dateValue(let val):
-			result = CNTextLine(string: val.description)
+			result = CNTextLine(string: CNValue.stringFromDate(date: val))
 		case .enumValue(let type, let val):
 			result = CNTextLine(string: ".\(type)(\(val))")
 		case .rangeValue(let val):
@@ -447,7 +458,7 @@ public enum CNValue {
 			}
 			result = sect
 		case .URLValue(let val):
-			result = CNTextLine(string: "\(val.absoluteString)")
+			result = CNTextLine(string: val.path)
 		case .colorValue(let val):
 			result = CNTextLine(string: "\(val.description)")
 		case .imageValue(let val):
@@ -559,6 +570,20 @@ public enum CNValue {
 		sect.add(text: table)
 
 		return sect
+	}
+
+	private static func stringFromDate(date: Date) -> String {
+		let formatter: DateFormatter = DateFormatter()
+		formatter.calendar = Calendar(identifier: .gregorian)
+		formatter.dateFormat = "yyyy/MM/dd HH:mm:ss Z"
+		return formatter.string(from: date)
+	}
+
+	private static func dateFromString(string: String) -> Date? {
+		let formatter: DateFormatter = DateFormatter()
+		formatter.calendar = Calendar(identifier: .gregorian)
+		formatter.dateFormat = "yyyy/MM/dd HH:mm:ss Z"
+		return formatter.date(from: string)
 	}
 
 	public func toAny() -> Any {
@@ -681,6 +706,94 @@ public enum CNValue {
 		return result
 	}
 
+	public static func stringToValue(type typ: CNValueType, source src: String) -> CNValue? {
+		var result: CNValue? = nil
+		switch typ {
+		case .nullType:
+			result = .nullValue
+		case .boolType:
+			switch src.caseInsensitiveCompare("true") {
+			case .orderedSame:
+				result = .boolValue(true)
+			case .orderedDescending, .orderedAscending:
+				result = .boolValue(false)
+			}
+		case .numberType:
+			if let dblval = Double(src) {
+				if dblval.truncatingRemainder(dividingBy: 1) == 0.0 {
+					result = .numberValue(NSNumber(value: Int(dblval)))
+				} else {
+					result = .numberValue(NSNumber(value: dblval))
+				}
+			}
+		case .stringType:
+			result = .stringValue(src)
+		case .dateType:
+			if let date = dateFromString(string: src) {
+				result = .dateValue(date)
+			}
+		case .URLType:
+			let url = URL(fileURLWithPath: src)
+			result = .URLValue(url)
+		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType,
+		     .colorType, .imageType, .objectType:
+			CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
+		}
+		return result
+	}
+
+	public static func valueToDictionary(value val: CNValue) -> Dictionary<String, CNValue>? {
+		var result: Dictionary<String, CNValue>? = nil
+		switch val {
+		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_), .dateValue(_),
+		     .arrayValue(_), .URLValue(_), .imageValue(_), .objectValue(_):
+			break
+		case .rangeValue(let src):
+			let dict: Dictionary<String, CNValue> = [
+				"location":	.numberValue(NSNumber(value: src.location)),
+				"length":	.numberValue(NSNumber(value: src.length))
+			]
+			result = dict
+		case .pointValue(let src):
+			let dict: Dictionary<String, CNValue> = [
+				"x":		.numberValue(NSNumber(value: Double(src.x))),
+				"y":		.numberValue(NSNumber(value: Double(src.y)))
+			]
+			result = dict
+		case .sizeValue(let src):
+			let dict: Dictionary<String, CNValue> = [
+				"width":	.numberValue(NSNumber(value: Double(src.width))),
+				"height":	.numberValue(NSNumber(value: Double(src.height)))
+			]
+			result = dict
+		case .rectValue(let src):
+			let dict: Dictionary<String, CNValue> = [
+				"x":		.numberValue(NSNumber(value: Double(src.origin.x))),
+				"y":		.numberValue(NSNumber(value: Double(src.origin.y))),
+				"width":	.numberValue(NSNumber(value: Double(src.size.width))),
+				"height":	.numberValue(NSNumber(value: Double(src.size.height)))
+			]
+			result = dict
+		case .dictionaryValue(let src):
+			result = src
+		case .colorValue(let src):
+			let dict: Dictionary<String, CNValue> = [
+				"alpha":	.numberValue(NSNumber(value: Double(src.alphaComponent))),
+				"red":		.numberValue(NSNumber(value: Double(src.redComponent))),
+				"blue":		.numberValue(NSNumber(value: Double(src.blueComponent))),
+				"green":	.numberValue(NSNumber(value: Double(src.greenComponent)))
+			]
+			result = dict
+		case .enumValue(let typename, let value):
+			let dict: Dictionary<String, CNValue> = [
+				"type":		.stringValue(typename),
+				"value":	.numberValue(NSNumber(value: value))
+			]
+			result = dict
+		}
+		return result
+	}
+
 	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue {
 		if dict.count == 2 {
 			/* Range type */
@@ -705,6 +818,14 @@ public enum CNValue {
 					let width  = CGFloat(wnum.doubleValue)
 					let height = CGFloat(hnum.doubleValue)
 					return .sizeValue(CGSize(width: width, height: height))
+				}
+			}
+			/* Decode enum */
+			if let tval = dict["type"], let vval = dict["value"] {
+				if let tstr = tval.toString(), let vnum = vval.toNumber() {
+					let typename = tstr
+					let value    = vnum.int32Value
+					return .enumValue(typename, value)
 				}
 			}
 		} else if dict.count == 4 {
