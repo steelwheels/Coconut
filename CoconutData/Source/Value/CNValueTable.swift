@@ -29,7 +29,7 @@ public protocol CNTable
 	var recordCount: Int { get }
 	var fieldNames: Array<String> { get }
 
-	func load(URL url: URL?) -> CNTableLoadResult
+	func store(URL url: URL?) -> CNTableLoadResult
 
 	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
@@ -190,7 +190,7 @@ public class CNValueTable: CNTable
 		})
 	}
 
-	public func load(URL urlp: URL?) -> CNTableLoadResult {
+	public func store(URL urlp: URL?) -> CNTableLoadResult {
 		if let url = urlp {
 			if let str = url.loadContents() {
 				return load(source: str as String)
