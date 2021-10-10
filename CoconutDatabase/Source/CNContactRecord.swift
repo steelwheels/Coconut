@@ -44,6 +44,10 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
+	public var contactType: CNContactType { get {
+		return contact.contactType
+	}}
+
 	public var fieldCount: Int { get {
 		return CNContactField.numberOfFields
 	}}
