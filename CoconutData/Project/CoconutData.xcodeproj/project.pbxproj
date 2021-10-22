@@ -30,6 +30,22 @@
 		057588E82629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */; };
 		057623E026A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */; };
 		057623E126A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */; };
+		0596C5632722E32000E9A24F /* character-a.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55D2722E2FE00E9A24F /* character-a.png */; };
+		0596C5642722E32000E9A24F /* chevron-backward.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55E2722E2FE00E9A24F /* chevron-backward.png */; };
+		0596C5652722E32000E9A24F /* chevron-forward.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55F2722E2FE00E9A24F /* chevron-forward.png */; };
+		0596C5662722E32000E9A24F /* hand-raised.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55C2722E2FE00E9A24F /* hand-raised.png */; };
+		0596C5672722E32000E9A24F /* paintbrush.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55B2722E2FE00E9A24F /* paintbrush.png */; };
+		0596C5682722E32000E9A24F /* pencil.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C5602722E2FE00E9A24F /* pencil.png */; };
+		0596C5692722E32000E9A24F /* questionmark.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C5612722E2FE00E9A24F /* questionmark.png */; };
+		0596C56E2722E33F00E9A24F /* character-a.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55D2722E2FE00E9A24F /* character-a.png */; };
+		0596C56F2722E33F00E9A24F /* chevron-backward.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55E2722E2FE00E9A24F /* chevron-backward.png */; };
+		0596C5702722E33F00E9A24F /* chevron-forward.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55F2722E2FE00E9A24F /* chevron-forward.png */; };
+		0596C5712722E33F00E9A24F /* hand-raised.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55C2722E2FE00E9A24F /* hand-raised.png */; };
+		0596C5722722E33F00E9A24F /* paintbrush.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C55B2722E2FE00E9A24F /* paintbrush.png */; };
+		0596C5732722E33F00E9A24F /* pencil.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C5602722E2FE00E9A24F /* pencil.png */; };
+		0596C5742722E33F00E9A24F /* questionmark.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0596C5612722E2FE00E9A24F /* questionmark.png */; };
+		0596C5792722EEF200E9A24F /* CNSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C5782722EEF200E9A24F /* CNSymbol.swift */; };
+		0596C57A2722EEF200E9A24F /* CNSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C5782722EEF200E9A24F /* CNSymbol.swift */; };
 		059BA6D3256B20B500893641 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059BA6D2256B20B500893641 /* UTType.swift */; };
 		05A44F0225C223350086033B /* CNGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0125C223350086033B /* CNGraphicsContext.swift */; };
 		05A44F0325C223350086033B /* CNGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0125C223350086033B /* CNGraphicsContext.swift */; };
@@ -237,6 +253,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		0596C5622722E30F00E9A24F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Images;
+			dstSubfolderSpec = 7;
+			files = (
+				0596C5632722E32000E9A24F /* character-a.png in CopyFiles */,
+				0596C5642722E32000E9A24F /* chevron-backward.png in CopyFiles */,
+				0596C5652722E32000E9A24F /* chevron-forward.png in CopyFiles */,
+				0596C5662722E32000E9A24F /* hand-raised.png in CopyFiles */,
+				0596C5672722E32000E9A24F /* paintbrush.png in CopyFiles */,
+				0596C5682722E32000E9A24F /* pencil.png in CopyFiles */,
+				0596C5692722E32000E9A24F /* questionmark.png in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0596C56D2722E32A00E9A24F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Images;
+			dstSubfolderSpec = 7;
+			files = (
+				0596C56E2722E33F00E9A24F /* character-a.png in CopyFiles */,
+				0596C56F2722E33F00E9A24F /* chevron-backward.png in CopyFiles */,
+				0596C5702722E33F00E9A24F /* chevron-forward.png in CopyFiles */,
+				0596C5712722E33F00E9A24F /* hand-raised.png in CopyFiles */,
+				0596C5722722E33F00E9A24F /* paintbrush.png in CopyFiles */,
+				0596C5732722E33F00E9A24F /* pencil.png in CopyFiles */,
+				0596C5742722E33F00E9A24F /* questionmark.png in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05FC5C54255FF9DB006C3664 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,6 +313,14 @@
 		055C8AEA25DD62F50053510B /* UTToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTToken.swift; sourceTree = "<group>"; };
 		057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandComplementer.swift; sourceTree = "<group>"; };
 		057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSortDescriptors.swift; sourceTree = "<group>"; };
+		0596C55B2722E2FE00E9A24F /* paintbrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paintbrush.png; sourceTree = "<group>"; };
+		0596C55C2722E2FE00E9A24F /* hand-raised.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hand-raised.png"; sourceTree = "<group>"; };
+		0596C55D2722E2FE00E9A24F /* character-a.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "character-a.png"; sourceTree = "<group>"; };
+		0596C55E2722E2FE00E9A24F /* chevron-backward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-backward.png"; sourceTree = "<group>"; };
+		0596C55F2722E2FE00E9A24F /* chevron-forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-forward.png"; sourceTree = "<group>"; };
+		0596C5602722E2FE00E9A24F /* pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pencil.png; sourceTree = "<group>"; };
+		0596C5612722E2FE00E9A24F /* questionmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = questionmark.png; sourceTree = "<group>"; };
+		0596C5782722EEF200E9A24F /* CNSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSymbol.swift; sourceTree = "<group>"; };
 		059BA6D2256B20B500893641 /* UTType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTType.swift; sourceTree = "<group>"; };
 		05A44F0125C223350086033B /* CNGraphicsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNGraphicsContext.swift; sourceTree = "<group>"; };
 		05A44F0D25C22B320086033B /* CNMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNMatrix.swift; sourceTree = "<group>"; };
@@ -451,9 +507,25 @@
 			path = CommandLine;
 			sourceTree = "<group>";
 		};
+		0596C55A2722E2E100E9A24F /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				0596C55D2722E2FE00E9A24F /* character-a.png */,
+				0596C55E2722E2FE00E9A24F /* chevron-backward.png */,
+				0596C55F2722E2FE00E9A24F /* chevron-forward.png */,
+				0596C55C2722E2FE00E9A24F /* hand-raised.png */,
+				0596C55B2722E2FE00E9A24F /* paintbrush.png */,
+				0596C5602722E2FE00E9A24F /* pencil.png */,
+				0596C5612722E2FE00E9A24F /* questionmark.png */,
+			);
+			name = Images;
+			path = Image;
+			sourceTree = "<group>";
+		};
 		05ADE083255C24D000DA3EB6 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				0596C55A2722E2E100E9A24F /* Images */,
 				055BF94E255C25070004C250 /* CoconutScript.sdef */,
 			);
 			name = Resource;
@@ -624,6 +696,7 @@
 				05B32D24251508D9000D1411 /* CNResource.swift */,
 				05F4AA20263C274700BAE5E2 /* CNResourceInstaller.swift */,
 				05BEE0ED2634E02100178484 /* CNStandardFiles.swift */,
+				0596C5782722EEF200E9A24F /* CNSymbol.swift */,
 			);
 			path = File;
 			sourceTree = "<group>";
@@ -775,6 +848,7 @@
 				05B32C7F251501B1000D1411 /* Sources */,
 				05B32C80251501B1000D1411 /* Frameworks */,
 				05B32C81251501B1000D1411 /* Resources */,
+				0596C5622722E30F00E9A24F /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -793,6 +867,7 @@
 				05B32C8E251501D7000D1411 /* Sources */,
 				05B32C8F251501D7000D1411 /* Frameworks */,
 				05B32C90251501D7000D1411 /* Resources */,
+				0596C56D2722E32A00E9A24F /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -963,6 +1038,7 @@
 				05B32D8C25150946000D1411 /* CNType.swift in Sources */,
 				05B32D9425150946000D1411 /* CNStringUtil.swift in Sources */,
 				05B32D4F251508F7000D1411 /* CNAppleEventManager.swift in Sources */,
+				0596C5792722EEF200E9A24F /* CNSymbol.swift in Sources */,
 				05B32D8A25150945000D1411 /* CNObservedValue.swift in Sources */,
 				05B32D31251508D9000D1411 /* CNFile.swift in Sources */,
 				05B32CAA2515025E000D1411 /* CNValueParser.swift in Sources */,
@@ -1042,6 +1118,7 @@
 				05B32CC9251502BE000D1411 /* CNFontManager.swift in Sources */,
 				05B32D44251508D9000D1411 /* CNConsole.swift in Sources */,
 				05B32CF225150328000D1411 /* CNUserDefaults.swift in Sources */,
+				0596C57A2722EEF200E9A24F /* CNSymbol.swift in Sources */,
 				05B32D8D25150946000D1411 /* CNType.swift in Sources */,
 				05B32D9525150946000D1411 /* CNStringUtil.swift in Sources */,
 				05B32D50251508F7000D1411 /* CNAppleEventManager.swift in Sources */,

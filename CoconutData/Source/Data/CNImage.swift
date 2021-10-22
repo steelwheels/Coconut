@@ -25,5 +25,11 @@ public extension CNImage
 	}
 	#endif
 
+	#if os(iOS)
+	convenience init?(contentsOf url: URL) {
+		self.init(contentsOfFile: url.path)
+	}
+	#endif
+
 }
 
