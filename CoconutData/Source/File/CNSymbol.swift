@@ -38,17 +38,23 @@ public class CNSymbol
 	private init(){
 	}
 
-	public func load(symbol sym: SymbolType) -> CNImage {
+	public func URLOfSymbol(type sym: SymbolType) -> URL {
 		if let url = CNFilePath.URLForResourceFile(fileName: sym.name, fileExtension: "png", subdirectory: "Images", forClass: CNSymbol.self){
-			if let img = CNImage(contentsOf: url) {
-				return img
-			} else {
-				CNLog(logLevel: .error, message: "Failed load image: \(sym.name)", atFunction: #function, inFile: #file)
-			}
+			return url
 		} else {
 			CNLog(logLevel: .error, message: "Failed to get URL: \(sym.name)", atFunction: #function, inFile: #file)
+			fatalError("failed to continue")
 		}
-		return CNImage() // empty image
+	}
+
+	public func loadImage(type sym: SymbolType) -> CNImage {
+		let url = URLOfSymbol(type: sym)
+		if let img = CNImage(contentsOf: url) {
+			return img
+		} else {
+			CNLog(logLevel: .error, message: "Failed to get load image: \(sym.name)", atFunction: #function, inFile: #file)
+			fatalError("failed to continue")
+		}
 	}
 }
 
