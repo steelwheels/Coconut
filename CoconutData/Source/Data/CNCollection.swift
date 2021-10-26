@@ -50,6 +50,15 @@ public class CNCollection
 		}
 	}
 
+	public func totalCount() -> Int {
+		var result: Int = 0
+		mSections.forEach({
+			(_ item: Section) -> Void in
+			result += item.items.count
+		})
+		return result
+	}
+
 	public func header(ofSection sec: Int) -> String {
 		if 0<=sec && sec<mSections.count {
 			return mSections[sec].header
