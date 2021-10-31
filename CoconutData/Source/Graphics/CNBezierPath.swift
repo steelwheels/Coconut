@@ -17,14 +17,17 @@ public class CNBezierPath
 	public enum Path {
 		case moveTo(CGPoint)
 		case lineTo(CGPoint)
+		case lineWidth(CGFloat)
 	}
 
 	private var mPaths:		Array<Path>
 	private var mIs1stPoint:	Bool
+	private var mLineWidth:		CGFloat
 
 	public init(){
 		mPaths		= []
 		mIs1stPoint	= true
+		mLineWidth	= 1.0
 	}
 
 	public func addUp(point pt: CGPoint, in area: CGSize){
@@ -59,6 +62,18 @@ public class CNBezierPath
 		mPaths.forEach({
 			(_ path: Path) -> Void in cbfunc(path)
 		})
+	}
+
+	public var lineWidth: CGFloat {
+		get {
+			return mLineWidth
+		}
+		set(newval){
+			if newval != mLineWidth {
+				mPaths.append(.lineWidth(newval))
+				mLineWidth = newval
+			}
+		}
 	}
 }
 
