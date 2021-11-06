@@ -180,8 +180,8 @@
 		05B32D9325150946000D1411 /* CNColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7225150945000D1411 /* CNColor.swift */; };
 		05B32D9425150946000D1411 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7325150945000D1411 /* CNStringUtil.swift */; };
 		05B32D9525150946000D1411 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7325150945000D1411 /* CNStringUtil.swift */; };
-		05B48405272D7CC6006DD06E /* CNBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNBezierPath.swift */; };
-		05B48406272D7CC6006DD06E /* CNBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNBezierPath.swift */; };
+		05B48405272D7CC6006DD06E /* CNVectorGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNVectorGraphics.swift */; };
+		05B48406272D7CC6006DD06E /* CNVectorGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNVectorGraphics.swift */; };
 		05BEE0EE2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
 		05BEE0EF2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
 		05E88DEB26AA9F1B00FF993E /* CNImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E88DEA26AA9F1B00FF993E /* CNImage.swift */; };
@@ -419,7 +419,7 @@
 		05B32D7225150945000D1411 /* CNColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNColor.swift; sourceTree = "<group>"; };
 		05B32D7325150945000D1411 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05B32DD025160330000D1411 /* CoconutData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutData.xcframework; path = ../../../../Library/Frameworks/CoconutData.xcframework; sourceTree = "<group>"; };
-		05B48404272D7CC6006DD06E /* CNBezierPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBezierPath.swift; sourceTree = "<group>"; };
+		05B48404272D7CC6006DD06E /* CNVectorGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVectorGraphics.swift; sourceTree = "<group>"; };
 		05BEE0ED2634E02100178484 /* CNStandardFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStandardFiles.swift; sourceTree = "<group>"; };
 		05E88DEA26AA9F1B00FF993E /* CNImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNImage.swift; sourceTree = "<group>"; };
 		05F3AC3D26571E1E0089C937 /* UTNativeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTNativeValue.swift; sourceTree = "<group>"; };
@@ -706,9 +706,9 @@
 			children = (
 				051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */,
 				053AE54A25D55D380007056B /* CNBitmapData.swift */,
-				05B48404272D7CC6006DD06E /* CNBezierPath.swift */,
 				05A44F0125C223350086033B /* CNGraphicsContext.swift */,
 				05B32D11251508B5000D1411 /* CNGraphicsType.swift */,
+				05B48404272D7CC6006DD06E /* CNVectorGraphics.swift */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -1123,7 +1123,7 @@
 				05B32D8025150945000D1411 /* CNArrayStream.swift in Sources */,
 				05B32CA92515025E000D1411 /* CNValueCoder.swift in Sources */,
 				05B32D39251508D9000D1411 /* CNDocumentTypeManager.swift in Sources */,
-				05B48405272D7CC6006DD06E /* CNBezierPath.swift in Sources */,
+				05B48405272D7CC6006DD06E /* CNVectorGraphics.swift in Sources */,
 				05B32D7A25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7425150945000D1411 /* CNCharacter.swift in Sources */,
 				05F4AA21263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */,
@@ -1205,7 +1205,7 @@
 				05B32CE0251502E7000D1411 /* CNOperationQueue.swift in Sources */,
 				05B32D8125150945000D1411 /* CNArrayStream.swift in Sources */,
 				05B32D3A251508D9000D1411 /* CNDocumentTypeManager.swift in Sources */,
-				05B48406272D7CC6006DD06E /* CNBezierPath.swift in Sources */,
+				05B48406272D7CC6006DD06E /* CNVectorGraphics.swift in Sources */,
 				05B32D7B25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7525150945000D1411 /* CNCharacter.swift in Sources */,
 				05F4AA22263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */,
