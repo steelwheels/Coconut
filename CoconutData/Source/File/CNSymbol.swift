@@ -16,6 +16,11 @@ public class CNSymbol
 		case chevronBackward
 		case chevronForward
 		case handRaised
+		case line1P
+		case line2P
+		case line4P
+		case line8P
+		case line16P
 		case paintbrush
 		case pencil
 		case questionmark
@@ -27,6 +32,11 @@ public class CNSymbol
 			case .chevronBackward:	result = "chevron-backward"
 			case .chevronForward:	result = "chevron-forward"
 			case .handRaised:	result = "hand-raised"
+			case .line1P:		result = "line-1p"
+			case .line2P:		result = "line-2p"
+			case .line4P:		result = "line-4p"
+			case .line8P:		result = "line-8p"
+			case .line16P:		result = "line-16p"
 			case .paintbrush:	result = "paintbrush"
 			case .pencil:		result = "pencil"
 			case .questionmark:	result = "questionmark"
