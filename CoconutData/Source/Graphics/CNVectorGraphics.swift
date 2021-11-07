@@ -1,6 +1,6 @@
 /*
- * @file	CNBezierPath.swift
- * @brief	Define CNBezierPath class
+ * @file	CNVectorGraphics.swift
+ * @brief	Define CNVectorGraphics class
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
@@ -20,18 +20,26 @@ private func normalizePoint(source src: CGPoint, in rect: CGRect) -> CGPoint {
 	return CGPoint(x: x, y: y)
 }
 
-public class CNVectorPath
+open class CNVectorObject
 {
-	private var mLineWidth:	CGFloat
+	public var lineWidth:		CGFloat
+	public var strokeColor:		CNColor
+	public var fillColor:		CNColor
+
+	public init(lineWidth width: CGFloat, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
+		lineWidth	= width
+		strokeColor	= scolor
+		fillColor	= fcolor
+	}
+}
+
+public class CNVectorPath: CNVectorObject
+{
 	private var mPoints:	Array<CGPoint>
 
-	public init(lineWidth width: CGFloat){
-		mLineWidth	= width
+	public override init(lineWidth width: CGFloat, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		mPoints		= []
-	}
-
-	public var width: CGFloat {
-		get { return mLineWidth }
+		super.init(lineWidth: width, strokeColor: scolor, fillColor: fcolor)
 	}
 
 	public var points: Array<CGPoint> {
@@ -52,16 +60,15 @@ public class CNVectorPath
 	}
 }
 
-public class CNVectorRect
+public class CNVectorRect: CNVectorObject
 {
-	public var width:		CGFloat
 	public var originPoint:		CGPoint
 	public var endPoint:		CGPoint
 
-	public init(lineWidth wid: CGFloat){
-		width		= wid
+	public override init(lineWidth width: CGFloat, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		originPoint	= CGPoint.zero
 		endPoint	= CGPoint.zero
+		super.init(lineWidth: width, strokeColor: scolor, fillColor: fcolor)
 	}
 
 	public func normalize(inRect rect: CGRect) -> CGRect? {
@@ -95,11 +102,15 @@ public class CNVecroGraphicsGenerator
 	private var mCurrentType:	CNVectorGraphicsType
 	private var mGraphics:		Array<CNVectorGraphics>
 	private var mLineWidth:		CGFloat
+	private var mStrokeColor:	CNColor
+	private var mFillColor:		CNColor
 
 	public init(type typ: CNVectorGraphicsType){
 		mCurrentType	= typ
 		mGraphics	= []
 		mLineWidth	= 1.0
+		mStrokeColor	= CNColor.black
+		mFillColor	= CNColor.black
 	}
 
 	public var contents: Array<CNVectorGraphics> { get { return mGraphics }}
@@ -114,14 +125,24 @@ public class CNVecroGraphicsGenerator
 		set(newval) { mLineWidth = newval }
 	}
 
+	public var strokeColor: CNColor {
+		get         { return mStrokeColor }
+		set(newval) { mStrokeColor = newval }
+	}
+
+	public var fillColor: CNColor {
+		get         { return mFillColor }
+		set(newval) { mFillColor = newval }
+	}
+
 	public func addDown(point pt: CGPoint, in area: CGSize) {
 		switch mCurrentType {
 		case .path:
-			let newpath = CNVectorPath(lineWidth: mLineWidth)
+			let newpath = CNVectorPath(lineWidth: mLineWidth, strokeColor: mStrokeColor, fillColor: mFillColor)
 			newpath.add(point: convert(point: pt, in: area))
 			mGraphics.append(.path(newpath))
 		case .rect:
-			let newrect = CNVectorRect(lineWidth: mLineWidth)
+			let newrect = CNVectorRect(lineWidth: mLineWidth, strokeColor: mStrokeColor, fillColor: mFillColor)
 			newrect.originPoint = convert(point: pt, in: area)
 			newrect.endPoint    = newrect.originPoint
 			mGraphics.append(.rect(newrect))

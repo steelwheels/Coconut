@@ -36,6 +36,10 @@ public extension CNColor
 		return result
 	}
 
+	var isClear: Bool {
+		get { return self.alphaComponent == 0.0 }
+	}
+
 	func escapeCode() -> Int32 {
 		let (red, green, blue, _) = self.toRGBA()
 		let rbit : Int32 = red   >= 0.5 ? 1 : 0
