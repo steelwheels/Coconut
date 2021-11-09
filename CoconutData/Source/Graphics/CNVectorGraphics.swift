@@ -23,11 +23,13 @@ private func normalizePoint(source src: CGPoint, in rect: CGRect) -> CGPoint {
 open class CNVectorObject
 {
 	public var lineWidth:		CGFloat
+	public var doFill:		Bool
 	public var strokeColor:		CNColor
 	public var fillColor:		CNColor
 
-	public init(lineWidth width: CGFloat, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
+	public init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		lineWidth	= width
+		doFill		= fill
 		strokeColor	= scolor
 		fillColor	= fcolor
 	}
@@ -37,9 +39,9 @@ public class CNVectorPath: CNVectorObject
 {
 	private var mPoints:	Array<CGPoint>
 
-	public override init(lineWidth width: CGFloat, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
+	public override init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		mPoints		= []
-		super.init(lineWidth: width, strokeColor: scolor, fillColor: fcolor)
+		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
 	public var points: Array<CGPoint> {
@@ -65,10 +67,10 @@ public class CNVectorRect: CNVectorObject
 	public var originPoint:		CGPoint
 	public var endPoint:		CGPoint
 
-	public override init(lineWidth width: CGFloat, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
+	public override init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		originPoint	= CGPoint.zero
 		endPoint	= CGPoint.zero
-		super.init(lineWidth: width, strokeColor: scolor, fillColor: fcolor)
+		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
 	public func normalize(inRect rect: CGRect) -> CGRect? {
@@ -93,8 +95,8 @@ public enum CNVectorGraphics
 }
 
 public enum CNVectorGraphicsType {
-	case path
-	case rect
+	case path(Bool)		// (doFill)
+	case rect(Bool)		// (doFill)
 }
 
 public class CNVecroGraphicsGenerator
@@ -105,8 +107,8 @@ public class CNVecroGraphicsGenerator
 	private var mStrokeColor:	CNColor
 	private var mFillColor:		CNColor
 
-	public init(type typ: CNVectorGraphicsType){
-		mCurrentType	= typ
+	public init(){
+		mCurrentType	= .path(false)
 		mGraphics	= []
 		mLineWidth	= 1.0
 		mStrokeColor	= CNColor.black
@@ -137,12 +139,12 @@ public class CNVecroGraphicsGenerator
 
 	public func addDown(point pt: CGPoint, in area: CGSize) {
 		switch mCurrentType {
-		case .path:
-			let newpath = CNVectorPath(lineWidth: mLineWidth, strokeColor: mStrokeColor, fillColor: mFillColor)
+		case .path(let dofill):
+			let newpath = CNVectorPath(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
 			newpath.add(point: convert(point: pt, in: area))
 			mGraphics.append(.path(newpath))
-		case .rect:
-			let newrect = CNVectorRect(lineWidth: mLineWidth, strokeColor: mStrokeColor, fillColor: mFillColor)
+		case .rect(let dofill):
+			let newrect = CNVectorRect(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
 			newrect.originPoint = convert(point: pt, in: area)
 			newrect.endPoint    = newrect.originPoint
 			mGraphics.append(.rect(newrect))
