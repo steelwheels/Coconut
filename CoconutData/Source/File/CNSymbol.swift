@@ -23,6 +23,7 @@ public class CNSymbol
 		case line16P
 		case paintbrush
 		case pencil
+		case pencilAndCircule
 		case rectangle
 		case rectangleFilled
 		case questionmark
@@ -41,6 +42,7 @@ public class CNSymbol
 			case .line16P:		result = "line-16p"
 			case .paintbrush:	result = "paintbrush"
 			case .pencil:		result = "pencil"
+			case .pencilAndCircule:	result = "pencil-circule"
 			case .rectangle:	result = "rectangle"
 			case .rectangleFilled:	result = "rectangle-filled"
 			case .questionmark:	result = "questionmark"

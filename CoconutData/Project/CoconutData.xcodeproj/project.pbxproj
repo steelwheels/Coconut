@@ -36,6 +36,8 @@
 		05613ADC273431C900A5C0A1 /* line-4p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05613AC0273431A600A5C0A1 /* line-4p.png */; };
 		05613ADD273431C900A5C0A1 /* line-8p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05613AC2273431A700A5C0A1 /* line-8p.png */; };
 		05613ADE273431C900A5C0A1 /* line-16p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05613AC4273431A700A5C0A1 /* line-16p.png */; };
+		0562ACC1273AC17700B90BE2 /* pencil-circule.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0562ACC0273AC15B00B90BE2 /* pencil-circule.png */; };
+		0562ACC5273AC19200B90BE2 /* pencil-circule.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0562ACC0273AC15B00B90BE2 /* pencil-circule.png */; };
 		057588E72629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */; };
 		057588E82629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */; };
 		057623E026A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */; };
@@ -288,6 +290,7 @@
 				0596C5662722E32000E9A24F /* hand-raised.png in CopyFiles */,
 				0596C5672722E32000E9A24F /* paintbrush.png in CopyFiles */,
 				0596C5682722E32000E9A24F /* pencil.png in CopyFiles */,
+				0562ACC5273AC19200B90BE2 /* pencil-circule.png in CopyFiles */,
 				0596C5692722E32000E9A24F /* questionmark.png in CopyFiles */,
 				05E45BCB2736CD290034254D /* rectangle-filled.png in CopyFiles */,
 				05E45BCC2736CD290034254D /* rectangle.png in CopyFiles */,
@@ -311,6 +314,7 @@
 				05613ADE273431C900A5C0A1 /* line-16p.png in CopyFiles */,
 				0596C5722722E33F00E9A24F /* paintbrush.png in CopyFiles */,
 				0596C5732722E33F00E9A24F /* pencil.png in CopyFiles */,
+				0562ACC1273AC17700B90BE2 /* pencil-circule.png in CopyFiles */,
 				0596C5742722E33F00E9A24F /* questionmark.png in CopyFiles */,
 				05E45BD02736CD460034254D /* rectangle-filled.png in CopyFiles */,
 				05E45BD12736CD460034254D /* rectangle.png in CopyFiles */,
@@ -348,6 +352,7 @@
 		05613AC2273431A700A5C0A1 /* line-8p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line-8p.png"; sourceTree = "<group>"; };
 		05613AC3273431A700A5C0A1 /* line-2p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line-2p.png"; sourceTree = "<group>"; };
 		05613AC4273431A700A5C0A1 /* line-16p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line-16p.png"; sourceTree = "<group>"; };
+		0562ACC0273AC15B00B90BE2 /* pencil-circule.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pencil-circule.png"; sourceTree = "<group>"; };
 		057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandComplementer.swift; sourceTree = "<group>"; };
 		057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSortDescriptors.swift; sourceTree = "<group>"; };
 		0596C55B2722E2FE00E9A24F /* paintbrush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paintbrush.png; sourceTree = "<group>"; };
@@ -562,6 +567,7 @@
 				05613AC4273431A700A5C0A1 /* line-16p.png */,
 				0596C55B2722E2FE00E9A24F /* paintbrush.png */,
 				0596C5602722E2FE00E9A24F /* pencil.png */,
+				0562ACC0273AC15B00B90BE2 /* pencil-circule.png */,
 				05E45BC92736CD070034254D /* rectangle-filled.png */,
 				05E45BCA2736CD070034254D /* rectangle.png */,
 				0596C5612722E2FE00E9A24F /* questionmark.png */,
