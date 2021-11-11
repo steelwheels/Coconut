@@ -22,10 +22,8 @@ public class CNSymbol
 		case line8P
 		case line16P
 		case paintbrush
-		case pencil
-		case pencilAndCircule
-		case rectangle
-		case rectangleFilled
+		case pencil(Bool)		// (doFill)
+		case rectangle(Bool, Bool)	// (doFill, rounded)
 		case questionmark
 
 		public var name: String {
@@ -41,10 +39,26 @@ public class CNSymbol
 			case .line8P:		result = "line-8p"
 			case .line16P:		result = "line-16p"
 			case .paintbrush:	result = "paintbrush"
-			case .pencil:		result = "pencil"
-			case .pencilAndCircule:	result = "pencil-circule"
-			case .rectangle:	result = "rectangle"
-			case .rectangleFilled:	result = "rectangle-filled"
+			case .pencil(let dofill):
+				if dofill {
+					result = "pencil-circule"
+				} else {
+					result = "pencil"
+				}
+			case .rectangle(let dofill, let isrounded):
+				if dofill {
+					if isrounded {
+						result = "rectangle-filled-rounded"
+					} else {
+						result = "rectangle-filled"
+					}
+				} else {
+					if isrounded {
+						result = "rectangle-rounded"
+					} else {
+						result = "rectangle"
+					}
+				}
 			case .questionmark:	result = "questionmark"
 			}
 			return result

@@ -66,10 +66,12 @@ public class CNVectorRect: CNVectorObject
 {
 	public var originPoint:		CGPoint
 	public var endPoint:		CGPoint
+	public var isRounded:		Bool
 
-	public override init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
+	public init(lineWidth width: CGFloat, doFill fill: Bool, isRounded isrnd: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		originPoint	= CGPoint.zero
 		endPoint	= CGPoint.zero
+		isRounded	= isrnd
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
@@ -95,8 +97,8 @@ public enum CNVectorGraphics
 }
 
 public enum CNVectorGraphicsType {
-	case path(Bool)		// (doFill)
-	case rect(Bool)		// (doFill)
+	case path(Bool)			// (doFill)
+	case rect(Bool, Bool)		// (doFill, isRounded)
 }
 
 public class CNVecroGraphicsGenerator
@@ -143,8 +145,8 @@ public class CNVecroGraphicsGenerator
 			let newpath = CNVectorPath(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
 			newpath.add(point: convert(point: pt, in: area))
 			mGraphics.append(.path(newpath))
-		case .rect(let dofill):
-			let newrect = CNVectorRect(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
+		case .rect(let dofill, let isround):
+			let newrect = CNVectorRect(lineWidth: mLineWidth, doFill: dofill, isRounded: isround, strokeColor: mStrokeColor, fillColor: mFillColor)
 			newrect.originPoint = convert(point: pt, in: area)
 			newrect.endPoint    = newrect.originPoint
 			mGraphics.append(.rect(newrect))
