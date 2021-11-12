@@ -12,11 +12,9 @@ import UIKit
 #endif
 import Foundation
 
-private func normalizePoint(source src: CGPoint, in rect: CGRect) -> CGPoint {
-	let origin = rect.origin
-	let size   = rect.size
-	let x = origin.x + (size.width  * src.x)
-	let y = origin.y + (size.height * src.y)
+private func normalizePoint(source src: CGPoint, in area: CGSize) -> CGPoint {
+	let x = area.width  * src.x
+	let y = area.height * src.y
 	return CGPoint(x: x, y: y)
 }
 
@@ -52,10 +50,10 @@ public class CNVectorPath: CNVectorObject
 		mPoints.append(pt)
 	}
 
-	public func normalize(inRect rect: CGRect) -> Array<CGPoint> {
+	public func normalize(in area: CGSize) -> Array<CGPoint> {
 		var result: Array<CGPoint> = []
 		for pt in mPoints {
-			let p = normalizePoint(source: pt, in: rect)
+			let p = normalizePoint(source: pt, in: area)
 			result.append(p)
 		}
 		return result
@@ -75,9 +73,9 @@ public class CNVectorRect: CNVectorObject
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
-	public func normalize(inRect rect: CGRect) -> CGRect? {
-		let norigin = normalizePoint(source: originPoint, in: rect)
-		let nend    = normalizePoint(source: endPoint, in: rect)
+	public func normalize(in area: CGSize) -> CGRect? {
+		let norigin = normalizePoint(source: originPoint, in: area)
+		let nend    = normalizePoint(source: endPoint, in: area)
 		let x = min(norigin.x, nend.x)
 		let y = min(norigin.y, nend.y)
 		let width  = abs(nend.x - norigin.x)
