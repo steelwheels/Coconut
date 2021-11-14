@@ -88,15 +88,47 @@ public class CNVectorRect: CNVectorObject
 	}
 }
 
+public class CNVectorString: CNVectorObject
+{
+	public var originPoint:		CGPoint
+	public var string:		NSAttributedString
+	private var mFont:		CNFont
+
+	public init(lineWidth width: CGFloat, font fnt: CNFont, color col: CNColor) {
+		originPoint = CGPoint.zero
+		string 	    = NSAttributedString(string: "")
+		mFont	    = fnt
+		super.init(lineWidth: width, doFill: false, strokeColor: col, fillColor: CNColor.clear)
+	}
+
+	public var isEmpty: Bool {
+		get { return string.string.isEmpty }
+	}
+
+	public func set(string str: String){
+		let attrs: [NSAttributedString.Key: Any] = [
+			NSAttributedString.Key.foregroundColor: strokeColor,
+			NSAttributedString.Key.font:		mFont
+		]
+		string = NSAttributedString(string: str, attributes: attrs)
+	}
+
+	public func normalize(in area: CGSize) -> CGPoint? {
+		return normalizePoint(source: originPoint, in: area)
+	}
+}
+
 public enum CNVectorGraphics
 {
 	case path(CNVectorPath)
 	case rect(CNVectorRect)
+	case string(CNVectorString)
 }
 
 public enum CNVectorGraphicsType {
 	case path(Bool)			// (doFill)
 	case rect(Bool, Bool)		// (doFill, isRounded)
+	case string			// (font)
 }
 
 public class CNVecroGraphicsGenerator
@@ -106,6 +138,7 @@ public class CNVecroGraphicsGenerator
 	private var mLineWidth:		CGFloat
 	private var mStrokeColor:	CNColor
 	private var mFillColor:		CNColor
+	private var mFont:		CNFont
 
 	public init(){
 		mCurrentType	= .path(false)
@@ -113,6 +146,7 @@ public class CNVecroGraphicsGenerator
 		mLineWidth	= 1.0
 		mStrokeColor	= CNColor.black
 		mFillColor	= CNColor.black
+		mFont		= CNFont.systemFont(ofSize: CNFont.systemFontSize)
 	}
 
 	public var contents: Array<CNVectorGraphics> { get { return mGraphics }}
@@ -148,6 +182,22 @@ public class CNVecroGraphicsGenerator
 			newrect.originPoint = convert(point: pt, in: area)
 			newrect.endPoint    = newrect.originPoint
 			mGraphics.append(.rect(newrect))
+		case .string:
+			let origin = convert(point: pt, in: area)
+			if let lastelm = mGraphics.last {
+				switch lastelm {
+				case .string(let vstr):
+					vstr.originPoint = origin
+				default:
+					let newstr = CNVectorString(lineWidth: mLineWidth, font: mFont, color: mStrokeColor)
+					newstr.originPoint = origin
+					mGraphics.append(.string(newstr))
+				}
+			} else {
+				let newstr = CNVectorString(lineWidth: mLineWidth, font: mFont, color: mStrokeColor)
+				newstr.originPoint = origin
+				mGraphics.append(.string(newstr))
+			}
 		}
 	}
 
@@ -157,6 +207,8 @@ public class CNVecroGraphicsGenerator
 			addPath(point: pt, in: area)
 		case .rect:
 			addRect(point: pt, in: area)
+		case .string:
+			addString(point: pt, in: area)
 		}
 	}
 
@@ -166,6 +218,8 @@ public class CNVecroGraphicsGenerator
 			addPath(point: pt, in: area)
 		case .rect:
 			addRect(point: pt, in: area)
+		case .string:
+			addString(point: pt, in: area)
 		}
 	}
 
@@ -174,7 +228,7 @@ public class CNVecroGraphicsGenerator
 			switch gr {
 			case .path(let path):
 				path.add(point: convert(point: pt, in: area))
-			case .rect(_):
+			case .rect(_), .string(_):
 				CNLog(logLevel: .error, message: "Unexpected object", atFunction: #function, inFile: #file)
 			}
 		} else {
@@ -185,10 +239,23 @@ public class CNVecroGraphicsGenerator
 	private func addRect(point pt: CGPoint, in area: CGSize){
 		if let gr = mGraphics.last {
 			switch gr {
-			case .path(_):
+			case .path(_), .string(_):
 				CNLog(logLevel: .error, message: "Unexpected object", atFunction: #function, inFile: #file)
 			case .rect(let rect):
 				rect.endPoint = convert(point: pt, in: area)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
+		}
+	}
+
+	private func addString(point pt: CGPoint, in area: CGSize){
+		if let gr = mGraphics.last {
+			switch gr {
+			case .string(let str):
+				str.originPoint = convert(point: pt, in: area)
+			case .rect(_), .path(_):
+				CNLog(logLevel: .error, message: "Unexpected object", atFunction: #function, inFile: #file)
 			}
 		} else {
 			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
