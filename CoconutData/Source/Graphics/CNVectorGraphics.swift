@@ -91,26 +91,18 @@ public class CNVectorRect: CNVectorObject
 public class CNVectorString: CNVectorObject
 {
 	public var originPoint:		CGPoint
-	public var string:		NSAttributedString
-	private var mFont:		CNFont
+	public var string:		String
+	public var font:		CNFont
 
 	public init(lineWidth width: CGFloat, font fnt: CNFont, color col: CNColor) {
 		originPoint = CGPoint.zero
-		string 	    = NSAttributedString(string: "")
-		mFont	    = fnt
+		string 	    = ""
+		font	    = fnt
 		super.init(lineWidth: width, doFill: false, strokeColor: col, fillColor: CNColor.clear)
 	}
 
 	public var isEmpty: Bool {
-		get { return string.string.isEmpty }
-	}
-
-	public func set(string str: String){
-		let attrs: [NSAttributedString.Key: Any] = [
-			NSAttributedString.Key.foregroundColor: strokeColor,
-			NSAttributedString.Key.font:		mFont
-		]
-		string = NSAttributedString(string: str, attributes: attrs)
+		get { return self.string.isEmpty }
 	}
 
 	public func normalize(in area: CGSize) -> CGPoint? {
@@ -169,6 +161,30 @@ public class CNVecroGraphicsGenerator
 	public var fillColor: CNColor {
 		get         { return mFillColor }
 		set(newval) { mFillColor = newval }
+	}
+
+	public func loadString() -> String? {
+		var result: String? = nil
+		if let gr = mGraphics.last {
+			switch gr {
+			case .path(_), .rect(_):
+				result = nil
+			case .string(let vstr):
+				result = vstr.string
+			}
+		}
+		return result
+	}
+
+	public func storeString(string str: String) {
+		if let gr = mGraphics.last {
+			switch gr {
+			case .path(_), .rect(_):
+				break
+			case .string(let vstr):
+				vstr.string = str
+			}
+		}
 	}
 
 	public func addDown(point pt: CGPoint, in area: CGSize) {
