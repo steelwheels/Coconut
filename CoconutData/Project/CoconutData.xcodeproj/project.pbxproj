@@ -188,6 +188,10 @@
 		05B32D9525150946000D1411 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7325150945000D1411 /* CNStringUtil.swift */; };
 		05B48405272D7CC6006DD06E /* CNVectorGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNVectorGraphics.swift */; };
 		05B48406272D7CC6006DD06E /* CNVectorGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNVectorGraphics.swift */; };
+		05BD9FA32745444900D43064 /* oval-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA12745443200D43064 /* oval-filled.png */; };
+		05BD9FA42745444900D43064 /* oval.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA22745443200D43064 /* oval.png */; };
+		05BD9FA82745445B00D43064 /* oval-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA12745443200D43064 /* oval-filled.png */; };
+		05BD9FA92745445B00D43064 /* oval.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA22745443200D43064 /* oval.png */; };
 		05BEE0EE2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
 		05BEE0EF2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
 		05E45BCB2736CD290034254D /* rectangle-filled-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BC92736CD070034254D /* rectangle-filled-rounded.png */; };
@@ -283,6 +287,8 @@
 			dstPath = Images;
 			dstSubfolderSpec = 7;
 			files = (
+				05BD9FA82745445B00D43064 /* oval-filled.png in CopyFiles */,
+				05BD9FA92745445B00D43064 /* oval.png in CopyFiles */,
 				0537C0B2273CC340003B742E /* rectangle-filled.png in CopyFiles */,
 				0537C0B3273CC340003B742E /* rectangle.png in CopyFiles */,
 				05613AD2273431BE00A5C0A1 /* line-1p.png in CopyFiles */,
@@ -309,6 +315,8 @@
 			dstPath = Images;
 			dstSubfolderSpec = 7;
 			files = (
+				05BD9FA32745444900D43064 /* oval-filled.png in CopyFiles */,
+				05BD9FA42745444900D43064 /* oval.png in CopyFiles */,
 				0537C0BA273CC353003B742E /* rectangle-filled.png in CopyFiles */,
 				0537C0BB273CC353003B742E /* rectangle.png in CopyFiles */,
 				0596C56E2722E33F00E9A24F /* character-a.png in CopyFiles */,
@@ -443,6 +451,8 @@
 		05B32D7325150945000D1411 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05B32DD025160330000D1411 /* CoconutData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutData.xcframework; path = ../../../../Library/Frameworks/CoconutData.xcframework; sourceTree = "<group>"; };
 		05B48404272D7CC6006DD06E /* CNVectorGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVectorGraphics.swift; sourceTree = "<group>"; };
+		05BD9FA12745443200D43064 /* oval-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval-filled.png"; sourceTree = "<group>"; };
+		05BD9FA22745443200D43064 /* oval.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oval.png; sourceTree = "<group>"; };
 		05BEE0ED2634E02100178484 /* CNStandardFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStandardFiles.swift; sourceTree = "<group>"; };
 		05E45BC92736CD070034254D /* rectangle-filled-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-filled-rounded.png"; sourceTree = "<group>"; };
 		05E45BCA2736CD070034254D /* rectangle-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-rounded.png"; sourceTree = "<group>"; };
@@ -575,6 +585,8 @@
 				05613AC0273431A600A5C0A1 /* line-4p.png */,
 				05613AC2273431A700A5C0A1 /* line-8p.png */,
 				05613AC4273431A700A5C0A1 /* line-16p.png */,
+				05BD9FA12745443200D43064 /* oval-filled.png */,
+				05BD9FA22745443200D43064 /* oval.png */,
 				0596C55B2722E2FE00E9A24F /* paintbrush.png */,
 				0596C5602722E2FE00E9A24F /* pencil.png */,
 				0562ACC0273AC15B00B90BE2 /* pencil-circule.png */,

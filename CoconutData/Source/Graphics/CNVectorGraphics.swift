@@ -88,6 +88,33 @@ public class CNVectorRect: CNVectorObject
 	}
 }
 
+public class CNVectorOval: CNVectorObject
+{
+	public var centerPoint:		CGPoint
+	public var endPoint:		CGPoint
+
+	public override init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
+		centerPoint	= CGPoint.zero
+		endPoint	= CGPoint.zero
+		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
+	}
+
+	public func normalize(in area: CGSize) -> (CGPoint, CGFloat)? { // (center, radius)
+		let ncenter = normalizePoint(source: centerPoint, in: area)
+		let nend    = normalizePoint(source: endPoint, in: area)
+
+		let diffx   = ncenter.x - nend.x
+		let diffy   = ncenter.y - nend.y
+		let radius  = sqrt(diffx * diffx + diffy * diffy)
+
+		if radius > 0.0 {
+			return (ncenter, radius)
+		} else {
+			return nil
+		}
+	}
+}
+
 public class CNVectorString: CNVectorObject
 {
 	public var originPoint:		CGPoint
@@ -114,12 +141,14 @@ public enum CNVectorGraphics
 {
 	case path(CNVectorPath)
 	case rect(CNVectorRect)
+	case oval(CNVectorOval)
 	case string(CNVectorString)
 }
 
 public enum CNVectorGraphicsType {
 	case path(Bool)			// (doFill)
 	case rect(Bool, Bool)		// (doFill, isRounded)
+	case oval(Bool)			// (doFill)
 	case string			// (font)
 }
 
@@ -167,7 +196,7 @@ public class CNVecroGraphicsGenerator
 		var result: String? = nil
 		if let gr = mGraphics.last {
 			switch gr {
-			case .path(_), .rect(_):
+			case .path(_), .rect(_), .oval(_):
 				result = nil
 			case .string(let vstr):
 				result = vstr.string
@@ -179,7 +208,7 @@ public class CNVecroGraphicsGenerator
 	public func storeString(string str: String) {
 		if let gr = mGraphics.last {
 			switch gr {
-			case .path(_), .rect(_):
+			case .path(_), .rect(_), .oval(_):
 				break
 			case .string(let vstr):
 				vstr.string = str
@@ -198,6 +227,11 @@ public class CNVecroGraphicsGenerator
 			newrect.originPoint = convert(point: pt, in: area)
 			newrect.endPoint    = newrect.originPoint
 			mGraphics.append(.rect(newrect))
+		case .oval(let dofill):
+			let newoval = CNVectorOval(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
+			newoval.centerPoint = convert(point: pt, in: area)
+			newoval.endPoint    = newoval.centerPoint
+			mGraphics.append(.oval(newoval))
 		case .string:
 			let origin = convert(point: pt, in: area)
 			if let lastelm = mGraphics.last {
@@ -218,60 +252,25 @@ public class CNVecroGraphicsGenerator
 	}
 
 	public func addDrag(point pt: CGPoint, in area: CGSize){
-		switch mCurrentType {
-		case .path:
-			addPath(point: pt, in: area)
-		case .rect:
-			addRect(point: pt, in: area)
-		case .string:
-			addString(point: pt, in: area)
-		}
+		addEndPoint(point: pt, in: area)
 	}
 
 	public func addUp(point pt: CGPoint, in area: CGSize){
-		switch mCurrentType {
-		case .path:
-			addPath(point: pt, in: area)
-		case .rect:
-			addRect(point: pt, in: area)
-		case .string:
-			addString(point: pt, in: area)
-		}
+		addEndPoint(point: pt, in: area)
 	}
 
-	private func addPath(point pt: CGPoint, in area: CGSize){
+	private func addEndPoint(point pt: CGPoint, in area: CGSize){
 		if let gr = mGraphics.last {
+			let cpt = convert(point: pt, in: area)
 			switch gr {
 			case .path(let path):
-				path.add(point: convert(point: pt, in: area))
-			case .rect(_), .string(_):
-				CNLog(logLevel: .error, message: "Unexpected object", atFunction: #function, inFile: #file)
-			}
-		} else {
-			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-		}
-	}
-
-	private func addRect(point pt: CGPoint, in area: CGSize){
-		if let gr = mGraphics.last {
-			switch gr {
-			case .path(_), .string(_):
-				CNLog(logLevel: .error, message: "Unexpected object", atFunction: #function, inFile: #file)
+				path.add(point: cpt)
 			case .rect(let rect):
-				rect.endPoint = convert(point: pt, in: area)
-			}
-		} else {
-			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-		}
-	}
-
-	private func addString(point pt: CGPoint, in area: CGSize){
-		if let gr = mGraphics.last {
-			switch gr {
-			case .string(let str):
-				str.originPoint = convert(point: pt, in: area)
-			case .rect(_), .path(_):
-				CNLog(logLevel: .error, message: "Unexpected object", atFunction: #function, inFile: #file)
+				rect.endPoint = cpt
+			case .string(let vstr):
+				vstr.originPoint = cpt
+			case .oval(let oval):
+				oval.endPoint = cpt
 			}
 		} else {
 			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)

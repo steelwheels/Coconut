@@ -21,6 +21,7 @@ public class CNSymbol
 		case line4P
 		case line8P
 		case line16P
+		case oval(Bool)			// (doFill)
 		case paintbrush
 		case pencil(Bool)		// (doFill)
 		case rectangle(Bool, Bool)	// (doFill, rounded)
@@ -38,6 +39,12 @@ public class CNSymbol
 			case .line4P:		result = "line-4p"
 			case .line8P:		result = "line-8p"
 			case .line16P:		result = "line-16p"
+			case .oval(let dofill):
+				if dofill {
+					result = "oval-filled"
+				} else {
+					result = "oval"
+				}
 			case .paintbrush:	result = "paintbrush"
 			case .pencil(let dofill):
 				if dofill {
