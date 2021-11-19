@@ -31,9 +31,43 @@ open class CNVectorObject
 		strokeColor	= scolor
 		fillColor	= fcolor
 	}
+
+	open func contains(point pt: CGPoint, in area: CGSize) -> Bool {
+		NSLog("Must be override")
+		return false
+	}
 }
 
-public class CNVectorPath: CNVectorObject
+public class CNPathObject: CNVectorObject
+{
+	private var mBezierPath: CNBezierPath?
+
+	public override init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
+		mBezierPath = nil
+		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
+	}
+
+	public func allocateBezierPath() -> CNBezierPath {
+		let bezier = CNBezierPath()
+		bezier.lineWidth     = self.lineWidth
+		bezier.lineJoinStyle = .round
+		bezier.lineCapStyle  = .round
+		self.fillColor.setFill()
+		self.strokeColor.setStroke()
+		mBezierPath = bezier
+		return bezier
+	}
+
+	public override func contains(point pt: CGPoint, in area: CGSize) -> Bool {
+		if let path = mBezierPath {
+			return path.contains(pt)
+		} else {
+			return false
+		}
+	}
+}
+
+public class CNVectorPath: CNPathObject
 {
 	private var mPoints:	Array<CGPoint>
 
@@ -60,7 +94,7 @@ public class CNVectorPath: CNVectorObject
 	}
 }
 
-public class CNVectorRect: CNVectorObject
+public class CNVectorRect: CNPathObject
 {
 	public var originPoint:		CGPoint
 	public var endPoint:		CGPoint
@@ -88,7 +122,7 @@ public class CNVectorRect: CNVectorObject
 	}
 }
 
-public class CNVectorOval: CNVectorObject
+public class CNVectorOval: CNPathObject
 {
 	public var centerPoint:		CGPoint
 	public var endPoint:		CGPoint
@@ -121,10 +155,13 @@ public class CNVectorString: CNVectorObject
 	public var string:		String
 	public var font:		CNFont
 
+	private var mAttributedString:	NSAttributedString?
+
 	public init(lineWidth width: CGFloat, font fnt: CNFont, color col: CNColor) {
-		originPoint = CGPoint.zero
-		string 	    = ""
-		font	    = fnt
+		originPoint 		= CGPoint.zero
+		string 	   		= ""
+		font	    		= fnt
+		mAttributedString	= nil
 		super.init(lineWidth: width, doFill: false, strokeColor: col, fillColor: CNColor.clear)
 	}
 
@@ -134,6 +171,31 @@ public class CNVectorString: CNVectorObject
 
 	public func normalize(in area: CGSize) -> CGPoint? {
 		return normalizePoint(source: originPoint, in: area)
+	}
+
+	public func attributedString() -> NSAttributedString {
+		let attrs: [NSAttributedString.Key: Any] = [
+			NSAttributedString.Key.foregroundColor: self.strokeColor,
+			NSAttributedString.Key.backgroundColor:	CNColor.clear,
+			NSAttributedString.Key.font:		self.font
+		]
+		let astr = NSAttributedString(string: self.string, attributes: attrs)
+		mAttributedString = astr
+		return astr
+	}
+
+	public override func contains(point pt: CGPoint, in area: CGSize) -> Bool {
+		if let orgpt = normalize(in: area) {
+			let x0 = orgpt.x ; let x1 = orgpt.x + area.width
+			let y0 = orgpt.y ; let y1 = orgpt.y + area.height
+			if x0<=pt.x && pt.x<x1 && y0<=pt.y && pt.y<y1 {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return false
+		}
 	}
 }
 

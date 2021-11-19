@@ -25,6 +25,8 @@
 		053AE54C25D55D380007056B /* CNBitmapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053AE54A25D55D380007056B /* CNBitmapData.swift */; };
 		0551394125CC2BD6007B1C6B /* CNTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551394025CC2BD6007B1C6B /* CNTimer.swift */; };
 		0551394225CC2BD6007B1C6B /* CNTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0551394025CC2BD6007B1C6B /* CNTimer.swift */; };
+		0556965D2747E34300102647 /* CNBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0556965C2747E34300102647 /* CNBezierPath.swift */; };
+		0556965E2747E34300102647 /* CNBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0556965C2747E34300102647 /* CNBezierPath.swift */; };
 		055BF94F255C25070004C250 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 055BF94E255C25070004C250 /* CoconutScript.sdef */; };
 		055BF950255C25070004C250 /* CoconutScript.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 055BF94E255C25070004C250 /* CoconutScript.sdef */; };
 		055C85E625A1F47F0064BE93 /* CNReadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055C85DF25A1F47F0064BE93 /* CNReadline.swift */; };
@@ -362,6 +364,7 @@
 		053AE54A25D55D380007056B /* CNBitmapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapData.swift; sourceTree = "<group>"; };
 		053B4EE9255FE176004B9052 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0551394025CC2BD6007B1C6B /* CNTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNTimer.swift; sourceTree = "<group>"; };
+		0556965C2747E34300102647 /* CNBezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNBezierPath.swift; sourceTree = "<group>"; };
 		055BF94E255C25070004C250 /* CoconutScript.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CoconutScript.sdef; sourceTree = "<group>"; };
 		055C85DF25A1F47F0064BE93 /* CNReadline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNReadline.swift; sourceTree = "<group>"; };
 		055C8AEA25DD62F50053510B /* UTToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTToken.swift; sourceTree = "<group>"; };
@@ -746,6 +749,7 @@
 		05B32D0E2515089F000D1411 /* Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				0556965C2747E34300102647 /* CNBezierPath.swift */,
 				051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */,
 				053AE54A25D55D380007056B /* CNBitmapData.swift */,
 				05A44F0125C223350086033B /* CNGraphicsContext.swift */,
@@ -1173,6 +1177,7 @@
 				05E88DEB26AA9F1B00FF993E /* CNImage.swift in Sources */,
 				053AE54B25D55D380007056B /* CNBitmapData.swift in Sources */,
 				05B32CE5251502E7000D1411 /* CNApplicationDelegate.swift in Sources */,
+				0556965D2747E34300102647 /* CNBezierPath.swift in Sources */,
 				05B32D2D251508D9000D1411 /* CNAuthorize.swift in Sources */,
 				05B32D29251508D9000D1411 /* CNValueFile.swift in Sources */,
 				05B32CF525150328000D1411 /* CNPreference.swift in Sources */,
@@ -1255,6 +1260,7 @@
 				05E88DEC26AA9F1B00FF993E /* CNImage.swift in Sources */,
 				053AE54C25D55D380007056B /* CNBitmapData.swift in Sources */,
 				05B32CE6251502E7000D1411 /* CNApplicationDelegate.swift in Sources */,
+				0556965E2747E34300102647 /* CNBezierPath.swift in Sources */,
 				05B32D2E251508D9000D1411 /* CNAuthorize.swift in Sources */,
 				05B32D2A251508D9000D1411 /* CNValueFile.swift in Sources */,
 				05B32CF625150328000D1411 /* CNPreference.swift in Sources */,
