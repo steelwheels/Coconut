@@ -212,6 +212,21 @@ public enum CNVectorGraphicsType {
 	case rect(Bool, Bool)		// (doFill, isRounded)
 	case oval(Bool)			// (doFill)
 	case string			// (font)
+
+	public var description: String { get {
+		let result: String
+		switch self {
+		case .path(let dofill):
+			result = "path(doFill:\(dofill))"
+		case .rect(let dofill, let isrounded):
+			result = "rect(doFill:\(dofill), isRounded:\(isrounded))"
+		case .oval(let dofill):
+			result = "oval(doFill:\(dofill))"
+		case .string:
+			result = "string"
+		}
+		return result
+	}}
 }
 
 public class CNVecroGraphicsGenerator
@@ -276,6 +291,10 @@ public class CNVecroGraphicsGenerator
 				vstr.string = str
 			}
 		}
+	}
+
+	public func addItem(location loc: CGPoint, graphicsType gtype: CNVectorGraphicsType){
+		NSLog("addItem: location=\(loc.description), type=\(gtype.description)")
 	}
 
 	public func addDown(point pt: CGPoint, in area: CGSize) {

@@ -13,8 +13,10 @@
 import Foundation
 
 #if os(OSX)
+public typealias CNEdgeInsets		= NSEdgeInsets
 public typealias CNImage		= NSImage
 #else
+public typealias CNEdgeInsets		= UIEdgeInsets
 public typealias CNImage		= UIImage
 #endif
 
