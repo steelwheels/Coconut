@@ -18,6 +18,64 @@ private func normalizePoint(source src: CGPoint, in area: CGSize) -> CGPoint {
 	return CGPoint(x: x, y: y)
 }
 
+public class CNGripPoint
+{
+	public enum VerticalPosition {
+		case top
+		case middle
+		case bottom
+	}
+
+	public enum HorizontalPosition {
+		case left
+		case center
+		case right
+	}
+
+	public struct Position {
+		var verticalPosition:	VerticalPosition
+		var horizontalPosition:	HorizontalPosition
+
+		public init(verticalPosition vpos: VerticalPosition, horizontalPosition hpos: HorizontalPosition){
+			verticalPosition	= vpos
+			horizontalPosition	= hpos
+		}
+	}
+
+	private var mBezierPath: CNBezierPath?
+	private var mPosition:   Position
+
+	public init(){
+		mBezierPath	= nil
+		mPosition	= Position(verticalPosition: .middle, horizontalPosition: .center)
+	}
+
+	public var bezierPath: CNBezierPath?	{ get { return mBezierPath	}}
+	public var position: Position		{ get { return mPosition	}}
+
+	public func setBezierPath(bezierPath path: CNBezierPath){
+		mBezierPath = path
+	}
+
+	public func setPosition(position pos: Position){
+		mPosition = pos
+	}
+
+	public func contains(point pt: CGPoint) -> Bool {
+		if let bezier = mBezierPath {
+			return bezier.contains(pt)
+		} else {
+			return false
+		}
+	}
+
+	public func clear(){
+		if let bezier = mBezierPath {
+			bezier.removeAllPoints()
+		}
+	}
+}
+
 open class CNVectorObject
 {
 	public var lineWidth:		CGFloat
@@ -25,16 +83,37 @@ open class CNVectorObject
 	public var strokeColor:		CNColor
 	public var fillColor:		CNColor
 
+	private var mGripPoints:	Array<CNGripPoint>
+
 	public init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		lineWidth	= width
 		doFill		= fill
 		strokeColor	= scolor
 		fillColor	= fcolor
+		mGripPoints	= []
+	}
+
+	public var gripPoints: Array<CNGripPoint> {
+		get { return mGripPoints }
+	}
+
+	public func allocateGripPoint() -> CNGripPoint {
+		let newpt = CNGripPoint()
+		mGripPoints.append(newpt)
+		return newpt
+	}
+
+	public func clearGripPoints() {
+		mGripPoints = []
 	}
 
 	open func contains(point pt: CGPoint, in area: CGSize) -> Bool {
 		NSLog("Must be override")
 		return false
+	}
+
+	open func move(_ dx: CGFloat, _ dy: CGFloat) {
+		NSLog("Must be override")
 	}
 }
 
@@ -47,15 +126,12 @@ public class CNPathObject: CNVectorObject
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
-	public func allocateBezierPath() -> CNBezierPath {
-		let bezier = CNBezierPath()
-		bezier.lineWidth     = self.lineWidth
-		bezier.lineJoinStyle = .round
-		bezier.lineCapStyle  = .round
-		self.fillColor.setFill()
-		self.strokeColor.setStroke()
-		mBezierPath = bezier
-		return bezier
+	public var bezierPath: CNBezierPath? {
+		get { return mBezierPath }
+	}
+
+	public func setBezierPath(bezierPath path: CNBezierPath){
+		mBezierPath = path
 	}
 
 	public override func contains(point pt: CGPoint, in area: CGSize) -> Bool {
@@ -92,6 +168,15 @@ public class CNVectorPath: CNPathObject
 		}
 		return result
 	}
+
+	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
+		var newpoints: Array<CGPoint> = []
+		for orgpt in mPoints {
+			let newpt = CGPoint(x: orgpt.x + dx, y: orgpt.y + dy)
+			newpoints.append(newpt)
+		}
+		mPoints = newpoints
+	}
 }
 
 public class CNVectorRect: CNPathObject
@@ -120,6 +205,13 @@ public class CNVectorRect: CNPathObject
 			return nil
 		}
 	}
+
+	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
+		let neworign = CGPoint(x: originPoint.x + dx, y: originPoint.y + dy)
+		let newend   = CGPoint(x: endPoint.x + dx, y: endPoint.y + dy)
+		originPoint  = neworign
+		endPoint     = newend
+	}
 }
 
 public class CNVectorOval: CNPathObject
@@ -132,6 +224,12 @@ public class CNVectorOval: CNPathObject
 		endPoint	= CGPoint.zero
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
+
+	public var radius: CGFloat { get {
+		let dx: CGFloat = abs(endPoint.x - centerPoint.x)
+		let dy: CGFloat = abs(endPoint.y - centerPoint.y)
+		return sqrt(dx*dx + dy*dy)
+	}}
 
 	public func normalize(in area: CGSize) -> (CGPoint, CGFloat)? { // (center, radius)
 		let ncenter = normalizePoint(source: centerPoint, in: area)
@@ -147,11 +245,19 @@ public class CNVectorOval: CNPathObject
 			return nil
 		}
 	}
+
+	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
+		let newcenter = CGPoint(x: centerPoint.x + dx, y: centerPoint.y + dy)
+		let newend    = CGPoint(x: endPoint.x + dx, y: endPoint.y + dy)
+		centerPoint   = newcenter
+		endPoint      = newend
+	}
 }
 
 public class CNVectorString: CNVectorObject
 {
 	public var originPoint:		CGPoint
+	public var frame:		CGRect
 	public var string:		String
 	public var font:		CNFont
 
@@ -159,6 +265,7 @@ public class CNVectorString: CNVectorObject
 
 	public init(lineWidth width: CGFloat, font fnt: CNFont, color col: CNColor) {
 		originPoint 		= CGPoint.zero
+		frame			= CGRect.zero
 		string 	   		= ""
 		font	    		= fnt
 		mAttributedString	= nil
@@ -186,16 +293,15 @@ public class CNVectorString: CNVectorObject
 
 	public override func contains(point pt: CGPoint, in area: CGSize) -> Bool {
 		if let orgpt = normalize(in: area) {
-			let x0 = orgpt.x ; let x1 = orgpt.x + area.width
-			let y0 = orgpt.y ; let y1 = orgpt.y + area.height
-			if x0<=pt.x && pt.x<x1 && y0<=pt.y && pt.y<y1 {
-				return true
-			} else {
-				return false
-			}
+			return frame.contains(orgpt)
 		} else {
 			return false
 		}
+	}
+
+	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
+		let neworigin = CGPoint(x: originPoint.x + dx, y: originPoint.y + dy)
+		originPoint   = neworigin
 	}
 }
 
@@ -227,146 +333,6 @@ public enum CNVectorGraphicsType {
 		}
 		return result
 	}}
-}
-
-public class CNVecroGraphicsGenerator
-{
-	private var mCurrentType:	CNVectorGraphicsType
-	private var mGraphics:		Array<CNVectorGraphics>
-	private var mLineWidth:		CGFloat
-	private var mStrokeColor:	CNColor
-	private var mFillColor:		CNColor
-	private var mFont:		CNFont
-
-	public init(){
-		mCurrentType	= .path(false)
-		mGraphics	= []
-		mLineWidth	= 1.0
-		mStrokeColor	= CNColor.black
-		mFillColor	= CNColor.black
-		mFont		= CNFont.systemFont(ofSize: CNFont.systemFontSize)
-	}
-
-	public var contents: Array<CNVectorGraphics> { get { return mGraphics }}
-
-	public var currentType: CNVectorGraphicsType {
-		get 	    { return mCurrentType	}
-		set(newval) { mCurrentType = newval	}
-	}
-
-	public var lineWidth: CGFloat {
-		get	    { return mLineWidth }
-		set(newval) { mLineWidth = newval }
-	}
-
-	public var strokeColor: CNColor {
-		get         { return mStrokeColor }
-		set(newval) { mStrokeColor = newval }
-	}
-
-	public var fillColor: CNColor {
-		get         { return mFillColor }
-		set(newval) { mFillColor = newval }
-	}
-
-	public func loadString() -> String? {
-		var result: String? = nil
-		if let gr = mGraphics.last {
-			switch gr {
-			case .path(_), .rect(_), .oval(_):
-				result = nil
-			case .string(let vstr):
-				result = vstr.string
-			}
-		}
-		return result
-	}
-
-	public func storeString(string str: String) {
-		if let gr = mGraphics.last {
-			switch gr {
-			case .path(_), .rect(_), .oval(_):
-				break
-			case .string(let vstr):
-				vstr.string = str
-			}
-		}
-	}
-
-	public func addItem(location loc: CGPoint, graphicsType gtype: CNVectorGraphicsType){
-		NSLog("addItem: location=\(loc.description), type=\(gtype.description)")
-	}
-
-	public func addDown(point pt: CGPoint, in area: CGSize) {
-		switch mCurrentType {
-		case .path(let dofill):
-			let newpath = CNVectorPath(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
-			newpath.add(point: convert(point: pt, in: area))
-			mGraphics.append(.path(newpath))
-		case .rect(let dofill, let isround):
-			let newrect = CNVectorRect(lineWidth: mLineWidth, doFill: dofill, isRounded: isround, strokeColor: mStrokeColor, fillColor: mFillColor)
-			newrect.originPoint = convert(point: pt, in: area)
-			newrect.endPoint    = newrect.originPoint
-			mGraphics.append(.rect(newrect))
-		case .oval(let dofill):
-			let newoval = CNVectorOval(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
-			newoval.centerPoint = convert(point: pt, in: area)
-			newoval.endPoint    = newoval.centerPoint
-			mGraphics.append(.oval(newoval))
-		case .string:
-			let origin = convert(point: pt, in: area)
-			if let lastelm = mGraphics.last {
-				switch lastelm {
-				case .string(let vstr):
-					vstr.originPoint = origin
-				default:
-					let newstr = CNVectorString(lineWidth: mLineWidth, font: mFont, color: mStrokeColor)
-					newstr.originPoint = origin
-					mGraphics.append(.string(newstr))
-				}
-			} else {
-				let newstr = CNVectorString(lineWidth: mLineWidth, font: mFont, color: mStrokeColor)
-				newstr.originPoint = origin
-				mGraphics.append(.string(newstr))
-			}
-		}
-	}
-
-	public func addDrag(point pt: CGPoint, in area: CGSize){
-		addEndPoint(point: pt, in: area)
-	}
-
-	public func addUp(point pt: CGPoint, in area: CGSize){
-		addEndPoint(point: pt, in: area)
-	}
-
-	private func addEndPoint(point pt: CGPoint, in area: CGSize){
-		if let gr = mGraphics.last {
-			let cpt = convert(point: pt, in: area)
-			switch gr {
-			case .path(let path):
-				path.add(point: cpt)
-			case .rect(let rect):
-				rect.endPoint = cpt
-			case .string(let vstr):
-				vstr.originPoint = cpt
-			case .oval(let oval):
-				oval.endPoint = cpt
-			}
-		} else {
-			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-		}
-	}
-
-	private func convert(point pt: CGPoint, in area: CGSize) -> CGPoint {
-		guard area.width > 0.0 && area.height > 0.0 else {
-			CNLog(logLevel: .error, message: "Can not accept empty frame", atFunction: #function, inFile: #file)
-			return CGPoint.zero
-		}
-		let x = pt.x / area.width
-		let y = pt.y / area.height
-		return CGPoint(x: x, y: y)
-	}
 }
 
 

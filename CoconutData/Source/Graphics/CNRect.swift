@@ -10,11 +10,51 @@ import Foundation
 
 public extension CGRect
 {
-	var center: CGPoint {
+	var center: CGPoint { get {
 		let x = self.origin.x + (self.size.width  / 2)
 		let y = self.origin.y + (self.size.height / 2)
 		return CGPoint(x: x, y:y)
-	}
+	}}
+
+	var upperLeftPoint: CGPoint { get {
+		let result: CGPoint
+		#if os(OSX)
+			result = CGPoint(x: self.origin.x, y: self.origin.y + self.size.height)
+		#else
+			result = self.origin
+		#endif
+		return result
+	}}
+
+	var upperRightPoint: CGPoint { get {
+		let result: CGPoint
+		#if os(OSX)
+			result = CGPoint(x: self.origin.x + self.size.width, y: self.origin.y + self.size.height)
+		#else
+			result = CGPoint(x: self.origin.x + self.size.width, y: self.origin.y)
+		#endif
+		return result
+	}}
+
+	var lowerLeftPoint: CGPoint { get {
+		let result: CGPoint
+		#if os(OSX)
+			result = self.origin
+		#else
+			result = CGPoint(x: self.origin.x, y: self.origin.y + self.size.height)
+		#endif
+		return result
+	}}
+
+	var lowerRightPoint: CGPoint { get {
+		let result: CGPoint
+		#if os(OSX)
+			result = CGPoint(x: self.origin.x + self.size.width, y: self.origin.y)
+		#else
+			result = CGPoint(x: self.origin.x + self.size.width, y: self.origin.y + self.size.height)
+		#endif
+		return result
+	}}
 
 	func centeringIn(bounds bnds: CGRect) -> CGRect {
 		let dx = (bnds.size.width  - self.size.width ) / 2.0
