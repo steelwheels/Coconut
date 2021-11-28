@@ -20,44 +20,22 @@ private func normalizePoint(source src: CGPoint, in area: CGSize) -> CGPoint {
 
 public class CNGripPoint
 {
-	public enum VerticalPosition {
-		case top
-		case middle
-		case bottom
-	}
-
-	public enum HorizontalPosition {
-		case left
-		case center
-		case right
-	}
-
-	public struct Position {
-		var verticalPosition:	VerticalPosition
-		var horizontalPosition:	HorizontalPosition
-
-		public init(verticalPosition vpos: VerticalPosition, horizontalPosition hpos: HorizontalPosition){
-			verticalPosition	= vpos
-			horizontalPosition	= hpos
-		}
-	}
-
 	private var mBezierPath: CNBezierPath?
-	private var mPosition:   Position
+	private var mPosition:   CNPosition
 
 	public init(){
 		mBezierPath	= nil
-		mPosition	= Position(verticalPosition: .middle, horizontalPosition: .center)
+		mPosition	= CNPosition(horizontal: .center, vertical: .middle)
 	}
 
 	public var bezierPath: CNBezierPath?	{ get { return mBezierPath	}}
-	public var position: Position		{ get { return mPosition	}}
+	public var position:   CNPosition       { get { return mPosition	}}
 
 	public func setBezierPath(bezierPath path: CNBezierPath){
 		mBezierPath = path
 	}
 
-	public func setPosition(position pos: Position){
+	public func setPosition(position pos: CNPosition){
 		mPosition = pos
 	}
 
@@ -107,13 +85,17 @@ open class CNVectorObject
 		mGripPoints = []
 	}
 
+	open func reshape(position pos: CNPosition, nextPoint point: CGPoint){
+		NSLog("Must be override: \(#function)")
+	}
+
 	open func contains(point pt: CGPoint, in area: CGSize) -> Bool {
-		NSLog("Must be override")
+		NSLog("Must be override: \(#function)")
 		return false
 	}
 
 	open func move(_ dx: CGFloat, _ dy: CGFloat) {
-		NSLog("Must be override")
+		NSLog("Must be override: \(#function)")
 	}
 }
 
@@ -160,6 +142,10 @@ public class CNVectorPath: CNPathObject
 		mPoints.append(pt)
 	}
 
+	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
+		self.add(point: point)
+	}
+
 	public func normalize(in area: CGSize) -> Array<CGPoint> {
 		var result: Array<CGPoint> = []
 		for pt in mPoints {
@@ -190,6 +176,10 @@ public class CNVectorRect: CNPathObject
 		endPoint	= CGPoint.zero
 		isRounded	= isrnd
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
+	}
+
+	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
+		NSLog("Must be override: \(#function)")
 	}
 
 	public func normalize(in area: CGSize) -> CGRect? {
@@ -230,6 +220,10 @@ public class CNVectorOval: CNPathObject
 		let dy: CGFloat = abs(endPoint.y - centerPoint.y)
 		return sqrt(dx*dx + dy*dy)
 	}}
+
+	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
+		NSLog("Must be override: \(#function)")
+	}
 
 	public func normalize(in area: CGSize) -> (CGPoint, CGFloat)? { // (center, radius)
 		let ncenter = normalizePoint(source: centerPoint, in: area)
@@ -276,6 +270,10 @@ public class CNVectorString: CNVectorObject
 		get { return self.string.isEmpty }
 	}
 
+	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
+		NSLog("Must be override: \(#function)")
+	}
+	
 	public func normalize(in area: CGSize) -> CGPoint? {
 		return normalizePoint(source: originPoint, in: area)
 	}

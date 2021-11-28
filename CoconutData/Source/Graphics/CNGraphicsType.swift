@@ -45,6 +45,33 @@ public enum CNAlignment: Int32 {
 	}
 }
 
+public enum CNVerticalPosition {
+	case top
+	case middle
+	case bottom
+}
+
+public enum CNHorizontalPosition {
+	case left
+	case center
+	case right
+}
+
+public struct CNPosition {
+	public var 	horizontal:	CNHorizontalPosition
+	public var	vertical:	CNVerticalPosition
+
+	public init(){
+		vertical	= .middle
+		horizontal	= .center
+	}
+
+	public init(horizontal hpos: CNHorizontalPosition, vertical vpos: CNVerticalPosition){
+		vertical	= vpos
+		horizontal	= hpos
+	}
+}
+
 /* OSX: NSStackView.Distribution */
 public enum CNDistribution: Int32 {
 	case fill

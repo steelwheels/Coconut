@@ -23,8 +23,13 @@ public extension CGPoint
 			return "{x:\(xstr), y:\(ystr)}"
 		}
 	}
-}
 
+	static func center(_ pt0: CGPoint, _ pt1: CGPoint) -> CGPoint {
+		let x = (pt0.x + pt1.x) / 2.0
+		let y = (pt0.y + pt1.y) / 2.0
+		return CGPoint(x: x, y: y)
+	}
+}
 
 public func == (left: CGPoint, right: CGPoint) -> Bool {
 	return (left.x == right.x) && (left.y == right.y)

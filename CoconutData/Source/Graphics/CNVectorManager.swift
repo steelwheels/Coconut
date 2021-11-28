@@ -20,7 +20,8 @@ public class CNVecroManager
 	public enum SelectedGraphics {
 		case none
 		case grip(CNGripPoint, CNVectorGraphics)
-		case graphics(CNVectorGraphics)
+		case choose(CNVectorGraphics)
+		case change(Int)			// next target index
 	}
 
 	public init(){
@@ -60,7 +61,7 @@ public class CNVecroManager
 		set(newval) { mFont = newval }
 	}
 
-	public func currentItem() -> CNVectorGraphics? {
+	public func currentObject() -> CNVectorGraphics? {
 		if let idx = mCurrentIndex {
 			return mGraphics[idx]
 		} else {
@@ -68,7 +69,13 @@ public class CNVecroManager
 		}
 	}
 
-	public func addItem(location gloc: CGPoint, in area: CGSize, graphicsType gtype: CNVectorGraphicsType){
+	public func selectObject(index idx: Int){
+		if 0<=idx && idx < mGraphics.count {
+			mCurrentIndex = idx
+		}
+	}
+
+	public func addObject(location gloc: CGPoint, in area: CGSize, type gtype: CNVectorGraphicsType){
 		let DefaultSize: CGFloat = 0.1
 		let loc = convert(point: gloc, in: area)
 		switch gtype {
@@ -94,7 +101,7 @@ public class CNVecroManager
 		mCurrentIndex = mGraphics.count - 1
 	}
 
-	public func moveItem(diffPoint dpoint: CGPoint, in area: CGSize, graphics gobj: CNVectorGraphics) {
+	public func moveObject(diffPoint dpoint: CGPoint, in area: CGSize, object gobj: CNVectorGraphics) {
 		let dx = dpoint.x / area.width
 		let dy = dpoint.y / area.height
 		switch gobj {
@@ -109,33 +116,45 @@ public class CNVecroManager
 		}
 	}
 
+	public func reshapeObject(nextPoint nextpt: CGPoint, in area: CGSize, grip gpoint: CNGripPoint, object gobj: CNVectorGraphics) {
+		let nextloc = convert(point: nextpt, in: area)
+		switch gobj {
+		case .path(let path):
+			path.reshape(position: gpoint.position, nextPoint: nextloc)
+		case .rect(let rect):
+			rect.reshape(position: gpoint.position, nextPoint: nextloc)
+		case .oval(let oval):
+			oval.reshape(position: gpoint.position, nextPoint: nextloc)
+		case .string(let vstr):
+			vstr.reshape(position: gpoint.position, nextPoint: nextloc)
+		}
+	}
+
 	public func contains(point pt: CGPoint, in area: CGSize) -> SelectedGraphics {
-		/* Search the grip point */
-		if let item = currentItem() {
-			let grippoints: Array<CNGripPoint>
-			switch item {
-			case .path(let path):   grippoints = path.gripPoints
-			case .rect(let rect):   grippoints = rect.gripPoints
-			case .oval(let oval):   grippoints = oval.gripPoints
-			case .string(let vstr): grippoints = vstr.gripPoints
-			}
-			for grip in grippoints {
+		if let obj = currentObject() {
+			/* Search the grip point */
+			let base = baseObject(in: obj)
+			for grip in base.gripPoints {
 				if grip.contains(point: pt) {
-					return .grip(grip, item)
+					return .grip(grip, obj)
 				}
+			}
+			/* Select current object */
+			if base.contains(point: pt, in: area){
+				return .choose(obj)
 			}
 		}
 		/* Search graphics */
-		for item in mGraphics.reversed() {
-			let gr: CNVectorObject
-			switch item {
-			case .path(let path):   gr = path
-			case .rect(let rect):   gr = rect
-			case .oval(let oval):   gr = oval
-			case .string(let vstr): gr = vstr
+		let count = mGraphics.count
+		for i in (0..<count).reversed() {
+			if let curidx = mCurrentIndex {
+				if curidx == i {
+					continue
+				}
 			}
-			if gr.contains(point: pt, in: area) {
-				return .graphics(item)
+			let base = baseObject(in: mGraphics[i])
+			if base.contains(point: pt, in: area) {
+				return .change(i)
 			}
 		}
 		return .none
@@ -143,8 +162,8 @@ public class CNVecroManager
 
 	public func loadString() -> String? {
 		var result: String? = nil
-		if let item = currentItem() {
-			switch item {
+		if let obj = currentObject() {
+			switch obj {
 			case .path(_), .rect(_), .oval(_):
 				result = nil
 			case .string(let vstr):
@@ -155,8 +174,8 @@ public class CNVecroManager
 	}
 
 	public func storeString(string str: String) {
-		if let item = currentItem() {
-			switch item {
+		if let obj = currentObject() {
+			switch obj {
 			case .path(_), .rect(_), .oval(_):
 				break
 			case .string(let vstr):
@@ -173,6 +192,17 @@ public class CNVecroManager
 		let x = pt.x / area.width
 		let y = pt.y / area.height
 		return CGPoint(x: x, y: y)
+	}
+
+	private func baseObject(in obj: CNVectorGraphics) -> CNVectorObject {
+		let result: CNVectorObject
+		switch obj {
+		case .path(let path):	result = path
+		case .rect(let rect):	result = rect
+		case .oval(let oval):	result = oval
+		case .string(let vstr):	result = vstr
+		}
+		return result
 	}
 }
 
