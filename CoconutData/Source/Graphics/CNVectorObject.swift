@@ -179,7 +179,53 @@ public class CNVectorRect: CNPathObject
 	}
 
 	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
-		NSLog("Must be override: \(#function)")
+		let orgrect = CGRect.pointsToRect(fromPoint: originPoint, toPoint: endPoint)
+		let orgul   = orgrect.upperLeftPoint
+		let orgur   = orgrect.upperRightPoint
+		let orgll   = orgrect.lowerLeftPoint
+		let orglr   = orgrect.lowerRightPoint
+
+		let neworg, newend: CGPoint
+		switch pos.horizontal {
+		case .left:
+			switch pos.vertical {
+			case .top:
+				neworg = orglr
+				newend = point
+			case .middle:
+				neworg = orgur
+				newend = CGPoint(x: point.x, y: orgll.y)
+			case .bottom:
+				neworg = orgur
+				newend = point
+			}
+		case .center:
+			switch pos.vertical {
+			case .top:
+				neworg = orgll
+				newend = CGPoint(x: orgur.x, y: point.y)
+			case .middle:
+				neworg = orgll
+				newend = orgur
+			case .bottom:
+				neworg = orgul
+				newend = CGPoint(x: orglr.x, y: point.y)
+			}
+		case .right:
+			switch pos.vertical {
+			case .top:
+				neworg = orgll
+				newend = point
+			case .middle:
+				neworg = orgul
+				newend = CGPoint(x: point.x, y: orglr.y)
+			case .bottom:
+				neworg = orgul
+				newend = point
+			}
+		}
+		originPoint	= neworg
+		endPoint	= newend
 	}
 
 	public func normalize(in area: CGSize) -> CGRect? {
@@ -222,7 +268,7 @@ public class CNVectorOval: CNPathObject
 	}}
 
 	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
-		NSLog("Must be override: \(#function)")
+		endPoint = point
 	}
 
 	public func normalize(in area: CGSize) -> (CGPoint, CGFloat)? { // (center, radius)
