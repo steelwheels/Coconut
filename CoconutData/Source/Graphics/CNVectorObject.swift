@@ -52,6 +52,10 @@ public class CNGripPoint
 			bezier.removeAllPoints()
 		}
 	}
+
+	public static func setColors(){
+		CNColor.black.setStroke()
+	}
 }
 
 open class CNVectorObject
@@ -83,6 +87,11 @@ open class CNVectorObject
 
 	public func clearGripPoints() {
 		mGripPoints = []
+	}
+
+	public func setColors(){
+		strokeColor.setStroke()
+		fillColor.setFill()
 	}
 
 	open func reshape(position pos: CNPosition, nextPoint point: CGPoint){
@@ -337,10 +346,12 @@ public class CNVectorString: CNVectorObject
 
 	public override func contains(point pt: CGPoint, in area: CGSize) -> Bool {
 		if let orgpt = normalize(in: area) {
-			return frame.contains(orgpt)
-		} else {
-			return false
+			if let astr = mAttributedString {
+				let strrect = CGRect(origin: orgpt, size: astr.size())
+				return strrect.contains(pt)
+			}
 		}
+		return false
 	}
 
 	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
