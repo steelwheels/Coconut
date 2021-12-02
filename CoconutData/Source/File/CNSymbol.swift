@@ -15,6 +15,7 @@ public class CNSymbol
 		case characterA
 		case chevronBackward
 		case chevronForward
+		case handPointUp
 		case handRaised
 		case line1P
 		case line2P
@@ -33,6 +34,7 @@ public class CNSymbol
 			case .characterA:	result = "character-a"
 			case .chevronBackward:	result = "chevron-backward"
 			case .chevronForward:	result = "chevron-forward"
+			case .handPointUp:	result = "hand-point-up"
 			case .handRaised:	result = "hand-raised"
 			case .line1P:		result = "line-1p"
 			case .line2P:		result = "line-2p"

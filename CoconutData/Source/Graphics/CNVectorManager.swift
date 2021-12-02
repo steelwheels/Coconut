@@ -19,9 +19,9 @@ public class CNVecroManager
 
 	public enum SelectedGraphics {
 		case none
-		case grip(CNGripPoint, CNVectorGraphics)
-		case choose(CNVectorGraphics)
-		case change(Int)			// next target index
+		case selectCurrentGrip(CNGripPoint, CNVectorGraphics)
+		case selectCurrentObject(CNVectorGraphics)
+		case selectOtherObject(Int)			// next target index
 	}
 
 	public init(){
@@ -69,36 +69,42 @@ public class CNVecroManager
 		}
 	}
 
-	public func selectObject(index idx: Int){
+	public func selectObject(index idx: Int) {
 		if 0<=idx && idx < mGraphics.count {
 			mCurrentIndex = idx
 		}
 	}
 
-	public func addObject(location gloc: CGPoint, in area: CGSize, type gtype: CNVectorGraphicsType){
+	public func addObject(location gloc: CGPoint, in area: CGSize, type gtype: CNVectorGraphicsType) -> CNVectorGraphics {
+		let newobj: CNVectorGraphics
 		let DefaultSize: CGFloat = 0.1
 		let loc = convert(point: gloc, in: area)
 		switch gtype {
 		case .path(let dofill):
-			let newobj = CNVectorPath(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
-			newobj.add(point: loc)
-			mGraphics.append(.path(newobj))
+			let newpath = CNVectorPath(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
+			newpath.add(point: loc)
+			mGraphics.append(.path(newpath))
+			newobj = .path(newpath)
 		case .rect(let dofill, let isround):
-			let newobj = CNVectorRect(lineWidth: mLineWidth, doFill: dofill, isRounded: isround, strokeColor: mStrokeColor, fillColor: mFillColor)
-			newobj.originPoint = loc
-			newobj.endPoint    = CGPoint(x: loc.x + DefaultSize, y: loc.y + DefaultSize)
-			mGraphics.append(.rect(newobj))
+			let newrect = CNVectorRect(lineWidth: mLineWidth, doFill: dofill, isRounded: isround, strokeColor: mStrokeColor, fillColor: mFillColor)
+			newrect.originPoint = loc
+			newrect.endPoint    = CGPoint(x: loc.x + DefaultSize, y: loc.y + DefaultSize)
+			mGraphics.append(.rect(newrect))
+			newobj = .rect(newrect)
 		case .oval(let dofill):
-			let newobj = CNVectorOval(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
-			newobj.centerPoint = loc
-			newobj.endPoint    = CGPoint(x: loc.x + DefaultSize, y: loc.y + DefaultSize)
-			mGraphics.append(.oval(newobj))
+			let newoval = CNVectorOval(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
+			newoval.centerPoint = loc
+			newoval.endPoint    = CGPoint(x: loc.x + DefaultSize, y: loc.y + DefaultSize)
+			mGraphics.append(.oval(newoval))
+			newobj = .oval(newoval)
 		case .string:
-			let newobj = CNVectorString(lineWidth: mLineWidth, font: mFont, color: mStrokeColor)
-			newobj.originPoint = loc
-			mGraphics.append(.string(newobj))
+			let newstr = CNVectorString(lineWidth: mLineWidth, font: mFont, color: mStrokeColor)
+			newstr.originPoint = loc
+			mGraphics.append(.string(newstr))
+			newobj = .string(newstr)
 		}
 		mCurrentIndex = mGraphics.count - 1
+		return newobj
 	}
 
 	public func moveObject(diffPoint dpoint: CGPoint, in area: CGSize, object gobj: CNVectorGraphics) {
@@ -113,6 +119,17 @@ public class CNVecroManager
 			oval.move(dx, dy)
 		case .string(let vstr):
 			vstr.move(dx, dy)
+		}
+	}
+
+	public func addPointToObject(nextPoint npoint: CGPoint, in area: CGSize, object gobj: CNVectorGraphics) {
+		let nx = npoint.x / area.width
+		let ny = npoint.y / area.height
+		switch gobj {
+		case .path(let path):
+			path.add(point: CGPoint(x: nx, y: ny))
+		case .rect(_), .oval(_), .string(_):
+			CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -136,12 +153,12 @@ public class CNVecroManager
 			let base = baseObject(in: obj)
 			for grip in base.gripPoints {
 				if grip.contains(point: pt) {
-					return .grip(grip, obj)
+					return .selectCurrentGrip(grip, obj)
 				}
 			}
 			/* Select current object */
 			if base.contains(point: pt, in: area){
-				return .choose(obj)
+				return .selectCurrentObject(obj)
 			}
 		}
 		/* Search graphics */
@@ -154,7 +171,7 @@ public class CNVecroManager
 			}
 			let base = baseObject(in: mGraphics[i])
 			if base.contains(point: pt, in: area) {
-				return .change(i)
+				return .selectOtherObject(i)
 			}
 		}
 		return .none
