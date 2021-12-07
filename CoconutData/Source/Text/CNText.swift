@@ -118,16 +118,53 @@ public class CNTextLine: CNText
 	}
 }
 
+public class CNLabeledText: CNText
+{
+	public var mLabel:	String
+	public var mText:	CNText
+
+	public init(label lab: String, text txt: CNText){
+		mLabel	= lab
+		mText	= txt
+	}
+
+	public func append(string src: String) {
+		mText.append(string: src)
+	}
+
+	public func prepend(string src: String) {
+		mText.prepend(string: src)
+	}
+
+	public func toStrings(indent idt: Int) -> Array<String> {
+		let bodies = mText.toStrings(indent: 0)
+
+		var result: Array<String> = []
+		if bodies.count > 0 {
+			/* 1st line */
+			result.append(indentString(indent: idt) + mLabel + bodies[0])
+			/* Other lines*/
+			let idtstr = indentString(indent: idt + 1)
+			for i in 1..<bodies.count {
+				result.append(idtstr + bodies[i])
+			}
+		}
+		return result
+	}
+}
+
 public class CNTextSection: CNText
 {
 	public var header: String
 	public var footer: String
+	public var separator: String?
 
 	private var mContents: Array<CNText>
 
 	public init() {
 		self.header	= ""
 		self.footer	= ""
+		self.separator	= nil
 		self.mContents	= []
 	}
 
@@ -168,9 +205,21 @@ public class CNTextSection: CNText
 			result.append(spaces + self.header)
 			nextidt += 1
 		}
-		for content in mContents {
+		let cnum = mContents.count
+		for c in 0..<cnum {
+			let content = mContents[c]
 			let lines = content.toStrings(indent: nextidt)
-			result.append(contentsOf: lines)
+			let lnum  = lines.count
+			for i in 0..<lnum {
+				var line: String = lines[i]
+				/* Insert separator to the end of last line */
+				if c < cnum - 1 && i == lnum - 1 {
+					if let sep = separator {
+						line += sep
+					}
+				}
+				result.append(line)
+			}
 		}
 		if !self.footer.isEmpty {
 			result.append(spaces + self.footer)
@@ -192,14 +241,6 @@ public class CNTextRecord
 	public var columns: Array<CNTextLine> {
 		get { return mColumns }
 	}
-
-	/*
-	public func forEachColumn(_ efunc: (_ column: CNTextLine) -> Void){
-		mColumns.forEach({
-			(_ column: CNTextLine) -> Void in
-			efunc(column)
-		})
-	}*/
 
 	public func append(string src: String) {
 		append(line: CNTextLine(string: src))

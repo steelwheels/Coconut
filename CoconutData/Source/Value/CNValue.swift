@@ -434,33 +434,27 @@ public enum CNValue {
 		case .numberValue(let val):
 			result = CNTextLine(string: val.stringValue)
 		case .stringValue(let val):
-			result = CNTextLine(string: val)
+			result = CNTextLine(string: "\"" + val + "\"")
 		case .dateValue(let val):
-			result = CNTextLine(string: CNValue.stringFromDate(date: val))
+			result = CNTextLine(string: "\"" + CNValue.stringFromDate(date: val) + "\"")
 		case .enumValue(let type, let val):
 			result = CNTextLine(string: ".\(type)(\(val))")
 		case .rangeValue(let val):
-			result = CNTextLine(string: val.description)
+			result = CNTextLine(string: "\"" + val.description + "\"")
 		case .pointValue(let val):
-			result = pointToText(rect: val)
+			result = dictionaryToText(dictionary: val.toValue())
 		case .sizeValue(let val):
-			result = sizeToText(size: val)
+			result = dictionaryToText(dictionary: val.toValue())
 		case .rectValue(let val):
-			result = rectToText(rect: val)
+			result = dictionaryToText(dictionary: val.toValue())
 		case .dictionaryValue(let val):
 			result = dictionaryToText(dictionary: val)
 		case .arrayValue(let val):
-			let sect = CNTextSection()
-			sect.header = "[" ; sect.footer = "]"
-			for elm in val {
-				let elmtxt = elm.toText()
-				sect.add(text: elmtxt)
-			}
-			result = sect
+			result = arrayToText(array: val)
 		case .URLValue(let val):
-			result = CNTextLine(string: val.path)
+			result = CNTextLine(string: "\"" + val.path + "\"")
 		case .colorValue(let val):
-			result = CNTextLine(string: "\(val.description)")
+			result = CNTextLine(string: "\"\(val.description)\"")
 		case .imageValue(let val):
 			#if os(OSX)
 				let name: String
@@ -482,93 +476,26 @@ public enum CNValue {
 		return result
 	}
 
-	private func pointToText(rect val: CGPoint) -> CNTextTable {
-		let x      = val.x
-		let y      = val.y
-
-		let table  = CNTextTable()
-
-		let rec0   = CNTextRecord()
-		rec0.append(string: "x")
-		rec0.append(string: "\(x)")
-		table.add(record: rec0)
-
-		let rec1   = CNTextRecord()
-		rec1.append(string: "y")
-		rec1.append(string: "\(y)")
-		table.add(record: rec1)
-
-		return table
-	}
-
-	private func sizeToText(size val: CGSize) -> CNTextTable {
-		let width  = val.width
-		let height = val.height
-
-		let table  = CNTextTable()
-
-		let rec0   = CNTextRecord()
-		rec0.append(string: "width")
-		rec0.append(string: "\(width)")
-		table.add(record: rec0)
-
-		let rec1   = CNTextRecord()
-		rec1.append(string: "height")
-		rec1.append(string: "\(height)")
-		table.add(record: rec1)
-
-		return table
-	}
-
-	private func rectToText(rect val: CGRect) -> CNTextTable {
-		let x      = val.origin.x
-		let y      = val.origin.y
-		let width  = val.size.width
-		let height = val.size.height
-
-		let table  = CNTextTable()
-
-		let rec0   = CNTextRecord()
-		rec0.append(string: "x")
-		rec0.append(string: "\(x)")
-		table.add(record: rec0)
-
-		let rec1   = CNTextRecord()
-		rec1.append(string: "y")
-		rec1.append(string: "\(y)")
-		table.add(record: rec1)
-
-		let rec2   = CNTextRecord()
-		rec2.append(string: "width")
-		rec2.append(string: "\(width)")
-		table.add(record: rec2)
-
-		let rec3   = CNTextRecord()
-		rec3.append(string: "height")
-		rec3.append(string: "\(height)")
-		table.add(record: rec3)
-
-		return table
+	private func arrayToText(array arr: Array<CNValue>) -> CNTextSection {
+		let sect = CNTextSection()
+		sect.header = "[" ; sect.footer = "]" ; sect.separator = ","
+		for elm in arr {
+			sect.add(text: elm.toText())
+		}
+		return sect
 	}
 
 	private func dictionaryToText(dictionary dict: Dictionary<String, CNValue>) -> CNTextSection {
 		let sect = CNTextSection()
-		sect.header = "{" ; sect.footer = "}"
-		let table = CNTextTable()
-
+		sect.header = "{" ; sect.footer = "}" ; sect.separator = ","
 		let keys = dict.keys.sorted()
 		for key in keys {
 			if let val = dict[key] {
-				let record = CNTextRecord()
-				record.append(string: key)
-				let txt   = val.toText()
-				let lines = txt.toStrings()
-				record.append(string: lines.joined(separator: "\n"))
-				table.add(record: record)
+				let newtxt = val.toText()
+				let labtxt = CNLabeledText(label: "\(key): ", text: newtxt)
+				sect.add(text: labtxt)
 			}
 		}
-		sect.add(text: table)
-
 		return sect
 	}
 
