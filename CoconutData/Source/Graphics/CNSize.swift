@@ -10,6 +10,31 @@ import Foundation
 
 public extension CGSize
 {
+	static let ClassName = "sizeClass"
+
+	init?(value val: Dictionary<String, CNValue>) {
+		if let wval = val["width"], let hval = val["height"] {
+			if let wnum = wval.toNumber(), let hnum = hval.toNumber() {
+				let width  : CGFloat = CGFloat(wnum.doubleValue)
+				let height : CGFloat = CGFloat(hnum.doubleValue)
+				self.init(width: width, height: height)
+				return
+			}
+		}
+		return nil
+	}
+
+	func toValue() -> Dictionary<String, CNValue> {
+		let wnum = NSNumber(floatLiteral: Double(self.width))
+		let hnum = NSNumber(floatLiteral: Double(self.height))
+		let result: Dictionary<String, CNValue> = [
+			"class":  .stringValue(CGSize.ClassName),
+			"width":  .numberValue(wnum),
+			"height": .numberValue(hnum)
+		]
+		return result
+	}
+
 	var description: String {
 		get {
 			let wstr = NSString(format: "%.2lf", self.width)
@@ -57,4 +82,5 @@ public func CNUnionSize(sizeA a: CGSize, sizeB b: CGSize, doVertical vert: Bool,
 		return CGSize(width: width, height: height)
 	}
 }
+
 

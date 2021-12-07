@@ -8,7 +8,16 @@
 import CoreGraphics
 import Foundation
 
-public class CNVecroManager
+private func className(value val: Dictionary<String, CNValue>) -> String? {
+	if let nameval = val["class"] {
+		if let namestr = nameval.toString() {
+			return namestr
+		}
+	}
+	return nil
+}
+
+public class CNVectorManager
 {
 	private var mGraphics:		Array<CNVectorGraphics>
 	private var mCurrentIndex:	Int?
@@ -31,6 +40,20 @@ public class CNVecroManager
 		mStrokeColor	= CNColor.black
 		mFillColor	= CNColor.black
 		mFont		= CNFont.systemFont(ofSize: CNFont.systemFontSize)
+	}
+
+	public convenience init?(value val: Dictionary<String, CNValue>) {
+		self.init()
+		if let objs = val["objects"] {
+			switch objs {
+			case .arrayValue(let elms):
+				let _ = store(objects: elms)
+				return // succeeded
+			default:
+				break
+			}
+		}
+		return nil
 	}
 
 	public var count: Int {
@@ -75,10 +98,9 @@ public class CNVecroManager
 		}
 	}
 
-	public func addObject(location gloc: CGPoint, in area: CGSize, type gtype: CNVectorGraphicsType) -> CNVectorGraphics {
+	public func addObject(location loc: CGPoint, type gtype: CNVectorGraphicsType) -> CNVectorGraphics {
 		let newobj: CNVectorGraphics
-		let DefaultSize: CGFloat = 0.1
-		let loc = convert(point: gloc, in: area)
+		let DefaultSize: CGFloat = 50.0
 		switch gtype {
 		case .path(let dofill):
 			let newpath = CNVectorPath(lineWidth: mLineWidth, doFill: dofill, strokeColor: mStrokeColor, fillColor: mFillColor)
@@ -98,7 +120,7 @@ public class CNVecroManager
 			mGraphics.append(.oval(newoval))
 			newobj = .oval(newoval)
 		case .string:
-			let newstr = CNVectorString(lineWidth: mLineWidth, font: mFont, color: mStrokeColor)
+			let newstr = CNVectorString(font: mFont, color: mStrokeColor)
 			newstr.originPoint = loc
 			mGraphics.append(.string(newstr))
 			newobj = .string(newstr)
@@ -107,9 +129,9 @@ public class CNVecroManager
 		return newobj
 	}
 
-	public func moveObject(diffPoint dpoint: CGPoint, in area: CGSize, object gobj: CNVectorGraphics) {
-		let dx = dpoint.x / area.width
-		let dy = dpoint.y / area.height
+	public func moveObject(diffPoint dpoint: CGPoint, object gobj: CNVectorGraphics) {
+		let dx = dpoint.x
+		let dy = dpoint.y
 		switch gobj {
 		case .path(let path):
 			path.move(dx, dy)
@@ -122,9 +144,9 @@ public class CNVecroManager
 		}
 	}
 
-	public func addPointToObject(nextPoint npoint: CGPoint, in area: CGSize, object gobj: CNVectorGraphics) {
-		let nx = npoint.x / area.width
-		let ny = npoint.y / area.height
+	public func addPointToObject(nextPoint npoint: CGPoint, object gobj: CNVectorGraphics) {
+		let nx = npoint.x
+		let ny = npoint.y
 		switch gobj {
 		case .path(let path):
 			path.add(point: CGPoint(x: nx, y: ny))
@@ -133,21 +155,20 @@ public class CNVecroManager
 		}
 	}
 
-	public func reshapeObject(nextPoint nextpt: CGPoint, in area: CGSize, grip gpoint: CNGripPoint, object gobj: CNVectorGraphics) {
-		let nextloc = convert(point: nextpt, in: area)
+	public func reshapeObject(nextPoint nextpt: CGPoint, grip gpoint: CNGripPoint, object gobj: CNVectorGraphics) {
 		switch gobj {
 		case .path(let path):
-			path.reshape(position: gpoint.position, nextPoint: nextloc)
+			path.reshape(position: gpoint.position, nextPoint: nextpt)
 		case .rect(let rect):
-			rect.reshape(position: gpoint.position, nextPoint: nextloc)
+			rect.reshape(position: gpoint.position, nextPoint: nextpt)
 		case .oval(let oval):
-			oval.reshape(position: gpoint.position, nextPoint: nextloc)
+			oval.reshape(position: gpoint.position, nextPoint: nextpt)
 		case .string(let vstr):
-			vstr.reshape(position: gpoint.position, nextPoint: nextloc)
+			vstr.reshape(position: gpoint.position, nextPoint: nextpt)
 		}
 	}
 
-	public func contains(point pt: CGPoint, in area: CGSize) -> SelectedGraphics {
+	public func contains(point pt: CGPoint) -> SelectedGraphics {
 		if let obj = currentObject() {
 			/* Search the grip point */
 			let base = baseObject(in: obj)
@@ -157,7 +178,7 @@ public class CNVecroManager
 				}
 			}
 			/* Select current object */
-			if base.contains(point: pt, in: area){
+			if base.contains(point: pt){
 				return .selectCurrentObject(obj)
 			}
 		}
@@ -170,7 +191,7 @@ public class CNVecroManager
 				}
 			}
 			let base = baseObject(in: mGraphics[i])
-			if base.contains(point: pt, in: area) {
+			if base.contains(point: pt) {
 				return .selectOtherObject(i)
 			}
 		}
@@ -201,14 +222,108 @@ public class CNVecroManager
 		}
 	}
 
-	private func convert(point pt: CGPoint, in area: CGSize) -> CGPoint {
-		guard area.width > 0.0 && area.height > 0.0 else {
-			CNLog(logLevel: .error, message: "Can not accept empty frame", atFunction: #function, inFile: #file)
-			return CGPoint.zero
+	public func toValue() -> Dictionary<String, CNValue> {
+		var objects: Array<CNValue> = []
+		for obj in mGraphics {
+			switch obj {
+			case .path(let path):
+				objects.append(.dictionaryValue(path.toValue()))
+			case .rect(let rect):
+				objects.append(.dictionaryValue(rect.toValue()))
+			case .oval(let oval):
+				objects.append(.dictionaryValue(oval.toValue()))
+			case .string(let vstr):
+				objects.append(.dictionaryValue(vstr.toValue()))
+			}
 		}
-		let x = pt.x / area.width
-		let y = pt.y / area.height
-		return CGPoint(x: x, y: y)
+		let result: Dictionary<String, CNValue> = [
+			"objects": .arrayValue(objects)
+		]
+		return result
+	}
+
+	public func store(objects objs: Array<CNValue>) -> Bool {
+		var result = true
+		mGraphics  = []
+		for obj in objs {
+			if let dict = obj.toDictionary() {
+				if let clsname = className(value: dict) {
+					switch clsname {
+					case CNVectorPath.ClassName:
+						if let obj = CNVectorPath(value: dict) {
+							mGraphics.append(.path(obj))
+						} else {
+							CNLog(logLevel: .error, message: "Failed to decode path", atFunction: #function, inFile: #file)
+							result = false
+						}
+					case CNVectorRect.ClassName:
+						if let obj = CNVectorRect(value: dict) {
+							mGraphics.append(.rect(obj))
+						} else {
+							CNLog(logLevel: .error, message: "Failed to decode rect", atFunction: #function, inFile: #file)
+							result = false
+						}
+					case CNVectorOval.ClassName:
+						if let obj = CNVectorOval(value: dict) {
+							mGraphics.append(.oval(obj))
+						} else {
+							CNLog(logLevel: .error, message: "Failed to decode oval", atFunction: #function, inFile: #file)
+							result = false
+						}
+					case CNVectorString.ClassName:
+						if let obj = CNVectorString(value: dict) {
+							mGraphics.append(.string(obj))
+						} else {
+							CNLog(logLevel: .error, message: "Failed to decode string", atFunction: #function, inFile: #file)
+							result = false
+						}
+					default:
+						CNLog(logLevel: .error, message: "Unknown object name: \(clsname)", atFunction: #function, inFile: #file)
+						result = false
+					}
+				} else {
+					CNLog(logLevel: .error, message: "No class name", atFunction: #function, inFile: #file)
+					result = false
+				}
+			} else {
+				CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
+				result = false
+			}
+		}
+		return result
+	}
+
+	public func store(value val: Dictionary<String, CNValue>) -> Bool {
+		var result = false
+		if let objs = val["objects"] {
+			switch objs {
+			case .arrayValue(let elms):
+				result = store(objects: elms)
+			default:
+				CNLog(logLevel: .error, message: "Array of objects are required", atFunction: #function, inFile: #file)
+			}
+		}
+		return result
+	}
+
+	public func store(URL url: URL) -> Bool {
+		var result: Bool = false
+		if let text = url.loadContents() {
+			let parser = CNValueParser()
+			switch parser.parse(source: text as String) {
+			case .ok(let value):
+				if let dict = value.toDictionary() {
+					result = store(value: dict)
+				} else {
+					CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
+				}
+			case .error(let err):
+				CNLog(logLevel: .error, message: "\(err.description)", atFunction: #function, inFile: #file)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Failed to load URL", atFunction: #function, inFile: #file)
+		}
+		return result
 	}
 
 	private func baseObject(in obj: CNVectorGraphics) -> CNVectorObject {

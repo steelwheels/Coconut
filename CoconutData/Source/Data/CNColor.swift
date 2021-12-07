@@ -36,6 +36,23 @@ public extension CNColor
 		return result
 	}
 
+	convenience init?(value val: Dictionary<String, CNValue>) {
+		if let rval = val["r"], let gval = val["g"], let bval = val["b"], let aval = val["a"] {
+			if let rnum = rval.toNumber(), let gnum = gval.toNumber(), let bnum = bval.toNumber(), let anum = aval.toNumber() {
+				let r : CGFloat = CGFloat(rnum.floatValue)
+				let g : CGFloat = CGFloat(gnum.floatValue)
+				let b : CGFloat = CGFloat(bnum.floatValue)
+				let a : CGFloat = CGFloat(anum.floatValue)
+				#if os(OSX)
+				self.init(calibratedRed: r, green: g, blue: b, alpha: a)
+				#else
+				self.init(red: r, green: g, blue: b, alpha: a)
+				#endif
+			}
+		}
+		return nil
+	}
+
 	var isClear: Bool {
 		get { return self.alphaComponent == 0.0 }
 	}
@@ -91,6 +108,17 @@ public extension CNColor
 			self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 		#endif
 		return (red, green, blue, alpha)
+	}
+
+	func toValue() -> Dictionary<String, CNValue> {
+		let (r, g, b, a) = self.toRGBA()
+		let result: Dictionary<String, CNValue> = [
+			"r":	CNValue.numberValue(NSNumber(floatLiteral: Double(r))),
+			"g":	CNValue.numberValue(NSNumber(floatLiteral: Double(g))),
+			"b":	CNValue.numberValue(NSNumber(floatLiteral: Double(b))),
+			"a":	CNValue.numberValue(NSNumber(floatLiteral: Double(a)))
+		]
+		return result
 	}
 
 	func toData() -> Data? {

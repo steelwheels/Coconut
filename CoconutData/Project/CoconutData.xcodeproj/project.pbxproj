@@ -206,6 +206,7 @@
 		05BD9FA92745445B00D43064 /* oval.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA22745443200D43064 /* oval.png */; };
 		05BEE0EE2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
 		05BEE0EF2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
+		05DDE3D1275BA2D7009F0B6E /* UTVectorGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */; };
 		05E45BCB2736CD290034254D /* rectangle-filled-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BC92736CD070034254D /* rectangle-filled-rounded.png */; };
 		05E45BCC2736CD290034254D /* rectangle-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BCA2736CD070034254D /* rectangle-rounded.png */; };
 		05E45BD02736CD460034254D /* rectangle-filled-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BC92736CD070034254D /* rectangle-filled-rounded.png */; };
@@ -476,6 +477,7 @@
 		05BD9FA12745443200D43064 /* oval-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval-filled.png"; sourceTree = "<group>"; };
 		05BD9FA22745443200D43064 /* oval.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oval.png; sourceTree = "<group>"; };
 		05BEE0ED2634E02100178484 /* CNStandardFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStandardFiles.swift; sourceTree = "<group>"; };
+		05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTVectorGraphics.swift; sourceTree = "<group>"; };
 		05E45BC92736CD070034254D /* rectangle-filled-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-filled-rounded.png"; sourceTree = "<group>"; };
 		05E45BCA2736CD070034254D /* rectangle-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-rounded.png"; sourceTree = "<group>"; };
 		05E7F00B274E8F7600938598 /* CNVectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVectorManager.swift; sourceTree = "<group>"; };
@@ -581,6 +583,7 @@
 				055C8AEA25DD62F50053510B /* UTToken.swift */,
 				059BA6D2256B20B500893641 /* UTType.swift */,
 				05FC3861255FEC1D004CA79E /* UTURL.swift */,
+				05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */,
 			);
 			path = UnitTest;
 			sourceTree = "<group>";
@@ -1119,6 +1122,7 @@
 				05FC3897255FECC2004CA79E /* main.swift in Sources */,
 				052E27E02625E5EF00414C26 /* UTCommandTable.swift in Sources */,
 				05FC387D255FEC1E004CA79E /* UTOperation.swift in Sources */,
+				05DDE3D1275BA2D7009F0B6E /* UTVectorGraphics.swift in Sources */,
 				05FC3881255FEC1E004CA79E /* UTStringUtil.swift in Sources */,
 				05F9A92D25C2C89400BC062E /* UTGraphicsContext.swift in Sources */,
 				05FC3874255FEC1E004CA79E /* UTAttributedString.swift in Sources */,

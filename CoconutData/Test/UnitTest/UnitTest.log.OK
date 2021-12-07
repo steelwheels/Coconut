@@ -647,15 +647,15 @@ Done (2)
 testOperationQueue: OK
 * testProcess
 Hello, World !!
-Process is finished with exit code: 0
 END of process
+Process is finished with exit code: 0
 Execute process which can not be finished
 Terminate the process
 END of process
 Process is terminated with exit code: 15
 testProcess .. OK
 * testCommandTable
-command counts: 1501
+command counts: 1503
 match-prefix: ls lsappinfo lsbom lskq lsm lsmp lsof lsvfs 
 * testEnvironment
 env("HOME") = nil
@@ -1416,8 +1416,8 @@ result: [
     20
   ]
   [
-    "a"
-    "b"
+    a
+    b
   ]
 ]
 Compare null and null ...  equal(==) -> OK
@@ -1434,7 +1434,7 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 -----
 [
   {
-    c0 "0/0" 
+    c0 0/0 
   }
 ]
 -----
@@ -1442,10 +1442,10 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 -----
 [
   {
-    c0 "0/0" 
+    c0 0/0 
   }
   {
-    c1 "1/1" 
+    c1 1/1 
   }
 ]
 -----
@@ -1453,25 +1453,25 @@ Compare 0 and 12.3 ...  ascending(<) -> OK
 -----
 [
   {
-    c0 "0/0" 
-    c1 "1/0" 
-    c2 "2/0" 
-    c3 "3/0" 
-    c4 "4/0" 
+    c0 0/0 
+    c1 1/0 
+    c2 2/0 
+    c3 3/0 
+    c4 4/0 
   }
   {
-    c0 "0/1" 
-    c1 "1/1" 
-    c2 "2/1" 
-    c3 "3/1" 
-    c4 "4/1" 
+    c0 0/1 
+    c1 1/1 
+    c2 2/1 
+    c3 3/1 
+    c4 4/1 
   }
   {
-    c0 "0/2" 
-    c1 "1/2" 
-    c2 "2/2" 
-    c3 "3/2" 
-    c4 "4/2" 
+    c0 0/2 
+    c1 1/2 
+    c2 2/2 
+    c3 3/2 
+    c4 4/2 
   }
 ]
 -----

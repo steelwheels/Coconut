@@ -13,3 +13,29 @@
 	public typealias CNFont = UIFont
 #endif
 
+public extension CNFont
+{
+	convenience init?(value val: Dictionary<String, CNValue>) {
+		if let nameval = val["name"], let sizeval = val["size"] {
+			if let namestr = nameval.toString(), let sizenum = sizeval.toNumber() {
+				self.init(name: namestr, size: CGFloat(sizenum.doubleValue))
+				return
+			}
+		}
+		return nil
+	}
+
+	func toValue() -> Dictionary<String, CNValue> {
+		#if os(OSX)
+		let name: String   = self.familyName ?? "system"
+		#else
+		let name: String   = self.familyName
+		#endif
+		let size: NSNumber = NSNumber(floatLiteral: Double(self.pointSize))
+		let result: Dictionary<String, CNValue> = [
+			"name":	.stringValue(name),
+			"size": .numberValue(size)
+		]
+		return result
+	}
+}

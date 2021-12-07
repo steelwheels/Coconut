@@ -10,6 +10,37 @@ import Foundation
 
 public extension CGRect
 {
+	static let ClassName = "rectClass"
+
+	init?(value val: Dictionary<String, CNValue>) {
+		if let xval = val["x"], let yval = val["y"], let wval = val["width"], let hval = val["height"] {
+			if let xnum = xval.toNumber(), let ynum = yval.toNumber(), let wnum = wval.toNumber(), let hnum = hval.toNumber() {
+				let x      : CGFloat = CGFloat(xnum.floatValue)
+				let y      : CGFloat = CGFloat(ynum.floatValue)
+				let width  : CGFloat = CGFloat(wnum.floatValue)
+				let height : CGFloat = CGFloat(hnum.floatValue)
+				self.init(x: x, y: y, width: width, height: height)
+				return
+			}
+		}
+		return nil
+	}
+
+	func toValue() -> Dictionary<String, CNValue> {
+		let x      = NSNumber(floatLiteral: Double(self.origin.x))
+		let y      = NSNumber(floatLiteral: Double(self.origin.y))
+		let width  = NSNumber(floatLiteral: Double(self.size.width))
+		let height = NSNumber(floatLiteral: Double(self.size.height))
+		let result: Dictionary<String, CNValue> = [
+			"class"  : .stringValue(CGRect.ClassName),
+			"x"      : .numberValue(x),
+			"y"      : .numberValue(y),
+			"width"  : .numberValue(width),
+			"height" : .numberValue(height)
+		]
+		return result
+	}
+
 	var center: CGPoint { get {
 		let x = self.origin.x + (self.size.width  / 2)
 		let y = self.origin.y + (self.size.height / 2)

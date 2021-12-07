@@ -10,10 +10,39 @@ import Foundation
 
 public extension CGPoint
 {
+	static let ClassName = "pointClass"
+
+	init?(value val: Dictionary<String, CNValue>) {
+		if let xval = val["x"], let yval = val["y"] {
+			if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
+				let x:CGFloat = CGFloat(xnum.floatValue)
+				let y:CGFloat = CGFloat(ynum.floatValue)
+				self.init(x: x, y: y)
+				return
+			}
+		}
+		return nil
+	}
+
+	func toValue() -> Dictionary<String, CNValue> {
+		let xnum = NSNumber(floatLiteral: Double(self.x))
+		let ynum = NSNumber(floatLiteral: Double(self.y))
+		let result: Dictionary<String, CNValue> = [
+			"class" : .stringValue(CGPoint.ClassName),
+			"x"     : .numberValue(xnum),
+			"y"     : .numberValue(ynum)
+		]
+		return result
+	}
+
 	func moving(dx x: CGFloat, dy y: CGFloat) -> CGPoint {
 		let newx = self.x + x
 		let newy = self.y + y
 		return CGPoint(x: newx, y: newy)
+	}
+
+	func subtracting(_ p: CGPoint) -> CGPoint {
+		return CGPoint(x: self.x - p.x, y: self.y - p.y)
 	}
 
 	var description: String {
@@ -31,31 +60,4 @@ public extension CGPoint
 	}
 }
 
-public func == (left: CGPoint, right: CGPoint) -> Bool {
-	return (left.x == right.x) && (left.y == right.y)
-}
-
-public func != (left: CGPoint, right: CGPoint) -> Bool {
-	return (left.x != right.x) || (left.y != right.y)
-}
-
-public func + (left: CGPoint, right: CGPoint) -> CGPoint {
-	return CGPoint(x: left.x + right.x, y: left.y + right.y)
-}
-
-public func - (left: CGPoint, right: CGPoint) -> CGPoint {
-	return CGPoint(x: left.x - right.x, y: left.y - right.y)
-}
-
-public func * (left: CGPoint, right: CGFloat) -> CGPoint {
-	return CGPoint(x: left.x * right, y: left.y * right)
-}
-
-public func * (left: CGFloat, right: CGPoint) -> CGPoint {
-	return CGPoint(x:left * right.x, y:left * right.y)
-}
-
-public func / (left: CGPoint, right: CGFloat) -> CGPoint {
-	return CGPoint(x:left.x / right, y:left.y / right)
-}
 

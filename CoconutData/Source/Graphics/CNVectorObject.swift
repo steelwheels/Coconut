@@ -3,6 +3,8 @@
  * @brief	Define CNVectorGraphics class
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
+ * @par reference
+ *   https://developer.mozilla.org/ja/docs/Web/SVG	(Japanese)
  */
 
 #if os(OSX)
@@ -12,10 +14,71 @@ import UIKit
 #endif
 import Foundation
 
-private func normalizePoint(source src: CGPoint, in area: CGSize) -> CGPoint {
-	let x = area.width  * src.x
-	let y = area.height * src.y
-	return CGPoint(x: x, y: y)
+private func floatToValue(value val: CGFloat) -> CNValue {
+	let num = NSNumber(floatLiteral: Double(val))
+	return CNValue.numberValue(num)
+}
+
+private func boolToValue(value val: Bool) -> CNValue {
+	let num = NSNumber(booleanLiteral: val)
+	return CNValue.numberValue(num)
+}
+
+private func floatInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGFloat? {
+	if let val = dict[key] {
+		if let num = val.toNumber() {
+			return CGFloat(num.doubleValue)
+		}
+	}
+	return nil
+}
+
+private func boolInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> Bool? {
+	if let val = dict[key] {
+		if let num = val.toNumber() {
+			return num.boolValue
+		}
+	}
+	return nil
+}
+
+private func colorInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CNColor? {
+	var result: CNColor? = nil
+	if let val = dict[key] {
+		switch val {
+		case .dictionaryValue(let dict):
+			result = CNColor(value: dict)
+		default:
+			break
+		}
+	}
+	return result
+}
+
+private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGPoint? {
+	var result: CGPoint? = nil
+	if let val = dict[key] {
+		switch val {
+		case .dictionaryValue(let dict):
+			result = CGPoint(value: dict)
+		default:
+			break
+		}
+	}
+	return result
+}
+
+private func sizeInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGSize? {
+	var result: CGSize? = nil
+	if let val = dict[key] {
+		switch val {
+		case .dictionaryValue(let dict):
+			result = CGSize(value: dict)
+		default:
+			break
+		}
+	}
+	return result
 }
 
 public class CNGripPoint
@@ -98,7 +161,7 @@ open class CNVectorObject
 		NSLog("Must be override: \(#function)")
 	}
 
-	open func contains(point pt: CGPoint, in area: CGSize) -> Bool {
+	open func contains(point pt: CGPoint) -> Bool {
 		NSLog("Must be override: \(#function)")
 		return false
 	}
@@ -106,6 +169,28 @@ open class CNVectorObject
 	open func move(_ dx: CGFloat, _ dy: CGFloat) {
 		NSLog("Must be override: \(#function)")
 	}
+
+	public func toValue() -> Dictionary<String, CNValue> {
+		let result: Dictionary<String, CNValue> = [
+			"lineWidth"   : floatToValue(value: self.lineWidth),
+			"doFill"      : boolToValue(value: self.doFill),
+			"fillColor"   : .dictionaryValue(fillColor.toValue()),
+			"strokeColor" : .dictionaryValue(strokeColor.toValue())
+		]
+		return result
+	}
+
+	public static func decode(value val: Dictionary<String, CNValue>) -> (CGFloat, Bool, CNColor, CNColor)? {
+		if let lwidth = floatInDictionary(dictionary: val, forKey: "lineWidth"),
+		   let dofill = boolInDictionary(dictionary:  val, forKey: "doFill"),
+		   let fcolor = colorInDictionary(dictionary: val, forKey: "fillColor"),
+		   let scolor = colorInDictionary(dictionary: val, forKey: "strokeColor"){
+			return (lwidth, dofill, fcolor, scolor)
+		} else {
+			return nil
+		}
+	}
+
 }
 
 public class CNPathObject: CNVectorObject
@@ -125,7 +210,7 @@ public class CNPathObject: CNVectorObject
 		mBezierPath = path
 	}
 
-	public override func contains(point pt: CGPoint, in area: CGSize) -> Bool {
+	public override func contains(point pt: CGPoint) -> Bool {
 		if let path = mBezierPath {
 			return path.contains(pt)
 		} else {
@@ -136,11 +221,46 @@ public class CNPathObject: CNVectorObject
 
 public class CNVectorPath: CNPathObject
 {
+	public static let ClassName = "vectorPathClass"
+
 	private var mPoints:	Array<CGPoint>
 
 	public override init(lineWidth width: CGFloat, doFill fill: Bool, strokeColor scolor: CNColor, fillColor fcolor: CNColor){
 		mPoints		= []
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
+	}
+
+	public convenience init?(value val: Dictionary<String, CNValue>) {
+		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
+			if let pointsval = val["points"] {
+				if let points = CNVectorPath.loadPoints(value: pointsval) {
+					self.init(lineWidth: lwidth, doFill: dofill, strokeColor: scolor, fillColor: fcolor)
+					self.mPoints = points
+					return
+				}
+			}
+		}
+		return nil
+	}
+
+	private static func loadPoints(value val: CNValue) -> Array<CGPoint>? {
+		if let elms = val.toArray() {
+			var result: Array<CGPoint> = []
+			for elm in elms {
+				switch elm {
+				case .dictionaryValue(let dict):
+					if let pt = CGPoint(value: dict) {
+						result.append(pt)
+					} else {
+						CNLog(logLevel: .error, message: "Failed to load point", atFunction: #function, inFile: #file)
+					}
+				default:
+					CNLog(logLevel: .error, message: "Dictionary expected", atFunction: #function, inFile: #file)
+				}
+			}
+			return result
+		}
+		return nil
 	}
 
 	public var points: Array<CGPoint> {
@@ -155,15 +275,6 @@ public class CNVectorPath: CNPathObject
 		self.add(point: point)
 	}
 
-	public func normalize(in area: CGSize) -> Array<CGPoint> {
-		var result: Array<CGPoint> = []
-		for pt in mPoints {
-			let p = normalizePoint(source: pt, in: area)
-			result.append(p)
-		}
-		return result
-	}
-
 	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
 		var newpoints: Array<CGPoint> = []
 		for orgpt in mPoints {
@@ -172,10 +283,23 @@ public class CNVectorPath: CNPathObject
 		}
 		mPoints = newpoints
 	}
+
+	public override func toValue() -> Dictionary<String, CNValue> {
+		var result = super.toValue()
+		var points: Array<CNValue> = []
+		for pt in mPoints {
+			points.append(.dictionaryValue(pt.toValue()))
+		}
+		result["class" ] = .stringValue(CNVectorPath.ClassName)
+		result["points"] = .arrayValue(points)
+		return result
+	}
 }
 
 public class CNVectorRect: CNPathObject
 {
+	public static let ClassName = "vectorRectClass"
+
 	public var originPoint:		CGPoint
 	public var endPoint:		CGPoint
 	public var isRounded:		Bool
@@ -185,6 +309,35 @@ public class CNVectorRect: CNPathObject
 		endPoint	= CGPoint.zero
 		isRounded	= isrnd
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
+	}
+
+	public convenience init?(value val: Dictionary<String, CNValue>) {
+		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
+			if let origin = pointInDictionary(dictionary: val, forKey: "origin"),
+			   let size   = sizeInDictionary(dictionary:  val, forKey: "size"),
+			   let rx     = floatInDictionary(dictionary: val, forKey: "rx") {
+				self.init(lineWidth: lwidth, doFill: dofill, isRounded: rx > 0.0, strokeColor: scolor, fillColor: fcolor)
+				self.originPoint = CGPoint(x: origin.x, y: origin.y)
+				self.endPoint    = CGPoint(x: origin.x + size.width, y: origin.y + size.height)
+				return
+			}
+		}
+		return nil
+	}
+
+	public override func toValue() -> Dictionary<String, CNValue> {
+		let rect = self.toRect()
+		var result = super.toValue()
+		result["class" ] = .stringValue(CNVectorRect.ClassName)
+		result["origin"] = .dictionaryValue(rect.origin.toValue())
+		result["size"  ] = .dictionaryValue(rect.size.toValue())
+		result["rx"    ] = floatToValue(value: self.roundValue)
+		result["ry"    ] = floatToValue(value: self.roundValue)
+		return result
+	}
+
+	public var roundValue: CGFloat {
+		get { return 10.0 }
 	}
 
 	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
@@ -237,18 +390,12 @@ public class CNVectorRect: CNPathObject
 		endPoint	= newend
 	}
 
-	public func normalize(in area: CGSize) -> CGRect? {
-		let norigin = normalizePoint(source: originPoint, in: area)
-		let nend    = normalizePoint(source: endPoint, in: area)
-		let x = min(norigin.x, nend.x)
-		let y = min(norigin.y, nend.y)
-		let width  = abs(nend.x - norigin.x)
-		let height = abs(nend.y - norigin.y)
-		if width > 0 && height > 0 {
-			return CGRect(x: x, y: y, width: width, height: height)
-		} else {
-			return nil
-		}
+	public func toRect() -> CGRect {
+		let x      = min(originPoint.x, endPoint.x)
+		let y      = min(originPoint.y, endPoint.y)
+		let width  = abs(originPoint.x - endPoint.x)
+		let height = abs(originPoint.y - endPoint.y)
+		return CGRect(x: x, y: y, width: width, height: height)
 	}
 
 	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
@@ -261,6 +408,8 @@ public class CNVectorRect: CNPathObject
 
 public class CNVectorOval: CNPathObject
 {
+	public static let ClassName = "vectorOvalClass"
+
 	public var centerPoint:		CGPoint
 	public var endPoint:		CGPoint
 
@@ -268,6 +417,33 @@ public class CNVectorOval: CNPathObject
 		centerPoint	= CGPoint.zero
 		endPoint	= CGPoint.zero
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
+	}
+
+	public convenience init?(value val: Dictionary<String, CNValue>) {
+		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
+			if let center = pointInDictionary(dictionary: val, forKey: "center"),
+			   let radius = floatInDictionary(dictionary: val, forKey: "radius") {
+				self.init(lineWidth: lwidth, doFill: dofill, strokeColor: scolor, fillColor: fcolor)
+				self.centerPoint = center
+				self.endPoint    = CGPoint(x: center.x + radius, y: center.y)
+				return
+			}
+		}
+		return nil
+	}
+
+	public override func toValue() -> Dictionary<String, CNValue> {
+		var result = super.toValue()
+		let rnum   = NSNumber(floatLiteral: Double(self.radius))
+		let local: Dictionary<String, CNValue> = [
+			"class"	      : .stringValue(CNVectorOval.ClassName),
+			"center"      : .dictionaryValue(centerPoint.toValue()),
+			"radius"      : .numberValue(rnum)
+		]
+		for (key, val) in local {
+			result[key] = val
+		}
+		return result
 	}
 
 	public var radius: CGFloat { get {
@@ -280,19 +456,11 @@ public class CNVectorOval: CNPathObject
 		endPoint = point
 	}
 
-	public func normalize(in area: CGSize) -> (CGPoint, CGFloat)? { // (center, radius)
-		let ncenter = normalizePoint(source: centerPoint, in: area)
-		let nend    = normalizePoint(source: endPoint, in: area)
-
-		let diffx   = ncenter.x - nend.x
-		let diffy   = ncenter.y - nend.y
-		let radius  = sqrt(diffx * diffx + diffy * diffy)
-
-		if radius > 0.0 {
-			return (ncenter, radius)
-		} else {
-			return nil
-		}
+	public func toOval() -> (CGPoint, CGFloat) { // (center, radius)
+		let diffx  = centerPoint.x - endPoint.x
+		let diffy  = centerPoint.y - endPoint.y
+		let radius = sqrt(diffx * diffx + diffy * diffy)
+		return (centerPoint, radius)
 	}
 
 	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
@@ -305,20 +473,49 @@ public class CNVectorOval: CNPathObject
 
 public class CNVectorString: CNVectorObject
 {
+	public static let ClassName = "vectorStringClass"
+
 	public var originPoint:		CGPoint
-	public var frame:		CGRect
 	public var string:		String
 	public var font:		CNFont
 
 	private var mAttributedString:	NSAttributedString?
 
-	public init(lineWidth width: CGFloat, font fnt: CNFont, color col: CNColor) {
+	public init(font fnt: CNFont, color col: CNColor) {
 		originPoint 		= CGPoint.zero
-		frame			= CGRect.zero
 		string 	   		= ""
 		font	    		= fnt
 		mAttributedString	= nil
-		super.init(lineWidth: width, doFill: false, strokeColor: col, fillColor: CNColor.clear)
+		super.init(lineWidth: 1.0, doFill: false, strokeColor: col, fillColor: CNColor.clear)
+	}
+
+	public convenience init?(value val: Dictionary<String, CNValue>) {
+		if let orgval = val["origin"], let txtval = val["text"], let fontval = val["font"], let colval = val["color"] {
+			if let orgdict = orgval.toDictionary(), let txtstr = txtval.toString(), let fontdict = fontval.toDictionary(), let coldict = colval.toDictionary() {
+				if let orgpt = CGPoint(value: orgdict), let font = CNFont(value: fontdict), let color = CNColor(value: coldict) {
+					self.init(font: font, color: color)
+					self.originPoint = orgpt
+					self.string      = txtstr
+					return
+				}
+			}
+		}
+		return nil
+	}
+
+	public override func toValue() -> Dictionary<String, CNValue> {
+		let orgpt = self.originPoint.toValue()
+		let text  = CNValue.stringValue(string)
+		let fnt   = font.toValue()
+		let color = self.strokeColor.toValue()
+		let result: Dictionary<String, CNValue> = [
+			"class":	.stringValue(CNVectorString.ClassName),
+			"origin":	.dictionaryValue(orgpt),
+			"text":		text,
+			"font":		.dictionaryValue(fnt),
+			"color":	.dictionaryValue(color)
+		]
+		return result
 	}
 
 	public var isEmpty: Bool {
@@ -327,10 +524,6 @@ public class CNVectorString: CNVectorObject
 
 	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){
 		NSLog("Must be override: \(#function)")
-	}
-	
-	public func normalize(in area: CGSize) -> CGPoint? {
-		return normalizePoint(source: originPoint, in: area)
 	}
 
 	public func attributedString() -> NSAttributedString {
@@ -344,14 +537,13 @@ public class CNVectorString: CNVectorObject
 		return astr
 	}
 
-	public override func contains(point pt: CGPoint, in area: CGSize) -> Bool {
-		if let orgpt = normalize(in: area) {
-			if let astr = mAttributedString {
-				let strrect = CGRect(origin: orgpt, size: astr.size())
-				return strrect.contains(pt)
-			}
+	public override func contains(point pt: CGPoint) -> Bool {
+		if let astr = mAttributedString {
+			let strrect = CGRect(origin: originPoint, size: astr.size())
+			return strrect.contains(pt)
+		} else {
+			return false
 		}
-		return false
 	}
 
 	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
