@@ -89,7 +89,7 @@ public enum CNValue {
 	case pointValue(_ val: CGPoint)
 	case sizeValue(_ val: CGSize)
 	case rectValue(_ val: CGRect)
-	case enumValue(_ type: String, _ val: Int32)	// enum type name and value
+	case enumValue(_ val: CNEnum)
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case URLValue(_ val: URL)
@@ -110,7 +110,7 @@ public enum CNValue {
 			case .pointValue(_):		result = .pointType
 			case .sizeValue(_):		result = .sizeType
 			case .rectValue(_):		result = .rectType
-			case .enumValue(_, _):		result = .enumType
+			case .enumValue(_):		result = .enumType
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
 			case .URLValue(_):		result = .URLType
@@ -214,11 +214,11 @@ public enum CNValue {
 		return result
 	}
 
-	public func toEnum() -> (String, Int32)? {
-		let result: (String, Int32)?
+	public func toEnum() -> CNEnum? {
+		let result: CNEnum?
 		switch self {
-		case .enumValue(let typestr, let val):
-			result = (typestr, val)
+		case .enumValue(let eval):
+			result = eval
 		default:
 			result = nil
 		}
@@ -411,7 +411,7 @@ public enum CNValue {
 		case .nullValue:
 			result = true
 		case .boolValue(_), .numberValue(_), .dateValue(_), .rangeValue(_), .pointValue(_),
-		     .sizeValue(_), .rectValue(_), .enumValue(_, _), .URLValue(_), .colorValue(_),
+		     .sizeValue(_), .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_),
 		     .imageValue(_), .objectValue(_):
 			result = false
 		case .stringValue(let str):
@@ -437,8 +437,8 @@ public enum CNValue {
 			result = CNTextLine(string: "\"" + val + "\"")
 		case .dateValue(let val):
 			result = CNTextLine(string: "\"" + CNValue.stringFromDate(date: val) + "\"")
-		case .enumValue(let type, let val):
-			result = CNTextLine(string: ".\(type)(\(val))")
+		case .enumValue(let val):
+			result = dictionaryToText(dictionary: val.toValue())
 		case .rangeValue(let val):
 			result = CNTextLine(string: "\"" + val.description + "\"")
 		case .pointValue(let val):
@@ -454,7 +454,7 @@ public enum CNValue {
 		case .URLValue(let val):
 			result = CNTextLine(string: "\"" + val.path + "\"")
 		case .colorValue(let val):
-			result = CNTextLine(string: "\"\(val.description)\"")
+			result = dictionaryToText(dictionary: val.toValue())
 		case .imageValue(let val):
 			#if os(OSX)
 				let name: String
@@ -526,34 +526,16 @@ public enum CNValue {
 			result = val
 		case .dateValue(let val):
 			result = val
-		case .enumValue(_, let val):
-			result = val
+		case .enumValue(let val):
+			result = val.toValue()
 		case .rangeValue(let val):
-			let newdict: Dictionary<String, Any> = [
-				"location" : NSNumber(value: Int(val.location)),
-				"length"   : NSNumber(value: Int(val.length))
-			]
-			result = newdict
+			result = val.toValue()
 		case .pointValue(let val):
-			let newdict: Dictionary<String, Any> = [
-				"x"	: NSNumber(value: Double(val.x)),
-				"y"	: NSNumber(value: Double(val.y))
-			]
-			result = newdict
+			result = val.toValue()
 		case .sizeValue(let val):
-			let newdict: Dictionary<String, Any> = [
-				"width"	: NSNumber(value: Double(val.width)),
-				"height": NSNumber(value: Double(val.height))
-			]
-			result = newdict
+			result = val.toValue()
 		case .rectValue(let val):
-			let rect: Dictionary<String, Any> = [
-				"x"	: NSNumber(value: Double(val.origin.x)),
-				"y"	: NSNumber(value: Double(val.origin.y)),
-				"width"	: NSNumber(value: Double(val.size.width)),
-				"height": NSNumber(value: Double(val.size.height))
-			]
-			result = rect
+			result = val.toValue()
 		case .dictionaryValue(let dict):
 			var newdict: Dictionary<String, Any> = [:]
 			for (key, elm) in dict {
@@ -569,14 +551,7 @@ public enum CNValue {
 		case .URLValue(let val):
 			result = val
 		case .colorValue(let val):
-			let (red, green, blue, alpha) = val.toRGBA()
-			let col: Dictionary<String, Any> = [
-				"red"	: NSNumber(floatLiteral: Double(red  )),
-				"green"	: NSNumber(floatLiteral: Double(green)),
-				"blue"	: NSNumber(floatLiteral: Double(blue )),
-				"alpha" : NSNumber(floatLiteral: Double(alpha))
-			]
-			result = col
+			result = val.toValue()
 		case .imageValue(let val):
 			result = val
 		case .objectValue(let val):
@@ -676,104 +651,59 @@ public enum CNValue {
 		     .arrayValue(_), .URLValue(_), .imageValue(_), .objectValue(_):
 			break
 		case .rangeValue(let src):
-			let dict: Dictionary<String, CNValue> = [
-				"location":	.numberValue(NSNumber(value: src.location)),
-				"length":	.numberValue(NSNumber(value: src.length))
-			]
-			result = dict
+			result = src.toValue()
 		case .pointValue(let src):
-			let dict: Dictionary<String, CNValue> = [
-				"x":		.numberValue(NSNumber(value: Double(src.x))),
-				"y":		.numberValue(NSNumber(value: Double(src.y)))
-			]
-			result = dict
+			result = src.toValue()
 		case .sizeValue(let src):
-			let dict: Dictionary<String, CNValue> = [
-				"width":	.numberValue(NSNumber(value: Double(src.width))),
-				"height":	.numberValue(NSNumber(value: Double(src.height)))
-			]
-			result = dict
+			result = src.toValue()
 		case .rectValue(let src):
-			let dict: Dictionary<String, CNValue> = [
-				"x":		.numberValue(NSNumber(value: Double(src.origin.x))),
-				"y":		.numberValue(NSNumber(value: Double(src.origin.y))),
-				"width":	.numberValue(NSNumber(value: Double(src.size.width))),
-				"height":	.numberValue(NSNumber(value: Double(src.size.height)))
-			]
-			result = dict
+			result = src.toValue()
 		case .dictionaryValue(let src):
 			result = src
 		case .colorValue(let src):
-			let dict: Dictionary<String, CNValue> = [
-				"alpha":	.numberValue(NSNumber(value: Double(src.alphaComponent))),
-				"red":		.numberValue(NSNumber(value: Double(src.redComponent))),
-				"blue":		.numberValue(NSNumber(value: Double(src.blueComponent))),
-				"green":	.numberValue(NSNumber(value: Double(src.greenComponent)))
-			]
-			result = dict
-		case .enumValue(let typename, let value):
-			let dict: Dictionary<String, CNValue> = [
-				"type":		.stringValue(typename),
-				"value":	.numberValue(NSNumber(value: value))
-			]
-			result = dict
+			result = src.toValue()
+		case .enumValue(let src):
+			result = src.toValue()
 		}
 		return result
 	}
 
 	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue {
-		if dict.count == 2 {
-			/* Range type */
-			if let locval = dict["location"], let lenval = dict["length"] {
-				if let locnum = locval.toNumber(), let lennum = lenval.toNumber() {
-					let location = locnum.intValue
-					let length   = lennum.intValue
-					return .rangeValue(NSRange(location: location, length: length))
+		var result: CNValue = .dictionaryValue(dict)
+		if let clsval = dict["class"] {
+			if let clsname = clsval.toString() {
+				switch clsname {
+				case CGPoint.ClassName:
+					if let point = CGPoint(value: dict) {
+						result = .pointValue(point)
+					}
+				case CGRect.ClassName:
+					if let rect = CGRect(value: dict) {
+						result = .rectValue(rect)
+					}
+				case CGSize.ClassName:
+					if let size = CGSize(value: dict) {
+						result = .sizeValue(size)
+					}
+				case CNColor.ClassName:
+					if let color = CNColor(value: dict) {
+						result = .colorValue(color)
+					}
+				case CNEnum.ClassName:
+					if let eval = CNEnum(value: dict) {
+						result = .enumValue(eval)
+					}
+				case NSRange.ClassName:
+					if let range = NSRange(value: dict) {
+						result = .rangeValue(range)
+					}
+				default:
+					CNLog(logLevel: .error, message: "Unknown value class:\(clsname)", atFunction: #function, inFile: #file)
 				}
 			}
-			/* Decode point type */
-			if let xval = dict["x"], let yval = dict["y"] {
-				if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
-					let x = CGFloat(xnum.doubleValue)
-					let y = CGFloat(ynum.doubleValue)
-					return .pointValue(CGPoint(x: x, y:y))
-				}
-			}
-			/* Decode size type */
-			if let wval = dict["width"], let hval = dict["height"] {
-				if let wnum = wval.toNumber(), let hnum = hval.toNumber() {
-					let width  = CGFloat(wnum.doubleValue)
-					let height = CGFloat(hnum.doubleValue)
-					return .sizeValue(CGSize(width: width, height: height))
-				}
-			}
-			/* Decode enum */
-			if let tval = dict["type"], let vval = dict["value"] {
-				if let tstr = tval.toString(), let vnum = vval.toNumber() {
-					let typename = tstr
-					let value    = vnum.int32Value
-					return .enumValue(typename, value)
-				}
-			}
-		} else if dict.count == 4 {
-			/* Decode rect type */
-			if let xval = dict["x"], let yval = dict["y"], let wval = dict["width"], let hval = dict["height"] {
-				if let x = xval.toNumber(), let y = yval.toNumber(), let width = wval.toNumber(), let height = hval.toNumber() {
-					return .rectValue(CGRect(x: x.doubleValue, y: y.doubleValue, width: width.doubleValue, height: height.doubleValue))
-				}
-			}
-			/* Decode color type */
-			if let rval = dict["red"], let gval = dict["green"], let bval = dict["blue"], let aval = dict["alpha"] {
-				if let rednum = rval.toNumber(), let greennum = gval.toNumber(), let bluenum = bval.toNumber(), let alphanum = aval.toNumber() {
-					let red   = CGFloat(rednum.floatValue)
-					let green = CGFloat(greennum.floatValue)
-					let blue  = CGFloat(bluenum.floatValue)
-					let alpha = CGFloat(alphanum.floatValue)
-					let color = CNColor(red: red, green: green, blue: blue, alpha: alpha)
-					return  .colorValue(color)
-				}
-			}
+		} else {
+			CNLog(logLevel: .error, message: "No class description", atFunction: #function, inFile: #file)
 		}
-		return .dictionaryValue(dict)
+		return result
 	}
 }

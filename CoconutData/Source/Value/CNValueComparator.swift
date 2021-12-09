@@ -73,15 +73,8 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 			result = compare(rect0: s0, rect1: s1)
 		}
 	case .enumType:
-		if let (s0, v0) = val0.toEnum(), let (s1, v1) = val1.toEnum() {
-			switch s0.compare(s1) {
-			case .orderedAscending:
-				result = .orderedAscending
-			case .orderedDescending:
-				result = .orderedDescending
-			case .orderedSame:
-				result = compare(int0: Int(v0), int1: Int(v1))
-			}
+		if let e0 = val0.toEnum(), let e1 = val1.toEnum() {
+			result = compare(enum0: e0, enum1: e1)
 		}
 	case .dictionaryType:
 		if let s0 = val0.toDictionary(), let s1 = val1.toDictionary() {
@@ -181,6 +174,22 @@ private func compare(rect0 s0: CGRect, rect1 s1: CGRect) -> ComparisonResult {
 		result = compare(size0: s0.size, size1: s1.size)
 	}
 	return result
+}
+
+private func compare(enum0 s0: CNEnum, enum1 s1: CNEnum) -> ComparisonResult {
+	if s0.type < s1.type{
+		return .orderedAscending
+	} else if s0.type > s1.type {
+		return .orderedDescending
+	} else { // s0 == s1
+		if s0.value < s1.value {
+			return .orderedAscending
+		} else if s0.value > s1.value {
+			return .orderedDescending
+		} else {
+			return .orderedSame		// Same
+		}
+	}
 }
 
 private func compare(URL0 s0: URL, URL1 s1: URL) -> ComparisonResult {

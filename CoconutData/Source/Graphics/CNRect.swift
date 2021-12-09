@@ -10,7 +10,7 @@ import Foundation
 
 public extension CGRect
 {
-	static let ClassName = "rectClass"
+	static let ClassName = "rect"
 
 	init?(value val: Dictionary<String, CNValue>) {
 		if let xval = val["x"], let yval = val["y"], let wval = val["width"], let hval = val["height"] {

@@ -10,7 +10,7 @@ import Foundation
 
 public extension CGSize
 {
-	static let ClassName = "sizeClass"
+	static let ClassName = "size"
 
 	init?(value val: Dictionary<String, CNValue>) {
 		if let wval = val["width"], let hval = val["height"] {

@@ -253,28 +253,28 @@ public class CNVectorManager
 						if let obj = CNVectorPath(value: dict) {
 							mGraphics.append(.path(obj))
 						} else {
-							CNLog(logLevel: .error, message: "Failed to decode path", atFunction: #function, inFile: #file)
+							CNLog(logLevel: .error, message: "Failed to decode vector path", atFunction: #function, inFile: #file)
 							result = false
 						}
 					case CNVectorRect.ClassName:
 						if let obj = CNVectorRect(value: dict) {
 							mGraphics.append(.rect(obj))
 						} else {
-							CNLog(logLevel: .error, message: "Failed to decode rect", atFunction: #function, inFile: #file)
+							CNLog(logLevel: .error, message: "Failed to decode vector rect", atFunction: #function, inFile: #file)
 							result = false
 						}
 					case CNVectorOval.ClassName:
 						if let obj = CNVectorOval(value: dict) {
 							mGraphics.append(.oval(obj))
 						} else {
-							CNLog(logLevel: .error, message: "Failed to decode oval", atFunction: #function, inFile: #file)
+							CNLog(logLevel: .error, message: "Failed to decode vector oval", atFunction: #function, inFile: #file)
 							result = false
 						}
 					case CNVectorString.ClassName:
 						if let obj = CNVectorString(value: dict) {
 							mGraphics.append(.string(obj))
 						} else {
-							CNLog(logLevel: .error, message: "Failed to decode string", atFunction: #function, inFile: #file)
+							CNLog(logLevel: .error, message: "Failed to decode vector string", atFunction: #function, inFile: #file)
 							result = false
 						}
 					default:

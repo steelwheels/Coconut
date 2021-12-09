@@ -10,7 +10,7 @@ import Foundation
 
 public extension CGPoint
 {
-	static let ClassName = "pointClass"
+	static let ClassName = "point"
 
 	init?(value val: Dictionary<String, CNValue>) {
 		if let xval = val["x"], let yval = val["y"] {

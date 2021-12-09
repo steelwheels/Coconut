@@ -18,6 +18,8 @@ public typealias CNColor = UIColor
 
 public extension CNColor
 {
+	static let ClassName = "color"
+
 	static func color(withEscapeCode code: Int32) -> CNColor? {
 		let result: CNColor?
 		switch code {
@@ -48,6 +50,7 @@ public extension CNColor
 				#else
 				self.init(red: r, green: g, blue: b, alpha: a)
 				#endif
+				return
 			}
 		}
 		return nil
@@ -113,10 +116,11 @@ public extension CNColor
 	func toValue() -> Dictionary<String, CNValue> {
 		let (r, g, b, a) = self.toRGBA()
 		let result: Dictionary<String, CNValue> = [
-			"r":	CNValue.numberValue(NSNumber(floatLiteral: Double(r))),
-			"g":	CNValue.numberValue(NSNumber(floatLiteral: Double(g))),
-			"b":	CNValue.numberValue(NSNumber(floatLiteral: Double(b))),
-			"a":	CNValue.numberValue(NSNumber(floatLiteral: Double(a)))
+			"class":	.stringValue(CNColor.ClassName),
+			"r":		.numberValue(NSNumber(floatLiteral: Double(r))),
+			"g":		.numberValue(NSNumber(floatLiteral: Double(g))),
+			"b":		.numberValue(NSNumber(floatLiteral: Double(b))),
+			"a":		.numberValue(NSNumber(floatLiteral: Double(a)))
 		]
 		return result
 	}

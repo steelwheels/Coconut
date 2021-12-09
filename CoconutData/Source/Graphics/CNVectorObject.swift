@@ -181,14 +181,23 @@ open class CNVectorObject
 	}
 
 	public static func decode(value val: Dictionary<String, CNValue>) -> (CGFloat, Bool, CNColor, CNColor)? {
-		if let lwidth = floatInDictionary(dictionary: val, forKey: "lineWidth"),
-		   let dofill = boolInDictionary(dictionary:  val, forKey: "doFill"),
-		   let fcolor = colorInDictionary(dictionary: val, forKey: "fillColor"),
-		   let scolor = colorInDictionary(dictionary: val, forKey: "strokeColor"){
-			return (lwidth, dofill, fcolor, scolor)
-		} else {
+		guard let lwidth = floatInDictionary(dictionary: val, forKey: "lineWidth") else {
+			CNLog(logLevel: .error, message: "The \"lineWidth\" property is not found")
 			return nil
 		}
+		guard let dofill = boolInDictionary(dictionary:  val, forKey: "doFill") else {
+			CNLog(logLevel: .error, message: "The \"doFill\" property is not found")
+			return nil
+		}
+		guard let fcolor = colorInDictionary(dictionary: val, forKey: "fillColor") else {
+			CNLog(logLevel: .error, message: "The \"fillColor\" property is not found")
+			return nil
+		}
+		guard let scolor = colorInDictionary(dictionary: val, forKey: "strokeColor") else {
+			CNLog(logLevel: .error, message: "The \"strokeColor\" property is not found")
+			return nil
+		}
+		return (lwidth, dofill, fcolor, scolor)
 	}
 
 }
@@ -221,7 +230,7 @@ public class CNPathObject: CNVectorObject
 
 public class CNVectorPath: CNPathObject
 {
-	public static let ClassName = "vectorPathClass"
+	public static let ClassName = "vectorPath"
 
 	private var mPoints:	Array<CGPoint>
 
@@ -298,7 +307,7 @@ public class CNVectorPath: CNPathObject
 
 public class CNVectorRect: CNPathObject
 {
-	public static let ClassName = "vectorRectClass"
+	public static let ClassName = "vectorRect"
 
 	public var originPoint:		CGPoint
 	public var endPoint:		CGPoint
@@ -408,7 +417,7 @@ public class CNVectorRect: CNPathObject
 
 public class CNVectorOval: CNPathObject
 {
-	public static let ClassName = "vectorOvalClass"
+	public static let ClassName = "vectorOval"
 
 	public var centerPoint:		CGPoint
 	public var endPoint:		CGPoint
@@ -473,7 +482,7 @@ public class CNVectorOval: CNPathObject
 
 public class CNVectorString: CNVectorObject
 {
-	public static let ClassName = "vectorStringClass"
+	public static let ClassName = "vectorString"
 
 	public var originPoint:		CGPoint
 	public var string:		String

@@ -19,7 +19,7 @@ public class CNValueVisitor
 		case .numberValue(let obj):		visit(number: obj)
 		case .stringValue(let obj):		visit(string: obj)
 		case .dateValue(let obj):		visit(date: obj)
-		case .enumValue(let type, let val):	visit(enumType: type, value: val)
+		case .enumValue(let obj):		visit(enumType: obj)
 		case .rangeValue(let obj):		visit(range: obj)
 		case .pointValue(let obj):		visit(point: obj)
 		case .sizeValue(let obj):		visit(size: obj)
@@ -38,7 +38,7 @@ public class CNValueVisitor
 	open func visit(number obj: NSNumber){	}
 	open func visit(string obj: String){ }
 	open func visit(date obj: Date){ }
-	open func visit(enumType etype: String, value val: Int32){ }
+	open func visit(enumType obj: CNEnum){ }
 	open func visit(range obj: NSRange){ }
 	open func visit(point obj: CGPoint){ }
 	open func visit(size obj: CGSize){ }

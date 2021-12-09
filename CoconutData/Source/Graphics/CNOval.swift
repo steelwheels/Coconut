@@ -10,7 +10,7 @@ import Foundation
 
 public struct CNOval
 {
-	public static let ClassName = "ovalClass"
+	public static let ClassName = "oval"
 
 	private var mCenter:	CGPoint
 	private var mRadius:	CGFloat

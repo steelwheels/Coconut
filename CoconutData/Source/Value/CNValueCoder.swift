@@ -227,8 +227,13 @@ public class CNJSONEncoder: CNValueVisitor
 		])
 	}
 
-	open override func visit(enumType etype: String, value val: Int32) {
-		mResult = NSNumber(value: val)
+	open override func visit(enumType obj: CNEnum) {
+		let typeval = NSString(string: obj.type)
+		let numval  = NSNumber(integerLiteral: obj.value)
+		mResult = NSDictionary(dictionary: [
+			NSString(string: "type"):	typeval,
+			NSString(string: "value"):	numval
+		])
 	}
 
 	private func convertTo2Numbers(name0 nm0: String, value0 val0: Double, name1 nm1: String, value1 val1: Double) -> NSDictionary {
