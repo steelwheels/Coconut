@@ -324,10 +324,12 @@ public class CNVectorRect: CNPathObject
 		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
 			if let origin = pointInDictionary(dictionary: val, forKey: "origin"),
 			   let size   = sizeInDictionary(dictionary:  val, forKey: "size"),
+			   let rnd    = boolInDictionary(dictionary: val, forKey: "isRounded"),
 			   let rx     = floatInDictionary(dictionary: val, forKey: "rx") {
 				self.init(lineWidth: lwidth, doFill: dofill, isRounded: rx > 0.0, strokeColor: scolor, fillColor: fcolor)
 				self.originPoint = CGPoint(x: origin.x, y: origin.y)
 				self.endPoint    = CGPoint(x: origin.x + size.width, y: origin.y + size.height)
+				self.isRounded   = rnd
 				return
 			}
 		}
@@ -337,16 +339,17 @@ public class CNVectorRect: CNPathObject
 	public override func toValue() -> Dictionary<String, CNValue> {
 		let rect = self.toRect()
 		var result = super.toValue()
-		result["class" ] = .stringValue(CNVectorRect.ClassName)
-		result["origin"] = .dictionaryValue(rect.origin.toValue())
-		result["size"  ] = .dictionaryValue(rect.size.toValue())
-		result["rx"    ] = floatToValue(value: self.roundValue)
-		result["ry"    ] = floatToValue(value: self.roundValue)
+		result["class"    ] = .stringValue(CNVectorRect.ClassName)
+		result["origin"   ] = .dictionaryValue(rect.origin.toValue())
+		result["size"     ] = .dictionaryValue(rect.size.toValue())
+		result["isRounded"] = .boolValue(self.isRounded)
+		result["rx"       ] = floatToValue(value: self.roundValue)
+		result["ry"       ] = floatToValue(value: self.roundValue)
 		return result
 	}
 
 	public var roundValue: CGFloat {
-		get { return 10.0 }
+		get { return 10.0}
 	}
 
 	open override func reshape(position pos: CNPosition, nextPoint point: CGPoint){

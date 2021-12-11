@@ -44,16 +44,12 @@ public class CNVectorManager
 
 	public convenience init?(value val: Dictionary<String, CNValue>) {
 		self.init()
-		if let objs = val["objects"] {
-			switch objs {
-			case .arrayValue(let elms):
-				let _ = store(objects: elms)
-				return // succeeded
-			default:
-				break
-			}
+		if self.load(contents: val) {
+			return	// load done
+		} else {
+			CNLog(logLevel: .error, message: "Failed to load contents", atFunction: #function, inFile: #file)
+			return nil
 		}
-		return nil
 	}
 
 	public var count: Int {
@@ -242,7 +238,7 @@ public class CNVectorManager
 		return result
 	}
 
-	public func store(objects objs: Array<CNValue>) -> Bool {
+	public func load(objects objs: Array<CNValue>) -> Bool {
 		var result = true
 		mGraphics  = []
 		for obj in objs {
@@ -293,12 +289,12 @@ public class CNVectorManager
 		return result
 	}
 
-	public func store(value val: Dictionary<String, CNValue>) -> Bool {
+	public func load(contents val: Dictionary<String, CNValue>) -> Bool {
 		var result = false
 		if let objs = val["objects"] {
 			switch objs {
 			case .arrayValue(let elms):
-				result = store(objects: elms)
+				result = load(objects: elms)
 			default:
 				CNLog(logLevel: .error, message: "Array of objects are required", atFunction: #function, inFile: #file)
 			}
@@ -306,22 +302,14 @@ public class CNVectorManager
 		return result
 	}
 
-	public func store(URL url: URL) -> Bool {
+	public func load(from url: URL) -> Bool {
 		var result: Bool = false
-		if let text = url.loadContents() {
-			let parser = CNValueParser()
-			switch parser.parse(source: text as String) {
-			case .ok(let value):
-				if let dict = value.toDictionary() {
-					result = store(value: dict)
-				} else {
-					CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
-				}
-			case .error(let err):
-				CNLog(logLevel: .error, message: "\(err.description)", atFunction: #function, inFile: #file)
+		if let val = url.loadValue() {
+			if let dict = val.toDictionary() {
+				result = load(contents: dict)
+			} else {
+				CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
 			}
-		} else {
-			CNLog(logLevel: .error, message: "Failed to load URL", atFunction: #function, inFile: #file)
 		}
 		return result
 	}

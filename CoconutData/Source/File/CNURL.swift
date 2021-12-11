@@ -1,8 +1,8 @@
 /*
- * @file	CNFileURL.swift
- * @brief	Extend CNFileURL class
+ * @file	CNURL.swift
+ * @brief	Extend URL class
  * @par Copyright
- *   Copyright (C) 2016 Steel Wheels Project
+ *   Copyright (C) 2016-2021 Steel Wheels Project
  */
 
 #if os(OSX)
@@ -127,6 +127,25 @@ public extension URL
 			stopAccessingSecurityScopedResource()
 		}
 		return result
+	}
+
+	func loadValue() -> CNValue? {
+		var result: CNValue? = nil
+		if let str = self.loadContents() {
+			let parser = CNValueParser()
+			switch parser.parse(source: str as String) {
+			case .ok(let val):
+				result = val
+			case .error(let err):
+				CNLog(logLevel: .error, message: "Error: \(err.description)", atFunction: #function, inFile: #file)
+			}
+		}
+		return result
+	}
+
+	func storeValue(value val: CNValue) -> Bool {
+		let str = val.toText().toStrings().joined(separator: "\n")
+		return self.storeContents(contents: str)
 	}
 }
 
