@@ -32,6 +32,15 @@ public struct CNOval
 		return nil
 	}
 
+	public init?(value val: CNValue){
+		if let dict = val.toDictionary() {
+			self.init(value: dict)
+			return
+		} else {
+			return nil
+		}
+	}
+
 	public func toValue() -> Dictionary<String, CNValue> {
 		let center = mCenter.toValue()
 		let radius = NSNumber(floatLiteral: Double(mRadius))

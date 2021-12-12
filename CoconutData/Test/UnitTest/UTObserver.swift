@@ -33,7 +33,7 @@ private func testObserverTable(console cons: CNConsole) -> Bool
 
 	vtable.setValue(NSNumber(booleanLiteral: true), forKey: "isExecuting")
 	Thread.sleep(forTimeInterval: 1.0)
-	
+
 	let result = updated
 	if result {
 		cons.print(string: "testObserver (d) .. OK\n")

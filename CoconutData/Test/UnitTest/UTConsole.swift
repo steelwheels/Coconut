@@ -26,7 +26,7 @@ public func testBufferConsole(console cons: CNConsole) -> Bool
 
 	cons.print(string: "- after buffered\n")
 	bufcons.print(string: "after1\n")
-	
+
 	return true
 }
 

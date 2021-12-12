@@ -21,7 +21,7 @@ public extension NSError
 	class func domain() -> String {
 		return "github.com.steelwheels.Coconut"
 	}
-	
+
 	class func errorLocationKey() -> String {
 		return "errorLocation"
 	}
@@ -49,31 +49,31 @@ public extension NSError
 		let error = NSError(domain: self.domain(), code: CNErrorCode.ParseError.rawValue, userInfo: userinfo)
 		return error
 	}
-	
+
 	class func parseError(message m: String, location l: NSString) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: NSString(string: m), self.errorLocationKey(): l]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.ParseError.rawValue, userInfo: userinfo)
 		return error
 	}
-	
+
 	class func fileError(message m: String) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: m]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.FileError.rawValue, userInfo: userinfo)
 		return error
 	}
-	
+
 	class func fileError(message m: String, location l: NSString) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: NSString(string: m), self.errorLocationKey(): l]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.FileError.rawValue, userInfo: userinfo)
 		return error
 	}
-	
+
 	class func serializeError(message m: String) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: m]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.SerializeError.rawValue, userInfo: userinfo)
 		return error
 	}
-	
+
 	class func serializeError(message m: String, location l: NSString) -> NSError {
 		let userinfo = [NSLocalizedDescriptionKey: NSString(string: m), self.errorLocationKey(): l]
 		let error = NSError(domain: self.domain(), code: CNErrorCode.SerializeError.rawValue, userInfo: userinfo)

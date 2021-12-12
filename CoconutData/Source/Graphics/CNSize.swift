@@ -24,6 +24,15 @@ public extension CGSize
 		return nil
 	}
 
+	init?(value val: CNValue) {
+		if let dict = val.toDictionary() {
+			self.init(value: dict)
+			return
+		} else {
+			return nil
+		}
+	}
+
 	func toValue() -> Dictionary<String, CNValue> {
 		let wnum = NSNumber(floatLiteral: Double(self.width))
 		let hnum = NSNumber(floatLiteral: Double(self.height))

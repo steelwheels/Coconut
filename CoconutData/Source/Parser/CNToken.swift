@@ -426,7 +426,7 @@ private class CNTokenizer
 			throw NSError.parseError(message: "Text value is not ended by %} but \"\(resstr)\" is given at \(mCurrentLine)", location: #function)
 		}
 	}
-	
+
 	private func getCommentFromStream(stream srcstream: CNStringStream) -> CNToken {
 		var idx      		= 2	// contains "//"
 		var docont   		= true

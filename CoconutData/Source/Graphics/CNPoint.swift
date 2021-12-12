@@ -24,6 +24,15 @@ public extension CGPoint
 		return nil
 	}
 
+	init?(value val: CNValue){
+		if let dict = val.toDictionary() {
+			self.init(value: dict)
+			return
+		} else {
+			return nil
+		}
+	}
+
 	func toValue() -> Dictionary<String, CNValue> {
 		let xnum = NSNumber(floatLiteral: Double(self.x))
 		let ynum = NSNumber(floatLiteral: Double(self.y))

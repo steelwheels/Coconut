@@ -74,7 +74,7 @@ public extension FileManager
 			return .NotExist
 		}
 	}
-	
+
 	func openFile(URL url: URL, accessType acctyp: CNFileAccessType) -> CNFileOpenResult {
 		do {
 			var file: CNFile

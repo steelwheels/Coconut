@@ -170,6 +170,10 @@ open class CNVectorObject
 		NSLog("Must be override: \(#function)")
 	}
 
+	open func resize(ratio r: CGFloat) {
+		NSLog("Must be override: \(#function)")
+	}
+
 	public func toValue() -> Dictionary<String, CNValue> {
 		let result: Dictionary<String, CNValue> = [
 			"lineWidth"   : floatToValue(value: self.lineWidth),
@@ -252,6 +256,15 @@ public class CNVectorPath: CNPathObject
 		return nil
 	}
 
+	public convenience init?(value val: CNValue) {
+		if let dict = val.toDictionary() {
+			self.init(value: dict)
+			return
+		} else {
+			return nil
+		}
+	}
+
 	private static func loadPoints(value val: CNValue) -> Array<CGPoint>? {
 		if let elms = val.toArray() {
 			var result: Array<CGPoint> = []
@@ -288,6 +301,15 @@ public class CNVectorPath: CNPathObject
 		var newpoints: Array<CGPoint> = []
 		for orgpt in mPoints {
 			let newpt = CGPoint(x: orgpt.x + dx, y: orgpt.y + dy)
+			newpoints.append(newpt)
+		}
+		mPoints = newpoints
+	}
+
+	open override func resize(ratio r: CGFloat) {
+		var newpoints:Array<CGPoint> = []
+		for curpt in mPoints {
+			let newpt = CGPoint(x: curpt.x * r, y: curpt.y * r)
 			newpoints.append(newpt)
 		}
 		mPoints = newpoints
@@ -334,6 +356,15 @@ public class CNVectorRect: CNPathObject
 			}
 		}
 		return nil
+	}
+
+	public convenience init?(value val: CNValue) {
+		if let dict = val.toDictionary() {
+			self.init(value: dict)
+			return
+		} else {
+			return nil
+		}
 	}
 
 	public override func toValue() -> Dictionary<String, CNValue> {
@@ -416,6 +447,12 @@ public class CNVectorRect: CNPathObject
 		originPoint  = neworign
 		endPoint     = newend
 	}
+
+	open override func resize(ratio r: CGFloat) {
+		originPoint = CGPoint(x: originPoint.x * r, y: originPoint.y * r)
+		endPoint    = CGPoint(x: endPoint.x * r, y: endPoint.y * r)
+	}
+
 }
 
 public class CNVectorOval: CNPathObject
@@ -442,6 +479,15 @@ public class CNVectorOval: CNPathObject
 			}
 		}
 		return nil
+	}
+
+	public convenience init?(value val: CNValue) {
+		if let dict = val.toDictionary() {
+			self.init(value: dict)
+			return
+		} else {
+			return nil
+		}
 	}
 
 	public override func toValue() -> Dictionary<String, CNValue> {
@@ -481,6 +527,11 @@ public class CNVectorOval: CNPathObject
 		centerPoint   = newcenter
 		endPoint      = newend
 	}
+
+	open override func resize(ratio r: CGFloat) {
+		centerPoint = CGPoint(x: centerPoint.x * r, y: centerPoint.y * r)
+		endPoint    = CGPoint(x: endPoint.x * r, y: endPoint.y * r)
+	}
 }
 
 public class CNVectorString: CNVectorObject
@@ -513,6 +564,15 @@ public class CNVectorString: CNVectorObject
 			}
 		}
 		return nil
+	}
+
+	public convenience init?(value val: CNValue) {
+		if let dict = val.toDictionary() {
+			self.init(value: dict)
+			return
+		} else {
+			return nil
+		}
 	}
 
 	public override func toValue() -> Dictionary<String, CNValue> {
@@ -561,6 +621,10 @@ public class CNVectorString: CNVectorObject
 	open override func move(_ dx: CGFloat, _ dy: CGFloat) {
 		let neworigin = CGPoint(x: originPoint.x + dx, y: originPoint.y + dy)
 		originPoint   = neworigin
+	}
+
+	open override func resize(ratio r: CGFloat) {
+		originPoint = CGPoint(x: originPoint.x * r, y: originPoint.y * r)
 	}
 }
 

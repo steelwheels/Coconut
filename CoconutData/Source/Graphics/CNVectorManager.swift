@@ -42,12 +42,12 @@ public class CNVectorManager
 		mFont		= CNFont.systemFont(ofSize: CNFont.systemFontSize)
 	}
 
-	public convenience init?(value val: Dictionary<String, CNValue>) {
+	public convenience init?(objects objs: Array<CNValue>) {
 		self.init()
-		if self.load(contents: val) {
+		if self.load(objects: objs) {
 			return	// load done
 		} else {
-			CNLog(logLevel: .error, message: "Failed to load contents", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Failed to load objects", atFunction: #function, inFile: #file)
 			return nil
 		}
 	}
@@ -56,7 +56,7 @@ public class CNVectorManager
 		get { return mGraphics.count }
 	}
 
-	public var contents: Array<CNVectorGraphics> {
+	public var objects: Array<CNVectorGraphics> {
 		get { return mGraphics }
 	}
 
@@ -140,6 +140,25 @@ public class CNVectorManager
 		}
 	}
 
+	public func resize(from fsize: CGSize, to tsize: CGSize) {
+		guard fsize.width > 0.0 && fsize.height > 0.0 && tsize.width > 0.0 && fsize.height > 0.0 else {
+			return
+		}
+		let ratio = min(tsize.width / fsize.width, tsize.height / fsize.height)
+		for obj in mGraphics {
+			switch obj {
+			case .rect(let rect):
+				rect.resize(ratio: ratio)
+			case .path(let path):
+				path.resize(ratio: ratio)
+			case .oval(let oval):
+				oval.resize(ratio: ratio)
+			case .string(let vstr):
+				vstr.resize(ratio: ratio)
+			}
+		}
+	}
+
 	public func addPointToObject(nextPoint npoint: CGPoint, object gobj: CNVectorGraphics) {
 		let nx = npoint.x
 		let ny = npoint.y
@@ -218,7 +237,7 @@ public class CNVectorManager
 		}
 	}
 
-	public func toValue() -> Dictionary<String, CNValue> {
+	public func toValue() -> Array<CNValue> {
 		var objects: Array<CNValue> = []
 		for obj in mGraphics {
 			switch obj {
@@ -232,10 +251,7 @@ public class CNVectorManager
 				objects.append(.dictionaryValue(vstr.toValue()))
 			}
 		}
-		let result: Dictionary<String, CNValue> = [
-			"objects": .arrayValue(objects)
-		]
-		return result
+		return objects
 	}
 
 	public func load(objects objs: Array<CNValue>) -> Bool {
@@ -284,31 +300,6 @@ public class CNVectorManager
 			} else {
 				CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
 				result = false
-			}
-		}
-		return result
-	}
-
-	public func load(contents val: Dictionary<String, CNValue>) -> Bool {
-		var result = false
-		if let objs = val["objects"] {
-			switch objs {
-			case .arrayValue(let elms):
-				result = load(objects: elms)
-			default:
-				CNLog(logLevel: .error, message: "Array of objects are required", atFunction: #function, inFile: #file)
-			}
-		}
-		return result
-	}
-
-	public func load(from url: URL) -> Bool {
-		var result: Bool = false
-		if let val = url.loadValue() {
-			if let dict = val.toDictionary() {
-				result = load(contents: dict)
-			} else {
-				CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
 			}
 		}
 		return result

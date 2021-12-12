@@ -32,7 +32,7 @@ public func testBitmap(console cons: CNConsole) -> Bool
 	]
 	base.set(x: 4, y: 4, bitmap: CNBitmapData(colorData: data))
 	dump(bitmap: base, console: cons)
-	
+
 	return true
 }
 

@@ -21,7 +21,7 @@ public class CNFilePath
 		case ok(_ urls: [URL])
 		case error(_ error: NSError)
 	}
-	
+
 	public class func URLForBundleFile(bundleName bname: String?, fileName fname: String?, ofType type: String?) -> FilePathError {
 		let mainbundle = Bundle.main
 		if let bundlepath = mainbundle.path(forResource: bname, ofType: "bundle") {

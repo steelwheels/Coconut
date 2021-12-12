@@ -118,7 +118,7 @@ open class CNPreferenceTable
 			return nil
 		}
 	}
-	
+
 	/*
 	 * Font
 	 */
