@@ -143,19 +143,14 @@ public class CNVectorManager
 	public func deleteCurrentObject() -> Bool {
 		var result = false
 		if let idx = mCurrentIndex {
-			let curcount = mGraphics.count
-			if curcount == 0 {
-				mCurrentIndex = nil
-			} else if curcount == 1 {
-				mGraphics.removeAll()
-				mCurrentIndex = nil
-				result = true
-			} else { // curcount > 1
+			if 0<=idx && idx<mGraphics.count {
 				mGraphics.remove(at: idx)
-				if idx > 0 {
-					mCurrentIndex = idx - 1
+				if mGraphics.count > 0 {
+					if idx >= mGraphics.count {
+						mCurrentIndex = mGraphics.count - 1
+					}
 				} else {
-					mCurrentIndex = 0
+					mCurrentIndex = nil
 				}
 				result = true
 			}
