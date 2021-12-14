@@ -12,7 +12,7 @@ import Foundation
  * reference: https://qiita.com/baba163/items/e2390c4529ec0448151d
  * reference: https://stackoverflow.com/questions/3202629/where-can-i-find-a-list-of-mac-virtual-key-codes
  */
-public enum CNKeyCode: Int
+public enum CNKeyCode: UInt16
 {
 	case a 				= 0x00
 	case s				= 0x01
