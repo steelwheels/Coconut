@@ -96,30 +96,31 @@ public class CNGraphicsContext
 		}
 	}
 
-	public func rect(rect rct: CGRect) {
+	public func rect(rect rct: CGRect, doFill fill: Bool) {
 		if let ctxt = mCoreContext {
 			let prct = logicalToPhysical(rect: rct)
-			ctxt.addRect(prct)
+			if fill {
+				ctxt.fill(prct)
+			} else {
+				ctxt.addRect(prct)
+			}
 		}
 	}
 
-	public func fill(rect rct: CGRect) {
-		if let ctxt = mCoreContext {
-			let prct = logicalToPhysical(rect: rct)
-			ctxt.fill(prct)
-		}
-	}
-
-	public func circle(center pt: CGPoint, radius rad: CGFloat) {
+	public func circle(center pt: CGPoint, radius rad: CGFloat, doFill fill: Bool) {
 		let pcenter = logicalToPhysical(point: pt)
 		let psize   = logicalToPhysical(size: CGSize(width: rad, height: rad))
 		let pbounds = CGRect(origin: pcenter, size: psize)
 		if let ctxt = mCoreContext {
-			ctxt.addEllipse(in: pbounds)
+			if fill {
+				ctxt.fillEllipse(in: pbounds)
+			} else {
+				ctxt.addEllipse(in: pbounds)
+			}
 		}
 	}
 
-	public func logicalToPhysical(point pt: CGPoint) -> CGPoint {
+	private func logicalToPhysical(point pt: CGPoint) -> CGPoint {
 		let lvec = CNVector3D(scalars: [
 			pt.x - mLogicalFrame.origin.x,
 			pt.y - mLogicalFrame.origin.y,
@@ -130,23 +131,23 @@ public class CNGraphicsContext
 		return CGPoint(x: rx, y: ry)
 	}
 
-	public func logicalToPhysical(size sz: CGSize) -> CGSize {
+	private func logicalToPhysical(size sz: CGSize) -> CGSize {
 		let width  = logicalToPhysical(width:  sz.width)
 		let height = logicalToPhysical(height: sz.height)
 		return CGSize(width: width, height: height)
 	}
 
-	public func logicalToPhysical(rect rct: CGRect) -> CGRect {
+	private func logicalToPhysical(rect rct: CGRect) -> CGRect {
 		let neworg  = logicalToPhysical(point: rct.origin)
 		let newsize = logicalToPhysical(size:  rct.size)
 		return CGRect(origin: neworg, size: newsize)
 	}
 
-	public func logicalToPhysical(width val: CGFloat) -> CGFloat {
+	private func logicalToPhysical(width val: CGFloat) -> CGFloat {
 		return val  * mPhysicalFrame.size.width  / mLogicalFrame.size.width
 	}
 
-	public func logicalToPhysical(height val: CGFloat) -> CGFloat {
+	private func logicalToPhysical(height val: CGFloat) -> CGFloat {
 		return val  * mPhysicalFrame.size.height  / mLogicalFrame.size.height
 	}
 }
