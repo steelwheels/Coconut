@@ -252,6 +252,8 @@
 		05FC388C255FEC1E004CA79E /* UTStringStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3871255FEC1E004CA79E /* UTStringStream.swift */; };
 		05FC3897255FECC2004CA79E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FC3896255FECC2004CA79E /* main.swift */; };
 		05FC5C5D255FFB01006C3664 /* CoconutData.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05B32C83251501B1000D1411 /* CoconutData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05FDF1B9276D6350004E2781 /* CNTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FDF1B8276D6350004E2781 /* CNTable.swift */; };
+		05FDF1BA276D6350004E2781 /* CNTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FDF1B8276D6350004E2781 /* CNTable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -519,6 +521,7 @@
 		05FC3896255FECC2004CA79E /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		05FC5C29255FF5E8006C3664 /* UnitTest.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTest.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		05FC5C2B255FF5E8006C3664 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05FDF1B8276D6350004E2781 /* CNTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNTable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -856,6 +859,7 @@
 				05B32D6625150945000D1411 /* CNStack.swift */,
 				05B32D6C25150945000D1411 /* CNStringStream.swift */,
 				05B32D7325150945000D1411 /* CNStringUtil.swift */,
+				05FDF1B8276D6350004E2781 /* CNTable.swift */,
 				05B32D6F25150945000D1411 /* CNType.swift */,
 			);
 			path = Data;
@@ -1168,6 +1172,7 @@
 				05B32CD7251502E6000D1411 /* CNOperationContext.swift in Sources */,
 				05A44F0225C223350086033B /* CNGraphicsContext.swift in Sources */,
 				05B32CAD2515025E000D1411 /* CNValue.swift in Sources */,
+				05FDF1B9276D6350004E2781 /* CNTable.swift in Sources */,
 				057588E72629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */,
 				05B32D35251508D9000D1411 /* CNAccess.swift in Sources */,
 				05B32D7625150945000D1411 /* CNEscapeCode.swift in Sources */,
@@ -1258,6 +1263,7 @@
 				05B32D8B25150946000D1411 /* CNObservedValue.swift in Sources */,
 				05B32D32251508D9000D1411 /* CNFile.swift in Sources */,
 				05B32CD8251502E6000D1411 /* CNOperationContext.swift in Sources */,
+				05FDF1BA276D6350004E2781 /* CNTable.swift in Sources */,
 				05A44F0325C223350086033B /* CNGraphicsContext.swift in Sources */,
 				057588E82629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */,
 				05B32D36251508D9000D1411 /* CNAccess.swift in Sources */,
