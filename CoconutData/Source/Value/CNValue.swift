@@ -668,8 +668,8 @@ public enum CNValue {
 		return result
 	}
 
-	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue {
-		var result: CNValue = .dictionaryValue(dict)
+	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue? {
+		var result: CNValue? = nil
 		if let clsval = dict["class"] {
 			if let clsname = clsval.toString() {
 				switch clsname {
@@ -701,8 +701,6 @@ public enum CNValue {
 					CNLog(logLevel: .error, message: "Unknown value class:\(clsname)", atFunction: #function, inFile: #file)
 				}
 			}
-		} else {
-			CNLog(logLevel: .error, message: "No class description", atFunction: #function, inFile: #file)
 		}
 		return result
 	}
