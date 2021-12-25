@@ -54,6 +54,20 @@ public class CNFilePath
 		}
 	}
 
+	public class func URLForResourceDirectory(directoryName dname: String, subdirectory subdir: String?, forClass fclass: AnyClass?) -> URL? {
+		let bundle: Bundle
+		if let cls = fclass {
+			bundle = Bundle(for: cls)
+		} else {
+			bundle = Bundle.main
+		}
+		if let dir = subdir {
+			return bundle.url(forResource: dname, withExtension: nil, subdirectory: dir)
+		} else {
+			return bundle.url(forResource: dname, withExtension: nil)
+		}
+	}
+
 	public class func URLsForResourceFiles(fileExtension fext: String, subdirectory subdir: String?, forClass fclass: AnyClass?) -> FilePathsError {
 		let bundle: Bundle
 		if let cls = fclass {

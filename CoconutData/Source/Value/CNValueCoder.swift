@@ -140,13 +140,13 @@ public class CNJSONDecoder
 
 public class CNJSONEncoder: CNValueVisitor
 {
-	private var mResult: AnyObject?
+	private var mResult: NSObject?
 
 	public override init(){
 		mResult = nil
 	}
 
-	public func convert(value val: CNValue) -> AnyObject {
+	public func convert(value val: CNValue) -> NSObject {
 		accept(value: val)
 		if let result = mResult {
 			return result
@@ -272,6 +272,20 @@ public class CNJSONEncoder: CNValueVisitor
 			}
 		}
 		mResult = newarr
+	}
+
+	open override func visit(reference obj: CNValueReference) {
+		let relstr  = NSString(string: obj.relativePath)
+		let dataobj: NSObject
+		if let val = obj.context {
+			dataobj = convert(value: val)
+		} else {
+			dataobj = NSNull()
+		}
+		mResult = NSDictionary(dictionary: [
+			NSString(string: CNValueReference.RelativePathItem): 	relstr,
+			NSString(string: CNValueReference.ContextItem): 	dataobj
+		])
 	}
 }
 

@@ -30,6 +30,7 @@ public class CNValueVisitor
 		case .colorValue(let obj):		visit(color: obj)
 		case .imageValue(let obj):		visit(image: obj)
 		case .objectValue(let obj):		visit(object: obj)
+		case .reference(let obj):		visit(reference: obj)
 		}
 	}
 
@@ -49,5 +50,6 @@ public class CNValueVisitor
 	open func visit(color obj: CNColor){ }
 	open func visit(image obj: CNImage){ }
 	open func visit(object obj: NSObject){ }
+	open func visit(reference obj: CNValueReference) { }
 }
 

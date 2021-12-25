@@ -31,6 +31,7 @@ public enum CNValueType: Int
 	case	colorType
 	case	imageType
 	case	objectType
+	case	referenceType
 
 	public var description: String { get {
 		let result: String
@@ -51,6 +52,7 @@ public enum CNValueType: Int
 		case .colorType:	result = "Color"
 		case .imageType:	result = "Image"
 		case .objectType:	result = "Object"
+		case .referenceType:	result = "Reference"
 		}
 		return result
 	}}
@@ -72,7 +74,7 @@ public enum CNValueType: Int
 		switch typ {
 		case .nullType, .boolType, .numberType, .stringType, .dateType, .URLType, .imageType, .objectType:
 			result = true
-		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType:
+		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType, .referenceType:
 			result = false
 		}
 		return result
@@ -96,6 +98,7 @@ public enum CNValue {
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
 	case objectValue(_ val: NSObject)
+	case reference(_ val: CNValueReference)
 
 	public var valueType: CNValueType {
 		get {
@@ -117,6 +120,7 @@ public enum CNValue {
 			case .colorValue(_):		result = .colorType
 			case .imageValue(_):		result = .imageType
 			case .objectValue(_):		result = .objectType
+			case .reference(_):		result = .referenceType
 			}
 			return result
 		}
@@ -279,6 +283,15 @@ public enum CNValue {
 		return result
 	}
 
+	public func toReference() -> CNValueReference? {
+		let result: CNValueReference?
+		switch self {
+		case .reference(let obj):	result = obj
+		default:			result = nil
+		}
+		return result
+	}
+
 	public func boolProperty(identifier ident: String) ->  Bool? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toBool()
@@ -383,6 +396,14 @@ public enum CNValue {
 		}
 	}
 
+	public func referenceProperty(identifier ident: String) -> CNValueReference? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toReference()
+		} else {
+			return nil
+		}
+	}
+
 	public func valueProperty(identifier ident: String) -> CNValue? {
 		let result: CNValue?
 		switch self {
@@ -412,7 +433,7 @@ public enum CNValue {
 			result = true
 		case .boolValue(_), .numberValue(_), .dateValue(_), .rangeValue(_), .pointValue(_),
 		     .sizeValue(_), .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_),
-		     .imageValue(_), .objectValue(_):
+		     .imageValue(_), .objectValue(_), .reference(_):
 			result = false
 		case .stringValue(let str):
 			result = str.isEmpty
@@ -472,6 +493,8 @@ public enum CNValue {
 		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
 			result = CNTextLine(string: "object(\(classname))")
+		case .reference(let val):
+			result = CNTextLine(string: "reference(\(val.relativePath))")
 		}
 		return result
 	}
@@ -556,6 +579,8 @@ public enum CNValue {
 			result = val
 		case .objectValue(let val):
 			result = val
+		case .reference(let val):
+			result = val
 		}
 		return result
 	}
@@ -602,6 +627,8 @@ public enum CNValue {
 			result = .imageValue(val)
 		} else if let val = obj as? NSObject {
 			result = .objectValue(val)
+		} else if let val = obj as? CNValueReference {
+			result = .reference(val)
 		} else {
 			result = nil
 		}
@@ -637,6 +664,8 @@ public enum CNValue {
 		case .URLType:
 			let url = URL(fileURLWithPath: src)
 			result = .URLValue(url)
+		case .referenceType:
+			result = .reference(CNValueReference(relativePath: src))
 		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType,
 		     .colorType, .imageType, .objectType:
 			CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
@@ -663,6 +692,8 @@ public enum CNValue {
 		case .colorValue(let src):
 			result = src.toValue()
 		case .enumValue(let src):
+			result = src.toValue()
+		case .reference(let src):
 			result = src.toValue()
 		}
 		return result

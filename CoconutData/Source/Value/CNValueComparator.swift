@@ -102,6 +102,10 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 			CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 			result = s0.description.compare(s1.description)
 		}
+	case .referenceType:
+		if let s0 = val0.toReference(), let s1 = val1.toReference() {
+			result = s0.compare(s1)
+		}
 	}
 
 	if let res = result {
