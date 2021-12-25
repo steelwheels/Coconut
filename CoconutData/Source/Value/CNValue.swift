@@ -728,6 +728,10 @@ public enum CNValue {
 					if let range = NSRange(value: dict) {
 						result = .rangeValue(range)
 					}
+				case CNValueReference.ClassName:
+					if let ref = CNValueReference(value: dict) {
+						result = .reference(ref)
+					}
 				default:
 					CNLog(logLevel: .error, message: "Unknown value class:\(clsname)", atFunction: #function, inFile: #file)
 				}

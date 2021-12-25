@@ -1,5 +1,13 @@
 {
 	a: true,
-	b: "Hello"
+	b: "Hello",
+	c: {
+		d: 12.34,
+		e: 34.56
+	}
+	f: {
+		class: 		"reference",
+		relativePath:	"sub.json"
+	}
 }
 

@@ -12,23 +12,19 @@ public class CNValueReference
 	static let ClassName	= "reference"
 
 	static let RelativePathItem	= "relativePath"
-	static let ContextItem		= "context"
 
 	public var relativePath	: String
-	public var context	: CNValue?
+	private var mContext	: CNValue?
 
 	public init(relativePath rpath: String){
 		relativePath	= rpath
-		context		= nil
+		mContext	= nil
 	}
 
 	public convenience init?(value val: Dictionary<String, CNValue>) {
 		if let rpathval = val[CNValueReference.RelativePathItem] {
 			if let rpath = rpathval.toString() {
 				self.init(relativePath: rpath)
-				if let ctxt = val[CNValueReference.ContextItem] {
-					self.context = ctxt
-				}
 				return
 			}
 		}
@@ -44,17 +40,30 @@ public class CNValueReference
 		}
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
-		let context: CNValue
-		if let ctxt = self.context {
-			context = ctxt
+	public func load(from base: URL) -> CNValue? {
+		if let ctxt = mContext {
+			return ctxt
 		} else {
-			context = .nullValue
+			let url    = base.appendingPathComponent(self.relativePath)
+			var result: CNValue? = nil
+			if let source = url.loadContents() {
+				let parser = CNValueParser()
+				switch parser.parse(source: source as String) {
+				case .ok(let val):
+					mContext = val
+					result   = val
+				case .error(let err):
+					CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
+				}
+			}
+			return result
 		}
+	}
+
+	func toValue() -> Dictionary<String, CNValue> {
 		let result: Dictionary<String, CNValue> = [
 			"class"					: .stringValue(CNValueReference.ClassName),
-			CNValueReference.RelativePathItem	: .stringValue(self.relativePath),
-			CNValueReference.ContextItem		: context
+			CNValueReference.RelativePathItem	: .stringValue(self.relativePath)
 		]
 		return result
 	}
@@ -64,20 +73,8 @@ public class CNValueReference
 			return .orderedAscending
 		} else if self.relativePath > val.relativePath {
 			return .orderedDescending
-		} else { // url0 == url1
-			let dat0 = self.context
-			let dat1 = val.context
-			if let v0 = dat0 {
-				if let v1 = dat1 {
-					return CNCompareValue(nativeValue0: v0, nativeValue1: v1)
-				} else { // v0 != nil && v1 == nil
-					return .orderedDescending
-				}
-			} else if let _ = dat1 { // v0 == nil && v1 != nil
-				return .orderedAscending
-			} else { // v0 == nil && v1 == nil
-				return .orderedSame
-			}
+		} else {
+			return .orderedSame
 		}
 	}
 }

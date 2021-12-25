@@ -47,30 +47,32 @@ public class CNValueCache
 	}
 
 	public func value(forPath path: Array<String>) -> CNValue? {
-		return value(forPath: path, in: &mRootValue, fullPath: path)
+		return value(forPath: path, in: mRootValue, fullPath: path)
 	}
 
-	private func value(forPath path: Array<String>, in source: inout CNValue, fullPath fpath: Array<String>) -> CNValue? {
+	private func value(forPath path: Array<String>, in source: CNValue, fullPath fpath: Array<String>) -> CNValue? {
+		guard path.count > 0 else {
+			return nil
+		}
 		if path.count > 1 {
-			if var nxtval = value(forProperty: path[0], in: &source, fullPath: fpath) {
+			if let nxtval = value(forProperty: path[0], in: source, fullPath: fpath) {
 				let nxtpath: Array<String> = Array(path.dropFirst())
-				return value(forPath: nxtpath, in: &nxtval, fullPath: fpath)
+				return value(forPath: nxtpath, in: nxtval, fullPath: fpath)
 			} else {
 				return nil
 			}
 		} else {
-			return value(forProperty: path[0], in: &source, fullPath: fpath)
+			return value(forProperty: path[0], in: source, fullPath: fpath)
 		}
 	}
 
-	private func value(forProperty property: String, in source: inout CNValue, fullPath fpath: Array<String>) -> CNValue? {
-		if var dict = source.toDictionary() {
+	private func value(forProperty property: String, in source: CNValue, fullPath fpath: Array<String>) -> CNValue? {
+		if let dict = source.toDictionary() {
 			if let prop = dict[property] {
 				switch prop {
 				case .reference(let refval):
-					if let ctxtval = load(reference: refval) {
-						dict[property] = ctxtval
-						return ctxtval
+					if let val = refval.load(from: mRootURL) {
+						return val
 					} else {
 						return nil
 					}
@@ -89,20 +91,6 @@ public class CNValueCache
 			}
 		} else {
 			return nil
-		}
-	}
-
-	private func load(reference refval: CNValueReference) -> CNValue? {
-		if let ctxt = refval.context {
-			return ctxt
-		} else {
-			switch load(relativePath: refval.relativePath) {
-			case .ok(let val):
-				return val
-			case .error(let err):
-				CNLog(logLevel: .error, message: err.description, atFunction: #function, inFile: #file)
-				return nil
-			}
 		}
 	}
 }

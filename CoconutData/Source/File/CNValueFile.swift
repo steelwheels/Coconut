@@ -1,6 +1,6 @@
 /**
- * @file	CNJSONFile.swift
- * @brief	Extend CNJSONFile class
+ * @file	CNValueFile.swift
+ * @brief	Extend CNValueFile class
  * @par Copyright
  *   Copyright (C) 2015 Steel Wheels Project
  */

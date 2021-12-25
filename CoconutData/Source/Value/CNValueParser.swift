@@ -30,7 +30,8 @@ public class CNValueParser
 				if tokens.count > 0 {
 					/* Parse object */
 					let obj = try parseObject(tokenStream: CNTokenStream(source: tokens))
-					result = .ok(obj)
+					let dec = decodeObject(value: obj)
+					result = .ok(dec)
 				} else {
 					result = .error(NSError.parseError(message: "Unexpected end of stream", location: #function))
 				}
@@ -214,6 +215,35 @@ public class CNValueParser
 		} else {
 			return 0
 		}
+	}
+
+	private func decodeObject(value src: CNValue) -> CNValue {
+		let dst: CNValue
+		switch src {
+		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_),
+		     .dateValue(_), .rangeValue(_), .pointValue(_), .sizeValue(_),
+		     .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_), .imageValue(_),
+		     .objectValue(_), .reference(_):
+			dst = src
+		case .dictionaryValue(let dict):
+			if let obj = CNValue.dictionaryToValue(dictionary: dict) {
+				dst = obj
+			} else {
+				var newdict: Dictionary<String, CNValue> = [:]
+				for (key, val) in dict {
+					newdict[key] = decodeObject(value: val)
+				}
+				dst = .dictionaryValue(newdict)
+			}
+		case .arrayValue(let arr):
+			var newarr: Array<CNValue> = []
+			for elm in arr {
+				let newelm = decodeObject(value: elm)
+				newarr.append(newelm)
+			}
+			dst = .arrayValue(newarr)
+		}
+		return dst
 	}
 }
 

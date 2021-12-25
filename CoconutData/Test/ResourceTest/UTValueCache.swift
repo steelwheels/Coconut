@@ -32,6 +32,34 @@ public func UTValueCache() -> Bool {
 				NSLog("Check property b ... fail")
 				result = false
 			}
+
+			if let vard = cache.value(forPath: ["c", "d"]) {
+				NSLog("Property c.d = \(vard.toText().toStrings().joined(separator: "\n"))")
+			} else {
+				NSLog("Check property c.d ... fail")
+				result = false
+			}
+
+			if let vare = cache.value(forPath: ["c", "e"]) {
+				NSLog("Property c.e = \(vare.toText().toStrings().joined(separator: "\n"))")
+			} else {
+				NSLog("Check property c.e ... fail")
+				result = false
+			}
+
+			if let varf = cache.value(forPath: ["f"]) {
+				NSLog("Property f = \(varf.toText().toStrings().joined(separator: "\n"))")
+			} else {
+				NSLog("Check property f ... fail")
+				result = false
+			}
+
+			if let varf = cache.value(forPath: ["f"]) {
+				NSLog("(2nd) Property f = \(varf.toText().toStrings().joined(separator: "\n"))")
+			} else {
+				NSLog("(2nd) Check property f ... fail")
+				result = false
+			}
 		case .error(let err):
 			NSLog("Load root ... fail: \(err.description)")
 		}
