@@ -37,7 +37,7 @@ public class CNValueRecord: CNRecord
 		return true
 	}
 
-	public func toNativeValue() -> CNValue {
+	public func toValue() -> CNValue {
 		return .dictionaryValue(mValues)
 	}
 

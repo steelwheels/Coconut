@@ -86,7 +86,6 @@
 		05A1AFE32776BF200091D527 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; };
 		05A1AFE42776BF200091D527 /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05A1AFF02776C0A50091D527 /* root.json in Resources */ = {isa = PBXBuildFile; fileRef = 05A1AFEF2776C0A50091D527 /* root.json */; };
-		05A1AFF52776C3F40091D527 /* UTValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFF42776C3F40091D527 /* UTValueCache.swift */; };
 		05A1AFF62776C3F40091D527 /* UTValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFF42776C3F40091D527 /* UTValueCache.swift */; };
 		05A1B0082776CA830091D527 /* root.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05A1AFEF2776C0A50091D527 /* root.json */; };
 		05A1B0142776E44B0091D527 /* sub.json in Resources */ = {isa = PBXBuildFile; fileRef = 05A1B0132776E44B0091D527 /* sub.json */; };
@@ -1249,7 +1248,6 @@
 				05FC387B255FEC1E004CA79E /* UTThread.swift in Sources */,
 				0507514326477A9F00848E00 /* UTNativeValueTable.swift in Sources */,
 				05FC3886255FEC1E004CA79E /* UTCharacter.swift in Sources */,
-				05A1AFF52776C3F40091D527 /* UTValueCache.swift in Sources */,
 				05FC3879255FEC1E004CA79E /* UTEscapeSequence.swift in Sources */,
 				05F3AC3E26571E1E0089C937 /* UTNativeValue.swift in Sources */,
 				05FC388C255FEC1E004CA79E /* UTStringStream.swift in Sources */,

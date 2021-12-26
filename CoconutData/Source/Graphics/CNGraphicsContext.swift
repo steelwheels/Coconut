@@ -120,7 +120,7 @@ public class CNGraphicsContext
 		}
 	}
 
-	private func logicalToPhysical(point pt: CGPoint) -> CGPoint {
+	public func logicalToPhysical(point pt: CGPoint) -> CGPoint {
 		let lvec = CNVector3D(scalars: [
 			pt.x - mLogicalFrame.origin.x,
 			pt.y - mLogicalFrame.origin.y,

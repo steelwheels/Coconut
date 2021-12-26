@@ -64,12 +64,12 @@ extension CNTable
 		return result
 	}}
 
-	public func toNativeValue() -> CNValue {
+	public func toValue() -> CNValue {
 		var result: Array<CNValue> = []
 		self.forEach(callback: {
 			(_ record: CNRecord) -> Void in
 			if let rec = record as? CNValueRecord {
-				result.append(rec.toNativeValue())
+				result.append(rec.toValue())
 			}
 		})
 		return .arrayValue(result)
