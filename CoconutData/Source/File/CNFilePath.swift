@@ -108,6 +108,10 @@ public class CNFilePath
 		return .error(NSError.fileError(message: "Failed to find bundle \(bname)"))
 	}
 
+	public class func URLforUserLibraryDirectory() -> URL {
+		return URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+	}
+
 	/* reference: https://qiita.com/masakihori/items/8d4af538b040c65a8871 */
 	public class func UTIForFile(URL url: URL) -> String? {
 		guard let r = try? url.resourceValues(forKeys: [.typeIdentifierKey]) else {

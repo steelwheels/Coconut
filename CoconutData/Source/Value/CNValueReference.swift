@@ -60,6 +60,16 @@ public class CNValueReference
 		}
 	}
 
+	public func store(to base: URL) -> Bool {
+		if let context = mContext {
+			let file = base.appendingPathComponent(self.relativePath)
+			let txt  = context.toText().toStrings().joined(separator: "\n")
+			return file.storeContents(contents: txt)
+		} else {
+			return false
+		}
+	}
+
 	func toValue() -> Dictionary<String, CNValue> {
 		let result: Dictionary<String, CNValue> = [
 			"class"					: .stringValue(CNValueReference.ClassName),
