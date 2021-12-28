@@ -9,9 +9,8 @@ import Foundation
 
 public class CNValueReference
 {
-	static let ClassName	= "reference"
-
-	static let RelativePathItem	= "relativePath"
+	public static let ClassName		= "reference"
+	public static let RelativePathItem	= "relativePath"
 
 	public var relativePath	: String
 	private var mContext	: CNValue?

@@ -113,7 +113,6 @@ public class CNValueCache
 		}
 	}
 
-
 	public func store(relativePath rpath: String) -> Bool {
 		/* Store child cache */
 		storeChildren(value: mRootValue)

@@ -118,7 +118,7 @@ public class CNContactDatabase: CNTable
 		}
 	}
 
-	public func store(URL url: URL?) -> CNTableLoadResult {
+	public func load(fromURL url: URL?) -> CNTableLoadResult {
 		switch mState {
 		case .undecided, .accessDenied, .loadFailed, .loaded:
 			break

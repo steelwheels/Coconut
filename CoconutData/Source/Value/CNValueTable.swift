@@ -121,10 +121,10 @@ public class CNValueTable: CNTable
 		})
 	}
 
-	public func store(URL urlp: URL?) -> CNTableLoadResult {
+	public func load(fromURL urlp: URL?) -> CNTableLoadResult {
 		if let url = urlp {
 			if let str = url.loadContents() {
-				return load(source: str as String)
+				return load(fromSource: str as String)
 			} else {
 				return .error(NSError.parseError(message: "Failed to load from \(url.path)"))
 			}
@@ -133,17 +133,17 @@ public class CNValueTable: CNTable
 		}
 	}
 
-	public func load(source src: String) -> CNTableLoadResult {
+	public func load(fromSource src: String) -> CNTableLoadResult {
 		let parser = CNValueParser()
 		switch parser.parse(source: src) {
 		case .ok(let val):
-			return load(nativeValue: val)
+			return load(fromValue: val)
 		case .error(let err):
 			return .error(err)
 		}
 	}
 
-	public func load(nativeValue nvalue: CNValue) -> CNTableLoadResult {
+	public func load(fromValue nvalue: CNValue) -> CNTableLoadResult {
 		switch nvalue {
 		case .arrayValue(let arr):
 			return load(arrayValue: arr)
@@ -152,10 +152,6 @@ public class CNValueTable: CNTable
 			return .error(err)
 		}
 	}
-
-	public static let HEADER_PROPERTY = "headers"
-	public static let DATA_PROPERTY   = "data"
-
 
 	private func load(arrayValue nvalue: Array<CNValue>) -> CNTableLoadResult {
 		/* Reset content */

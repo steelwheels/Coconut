@@ -29,7 +29,7 @@ public protocol CNTable
 	var recordCount: Int { get }
 	var fieldNames: Array<String> { get }
 
-	func store(URL url: URL?) -> CNTableLoadResult
+	func load(fromURL url: URL?) -> CNTableLoadResult
 
 	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
