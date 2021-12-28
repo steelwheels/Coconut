@@ -12,25 +12,15 @@ public extension CGSize
 {
 	static let ClassName = "size"
 
-	init?(value val: Dictionary<String, CNValue>) {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CGSize? {
 		if let wval = val["width"], let hval = val["height"] {
 			if let wnum = wval.toNumber(), let hnum = hval.toNumber() {
 				let width  : CGFloat = CGFloat(wnum.doubleValue)
 				let height : CGFloat = CGFloat(hnum.doubleValue)
-				self.init(width: width, height: height)
-				return
+				return CGSize(width: width, height: height)
 			}
 		}
 		return nil
-	}
-
-	init?(value val: CNValue) {
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	func toValue() -> Dictionary<String, CNValue> {

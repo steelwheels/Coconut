@@ -12,27 +12,17 @@ public extension CGRect
 {
 	static let ClassName = "rect"
 
-	init?(value val: Dictionary<String, CNValue>) {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CGRect? {
 		if let xval = val["x"], let yval = val["y"], let wval = val["width"], let hval = val["height"] {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber(), let wnum = wval.toNumber(), let hnum = hval.toNumber() {
 				let x      : CGFloat = CGFloat(xnum.floatValue)
 				let y      : CGFloat = CGFloat(ynum.floatValue)
 				let width  : CGFloat = CGFloat(wnum.floatValue)
 				let height : CGFloat = CGFloat(hnum.floatValue)
-				self.init(x: x, y: y, width: width, height: height)
-				return
+				return CGRect(x: x, y: y, width: width, height: height)
 			}
 		}
 		return nil
-	}
-
-	init?(value val: CNValue){
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	func toValue() -> Dictionary<String, CNValue> {

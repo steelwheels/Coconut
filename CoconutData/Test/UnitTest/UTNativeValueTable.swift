@@ -88,7 +88,7 @@ private func setTable(table tbl: CNValueTable, column cname: String, row ridx: I
 private func loadTest(source src: String, console cons: CNConsole) -> Bool {
 	let newtable = CNValueTable()
 	let result: Bool
-	switch newtable.load(source: src) {
+	switch newtable.load(fromSource: src) {
 	case .ok:
 		cons.print(string: "Source: \(src):\n")
 		printTable(table: newtable, console: cons)

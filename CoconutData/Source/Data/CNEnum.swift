@@ -18,11 +18,10 @@ public struct CNEnum {
 		value	= v
 	}
 
-	public init?(value val: Dictionary<String, CNValue>){
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNEnum? {
 		if let typeval = val["type"], let valval = val["value"] {
 			if let typestr = typeval.toString(), let valnum = valval.toNumber() {
-				self.init(type: typestr, value: valnum.intValue)
-				return
+				return CNEnum(type: typestr, value: valnum.intValue)
 			}
 		}
 		return nil

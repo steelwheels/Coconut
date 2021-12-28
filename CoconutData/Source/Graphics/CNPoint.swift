@@ -12,25 +12,15 @@ public extension CGPoint
 {
 	static let ClassName = "point"
 
-	init?(value val: Dictionary<String, CNValue>) {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CGPoint? {
 		if let xval = val["x"], let yval = val["y"] {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
 				let x:CGFloat = CGFloat(xnum.floatValue)
 				let y:CGFloat = CGFloat(ynum.floatValue)
-				self.init(x: x, y: y)
-				return
+				return CGPoint(x: x, y: y)
 			}
 		}
 		return nil
-	}
-
-	init?(value val: CNValue){
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	func toValue() -> Dictionary<String, CNValue> {

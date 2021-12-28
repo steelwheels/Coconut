@@ -20,25 +20,15 @@ public struct CNOval
 		mRadius		= rad
 	}
 
-	public init?(value val: Dictionary<String, CNValue>) {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNOval? {
 		if let centerval = val["center"], let radval = val["radius"] {
 			if let centerdict = centerval.toDictionary(), let radius = radval.toNumber() {
-				if let center = CGPoint(value: centerdict) {
-					self.init(center: center, radius: CGFloat(radius.floatValue))
-					return
+				if let center = CGPoint.fromValue(value: centerdict) {
+					return CNOval(center: center, radius: CGFloat(radius.floatValue))
 				}
 			}
 		}
 		return nil
-	}
-
-	public init?(value val: CNValue){
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	public func toValue() -> Dictionary<String, CNValue> {

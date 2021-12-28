@@ -38,7 +38,7 @@ public extension CNColor
 		return result
 	}
 
-	convenience init?(value val: Dictionary<String, CNValue>) {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CNColor? {
 		if let rval = val["r"], let gval = val["g"], let bval = val["b"], let aval = val["a"] {
 			if let rnum = rval.toNumber(), let gnum = gval.toNumber(), let bnum = bval.toNumber(), let anum = aval.toNumber() {
 				let r : CGFloat = CGFloat(rnum.floatValue)
@@ -46,11 +46,10 @@ public extension CNColor
 				let b : CGFloat = CGFloat(bnum.floatValue)
 				let a : CGFloat = CGFloat(anum.floatValue)
 				#if os(OSX)
-				self.init(calibratedRed: r, green: g, blue: b, alpha: a)
+				return CNColor(calibratedRed: r, green: g, blue: b, alpha: a)
 				#else
-				self.init(red: r, green: g, blue: b, alpha: a)
+				return CNColor(red: r, green: g, blue: b, alpha: a)
 				#endif
-				return
 			}
 		}
 		return nil

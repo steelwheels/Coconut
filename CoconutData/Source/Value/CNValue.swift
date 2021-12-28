@@ -165,55 +165,39 @@ public enum CNValue {
 	public func toRange() -> NSRange? {
 		let result: NSRange?
 		switch self {
-		case .rangeValue(let obj):	result = obj
-		default:			result = nil
+		case .rangeValue(let range):		result = range
+		case .dictionaryValue(let dict):	result = NSRange.fromValue(value: dict)
+		default:				result = nil
 		}
 		return result
 	}
 
 	public func toPoint() -> CGPoint? {
-		var result: CGPoint? = nil
+		let result: CGPoint?
 		switch self {
-		case .pointValue(let obj):	result = obj
-		case .dictionaryValue(let obj):
-			if let xval = obj["x"], let yval = obj["y"] {
-				if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
-					let xval = CGFloat(xnum.doubleValue)
-					let yval = CGFloat(ynum.doubleValue)
-					result = CGPoint(x: xval, y:yval)
-				}
-			}
-		default:			result = nil
+		case .pointValue(let pt):		result = pt
+		case .dictionaryValue(let dict):	result = CGPoint.fromValue(value: dict)
+		default:				result = nil
 		}
 		return result
 	}
 
 	public func toSize() -> CGSize? {
-		var result: CGSize? = nil
+		let result: CGSize?
 		switch self {
-		case .sizeValue(let obj):	result = obj
-		case .dictionaryValue(let obj):
-			if let wval = obj["width"], let hval = obj["height"] {
-				if let wnum = wval.toNumber(), let hnum = hval.toNumber() {
-					let wval = CGFloat(wnum.doubleValue)
-					let hval = CGFloat(hnum.doubleValue)
-					result = CGSize(width: wval, height: hval)
-				}
-			}
-		default:			result = nil
+		case .sizeValue(let size):		result = size
+		case .dictionaryValue(let dict):	result = CGSize.fromValue(value: dict)
+		default:				result = nil
 		}
 		return result
 	}
 
 	public func toRect() -> CGRect? {
-		var result: CGRect? = nil
+		let result: CGRect?
 		switch self {
-		case .rectValue(let obj):	result = obj
-		case .dictionaryValue:
-			if let oval = self.toPoint(), let sval = self.toSize() {
-				result = CGRect(origin: oval, size: sval)
-			}
-		default:			result = nil
+		case .rectValue(let rect):		result = rect
+		case .dictionaryValue(let dict):	result = CGRect.fromValue(value: dict)
+		default:				result = nil
 		}
 		return result
 	}
@@ -221,10 +205,9 @@ public enum CNValue {
 	public func toEnum() -> CNEnum? {
 		let result: CNEnum?
 		switch self {
-		case .enumValue(let eval):
-			result = eval
-		default:
-			result = nil
+		case .enumValue(let eval):		result = eval
+		case .dictionaryValue(let dict):	result = CNEnum.fromValue(value: dict)
+		default:				result = nil
 		}
 		return result
 	}
@@ -259,8 +242,9 @@ public enum CNValue {
 	public func toColor() -> CNColor? {
 		let result: CNColor?
 		switch self {
-		case .colorValue(let col):	result = col
-		default:			result = nil
+		case .colorValue(let col):		result = col
+		case .dictionaryValue(let dict):	result = CNColor.fromValue(value: dict)
+		default:				result = nil
 		}
 		return result
 	}
@@ -559,6 +543,16 @@ public enum CNValue {
 			result = val.toValue()
 		case .rectValue(let val):
 			result = val.toValue()
+		case .URLValue(let val):
+			result = val
+		case .colorValue(let val):
+			result = val.toValue()
+		case .imageValue(let val):
+			result = val
+		case .objectValue(let val):
+			result = val
+		case .reference(let val):
+			result = val
 		case .dictionaryValue(let dict):
 			var newdict: Dictionary<String, Any> = [:]
 			for (key, elm) in dict {
@@ -571,16 +565,6 @@ public enum CNValue {
 				newarr.append(elm.toAny())
 			}
 			result = newarr
-		case .URLValue(let val):
-			result = val
-		case .colorValue(let val):
-			result = val.toValue()
-		case .imageValue(let val):
-			result = val
-		case .objectValue(let val):
-			result = val
-		case .reference(let val):
-			result = val
 		}
 		return result
 	}
@@ -603,22 +587,6 @@ public enum CNValue {
 			result = .sizeValue(val)
 		} else if let val = obj as? CGRect {
 			result = .rectValue(val)
-		} else if let val = obj as? Dictionary<String, Any> {
-			var newdict: Dictionary<String, CNValue> = [:]
-			for (key, elm) in val {
-				if let child = anyToValue(object: elm) {
-					newdict[key] = child
-				}
-			}
-			result = dictionaryToValue(dictionary: newdict)
-		} else if let val = obj as? Array<Any> {
-			var newarr: Array<CNValue> = []
-			for elm in val {
-				if let child = anyToValue(object: elm) {
-					newarr.append(child)
-				}
-			}
-			result = .arrayValue(newarr)
 		} else if let val = obj as? URL {
 			result = .URLValue(val)
 		} else if let val = obj as? CNColor {
@@ -629,6 +597,26 @@ public enum CNValue {
 			result = .objectValue(val)
 		} else if let val = obj as? CNValueReference {
 			result = .reference(val)
+		} else if let val = obj as? Dictionary<String, Any> {
+			var newdict: Dictionary<String, CNValue> = [:]
+			for (key, elm) in val {
+				if let child = anyToValue(object: elm) {
+					newdict[key] = child
+				}
+			}
+			if let val = dictionaryToValue(dictionary: newdict){
+				result = val
+			} else {
+				result = .dictionaryValue(newdict)
+			}
+		} else if let val = obj as? Array<Any> {
+			var newarr: Array<CNValue> = []
+			for elm in val {
+				if let child = anyToValue(object: elm) {
+					newarr.append(child)
+				}
+			}
+			result = .arrayValue(newarr)
 		} else {
 			result = nil
 		}
@@ -705,35 +693,35 @@ public enum CNValue {
 			if let clsname = clsval.toString() {
 				switch clsname {
 				case CGPoint.ClassName:
-					if let point = CGPoint(value: dict) {
+					if let point = CGPoint.fromValue(value: dict) {
 						result = .pointValue(point)
 					}
 				case CGRect.ClassName:
-					if let rect = CGRect(value: dict) {
+					if let rect = CGRect.fromValue(value: dict) {
 						result = .rectValue(rect)
 					}
 				case CGSize.ClassName:
-					if let size = CGSize(value: dict) {
+					if let size = CGSize.fromValue(value: dict) {
 						result = .sizeValue(size)
 					}
 				case CNColor.ClassName:
-					if let color = CNColor(value: dict) {
+					if let color = CNColor.fromValue(value: dict) {
 						result = .colorValue(color)
 					}
 				case CNEnum.ClassName:
-					if let eval = CNEnum(value: dict) {
+					if let eval = CNEnum.fromValue(value: dict) {
 						result = .enumValue(eval)
 					}
 				case NSRange.ClassName:
-					if let range = NSRange(value: dict) {
+					if let range = NSRange.fromValue(value: dict) {
 						result = .rangeValue(range)
 					}
 				case CNValueReference.ClassName:
-					if let ref = CNValueReference(value: dict) {
+					if let ref = CNValueReference.fromValue(value: dict) {
 						result = .reference(ref)
 					}
 				default:
-					CNLog(logLevel: .error, message: "Unknown value class:\(clsname)", atFunction: #function, inFile: #file)
+					break
 				}
 			}
 		}

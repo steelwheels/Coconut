@@ -43,42 +43,45 @@ private func boolInDictionary(dictionary dict: Dictionary<String, CNValue>, forK
 }
 
 private func colorInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CNColor? {
-	var result: CNColor? = nil
 	if let val = dict[key] {
 		switch val {
+		case .colorValue(let col):
+			return col
 		case .dictionaryValue(let dict):
-			result = CNColor(value: dict)
+			return CNColor.fromValue(value: dict)
 		default:
 			break
 		}
 	}
-	return result
+	return nil
 }
 
 private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGPoint? {
-	var result: CGPoint? = nil
 	if let val = dict[key] {
 		switch val {
+		case .pointValue(let pt):
+			return pt
 		case .dictionaryValue(let dict):
-			result = CGPoint(value: dict)
+			return CGPoint.fromValue(value: dict)
 		default:
 			break
 		}
 	}
-	return result
+	return nil
 }
 
 private func sizeInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGSize? {
-	var result: CGSize? = nil
 	if let val = dict[key] {
 		switch val {
+		case .sizeValue(let size):
+			return size
 		case .dictionaryValue(let dict):
-			result = CGSize(value: dict)
+			return CGSize.fromValue(value: dict)
 		default:
 			break
 		}
 	}
-	return result
+	return nil
 }
 
 public class CNGripPoint
@@ -243,26 +246,17 @@ public class CNVectorPath: CNPathObject
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
-	public convenience init?(value val: Dictionary<String, CNValue>) {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorPath? {
 		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
 			if let pointsval = val["points"] {
 				if let points = CNVectorPath.loadPoints(value: pointsval) {
-					self.init(lineWidth: lwidth, doFill: dofill, strokeColor: scolor, fillColor: fcolor)
-					self.mPoints = points
-					return
+					let path = CNVectorPath(lineWidth: lwidth, doFill: dofill, strokeColor: scolor, fillColor: fcolor)
+					path.mPoints = points
+					return path
 				}
 			}
 		}
 		return nil
-	}
-
-	public convenience init?(value val: CNValue) {
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	private static func loadPoints(value val: CNValue) -> Array<CGPoint>? {
@@ -270,8 +264,10 @@ public class CNVectorPath: CNPathObject
 			var result: Array<CGPoint> = []
 			for elm in elms {
 				switch elm {
+				case .pointValue(let pt):
+					result.append(pt)
 				case .dictionaryValue(let dict):
-					if let pt = CGPoint(value: dict) {
+					if let pt = CGPoint.fromValue(value: dict) {
 						result.append(pt)
 					} else {
 						CNLog(logLevel: .error, message: "Failed to load point", atFunction: #function, inFile: #file)
@@ -342,29 +338,20 @@ public class CNVectorRect: CNPathObject
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
-	public convenience init?(value val: Dictionary<String, CNValue>) {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorRect? {
 		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
 			if let origin = pointInDictionary(dictionary: val, forKey: "origin"),
 			   let size   = sizeInDictionary(dictionary:  val, forKey: "size"),
 			   let rnd    = boolInDictionary(dictionary: val, forKey: "isRounded"),
 			   let rx     = floatInDictionary(dictionary: val, forKey: "rx") {
-				self.init(lineWidth: lwidth, doFill: dofill, isRounded: rx > 0.0, strokeColor: scolor, fillColor: fcolor)
-				self.originPoint = CGPoint(x: origin.x, y: origin.y)
-				self.endPoint    = CGPoint(x: origin.x + size.width, y: origin.y + size.height)
-				self.isRounded   = rnd
-				return
+				let rect = CNVectorRect(lineWidth: lwidth, doFill: dofill, isRounded: rx > 0.0, strokeColor: scolor, fillColor: fcolor)
+				rect.originPoint = CGPoint(x: origin.x, y: origin.y)
+				rect.endPoint    = CGPoint(x: origin.x + size.width, y: origin.y + size.height)
+				rect.isRounded   = rnd
+				return rect
 			}
 		}
 		return nil
-	}
-
-	public convenience init?(value val: CNValue) {
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	public override func toValue() -> Dictionary<String, CNValue> {
@@ -468,26 +455,17 @@ public class CNVectorOval: CNPathObject
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
-	public convenience init?(value val: Dictionary<String, CNValue>) {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorOval? {
 		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
 			if let center = pointInDictionary(dictionary: val, forKey: "center"),
 			   let radius = floatInDictionary(dictionary: val, forKey: "radius") {
-				self.init(lineWidth: lwidth, doFill: dofill, strokeColor: scolor, fillColor: fcolor)
-				self.centerPoint = center
-				self.endPoint    = CGPoint(x: center.x + radius, y: center.y)
-				return
+				let oval = CNVectorOval(lineWidth: lwidth, doFill: dofill, strokeColor: scolor, fillColor: fcolor)
+				oval.centerPoint = center
+				oval.endPoint    = CGPoint(x: center.x + radius, y: center.y)
+				return oval
 			}
 		}
 		return nil
-	}
-
-	public convenience init?(value val: CNValue) {
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	public override func toValue() -> Dictionary<String, CNValue> {
@@ -552,27 +530,20 @@ public class CNVectorString: CNVectorObject
 		super.init(lineWidth: 1.0, doFill: false, strokeColor: col, fillColor: CNColor.clear)
 	}
 
-	public convenience init?(value val: Dictionary<String, CNValue>) {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorString? {
 		if let orgval = val["origin"], let txtval = val["text"], let fontval = val["font"], let colval = val["color"] {
 			if let orgdict = orgval.toDictionary(), let txtstr = txtval.toString(), let fontdict = fontval.toDictionary(), let coldict = colval.toDictionary() {
-				if let orgpt = CGPoint(value: orgdict), let font = CNFont(value: fontdict), let color = CNColor(value: coldict) {
-					self.init(font: font, color: color)
-					self.originPoint = orgpt
-					self.string      = txtstr
-					return
+				if let orgpt = CGPoint.fromValue(value: orgdict),
+				   let font  = CNFont.fromValue(value: fontdict),
+				   let color = CNColor.fromValue(value: coldict) {
+					let vstr = CNVectorString(font: font, color: color)
+					vstr.originPoint = orgpt
+					vstr.string      = txtstr
+					return vstr
 				}
 			}
 		}
 		return nil
-	}
-
-	public convenience init?(value val: CNValue) {
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	public override func toValue() -> Dictionary<String, CNValue> {

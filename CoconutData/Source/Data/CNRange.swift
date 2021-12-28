@@ -11,13 +11,12 @@ public extension NSRange
 {
 	static let ClassName = "range"
 
-	init?(value val: Dictionary<String, CNValue>) {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> NSRange? {
 		if let locval = val["location"], let lenval = val["length"] {
 			if let locnum = locval.toNumber(), let lennum = lenval.toNumber() {
 				let loc = locnum.intValue
 				let len = lennum.intValue
-				self.init(location: loc, length: len)
-				return
+				return NSRange(location: loc, length: len)
 			}
 		}
 		return nil

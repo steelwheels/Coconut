@@ -20,23 +20,13 @@ public class CNValueReference
 		mContext	= nil
 	}
 
-	public convenience init?(value val: Dictionary<String, CNValue>) {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueReference? {
 		if let rpathval = val[CNValueReference.RelativePathItem] {
 			if let rpath = rpathval.toString() {
-				self.init(relativePath: rpath)
-				return
+				return CNValueReference(relativePath: rpath)
 			}
 		}
 		return nil
-	}
-
-	public convenience init?(value val: CNValue){
-		if let dict = val.toDictionary() {
-			self.init(value: dict)
-			return
-		} else {
-			return nil
-		}
 	}
 
 	public func load(from base: URL) -> CNValue? {

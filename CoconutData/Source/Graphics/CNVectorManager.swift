@@ -289,33 +289,37 @@ public class CNVectorManager
 	public func load(objects objs: Array<CNValue>) -> Bool {
 		var result = true
 		mGraphics  = []
+		NSLog("l0")
 		for obj in objs {
+			NSLog("l1")
 			if let dict = obj.toDictionary() {
+				NSLog("l1.1")
 				if let clsname = className(value: dict) {
+					NSLog("l1.1.1")
 					switch clsname {
 					case CNVectorPath.ClassName:
-						if let obj = CNVectorPath(value: dict) {
+						if let obj = CNVectorPath.fromValue(value: dict) {
 							mGraphics.append(.path(obj))
 						} else {
 							CNLog(logLevel: .error, message: "Failed to decode vector path", atFunction: #function, inFile: #file)
 							result = false
 						}
 					case CNVectorRect.ClassName:
-						if let obj = CNVectorRect(value: dict) {
+						if let obj = CNVectorRect.fromValue(value: dict) {
 							mGraphics.append(.rect(obj))
 						} else {
 							CNLog(logLevel: .error, message: "Failed to decode vector rect", atFunction: #function, inFile: #file)
 							result = false
 						}
 					case CNVectorOval.ClassName:
-						if let obj = CNVectorOval(value: dict) {
+						if let obj = CNVectorOval.fromValue(value: dict) {
 							mGraphics.append(.oval(obj))
 						} else {
 							CNLog(logLevel: .error, message: "Failed to decode vector oval", atFunction: #function, inFile: #file)
 							result = false
 						}
 					case CNVectorString.ClassName:
-						if let obj = CNVectorString(value: dict) {
+						if let obj = CNVectorString.fromValue(value: dict) {
 							mGraphics.append(.string(obj))
 						} else {
 							CNLog(logLevel: .error, message: "Failed to decode vector string", atFunction: #function, inFile: #file)
@@ -326,14 +330,17 @@ public class CNVectorManager
 						result = false
 					}
 				} else {
+					NSLog("l1.1.2")
 					CNLog(logLevel: .error, message: "No class name", atFunction: #function, inFile: #file)
 					result = false
 				}
 			} else {
+				NSLog("l1.2")
 				CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
 				result = false
 			}
 		}
+		NSLog("l2")
 		return result
 	}
 

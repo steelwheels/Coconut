@@ -15,11 +15,10 @@
 
 public extension CNFont
 {
-	convenience init?(value val: Dictionary<String, CNValue>) {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CNFont? {
 		if let nameval = val["name"], let sizeval = val["size"] {
 			if let namestr = nameval.toString(), let sizenum = sizeval.toNumber() {
-				self.init(name: namestr, size: CGFloat(sizenum.doubleValue))
-				return
+				return CNFont(name: namestr, size: CGFloat(sizenum.doubleValue))
 			}
 		}
 		return nil
