@@ -14,9 +14,6 @@ public protocol CNRecord
 
 	func value(ofField name: String) -> CNValue?
 	func setValue(value val: CNValue, forField name: String) -> Bool
-
-	var isDirty: Bool { get }
-	func save()
 }
 
 public enum CNTableLoadResult {
@@ -37,7 +34,6 @@ public protocol CNTable
 	func forEach(callback cbfunc: (_ record: CNRecord) -> Void)
 
 	func sort(byDescriptors descs: CNSortDescriptors)
-	func save()
 }
 
 extension CNRecord
@@ -49,30 +45,4 @@ extension CNRecord
 	}
 }
 
-extension CNTable
-{
-	public var isDirty: Bool { get {
-		var result = false
-		for i in 0..<self.recordCount {
-			if let rec = self.record(at: i) {
-				if rec.isDirty {
-					result = true
-					break
-				}
-			}
-		}
-		return result
-	}}
-
-	public func toValue() -> CNValue {
-		var result: Array<CNValue> = []
-		self.forEach(callback: {
-			(_ record: CNRecord) -> Void in
-			if let rec = record as? CNValueRecord {
-				result.append(rec.toValue())
-			}
-		})
-		return .arrayValue(result)
-	}
-}
 

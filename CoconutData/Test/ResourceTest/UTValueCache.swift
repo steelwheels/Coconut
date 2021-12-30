@@ -112,6 +112,7 @@ private func testCacheWrite(target cache: CNValueCache) -> Bool
 
 	NSLog("***** Cache write test")
 
+	// set "str0" for "A"
 	let val0: CNValue = .stringValue("str0")
 	if cache.set(value: val0, forPath: ["A"]) {
 		if let ret0 = cache.value(forPath: ["A"]) {
@@ -123,6 +124,36 @@ private func testCacheWrite(target cache: CNValueCache) -> Bool
 		}
 	} else {
 		NSLog("Failed tp store val0")
+		result = false
+	}
+
+	// set "str1" for "B"
+	let val1: CNValue = .stringValue("str1")
+	if cache.set(value: val1, forPath: ["B"]) {
+		if let ret1 = cache.value(forPath: ["B"]) {
+			let txt1 = ret1.toText().toStrings().joined(separator: "\n")
+			NSLog("write->read: \(txt1)")
+		} else {
+			NSLog("Failed to check val1")
+			result = false
+		}
+	} else {
+		NSLog("Failed tp store val1")
+		result = false
+	}
+
+	// set "str2" for "A"
+	let val2: CNValue = .stringValue("str2")
+	if cache.set(value: val2, forPath: ["A"]) {
+		if let ret2 = cache.value(forPath: ["A"]) {
+			let txt2 = ret2.toText().toStrings().joined(separator: "\n")
+			NSLog("write->read: \(txt2)")
+		} else {
+			NSLog("Failed to check val2")
+			result = false
+		}
+	} else {
+		NSLog("Failed tp store val2")
 		result = false
 	}
 

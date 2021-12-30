@@ -137,10 +137,6 @@ public class CNValueTable: CNTable
 		return .ok
 	}
 
-	public func save() {
-
-	}
-
 	private func reset() {
 		mRecords 	= []
 	}

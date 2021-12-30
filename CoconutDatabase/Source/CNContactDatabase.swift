@@ -155,11 +155,4 @@ public class CNContactDatabase: CNTable
 		/* Update array */
 		mContacts = records
 	}
-
-	public func save() {
-		forEach(callback: {
-			(_ rec: CNRecord) -> Void in
-			rec.save()
-		})
-	}
 }
