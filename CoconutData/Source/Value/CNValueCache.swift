@@ -65,17 +65,33 @@ public class CNValueCache
 		let midpath = path.dropLast()
 		var owner: Dictionary<String, CNValue> = mRootValue
 		for mid in midpath {
+			var hasnext = false
 			if let child = owner[mid] {
-				if let childdir = child.toDictionary() {
-					owner = childdir
-				} else {
-					return nil
+				switch child {
+				case .dictionaryValue(let childdic):
+					owner   = childdic
+					hasnext = true
+				case .reference(let childref):
+					if let childval = childref.load(from: mRootURL) {
+						if let childdic = childval.toDictionary() {
+							owner   = childdic
+							hasnext = true
+						}
+					}
+				default:
+					break
 				}
-			} else {
+			}
+			if !hasnext {
 				return nil
 			}
 		}
-		return owner[prop]
+		switch owner[prop] {
+		case .reference(let refval):
+			return refval.load(from: mRootURL)
+		default:
+			return owner[prop]
+		}
 	}
 
 	public func set(value val: CNValue, forPath path: Array<String>) -> Bool {
@@ -98,17 +114,27 @@ public class CNValueCache
 			return newdst
 		} else {
 			if let dstelm = dst[first] {
-				if let dstdic = dstelm.toDictionary() {
+				switch dstelm {
+				case .dictionaryValue(let dstdic):
 					let newdic = localSet(destination: dstdic, source: src, forPath: rest)
 					newdst[first] = .dictionaryValue(newdic)
 					return newdst
-				} else {
+				case .reference(let dstref):
+					if let refval = dstref.load(from: mRootURL) {
+						if let dstdic = refval.toDictionary() {
+							let newdic = localSet(destination: dstdic, source: src, forPath: rest)
+							newdst[first] = .dictionaryValue(newdic)
+							return newdst
+						}
+					}
+				default:
 					let pathstr = path.joined(separator: ".")
-					CNLog(logLevel: .error, message: "Overwrite non dictionary member: \(pathstr)", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "No such member: \(pathstr)", atFunction: #function, inFile: #file)
 				}
 			}
-			let newelm = localSet(destination: [:], source: src, forPath: rest)
-			newdst[first] = .dictionaryValue(newelm)
+			/* Not found */
+			let pathstr = path.joined(separator: ".")
+			CNLog(logLevel: .error, message: "No such member: \(pathstr)", atFunction: #function, inFile: #file)
 			return newdst
 		}
 	}

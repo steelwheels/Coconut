@@ -96,6 +96,13 @@ private func testCacheRead(target cache: CNValueCache) -> Bool
 		result = false
 	}
 
+	if let vars1 = cache.value(forPath: ["f", "s1"]) {
+		NSLog("Property f.s1 = \(vars1.toText().toStrings().joined(separator: "\n"))")
+	} else {
+		NSLog("Check property f.s1 ... fail")
+		result = false
+	}
+
 	if let varf = cache.value(forPath: ["f"]) {
 		NSLog("(2nd) Property f = \(varf.toText().toStrings().joined(separator: "\n"))")
 	} else {
