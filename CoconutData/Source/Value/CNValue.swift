@@ -2,7 +2,7 @@
  * @file	CNValue.swift
  * @brief	Define CNValue class
  * @par Copyright
- *   Copyright (C) 2017 Steel Wheels Project
+ *   Copyright (C) 2017-2021 Steel Wheels Project
  */
 
 #if os(iOS)
@@ -593,8 +593,6 @@ public enum CNValue {
 			result = .colorValue(val)
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
-		} else if let val = obj as? NSObject {
-			result = .objectValue(val)
 		} else if let val = obj as? CNValueReference {
 			result = .reference(val)
 		} else if let val = obj as? Dictionary<String, Any> {
@@ -617,6 +615,9 @@ public enum CNValue {
 				}
 			}
 			result = .arrayValue(newarr)
+		} else if let val = obj as? NSObject {
+			// this must be put at the last
+			result = .objectValue(val)
 		} else {
 			result = nil
 		}
