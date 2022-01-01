@@ -18,6 +18,9 @@
 		051ED8E525C99269003AD1F6 /* CNBitmapContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */; };
 		051EE76625E24C3A006FED4D /* UTBitmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051EE76525E24C3A006FED4D /* UTBitmap.swift */; };
 		05252C5B26E782A50026230C /* UTText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05252C5A26E782A50026230C /* UTText.swift */; };
+		052D71F6277EEE6F00B4C7EB /* UTValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052D71F5277EEE6F00B4C7EB /* UTValueTable.swift */; };
+		052D71FB277EF20100B4C7EB /* adbook.json in Resources */ = {isa = PBXBuildFile; fileRef = 052D71FA277EF20100B4C7EB /* adbook.json */; };
+		052D71FF277EF21600B4C7EB /* adbook.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052D71FA277EF20100B4C7EB /* adbook.json */; };
 		052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
 		052E27D52625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
 		052E27E02625E5EF00414C26 /* UTCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27DF2625E5EF00414C26 /* UTCommandTable.swift */; };
@@ -399,6 +402,7 @@
 			dstPath = Data;
 			dstSubfolderSpec = 7;
 			files = (
+				052D71FF277EF21600B4C7EB /* adbook.json in CopyFiles */,
 				05A1B01B2776E4650091D527 /* sub.json in CopyFiles */,
 				05A1B0082776CA830091D527 /* root.json in CopyFiles */,
 			);
@@ -424,6 +428,8 @@
 		051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapContext.swift; sourceTree = "<group>"; };
 		051EE76525E24C3A006FED4D /* UTBitmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTBitmap.swift; sourceTree = "<group>"; };
 		05252C5A26E782A50026230C /* UTText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTText.swift; sourceTree = "<group>"; };
+		052D71F5277EEE6F00B4C7EB /* UTValueTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValueTable.swift; sourceTree = "<group>"; };
+		052D71FA277EF20100B4C7EB /* adbook.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = adbook.json; sourceTree = "<group>"; };
 		052E27D32625DCA100414C26 /* CNCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandTable.swift; sourceTree = "<group>"; };
 		052E27DF2625E5EF00414C26 /* UTCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCommandTable.swift; sourceTree = "<group>"; };
 		0537C0A6273CC320003B742E /* rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectangle.png; sourceTree = "<group>"; };
@@ -711,6 +717,7 @@
 				05A1AFD02776BBE80091D527 /* Info.plist */,
 				05A1B00F2776CB040091D527 /* ResourceTest.entitlements */,
 				05A1AFF42776C3F40091D527 /* UTValueCache.swift */,
+				052D71F5277EEE6F00B4C7EB /* UTValueTable.swift */,
 			);
 			path = ResourceTest;
 			sourceTree = "<group>";
@@ -726,6 +733,7 @@
 		05A1AFEE2776C08D0091D527 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				052D71FA277EF20100B4C7EB /* adbook.json */,
 				05A1AFEF2776C0A50091D527 /* root.json */,
 				05A1B0132776E44B0091D527 /* sub.json */,
 			);
@@ -1206,6 +1214,7 @@
 			files = (
 				05A1AFF02776C0A50091D527 /* root.json in Resources */,
 				05A1AFCC2776BBE80091D527 /* Assets.xcassets in Resources */,
+				052D71FB277EF20100B4C7EB /* adbook.json in Resources */,
 				05A1B0142776E44B0091D527 /* sub.json in Resources */,
 				05A1AFCF2776BBE80091D527 /* Main.storyboard in Resources */,
 			);
@@ -1285,6 +1294,7 @@
 				05A1AFF62776C3F40091D527 /* UTValueCache.swift in Sources */,
 				05A1AFCA2776BBDF0091D527 /* ViewController.swift in Sources */,
 				05A1AFC82776BBDF0091D527 /* AppDelegate.swift in Sources */,
+				052D71F6277EEE6F00B4C7EB /* UTValueTable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

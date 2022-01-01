@@ -112,6 +112,10 @@ public class CNFilePath
 		return URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
 	}
 
+	public class func URLforTempDirectory() -> URL {
+		return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+	}
+
 	/* reference: https://qiita.com/masakihori/items/8d4af538b040c65a8871 */
 	public class func UTIForFile(URL url: URL) -> String? {
 		guard let r = try? url.resourceValues(forKeys: [.typeIdentifierKey]) else {

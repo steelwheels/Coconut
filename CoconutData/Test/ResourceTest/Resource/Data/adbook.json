@@ -1,0 +1,13 @@
+{
+	persons: [
+		{
+			name: "Nobita",
+			age:  10
+		},
+		{
+			name: "Gian",
+			age:  10
+		}
+	]
+}
+

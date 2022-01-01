@@ -24,6 +24,11 @@ public class CNValueCache
 		mParentCache	= pc
 	}
 
+	/* The cache which has no file to load/save contents */
+	public static func allocateVolatileValueCache() -> CNValueCache {
+		return CNValueCache(root: URL.null(), parentCache: nil)
+	}
+
 	public func load(relativePath rpath: String) -> Result {
 		let url = mRootURL.appendingPathComponent(rpath, isDirectory: false)
 		guard let ctxt = url.loadContents() else {

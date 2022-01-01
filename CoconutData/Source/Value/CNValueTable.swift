@@ -9,6 +9,141 @@ import Foundation
 
 public class CNValueTable: CNTable
 {
+	private var mPath:		Array<String>
+	private var mValueCache:	CNValueCache
+
+	public init(path pth: Array<String>, valueCache cache: CNValueCache) {
+		mPath		= pth
+		mValueCache	= cache
+	}
+
+	/* The cache which has no file to load/save contents */
+	public static func allocateVolatileValueTable() -> CNValueTable {
+		let cache = CNValueCache.allocateVolatileValueCache()
+		if !cache.set(value: .arrayValue([]), forPath: ["root"]){
+			CNLog(logLevel: .error, message: "Failed to set root data", atFunction: #function, inFile: #file)
+		}
+		return CNValueTable(path: ["root"], valueCache: cache)
+	}
+
+	public var recordCount: Int { get {
+		if let recs = self.recordValues() {
+			return recs.count
+		} else {
+			return 0
+		}
+	}}
+
+	public var fieldNames: Array<String> { get {
+		if let recs = self.recordValues() {
+			var result: Array<String> = []
+			for rec in recs {
+				if let dict = rec.toDictionary() {
+					for (key, _) in dict {
+						if !result.contains(key) {
+							result.append(key)
+						}
+					}
+				} else {
+					CNLog(logLevel: .error, message: "Invalid data structure for record", atFunction: #function, inFile: #file)
+				}
+			}
+			return result
+		} else {
+			return []
+		}
+	}}
+
+	public func newRecord() -> CNRecord {
+		if self.addRecord() {
+			if let rec = record(at: self.recordCount - 1) {
+				return rec
+			}
+		}
+		/* Failed to allocate */
+		CNLog(logLevel: .error, message: "Failed to allocate new record", atFunction: #function, inFile: #file)
+		return CNValueRecord(table: self, index: 0)
+	}
+
+	public func record(at row: Int) -> CNRecord? {
+		if let recs = self.recordValues() {
+			if 0<=row && row<recs.count {
+				return CNValueRecord(table: self, index: row)
+			}
+		}
+		return nil
+	}
+
+	public func append(record rcd: CNRecord) {
+		// Nothing have to do (Already added at newRecord())
+	}
+
+	public func forEach(callback cbfunc: (CNRecord) -> Void) {
+		if let recs = self.recordValues() {
+			for i in 0..<recs.count {
+				let newrec = CNValueRecord(table: self, index: i)
+				cbfunc(newrec)
+			}
+		} else {
+			/* Failed to execute */
+			CNLog(logLevel: .error, message: "Failed to execute forEach", atFunction: #function, inFile: #file)
+		}
+	}
+
+	public func sort(byDescriptors descs: CNSortDescriptors) {
+		CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
+	}
+
+	private func recordValues() -> Array<CNValue>? {
+		if let val = mValueCache.value(forPath: mPath) {
+			if let arr = val.toArray() {
+				return arr
+			}
+		}
+		CNLog(logLevel: .error, message: "Invalid data structure for table", atFunction: #function, inFile: #file)
+		return nil
+	}
+
+	public func recordValue(at idx: Int) -> Dictionary<String, CNValue>? {
+		if let vals = recordValues() {
+			if 0<=idx && idx<vals.count {
+				return vals[idx].toDictionary()
+			} else {
+				CNLog(logLevel: .error, message: "Invalid index: \(idx)", atFunction: #function, inFile: #file)
+			}
+		}
+		return nil
+	}
+
+	public func setRecordValue(value val: Dictionary<String, CNValue>, at idx: Int) -> Bool {
+		if let orgval = mValueCache.value(forPath: mPath) {
+			if var arr = orgval.toArray() {
+				if 0<=idx && idx<arr.count {
+					arr[idx] = .dictionaryValue(val)
+					return mValueCache.set(value: .arrayValue(arr), forPath: mPath)
+				}
+			}
+		}
+		return false
+	}
+
+	private func addRecord() -> Bool {
+		if let val = mValueCache.value(forPath: mPath) {
+			if var newarr = val.toArray() {
+				newarr.append(.dictionaryValue([:]))
+				if mValueCache.set(value: .arrayValue(newarr), forPath: mPath) {
+					return true
+				}
+			}
+		}
+		CNLog(logLevel: .error, message: "Failed to append record", atFunction: #function, inFile: #file)
+		return false
+	}
+}
+
+/*
+public class CNValueTable: CNTable
+{
 	private var mRecords:		Array<CNValueRecord>
 	private var mFieldNames:	Array<String>
 
@@ -141,4 +276,5 @@ public class CNValueTable: CNTable
 		mRecords 	= []
 	}
 }
+*/
 

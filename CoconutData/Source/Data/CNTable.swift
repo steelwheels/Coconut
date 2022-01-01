@@ -26,8 +26,6 @@ public protocol CNTable
 	var recordCount: Int { get }
 	var fieldNames: Array<String> { get }
 
-	func load(fromURL url: URL?) -> CNTableLoadResult
-
 	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
 	func append(record rcd: CNRecord)

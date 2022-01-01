@@ -24,7 +24,8 @@ class ViewController: NSViewController {
 	override func viewDidAppear() {
 		super.viewDidAppear()
 		let res0 = UTValueCache()
-		if res0 {
+		let res1 = UTValueTable()
+		if res0 && res1 {
 			NSLog("Summary: OK")
 		} else {
 			NSLog("Summary: Error")
