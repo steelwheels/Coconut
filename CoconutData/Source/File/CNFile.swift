@@ -250,6 +250,23 @@ public class CNFile
 		return result
 	}
 
+	/* Note this function requires unlimited execution time. Do not call by JavaScriptCore */
+	public func getall() -> String {
+		var result: String = ""
+		var docont: Bool = true
+		while docont {
+			switch self.gets() {
+			case .null:
+				break
+			case .str(let str):
+				result += str
+			case .endOfFile:
+				docont = false
+			}
+		}
+		return result
+	}
+
 	public func put(string str: String) {
 		if let data = str.data(using: .utf8) {
 			fileHandle.write(data)
