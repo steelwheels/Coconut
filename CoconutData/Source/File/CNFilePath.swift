@@ -124,6 +124,31 @@ public class CNFilePath
 		return r.typeIdentifier
 	}
 
+	public class func relativePathUnderBaseURL(fullPath fpath: URL, basePath bpath: URL) -> URL? {
+		let fcomp = fpath.pathComponents
+		let bcomp = bpath.pathComponents
+
+		if bcomp.count < fcomp.count {
+			/* Check they have same path */
+			for i in 0..<bcomp.count {
+				if fcomp[i] != bcomp[i] {
+					CNLog(logLevel: .error, message: "Not mached path (0): \(fpath.path) <-> \(bpath.path)", atFunction: #function, inFile: #file)
+					return nil
+				}
+			}
+			/* Make relative comp */
+			var newcomp: Array<String> = []
+			for i in bcomp.count ..< fcomp.count {
+				newcomp.append(fcomp[i])
+			}
+			let newpath = newcomp.joined(separator: "/")
+			return URL(fileURLWithPath: newpath)
+		} else {
+			CNLog(logLevel: .error, message: "Not mached path (1): \(fpath.path) <-> \(bpath.path)", atFunction: #function, inFile: #file)
+			return nil
+		}
+	}
+
 	private class func name(_ name: String?) -> String {
 		if let str = name {
 			return str
