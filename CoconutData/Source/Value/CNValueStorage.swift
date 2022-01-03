@@ -1,6 +1,6 @@
 /*
- * @file	CNValueCache.swift
- * @brief	Define CNValueCache class
+ * @file	CNValueStorage.swift
+ * @brief	Define CNValueStorage class
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
@@ -10,23 +10,23 @@ import UIKit
 #endif
 import Foundation
 
-public class CNValueCache
+public class CNValueStorage
 {
 	public typealias Result = CNValueParser.Result
 
 	private var mRootURL:		URL
 	private var mRootValue:		Dictionary<String, CNValue>
-	private var mParentCache:	CNValueCache?
+	private var mParentStorage:	CNValueStorage?
 
-	public init(root rooturl: URL, parentCache pc: CNValueCache?) {
+	public init(root rooturl: URL, parentStorage storage: CNValueStorage?) {
 		mRootURL	= rooturl
 		mRootValue	= [:]
-		mParentCache	= pc
+		mParentStorage	= storage
 	}
 
-	/* The cache which has no file to load/save contents */
-	public static func allocateVolatileValueCache() -> CNValueCache {
-		return CNValueCache(root: URL.null(), parentCache: nil)
+	/* The storage which has no file to load/save contents */
+	public static func allocateVolatileValueStorage() -> CNValueStorage {
+		return CNValueStorage(root: URL.null(), parentStorage: nil)
 	}
 
 	public func load(relativePath rpath: String) -> Result {
@@ -56,7 +56,7 @@ public class CNValueCache
 	public func value(forPath path: Array<String>) -> CNValue? {
 		if let locval = self.localValue(forPath: path) {
 			return locval
-		} else if let cashval = mParentCache?.localValue(forPath: path) {
+		} else if let cashval = mParentStorage?.localValue(forPath: path) {
 			return cashval
 		} else {
 			return nil
@@ -145,7 +145,7 @@ public class CNValueCache
 	}
 
 	public func store(relativePath rpath: String) -> Bool {
-		/* Store child cache */
+		/* Store child storage */
 		storeChildren(value: mRootValue)
 		/* Save to file */
 		let file = mRootURL.appendingPathComponent(rpath)
@@ -160,7 +160,7 @@ public class CNValueCache
 				storeChildren(value: dict)
 			case .reference(let val):
 				if !val.store(to: mRootURL) {
-					CNLog(logLevel: .error, message: "Failed to store cache", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "Failed to store to starage", atFunction: #function, inFile: #file)
 				}
 			default:
 				break

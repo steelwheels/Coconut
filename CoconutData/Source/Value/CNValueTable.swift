@@ -10,20 +10,20 @@ import Foundation
 public class CNValueTable: CNTable
 {
 	private var mPath:		Array<String>
-	private var mValueCache:	CNValueCache
+	private var mValueStorage:	CNValueStorage
 
-	public init(path pth: Array<String>, valueCache cache: CNValueCache) {
+	public init(path pth: Array<String>, valueStorage storage: CNValueStorage) {
 		mPath		= pth
-		mValueCache	= cache
+		mValueStorage	= storage
 	}
 
-	/* The cache which has no file to load/save contents */
+	/* The storage which has no file to load/save contents */
 	public static func allocateVolatileValueTable() -> CNValueTable {
-		let cache = CNValueCache.allocateVolatileValueCache()
-		if !cache.set(value: .arrayValue([]), forPath: ["root"]){
+		let storage = CNValueStorage.allocateVolatileValueStorage()
+		if !storage.set(value: .arrayValue([]), forPath: ["root"]){
 			CNLog(logLevel: .error, message: "Failed to set root data", atFunction: #function, inFile: #file)
 		}
-		return CNValueTable(path: ["root"], valueCache: cache)
+		return CNValueTable(path: ["root"], valueStorage: storage)
 	}
 
 	public var recordCount: Int { get {
@@ -95,7 +95,7 @@ public class CNValueTable: CNTable
 	}
 
 	private func recordValues() -> Array<CNValue>? {
-		if let val = mValueCache.value(forPath: mPath) {
+		if let val = mValueStorage.value(forPath: mPath) {
 			if let arr = val.toArray() {
 				return arr
 			}
@@ -116,11 +116,11 @@ public class CNValueTable: CNTable
 	}
 
 	public func setRecordValue(value val: Dictionary<String, CNValue>, at idx: Int) -> Bool {
-		if let orgval = mValueCache.value(forPath: mPath) {
+		if let orgval = mValueStorage.value(forPath: mPath) {
 			if var arr = orgval.toArray() {
 				if 0<=idx && idx<arr.count {
 					arr[idx] = .dictionaryValue(val)
-					return mValueCache.set(value: .arrayValue(arr), forPath: mPath)
+					return mValueStorage.set(value: .arrayValue(arr), forPath: mPath)
 				}
 			}
 		}
@@ -128,10 +128,10 @@ public class CNValueTable: CNTable
 	}
 
 	private func addRecord() -> Bool {
-		if let val = mValueCache.value(forPath: mPath) {
+		if let val = mValueStorage.value(forPath: mPath) {
 			if var newarr = val.toArray() {
 				newarr.append(.dictionaryValue([:]))
-				if mValueCache.set(value: .arrayValue(newarr), forPath: mPath) {
+				if mValueStorage.set(value: .arrayValue(newarr), forPath: mPath) {
 					return true
 				}
 			}

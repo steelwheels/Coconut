@@ -82,8 +82,8 @@
 		0596C5792722EEF200E9A24F /* CNSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C5782722EEF200E9A24F /* CNSymbol.swift */; };
 		0596C57A2722EEF200E9A24F /* CNSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0596C5782722EEF200E9A24F /* CNSymbol.swift */; };
 		059BA6D3256B20B500893641 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059BA6D2256B20B500893641 /* UTType.swift */; };
-		05A1AFB9277689F90091D527 /* CNValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFB8277689F90091D527 /* CNValueCache.swift */; };
-		05A1AFBA277689F90091D527 /* CNValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFB8277689F90091D527 /* CNValueCache.swift */; };
+		05A1AFB9277689F90091D527 /* CNValueStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFB8277689F90091D527 /* CNValueStorage.swift */; };
+		05A1AFBA277689F90091D527 /* CNValueStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFB8277689F90091D527 /* CNValueStorage.swift */; };
 		05A1AFC82776BBDF0091D527 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFC72776BBDF0091D527 /* AppDelegate.swift */; };
 		05A1AFCA2776BBDF0091D527 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFC92776BBDF0091D527 /* ViewController.swift */; };
 		05A1AFCC2776BBE80091D527 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05A1AFCB2776BBE80091D527 /* Assets.xcassets */; };
@@ -461,7 +461,7 @@
 		0596C5612722E2FE00E9A24F /* questionmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = questionmark.png; sourceTree = "<group>"; };
 		0596C5782722EEF200E9A24F /* CNSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSymbol.swift; sourceTree = "<group>"; };
 		059BA6D2256B20B500893641 /* UTType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTType.swift; sourceTree = "<group>"; };
-		05A1AFB8277689F90091D527 /* CNValueCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueCache.swift; sourceTree = "<group>"; };
+		05A1AFB8277689F90091D527 /* CNValueStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueStorage.swift; sourceTree = "<group>"; };
 		05A1AFC52776BBDF0091D527 /* ResourceTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ResourceTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05A1AFC72776BBDF0091D527 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05A1AFC92776BBDF0091D527 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -815,7 +815,7 @@
 			children = (
 				05B32CA72515025E000D1411 /* CNStruct.swift */,
 				05B32CA32515025E000D1411 /* CNValue.swift */,
-				05A1AFB8277689F90091D527 /* CNValueCache.swift */,
+				05A1AFB8277689F90091D527 /* CNValueStorage.swift */,
 				05A501B426A4203E00A992F9 /* CNValueComparator.swift */,
 				05B32CA02515025E000D1411 /* CNValueParser.swift */,
 				0550399F277D7DC0007FA515 /* CNValueRecord.swift */,
@@ -1344,7 +1344,7 @@
 				05B32D0025150368000D1411 /* CNToken.swift in Sources */,
 				05B32D7825150945000D1411 /* CNAttributedString.swift in Sources */,
 				052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */,
-				05A1AFB9277689F90091D527 /* CNValueCache.swift in Sources */,
+				05A1AFB9277689F90091D527 /* CNValueStorage.swift in Sources */,
 				05A501B526A4203E00A992F9 /* CNValueComparator.swift in Sources */,
 				057623E026A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */,
 				0551394125CC2BD6007B1C6B /* CNTimer.swift in Sources */,
@@ -1435,7 +1435,7 @@
 				05B32D0B25150395000D1411 /* CNMath.swift in Sources */,
 				05B32D0125150368000D1411 /* CNToken.swift in Sources */,
 				05B32D7925150945000D1411 /* CNAttributedString.swift in Sources */,
-				05A1AFBA277689F90091D527 /* CNValueCache.swift in Sources */,
+				05A1AFBA277689F90091D527 /* CNValueStorage.swift in Sources */,
 				052E27D52625DCA100414C26 /* CNCommandTable.swift in Sources */,
 				05B32CBB25150299000D1411 /* CNValueVisitor.swift in Sources */,
 				05A501B626A4203E00A992F9 /* CNValueComparator.swift in Sources */,
