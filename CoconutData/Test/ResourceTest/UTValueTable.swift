@@ -26,8 +26,9 @@ public func UTValueTable() -> Bool
 	}
 
 	var result  = true
-	let liburl  = CNFilePath.URLforUserLibraryDirectory()
-	let storage = CNValueStorage(root: liburl, parentStorage: base)
+	let supurl  = CNFilePath.URLforApplicationSupportDirectory()
+	NSLog("sup-cache: \(supurl.path)")
+	let storage = CNValueStorage(root: supurl, parentStorage: base)
 
 	let vtable = CNValueTable(path: ["persons"], valueStorage: storage)
 	NSLog("record count: \(vtable.recordCount)")

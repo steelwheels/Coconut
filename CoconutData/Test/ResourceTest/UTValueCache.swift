@@ -40,7 +40,7 @@ private func testChildStorage(parentStorage parent: CNValueStorage) -> Bool {
 	var result = true
 	
 	NSLog("***** Child storage")
-	let url = CNFilePath.URLforUserLibraryDirectory()
+	let url = CNFilePath.URLforApplicationSupportDirectory()
 	NSLog("home: \(url.absoluteString)")
 
 	let storage = CNValueStorage(root: url, parentStorage: parent)

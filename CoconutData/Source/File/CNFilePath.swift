@@ -108,8 +108,15 @@ public class CNFilePath
 		return .error(NSError.fileError(message: "Failed to find bundle \(bname)"))
 	}
 
-	public class func URLforUserLibraryDirectory() -> URL {
-		return URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true)
+	public class func URLforApplicationSupportDirectory() -> URL {
+		let path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
+		let dir: String
+		if path.count > 0 {
+			dir = path[0]
+		} else {
+			dir = NSHomeDirectory() + "/Application Support"
+		}
+		return URL(fileURLWithPath: dir, isDirectory: true)
 	}
 
 	public class func URLforTempDirectory() -> URL {
@@ -124,7 +131,7 @@ public class CNFilePath
 		return r.typeIdentifier
 	}
 
-	public class func relativePathUnderBaseURL(fullPath fpath: URL, basePath bpath: URL) -> URL? {
+	public class func relativePathUnderBaseURL(fullPath fpath: URL, basePath bpath: URL) -> String? {
 		let fcomp = fpath.pathComponents
 		let bcomp = bpath.pathComponents
 
@@ -132,7 +139,7 @@ public class CNFilePath
 			/* Check they have same path */
 			for i in 0..<bcomp.count {
 				if fcomp[i] != bcomp[i] {
-					CNLog(logLevel: .error, message: "Not mached path (0): \(fpath.path) <-> \(bpath.path)", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "Not matched path (0): \(fpath.path) <-> \(bpath.path)", atFunction: #function, inFile: #file)
 					return nil
 				}
 			}
@@ -142,9 +149,9 @@ public class CNFilePath
 				newcomp.append(fcomp[i])
 			}
 			let newpath = newcomp.joined(separator: "/")
-			return URL(fileURLWithPath: newpath)
+			return newpath
 		} else {
-			CNLog(logLevel: .error, message: "Not mached path (1): \(fpath.path) <-> \(bpath.path)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Not matched path (1): \(fpath.path) <-> \(bpath.path)", atFunction: #function, inFile: #file)
 			return nil
 		}
 	}
