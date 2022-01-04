@@ -14,23 +14,27 @@ public class CNValueStorage
 {
 	public typealias Result = CNValueParser.Result
 
-	private var mRootURL:		URL
-	private var mRootValue:		Dictionary<String, CNValue>
-	private var mParentStorage:	CNValueStorage?
+	private var mPackageDirectory:		URL
+	private var mFilePath:			String
+	private var mRootValue:			Dictionary<String, CNValue>
+	private var mParentStorage:		CNValueStorage?
 
-	public init(root rooturl: URL, parentStorage storage: CNValueStorage?) {
-		mRootURL	= rooturl
-		mRootValue	= [:]
-		mParentStorage	= storage
+	// packdir: Root directory for package (*.jspkg)
+	// fpath:   The location of data file against packdir
+	public init(packageDirectory packdir: URL, filePath fpath: String, parentStorage storage: CNValueStorage?) {
+		mPackageDirectory	= packdir
+		mFilePath		= fpath
+		mRootValue		= [:]
+		mParentStorage		= storage
 	}
 
 	/* The storage which has no file to load/save contents */
 	public static func allocateVolatileValueStorage() -> CNValueStorage {
-		return CNValueStorage(root: URL.null(), parentStorage: nil)
+		return CNValueStorage(packageDirectory: URL.null(), filePath: "dummy.json", parentStorage: nil)
 	}
 
-	public func load(relativePath rpath: String) -> Result {
-		let url = mRootURL.appendingPathComponent(rpath, isDirectory: false)
+	public func load() -> Result {
+		let url = mPackageDirectory.appendingPathComponent(mFilePath, isDirectory: false)
 		guard let ctxt = url.loadContents() else {
 			let err = NSError.fileError(message: "Failed to read file from \(url.path)")
 			return .error(err)
@@ -77,7 +81,7 @@ public class CNValueStorage
 					owner   = childdic
 					hasnext = true
 				case .reference(let childref):
-					if let childval = childref.load(from: mRootURL) {
+					if let childval = childref.load(fromPackageDirectory: mPackageDirectory) {
 						if let childdic = childval.toDictionary() {
 							owner   = childdic
 							hasnext = true
@@ -93,7 +97,7 @@ public class CNValueStorage
 		}
 		switch owner[prop] {
 		case .reference(let refval):
-			return refval.load(from: mRootURL)
+			return refval.load(fromPackageDirectory: mPackageDirectory)
 		default:
 			return owner[prop]
 		}
@@ -125,7 +129,7 @@ public class CNValueStorage
 					newdst[first] = .dictionaryValue(newdic)
 					return newdst
 				case .reference(let dstref):
-					if let refval = dstref.load(from: mRootURL) {
+					if let refval = dstref.load(fromPackageDirectory: mPackageDirectory) {
 						if let dstdic = refval.toDictionary() {
 							let newdic = localSet(destination: dstdic, source: src, forPath: rest)
 							newdst[first] = .dictionaryValue(newdic)
@@ -144,11 +148,11 @@ public class CNValueStorage
 		}
 	}
 
-	public func store(relativePath rpath: String) -> Bool {
+	public func store() -> Bool {
 		/* Store child storage */
 		storeChildren(value: mRootValue)
 		/* Save to file */
-		let file = mRootURL.appendingPathComponent(rpath)
+		let file = mPackageDirectory.appendingPathComponent(mFilePath)
 		let txt  = CNValue.dictionaryValue(mRootValue).toText().toStrings().joined(separator: "\n")
 		return file.storeContents(contents: txt + "\n")
 	}
@@ -159,7 +163,7 @@ public class CNValueStorage
 			case .dictionaryValue(let dict):
 				storeChildren(value: dict)
 			case .reference(let val):
-				if !val.store(to: mRootURL) {
+				if !val.store(toPackageDirectory: mPackageDirectory) {
 					CNLog(logLevel: .error, message: "Failed to store to starage", atFunction: #function, inFile: #file)
 				}
 			default:

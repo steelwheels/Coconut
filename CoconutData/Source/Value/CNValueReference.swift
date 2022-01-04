@@ -29,11 +29,11 @@ public class CNValueReference
 		return nil
 	}
 
-	public func load(from base: URL) -> CNValue? {
+	public func load(fromPackageDirectory packdir: URL) -> CNValue? {
 		if let ctxt = mContext {
 			return ctxt
 		} else {
-			let url    = base.appendingPathComponent(self.relativePath)
+			let url = packdir.appendingPathComponent(self.relativePath)
 			var result: CNValue? = nil
 			if let source = url.loadContents() {
 				let parser = CNValueParser()
@@ -49,9 +49,9 @@ public class CNValueReference
 		}
 	}
 
-	public func store(to base: URL) -> Bool {
+	public func store(toPackageDirectory resdir: URL) -> Bool {
 		if let context = mContext {
-			let file = base.appendingPathComponent(self.relativePath)
+			let file = resdir.appendingPathComponent(self.relativePath)
 			let txt  = context.toText().toStrings().joined(separator: "\n")
 			return file.storeContents(contents: txt)
 		} else {

@@ -21,11 +21,11 @@ private class CNFileResource
 
 	public var pathString: String { get { return mPath }}
 
-	public func fullPathURL(directoryURL url: URL) -> URL? {
+	public func fullPathURL(packageDirectory url: URL) -> URL? {
 		return url.appendingPathComponent(mPath)
 	}
 
-	public func load<T>(directoryURL url: URL, loader ldr: LoaderFunc) -> T? {
+	public func load<T>(packageDirectory url: URL, loader ldr: LoaderFunc) -> T? {
 		if let content = mContent {
 			return content as? T
 		} else {
@@ -90,19 +90,19 @@ private class CNDirectoryResource
 		return nil
 	}
 
-	public func fullPathURL(directoryURL url: URL, identifier ident: String, index idx: Int) -> URL? {
+	public func fullPathURL(packageDirectory url: URL, identifier ident: String, index idx: Int) -> URL? {
 		if let files = mFileMap[ident] {
 			if idx < files.count {
-				return files[idx].fullPathURL(directoryURL: url)
+				return files[idx].fullPathURL(packageDirectory: url)
 			}
 		}
 		return nil
 	}
 
-	public func load<T>(directoryURL url: URL, identifier ident: String, index idx: Int) -> T? {
+	public func load<T>(packageDirectory url: URL, identifier ident: String, index idx: Int) -> T? {
 		if let files = mFileMap[ident] {
 			if idx < files.count {
-				let contents:T? = files[idx].load(directoryURL: url, loader: mLoader)
+				let contents:T? = files[idx].load(packageDirectory: url, loader: mLoader)
 				return contents
 			}
 		}
@@ -139,13 +139,13 @@ open class CNResource
 {
 	public typealias LoaderFunc = (_ url: URL) -> Any?
 
-	private var mRootDirectoryURL		: URL
+	private var mPackageDirectory		: URL
 	private var mDirectoryResources		: Dictionary<String, CNDirectoryResource>	// category, directory-resource
 
-	public var rootDirectoryURL: URL { get { return mRootDirectoryURL }}
+	public var packageDirectory: URL { get { return mPackageDirectory }}
 
-	public init(directoryURL url: URL) {
-		mRootDirectoryURL	= url
+	public init(packageDirectory url: URL) {
+		mPackageDirectory	= url
 		mDirectoryResources	= [:]
 	}
 
@@ -180,13 +180,13 @@ open class CNResource
 
 	public func fullPathURL(category cat: String, identifier ident: String, index idx: Int) -> URL? {
 		if let dirres = mDirectoryResources[cat] {
-			return dirres.fullPathURL(directoryURL: mRootDirectoryURL, identifier: ident, index: idx)
+			return dirres.fullPathURL(packageDirectory: mPackageDirectory, identifier: ident, index: idx)
 		}
 		return nil
 	}
 
 	public func load<T>(category cat: String, identifier ident: String, index idx: Int) -> T? {
-		let result:T? = mDirectoryResources[cat]?.load(directoryURL: mRootDirectoryURL, identifier: ident, index: idx)
+		let result:T? = mDirectoryResources[cat]?.load(packageDirectory: mPackageDirectory, identifier: ident, index: idx)
 		return result
 	}
 
@@ -208,7 +208,7 @@ open class CNResource
 		let section = CNTextSection()
 		section.header = "{" ; section.footer = "}"
 
-		let urltxt = CNTextLine(string: "URL: \(mRootDirectoryURL.relativeString)")
+		let urltxt = CNTextLine(string: "URL: \(mPackageDirectory.relativeString)")
 		section.add(text: urltxt)
 
 		let categories = mDirectoryResources.keys.sorted()
