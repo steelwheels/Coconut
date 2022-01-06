@@ -33,10 +33,14 @@ public class CNValueStorage
 		return CNValueStorage(packageDirectory: URL.null(), filePath: "dummy.json", parentStorage: nil)
 	}
 
+	public var storageFile: URL {
+		get { return mPackageDirectory.appendingPathComponent(mFilePath, isDirectory: false) }
+	}
+
 	public func load() -> Result {
-		let url = mPackageDirectory.appendingPathComponent(mFilePath, isDirectory: false)
-		guard let ctxt = url.loadContents() else {
-			let err = NSError.fileError(message: "Failed to read file from \(url.path)")
+		let file = self.storageFile
+		guard let ctxt = file.loadContents() else {
+			let err = NSError.fileError(message: "Failed to read file from \(file.path)")
 			return .error(err)
 		}
 		let parser = CNValueParser()
@@ -151,8 +155,18 @@ public class CNValueStorage
 	public func store() -> Bool {
 		/* Store child storage */
 		storeChildren(value: mRootValue)
-		/* Save to file */
-		let file = mPackageDirectory.appendingPathComponent(mFilePath)
+
+		let file = self.storageFile
+		/* Make directory for the file */
+		let pathes = file.deletingLastPathComponent()
+		switch FileManager.default.createDirectories(directory: pathes) {
+		case .ok:
+			break // continue
+		case .error(let err):
+			CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
+			return false // stop the save operation
+		}
+		/* Save into the file */
 		let txt  = CNValue.dictionaryValue(mRootValue).toText().toStrings().joined(separator: "\n")
 		return file.storeContents(contents: txt + "\n")
 	}

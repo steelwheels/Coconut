@@ -62,6 +62,25 @@ public extension FileManager
 		return createFile(atPath: url.absoluteString, contents: data, attributes: attr)
 	}
 
+	enum Result {
+		case ok
+		case error(NSError)
+	}
+
+	func createDirectories(directory dir: URL) -> Result {
+		guard dir.pathComponents.count > 0 else {
+			return .error(NSError.parseError(message: "No directory is contained"))
+		}
+		do {
+			try createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
+			return .ok
+		} catch let err as NSError {
+			return .error(err)
+		} catch {
+			return .error(NSError.unknownError())
+		}
+	}
+
 	func checkFileType(pathString pathstr: String) -> CNFileType {
 		var isdir    = ObjCBool(false)
 		if fileExists(atPath: pathstr, isDirectory: &isdir) {

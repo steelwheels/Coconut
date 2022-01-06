@@ -14,15 +14,14 @@ public func UTValueStorage() -> Bool {
 		var result = true
 		NSLog("base-url = \(baseurl.path)")
 		NSLog("***** Main storage")
-		let storage = CNValueStorage(root: baseurl, parentStorage: nil)
-		switch storage.load(relativePath: "root.json") {
+		let storage = CNValueStorage(packageDirectory: baseurl, filePath: "root.json", parentStorage: nil)
+		switch storage.load() {
 		case .ok(let value):
 			let txt = value.toText().toStrings().joined(separator: "\n")
 			NSLog("Load root ... done: \(txt)")
 			if !testStorageRead(target: storage) {
 				result = false
 			}
-
 			if !testChildStorage(parentStorage: storage) {
 				result = false
 			}
@@ -43,7 +42,7 @@ private func testChildStorage(parentStorage parent: CNValueStorage) -> Bool {
 	let url = CNFilePath.URLforApplicationSupportDirectory()
 	NSLog("home: \(url.absoluteString)")
 
-	let storage = CNValueStorage(root: url, parentStorage: parent)
+	let storage = CNValueStorage(packageDirectory: url, filePath: "sub.json", parentStorage: parent)
 	if !testStorageRead(target: storage) {
 		result = false
 	}
@@ -170,7 +169,7 @@ private func testStorageWrite(target storage: CNValueStorage) -> Bool
 private func testStorageStore(target storage: CNValueStorage) -> Bool
 {
 	NSLog("***** Storage store test")
-	if storage.store(relativePath: "new_storage.json") {
+	if storage.store() {
 		NSLog("storage store: OK")
 		return true
 	} else {

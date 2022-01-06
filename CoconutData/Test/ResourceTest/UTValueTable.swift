@@ -16,8 +16,8 @@ public func UTValueTable() -> Bool
 		return false
 	}
 
-	let base = CNValueStorage(root: baseurl, parentStorage: nil)
-	switch base.load(relativePath: "adbook.json") {
+	let base = CNValueStorage(packageDirectory: baseurl, filePath: "adbook.json", parentStorage: nil)
+	switch base.load() {
 	case .ok(_):
 		break
 	case .error(let err):
@@ -28,7 +28,7 @@ public func UTValueTable() -> Bool
 	var result  = true
 	let supurl  = CNFilePath.URLforApplicationSupportDirectory()
 	NSLog("sup-cache: \(supurl.path)")
-	let storage = CNValueStorage(root: supurl, parentStorage: base)
+	let storage = CNValueStorage(packageDirectory: supurl, filePath: "updated_adbook.json", parentStorage: base)
 
 	let vtable = CNValueTable(path: ["persons"], valueStorage: storage)
 	NSLog("record count: \(vtable.recordCount)")
@@ -74,7 +74,7 @@ public func UTValueTable() -> Bool
 	vtable.append(record: newrec)
 
 	/* Save to the storage file */
-	if storage.store(relativePath: "updated_adbook.json") {
+	if storage.store() {
 		NSLog("storage store ... done")
 	} else {
 		NSLog("storage store ... failed")
