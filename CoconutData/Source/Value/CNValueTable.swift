@@ -11,10 +11,12 @@ public class CNValueTable: CNTable
 {
 	private var mPath:		Array<String>
 	private var mValueStorage:	CNValueStorage
+	private var mActiveFieldNames:	Array<String>
 
 	public init(path pth: Array<String>, valueStorage storage: CNValueStorage) {
-		mPath		= pth
-		mValueStorage	= storage
+		mPath			= pth
+		mValueStorage		= storage
+		mActiveFieldNames	= []
 	}
 
 	/* The storage which has no file to load/save contents */
@@ -34,7 +36,7 @@ public class CNValueTable: CNTable
 		}
 	}}
 
-	public var fieldNames: Array<String> { get {
+	public var allFieldNames: Array<String> { get {
 		if let recs = self.recordValues() {
 			var result: Array<String> = []
 			for rec in recs {
@@ -53,6 +55,19 @@ public class CNValueTable: CNTable
 			return []
 		}
 	}}
+
+	public var activeFieldNames: Array<String> {
+		get {
+			if mActiveFieldNames.isEmpty {
+				return self.allFieldNames
+			} else {
+				return mActiveFieldNames
+			}
+		}
+		set(newarr){
+			mActiveFieldNames = newarr
+		}
+	}
 
 	public func newRecord() -> CNRecord {
 		if self.addRecord() {

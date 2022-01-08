@@ -35,19 +35,34 @@ public class CNContactDatabase: CNTable
 
 	private var mContacts:		Array<CNContactRecord>
 	private var mState: 		State
+	private var mActiveFieldNames:	Array<String>
 
 	private init(){
-		mContacts	= []
-		mState		= .undecided
+		mContacts		= []
+		mState			= .undecided
+		mActiveFieldNames	= []
 	}
 
 	public var recordCount: Int { get {
 		return mContacts.count
 	}}
 
-	public var fieldNames: Array<String> { get {
+	public var allFieldNames: Array<String> { get {
 		return CNContactField.allFieldNames
 	}}
+
+	public var activeFieldNames: Array<String> {
+		get {
+			if mActiveFieldNames.isEmpty {
+				return self.allFieldNames
+			} else {
+				return mActiveFieldNames
+			}
+		}
+		set(newnames){
+			mActiveFieldNames = newnames
+		}
+	}
 
 	public func newRecord() -> CNRecord {
 		return CNContactRecord(mutableContext: CNMutableContact())

@@ -24,7 +24,8 @@ public enum CNTableLoadResult {
 public protocol CNTable
 {
 	var recordCount: Int { get }
-	var fieldNames: Array<String> { get }
+	var allFieldNames:    Array<String> { get }
+	var activeFieldNames: Array<String> { get set }
 
 	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
