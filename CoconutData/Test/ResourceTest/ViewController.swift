@@ -5,6 +5,7 @@
 //  Created by Tomoo Hamada on 2021/12/25.
 //
 
+import CoconutData
 import Cocoa
 
 class ViewController: NSViewController {
@@ -23,9 +24,10 @@ class ViewController: NSViewController {
 
 	override func viewDidAppear() {
 		super.viewDidAppear()
-		let res0 = UTValueStorage()
-		let res1 = UTValueTable()
-		if res0 && res1 {
+		let res0 = UTMutableValue()
+		let res1 = UTValueStorage()
+		let res2 = UTValueTable()
+		if res0 && res1 && res2 {
 			NSLog("Summary: OK")
 		} else {
 			NSLog("Summary: Error")

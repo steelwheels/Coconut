@@ -69,7 +69,8 @@ public enum CNValueType: Int
 		}
 	}
 
-	public static func isScaler(type typ: CNValueType) -> Bool {
+	/* Return true when the value has single data */
+	public static func isPrimitive(type typ: CNValueType) -> Bool {
 		let result: Bool
 		switch typ {
 		case .nullType, .boolType, .numberType, .stringType, .dateType, .URLType, .imageType, .objectType:

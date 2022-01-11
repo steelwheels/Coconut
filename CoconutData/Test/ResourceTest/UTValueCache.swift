@@ -9,7 +9,7 @@ import CoconutData
 import Foundation
 
 public func UTValueStorage() -> Bool {
-	NSLog("UTValueStorage")
+	NSLog("*** UTValueStorage")
 	if let baseurl = CNFilePath.URLForResourceDirectory(directoryName: "Data", subdirectory: nil, forClass: ViewController.self) {
 		var result = true
 		NSLog("base-url = \(baseurl.path)")

@@ -10,7 +10,7 @@ import Foundation
 
 public func UTValueTable() -> Bool
 {
-	NSLog("UTValueTable")
+	NSLog("*** UTValueTable")
 
 	guard let baseurl = CNFilePath.URLForResourceDirectory(directoryName: "Data", subdirectory: nil, forClass: ViewController.self) else {
 		return false
@@ -32,7 +32,7 @@ public func UTValueTable() -> Bool
 
 	let vtable = CNValueTable(path: ["persons"], valueStorage: storage)
 	NSLog("record count: \(vtable.recordCount)")
-	NSLog("field names:  \(vtable.fieldNames)")
+	NSLog("field names:  \(vtable.allFieldNames)")
 
 	if let rec0 = vtable.record(at: 0) {
 		if let nameval = rec0.value(ofField: "name") {
