@@ -34,6 +34,11 @@ public class CNMutableValue
 		return false
 	}
 
+	open func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
+		return false
+	}
+
 	open func clone() -> CNMutableValue {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return CNMutableValue(type: mType)
@@ -81,6 +86,11 @@ public class CNMutableScalarValue: CNMutableValue
 			result = false
 		}
 		return result
+	}
+
+	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
+		return false
 	}
 
 	public override func clone() -> CNMutableValue {
@@ -166,6 +176,38 @@ public class CNMutableArrayValue: CNMutableValue
 			} else {
 				if 0<=idx && idx<mArrayValue.count {
 					result = mArrayValue[idx].set(value: val, forPath: rest, fromPackageDirectory: package)
+				} else {
+					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			}
+		}
+		return result
+	}
+
+	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		guard let first = path.first else {
+			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
+			return false
+		}
+		let result: Bool
+		switch first {
+		case .member(let member):
+			CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
+			result = false
+		case .index(let idx):
+			let rest = Array(path.dropFirst())
+			if rest.count == 0 {
+				if 0<=idx && idx<mArrayValue.count {
+					mArrayValue.remove(at: idx)
+					result = true
+				} else {
+					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			} else {
+				if 0<=idx && idx<mArrayValue.count {
+					result = mArrayValue[idx].delete(forPath: rest, fromPackageDirectory: package)
 				} else {
 					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 					result = false
@@ -272,6 +314,38 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
+	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		guard let first = path.first else {
+			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
+			return false
+		}
+		let result: Bool
+		switch first {
+		case .member(let member):
+			let rest = Array(path.dropFirst(1))
+			if rest.count == 0 {
+				if let _ = mDictionaryValue[member] {
+					mDictionaryValue.removeValue(forKey: member)
+					result = true
+				} else {
+					CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			} else {
+				if let dst = mDictionaryValue[member] {
+					result = dst.delete(forPath: rest, fromPackageDirectory: package)
+				} else {
+					CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			}
+		case .index(let idx):
+			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
+			result = false
+		}
+		return result
+	}
+
 	public override func clone() -> CNMutableValue {
 		let result = CNMutableDictionaryValue()
 		for (key, elm) in mDictionaryValue {
@@ -331,6 +405,16 @@ public class CNMutableValueReference: CNMutableValue
 		return result
 	}
 
+	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		let result: Bool
+		if let dst = load(fromPackageDirectory: package) {
+			result = dst.delete(forPath: path, fromPackageDirectory: package)
+		} else {
+			result = false
+		}
+		return result
+	}
+	
 	private func load(fromPackageDirectory package: URL) -> CNMutableValue? {
 		let result:  CNMutableValue?
 		if let ctxt = mContext {

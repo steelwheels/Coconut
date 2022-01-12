@@ -128,6 +128,22 @@ private func accessTest() -> Bool
 		return false
 	}
 
+	let cval: CNValue        = mval.toValue()
+	NSLog("current-value: ")
+	dumpValue(value: cval)
+
+	NSLog("delete value \"g[3]\"")
+	let pathg3 = CNValuePath(elements: [.member("g"), .index(3)])
+	if !deleteValue(destination: mval, forPath: pathg3, fromPackageDirectory: baseurl){
+		return false
+	}
+
+	NSLog("delete value \"h.m0.m1\"")
+	let pathhm0m1 = CNValuePath(elements: [.member("h"), .member("m0"), .member("m1") ])
+	if !deleteValue(destination: mval, forPath: pathhm0m1, fromPackageDirectory: baseurl){
+		return false
+	}
+
 	let fval: CNValue        = mval.toValue()
 	NSLog("final-value: ")
 	dumpValue(value: fval)
@@ -156,6 +172,16 @@ private func getValue(path pth: CNValuePath, in owner: CNMutableValue,fromPackag
 	} else {
 		NSLog("Failed to get")
 		return nil
+	}
+}
+
+private func deleteValue(destination dst: CNMutableValue, forPath path: CNValuePath, fromPackageDirectory baseurl: URL) -> Bool {
+	if dst.delete(forPath: path.elements, fromPackageDirectory: baseurl) {
+		dumpValue(value: dst.toValue())
+		return true
+	} else {
+		NSLog("Failed to delete")
+		return false
 	}
 }
 
