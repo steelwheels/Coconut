@@ -24,6 +24,7 @@
 		052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
 		052E27D52625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
 		052E27E02625E5EF00414C26 /* UTCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27DF2625E5EF00414C26 /* UTCommandTable.swift */; };
+		052F30F4278F246500CADA5C /* UTValuePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052F30F3278F246500CADA5C /* UTValuePath.swift */; };
 		0537C0B2273CC340003B742E /* rectangle-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A7273CC320003B742E /* rectangle-filled.png */; };
 		0537C0B3273CC340003B742E /* rectangle.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A6273CC320003B742E /* rectangle.png */; };
 		0537C0BA273CC353003B742E /* rectangle-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A7273CC320003B742E /* rectangle-filled.png */; };
@@ -435,6 +436,7 @@
 		052D71FA277EF20100B4C7EB /* adbook.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = adbook.json; sourceTree = "<group>"; };
 		052E27D32625DCA100414C26 /* CNCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandTable.swift; sourceTree = "<group>"; };
 		052E27DF2625E5EF00414C26 /* UTCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCommandTable.swift; sourceTree = "<group>"; };
+		052F30F3278F246500CADA5C /* UTValuePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValuePath.swift; sourceTree = "<group>"; };
 		0537C0A6273CC320003B742E /* rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectangle.png; sourceTree = "<group>"; };
 		0537C0A7273CC320003B742E /* rectangle-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-filled.png"; sourceTree = "<group>"; };
 		053AE54A25D55D380007056B /* CNBitmapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapData.swift; sourceTree = "<group>"; };
@@ -724,6 +726,7 @@
 				05A1AFF42776C3F40091D527 /* UTValueCache.swift */,
 				052D71F5277EEE6F00B4C7EB /* UTValueTable.swift */,
 				0548496C278A888400642FAC /* UTMutableValue.swift */,
+				052F30F3278F246500CADA5C /* UTValuePath.swift */,
 			);
 			path = ResourceTest;
 			sourceTree = "<group>";
@@ -1301,6 +1304,7 @@
 				05A1AFF62776C3F40091D527 /* UTValueCache.swift in Sources */,
 				05A1AFCA2776BBDF0091D527 /* ViewController.swift in Sources */,
 				0548496D278A888400642FAC /* UTMutableValue.swift in Sources */,
+				052F30F4278F246500CADA5C /* UTValuePath.swift in Sources */,
 				05A1AFC82776BBDF0091D527 /* AppDelegate.swift in Sources */,
 				052D71F6277EEE6F00B4C7EB /* UTValueTable.swift in Sources */,
 			);

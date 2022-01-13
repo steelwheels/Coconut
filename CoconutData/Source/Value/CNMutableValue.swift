@@ -202,14 +202,12 @@ public class CNMutableArrayValue: CNMutableValue
 					mArrayValue.remove(at: idx)
 					result = true
 				} else {
-					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 					result = false
 				}
 			} else {
 				if 0<=idx && idx<mArrayValue.count {
 					result = mArrayValue[idx].delete(forPath: rest, fromPackageDirectory: package)
 				} else {
-					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 					result = false
 				}
 			}
@@ -269,14 +267,12 @@ public class CNMutableDictionaryValue: CNMutableValue
 				if let targ = mDictionaryValue[member] {
 					result = targ
 				} else {
-					CNLog(logLevel: .error, message: "Member not found: \(member)", atFunction: #function, inFile: #file)
 					result = nil
 				}
 			} else {
 				if let targ = mDictionaryValue[member] {
 					result = targ.value(forPath: rest, fromPackageDirectory: package)
 				} else {
-					CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
 					result = nil
 				}
 			}

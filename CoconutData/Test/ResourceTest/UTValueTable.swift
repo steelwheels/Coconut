@@ -30,7 +30,12 @@ public func UTValueTable() -> Bool
 	NSLog("sup-cache: \(supurl.path)")
 	let storage = CNValueStorage(packageDirectory: supurl, filePath: "updated_adbook.json", parentStorage: base)
 
-	let vtable = CNValueTable(path: ["persons"], valueStorage: storage)
+	guard let persons = CNValuePath.pathExpression(string: "persons") else {
+		NSLog("Failed to decode path: persons")
+		return false
+	}
+
+	let vtable = CNValueTable(path: CNValuePath(elements: persons), valueStorage: storage)
 	NSLog("record count: \(vtable.recordCount)")
 	NSLog("field names:  \(vtable.allFieldNames)")
 

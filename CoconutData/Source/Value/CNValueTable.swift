@@ -9,11 +9,11 @@ import Foundation
 
 public class CNValueTable: CNTable
 {
-	private var mPath:		Array<String>
+	private var mPath:		CNValuePath
 	private var mValueStorage:	CNValueStorage
 	private var mActiveFieldNames:	Array<String>
 
-	public init(path pth: Array<String>, valueStorage storage: CNValueStorage) {
+	public init(path pth: CNValuePath, valueStorage storage: CNValueStorage) {
 		mPath			= pth
 		mValueStorage		= storage
 		mActiveFieldNames	= []
@@ -21,11 +21,12 @@ public class CNValueTable: CNTable
 
 	/* The storage which has no file to load/save contents */
 	public static func allocateVolatileValueTable() -> CNValueTable {
-		let storage = CNValueStorage.allocateVolatileValueStorage()
-		if !storage.set(value: .arrayValue([]), forPath: ["root"]){
+		let storage  = CNValueStorage.allocateVolatileValueStorage()
+		let rootpath = CNValuePath(elements: [.member("root")])
+		if !storage.set(value: .arrayValue([]), forPath: rootpath) {
 			CNLog(logLevel: .error, message: "Failed to set root data", atFunction: #function, inFile: #file)
 		}
-		return CNValueTable(path: ["root"], valueStorage: storage)
+		return CNValueTable(path: rootpath, valueStorage: storage)
 	}
 
 	public var recordCount: Int { get {

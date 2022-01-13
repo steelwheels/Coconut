@@ -16,7 +16,7 @@ public class CNValueStorage
 
 	private var mPackageDirectory:		URL
 	private var mFilePath:			String
-	private var mRootValue:			Dictionary<String, CNValue>
+	private var mRootValue:			CNMutableValue
 	private var mParentStorage:		CNValueStorage?
 
 	// packdir: Root directory for package (*.jspkg)
@@ -24,7 +24,7 @@ public class CNValueStorage
 	public init(packageDirectory packdir: URL, filePath fpath: String, parentStorage storage: CNValueStorage?) {
 		mPackageDirectory	= packdir
 		mFilePath		= fpath
-		mRootValue		= [:]
+		mRootValue		= CNMutableDictionaryValue()
 		mParentStorage		= storage
 	}
 
@@ -47,117 +47,32 @@ public class CNValueStorage
 		let result: Result
 		switch parser.parse(source: ctxt as String) {
 		case .ok(let val):
-			switch val {
-			case .dictionaryValue(let dict):
-				mRootValue = dict
-				result = .ok(val)
-			default:
-				let err = NSError.fileError(message: "Not dictionary data")
-				result = .error(err)
-			}
+			mRootValue = CNValueToMutableValue(from: val)
+			result = .ok(val)
 		case .error(let err):
 			result = .error(err)
 		}
 		return result
 	}
 
-	public func value(forPath path: Array<String>) -> CNValue? {
-		if let locval = self.localValue(forPath: path) {
-			return locval
-		} else if let cashval = mParentStorage?.localValue(forPath: path) {
-			return cashval
+	public func value(forPath path: CNValuePath) -> CNValue? {
+		if let mval = mRootValue.value(forPath: path.elements, fromPackageDirectory: mPackageDirectory) {
+			return mval.toValue()
+		} else if let parent = mParentStorage {
+			return parent.value(forPath: path)
 		} else {
 			return nil
 		}
 	}
 
-	private func localValue(forPath path: Array<String>) -> CNValue? {
-		guard let prop = path.last else {
-			return nil
-		}
-		let midpath = path.dropLast()
-		var owner: Dictionary<String, CNValue> = mRootValue
-		for mid in midpath {
-			var hasnext = false
-			if let child = owner[mid] {
-				switch child {
-				case .dictionaryValue(let childdic):
-					owner   = childdic
-					hasnext = true
-				case .reference(let childref):
-					if let childval = childref.load(fromPackageDirectory: mPackageDirectory) {
-						if let childdic = childval.toDictionary() {
-							owner   = childdic
-							hasnext = true
-						}
-					}
-				default:
-					break
-				}
-			}
-			if !hasnext {
-				return nil
-			}
-		}
-		switch owner[prop] {
-		case .reference(let refval):
-			return refval.load(fromPackageDirectory: mPackageDirectory)
-		default:
-			return owner[prop]
-		}
-	}
-
-	public func set(value val: CNValue, forPath path: Array<String>) -> Bool {
-		guard path.count > 0 else {
-			return false
-		}
-		mRootValue = localSet(destination: mRootValue, source: val, forPath: path)
-		return true
-	}
-
-	private func localSet(destination dst: Dictionary<String, CNValue>, source src: CNValue, forPath path: Array<String>) -> Dictionary<String, CNValue> {
-		guard let first = path.first else {
-			CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-			return [:]
-		}
-		let rest   = Array(path.dropFirst())
-		var newdst = dst
-		if rest.count == 0 {
-			newdst[first] = src
-			return newdst
-		} else {
-			if let dstelm = dst[first] {
-				switch dstelm {
-				case .dictionaryValue(let dstdic):
-					let newdic = localSet(destination: dstdic, source: src, forPath: rest)
-					newdst[first] = .dictionaryValue(newdic)
-					return newdst
-				case .reference(let dstref):
-					if let refval = dstref.load(fromPackageDirectory: mPackageDirectory) {
-						if let dstdic = refval.toDictionary() {
-							let newdic = localSet(destination: dstdic, source: src, forPath: rest)
-							newdst[first] = .dictionaryValue(newdic)
-							return newdst
-						}
-					}
-				default:
-					let pathstr = path.joined(separator: ".")
-					CNLog(logLevel: .error, message: "No such member: \(pathstr)", atFunction: #function, inFile: #file)
-				}
-			}
-			/* Not found */
-			let pathstr = path.joined(separator: ".")
-			CNLog(logLevel: .error, message: "No such member: \(pathstr)", atFunction: #function, inFile: #file)
-			return newdst
-		}
+	public func set(value val: CNValue, forPath path: CNValuePath) -> Bool {
+		let mval = CNValueToMutableValue(from: val)
+		return mRootValue.set(value: mval, forPath: path.elements, fromPackageDirectory: mPackageDirectory)
 	}
 
 	public func store() -> Bool {
-		/* Store child storage */
-		storeChildren(value: mRootValue)
-
-		let file = self.storageFile
 		/* Make directory for the file */
+		let file = self.storageFile
 		let pathes = file.deletingLastPathComponent()
 		switch FileManager.default.createDirectories(directory: pathes) {
 		case .ok:
@@ -167,23 +82,9 @@ public class CNValueStorage
 			return false // stop the save operation
 		}
 		/* Save into the file */
-		let txt  = CNValue.dictionaryValue(mRootValue).toText().toStrings().joined(separator: "\n")
+		let val = mRootValue.toValue()
+		let txt = val.toText().toStrings().joined(separator: "\n")
 		return file.storeContents(contents: txt + "\n")
-	}
-
-	private func storeChildren(value val: Dictionary<String, CNValue>) {
-		for (_, elm) in val {
-			switch elm {
-			case .dictionaryValue(let dict):
-				storeChildren(value: dict)
-			case .reference(let val):
-				if !val.store(toPackageDirectory: mPackageDirectory) {
-					CNLog(logLevel: .error, message: "Failed to store to starage", atFunction: #function, inFile: #file)
-				}
-			default:
-				break
-			}
-		}
 	}
 }
 
