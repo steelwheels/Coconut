@@ -96,11 +96,15 @@ public class CNValueTable: CNTable
 	}
 
 	private func recordValues() -> Array<CNValue>? {
+		NSLog("rV (0)")
 		if let val = mValueStorage.value(forPath: mPath) {
+			NSLog("rV (1) \(val.toText().toStrings().joined(separator: "\n"))")
 			if let arr = val.toArray() {
+				NSLog("rV (2)")
 				return arr
 			}
 		}
+		NSLog("rV (3)")
 		CNLog(logLevel: .error, message: "Invalid data structure for table", atFunction: #function, inFile: #file)
 		return nil
 	}

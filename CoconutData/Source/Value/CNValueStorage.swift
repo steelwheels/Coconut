@@ -57,7 +57,19 @@ public class CNValueStorage
 
 	public func value(forPath path: CNValuePath) -> CNValue? {
 		if let mval = mRootValue.value(forPath: path.elements, fromPackageDirectory: mPackageDirectory) {
-			return mval.toValue()
+			let result: CNValue
+			switch mval.type {
+			case .reference:
+				if let refval = mval as? CNMutableValueReference {
+					result = refval.context(fromPackageDirectory: mPackageDirectory)
+				} else {
+					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
+					result = .nullValue
+				}
+			default:
+				result = mval.toValue()
+			}
+			return result
 		} else if let parent = mParentStorage {
 			return parent.value(forPath: path)
 		} else {

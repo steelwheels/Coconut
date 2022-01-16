@@ -410,7 +410,17 @@ public class CNMutableValueReference: CNMutableValue
 		}
 		return result
 	}
-	
+
+	public func context(fromPackageDirectory package: URL) -> CNValue {
+		if let ctxt = mContext {
+			return ctxt.toValue()
+		} else if let ctxt = load(fromPackageDirectory: package) {
+			return ctxt.toValue()
+		} else {
+			return .nullValue
+		}
+	}
+
 	private func load(fromPackageDirectory package: URL) -> CNMutableValue? {
 		let result:  CNMutableValue?
 		if let ctxt = mContext {
