@@ -243,6 +243,10 @@
 		05E7F00D274E8F7600938598 /* CNVectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E7F00B274E8F7600938598 /* CNVectorManager.swift */; };
 		05E88DEB26AA9F1B00FF993E /* CNImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E88DEA26AA9F1B00FF993E /* CNImage.swift */; };
 		05E88DEC26AA9F1B00FF993E /* CNImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E88DEA26AA9F1B00FF993E /* CNImage.swift */; };
+		05EF830C279D54CE00163256 /* chevron-down.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EF82FD279D549400163256 /* chevron-down.png */; };
+		05EF830D279D54CE00163256 /* chevron-up.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EF82FE279D549400163256 /* chevron-up.png */; };
+		05EF8314279D54E300163256 /* chevron-down.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EF82FD279D549400163256 /* chevron-down.png */; };
+		05EF8315279D54E300163256 /* chevron-up.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EF82FE279D549400163256 /* chevron-up.png */; };
 		05F3AC3E26571E1E0089C937 /* UTNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F3AC3D26571E1E0089C937 /* UTNativeValue.swift */; };
 		05F4AA21263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F4AA20263C274700BAE5E2 /* CNResourceInstaller.swift */; };
 		05F4AA22263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F4AA20263C274700BAE5E2 /* CNResourceInstaller.swift */; };
@@ -350,6 +354,8 @@
 			dstPath = Images;
 			dstSubfolderSpec = 7;
 			files = (
+				05EF830C279D54CE00163256 /* chevron-down.png in CopyFiles */,
+				05EF830D279D54CE00163256 /* chevron-up.png in CopyFiles */,
 				05AC005927587A0F00B2AFB8 /* hand-point-up.png in CopyFiles */,
 				05BD9FA82745445B00D43064 /* oval-filled.png in CopyFiles */,
 				05BD9FA92745445B00D43064 /* oval.png in CopyFiles */,
@@ -379,6 +385,8 @@
 			dstPath = Images;
 			dstSubfolderSpec = 7;
 			files = (
+				05EF8314279D54E300163256 /* chevron-down.png in CopyFiles */,
+				05EF8315279D54E300163256 /* chevron-up.png in CopyFiles */,
 				05AC005D27587A2000B2AFB8 /* hand-point-up.png in CopyFiles */,
 				05BD9FA32745444900D43064 /* oval-filled.png in CopyFiles */,
 				05BD9FA42745444900D43064 /* oval.png in CopyFiles */,
@@ -562,6 +570,8 @@
 		05E45BCA2736CD070034254D /* rectangle-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-rounded.png"; sourceTree = "<group>"; };
 		05E7F00B274E8F7600938598 /* CNVectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVectorManager.swift; sourceTree = "<group>"; };
 		05E88DEA26AA9F1B00FF993E /* CNImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNImage.swift; sourceTree = "<group>"; };
+		05EF82FD279D549400163256 /* chevron-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-down.png"; sourceTree = "<group>"; };
+		05EF82FE279D549400163256 /* chevron-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-up.png"; sourceTree = "<group>"; };
 		05F3AC3D26571E1E0089C937 /* UTNativeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTNativeValue.swift; sourceTree = "<group>"; };
 		05F4AA20263C274700BAE5E2 /* CNResourceInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNResourceInstaller.swift; sourceTree = "<group>"; };
 		05F924AE27243267008BAFDC /* CNCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollection.swift; sourceTree = "<group>"; };
@@ -693,7 +703,9 @@
 			children = (
 				0596C55D2722E2FE00E9A24F /* character-a.png */,
 				0596C55E2722E2FE00E9A24F /* chevron-backward.png */,
+				05EF82FD279D549400163256 /* chevron-down.png */,
 				0596C55F2722E2FE00E9A24F /* chevron-forward.png */,
+				05EF82FE279D549400163256 /* chevron-up.png */,
 				05AC0058275879F400B2AFB8 /* hand-point-up.png */,
 				0596C55C2722E2FE00E9A24F /* hand-raised.png */,
 				05613AC1273431A700A5C0A1 /* line-1p.png */,

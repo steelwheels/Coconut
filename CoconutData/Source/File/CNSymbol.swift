@@ -2,7 +2,7 @@
  * @file	CNSymbol.swift
  * @brief	Define CNSymbol class
  * @par Copyright
- *   Copyright (C) 2021 Steel Wheels Project
+ *   Copyright (C) 2021, 2022 Steel Wheels Project
  */
 
 import Foundation
@@ -14,7 +14,9 @@ public class CNSymbol
 	public enum SymbolType {
 		case characterA
 		case chevronBackward
+		case chevronDown
 		case chevronForward
+		case chevronUp
 		case handPointUp
 		case handRaised
 		case line1P
@@ -33,7 +35,9 @@ public class CNSymbol
 			switch self {
 			case .characterA:	result = "character-a"
 			case .chevronBackward:	result = "chevron-backward"
+			case .chevronDown:	result = "chevron-down"
 			case .chevronForward:	result = "chevron-forward"
+			case .chevronUp:	result = "chevron-up"
 			case .handPointUp:	result = "hand-point-up"
 			case .handRaised:	result = "hand-raised"
 			case .line1P:		result = "line-1p"
