@@ -289,13 +289,9 @@ public class CNVectorManager
 	public func load(objects objs: Array<CNValue>) -> Bool {
 		var result = true
 		mGraphics  = []
-		NSLog("l0")
 		for obj in objs {
-			NSLog("l1")
 			if let dict = obj.toDictionary() {
-				NSLog("l1.1")
 				if let clsname = className(value: dict) {
-					NSLog("l1.1.1")
 					switch clsname {
 					case CNVectorPath.ClassName:
 						if let obj = CNVectorPath.fromValue(value: dict) {
@@ -330,17 +326,14 @@ public class CNVectorManager
 						result = false
 					}
 				} else {
-					NSLog("l1.1.2")
 					CNLog(logLevel: .error, message: "No class name", atFunction: #function, inFile: #file)
 					result = false
 				}
 			} else {
-				NSLog("l1.2")
 				CNLog(logLevel: .error, message: "Object is required", atFunction: #function, inFile: #file)
 				result = false
 			}
 		}
-		NSLog("l2")
 		return result
 	}
 

@@ -95,6 +95,16 @@ public class CNTokenStream
 		return  false
 	}
 
+	public func requireAnyIdentifier() -> String? {
+		if let token = mStream.get() {
+			if let val = token.getIdentifier() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
+	}
+
 	public func getBool() -> Bool? {
 		if let token = mStream.get() {
 			return token.getBool()
