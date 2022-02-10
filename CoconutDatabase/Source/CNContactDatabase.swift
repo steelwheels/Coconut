@@ -61,6 +61,23 @@ public class CNContactDatabase: CNTable
 		}
 	}
 
+	public func search(value srcval: CNValue, forField field: String) -> Array<CNRecord> {
+		var result: Array<CNRecord> = []
+		let recnum = mContacts.count
+		for i in 0..<recnum {
+			let contact = mContacts[i]
+			if let val = mContacts[i].value(ofField: field) {
+				switch CNCompareValue(nativeValue0: val, nativeValue1: srcval) {
+				case .orderedSame:
+					result.append(contact)
+				case .orderedAscending, .orderedDescending:
+					break
+				}
+			}
+		}
+		return result
+	}
+
 	public func append(record rcd: CNRecord) {
 		if let nrcd = rcd as? CNContactRecord {
 			mContacts.append(nrcd)

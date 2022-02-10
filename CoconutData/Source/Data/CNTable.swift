@@ -20,6 +20,7 @@ public protocol CNTable
 
 	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
+	func search(value val: CNValue, forField field: String) -> Array<CNRecord>
 	func append(record rcd: CNRecord)
 	func forEach(callback cbfunc: (_ record: CNRecord) -> Void)
 

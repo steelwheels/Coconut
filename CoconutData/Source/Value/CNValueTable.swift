@@ -75,6 +75,28 @@ public class CNValueTable: CNTable
 		return nil
 	}
 
+	public func search(value srcval: CNValue, forField field: String) -> Array<CNRecord> {
+		guard let values = self.recordValues() else {
+			return []
+		}
+		var result: Array<CNRecord> = []
+		let count = values.count
+		for i in 0..<count {
+			if let dict = values[i].toDictionary() {
+				if let dval = dict[field] {
+					switch CNCompareValue(nativeValue0: dval, nativeValue1: srcval) {
+					case .orderedSame:
+						let newrec = CNValueRecord(table: self, index: i)
+						result.append(newrec)
+					case .orderedAscending, .orderedDescending:
+						break
+					}
+				}
+			}
+		}
+		return result
+	}
+
 	public func append(record rcd: CNRecord) {
 		// Nothing have to do (Already added at newRecord())
 	}
