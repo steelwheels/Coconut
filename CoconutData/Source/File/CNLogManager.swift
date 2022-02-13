@@ -44,6 +44,8 @@ public class CNLogManager
 			switch level {
 			case .nolog:
 				break
+			case .user:
+				cons.print(string: msg + "\n")
 			case .error:
 				cons.error(string: "[Error  ] " + msg + "\n")
 			case .warning:

@@ -11,10 +11,11 @@ open class CNConfig
 {
 	public enum LogLevel: Int {
 		case nolog	= 0	// No log
-		case error	= 1	// Ony error log
-		case warning	= 2	// + warning log
-		case debug	= 3	// + debug log
-		case detail	= 4	// + detail
+		case user	= 1	// User's log
+		case error	= 2	// Ony error log
+		case warning	= 3	// + warning log
+		case debug	= 4	// + debug log
+		case detail	= 5	// + detail
 
 		public static let min	: Int	= LogLevel.nolog.rawValue
 		public static let max	: Int 	= LogLevel.detail.rawValue
@@ -24,6 +25,7 @@ open class CNConfig
 				let result: String
 				switch self {
 				case .nolog:	result = "nolog"
+				case .user:	result = "user"
 				case .error:	result = "error"
 				case .warning:	result = "warning"
 				case .debug:	result = "debug"
@@ -45,6 +47,7 @@ open class CNConfig
 			let result: LogLevel?
 			switch str {
 			case "nolog":		result = .nolog
+			case "user":		result = .user
 			case "error":		result = .error
 			case "warning":		result = .warning
 			case "debug":		result = .debug
