@@ -38,46 +38,54 @@ public class CNLogManager
 	}
 
 	public func log(logLevel level: CNConfig.LogLevel, message msg: String){
-		let curlvl = CNPreference.shared.systemPreference.logLevel
 		let cons   = self.console
-		if curlvl.isIncluded(in: level) {
-			switch level {
-			case .nolog:
-				break
-			case .user:
-				cons.print(string: msg + "\n")
-			case .error:
-				cons.error(string: "[Error  ] " + msg + "\n")
-			case .warning:
-				cons.error(string: "[Warning] " + msg + "\n")
-			case .debug:
-				cons.print(string: "[Debug  ] " + msg + "\n")
-			case .detail:
-				cons.print(string: "[Message] " + msg + "\n")
-			}
+		switch level {
+		case .nolog:
+			break
+		case .error:
+			cons.error(string: "[Error  ] " + msg + "\n")
+		case .warning:
+			cons.error(string: "[Warning] " + msg + "\n")
+		case .debug:
+			cons.print(string: "[Debug  ] " + msg + "\n")
+		case .detail:
+			cons.print(string: "[Message] " + msg + "\n")
 		}
 	}
 }
 
 public func CNLog(logLevel level: CNConfig.LogLevel, message msg: String)
 {
-	CNLogManager.shared.log(logLevel: level, message: msg)
+	if doOutput(logLevel: level) {
+		CNLogManager.shared.log(logLevel: level, message: msg)
+	}
 }
 
 public func CNLog(logLevel level: CNConfig.LogLevel, message msg: String, atFunction afunc: String, inFile ifile: String)
 {
-	let newmsg = msg + " at " + afunc + " in " + ifile
-	CNLog(logLevel: level, message: newmsg)
+	if doOutput(logLevel: level) {
+		let newmsg = msg + " at " + afunc + " in " + ifile
+		CNLog(logLevel: level, message: newmsg)
+	}
 }
 
 public func CNLog(logLevel level: CNConfig.LogLevel, messages msgs: Array<String>)
 {
-	let msg = msgs.joined(separator: "\n")
-	CNLog(logLevel: level, message: msg)
+	if doOutput(logLevel: level) {
+		let msg = msgs.joined(separator: "\n")
+		CNLog(logLevel: level, message: msg)
+	}
 }
 
 public func CNLog(logLevel level: CNConfig.LogLevel, text txt: CNText)
 {
-	let lines = txt.toStrings()
-	CNLog(logLevel: level, messages: lines)
+	if doOutput(logLevel: level) {
+		let lines = txt.toStrings()
+		CNLog(logLevel: level, messages: lines)
+	}
+}
+
+private func doOutput(logLevel level: CNConfig.LogLevel) -> Bool {
+	let deflevel = CNPreference.shared.systemPreference.logLevel
+	return deflevel.isIncluded(in: level)
 }

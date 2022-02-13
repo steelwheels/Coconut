@@ -10,6 +10,7 @@ import Foundation
 public protocol CNConsole {
 	func print(string str: String)
 	func error(string str: String)
+	func log(string str: String)
 	func scan() -> String?
 }
 
@@ -23,6 +24,10 @@ public class CNDefaultConsole: CNConsole
 	}
 
 	public func error(string str: String){
+		NSLog(str)
+	}
+
+	public func log(string str: String){
 		NSLog(str)
 	}
 
@@ -60,6 +65,11 @@ public class CNFileConsole : CNConsole
 		errorFile.put(string: attr + str + rev)
 	}
 
+	public func log(string str: String){
+		let cons = CNLogManager.shared.console
+		cons.print(string: str)
+	}
+
 	public func scan() -> String? {
 		let result: String?
 		switch inputFile.gets() {
@@ -90,6 +100,10 @@ public class CNIndentedConsole: CNConsole
 
 	public func error(string str: String){
 		mConsole.error(string: mIndentString + str)
+	}
+
+	public func log(string str: String){
+		mConsole.log(string: mIndentString + str)
 	}
 
 	public func scan() -> String? {
@@ -155,6 +169,15 @@ public class CNBufferedConsole: CNConsole
 			cons.error(string: str)
 		} else {
 			mErrorBuffer.append(str)
+		}
+	}
+
+	public func log(string str: String){
+		if let cons = mOutputConsole {
+			cons.log(string: str)
+		} else {
+			let cons = CNLogManager.shared.console
+			cons.print(string: str)
 		}
 	}
 
