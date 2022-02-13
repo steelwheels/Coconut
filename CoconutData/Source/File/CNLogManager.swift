@@ -70,11 +70,8 @@ public func CNLog(logLevel level: CNConfig.LogLevel, message msg: String, atFunc
 
 public func CNLog(logLevel level: CNConfig.LogLevel, messages msgs: Array<String>)
 {
-	var lines: String = ""
-	for msg in msgs {
-		lines += msg + "\n"
-	}
-	CNLogManager.shared.log(logLevel: level, message: lines)
+	let msg = msgs.joined(separator: "\n")
+	CNLog(logLevel: level, message: msg)
 }
 
 public func CNLog(logLevel level: CNConfig.LogLevel, text txt: CNText)
