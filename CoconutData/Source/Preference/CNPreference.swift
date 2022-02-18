@@ -88,7 +88,17 @@ public enum CNInterfaceStyle: Int {
 
 public class CNPreference
 {
-	public static let shared = CNPreference()
+	public static var mShared: CNPreference? = nil
+
+	public static var shared: CNPreference { get {
+		if let obj = mShared {
+			return obj
+		} else {
+			let newobj = CNPreference()
+			mShared = newobj
+			return newobj
+		}
+	}}
 
 	private var mTable:		Dictionary<String, CNPreferenceTable>
 	private var mUserDefaults:	UserDefaults

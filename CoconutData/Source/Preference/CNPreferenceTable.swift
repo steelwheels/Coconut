@@ -2,32 +2,34 @@
  * @file	CNPrefereceParameter.swift
  * @brief	Define CNPreferenceParameterTable class
  * @par Copyright
- *   Copyright (C) 2020 Steel Wheels Project
+ *   Copyright (C) 2020-2022 Steel Wheels Project
  */
 
 import Foundation
 
 open class CNPreferenceTable
 {
-	private var mSectionName:	String
+	public typealias ListenerFunction = CNObserverDictionary.ListenerFunction
+	public typealias ListnerHolder    = CNObserverDictionary.ListnerHolder
 
-	@objc private dynamic var mParameterTable:	NSMutableDictionary
+	private var mSectionName:	String
+	private var mValueTable:	CNObserverDictionary
 
 	public init(sectionName name: String){
 		mSectionName 	= name
-		mParameterTable = NSMutableDictionary(capacity: 32)
+		mValueTable	= CNObserverDictionary()
 	}
 
 	public func path(keyString key: String) -> String {
 		return mSectionName + "." + key
 	}
 
-	public func set(anyValue val: Any, forKey key: String) {
-		mParameterTable.setValue(val, forKey: key)
+	public func set(objectValue val: NSObject, forKey key: String) {
+		mValueTable.setValue(val, forKey: key)
 	}
 
-	public func anyValue(forKey key: String) -> Any? {
-		return mParameterTable.value(forKey: key)
+	public func objectValue(forKey key: String) -> NSObject? {
+		return mValueTable.value(forKey: key)
 	}
 
 	/*
@@ -35,11 +37,11 @@ open class CNPreferenceTable
 	 */
 	public func set(intValue val: Int, forKey key: String) {
 		let num = NSNumber(integerLiteral: val)
-		set(anyValue: num, forKey: key)
+		set(objectValue: num, forKey: key)
 	}
 
 	public func intValue(forKey key: String) -> Int? {
-		if let val = anyValue(forKey: key) as? NSNumber {
+		if let val = objectValue(forKey: key) as? NSNumber {
 			return val.intValue
 		} else {
 			return nil
@@ -65,12 +67,12 @@ open class CNPreferenceTable
 	 * String
 	 */
 	public func set(stringValue val: String, forKey key: String) {
-		set(anyValue: val, forKey: key)
+		set(objectValue: val as NSString, forKey: key)
 	}
 
 	public func stringValue(forKey key: String) -> String? {
-		if let val = anyValue(forKey: key) as? String {
-			return val
+		if let val = objectValue(forKey: key) as? NSString {
+			return val as String
 		} else {
 			return nil
 		}
@@ -94,11 +96,11 @@ open class CNPreferenceTable
 	 * Color
 	 */
 	public func set(colorValue val: CNColor, forKey key: String) {
-		set(anyValue: val, forKey: key)
+		set(objectValue: val, forKey: key)
 	}
 
 	public func colorValue(forKey key: String) -> CNColor? {
-		if let val = anyValue(forKey: key) as? CNColor {
+		if let val = objectValue(forKey: key) as? CNColor {
 			return val
 		} else {
 			return nil
@@ -123,11 +125,11 @@ open class CNPreferenceTable
 	 * Font
 	 */
 	public func set(fontValue val: CNFont, forKey key: String) {
-		set(anyValue: val, forKey: key)
+		set(objectValue: val, forKey: key)
 	}
 
 	public func fontValue(forKey key: String) -> CNFont? {
-		if let val = anyValue(forKey: key) as? CNFont {
+		if let val = objectValue(forKey: key) as? CNFont {
 			return val
 		} else {
 			return nil
@@ -152,12 +154,13 @@ open class CNPreferenceTable
 	 * DataDictionary
 	 */
 	public func set(dataDictionaryValue val: Dictionary<String, Data>, forKey key: String) {
-		set(anyValue: val, forKey: key)
+		let mval = val as NSDictionary
+		set(objectValue: mval, forKey: key)
 	}
 
 	public func dataDictionaryValue(forKey key: String) -> Dictionary<String, Data>? {
-		if let val = anyValue(forKey: key) as? Dictionary<String, Data> {
-			return val
+		if let val = objectValue(forKey: key) as? NSDictionary  {
+			return val as? Dictionary<String, Data>
 		} else {
 			return nil
 		}
@@ -181,12 +184,13 @@ open class CNPreferenceTable
 	 * Color Dictionary
 	 */
 	public func set(colorDictionaryValue val: Dictionary<CNInterfaceStyle, CNColor>, forKey key: String) {
-		set(anyValue: val, forKey: key)
+		let dict = val as NSDictionary
+		set(objectValue: dict, forKey: key)
 	}
 
 	public func colorDictionaryValue(forKey key: String) -> Dictionary<CNInterfaceStyle, CNColor>? {
-		if let val = anyValue(forKey: key) as? Dictionary<CNInterfaceStyle, CNColor> {
-			return val
+		if let val = objectValue(forKey: key) as? NSDictionary {
+			return val as? Dictionary<CNInterfaceStyle, CNColor>
 		} else {
 			return nil
 		}
@@ -224,12 +228,12 @@ open class CNPreferenceTable
 	/*
 	 * Observer
 	 */
-	public func addObserver(observer obs: NSObject, forKey key: String) {
-		mParameterTable.addObserver(obs, forKeyPath: key, options: [.new], context: nil)
+	public func addObserver(forKey key: String, listnerFunction lfunc: @escaping ListenerFunction) -> ListnerHolder {
+		mValueTable.addObserver(forKey: key, listnerFunction: lfunc)
 	}
 
-	public func removeObserver(observer obs: NSObject, forKey key: String) {
-		mParameterTable.removeObserver(obs, forKeyPath: key)
+	public func removeObserver(listnerHolder holder: ListnerHolder?) {
+		mValueTable.removeObserver(listnerHolder: holder)
 	}
 }
 

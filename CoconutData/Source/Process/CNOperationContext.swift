@@ -9,11 +9,15 @@ import Foundation
 
 @objc open class CNOperationContext: NSObject
 {
+	public typealias ListnerHolder		= CNObserverDictionary.ListnerHolder
+
 	public static let isExecutingItem	= "isExecuting"
 	public static let isFinishedItem	= "isFinished"
 	public static let isCanceledItem	= "isCanceled"
 
 	private var mObserverDictionary:	CNObserverDictionary
+	private var mObserverHolder:		Array<ListnerHolder>
+
 	private var mParameters:		Dictionary<String, CNValue>
 	private var mConsole:			CNFileConsole
 
@@ -26,6 +30,7 @@ import Foundation
 
 	public init(input ifile: CNFile, output ofile: CNFile, error efile: CNFile) {
 		mObserverDictionary = CNObserverDictionary()
+		mObserverHolder	    = []
 		mParameters	    = [:]
 		mConsole	    = CNFileConsole(input: ifile, output: ofile, error: efile)
 		ownerExecutor	    = nil
@@ -37,9 +42,9 @@ import Foundation
 
 	deinit {
 		ownerExecutor = nil
-		mObserverDictionary.removeObserver(forKey: CNOperationContext.isExecutingItem)
-		mObserverDictionary.removeObserver(forKey: CNOperationContext.isFinishedItem)
-		mObserverDictionary.removeObserver(forKey: CNOperationContext.isCanceledItem)
+		for holder in mObserverHolder {
+			mObserverDictionary.removeObserver(listnerHolder: holder)
+		}
 	}
 
 	public func parameterNames() -> Array<String> {
@@ -61,15 +66,18 @@ import Foundation
 	}
 
 	public func addIsExecutingListener(listnerFunction lfunc: @escaping CNObserverDictionary.ListenerFunction) {
-		mObserverDictionary.addObserver(forKey: CNOperationContext.isExecutingItem, listnerFunction: lfunc)
+		let holder = mObserverDictionary.addObserver(forKey: CNOperationContext.isExecutingItem, listnerFunction: lfunc)
+		mObserverHolder.append(holder)
 	}
 
 	public func addIsFinishedListener(listnerFunction lfunc: @escaping CNObserverDictionary.ListenerFunction) {
-		mObserverDictionary.addObserver(forKey: CNOperationContext.isFinishedItem, listnerFunction: lfunc)
+		let holder = mObserverDictionary.addObserver(forKey: CNOperationContext.isFinishedItem, listnerFunction: lfunc)
+		mObserverHolder.append(holder)
 	}
 
 	public func addIsCanceledListener(listnerFunction lfunc: @escaping CNObserverDictionary.ListenerFunction) {
-		mObserverDictionary.addObserver(forKey: CNOperationContext.isCanceledItem, listnerFunction: lfunc)
+		let holder = mObserverDictionary.addObserver(forKey: CNOperationContext.isCanceledItem, listnerFunction: lfunc)
+		mObserverHolder.append(holder)
 	}
 
 	open var isExecuting: Bool {
