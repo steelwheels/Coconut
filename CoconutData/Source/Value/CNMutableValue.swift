@@ -358,8 +358,10 @@ public class CNMutableDictionaryValue: CNMutableValue
 			if let dst = mDictionaryValue[member] {
 				result = dst.append(value: val, forPath: rest, fromPackageDirectory: package)
 			} else {
-				CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
-				result = false
+				/* append new sub-tree */
+				let newval = CNMakePathValue(value: val, forPath: rest)
+				mDictionaryValue[member] = newval
+				result = true
 			}
 		case .index(let idx):
 			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
