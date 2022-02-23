@@ -34,6 +34,11 @@ public class CNMutableValue
 		return false
 	}
 
+	open func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
+		return false
+	}
+
 	open func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
@@ -86,6 +91,11 @@ public class CNMutableScalarValue: CNMutableValue
 			result = false
 		}
 		return result
+	}
+
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
+		return false
 	}
 
 	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
@@ -181,6 +191,30 @@ public class CNMutableArrayValue: CNMutableValue
 					result = false
 				}
 			}
+		}
+		return result
+	}
+
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		let result: Bool
+		if let first = path.first {
+			switch first {
+			case .member(let member):
+				CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
+				result = false
+			case .index(let idx):
+				if 0<=idx && idx<mArrayValue.count {
+					let dst  = mArrayValue[idx]
+					let rest = Array(path.dropFirst())
+					result = dst.append(value: val, forPath: rest, fromPackageDirectory: package)
+				} else {
+					CNLog(logLevel: .error, message: "Array index overflow: \(idx)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			}
+		} else {
+			mArrayValue.append(val)
+			result = true
 		}
 		return result
 	}
@@ -299,9 +333,33 @@ public class CNMutableDictionaryValue: CNMutableValue
 				if let dst = mDictionaryValue[member] {
 					result = dst.set(value: val, forPath: rest, fromPackageDirectory: package)
 				} else {
-					CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
-					result = false
+					/* append new sub-tree */
+					let newval = CNMakePathValue(value: val, forPath: rest)
+					mDictionaryValue[member] = newval
+					result = true
 				}
+			}
+		case .index(let idx):
+			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
+			result = false
+		}
+		return result
+	}
+
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		guard let first = path.first else {
+			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
+			return false
+		}
+		let result: Bool
+		switch first {
+		case .member(let member):
+			let rest = Array(path.dropFirst(1))
+			if let dst = mDictionaryValue[member] {
+				result = dst.append(value: val, forPath: rest, fromPackageDirectory: package)
+			} else {
+				CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
+				result = false
 			}
 		case .index(let idx):
 			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
@@ -401,6 +459,16 @@ public class CNMutableValueReference: CNMutableValue
 		return result
 	}
 
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+		let result: Bool
+		if let dst = load(fromPackageDirectory: package) {
+			result = dst.append(value: val, forPath: path, fromPackageDirectory: package)
+		} else {
+			result = false
+		}
+		return result
+	}
+
 	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
 		let result: Bool
 		if let dst = load(fromPackageDirectory: package) {
@@ -448,6 +516,36 @@ public class CNMutableValueReference: CNMutableValue
 
 	public override func toText() -> CNText {
 		return CNTextLine(string: mReferenceValue.relativePath)
+	}
+}
+
+private func CNMakePathValue(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> CNMutableValue {
+	if path.count == 0 {
+		return val
+	} else {
+		guard let first = path.first else {
+			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
+			return val
+		}
+		let result: CNMutableValue
+		switch first {
+		case .member(let member):
+			let rest    = Array(path.dropFirst(1))
+			let subval  = CNMakePathValue(value: val, forPath: rest)
+			let newdict = CNMutableDictionaryValue()
+			newdict.set(value: subval, forKey: member)
+			result = newdict
+		case .index(let idx):
+			let rest    = Array(path.dropFirst(1))
+			let subval  = CNMakePathValue(value: val, forPath: rest)
+			let newarr  = CNMutableArrayValue()
+			for _ in 0..<idx {
+				newarr.append(value: CNMutableScalarValue(scalarValue: .nullValue))
+			}
+			newarr.append(value: subval)
+			result = newarr
+		}
+		return result
 	}
 }
 

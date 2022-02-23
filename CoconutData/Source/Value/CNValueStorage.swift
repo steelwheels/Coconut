@@ -28,10 +28,9 @@ public class CNValueStorage
 		mParentStorage		= storage
 	}
 
-	/* The storage which has no file to load/save contents */
-	public static func allocateVolatileValueStorage() -> CNValueStorage {
-		return CNValueStorage(packageDirectory: URL.null(), filePath: "dummy.json", parentStorage: nil)
-	}
+	public var description: String { get {
+		return "{packdir=\(mPackageDirectory.path), file=\(mFilePath), parent=\(String(describing: mParentStorage))}"
+	}}
 
 	public var storageFile: URL {
 		get { return mPackageDirectory.appendingPathComponent(mFilePath, isDirectory: false) }
@@ -80,6 +79,11 @@ public class CNValueStorage
 	public func set(value val: CNValue, forPath path: CNValuePath) -> Bool {
 		let mval = CNValueToMutableValue(from: val)
 		return mRootValue.set(value: mval, forPath: path.elements, fromPackageDirectory: mPackageDirectory)
+	}
+
+	public func append(value val: CNValue, forPath path: CNValuePath) -> Bool {
+		let mval = CNValueToMutableValue(from: val)
+		return mRootValue.append(value: mval, forPath: path.elements, fromPackageDirectory: mPackageDirectory)
 	}
 
 	public func store() -> Bool {

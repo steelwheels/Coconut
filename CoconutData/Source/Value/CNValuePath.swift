@@ -28,6 +28,33 @@ public class CNValuePath
 		mElements = [ .member(memb) ]
 	}
 
+	public init(path pth: CNValuePath, subPath subs: Array<Element>){
+		mElements = []
+		for src in pth.elements {
+			mElements.append(src)
+		}
+		for subs in subs {
+			mElements.append(subs)
+		}
+	}
+
+	public var description: String { get {
+		var result = ""
+		var is1st = true
+		for elm in mElements {
+			if is1st {
+				is1st = false
+			} else {
+				result += ", "
+			}
+			switch elm {
+			case .member(let str): result += ".member(\(str))"
+			case .index(let idx):  result += ".index(\(idx))"
+			}
+		}
+		return result
+	}}
+
 	public static func pathExpression(string str: String) -> Array<Element>? {
 		var result: Array<Element> = []
 		var finished               = true

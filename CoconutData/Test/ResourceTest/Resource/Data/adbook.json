@@ -1,13 +1,17 @@
 {
-	persons: [
-		{
-			name: "Nobita",
-			age:  10
-		},
-		{
-			name: "Gian",
-			age:  10
-		}
-	]
+	persons: {
+		className:	"ValueTable",
+		columnNames:	["name", "age"],
+		records: [
+			{
+				name: "Nobita",
+				age:  10
+			},
+			{
+				name: "Gian",
+				age:  10
+			}
+		]
+	}
 }
 
