@@ -217,7 +217,7 @@ open class CNResource
 				let subsec = dirres.toText(category: category)
 				section.add(text: subsec)
 			} else {
-				fatalError("Can not happen")
+				fatalError("Can not happen at function \(#function) in file \(#file)")
 			}
 		}
 		return section

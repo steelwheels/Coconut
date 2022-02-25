@@ -291,7 +291,7 @@ private func compare(dictionary0 s0: Dictionary<String, CNValue>, dictionary1 s1
 				break
 			}
 		} else {
-			CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Can not happen at function \(#function) in file \(#file)", atFunction: #function, inFile: #file)
 		}
 	}
 	return .orderedSame

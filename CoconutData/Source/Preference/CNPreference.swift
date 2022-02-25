@@ -245,7 +245,7 @@ public class CNUserPreference: CNPreferenceTable
 					return URL(fileURLWithPath: homedir)
 				}
 			}
-			fatalError("Can not happen")
+			fatalError("Can not happen at function \(#function) in file \(#file)")
 		}
 		set(newval){
 			var isdir: ObjCBool = false
@@ -482,7 +482,7 @@ public class CNTerminalPreference: CNPreferenceTable
 			if let val = super.intValue(forKey: WidthItem) {
 				return val
 			}
-			fatalError("Can not happen")
+			fatalError("Can not happen at function \(#function) in file \(#file)")
 		}
 		set(newval) {
 			let orgval = super.intValue(forKey: WidthItem)
@@ -498,7 +498,7 @@ public class CNTerminalPreference: CNPreferenceTable
 			if let val = super.intValue(forKey: HeightItem) {
 				return val
 			}
-			fatalError("Can not happen")
+			fatalError("Can not happen at function \(#function) in file \(#file)")
 		}
 		set(newval) {
 			let orgval = super.intValue(forKey: HeightItem)
@@ -575,7 +575,7 @@ public class CNTerminalPreference: CNPreferenceTable
 			if let font = super.fontValue(forKey: FontItem) {
 				return font
 			}
-			fatalError("Can not happen")
+			fatalError("Can not happen at function \(#function) in file \(#file)")
 		}
 		set(newfont) {
 			super.set(fontValue: newfont, forKey: FontItem)

@@ -127,7 +127,7 @@ public class CNEnvironment
 			if let url = getURL(name: "PWD") {
 				return url
 			} else {
-				fatalError("Can not happen (1)")
+				fatalError("Can not happen at function \(#function) in file \(#file)")
 			}
 		}
 		set(url){
@@ -140,7 +140,7 @@ public class CNEnvironment
 			if let url = getURL(name: "TMPDIR") {
 				return url
 			} else {
-				fatalError("Can not happen (2)")
+				fatalError("Can not happen at function \(#function) in file \(#file)")
 			}
 		}
 		set(url){
@@ -153,7 +153,7 @@ public class CNEnvironment
 			if let val = getInt(name: CNEnvironment.WidthItem) {
 				return val
 			} else {
-				fatalError("Can not happen (3)")
+				fatalError("Can not happen at function \(#function) in file \(#file)")
 			}
 		}
 		set(newval){
@@ -166,7 +166,7 @@ public class CNEnvironment
 			if let val = getInt(name: CNEnvironment.HeightItem) {
 				return val
 			} else {
-				fatalError("Can not happen (4)")
+				fatalError("Can not happen at function \(#function) in file \(#file)")
 			}
 		}
 		set(newval){
