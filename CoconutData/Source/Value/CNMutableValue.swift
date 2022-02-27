@@ -24,22 +24,22 @@ public class CNMutableValue
 		mType = t
 	}
 
-	open func value(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> CNMutableValue? {
+	open func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return nil
 	}
 
-	open func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	open func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
 	}
 
-	open func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	open func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
 	}
 
-	open func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	open func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
 	}
@@ -54,7 +54,7 @@ public class CNMutableValue
 		return .nullValue
 	}
 
-	open func toText(fromPackageDirectory package: URL) -> CNText {
+	open func toText() -> CNText {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return CNTextLine(string: "?")
 	}
@@ -69,7 +69,7 @@ public class CNMutableScalarValue: CNMutableValue
 		super.init(type: .scaler)
 	}
 
-	public override func value(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> CNMutableValue? {
+	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
 		let result: CNMutableValue?
 		if path.count == 0 {
 			let newval = CNMutableScalarValue(scalarValue: mScalarValue)
@@ -81,7 +81,7 @@ public class CNMutableScalarValue: CNMutableValue
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		let result: Bool
 		if path.count == 0 {
 			mScalarValue = val.toValue()
@@ -93,12 +93,12 @@ public class CNMutableScalarValue: CNMutableValue
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		return false
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
 		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		return false
 	}
@@ -111,7 +111,7 @@ public class CNMutableScalarValue: CNMutableValue
 		return mScalarValue
 	}
 
-	public override func toText(fromPackageDirectory package: URL) -> CNText {
+	public override func toText() -> CNText {
 		return mScalarValue.toText()
 	}
 }
@@ -129,7 +129,7 @@ public class CNMutableArrayValue: CNMutableValue
 		mArrayValue.append(val)
 	}
 
-	public override func value(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> CNMutableValue? {
+	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return nil
@@ -150,7 +150,7 @@ public class CNMutableArrayValue: CNMutableValue
 				}
 			} else {
 				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx].value(forPath: rest, fromPackageDirectory: package)
+					result = mArrayValue[idx].value(forPath: rest)
 				} else {
 					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 					result = nil
@@ -160,7 +160,7 @@ public class CNMutableArrayValue: CNMutableValue
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return false
@@ -185,7 +185,7 @@ public class CNMutableArrayValue: CNMutableValue
 				}
 			} else {
 				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx].set(value: val, forPath: rest, fromPackageDirectory: package)
+					result = mArrayValue[idx].set(value: val, forPath: rest)
 				} else {
 					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 					result = false
@@ -195,7 +195,7 @@ public class CNMutableArrayValue: CNMutableValue
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		let result: Bool
 		if let first = path.first {
 			switch first {
@@ -206,7 +206,7 @@ public class CNMutableArrayValue: CNMutableValue
 				if 0<=idx && idx<mArrayValue.count {
 					let dst  = mArrayValue[idx]
 					let rest = Array(path.dropFirst())
-					result = dst.append(value: val, forPath: rest, fromPackageDirectory: package)
+					result = dst.append(value: val, forPath: rest)
 				} else {
 					CNLog(logLevel: .error, message: "Array index overflow: \(idx)", atFunction: #function, inFile: #file)
 					result = false
@@ -219,7 +219,7 @@ public class CNMutableArrayValue: CNMutableValue
 		return result
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return false
@@ -240,7 +240,7 @@ public class CNMutableArrayValue: CNMutableValue
 				}
 			} else {
 				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx].delete(forPath: rest, fromPackageDirectory: package)
+					result = mArrayValue[idx].delete(forPath: rest)
 				} else {
 					result = false
 				}
@@ -265,11 +265,11 @@ public class CNMutableArrayValue: CNMutableValue
 		return .arrayValue(result)
 	}
 
-	public override func toText(fromPackageDirectory package: URL) -> CNText {
+	public override func toText() -> CNText {
 		let sect = CNTextSection()
 		sect.header = "[" ; sect.footer = "]" ; sect.separator = ","
 		for elm in mArrayValue {
-			sect.add(text: elm.toText(fromPackageDirectory: package))
+			sect.add(text: elm.toText())
 		}
 		return sect
 	}
@@ -288,7 +288,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		mDictionaryValue[key] = val
 	}
 
-	public override func value(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> CNMutableValue? {
+	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return nil
@@ -305,7 +305,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 				}
 			} else {
 				if let targ = mDictionaryValue[member] {
-					result = targ.value(forPath: rest, fromPackageDirectory: package)
+					result = targ.value(forPath: rest)
 				} else {
 					result = nil
 				}
@@ -317,7 +317,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
@@ -331,7 +331,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 				result = true
 			} else {
 				if let dst = mDictionaryValue[member] {
-					result = dst.set(value: val, forPath: rest, fromPackageDirectory: package)
+					result = dst.set(value: val, forPath: rest)
 				} else {
 					/* append new sub-tree */
 					let newval = CNMakePathValue(value: val, forPath: rest)
@@ -346,7 +346,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
@@ -356,7 +356,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		case .member(let member):
 			let rest = Array(path.dropFirst(1))
 			if let dst = mDictionaryValue[member] {
-				result = dst.append(value: val, forPath: rest, fromPackageDirectory: package)
+				result = dst.append(value: val, forPath: rest)
 			} else {
 				/* append new sub-tree */
 				let newval = CNMakePathValue(value: val, forPath: rest)
@@ -370,7 +370,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
@@ -389,7 +389,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 				}
 			} else {
 				if let dst = mDictionaryValue[member] {
-					result = dst.delete(forPath: rest, fromPackageDirectory: package)
+					result = dst.delete(forPath: rest)
 				} else {
 					CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
 					result = false
@@ -418,12 +418,16 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return .dictionaryValue(result)
 	}
 
-	public override func toText(fromPackageDirectory package: URL) -> CNText {
+	public override func toText() -> CNText {
 		let sect = CNTextSection()
 		sect.header = "{" ; sect.footer = "}" ; sect.separator = ","
 		for (key, elm) in mDictionaryValue {
-			let elmtxt = elm.toText(fromPackageDirectory: package)
-			elmtxt.prepend(string: "\(key): ")
+			let elmtxt = elm.toText()
+			if let sect = elmtxt as? CNTextSection {
+				sect.header = "\(key): " + sect.header
+			} else {
+				elmtxt.prepend(string: "\(key): ")
+			}
 			sect.add(text: elmtxt)
 		}
 		return sect
@@ -433,75 +437,79 @@ public class CNMutableDictionaryValue: CNMutableValue
 public class CNMutableValueReference: CNMutableValue
 {
 	private var mReferenceValue: 	CNValueReference
+	private var mSourceDirectory:	URL
+	private var mCacheDirectory:	URL
 	private var mContext:		CNMutableValue?
 
-	public init(value val: CNValueReference){
+	public init(value val: CNValueReference, sourceDirectory srcdir: URL, cacheDirectory cachedir: URL){
 		mReferenceValue 	= val
+		mSourceDirectory	= srcdir
+		mCacheDirectory		= cachedir
 		mContext		= nil
 		super.init(type: .reference)
 	}
 
-	public override func value(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> CNMutableValue? {
+	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
 		let result: CNMutableValue?
-		if let val = load(fromPackageDirectory: package) {
-			result = val.value(forPath: path, fromPackageDirectory: package)
+		if let val = load() {
+			result = val.value(forPath: path)
 		} else {
 			result = nil
 		}
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		let result: Bool
-		if let dst = load(fromPackageDirectory: package) {
-			result = dst.set(value: val, forPath: path, fromPackageDirectory: package)
+		if let dst = load() {
+			result = dst.set(value: val, forPath: path)
 		} else {
 			result = false
 		}
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
 		let result: Bool
-		if let dst = load(fromPackageDirectory: package) {
-			result = dst.append(value: val, forPath: path, fromPackageDirectory: package)
+		if let dst = load() {
+			result = dst.append(value: val, forPath: path)
 		} else {
 			result = false
 		}
 		return result
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>, fromPackageDirectory package: URL) -> Bool {
+	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
 		let result: Bool
-		if let dst = load(fromPackageDirectory: package) {
-			result = dst.delete(forPath: path, fromPackageDirectory: package)
+		if let dst = load() {
+			result = dst.delete(forPath: path)
 		} else {
 			result = false
 		}
 		return result
 	}
 
-	public func context(fromPackageDirectory package: URL) -> CNValue {
+	public func context() -> CNValue {
 		if let ctxt = mContext {
 			return ctxt.toValue()
-		} else if let ctxt = load(fromPackageDirectory: package) {
+		} else if let ctxt = load() {
 			return ctxt.toValue()
 		} else {
 			return .nullValue
 		}
 	}
 
-	private func load(fromPackageDirectory package: URL) -> CNMutableValue? {
+	private func load() -> CNMutableValue? {
 		let result:  CNMutableValue?
 		if let ctxt = mContext {
 			result = ctxt
 		} else {
-			if let src = mReferenceValue.load(fromPackageDirectory: package) {
-				let ctxt = CNValueToMutableValue(from: src)
+			if let src = mReferenceValue.load(fromSourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory) {
+				let ctxt = CNValueToMutableValue(from: src, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 				mContext = ctxt
 				result = ctxt
 			} else {
-				CNLog(logLevel: .error, message: "Failed to load: \(package.path)", atFunction: #function, inFile: #file)
+				CNLog(logLevel: .error, message: "Failed to load: \(mCacheDirectory.path)", atFunction: #function, inFile: #file)
 				result = nil
 			}
 		}
@@ -509,17 +517,17 @@ public class CNMutableValueReference: CNMutableValue
 	}
 
 	public override func clone() -> CNMutableValue {
-		return CNMutableValueReference(value: mReferenceValue)
+		return CNMutableValueReference(value: mReferenceValue, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 	}
 
 	public override func toValue() -> CNValue {
 		return .reference(mReferenceValue)
 	}
 
-	public override func toText(fromPackageDirectory package: URL) -> CNText {
+	public override func toText() -> CNText {
 		let result: CNText
-		if let dst = load(fromPackageDirectory: package) {
-			result = dst.toText(fromPackageDirectory: package)
+		if let dst = load() {
+			result = dst.toText()
 		} else {
 			result = CNTextLine(string: "{relativePath: " + mReferenceValue.relativePath + "}")
 		}
@@ -557,24 +565,24 @@ private func CNMakePathValue(value val: CNMutableValue, forPath path: Array<CNVa
 	}
 }
 
-public func CNValueToMutableValue(from val: CNValue) -> CNMutableValue {
+public func CNValueToMutableValue(from val: CNValue, sourceDirectory srcdir: URL, cacheDirectory cachedir: URL) -> CNMutableValue {
 	let result: CNMutableValue
 	switch val {
 	case .arrayValue(let arr):
 		let newarr = CNMutableArrayValue()
 		for elm in arr {
-			newarr.append(value: CNValueToMutableValue(from: elm))
+			newarr.append(value: CNValueToMutableValue(from: elm, sourceDirectory: srcdir, cacheDirectory: cachedir))
 		}
 		result = newarr
 	case .dictionaryValue(let dict):
 		let newdict = CNMutableDictionaryValue()
 		for (key, elm) in dict {
-			let newelm = CNValueToMutableValue(from: elm)
+			let newelm = CNValueToMutableValue(from: elm, sourceDirectory: srcdir, cacheDirectory: cachedir)
 			newdict.set(value: newelm, forKey: key)
 		}
 		result = newdict
 	case .reference(let ref):
-		let newref = CNMutableValueReference(value: ref)
+		let newref = CNMutableValueReference(value: ref, sourceDirectory: srcdir, cacheDirectory: cachedir)
 		result = newref
 	default:
 		let newscalar = CNMutableScalarValue(scalarValue: val)

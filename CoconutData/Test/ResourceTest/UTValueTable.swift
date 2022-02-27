@@ -13,21 +13,21 @@ public func UTValueTable() -> Bool
 	NSLog("*** UTValueTable")
 	var result = true
 
-	guard let srcurl = CNFilePath.URLForResourceFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
+	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
 		NSLog("Failed to allocate source url")
 		return false
 	}
 
-	let dsturl = CNFilePath.URLForApplicationSupportFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data")
+	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data")
 	
-	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcurl, destinationFile: dsturl) else {
+	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) else {
 		NSLog("Failed to copy value table")
 		return false
 	}
 
-	let packdir = CNFilePath.URLforApplicationSupportDirectory(subDirectory: "Data")
-	let dstname = "adbook.json"
-	let storage = CNValueStorage(packageDirectory: packdir, filePath: dstname)
+	let srcdir   = srcfile.deletingLastPathComponent()
+	let cachedir = cachefile.deletingLastPathComponent()
+	let storage  = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
 	switch storage.load() {
 	case .ok(_):
 		break

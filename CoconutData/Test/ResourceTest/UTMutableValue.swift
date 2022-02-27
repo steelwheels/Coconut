@@ -24,26 +24,24 @@ public func UTMutableValue() -> Bool
 
 private func unitTest() -> Bool
 {
-	let package = URL(fileURLWithPath: "/tmp/a")
-
 	NSLog("- MutableScalarValue")
 	let scalar1 = allocateScalar(intValue: 1)
 	let scalar2 = allocateScalar(intValue: 2)
-	let scr1txt = scalar1.toText(fromPackageDirectory: package).toStrings().joined(separator: "\n")
+	let scr1txt = scalar1.toText().toStrings().joined(separator: "\n")
 	NSLog("scalar1 -> \(scr1txt)")
 
 	NSLog("- MutableArrayValue")
 	let array0 = CNMutableArrayValue()
 	array0.append(value: scalar1)
 	array0.append(value: scalar2)
-	let arrtxt0 = array0.toText(fromPackageDirectory: package).toStrings().joined(separator: "\n")
+	let arrtxt0 = array0.toText().toStrings().joined(separator: "\n")
 	NSLog("array0 -> \(arrtxt0)")
 
 	NSLog("- MutableDictionaryValue")
 	let dict = CNMutableDictionaryValue()
 	dict.set(value: scalar1, forKey: "a")
 	dict.set(value: scalar2, forKey: "b")
-	let dicttxt = dict.toText(fromPackageDirectory: package).toStrings().joined(separator: "\n")
+	let dicttxt = dict.toText().toStrings().joined(separator: "\n")
 	NSLog("dict -> \(dicttxt)")
 
 	return true
@@ -51,65 +49,67 @@ private func unitTest() -> Bool
 
 private func accessTest() -> Bool
 {
-	guard let baseurl = CNFilePath.URLForResourceDirectory(directoryName: "Data", subdirectory: nil, forClass: ViewController.self) else {
-		NSLog("Failed to get resource URL")
+	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
+		NSLog("Failed to get source URL")
 		return false
 	}
+	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: "Data")
 
-	let file = baseurl.appendingPathComponent("root.json")
-	NSLog("- file-url = \(file.path)")
+	NSLog("- srcfile=\(srcfile.path), cachefile=\(cachefile.path)")
 
-	guard let initval = file.loadValue() else {
+	guard let initval = srcfile.loadValue() else {
 		NSLog("Failed to load resource")
 		return false
 	}
 
-	let mval: CNMutableValue = CNValueToMutableValue(from: initval)
+	let srcdir   = srcfile.deletingLastPathComponent()
+	let cachedir = cachefile.deletingLastPathComponent()
+	let mval: CNMutableValue = CNValueToMutableValue(from: initval, sourceDirectory: srcdir, cacheDirectory: cachedir)
 	let rval: CNValue        = mval.toValue()
 	NSLog("mutable-value: ")
 	dumpValue(value: rval)
 
 	NSLog("get value \"a\"")
 	let patha = CNValuePath(elements: [.member("a")])
-	if getValue(path: patha, in: mval, fromPackageDirectory: baseurl) == nil{
+	if getValue(path: patha, in: mval) == nil{
 		NSLog("Failed to get a")
 		return false
 	}
 
 	NSLog("get value \"c.d\"")
 	let pathcd = CNValuePath(elements: [.member("c"), .member("d")])
-	if getValue(path: pathcd, in: mval, fromPackageDirectory: baseurl) == nil{
+	if getValue(path: pathcd, in: mval) == nil{
 		NSLog("Failed to get c.d")
 		return false
 	}
 
 	NSLog("get value \"f.s1\"")
 	let pathfs1 = CNValuePath(elements: [.member("f"), .member("s1")])
-	if getValue(path: pathfs1, in: mval, fromPackageDirectory: baseurl) == nil{
+	if getValue(path: pathfs1, in: mval) == nil{
 		NSLog("Failed to get f.s1")
 		return false
 	}
 
 	NSLog("get value \"g[1]\"")
 	let pathg1 = CNValuePath(elements: [.member("g"), .index(1)])
-	if getValue(path: pathg1, in: mval, fromPackageDirectory: baseurl) == nil{
+	if getValue(path: pathg1, in: mval) == nil{
 		NSLog("Failed to get g[1]")
 		return false
 	}
 
 	NSLog("override value \"a\"")
-	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .boolValue(true)), forPath: patha, fromPackageDirectory: baseurl){
+	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .boolValue(true)), forPath: patha){
 		return false
 	}
 
 	NSLog("override value \"g[1]\"")
-	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .numberValue(NSNumber(floatLiteral: -1.0))), forPath: pathg1, fromPackageDirectory: baseurl){
+	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .numberValue(NSNumber(floatLiteral: -1.0))), forPath: pathg1){
 		return false
 	}
 
 	NSLog("append value \"g[5]\"")
 	let pathg5 = CNValuePath(elements: [.member("g"), .index(5)])
-	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .numberValue(NSNumber(floatLiteral: 0.5))), forPath: pathg5, fromPackageDirectory: baseurl){
+	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .numberValue(NSNumber(floatLiteral: 0.5))), forPath: pathg5){
 		return false
 	}
 
@@ -120,13 +120,13 @@ private func accessTest() -> Bool
 	dict.set(value: m0, forKey: "m0")
 	dict.set(value: m1, forKey: "m1")
 	let pathh = CNValuePath(elements: [.member("h") ])
-	if !setValue(destination: mval, source: dict, forPath: pathh, fromPackageDirectory: baseurl){
+	if !setValue(destination: mval, source: dict, forPath: pathh){
 		return false
 	}
 
 	NSLog("override value \"h.m0\"")
 	let pathhm0 = CNValuePath(elements: [.member("h"), .member("m0") ])
-	if !setValue(destination: mval, source: dict, forPath: pathhm0, fromPackageDirectory: baseurl){
+	if !setValue(destination: mval, source: dict, forPath: pathhm0){
 		return false
 	}
 
@@ -136,13 +136,13 @@ private func accessTest() -> Bool
 
 	NSLog("delete value \"g[3]\"")
 	let pathg3 = CNValuePath(elements: [.member("g"), .index(3)])
-	if !deleteValue(destination: mval, forPath: pathg3, fromPackageDirectory: baseurl){
+	if !deleteValue(destination: mval, forPath: pathg3){
 		return false
 	}
 
 	NSLog("delete value \"h.m0.m1\"")
 	let pathhm0m1 = CNValuePath(elements: [.member("h"), .member("m0"), .member("m1") ])
-	if !deleteValue(destination: mval, forPath: pathhm0m1, fromPackageDirectory: baseurl){
+	if !deleteValue(destination: mval, forPath: pathhm0m1){
 		return false
 	}
 
@@ -153,9 +153,9 @@ private func accessTest() -> Bool
 	return true
 }
 
-private func setValue(destination dst: CNMutableValue, source src: CNMutableValue, forPath path: CNValuePath, fromPackageDirectory baseurl: URL) -> Bool {
-	if dst.set(value: src, forPath: path.elements, fromPackageDirectory: baseurl) {
-		if let _ = getValue(path: path, in: dst, fromPackageDirectory: baseurl) {
+private func setValue(destination dst: CNMutableValue, source src: CNMutableValue, forPath path: CNValuePath) -> Bool {
+	if dst.set(value: src, forPath: path.elements) {
+		if let _ = getValue(path: path, in: dst) {
 			return true
 		} else {
 			NSLog("Failed to re-get")
@@ -167,8 +167,8 @@ private func setValue(destination dst: CNMutableValue, source src: CNMutableValu
 	}
 }
 
-private func getValue(path pth: CNValuePath, in owner: CNMutableValue,fromPackageDirectory baseurl:URL) -> CNMutableValue? {
-	if let val = owner.value(forPath: pth.elements, fromPackageDirectory: baseurl) {
+private func getValue(path pth: CNValuePath, in owner: CNMutableValue) -> CNMutableValue? {
+	if let val = owner.value(forPath: pth.elements) {
 		dumpValue(value: val.toValue())
 		return val
 	} else {
@@ -177,8 +177,8 @@ private func getValue(path pth: CNValuePath, in owner: CNMutableValue,fromPackag
 	}
 }
 
-private func deleteValue(destination dst: CNMutableValue, forPath path: CNValuePath, fromPackageDirectory baseurl: URL) -> Bool {
-	if dst.delete(forPath: path.elements, fromPackageDirectory: baseurl) {
+private func deleteValue(destination dst: CNMutableValue, forPath path: CNValuePath) -> Bool {
+	if dst.delete(forPath: path.elements) {
 		dumpValue(value: dst.toValue())
 		return true
 	} else {

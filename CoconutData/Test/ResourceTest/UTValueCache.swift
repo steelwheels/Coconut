@@ -10,11 +10,17 @@ import Foundation
 
 public func UTValueStorage() -> Bool {
 	NSLog("*** UTValueStorage")
-	if let baseurl = CNFilePath.URLForResourceDirectory(directoryName: "Data", subdirectory: nil, forClass: ViewController.self) {
+	if let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: nil, forClass: ViewController.self) {
 		var result = true
-		NSLog("base-url = \(baseurl.path)")
+
 		NSLog("***** Main storage")
-		let storage = CNValueStorage(packageDirectory: baseurl, filePath: "root.json")
+		let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: nil)
+		NSLog("srcfile=\(srcfile.path), cachefile=\(cachefile)")
+
+		let srcdir   = srcfile.deletingLastPathComponent()
+		let cachedir = cachefile.deletingLastPathComponent()
+
+		let storage = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "root.json")
 		switch storage.load() {
 		case .ok(let value):
 			let txt = value.toText().toStrings().joined(separator: "\n")
@@ -39,20 +45,18 @@ private func testChildStorage(parentStorage parent: CNValueStorage) -> Bool {
 	var result = true
 	
 	NSLog("***** Child storage")
-	guard let srcurl = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
+	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
 		NSLog("Faild to allocate source file")
 		return false
 	}
-	let dsturl = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: "Data")
-	NSLog("Copy from \(srcurl.path) to \(dsturl.path)")
-	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcurl, destinationFile: dsturl) else {
+	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: "Data")
+	NSLog("Copy from \(srcfile.path) to \(cachefile.path)")
+	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) else {
 		NSLog("Failed to copy root.json")
 		return false
 	}
 
-	let packdir = CNFilePath.URLforApplicationSupportDirectory(subDirectory: "Data")
-	let dstname = "root.json"
-	let storage = CNValueStorage(packageDirectory: packdir, filePath: dstname)
+	let storage = CNValueStorage(sourceDirectory: srcfile, cacheDirectory: cachefile, filePath: "root.json")
 	if !testStorageRead(target: storage) {
 		result = false
 	}

@@ -2,7 +2,7 @@
  * @file	CNValueReference.swift
  * @brief	Define CNValueReference class
  * @par Copyright
- *   Copyright (C) 2021 Steel Wheels Project
+ *   Copyright (C) 2021-2022 Steel Wheels Project
  */
 
 import Foundation
@@ -29,13 +29,19 @@ public class CNValueReference
 		return nil
 	}
 
-	public func load(fromPackageDirectory packdir: URL) -> CNValue? {
+	public func load(fromSourceDirectory srcdir: URL, cacheDirectory cachedir: URL) -> CNValue? {
 		if let ctxt = mContext {
 			return ctxt
 		} else {
-			let url = packdir.appendingPathComponent(self.relativePath)
+			/* Copy the source file into cache file */
+			let srcfile   = srcdir.appendingPathComponent(self.relativePath)
+			let cachefile = cachedir.appendingPathComponent(self.relativePath)
+			if !FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) {
+				CNLog(logLevel: .error, message: "Failed to copy file", atFunction: #function, inFile: #file)
+				return nil
+			}
 			var result: CNValue? = nil
-			if let source = url.loadContents() {
+			if let source = cachefile.loadContents() {
 				let parser = CNValueParser()
 				switch parser.parse(source: source as String) {
 				case .ok(let val):
@@ -49,9 +55,9 @@ public class CNValueReference
 		}
 	}
 
-	public func store(toPackageDirectory resdir: URL) -> Bool {
+	public func store(toCacheDirectory cachedir: URL) -> Bool {
 		if let context = mContext {
-			let file = resdir.appendingPathComponent(self.relativePath)
+			let file = cachedir.appendingPathComponent(self.relativePath)
 			let txt  = context.toText().toStrings().joined(separator: "\n")
 			return file.storeContents(contents: txt)
 		} else {
