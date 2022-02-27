@@ -14,7 +14,7 @@ public func UTValueStorage() -> Bool {
 		var result = true
 		NSLog("base-url = \(baseurl.path)")
 		NSLog("***** Main storage")
-		let storage = CNValueStorage(packageDirectory: baseurl, filePath: "root.json", parentStorage: nil)
+		let storage = CNValueStorage(packageDirectory: baseurl, filePath: "root.json")
 		switch storage.load() {
 		case .ok(let value):
 			let txt = value.toText().toStrings().joined(separator: "\n")
@@ -39,10 +39,20 @@ private func testChildStorage(parentStorage parent: CNValueStorage) -> Bool {
 	var result = true
 	
 	NSLog("***** Child storage")
-	let url = CNFilePath.URLforApplicationSupportDirectory()
-	NSLog("home: \(url.absoluteString)")
+	guard let srcurl = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
+		NSLog("Faild to allocate source file")
+		return false
+	}
+	let dsturl = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: "Data")
+	NSLog("Copy from \(srcurl.path) to \(dsturl.path)")
+	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcurl, destinationFile: dsturl) else {
+		NSLog("Failed to copy root.json")
+		return false
+	}
 
-	let storage = CNValueStorage(packageDirectory: url, filePath: "sub.json", parentStorage: parent)
+	let packdir = CNFilePath.URLforApplicationSupportDirectory(subDirectory: "Data")
+	let dstname = "root.json"
+	let storage = CNValueStorage(packageDirectory: packdir, filePath: dstname)
 	if !testStorageRead(target: storage) {
 		result = false
 	}

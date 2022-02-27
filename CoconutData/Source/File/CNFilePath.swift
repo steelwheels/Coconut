@@ -108,15 +108,24 @@ public class CNFilePath
 		return .error(NSError.fileError(message: "Failed to find bundle \(bname)"))
 	}
 
-	public class func URLforApplicationSupportDirectory() -> URL {
+	public class func URLforApplicationSupportDirectory(subDirectory subdir: String?) -> URL {
 		let path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
-		let dir: String
+		var dir: String
 		if path.count > 0 {
 			dir = path[0]
 		} else {
 			dir = NSHomeDirectory() + "/Application Support"
 		}
+		if let sub = subdir {
+			dir += "/" + sub
+		}
 		return URL(fileURLWithPath: dir, isDirectory: true)
+	}
+
+	public class func URLForApplicationSupportFile(fileName fname: String, fileExtension fext: String, subdirectory subdir: String?) -> URL {
+		var baseurl = URLforApplicationSupportDirectory(subDirectory: subdir)
+		baseurl.appendPathComponent(fname + "." + fext)
+		return baseurl
 	}
 
 	public class func URLforTempDirectory() -> URL {

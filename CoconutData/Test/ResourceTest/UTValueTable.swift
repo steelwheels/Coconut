@@ -11,13 +11,24 @@ import Foundation
 public func UTValueTable() -> Bool
 {
 	NSLog("*** UTValueTable")
+	var result = true
 
-	guard let baseurl = CNFilePath.URLForResourceDirectory(directoryName: "Data", subdirectory: nil, forClass: ViewController.self) else {
+	guard let srcurl = CNFilePath.URLForResourceFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
+		NSLog("Failed to allocate source url")
 		return false
 	}
 
-	let base = CNValueStorage(packageDirectory: baseurl, filePath: "adbook.json", parentStorage: nil)
-	switch base.load() {
+	let dsturl = CNFilePath.URLForApplicationSupportFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data")
+	
+	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcurl, destinationFile: dsturl) else {
+		NSLog("Failed to copy value table")
+		return false
+	}
+
+	let packdir = CNFilePath.URLforApplicationSupportDirectory(subDirectory: "Data")
+	let dstname = "adbook.json"
+	let storage = CNValueStorage(packageDirectory: packdir, filePath: dstname)
+	switch storage.load() {
 	case .ok(_):
 		break
 	case .error(let err):
@@ -25,17 +36,7 @@ public func UTValueTable() -> Bool
 		return false
 	}
 
-	var result  = true
-	let supurl  = CNFilePath.URLforApplicationSupportDirectory()
-	NSLog("sup-cache: \(supurl.path)")
-	let storage = CNValueStorage(packageDirectory: supurl, filePath: "updated_adbook.json", parentStorage: base)
-
-	guard let persons = CNValuePath.pathExpression(string: "persons") else {
-		NSLog("Failed to decode path: persons")
-		return false
-	}
-
-	let vtable = CNValueTable(path: CNValuePath(elements: persons), valueStorage: storage)
+	let vtable = CNValueTable(path: CNValuePath(elements: [.member("persons")]), valueStorage: storage)
 	NSLog("record count: \(vtable.recordCount)")
 	NSLog("field names:  \(vtable.allFieldNames)")
 

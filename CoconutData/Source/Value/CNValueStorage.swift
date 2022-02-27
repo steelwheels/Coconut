@@ -17,19 +17,17 @@ public class CNValueStorage
 	private var mPackageDirectory:		URL
 	private var mFilePath:			String
 	private var mRootValue:			CNMutableValue
-	private var mParentStorage:		CNValueStorage?
 
 	// packdir: Root directory for package (*.jspkg)
 	// fpath:   The location of data file against packdir
-	public init(packageDirectory packdir: URL, filePath fpath: String, parentStorage storage: CNValueStorage?) {
+	public init(packageDirectory packdir: URL, filePath fpath: String) {
 		mPackageDirectory	= packdir
 		mFilePath		= fpath
 		mRootValue		= CNMutableDictionaryValue()
-		mParentStorage		= storage
 	}
 
 	public var description: String { get {
-		return "{packdir=\(mPackageDirectory.path), file=\(mFilePath), parent=\(String(describing: mParentStorage))}"
+		return "{packdir=\(mPackageDirectory.path), file=\(mFilePath)}"
 	}}
 
 	public var storageFile: URL {
@@ -69,8 +67,6 @@ public class CNValueStorage
 				result = mval.toValue()
 			}
 			return result
-		} else if let parent = mParentStorage {
-			return parent.value(forPath: path)
 		} else {
 			return nil
 		}
@@ -101,6 +97,19 @@ public class CNValueStorage
 		let val = mRootValue.toValue()
 		let txt = val.toText().toStrings().joined(separator: "\n")
 		return file.storeContents(contents: txt + "\n")
+	}
+
+	public func toText() -> CNText {
+		let result = CNTextSection()
+		result.header    = "ValueStorage: {"
+		result.footer    = "}"
+		result.separator = ", "
+
+		let package = CNTextLine(string: self.description)
+		result.add(text: package)
+		result.add(text: mRootValue.toText(fromPackageDirectory: mPackageDirectory))
+
+		return result
 	}
 }
 

@@ -166,6 +166,19 @@ public class CNValueTable: CNTable
 		CNLog(logLevel: .error, message: "Invalid \"\(CNValueTable.RecordsItem)\" property", atFunction: #function, inFile: #file)
 		return nil
 	}
+
+	public func toText() -> CNText {
+		let result = CNTextSection()
+		result.header    = "ValueTable: {"
+		result.footer    = "}"
+		result.separator = ", "
+
+		let path = CNTextLine(string: "{path: " + mPath.description + "}")
+		result.add(text: path)
+		result.add(text: mValueStorage.toText())
+
+		return result
+	}
 }
 
 

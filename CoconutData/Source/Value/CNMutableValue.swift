@@ -54,7 +54,7 @@ public class CNMutableValue
 		return .nullValue
 	}
 
-	open func toText() -> CNText {
+	open func toText(fromPackageDirectory package: URL) -> CNText {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return CNTextLine(string: "?")
 	}
@@ -111,7 +111,7 @@ public class CNMutableScalarValue: CNMutableValue
 		return mScalarValue
 	}
 
-	public override func toText() -> CNText {
+	public override func toText(fromPackageDirectory package: URL) -> CNText {
 		return mScalarValue.toText()
 	}
 }
@@ -265,11 +265,11 @@ public class CNMutableArrayValue: CNMutableValue
 		return .arrayValue(result)
 	}
 
-	public override func toText() -> CNText {
+	public override func toText(fromPackageDirectory package: URL) -> CNText {
 		let sect = CNTextSection()
 		sect.header = "[" ; sect.footer = "]" ; sect.separator = ","
 		for elm in mArrayValue {
-			sect.add(text: elm.toText())
+			sect.add(text: elm.toText(fromPackageDirectory: package))
 		}
 		return sect
 	}
@@ -418,11 +418,11 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return .dictionaryValue(result)
 	}
 
-	public override func toText() -> CNText {
+	public override func toText(fromPackageDirectory package: URL) -> CNText {
 		let sect = CNTextSection()
 		sect.header = "{" ; sect.footer = "}" ; sect.separator = ","
 		for (key, elm) in mDictionaryValue {
-			let elmtxt = elm.toText()
+			let elmtxt = elm.toText(fromPackageDirectory: package)
 			elmtxt.prepend(string: "\(key): ")
 			sect.add(text: elmtxt)
 		}
@@ -516,8 +516,14 @@ public class CNMutableValueReference: CNMutableValue
 		return .reference(mReferenceValue)
 	}
 
-	public override func toText() -> CNText {
-		return CNTextLine(string: mReferenceValue.relativePath)
+	public override func toText(fromPackageDirectory package: URL) -> CNText {
+		let result: CNText
+		if let dst = load(fromPackageDirectory: package) {
+			result = dst.toText(fromPackageDirectory: package)
+		} else {
+			result = CNTextLine(string: "{relativePath: " + mReferenceValue.relativePath + "}")
+		}
+		return result
 	}
 }
 

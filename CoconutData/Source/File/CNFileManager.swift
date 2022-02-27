@@ -184,6 +184,37 @@ public extension FileManager
 		return true
 	}
 
+	func copyFileIfItIsNotExist(sourceFile srcurl: URL, destinationFile dsturl: URL) -> Bool {
+		let fmanager = FileManager.default
+
+		guard fmanager.fileExists(atURL: srcurl) else {
+			CNLog(logLevel: .error, message: "Source file \(srcurl.path) is NOT exist", atFunction: #function, inFile: #file)
+			return false
+		}
+		if fmanager.fileExists(atURL: dsturl){
+			/* Already exist */
+			CNLog(logLevel: .debug, message: "Destination file \(dsturl.path) is already exist", atFunction: #function, inFile: #file)
+		} else {
+			do {
+				if dsturl.isFileURL {
+					let dstdir = dsturl.deletingLastPathComponent()
+					if !self.fileExists(atPath: dstdir.path) {
+						CNLog(logLevel: .debug, message: "Create Directory: \(dstdir.path)", atFunction: #function, inFile: #file)
+						try fmanager.createDirectory(at: dstdir, withIntermediateDirectories: false, attributes: nil)
+					}
+				}
+				try fmanager.copyItem(at: srcurl, to: dsturl)
+			} catch let err as NSError {
+				CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
+				return false
+			} catch {
+				CNLog(logLevel: .error, message: "Failed to copy file: \(srcurl.path) -> \(dsturl.path)", atFunction: #function, inFile: #file)
+				return false
+			}
+		}
+		return true
+	}
+	
 	var usersHomeDirectory: URL {
 		get {
 			#if os(OSX)
