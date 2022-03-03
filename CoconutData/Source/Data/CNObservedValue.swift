@@ -2,7 +2,7 @@
  * @file	CNObserver.swift
  * @brief	Define CNObserver and CNObservedTable class
  * @par Copyright
- *   Copyright (C) 2018 Steel Wheels Project
+ *   Copyright (C) 2018-2022 Steel Wheels Project
  */
 
 import Foundation
@@ -22,7 +22,7 @@ public class CNObserverDictionary
 	}
 
 	private var mValueTable:	NSMutableDictionary
-	private var mObservers:		Dictionary<String, CNListener>
+	private var mObservers:		Dictionary<String, CNObjectListener>
 	private var mListnerId:		Int
 
 	public init(){
@@ -83,7 +83,7 @@ public class CNObserverDictionary
 			mListnerId += 1
 		} else {
 			/* Allocate new observer */
-			let newobs = CNListener()
+			let newobs = CNObjectListener()
 			mObservers[key] = newobs
 			newobs.add(listnerId: mListnerId, listenerFunction: lfunc)
 			result = ListnerHolder(key: key, listnerId: mListnerId)
@@ -116,7 +116,7 @@ public class CNObserverDictionary
 	}
 }
 
-private class CNListener: NSObject
+private class CNObjectListener: NSObject
 {
 	public typealias ListenerFunction = (Any?) -> Void	// new-value
 

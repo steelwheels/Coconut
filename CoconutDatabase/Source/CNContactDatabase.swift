@@ -35,10 +35,12 @@ public class CNContactDatabase: CNTable
 
 	private var mContacts:		Array<CNContactRecord>
 	private var mState: 		State
+	private var mListner:		CNTableListener
 
 	private init(){
 		mContacts		= []
 		mState			= .undecided
+		mListner		= CNTableListener()
 	}
 
 	public var recordCount: Int { get {
@@ -48,6 +50,10 @@ public class CNContactDatabase: CNTable
 	public var allFieldNames: Array<String> { get {
 		return CNContactField.allFieldNames
 	}}
+
+	public func fieldName(at index: Int) -> String? {
+		return CNContactField.fieldName(at: index)
+	}
 
 	public func newRecord() -> CNRecord {
 		return CNContactRecord(mutableContext: CNMutableContact())
@@ -171,5 +177,13 @@ public class CNContactDatabase: CNTable
 		})
 		/* Update array */
 		mContacts = records
+	}
+
+	public func addListner(listner lnr: @escaping CNTableListener.ListenerFunction) -> Int {
+		return mListner.add(listenerFunction: lnr)
+	}
+
+	public func removeListner(listnerId lid: Int) {
+		mListner.remove(listnerId: lid)
 	}
 }

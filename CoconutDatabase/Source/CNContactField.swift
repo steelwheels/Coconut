@@ -78,6 +78,15 @@ public enum CNContactField: Int
 		}
 	}
 
+	public static func fieldName(at index: Int) -> String? {
+		if 0<=index && index<numberOfFields {
+			if let fld = CNContactField(rawValue: index) {
+				return fld.toName()
+			}
+		}
+		return nil
+	}
+
 	public func toKey() -> String {
 		let result: String
 		switch self {

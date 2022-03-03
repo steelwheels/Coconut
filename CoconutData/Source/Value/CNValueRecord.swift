@@ -12,6 +12,8 @@ public class CNValueRecord: CNRecord
 	private var mTable:	CNValueTable
 	private var mIndex:	Int
 
+	public var index: Int { get { return mIndex} }
+
 	public init(table tbl: CNValueTable, index idx: Int){
 		mTable	= tbl
 		mIndex	= idx
