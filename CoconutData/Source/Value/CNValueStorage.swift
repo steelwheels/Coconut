@@ -104,7 +104,12 @@ public class CNValueStorage
 		/* Save into the file */
 		let val = mRootValue.toValue()
 		let txt = val.toText().toStrings().joined(separator: "\n")
-		return cachefile.storeContents(contents: txt + "\n")
+		if cachefile.storeContents(contents: txt + "\n") {
+			return true
+		} else {
+			CNLog(logLevel: .error, message: "Failed to store storage: \(self.description)", atFunction: #function, inFile: #file)
+			return false
+		}
 	}
 
 	public func toText() -> CNText {

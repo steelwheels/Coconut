@@ -31,7 +31,7 @@ class ViewController: NSViewController {
 		if res0 && res1 && res2 && res3 {
 			NSLog("Summary: OK")
 		} else {
-			NSLog("Summary: Error")
+			NSLog("Summary: Error (\(res0), \(res1), \(res2), \(res3))")
 		}
 	}
 

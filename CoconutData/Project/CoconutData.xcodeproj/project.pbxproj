@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0504D17C2751C24900EFE0D7 /* CNOval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0504D17B2751C24900EFE0D7 /* CNOval.swift */; };
 		0504D17D2751C24900EFE0D7 /* CNOval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0504D17B2751C24900EFE0D7 /* CNOval.swift */; };
-		0507514326477A9F00848E00 /* UTNativeValueTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0507514226477A9F00848E00 /* UTNativeValueTable.swift */; };
 		0512074B274E6DD200189550 /* CNRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0512074A274E6DD200189550 /* CNRect.swift */; };
 		0512074C274E6DD200189550 /* CNRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0512074A274E6DD200189550 /* CNRect.swift */; };
 		0516F94526351DB60051B5A5 /* CNPipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0516F94426351DB60051B5A5 /* CNPipe.swift */; };
@@ -436,7 +435,6 @@
 
 /* Begin PBXFileReference section */
 		0504D17B2751C24900EFE0D7 /* CNOval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNOval.swift; sourceTree = "<group>"; };
-		0507514226477A9F00848E00 /* UTNativeValueTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTNativeValueTable.swift; sourceTree = "<group>"; };
 		0512074A274E6DD200189550 /* CNRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRect.swift; sourceTree = "<group>"; };
 		0516F94426351DB60051B5A5 /* CNPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPipe.swift; sourceTree = "<group>"; };
 		051ED8E325C99269003AD1F6 /* CNBitmapContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapContext.swift; sourceTree = "<group>"; };
@@ -665,7 +663,6 @@
 				05F9A92C25C2C89400BC062E /* UTGraphicsContext.swift */,
 				05FC386D255FEC1D004CA79E /* UTKeyBinding.swift */,
 				05F3AC3D26571E1E0089C937 /* UTNativeValue.swift */,
-				0507514226477A9F00848E00 /* UTNativeValueTable.swift */,
 				05A44F1325C24D0D0086033B /* UTMatrix.swift */,
 				05FC3864255FEC1D004CA79E /* UTObserver.swift */,
 				05FC3862255FEC1D004CA79E /* UTOperation.swift */,
@@ -1285,7 +1282,6 @@
 				05252C5B26E782A50026230C /* UTText.swift in Sources */,
 				05FC3873255FEC1E004CA79E /* UTTextStorage.swift in Sources */,
 				05FC387B255FEC1E004CA79E /* UTThread.swift in Sources */,
-				0507514326477A9F00848E00 /* UTNativeValueTable.swift in Sources */,
 				05FC3886255FEC1E004CA79E /* UTCharacter.swift in Sources */,
 				05FC3879255FEC1E004CA79E /* UTEscapeSequence.swift in Sources */,
 				05F3AC3E26571E1E0089C937 /* UTNativeValue.swift in Sources */,

@@ -72,17 +72,6 @@ public class CNValueTable: CNTable
 		}
 	}
 
-	public func newRecord() -> CNRecord {
-		let newrec = CNValueRecord(table: self, index: self.recordCount)
-		let empty: Dictionary<String, CNValue> = [:]
-		if !mValueStorage.append(value: .dictionaryValue(empty), forPath: recordPath()) {
-			CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
-		}
-		/* Clear cache */
-		mRecordValuesCache = nil
-		return newrec
-	}
-
 	public func record(at row: Int) -> CNRecord? {
 		if let recvals = self.recordValues() {
 			let cnt = recvals.count
@@ -115,8 +104,23 @@ public class CNValueTable: CNTable
 
 	public func append(record rcd: CNRecord) {
 		if let vrcd = rcd as? CNValueRecord {
+			/* Keep the array index of new record */
+			let newidx = self.recordCount
+			/* Append the contents of record */
+			var contents : Dictionary<String, CNValue> = [:]
+			let fields = vrcd.fieldNames
+			for field in fields {
+				if let val = vrcd.value(ofField: field) {
+					contents[field] = val
+				}
+			}
+			if !mValueStorage.append(value: .dictionaryValue(contents), forPath: recordPath()) {
+				CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
+			}
+			/* Clear cache */
+			mRecordValuesCache = nil
 			/* Send event: addRecord */
-			mListner.sendEvents(events: [.addRecord(vrcd.index)])
+			mListner.sendEvents(events: [.addRecord(newidx)])
 		} else {
 			CNLog(logLevel: .error, message: "Invalid parameter type", atFunction: #function, inFile: #file)
 		}

@@ -25,7 +25,6 @@ public protocol CNTable
 	var allFieldNames:    Array<String> { get }
 	func fieldName(at index: Int) -> String?
 
-	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
 	func search(value val: CNValue, forField field: String) -> Array<CNRecord>
 	func append(record rcd: CNRecord)

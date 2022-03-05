@@ -12,6 +12,7 @@ import Foundation
 public class CNContactRecord: CNRecord
 {
 	private enum ContactHandle {
+		case none
 		case immutable(CNContact)
 		case mutable(CNMutableContact)
 	}
@@ -44,8 +45,24 @@ public class CNContactRecord: CNRecord
 		}
 	}
 
-	public var contactType: CNContactType { get {
-		return contact.contactType
+	public init(){
+		mContact	= .none
+		mFieldNames	= [:]
+		mIsDirty	= true
+		let num = CNContactField.numberOfFields
+		for i in 0..<num {
+			if let fld = CNContactField(rawValue: i) {
+				mFieldNames[fld.toName()] = fld
+			}
+		}
+	}
+
+	public var contactType: CNContactType? { get {
+		if let cont = self.contact {
+			return cont.contactType
+		} else {
+			return nil
+		}
 	}}
 
 	public var fieldCount: Int { get {
@@ -74,32 +91,36 @@ public class CNContactRecord: CNRecord
 		return result
 	}}
 
-	private var contact: CNContact { get {
+	private var contact: CNContact? { get {
+		let result: CNContact?
 		switch mContact {
+		case .none:
+			result = nil
 		case .immutable(let ctct):
-			return ctct
+			result = ctct
 		case .mutable(let ctct):
-			return ctct
+			result = ctct
 		}
+		return result
 	}}
 
-	private var mutableContact: CNMutableContact {
-		get {
-			let result: CNMutableContact
-			switch mContact {
-			case .immutable(let cont):
-				if let newcont = cont.mutableCopy() as? CNMutableContact {
-					result = newcont
-					mContact = .mutable(newcont)
-				} else {
-					fatalError("Failed to allocate mutable contact")
-				}
-			case .mutable(let cont):
-				result = cont
+	private var mutableContact: CNMutableContact? { get {
+		let result: CNMutableContact?
+		switch mContact {
+		case .none:
+			result = nil
+		case .immutable(let cont):
+			if let newcont = cont.mutableCopy() as? CNMutableContact {
+				result = newcont
+				mContact = .mutable(newcont)
+			} else {
+				fatalError("Failed to allocate mutable contact")
 			}
-			return result
+		case .mutable(let cont):
+			result = cont
 		}
-	}
+		return result
+	}}
 
 	public func value(ofField name: String) -> CNValue? {
 		if let fld = mFieldNames[name] {
@@ -119,8 +140,11 @@ public class CNContactRecord: CNRecord
 	}
 
 	private func value(ofField fld: CNContactField) -> CNValue? {
+		guard let cont = self.contact else {
+			return nil
+		}
+
 		var result: CNValue? = nil
-		let cont = contact
 		switch fld {
 		case .identifier:
 			result = .stringValue(cont.identifier)
@@ -185,8 +209,10 @@ public class CNContactRecord: CNRecord
 	}
 
 	private func setValue(value val: CNValue, forField fld: CNContactField) -> Bool {
+		guard let mcont = mutableContact else {
+			return false
+		}
 		var result = false
-		let mcont  = mutableContact
 		switch fld {
 		case .identifier:
 			break
@@ -324,6 +350,8 @@ public class CNContactRecord: CNRecord
 	
 	public func save(){
 		switch mContact {
+		case .none:
+			break		// No content
 		case .immutable(_):
 			break		// Not modified
 		case .mutable(let cont):

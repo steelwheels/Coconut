@@ -55,10 +55,6 @@ public class CNContactDatabase: CNTable
 		return CNContactField.fieldName(at: index)
 	}
 
-	public func newRecord() -> CNRecord {
-		return CNContactRecord(mutableContext: CNMutableContact())
-	}
-
 	public func record(at row: Int) -> CNRecord? {
 		if 0<=row && row<mContacts.count {
 			return mContacts[row]
