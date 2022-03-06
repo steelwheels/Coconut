@@ -14,7 +14,6 @@ public class CNValueTable: CNTable
 
 	private var mPath:		CNValuePath
 	private var mValueStorage:	CNValueStorage
-	private var mListner:		CNTableListener
 
 	private var mColumnNamesCache:  Array<String>?
 	private var mRecordValuesCache:	Array<Dictionary<String, CNValue>>?
@@ -22,7 +21,6 @@ public class CNValueTable: CNTable
 	public init(path pth: CNValuePath, valueStorage storage: CNValueStorage) {
 		mPath			= pth
 		mValueStorage		= storage
-		mListner		= CNTableListener()
 		mColumnNamesCache	= nil
 		mRecordValuesCache	= nil
 
@@ -104,8 +102,6 @@ public class CNValueTable: CNTable
 
 	public func append(record rcd: CNRecord) {
 		if let vrcd = rcd as? CNValueRecord {
-			/* Keep the array index of new record */
-			let newidx = self.recordCount
 			/* Append the contents of record */
 			var contents : Dictionary<String, CNValue> = [:]
 			let fields = vrcd.fieldNames
@@ -119,8 +115,6 @@ public class CNValueTable: CNTable
 			}
 			/* Clear cache */
 			mRecordValuesCache = nil
-			/* Send event: addRecord */
-			mListner.sendEvents(events: [.addRecord(newidx)])
 		} else {
 			CNLog(logLevel: .error, message: "Invalid parameter type", atFunction: #function, inFile: #file)
 		}
@@ -198,14 +192,6 @@ public class CNValueTable: CNTable
 		result.add(text: mValueStorage.toText())
 
 		return result
-	}
-
-	public func addListner(listner lnr: @escaping CNTableListener.ListenerFunction) -> Int {
-		return mListner.add(listenerFunction: lnr)
-	}
-
-	public func removeListner(listnerId lid: Int) {
-		mListner.remove(listnerId: lid)
 	}
 }
 
