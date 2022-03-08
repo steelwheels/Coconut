@@ -1,6 +1,6 @@
 {
 	persons: {
-		className:	"ValueTable",
+		class:		"ValueTable",
 		columnNames:	["name", "age"],
 		records: [
 			{

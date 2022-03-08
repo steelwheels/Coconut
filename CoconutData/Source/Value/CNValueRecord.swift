@@ -9,6 +9,8 @@ import Foundation
 
 public class CNValueRecord: CNRecord
 {
+	static let ClassName = "ValueRecord"
+
 	private var mTable:	CNValueTable?
 	private var mIndex:	Int?
 	private var mCache:	Dictionary<String, CNValue>
@@ -47,6 +49,23 @@ public class CNValueRecord: CNRecord
 			return table.setRecordValue(val, index: idx, field: name)
 		} else {
 			return true
+		}
+	}
+
+	public func toValue() -> CNValue {
+		var result: Dictionary<String, CNValue> = mCache
+		CNValue.setClassName(toValue: &result, className: CNValueRecord.ClassName)
+		return .dictionaryValue(result)
+	}
+
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueRecord? {
+		if CNValue.hasClassName(inValue: val, className: CNValueRecord.ClassName) {
+			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)
+			let newrec = CNValueRecord()
+			newrec.mCache = dupval
+			return newrec
+		} else {
+			return nil
 		}
 	}
 }

@@ -507,6 +507,34 @@ public enum CNValue {
 		return sect
 	}
 
+	public static func className(forValue dict: Dictionary<String, CNValue>) -> String? {
+		guard let val = dict["class"] else {
+			return nil
+		}
+		switch val {
+		case .stringValue(let str):
+			return str
+		default:
+			return nil
+		}
+	}
+
+	public static func hasClassName(inValue dict: Dictionary<String, CNValue>, className expname: String) -> Bool {
+		if let name = CNValue.className(forValue: dict) {
+			return expname == name
+		} else {
+			return false
+		}
+	}
+
+	public static func setClassName(toValue dict: inout Dictionary<String, CNValue>, className name: String){
+		dict["class"] = .stringValue(name)
+	}
+
+	public static func removeClassName(fromValue dict: inout Dictionary<String, CNValue>){
+		dict["class"] = nil
+	}
+
 	private static func stringFromDate(date: Date) -> String {
 		let formatter: DateFormatter = DateFormatter()
 		formatter.calendar = Calendar(identifier: .gregorian)
