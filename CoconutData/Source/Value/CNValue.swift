@@ -30,6 +30,7 @@ public enum CNValueType: Int
 	case	URLType
 	case	colorType
 	case	imageType
+	case	recordType
 	case	objectType
 	case	referenceType
 
@@ -51,6 +52,7 @@ public enum CNValueType: Int
 		case .URLType:		result = "URL"
 		case .colorType:	result = "Color"
 		case .imageType:	result = "Image"
+		case .recordType:	result = "Record"
 		case .objectType:	result = "Object"
 		case .referenceType:	result = "Reference"
 		}
@@ -75,7 +77,7 @@ public enum CNValueType: Int
 		switch typ {
 		case .nullType, .boolType, .numberType, .stringType, .dateType, .URLType, .imageType, .objectType:
 			result = true
-		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType, .referenceType:
+		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType, .recordType, .referenceType:
 			result = false
 		}
 		return result
@@ -98,6 +100,7 @@ public enum CNValue {
 	case URLValue(_ val: URL)
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
+	case recordValue(_ val: CNRecord)
 	case objectValue(_ val: NSObject)
 	case reference(_ val: CNValueReference)
 
@@ -120,6 +123,7 @@ public enum CNValue {
 			case .URLValue(_):		result = .URLType
 			case .colorValue(_):		result = .colorType
 			case .imageValue(_):		result = .imageType
+			case .recordValue(_):		result = .recordType
 			case .objectValue(_):		result = .objectType
 			case .reference(_):		result = .referenceType
 			}
@@ -259,6 +263,15 @@ public enum CNValue {
 		return result
 	}
 
+	public func toRecord() -> CNRecord? {
+		let result: CNRecord?
+		switch self {
+		case .recordValue(let obj):	result = obj
+		default:			result = nil
+		}
+		return result
+	}
+
 	public func toObject() -> NSObject? {
 		let result: NSObject?
 		switch self {
@@ -373,6 +386,14 @@ public enum CNValue {
 		}
 	}
 
+	public func recordProperty(identifier ident: String) -> CNRecord? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toRecord()
+		} else {
+			return nil
+		}
+	}
+
 	public func objectProperty(identifier ident: String) -> NSObject? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toObject()
@@ -426,6 +447,8 @@ public enum CNValue {
 			result = dict.count == 0
 		case .arrayValue(let arr):
 			result = arr.count == 0
+		case .recordValue(let rec):
+			result = rec.fieldCount == 0
 		}
 		return result
 	}
@@ -475,6 +498,8 @@ public enum CNValue {
 				let size = val.size
 				result = CNTextLine(string: "{image: size:\(size.width) x \(size.height)}")
 			#endif
+		case .recordValue(let val):
+			result = val.toText()
 		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
 			result = CNTextLine(string: "object(\(classname))")
@@ -580,6 +605,8 @@ public enum CNValue {
 			result = val
 		case .objectValue(let val):
 			result = val
+		case .recordValue(let val):
+			result = val
 		case .reference(let val):
 			result = val
 		case .dictionaryValue(let dict):
@@ -622,6 +649,8 @@ public enum CNValue {
 			result = .colorValue(val)
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
+		} else if let val = obj as? CNRecord {
+			result = .recordValue(val)
 		} else if let val = obj as? CNValueReference {
 			result = .reference(val)
 		} else if let val = obj as? Dictionary<String, Any> {
@@ -685,7 +714,7 @@ public enum CNValue {
 		case .referenceType:
 			result = .reference(CNValueReference(relativePath: src))
 		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType,
-		     .colorType, .imageType, .objectType:
+		     .colorType, .imageType, .recordType, .objectType:
 			CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
 		}
 		return result
@@ -710,6 +739,8 @@ public enum CNValue {
 		case .colorValue(let src):
 			result = src.toValue()
 		case .enumValue(let src):
+			result = src.toValue()
+		case .recordValue(let src):
 			result = src.toValue()
 		case .reference(let src):
 			result = src.toValue()
@@ -745,6 +776,10 @@ public enum CNValue {
 				case NSRange.ClassName:
 					if let range = NSRange.fromValue(value: dict) {
 						result = .rangeValue(range)
+					}
+				case CNValueRecord.ClassName:
+					if let record = CNValueRecord.fromValue(value: dict) {
+						result = .recordValue(record)
 					}
 				case CNValueReference.ClassName:
 					if let ref = CNValueReference.fromValue(value: dict) {

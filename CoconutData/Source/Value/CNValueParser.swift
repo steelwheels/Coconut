@@ -223,7 +223,7 @@ public class CNValueParser
 		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_),
 		     .dateValue(_), .rangeValue(_), .pointValue(_), .sizeValue(_),
 		     .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_), .imageValue(_),
-		     .objectValue(_), .reference(_):
+		     .recordValue(_), .objectValue(_), .reference(_):
 			dst = src
 		case .dictionaryValue(let dict):
 			if let obj = CNValue.dictionaryToValue(dictionary: dict) {

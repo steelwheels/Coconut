@@ -11,6 +11,8 @@ import Foundation
 
 public class CNContactRecord: CNRecord
 {
+	static let ClassName = "record"
+
 	private enum ContactHandle {
 		case none
 		case immutable(CNContact)
@@ -373,6 +375,23 @@ public class CNContactRecord: CNRecord
 		let v0 = self.value(ofField: fld) ?? .nullValue
 		let v1 = s1.value(ofField:   fld) ?? .nullValue
 		return CNCompareValue(nativeValue0: v0, nativeValue1: v1)
+	}
+
+	public func toValue() -> Dictionary<String, CNValue> {
+		var result: Dictionary<String, CNValue> = [:]
+		for i in 0..<CNContactField.numberOfFields {
+			if let fld = CNContactField(rawValue: i) {
+				if let name = CNContactField.fieldName(at: i), let val = self.value(ofField: fld) {
+					result[name] = val
+				}
+			}
+		}
+		return result
+	}
+
+	public func toText() -> CNText {
+		let value: CNValue = .dictionaryValue(self.toValue())
+		return value.toText()
 	}
 }
 

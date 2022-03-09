@@ -14,6 +14,9 @@ public protocol CNRecord
 
 	func value(ofField name: String) -> CNValue?
 	func setValue(value val: CNValue, forField name: String) -> Bool
+
+	func toValue() -> Dictionary<String, CNValue>
+	func toText() -> CNText
 }
 
 extension CNRecord

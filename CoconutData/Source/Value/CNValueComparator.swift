@@ -93,15 +93,11 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 			result = compare(color0: s0, color1: s1)
 		}
 	case .imageType:
-		if let s0 = val0.toImage(), let s1 = val1.toImage() {
-			CNLog(logLevel: .error, message: "Failed to compare image", atFunction: #function, inFile: #file)
-			result = s0.description.compare(s1.description)
-		}
+		CNLog(logLevel: .error, message: "Failed to compare image", atFunction: #function, inFile: #file)
+	case .recordType:
+		CNLog(logLevel: .error, message: "Failed to compare record", atFunction: #function, inFile: #file)
 	case .objectType:
-		if let s0 = val0.toObject(), let s1 = val1.toObject() {
-			CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
-			result = s0.description.compare(s1.description)
-		}
+		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 	case .referenceType:
 		if let s0 = val0.toReference(), let s1 = val1.toReference() {
 			result = s0.compare(s1)

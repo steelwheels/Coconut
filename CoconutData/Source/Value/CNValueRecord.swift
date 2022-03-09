@@ -9,7 +9,7 @@ import Foundation
 
 public class CNValueRecord: CNRecord
 {
-	static let ClassName = "ValueRecord"
+	static let ClassName = "record"
 
 	private var mTable:	CNValueTable?
 	private var mIndex:	Int?
@@ -52,10 +52,15 @@ public class CNValueRecord: CNRecord
 		}
 	}
 
-	public func toValue() -> CNValue {
+	public func toValue() -> Dictionary<String, CNValue> {
 		var result: Dictionary<String, CNValue> = mCache
 		CNValue.setClassName(toValue: &result, className: CNValueRecord.ClassName)
-		return .dictionaryValue(result)
+		return result
+	}
+
+	public func toText() -> CNText {
+		let val: CNValue = .dictionaryValue(mCache)
+		return val.toText()
 	}
 
 	static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueRecord? {
