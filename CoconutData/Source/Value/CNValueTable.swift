@@ -74,7 +74,7 @@ public class CNValueTable: CNTable
 		if let recvals = self.recordValues() {
 			let cnt = recvals.count
 			if 0<=row && row<cnt {
-				return CNValueRecord(table: self, index: row)
+				return CNRecord(table: self, index: row)
 			}
 		}
 		return nil
@@ -90,7 +90,7 @@ public class CNValueTable: CNTable
 			if let dval = dicts[i][field] {
 				switch CNCompareValue(nativeValue0: dval, nativeValue1: val) {
 				case .orderedSame:
-					let newrec = CNValueRecord(table: self, index: i)
+					let newrec = CNRecord(table: self, index: i)
 					result.append(newrec)
 				case .orderedAscending, .orderedDescending:
 					break
@@ -101,29 +101,25 @@ public class CNValueTable: CNTable
 	}
 
 	public func append(record rcd: CNRecord) {
-		if let vrcd = rcd as? CNValueRecord {
-			/* Append the contents of record */
-			var contents : Dictionary<String, CNValue> = [:]
-			let fields = vrcd.fieldNames
-			for field in fields {
-				if let val = vrcd.value(ofField: field) {
-					contents[field] = val
-				}
+		/* Append the contents of record */
+		var contents : Dictionary<String, CNValue> = [:]
+		let fields = rcd.fieldNames
+		for field in fields {
+			if let val = rcd.value(ofField: field) {
+				contents[field] = val
 			}
-			if !mValueStorage.append(value: .dictionaryValue(contents), forPath: recordPath()) {
-				CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
-			}
-			/* Clear cache */
-			mRecordValuesCache = nil
-		} else {
-			CNLog(logLevel: .error, message: "Invalid parameter type", atFunction: #function, inFile: #file)
 		}
+		if !mValueStorage.append(value: .dictionaryValue(contents), forPath: recordPath()) {
+			CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
+		}
+		/* Clear cache */
+		mRecordValuesCache = nil
 	}
 
 	public func forEach(callback cbfunc: (CNRecord) -> Void) {
 		if let dicts = self.recordValues() {
 			for i in 0..<dicts.count {
-				let newrec = CNValueRecord(table: self, index: i)
+				let newrec = CNRecord(table: self, index: i)
 				cbfunc(newrec)
 			}
 		} else {

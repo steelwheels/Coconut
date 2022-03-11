@@ -777,8 +777,8 @@ public enum CNValue {
 					if let range = NSRange.fromValue(value: dict) {
 						result = .rangeValue(range)
 					}
-				case CNValueRecord.ClassName:
-					if let record = CNValueRecord.fromValue(value: dict) {
+				case CNRecord.ClassName:
+					if let record = CNRecord.fromValue(value: dict) {
 						result = .recordValue(record)
 					}
 				case CNValueReference.ClassName:

@@ -68,7 +68,7 @@ public func UTValueTable() -> Bool
 		}
 	}
 	/* append record */
-	let newrec = CNValueRecord()
+	let newrec = CNRecord()
 	if !newrec.setValue(value: .stringValue("sizuka"), forField: "name") {
 		NSLog("Failed to set name to new record")
 		result = false

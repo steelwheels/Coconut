@@ -1,13 +1,13 @@
 /**
- * @file	CNValueRecord.swift
- * @brief	Define CNValueTable class
+ * @file	CNRecord.swift
+ * @brief	Define CNRecord class
  * @par Copyright
- *   Copyright (C) 2021 Steel Wheels Project
+ *   Copyright (C) 2021-2022 Steel Wheels Project
  */
 
 import Foundation
 
-public class CNValueRecord: CNRecord
+public class CNRecord
 {
 	static let ClassName = "record"
 
@@ -54,7 +54,7 @@ public class CNValueRecord: CNRecord
 
 	public func toValue() -> Dictionary<String, CNValue> {
 		var result: Dictionary<String, CNValue> = mCache
-		CNValue.setClassName(toValue: &result, className: CNValueRecord.ClassName)
+		CNValue.setClassName(toValue: &result, className: CNRecord.ClassName)
 		return result
 	}
 
@@ -63,15 +63,21 @@ public class CNValueRecord: CNRecord
 		return val.toText()
 	}
 
-	static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueRecord? {
-		if CNValue.hasClassName(inValue: val, className: CNValueRecord.ClassName) {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
+		if CNValue.hasClassName(inValue: val, className: CNRecord.ClassName) {
 			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)
-			let newrec = CNValueRecord()
+			let newrec = CNRecord()
 			newrec.mCache = dupval
 			return newrec
 		} else {
 			return nil
 		}
+	}
+
+	public func compare(forField name: String, with rec: CNRecord) -> ComparisonResult {
+		let s0 = self.value(ofField: name) ?? .nullValue
+		let s1 = rec.value(ofField: name)  ?? .nullValue
+		return CNCompareValue(nativeValue0: s0, nativeValue1: s1)
 	}
 }
 
