@@ -116,6 +116,19 @@ public class CNValueTable: CNTable
 		mRecordValuesCache = nil
 	}
 
+	public func remove(at row: Int) -> Bool {
+		var result = false
+		if 0<=row && row<self.recordCount {
+			let elmpath = CNValuePath(path: recordPath(), subPath: [.index(row)])
+			if mValueStorage.delete(forPath: elmpath) {
+				result = true
+			}
+		}
+		/* Clear cache */
+		mRecordValuesCache = nil
+		return result
+	}
+
 	public func forEach(callback cbfunc: (CNRecord) -> Void) {
 		if let dicts = self.recordValues() {
 			for i in 0..<dicts.count {

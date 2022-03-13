@@ -89,6 +89,10 @@ public class CNValueStorage
 		return mRootValue.append(value: mval, forPath: path.elements)
 	}
 
+	public func delete(forPath path: CNValuePath) -> Bool {
+		return mRootValue.delete(forPath: path.elements)
+	}
+
 	public func store() -> Bool {
 		let cachefile = self.cacheFile
 		let pathes    = cachefile.deletingLastPathComponent()
