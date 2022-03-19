@@ -87,6 +87,11 @@ public class CNContactDatabase: CNTable
 		return false
 	}
 
+	public func save() -> Bool {
+		CNLog(logLevel: .error, message: "Not supported yet", atFunction: #function, inFile: #file)
+		return false
+	}
+
 	public func forEach(callback cbfunc: (_ record: CNRecord) -> Void) {
 		do {
 			try mRecords.forEach({

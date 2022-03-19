@@ -23,6 +23,8 @@ public protocol CNTable
 	func search(value val: CNValue, forField field: String) -> Array<CNRecord>
 	func append(record rcd: CNRecord)
 	func remove(at row: Int) -> Bool
+	func save() -> Bool
+
 	func forEach(callback cbfunc: (_ record: CNRecord) -> Void)
 
 	func sort(byDescriptors descs: CNSortDescriptors)
