@@ -18,6 +18,8 @@ public class CNValueStorage
 	private var mCacheDirectory:		URL
 	private var mFilePath:			String
 	private var mRootValue:			CNMutableValue
+	private var mLock:			NSLock
+	private var mIsDirty:			Bool
 
 	// packdir: Root directory for package (*.jspkg)
 	// fpath:   The location of data file against packdir
@@ -26,8 +28,13 @@ public class CNValueStorage
 		mCacheDirectory		= cachedir
 		mFilePath		= fpath
 		mRootValue		= CNMutableDictionaryValue()
+		mLock			= NSLock()
+		mIsDirty		= false
 	}
 
+	public var isDirty: Bool { get {
+		return mIsDirty
+	}}
 	public var description: String { get {
 		return "{srcdir=\(mSourceDirectory.path), cachedir=\(mCacheDirectory.path), file=\(mFilePath)}"
 	}}
@@ -36,6 +43,9 @@ public class CNValueStorage
 	private var cacheFile:  URL { get { return mCacheDirectory.appendingPathComponent(mFilePath)	}}
 
 	public func load() -> Result {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
 		/* Copy source file to cache file */
 		let srcfile   = self.sourceFile
 		let cachefile = self.cacheFile
@@ -52,6 +62,7 @@ public class CNValueStorage
 		switch parser.parse(source: ctxt as String) {
 		case .ok(let val):
 			mRootValue = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
+			mIsDirty   = false
 			result = .ok(val)
 		case .error(let err):
 			result = .error(err)
@@ -60,6 +71,9 @@ public class CNValueStorage
 	}
 
 	public func value(forPath path: CNValuePath) -> CNValue? {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
 		if let mval = mRootValue.value(forPath: path.elements) {
 			let result: CNValue
 			switch mval.type {
@@ -80,20 +94,46 @@ public class CNValueStorage
 	}
 
 	public func set(value val: CNValue, forPath path: CNValuePath) -> Bool {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-		return mRootValue.set(value: mval, forPath: path.elements)
+		if mRootValue.set(value: mval, forPath: path.elements) {
+			mIsDirty = true
+			return true
+		} else {
+			return false
+		}
 	}
 
 	public func append(value val: CNValue, forPath path: CNValuePath) -> Bool {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-		return mRootValue.append(value: mval, forPath: path.elements)
+		if mRootValue.append(value: mval, forPath: path.elements) {
+			mIsDirty =  true
+			return true
+		} else {
+			return false
+		}
 	}
 
 	public func delete(forPath path: CNValuePath) -> Bool {
-		return mRootValue.delete(forPath: path.elements)
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+		if mRootValue.delete(forPath: path.elements) {
+			mIsDirty = true
+			return true
+		} else {
+			return false
+		}
 	}
 
-	public func store() -> Bool {
+	public func save() -> Bool {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
 		let cachefile = self.cacheFile
 		let pathes    = cachefile.deletingLastPathComponent()
 		if !FileManager.default.fileExists(atPath: pathes.path) {
@@ -109,6 +149,7 @@ public class CNValueStorage
 		let val = mRootValue.toValue()
 		let txt = val.toText().toStrings().joined(separator: "\n")
 		if cachefile.storeContents(contents: txt + "\n") {
+			mIsDirty = false
 			return true
 		} else {
 			CNLog(logLevel: .error, message: "Failed to store storage: \(self.description)", atFunction: #function, inFile: #file)
@@ -117,6 +158,9 @@ public class CNValueStorage
 	}
 
 	public func toText() -> CNText {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
 		let result = CNTextSection()
 		result.header    = "ValueStorage: {"
 		result.footer    = "}"

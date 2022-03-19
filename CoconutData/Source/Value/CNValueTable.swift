@@ -39,6 +39,10 @@ public class CNValueTable: CNTable
 		}
 	}}
 
+	public var isDirty: Bool { get {
+		return mValueStorage.isDirty
+	}}
+
 	public var allFieldNames: Array<String> { get {
 		if let cache = mColumnNamesCache {
 			return cache
@@ -188,6 +192,10 @@ public class CNValueTable: CNTable
 		}
 		CNLog(logLevel: .error, message: "Invalid \"\(CNValueTable.RecordsItem)\" property", atFunction: #function, inFile: #file)
 		return nil
+	}
+
+	public func save() -> Bool {
+		return mValueStorage.save()
 	}
 
 	public func toText() -> CNText {
