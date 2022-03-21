@@ -41,6 +41,9 @@ public class CNContactDatabase: CNTable
 		mState			= .undecided
 	}
 
+	public var isDirty: Bool { get {
+		return false
+	}}
 	public var recordCount: Int { get {
 		return mRecords.count
 	}}

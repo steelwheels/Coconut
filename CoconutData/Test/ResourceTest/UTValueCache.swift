@@ -10,61 +10,45 @@ import Foundation
 
 public func UTValueStorage() -> Bool {
 	NSLog("*** UTValueStorage")
-	if let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: nil, forClass: ViewController.self) {
-		var result = true
 
-		NSLog("***** Main storage")
-		let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: nil)
-		NSLog("srcfile=\(srcfile.path), cachefile=\(cachefile)")
-
-		let srcdir   = srcfile.deletingLastPathComponent()
-		let cachedir = cachefile.deletingLastPathComponent()
-
-		let storage = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "root.json")
-		switch storage.load() {
-		case .ok(let value):
-			let txt = value.toText().toStrings().joined(separator: "\n")
-			NSLog("Load root ... done: \(txt)")
-			if !testStorageRead(target: storage) {
-				result = false
-			}
-			if !testChildStorage(parentStorage: storage) {
-				result = false
-			}
-		case .error(let err):
-			NSLog("Load root ... fail: \(err.description)")
-		}
-		return result
-	} else {
-		NSLog("Failed to get base url")
+	guard let storage = loadStorage() else {
 		return false
 	}
+	guard testStorageRead(target: storage) else {
+		return false
+	}
+	guard testStorageWrite(target: storage) else {
+		return false
+	}
+
+	return true
 }
 
-private func testChildStorage(parentStorage parent: CNValueStorage) -> Bool {
-	var result = true
-	
-	NSLog("***** Child storage")
-	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
-		NSLog("Faild to allocate source file")
-		return false
+private func loadStorage() -> CNValueStorage? {
+	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: nil, forClass: ViewController.self) else {
+		NSLog("Failed to allocate source URL")
+		return nil
 	}
-	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: "Data")
+	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: nil)
+
 	NSLog("Copy from \(srcfile.path) to \(cachefile.path)")
 	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) else {
 		NSLog("Failed to copy root.json")
-		return false
+		return nil
 	}
 
-	let storage = CNValueStorage(sourceDirectory: srcfile, cacheDirectory: cachefile, filePath: "root.json")
-	if !testStorageRead(target: storage) {
-		result = false
-	}
-	if !testStorageWrite(target: storage) {
-		result = false
-	}
-	if !testStorageStore(target: storage) {
-		result = false
+	let srcdir   = srcfile.deletingLastPathComponent()
+	let cachedir = cachefile.deletingLastPathComponent()
+
+	var result: CNValueStorage? = nil
+	let storage = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "root.json")
+	switch storage.load() {
+	case .ok(let value):
+		let txt = value.toText().toStrings().joined(separator: "\n")
+		NSLog("Loaded storage: \(txt)")
+		result = storage
+	case .error(let err):
+		NSLog("Load root ... fail: \(err.description)")
 	}
 	return result
 }
@@ -73,79 +57,85 @@ private func testStorageRead(target storage: CNValueStorage) -> Bool
 {
 	var result = true
 
-	guard let patha = CNValuePath.pathExpression(string: "a") else {
+	guard let expa = CNValuePath.pathExpression(string: "a") else {
 		NSLog("Invalid path expression: a")
 		return false
 	}
-	guard let pathb = CNValuePath.pathExpression(string: "b") else {
+	guard let expb = CNValuePath.pathExpression(string: "b") else {
 		NSLog("Invalid path expression: b")
 		return false
 	}
-	guard let pathf = CNValuePath.pathExpression(string: "f") else {
+	guard let expf = CNValuePath.pathExpression(string: "f") else {
 		NSLog("Invalid path expression: f")
 		return false
 	}
-	guard let pathcd = CNValuePath.pathExpression(string: "c.d") else {
+	guard let expcd = CNValuePath.pathExpression(string: "c.d") else {
 		NSLog("Invalid path expression: c.d")
 		return false
 	}
-	guard let pathce = CNValuePath.pathExpression(string: "c.e") else {
+	guard let expce = CNValuePath.pathExpression(string: "c.e") else {
 		NSLog("Invalid path expression: c.e")
 		return false
 	}
-	guard let pathfs1 = CNValuePath.pathExpression(string: "f.s1") else {
+	guard let expfs1 = CNValuePath.pathExpression(string: "f.s1") else {
 		NSLog("Invalid path expression: f.s1")
 		return false
 	}
 
-
 	NSLog("***** Storage read test")
-	if let vara = storage.value(forPath: CNValuePath(elements: patha)) {
+	NSLog("storage = \(storage.toText().toStrings().joined(separator: "\n"))")
+	let patha = CNValuePath(elements: expa)
+	if let vara = storage.value(forPath: patha) {
 		NSLog("Property a = \(vara.toText().toStrings().joined(separator: "\n"))")
 	} else {
-		NSLog("Check property a ... fail")
+		NSLog("Check property a ... fail (path: \(patha.expression))")
 		result = false
 	}
 
-	if let varb = storage.value(forPath: CNValuePath(elements: pathb)) {
+	let pathb = CNValuePath(elements: expb)
+	if let varb = storage.value(forPath: pathb) {
 		NSLog("Property b = \(varb.toText().toStrings().joined(separator: "\n"))")
 	} else {
-		NSLog("Check property b ... fail")
+		NSLog("Check property b ... fail: (path: \(pathb.expression)")
 		result = false
 	}
 
-	if let vard = storage.value(forPath: CNValuePath(elements: pathcd)) {
+	let pathcd = CNValuePath(elements: expcd)
+	if let vard = storage.value(forPath: pathcd) {
 		NSLog("Property c.d = \(vard.toText().toStrings().joined(separator: "\n"))")
 	} else {
-		NSLog("Check property c.d ... fail")
+		NSLog("Check property c.d ... fail: (path: \(pathcd.expression))")
 		result = false
 	}
 
-	if let vare = storage.value(forPath: CNValuePath(elements: pathce)) {
+	let pathce = CNValuePath(elements: expce)
+	if let vare = storage.value(forPath: pathce) {
 		NSLog("Property c.e = \(vare.toText().toStrings().joined(separator: "\n"))")
 	} else {
-		NSLog("Check property c.e ... fail")
+		NSLog("Check property c.e ... fail: (path: \(pathce.expression))")
 		result = false
 	}
 
-	if let varf = storage.value(forPath: CNValuePath(elements: pathf)) {
+	let pathfs1 = CNValuePath(elements: expfs1)
+	if let varf = storage.value(forPath: pathfs1) {
 		NSLog("Property f = \(varf.toText().toStrings().joined(separator: "\n"))")
 	} else {
-		NSLog("Check property f ... fail")
+		NSLog("Check property f ... fail: (path: \(pathfs1.expression))")
 		result = false
 	}
 
-	if let vars1 = storage.value(forPath: CNValuePath(elements: pathfs1)) {
+	if let vars1 = storage.value(forPath: pathfs1) {
 		NSLog("Property f.s1 = \(vars1.toText().toStrings().joined(separator: "\n"))")
 	} else {
-		NSLog("Check property f.s1 ... fail")
+		NSLog("Check property f.s1 ... fail: (path: \(pathfs1.expression))")
 		result = false
 	}
 
-	if let varf = storage.value(forPath: CNValuePath(elements: pathf)) {
+	let pathf = CNValuePath(elements: expf)
+	if let varf = storage.value(forPath: pathf) {
 		NSLog("(2nd) Property f = \(varf.toText().toStrings().joined(separator: "\n"))")
 	} else {
-		NSLog("(2nd) Check property f ... fail")
+		NSLog("(2nd) Check property f ... fail: (path: \(pathf.expression))")
 		result = false
 	}
 
@@ -213,17 +203,5 @@ private func testStorageWrite(target storage: CNValueStorage) -> Bool
 	}
 
 	return result
-}
-
-private func testStorageStore(target storage: CNValueStorage) -> Bool
-{
-	NSLog("***** Storage store test")
-	if storage.store() {
-		NSLog("storage store: OK")
-		return true
-	} else {
-		NSLog("storage store: NG")
-		return false
-	}
 }
 

@@ -223,6 +223,8 @@
 		05B32D9525150946000D1411 /* CNStringUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B32D7325150945000D1411 /* CNStringUtil.swift */; };
 		05B48405272D7CC6006DD06E /* CNVectorObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNVectorObject.swift */; };
 		05B48406272D7CC6006DD06E /* CNVectorObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B48404272D7CC6006DD06E /* CNVectorObject.swift */; };
+		05B7967F27E69C6300FE2B85 /* CNValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7967E27E69C6300FE2B85 /* CNValueCache.swift */; };
+		05B7968027E69C6300FE2B85 /* CNValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7967E27E69C6300FE2B85 /* CNValueCache.swift */; };
 		05B7B1AF277606810077DEDC /* CNValueReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7B1AE277606810077DEDC /* CNValueReference.swift */; };
 		05B7B1B0277606810077DEDC /* CNValueReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B7B1AE277606810077DEDC /* CNValueReference.swift */; };
 		05BD9FA32745444900D43064 /* oval-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA12745443200D43064 /* oval-filled.png */; };
@@ -556,6 +558,7 @@
 		05B32D7325150945000D1411 /* CNStringUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStringUtil.swift; sourceTree = "<group>"; };
 		05B32DD025160330000D1411 /* CoconutData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutData.xcframework; path = ../../../../Library/Frameworks/CoconutData.xcframework; sourceTree = "<group>"; };
 		05B48404272D7CC6006DD06E /* CNVectorObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVectorObject.swift; sourceTree = "<group>"; };
+		05B7967E27E69C6300FE2B85 /* CNValueCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueCache.swift; sourceTree = "<group>"; };
 		05B7B1AE277606810077DEDC /* CNValueReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueReference.swift; sourceTree = "<group>"; };
 		05BD9FA12745443200D43064 /* oval-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval-filled.png"; sourceTree = "<group>"; };
 		05BD9FA22745443200D43064 /* oval.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oval.png; sourceTree = "<group>"; };
@@ -839,6 +842,7 @@
 				05B32CA72515025E000D1411 /* CNStruct.swift */,
 				05B32CA32515025E000D1411 /* CNValue.swift */,
 				05A1AFB8277689F90091D527 /* CNValueStorage.swift */,
+				05B7967E27E69C6300FE2B85 /* CNValueCache.swift */,
 				05A501B426A4203E00A992F9 /* CNValueComparator.swift */,
 				05B32CA02515025E000D1411 /* CNValueParser.swift */,
 				05484963278A6D1800642FAC /* CNValuePath.swift */,
@@ -1409,6 +1413,7 @@
 				056F5702278AB95B0078C25D /* CNMutableValue.swift in Sources */,
 				05B32D2D251508D9000D1411 /* CNAuthorize.swift in Sources */,
 				05B32CF525150328000D1411 /* CNPreference.swift in Sources */,
+				05B7967F27E69C6300FE2B85 /* CNValueCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1503,6 +1508,7 @@
 				056F5703278AB95B0078C25D /* CNMutableValue.swift in Sources */,
 				05B32D2E251508D9000D1411 /* CNAuthorize.swift in Sources */,
 				05B32CF625150328000D1411 /* CNPreference.swift in Sources */,
+				05B7968027E69C6300FE2B85 /* CNValueCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

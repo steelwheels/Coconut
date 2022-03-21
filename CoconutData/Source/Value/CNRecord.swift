@@ -12,7 +12,7 @@ public class CNRecord
 	static let ClassName = "record"
 
 	private var mTable:	CNValueTable?
-	private var mIndex:	Int?
+	private var mIndex:	Int
 	private var mCache:	Dictionary<String, CNValue>
 
 	public var index: Int? { get { return mIndex} }
@@ -21,45 +21,60 @@ public class CNRecord
 		mTable		= tbl
 		mIndex		= idx
 		mCache		= [:]
-
-		/* load current value */
-		if let dicts = tbl.recordValues() {
-			if 0<=idx && idx < dicts.count {
-				mCache = dicts[idx]
-			}
-		}
 	}
 
 	public init(){
 		mTable		= nil
-		mIndex		= nil
+		mIndex		= 0
 		mCache		= [:]
 	}
 
-	public var fieldCount: Int		{ get { return mCache.keys.count 	}}
-	public var fieldNames: Array<String>	{ get { return Array(mCache.keys) 	}}
+	public var fieldCount: Int		{ get {
+		if let tbl = mTable {
+			return tbl.allFieldNames.count
+		} else {
+			return mCache.keys.count
+		}
+	}}
+
+	public var fieldNames: Array<String>	{ get {
+		if let tbl = mTable {
+			return tbl.allFieldNames
+		} else {
+			return Array(mCache.keys)
+		}
+	}}
 	
 	public func value(ofField name: String) -> CNValue? {
-		return mCache[name]
+		if let tbl = mTable {
+			return tbl.getRecordValue(index: mIndex, field: name)
+		} else {
+			return mCache[name]
+		}
 	}
 
 	public func setValue(value val: CNValue, forField name: String) -> Bool {
-		mCache[name] = val
-		if let table = mTable, let idx = mIndex {
-			return table.setRecordValue(val, index: idx, field: name)
+		if let tbl = mTable {
+			return tbl.setRecordValue(val, index: mIndex, field: name)
 		} else {
+			mCache[name] = val
 			return true
 		}
 	}
 
 	public func toValue() -> Dictionary<String, CNValue> {
-		var result: Dictionary<String, CNValue> = mCache
+		var result: Dictionary<String, CNValue> = [:]
+		for field in self.fieldNames {
+			if let val = value(ofField: field) {
+				result[field] = val
+			}
+		}
 		CNValue.setClassName(toValue: &result, className: CNRecord.ClassName)
 		return result
 	}
 
 	public func toText() -> CNText {
-		let val: CNValue = .dictionaryValue(mCache)
+		let val: CNValue = .dictionaryValue(self.toValue())
 		return val.toText()
 	}
 

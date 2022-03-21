@@ -18,6 +18,7 @@ public class CNValueStorage
 	private var mCacheDirectory:		URL
 	private var mFilePath:			String
 	private var mRootValue:			CNMutableValue
+	private var mValueCache:		CNValueCache
 	private var mLock:			NSLock
 	private var mIsDirty:			Bool
 
@@ -28,10 +29,14 @@ public class CNValueStorage
 		mCacheDirectory		= cachedir
 		mFilePath		= fpath
 		mRootValue		= CNMutableDictionaryValue()
+		mValueCache		= CNValueCache()
 		mLock			= NSLock()
 		mIsDirty		= false
 	}
 
+	public var cache: CNValueCache { get {
+		return mValueCache
+	}}
 	public var isDirty: Bool { get {
 		return mIsDirty
 	}}
@@ -99,6 +104,7 @@ public class CNValueStorage
 
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 		if mRootValue.set(value: mval, forPath: path.elements) {
+			mValueCache.setDirty(at: path)
 			mIsDirty = true
 			return true
 		} else {
@@ -112,6 +118,7 @@ public class CNValueStorage
 
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 		if mRootValue.append(value: mval, forPath: path.elements) {
+			mValueCache.setDirty(at: path)
 			mIsDirty =  true
 			return true
 		} else {
@@ -122,6 +129,7 @@ public class CNValueStorage
 	public func delete(forPath path: CNValuePath) -> Bool {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
+		mValueCache.setDirty(at: path)
 		if mRootValue.delete(forPath: path.elements) {
 			mIsDirty = true
 			return true
@@ -150,9 +158,10 @@ public class CNValueStorage
 		let txt = val.toText().toStrings().joined(separator: "\n")
 		if cachefile.storeContents(contents: txt + "\n") {
 			mIsDirty = false
+			mValueCache.setAllClean()
 			return true
 		} else {
-			CNLog(logLevel: .error, message: "Failed to store storage: \(self.description)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Failed to store storage: \(cachefile.path)", atFunction: #function, inFile: #file)
 			return false
 		}
 	}

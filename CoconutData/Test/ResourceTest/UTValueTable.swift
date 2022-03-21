@@ -13,16 +13,68 @@ public func UTValueTable() -> Bool
 	NSLog("*** UTValueTable")
 	var result = true
 
-	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
-		NSLog("Failed to allocate source url")
+	guard let (table0, table1) = allocateTable() else {
+		NSLog("Failed to allocate table")
 		return false
 	}
 
+	NSLog("**** Initial table 0")
+	printTableInfo(table: table0)
+
+	/* get record */
+	guard let rec0_0 = table0.record(at: 0) else {
+		NSLog("[Error] Failed to get record")
+		return false
+	}
+	if let nameval = rec0_0.value(ofField: "name") {
+		let name = nameval.toText().toStrings().joined(separator: "\n")
+		NSLog("rec0_0.name = \(name)")
+	} else {
+		NSLog("[Error] No name field")
+		result = false
+	}
+
+	/* add record */
+	NSLog("**** Add record to table")
+	let rec0_1 = CNRecord()
+	result = rec0_1.setValue(value: .stringValue("Shizuka"), forField: "name") && result
+	result = rec0_1.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
+	table0.append(record: rec0_1)
+	printTableInfo(table: table0)
+
+	/* Search table from different table */
+	NSLog("**+ Search other record")
+	let rec1_0 = table1.search(value: .stringValue("Shizuka"), forField: "name")
+	if rec1_0.count > 0 {
+		printRecord(record: rec1_0[0])
+	} else {
+		NSLog("[Error] Failed to search")
+		result = false
+	}
+
+	/* Save to the storage file */
+	NSLog("**** Save the table")
+	if table0.save() {
+		NSLog("storage save ... done")
+	} else {
+		NSLog("storage save ... failed")
+		result = false
+	}
+	printTableInfo(table: table0)
+
+	return result
+}
+
+private func allocateTable() -> (CNValueTable, CNValueTable)? {
+	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
+		NSLog("Failed to allocate source url")
+		return nil
+	}
+
 	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data")
-	
 	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) else {
 		NSLog("Failed to copy value table")
-		return false
+		return nil
 	}
 
 	let srcdir   = srcfile.deletingLastPathComponent()
@@ -30,62 +82,32 @@ public func UTValueTable() -> Bool
 	let storage  = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
 	switch storage.load() {
 	case .ok(_):
-		break
+		let table0 = CNValueTable(path: CNValuePath(elements: [.member("persons")]), valueStorage: storage)
+		NSLog("record count [0]: \(table0.recordCount)")
+		NSLog("field names  [0]:  \(table0.allFieldNames)")
+
+		let table1 = CNValueTable(path: CNValuePath(elements: [.member("persons")]), valueStorage: storage)
+		NSLog("record count [1]: \(table1.recordCount)")
+		NSLog("field names  [1]:  \(table1.allFieldNames)")
+
+		return (table0, table1)
 	case .error(let err):
-		NSLog("Error: \(err.toString())")
-		return false
+		NSLog("Failed to load storage: \(err.toString())")
+		return nil
 	}
+}
 
-	let vtable = CNValueTable(path: CNValuePath(elements: [.member("persons")]), valueStorage: storage)
-	NSLog("record count: \(vtable.recordCount)")
-	NSLog("field names:  \(vtable.allFieldNames)")
+private func printTableInfo(table tbl: CNTable){
+	NSLog("table info: isDirty:\(tbl.isDirty)")
+}
 
-	if let rec0 = vtable.record(at: 0) {
-		if let nameval = rec0.value(ofField: "name") {
-			let name = nameval.toText().toStrings().joined(separator: "\n")
-			NSLog("rec0.name = \(name)")
+private func printRecord(record rec: CNRecord){
+	NSLog("record")
+	for field in rec.fieldNames {
+		if let val = rec.value(ofField: field) {
+			NSLog(" - \(field): \(val.toText().toStrings().joined(separator: "\n"))")
 		} else {
-			NSLog("No name field")
-			result = false
+			NSLog(" - \(field): nil")
 		}
 	}
-	if let rec1 = vtable.record(at: 1) {
-		if rec1.setValue(value: .numberValue(NSNumber(integerLiteral: 12)), forField: "age") {
-			if let ageval = rec1.value(ofField: "age") {
-				switch ageval {
-				case .numberValue(let num):
-					NSLog("rec1.age = \(num.intValue)")
-				default:
-					NSLog("Unknown data: \(ageval.toText().toStrings().joined(separator: "\n"))")
-					result = false
-				}
-			} else {
-				NSLog("No age field")
-				result = false
-			}
-		} else {
-			NSLog("No record(1)")
-		}
-	}
-	/* append record */
-	let newrec = CNRecord()
-	if !newrec.setValue(value: .stringValue("sizuka"), forField: "name") {
-		NSLog("Failed to set name to new record")
-		result = false
-	}
-	if !newrec.setValue(value: .numberValue(NSNumber(integerLiteral: 11)), forField: "age") {
-		NSLog("Failed to set age to new record")
-		result = false
-	}
-	vtable.append(record: newrec)
-
-	/* Save to the storage file */
-	if storage.store() {
-		NSLog("storage store ... done")
-	} else {
-		NSLog("storage store ... failed")
-		result = false
-	}
-
-	return result
 }
