@@ -27,21 +27,21 @@ private func unitTest() -> Bool
 	NSLog("- MutableScalarValue")
 	let scalar1 = allocateScalar(intValue: 1)
 	let scalar2 = allocateScalar(intValue: 2)
-	let scr1txt = scalar1.toText().toStrings().joined(separator: "\n")
+	let scr1txt = scalar1.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("scalar1 -> \(scr1txt)")
 
 	NSLog("- MutableArrayValue")
 	let array0 = CNMutableArrayValue()
 	array0.append(value: scalar1)
 	array0.append(value: scalar2)
-	let arrtxt0 = array0.toText().toStrings().joined(separator: "\n")
+	let arrtxt0 = array0.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("array0 -> \(arrtxt0)")
 
 	NSLog("- MutableDictionaryValue")
 	let dict = CNMutableDictionaryValue()
 	dict.set(value: scalar1, forKey: "a")
 	dict.set(value: scalar2, forKey: "b")
-	let dicttxt = dict.toText().toStrings().joined(separator: "\n")
+	let dicttxt = dict.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("dict -> \(dicttxt)")
 
 	return true

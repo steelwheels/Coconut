@@ -499,12 +499,12 @@ public enum CNValue {
 				result = CNTextLine(string: "{image: size:\(size.width) x \(size.height)}")
 			#endif
 		case .recordValue(let val):
-			result = val.toText()
+			result = dictionaryToText(dictionary: val.toValue())
 		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
 			result = CNTextLine(string: "object(\(classname))")
 		case .reference(let val):
-			result = CNTextLine(string: "reference(\(val.relativePath))")
+			result = dictionaryToText(dictionary: val.toValue())
 		}
 		return result
 	}

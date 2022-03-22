@@ -83,7 +83,8 @@ private func testStorageRead(target storage: CNValueStorage) -> Bool
 	}
 
 	NSLog("***** Storage read test")
-	NSLog("storage = \(storage.toText().toStrings().joined(separator: "\n"))")
+	let storagetxt = storage.toValue().toText().toStrings().joined(separator: "\n")
+	NSLog("storage = \(storagetxt)")
 	let patha = CNValuePath(elements: expa)
 	if let vara = storage.value(forPath: patha) {
 		NSLog("Property a = \(vara.toText().toStrings().joined(separator: "\n"))")

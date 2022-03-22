@@ -73,11 +73,6 @@ public class CNRecord
 		return result
 	}
 
-	public func toText() -> CNText {
-		let val: CNValue = .dictionaryValue(self.toValue())
-		return val.toText()
-	}
-
 	static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
 		if CNValue.hasClassName(inValue: val, className: CNRecord.ClassName) {
 			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)

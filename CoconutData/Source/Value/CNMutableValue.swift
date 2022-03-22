@@ -53,11 +53,6 @@ public class CNMutableValue
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return .nullValue
 	}
-
-	open func toText() -> CNText {
-		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
-		return CNTextLine(string: "?")
-	}
 }
 
 public class CNMutableScalarValue: CNMutableValue
@@ -110,10 +105,6 @@ public class CNMutableScalarValue: CNMutableValue
 	public override func toValue() -> CNValue {
 		return mScalarValue
 	}
-
-	public override func toText() -> CNText {
-		return mScalarValue.toText()
-	}
 }
 
 public class CNMutableArrayValue: CNMutableValue
@@ -124,6 +115,8 @@ public class CNMutableArrayValue: CNMutableValue
 		mArrayValue = []
 		super.init(type: .array)
 	}
+
+	public var values: Array<CNMutableValue> { get { return mArrayValue }}
 
 	public func append(value val: CNMutableValue){
 		mArrayValue.append(val)
@@ -264,15 +257,6 @@ public class CNMutableArrayValue: CNMutableValue
 		}
 		return .arrayValue(result)
 	}
-
-	public override func toText() -> CNText {
-		let sect = CNTextSection()
-		sect.header = "[" ; sect.footer = "]" ; sect.separator = ","
-		for elm in mArrayValue {
-			sect.add(text: elm.toText())
-		}
-		return sect
-	}
 }
 
 public class CNMutableDictionaryValue: CNMutableValue
@@ -283,6 +267,9 @@ public class CNMutableDictionaryValue: CNMutableValue
 		mDictionaryValue = [:]
 		super.init(type: .dictionary)
 	}
+
+	public var keys:   Array<String>         { get { return Array(mDictionaryValue.keys) }}
+	public var values: Array<CNMutableValue> { get { return Array(mDictionaryValue.values) }}
 
 	public func set(value val: CNMutableValue, forKey key: String){
 		mDictionaryValue[key] = val
@@ -417,21 +404,6 @@ public class CNMutableDictionaryValue: CNMutableValue
 		}
 		return .dictionaryValue(result)
 	}
-
-	public override func toText() -> CNText {
-		let sect = CNTextSection()
-		sect.header = "{" ; sect.footer = "}" ; sect.separator = ","
-		for (key, elm) in mDictionaryValue {
-			let elmtxt = elm.toText()
-			if let sect = elmtxt as? CNTextSection {
-				sect.header = "\(key): " + sect.header
-			} else {
-				elmtxt.prepend(string: "\(key): ")
-			}
-			sect.add(text: elmtxt)
-		}
-		return sect
-	}
 }
 
 public class CNMutableValueReference: CNMutableValue
@@ -448,6 +420,17 @@ public class CNMutableValueReference: CNMutableValue
 		mContext		= nil
 		super.init(type: .reference)
 	}
+
+	public var sourceDirectory: URL     { get { return mSourceDirectory }}
+	public var cacheDirectory:  URL     { get { return mCacheDirectory  }}
+	public var context: CNMutableValue? { get { return mContext         }}
+
+	public var sourceFile: URL { get {
+		return mSourceDirectory.appendingPathComponent(mReferenceValue.relativePath)
+	}}
+	public var cacheFile: URL { get {
+		return mCacheDirectory.appendingPathComponent(mReferenceValue.relativePath)
+	}}
 
 	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
 		let result: CNMutableValue?
@@ -489,16 +472,6 @@ public class CNMutableValueReference: CNMutableValue
 		return result
 	}
 
-	public func context() -> CNValue {
-		if let ctxt = mContext {
-			return ctxt.toValue()
-		} else if let ctxt = load() {
-			return ctxt.toValue()
-		} else {
-			return .nullValue
-		}
-	}
-
 	private func load() -> CNMutableValue? {
 		let result:  CNMutableValue?
 		if let ctxt = mContext {
@@ -522,16 +495,6 @@ public class CNMutableValueReference: CNMutableValue
 
 	public override func toValue() -> CNValue {
 		return .reference(mReferenceValue)
-	}
-
-	public override func toText() -> CNText {
-		let result: CNText
-		if let dst = load() {
-			result = dst.toText()
-		} else {
-			result = CNTextLine(string: "{relativePath: " + mReferenceValue.relativePath + "}")
-		}
-		return result
 	}
 }
 
@@ -591,3 +554,35 @@ public func CNValueToMutableValue(from val: CNValue, sourceDirectory srcdir: URL
 	return result
 }
 
+public func CNAllReferencesInValue(value val: CNMutableValue) -> Array<CNMutableValueReference> {
+	var result: Array<CNMutableValueReference> = []
+	switch val.type {
+	case .scaler:
+		break
+	case .dictionary:
+		if let dict = val as? CNMutableDictionaryValue {
+			for child in dict.values {
+				let cres = CNAllReferencesInValue(value: child)
+				result.append(contentsOf: cres)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Can not happen (1)", atFunction: #function, inFile: #file)
+		}
+	case .array:
+		if let arr = val as? CNMutableArrayValue {
+			for child in arr.values {
+				let cres = CNAllReferencesInValue(value: child)
+				result.append(contentsOf: cres)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
+		}
+	case .reference:
+		if let ref = val as? CNMutableValueReference {
+			result.append(ref)
+		} else {
+			CNLog(logLevel: .error, message: "Can not happen (3)", atFunction: #function, inFile: #file)
+		}
+	}
+	return result
+}

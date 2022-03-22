@@ -223,17 +223,8 @@ public class CNValueTable: CNTable
 		return mValueStorage.save()
 	}
 
-	public func toText() -> CNText {
-		let result = CNTextSection()
-		result.header    = "ValueTable: {"
-		result.footer    = "}"
-		result.separator = ", "
-
-		let path = CNTextLine(string: "{path: " + mPath.description + "}")
-		result.add(text: path)
-		result.add(text: mValueStorage.toText())
-
-		return result
+	public func toValue() -> CNValue {
+		return mValueStorage.toValue()
 	}
 }
 

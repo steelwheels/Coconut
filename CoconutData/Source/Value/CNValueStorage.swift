@@ -84,7 +84,11 @@ public class CNValueStorage
 			switch mval.type {
 			case .reference:
 				if let refval = mval as? CNMutableValueReference {
-					result = refval.context()
+					if let cval = refval.context {
+						result = cval.toValue()
+					} else {
+						result = .nullValue
+					}
 				} else {
 					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 					result = .nullValue
@@ -154,6 +158,16 @@ public class CNValueStorage
 			}
 		}
 		/* Save into the file */
+		if save(value: mRootValue, outFile: cachefile) {
+			mIsDirty = false
+			mValueCache.setAllClean()
+			return true
+		} else {
+			CNLog(logLevel: .error, message: "Failed to store storage: \(cachefile.path)", atFunction: #function, inFile: #file)
+			return false
+		}
+
+		/*
 		let val = mRootValue.toValue()
 		let txt = val.toText().toStrings().joined(separator: "\n")
 		if cachefile.storeContents(contents: txt + "\n") {
@@ -163,23 +177,36 @@ public class CNValueStorage
 		} else {
 			CNLog(logLevel: .error, message: "Failed to store storage: \(cachefile.path)", atFunction: #function, inFile: #file)
 			return false
-		}
+		}*/
 	}
 
-	public func toText() -> CNText {
+	private func save(value val: CNMutableValue, outFile file: URL) -> Bool {
+		/* save it self */
+		let txt = val.toValue().toText().toStrings().joined(separator: "\n")
+		if file.storeContents(contents: txt + "\n") {
+			mIsDirty = false
+			mValueCache.setAllClean()
+		} else {
+			CNLog(logLevel: .error, message: "Failed to store storage: \(file.path)", atFunction: #function, inFile: #file)
+			return false
+		}
+		/* save referenced values */
+		var result = true
+		let refs = CNAllReferencesInValue(value: val)
+		for ref in refs {
+			if let cval = ref.context {
+				if !save(value: cval, outFile: ref.cacheFile) {
+					result = false
+				}
+			}
+		}
+		return result
+	}
+
+	public func toValue() -> CNValue {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
-
-		let result = CNTextSection()
-		result.header    = "ValueStorage: {"
-		result.footer    = "}"
-		result.separator = ", "
-
-		let package = CNTextLine(string: self.description)
-		result.add(text: package)
-		result.add(text: mRootValue.toText())
-
-		return result
+		return mRootValue.toValue()
 	}
 }
 
