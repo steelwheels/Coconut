@@ -17,7 +17,6 @@ public protocol CNTable
 	var recordCount: Int { get }
 
 	var allFieldNames:    Array<String> { get }
-	var isDirty: Bool { get }
 
 	func fieldName(at index: Int) -> String?
 

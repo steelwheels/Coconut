@@ -16,12 +16,14 @@ public class CNMutableValue
 		case reference
 	}
 
-	private var mType: ValueType
+	private var mType:    ValueType
 
-	public var type: ValueType { get { return mType }}
+	public var	type:    ValueType { get { return mType    }}
+	fileprivate var	isDirty: Bool
 
 	public init(type t: ValueType){
-		mType = t
+		mType	= t
+		isDirty	= false
 	}
 
 	open func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
@@ -80,7 +82,8 @@ public class CNMutableScalarValue: CNMutableValue
 		let result: Bool
 		if path.count == 0 {
 			mScalarValue = val.toValue()
-			result = true
+			self.isDirty = true
+			result       = true
 		} else {
 			CNLog(logLevel: .error, message: "Non-empty path for scalar value", atFunction: #function, inFile: #file)
 			result = false
@@ -167,10 +170,12 @@ public class CNMutableArrayValue: CNMutableValue
 			let rest = Array(path.dropFirst())
 			if rest.count == 0 {
 				if 0<=idx && idx<mArrayValue.count {
-					mArrayValue[idx] = val.clone()
+					let dval = val.clone()
+					mArrayValue[idx] = dval ; dval.isDirty = true
 					result = true
 				} else if idx == mArrayValue.count {
-					mArrayValue.append(val.clone())
+					let dval = val.clone()
+					mArrayValue.append(dval) ; dval.isDirty = true
 					result = true
 				} else {
 					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
@@ -199,7 +204,8 @@ public class CNMutableArrayValue: CNMutableValue
 				if 0<=idx && idx<mArrayValue.count {
 					let dst  = mArrayValue[idx]
 					let rest = Array(path.dropFirst())
-					result = dst.append(value: val, forPath: rest)
+					let dval = val.clone() ; dval.isDirty = true
+					result = dst.append(value: dval, forPath: rest)
 				} else {
 					CNLog(logLevel: .error, message: "Array index overflow: \(idx)", atFunction: #function, inFile: #file)
 					result = false
@@ -227,6 +233,7 @@ public class CNMutableArrayValue: CNMutableValue
 			if rest.count == 0 {
 				if 0<=idx && idx<mArrayValue.count {
 					mArrayValue.remove(at: idx)
+					self.isDirty = true
 					result = true
 				} else {
 					result = false
@@ -314,7 +321,8 @@ public class CNMutableDictionaryValue: CNMutableValue
 		case .member(let member):
 			let rest = Array(path.dropFirst(1))
 			if rest.count == 0 {
-				mDictionaryValue[member] = val.clone()
+				let dval = val.clone()
+				mDictionaryValue[member] = dval ; dval.isDirty = true
 				result = true
 			} else {
 				if let dst = mDictionaryValue[member] {
@@ -322,7 +330,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 				} else {
 					/* append new sub-tree */
 					let newval = CNMakePathValue(value: val, forPath: rest)
-					mDictionaryValue[member] = newval
+					mDictionaryValue[member] = newval ; newval.isDirty = true
 					result = true
 				}
 			}
@@ -347,7 +355,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 			} else {
 				/* append new sub-tree */
 				let newval = CNMakePathValue(value: val, forPath: rest)
-				mDictionaryValue[member] = newval
+				mDictionaryValue[member] = newval ; newval.isDirty = true
 				result = true
 			}
 		case .index(let idx):
@@ -369,6 +377,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 			if rest.count == 0 {
 				if let _ = mDictionaryValue[member] {
 					mDictionaryValue.removeValue(forKey: member)
+					self.isDirty = true
 					result = true
 				} else {
 					CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
@@ -586,3 +595,36 @@ public func CNAllReferencesInValue(value val: CNMutableValue) -> Array<CNMutable
 	}
 	return result
 }
+
+public func CNIsDirty(in val: CNMutableValue) -> Bool {
+	if val.isDirty {
+		return true
+	} else {
+		switch val.type {
+		case .scaler, .reference:
+			break
+		case .dictionary:
+			if let dict = val as? CNMutableDictionaryValue {
+				for child in dict.values {
+					if CNIsDirty(in: child) {
+						return true
+					}
+				}
+			} else {
+				CNLog(logLevel: .error, message: "Can not happen (1)", atFunction: #function, inFile: #file)
+			}
+		case .array:
+			if let arr = val as? CNMutableArrayValue {
+				for child in arr.values {
+					if CNIsDirty(in: child) {
+						return true
+					}
+				}
+			} else {
+				CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
+			}
+		}
+		return false
+	}
+}
+

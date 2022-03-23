@@ -41,10 +41,6 @@ public class CNValueTable: CNTable
 		return recordValues().count
 	}}
 
-	public var isDirty: Bool { get {
-		return mValueStorage.isDirty
-	}}
-
 	public var allFieldNames: Array<String> { get {
 		if mValueStorage.cache.isDirty(accessor: mPath) {
 			let cache = allocateAllFieldNames()

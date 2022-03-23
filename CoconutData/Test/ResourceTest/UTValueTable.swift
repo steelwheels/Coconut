@@ -19,7 +19,6 @@ public func UTValueTable() -> Bool
 	}
 
 	NSLog("**** Initial table 0")
-	printTableInfo(table: table0)
 
 	/* get record */
 	guard let rec0_0 = table0.record(at: 0) else {
@@ -40,7 +39,6 @@ public func UTValueTable() -> Bool
 	result = rec0_1.setValue(value: .stringValue("Shizuka"), forField: "name") && result
 	result = rec0_1.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	table0.append(record: rec0_1)
-	printTableInfo(table: table0)
 
 	/* Search table from different table */
 	NSLog("**+ Search other record")
@@ -60,7 +58,6 @@ public func UTValueTable() -> Bool
 		NSLog("storage save ... failed")
 		result = false
 	}
-	printTableInfo(table: table0)
 
 	return result
 }
@@ -95,10 +92,6 @@ private func allocateTable() -> (CNValueTable, CNValueTable)? {
 		NSLog("Failed to load storage: \(err.toString())")
 		return nil
 	}
-}
-
-private func printTableInfo(table tbl: CNTable){
-	NSLog("table info: isDirty:\(tbl.isDirty)")
 }
 
 private func printRecord(record rec: CNRecord){

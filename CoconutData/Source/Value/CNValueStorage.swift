@@ -20,7 +20,6 @@ public class CNValueStorage
 	private var mRootValue:			CNMutableValue
 	private var mValueCache:		CNValueCache
 	private var mLock:			NSLock
-	private var mIsDirty:			Bool
 
 	// packdir: Root directory for package (*.jspkg)
 	// fpath:   The location of data file against packdir
@@ -31,14 +30,10 @@ public class CNValueStorage
 		mRootValue		= CNMutableDictionaryValue()
 		mValueCache		= CNValueCache()
 		mLock			= NSLock()
-		mIsDirty		= false
 	}
 
 	public var cache: CNValueCache { get {
 		return mValueCache
-	}}
-	public var isDirty: Bool { get {
-		return mIsDirty
 	}}
 	public var description: String { get {
 		return "{srcdir=\(mSourceDirectory.path), cachedir=\(mCacheDirectory.path), file=\(mFilePath)}"
@@ -67,7 +62,6 @@ public class CNValueStorage
 		switch parser.parse(source: ctxt as String) {
 		case .ok(let val):
 			mRootValue = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-			mIsDirty   = false
 			result = .ok(val)
 		case .error(let err):
 			result = .error(err)
@@ -109,7 +103,6 @@ public class CNValueStorage
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 		if mRootValue.set(value: mval, forPath: path.elements) {
 			mValueCache.setDirty(at: path)
-			mIsDirty = true
 			return true
 		} else {
 			return false
@@ -123,7 +116,6 @@ public class CNValueStorage
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 		if mRootValue.append(value: mval, forPath: path.elements) {
 			mValueCache.setDirty(at: path)
-			mIsDirty =  true
 			return true
 		} else {
 			return false
@@ -135,7 +127,6 @@ public class CNValueStorage
 		mLock.lock() ; defer { mLock.unlock() }
 		mValueCache.setDirty(at: path)
 		if mRootValue.delete(forPath: path.elements) {
-			mIsDirty = true
 			return true
 		} else {
 			return false
@@ -159,7 +150,6 @@ public class CNValueStorage
 		}
 		/* Save into the file */
 		if save(value: mRootValue, outFile: cachefile) {
-			mIsDirty = false
 			mValueCache.setAllClean()
 			return true
 		} else {
@@ -182,16 +172,15 @@ public class CNValueStorage
 
 	private func save(value val: CNMutableValue, outFile file: URL) -> Bool {
 		/* save it self */
+		var result = true
 		let txt = val.toValue().toText().toStrings().joined(separator: "\n")
 		if file.storeContents(contents: txt + "\n") {
-			mIsDirty = false
 			mValueCache.setAllClean()
 		} else {
 			CNLog(logLevel: .error, message: "Failed to store storage: \(file.path)", atFunction: #function, inFile: #file)
-			return false
+			result = false
 		}
 		/* save referenced values */
-		var result = true
 		let refs = CNAllReferencesInValue(value: val)
 		for ref in refs {
 			if let cval = ref.context {
