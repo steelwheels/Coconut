@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum CNExitCode: Int32
+public enum CNExitCode: Int
 {
 	case NoError
 	case InternalError

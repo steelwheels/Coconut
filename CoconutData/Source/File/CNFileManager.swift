@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum CNFileType: Int32 {
+public enum CNFileType: Int {
 	case NotExist		= 0
 	case File		= 1
 	case Directory		= 2
@@ -30,7 +30,7 @@ public enum CNFileOpenResult {
 	case	error(_ error: NSError)
 }
 
-public enum CNFileAccessType: Int32 {
+public enum CNFileAccessType: Int {
 	case ReadAccess		= 0
 	case WriteAccess	= 1
 	case AppendAccess	= 2

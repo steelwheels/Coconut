@@ -177,9 +177,9 @@ private func compare(rect0 s0: CGRect, rect1 s1: CGRect) -> ComparisonResult {
 }
 
 private func compare(enum0 s0: CNEnum, enum1 s1: CNEnum) -> ComparisonResult {
-	if s0.type < s1.type{
+	if s0.name < s1.name{
 		return .orderedAscending
-	} else if s0.type > s1.type {
+	} else if s0.name > s1.name {
 		return .orderedDescending
 	} else { // s0 == s1
 		if s0.value < s1.value {

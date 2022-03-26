@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum CNAxis: Int32
+public enum CNAxis: Int
 {
 	case horizontal
 	case vertical
@@ -25,7 +25,7 @@ public enum CNAxis: Int32
 }
 
 
-public enum CNAlignment: Int32 {
+public enum CNAlignment: Int {
 	case leading
 	case trailing
 	case fill
@@ -73,7 +73,7 @@ public struct CNPosition {
 }
 
 /* OSX: NSStackView.Distribution */
-public enum CNDistribution: Int32 {
+public enum CNDistribution: Int {
 	case fill
 	case fillProportinally
 	case fillEqually
@@ -93,7 +93,7 @@ public enum CNDistribution: Int32 {
 	}
 }
 
-public enum CNAnimationState: Int32 {
+public enum CNAnimationState: Int {
 	case	idle
 	case	run
 	case	pause
