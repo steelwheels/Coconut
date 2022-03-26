@@ -596,35 +596,63 @@ public func CNAllReferencesInValue(value val: CNMutableValue) -> Array<CNMutable
 	return result
 }
 
-public func CNIsDirty(in val: CNMutableValue) -> Bool {
-	if val.isDirty {
-		return true
-	} else {
-		switch val.type {
-		case .scaler, .reference:
-			break
-		case .dictionary:
-			if let dict = val as? CNMutableDictionaryValue {
-				for child in dict.values {
-					if CNIsDirty(in: child) {
-						return true
+extension CNMutableValue {
+	public var needsToSave: Bool {
+		get {
+			if self.isDirty {
+				return true
+			} else {
+				switch self.type {
+				case .scaler, .reference:
+					break
+				case .dictionary:
+					if let dict = self as? CNMutableDictionaryValue {
+						for child in dict.values {
+							if child.needsToSave {
+								return true
+							}
+						}
+					} else {
+						CNLog(logLevel: .error, message: "Can not happen (1)", atFunction: #function, inFile: #file)
+					}
+				case .array:
+					if let arr = self as? CNMutableArrayValue {
+						for child in arr.values {
+							if child.needsToSave {
+								return true
+							}
+						}
+					} else {
+						CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
 					}
 				}
-			} else {
-				CNLog(logLevel: .error, message: "Can not happen (1)", atFunction: #function, inFile: #file)
-			}
-		case .array:
-			if let arr = val as? CNMutableArrayValue {
-				for child in arr.values {
-					if CNIsDirty(in: child) {
-						return true
-					}
-				}
-			} else {
-				CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
+				return false
 			}
 		}
-		return false
+		set(newval){
+			self.isDirty = newval
+			switch self.type {
+			case .scaler, .reference:
+				break // already set
+			case .dictionary:
+				if let dict = self as? CNMutableDictionaryValue {
+					for child in dict.values {
+						child.needsToSave = newval
+					}
+				} else {
+					CNLog(logLevel: .error, message: "Can not happen (1)", atFunction: #function, inFile: #file)
+				}
+			case .array:
+				if let arr = self as? CNMutableArrayValue {
+					for child in arr.values {
+						child.needsToSave = newval
+					}
+				} else {
+					CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
+				}
+			}
+		}
 	}
 }
+
 

@@ -15,13 +15,17 @@ public class CNValueTable: CNTable
 	private var mPath:		CNValuePath
 	private var mValueStorage:	CNValueStorage
 
-	private var mColumnNamesCache:  Array<String>?
-	private var mRecordValuesCache:	Array<Dictionary<String, CNValue>>?
+	private var mColumnNamesCacheId:	Int
+	private var mColumnNamesCache:  	Array<String>?
+	private var mRecordValuesCacheId:	Int
+	private var mRecordValuesCache:		Array<Dictionary<String, CNValue>>?
 
 	public init(path pth: CNValuePath, valueStorage storage: CNValueStorage) {
 		mPath			= pth
 		mValueStorage		= storage
+		mColumnNamesCacheId	= 0
 		mColumnNamesCache	= nil
+		mRecordValuesCacheId	= 0
 		mRecordValuesCache	= nil
 
 		/* check storage */
@@ -30,11 +34,13 @@ public class CNValueTable: CNTable
 			CNLog(logLevel: .error, message: msg, atFunction: #function, inFile: #file)
 		}
 		/* Allocate cache */
-		storage.cache.add(accessor: mPath)
+		mColumnNamesCacheId  = storage.cache.add(accessor: columnNamesPath())
+		mRecordValuesCacheId = storage.cache.add(accessor: recordPath())
 	}
 
 	deinit {
-		mValueStorage.cache.remove(accessor: mPath)
+		mValueStorage.cache.remove(cacheId: mColumnNamesCacheId )
+		mValueStorage.cache.remove(cacheId: mRecordValuesCacheId)
 	}
 
 	public var recordCount: Int { get {
@@ -42,9 +48,10 @@ public class CNValueTable: CNTable
 	}}
 
 	public var allFieldNames: Array<String> { get {
-		if mValueStorage.cache.isDirty(accessor: mPath) {
+		if mValueStorage.cache.isDirty(cacheId: mColumnNamesCacheId) {
 			let cache = allocateAllFieldNames()
 			mColumnNamesCache = cache
+			mValueStorage.cache.setClean(cacheId: mColumnNamesCacheId)
 			return cache
 		} else {
 			if let cache = mColumnNamesCache {
@@ -181,9 +188,10 @@ public class CNValueTable: CNTable
 	}
 
 	public func recordValues() -> Array<Dictionary<String, CNValue>> {
-		if mValueStorage.cache.isDirty(accessor: mPath) {
+		if mValueStorage.cache.isDirty(cacheId: mRecordValuesCacheId) {
 			let cache = allocateRecordValues()
 			mRecordValuesCache = cache
+			mValueStorage.cache.setClean(cacheId: mRecordValuesCacheId)
 			return cache
 		} else {
 			if let cache = mRecordValuesCache {

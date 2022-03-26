@@ -11,19 +11,10 @@ import UIKit
 import Foundation
 
 private class CacheInfo {
-	private weak var	mPath:		CNValuePath?
-	private var 		mIsDirty:	Bool
+	private var	mPath:		CNValuePath
+	private var 	mIsDirty:	Bool
 
-	public var path: CNValuePath {
-		get {
-			if let p = mPath {
-				return p
-			} else {
-				CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-				fatalError("Can not happen")
-			}
-		}
-	}
+	public var path: CNValuePath { get { return mPath }}
 
 	public var isDirty: Bool {
 		get         { return mIsDirty }
@@ -38,25 +29,30 @@ private class CacheInfo {
 
 public class CNValueCache
 {
-	private var mCacheTable: Dictionary<String, CacheInfo>
+	private var mCacheTable: Dictionary<Int, CacheInfo>
+	private var mCacheId:    Int
 
 	public init(){
 		mCacheTable = [:]
+		mCacheId    = 0
 	}
 
-	public func add(accessor path: CNValuePath){
-		mCacheTable[path.expression] = CacheInfo(path: path)
+	public func add(accessor path: CNValuePath) -> Int {
+		let curid = mCacheId
+		mCacheTable[curid] = CacheInfo(path: path)
+		mCacheId += 1
+		return curid
 	}
 
-	public func remove(accessor path: CNValuePath){
-		mCacheTable[path.expression] = nil
+	public func remove(cacheId cid: Int){
+		mCacheTable[cid] = nil
 	}
 
-	public func isDirty(accessor path: CNValuePath) -> Bool {
-		if let info = mCacheTable[path.expression] {
+	public func isDirty(cacheId cid: Int) -> Bool {
+		if let info = mCacheTable[cid] {
 			return info.isDirty
 		} else {
-			CNLog(logLevel: .error, message: "Unknown accessor: \(path.expression)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Unknown accessor: \(cid)", atFunction: #function, inFile: #file)
 			return true
 		}
 	}
@@ -69,17 +65,11 @@ public class CNValueCache
 		}
 	}
 
-	public func setClean(accessor path: CNValuePath) {
-		if let info = mCacheTable[path.expression] {
+	public func setClean(cacheId cid: Int) {
+		if let info = mCacheTable[cid] {
 			info.isDirty = false
 		} else {
-			CNLog(logLevel: .error, message: "Unknown accessor: \(path.expression)", atFunction: #function, inFile: #file)
-		}
-	}
-
-	public func setAllClean(){
-		for cache in mCacheTable.values {
-			cache.isDirty = false
+			CNLog(logLevel: .error, message: "Unknown accessor: \(cid)", atFunction: #function, inFile: #file)
 		}
 	}
 }

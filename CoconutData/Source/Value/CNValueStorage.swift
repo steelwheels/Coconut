@@ -150,35 +150,24 @@ public class CNValueStorage
 		}
 		/* Save into the file */
 		if save(value: mRootValue, outFile: cachefile) {
-			mValueCache.setAllClean()
 			return true
 		} else {
 			CNLog(logLevel: .error, message: "Failed to store storage: \(cachefile.path)", atFunction: #function, inFile: #file)
 			return false
 		}
-
-		/*
-		let val = mRootValue.toValue()
-		let txt = val.toText().toStrings().joined(separator: "\n")
-		if cachefile.storeContents(contents: txt + "\n") {
-			mIsDirty = false
-			mValueCache.setAllClean()
-			return true
-		} else {
-			CNLog(logLevel: .error, message: "Failed to store storage: \(cachefile.path)", atFunction: #function, inFile: #file)
-			return false
-		}*/
 	}
 
 	private func save(value val: CNMutableValue, outFile file: URL) -> Bool {
 		/* save it self */
 		var result = true
-		let txt = val.toValue().toText().toStrings().joined(separator: "\n")
-		if file.storeContents(contents: txt + "\n") {
-			mValueCache.setAllClean()
-		} else {
-			CNLog(logLevel: .error, message: "Failed to store storage: \(file.path)", atFunction: #function, inFile: #file)
-			result = false
+		if val.needsToSave {
+			let txt = val.toValue().toText().toStrings().joined(separator: "\n")
+			if file.storeContents(contents: txt + "\n") {
+				val.needsToSave = false
+			} else {
+				CNLog(logLevel: .error, message: "Failed to store storage: \(file.path)", atFunction: #function, inFile: #file)
+				result = false
+			}
 		}
 		/* save referenced values */
 		let refs = CNAllReferencesInValue(value: val)
