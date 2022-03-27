@@ -212,7 +212,8 @@ public class CNMutableArrayValue: CNMutableValue
 				}
 			}
 		} else {
-			mArrayValue.append(val)
+			let dval = val.clone() ; dval.isDirty = true
+			mArrayValue.append(dval)
 			result = true
 		}
 		return result
