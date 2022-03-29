@@ -80,7 +80,6 @@ public class CNObserverDictionary
 		if let obs = mObservers[key] {
 			obs.add(listnerId: mListnerId, listenerFunction: lfunc)
 			result = ListnerHolder(key: key, listnerId: mListnerId)
-			mListnerId += 1
 		} else {
 			/* Allocate new observer */
 			let newobs = CNObjectListener()
@@ -90,6 +89,7 @@ public class CNObserverDictionary
 			/* Set the new observer to observe value table */
 			mValueTable.addObserver(newobs, forKeyPath: key, options: [.new], context: nil)
 		}
+		mListnerId += 1
 		return result
 	}
 
