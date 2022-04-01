@@ -34,14 +34,26 @@ public class CNValueTable: CNTable
 			CNLog(logLevel: .error, message: msg, atFunction: #function, inFile: #file)
 		}
 		/* Allocate cache */
-		mColumnNamesCacheId  = storage.cache.add(accessor: columnNamesPath())
-		mRecordValuesCacheId = storage.cache.add(accessor: recordPath())
+		mColumnNamesCacheId  = addColumnNameCache()
+		mRecordValuesCacheId = addRecordValueCache()
 	}
 
 	deinit {
 		mValueStorage.cache.remove(cacheId: mColumnNamesCacheId )
 		mValueStorage.cache.remove(cacheId: mRecordValuesCacheId)
 	}
+
+	public func addColumnNameCache() -> Int {
+		return mValueStorage.cache.add(accessor: columnNamesPath())
+	}
+
+	public func addRecordValueCache() -> Int {
+		return mValueStorage.cache.add(accessor: recordPath())
+	}
+
+	public var cache: CNTableCache { get {
+		return mValueStorage.cache
+	}}
 
 	public var recordCount: Int { get {
 		return recordValues().count
@@ -187,7 +199,7 @@ public class CNValueTable: CNTable
 		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.RecordsItem), .index(idx), .member(fld)])
 	}
 
-	public func recordValues() -> Array<Dictionary<String, CNValue>> {
+	private func recordValues() -> Array<Dictionary<String, CNValue>> {
 		if mValueStorage.cache.isDirty(cacheId: mRecordValuesCacheId) {
 			let cache = allocateRecordValues()
 			mRecordValuesCache = cache

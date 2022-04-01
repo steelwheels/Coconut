@@ -35,15 +35,26 @@ public class CNContactDatabase: CNTable
 
 	private var mRecords:		Array<CNRecord>
 	private var mState: 		State
+	private var mCache:		CNContactCache
 
 	private init(){
-		mRecords		= []
-		mState			= .undecided
+		mRecords	= []
+		mState		= .undecided
+		mCache		= CNContactCache()
 	}
 
-	public var isDirty: Bool { get {
-		return false
+	public func addColumnNameCache() -> Int {
+		return mCache.add()
+	}
+
+	public func addRecordValueCache() -> Int {
+		return mCache.add()
+	}
+
+	public var cache: CNTableCache { get {
+		return mCache
 	}}
+
 	public var recordCount: Int { get {
 		return mRecords.count
 	}}
@@ -83,10 +94,12 @@ public class CNContactDatabase: CNTable
 
 	public func append(record rcd: CNRecord) {
 		mRecords.append(rcd)
+		mCache.setDirty()
 	}
 
 	public func remove(at row: Int) -> Bool {
 		CNLog(logLevel: .error, message: "Not supported yet: \(row)", atFunction: #function, inFile: #file)
+		mCache.setDirty()
 		return false
 	}
 
@@ -162,6 +175,7 @@ public class CNContactDatabase: CNTable
 					self.mRecords.append(record)
 				})
 				mState = .loaded
+				mCache.setDirty()
 			} catch {
 				mState = .loadFailed
 			}

@@ -2,7 +2,7 @@
  * @file	CNTable.swift
  * @brief	Define CNTable protocol
  * @par Copyright
- *   Copyright (C) 2021 Steel Wheels Project
+ *   Copyright (C) 2021-2022 Steel Wheels Project
  */
 
 import Foundation
@@ -12,12 +12,22 @@ public enum CNTableLoadResult {
 	case error(NSError)
 }
 
+public protocol CNTableCache
+{
+	func remove(cacheId cid: Int)
+	func isDirty(cacheId cid: Int) -> Bool
+	func setClean(cacheId cid: Int)
+}
+
 public protocol CNTable
 {
+	func addColumnNameCache() -> Int
+	func addRecordValueCache() -> Int
+	var cache: CNTableCache { get }
+
 	var recordCount: Int { get }
 
 	var allFieldNames:    Array<String> { get }
-
 	func fieldName(at index: Int) -> String?
 
 	func record(at row: Int) -> CNRecord?

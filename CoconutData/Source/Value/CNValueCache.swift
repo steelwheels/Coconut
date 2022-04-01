@@ -27,7 +27,7 @@ private class CacheInfo {
 	}
 }
 
-public class CNValueCache
+public class CNValueCache: CNTableCache
 {
 	private var mCacheTable: Dictionary<Int, CacheInfo>
 	private var mCacheId:    Int

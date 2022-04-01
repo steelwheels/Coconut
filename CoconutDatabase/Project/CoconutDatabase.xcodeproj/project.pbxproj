@@ -17,6 +17,8 @@
 		050916D126BE006C0019879C /* CNContactValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050916CF26BE006C0019879C /* CNContactValue.swift */; };
 		050916D726BE011F0019879C /* CNContactField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050916D626BE011F0019879C /* CNContactField.swift */; };
 		050916D826BE011F0019879C /* CNContactField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050916D626BE011F0019879C /* CNContactField.swift */; };
+		05911A2627F5F47C00061124 /* CNContactCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05911A2527F5F47C00061124 /* CNContactCache.swift */; };
+		05911A2727F5F47C00061124 /* CNContactCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05911A2527F5F47C00061124 /* CNContactCache.swift */; };
 		059226A526457EE90083E304 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059226A426457EE90083E304 /* AppDelegate.swift */; };
 		059226A726457EE90083E304 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059226A626457EE90083E304 /* ViewController.swift */; };
 		059226A926457EEA0083E304 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 059226A826457EEA0083E304 /* Assets.xcassets */; };
@@ -80,6 +82,7 @@
 		0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoconutDatabase.h; sourceTree = "<group>"; };
 		050916CF26BE006C0019879C /* CNContactValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNContactValue.swift; sourceTree = "<group>"; };
 		050916D626BE011F0019879C /* CNContactField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNContactField.swift; sourceTree = "<group>"; };
+		05911A2527F5F47C00061124 /* CNContactCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNContactCache.swift; sourceTree = "<group>"; };
 		059226A226457EE90083E304 /* UTAddressBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UTAddressBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		059226A426457EE90083E304 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		059226A626457EE90083E304 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				0505AB6525163E1D0005CFC4 /* CoconutDatabase.h */,
+				05911A2527F5F47C00061124 /* CNContactCache.swift */,
 				0505AB6425163E1D0005CFC4 /* CNContactDatabase.swift */,
 				050916D626BE011F0019879C /* CNContactField.swift */,
 				050916CF26BE006C0019879C /* CNContactValue.swift */,
@@ -389,6 +393,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05911A2627F5F47C00061124 /* CNContactCache.swift in Sources */,
 				050916D726BE011F0019879C /* CNContactField.swift in Sources */,
 				050916D026BE006C0019879C /* CNContactValue.swift in Sources */,
 				0505AB6625163E1D0005CFC4 /* CNContactDatabase.swift in Sources */,
@@ -399,6 +404,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05911A2727F5F47C00061124 /* CNContactCache.swift in Sources */,
 				050916D826BE011F0019879C /* CNContactField.swift in Sources */,
 				050916D126BE006C0019879C /* CNContactValue.swift in Sources */,
 				0505AB6725163E1D0005CFC4 /* CNContactDatabase.swift in Sources */,
