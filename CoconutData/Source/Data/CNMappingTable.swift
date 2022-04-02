@@ -9,28 +9,28 @@ import Foundation
 
 public class CNMappingTable: CNTable
 {
-	public typealias RecordMappingFunction = (_ rec: CNRecord) -> Bool
+	public typealias FilterFunction = (_ rec: CNRecord) -> Bool
 
-	private var mSourceTable:	CNValueTable
+	private var mSourceTable:	CNTable
 	private var mCacheId:		Int
 	private var mRecords:		Array<CNRecord>
 	private var mRecordIndexes:	Array<Int>
-	private var mRecordMapFunc:	RecordMappingFunction?
+	private var mFilterFunc:	FilterFunction?
 
-	public init(sourceTable table: CNValueTable){
+	public init(sourceTable table: CNTable){
 		mSourceTable 	= table
 		mCacheId     	= table.addRecordValueCache()
 		mRecords	= []
 		mRecordIndexes	= []
-		mRecordMapFunc	= nil
+		mFilterFunc	= nil
 	}
 
 	deinit {
 		mSourceTable.cache.remove(cacheId: mCacheId)
 	}
 
-	public func setRecordMapper(mappingFunction mfunc: @escaping RecordMappingFunction){
-		mRecordMapFunc = mfunc
+	public func setFilter(filterFunction mfunc: @escaping FilterFunction){
+		mFilterFunc = mfunc
 	}
 
 	public func addColumnNameCache() -> Int {
@@ -112,14 +112,18 @@ public class CNMappingTable: CNTable
 		mSourceTable.sort(byDescriptors: descs)
 	}
 
+	public func toValue() -> CNValue {
+		return mSourceTable.toValue()
+	}
+
 	private func getRecords() -> Array<CNRecord> {
-		let mapfunc = mRecordMapFunc ?? { (_ rec: CNRecord) -> Bool in return true }
+		let filterfunc = mFilterFunc ?? { (_ rec: CNRecord) -> Bool in return true }
 		if mSourceTable.cache.isDirty(cacheId: mCacheId) {
 			mRecords       = []
 			mRecordIndexes = []
 			for i in 0..<mSourceTable.recordCount {
 				if let rec = mSourceTable.record(at: i) {
-					if mapfunc(rec){
+					if filterfunc(rec){
 						mRecords.append(rec)
 						mRecordIndexes.append(i)
 					}
