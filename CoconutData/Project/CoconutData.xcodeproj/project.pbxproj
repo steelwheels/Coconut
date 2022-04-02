@@ -36,6 +36,7 @@
 		053C3A9A275FA729009FA25D /* CNRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053C3A98275FA729009FA25D /* CNRange.swift */; };
 		053C3AA2275FAABC009FA25D /* CNEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053C3AA1275FAABC009FA25D /* CNEnum.swift */; };
 		053C3AA3275FAABC009FA25D /* CNEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053C3AA1275FAABC009FA25D /* CNEnum.swift */; };
+		053EC40927F7CEC10053FE24 /* UTMappingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053EC40827F7CEC10053FE24 /* UTMappingTable.swift */; };
 		05484964278A6D1800642FAC /* CNValuePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05484963278A6D1800642FAC /* CNValuePath.swift */; };
 		05484965278A6D1800642FAC /* CNValuePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05484963278A6D1800642FAC /* CNValuePath.swift */; };
 		0548496D278A888400642FAC /* UTMutableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0548496C278A888400642FAC /* UTMutableValue.swift */; };
@@ -454,6 +455,7 @@
 		053B4EE9255FE176004B9052 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		053C3A98275FA729009FA25D /* CNRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRange.swift; sourceTree = "<group>"; };
 		053C3AA1275FAABC009FA25D /* CNEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNEnum.swift; sourceTree = "<group>"; };
+		053EC40827F7CEC10053FE24 /* UTMappingTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMappingTable.swift; sourceTree = "<group>"; };
 		05484963278A6D1800642FAC /* CNValuePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValuePath.swift; sourceTree = "<group>"; };
 		0548496C278A888400642FAC /* UTMutableValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMutableValue.swift; sourceTree = "<group>"; };
 		0550399F277D7DC0007FA515 /* CNRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNRecord.swift; sourceTree = "<group>"; };
@@ -738,9 +740,10 @@
 				05A1AFCD2776BBE80091D527 /* Main.storyboard */,
 				05A1AFD02776BBE80091D527 /* Info.plist */,
 				05A1B00F2776CB040091D527 /* ResourceTest.entitlements */,
+				053EC40827F7CEC10053FE24 /* UTMappingTable.swift */,
+				0548496C278A888400642FAC /* UTMutableValue.swift */,
 				05A1AFF42776C3F40091D527 /* UTValueCache.swift */,
 				052D71F5277EEE6F00B4C7EB /* UTValueTable.swift */,
-				0548496C278A888400642FAC /* UTMutableValue.swift */,
 				052F30F3278F246500CADA5C /* UTValuePath.swift */,
 			);
 			path = ResourceTest;
@@ -1322,6 +1325,7 @@
 				0548496D278A888400642FAC /* UTMutableValue.swift in Sources */,
 				052F30F4278F246500CADA5C /* UTValuePath.swift in Sources */,
 				05A1AFC82776BBDF0091D527 /* AppDelegate.swift in Sources */,
+				053EC40927F7CEC10053FE24 /* UTMappingTable.swift in Sources */,
 				052D71F6277EEE6F00B4C7EB /* UTValueTable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

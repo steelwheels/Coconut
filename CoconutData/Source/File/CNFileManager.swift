@@ -62,6 +62,17 @@ public extension FileManager
 		return createFile(atPath: url.absoluteString, contents: data, attributes: attr)
 	}
 
+	func removeFile(atURL url: URL) -> Result {
+		do {
+			try self.removeItem(at: url)
+			return .ok
+		} catch let err as NSError {
+			return .error(err)
+		} catch {
+			return .error(NSError.unknownError())
+		}
+	}
+
 	enum Result {
 		case ok
 		case error(NSError)

@@ -69,6 +69,16 @@ public class CNValueStorage
 		return result
 	}
 
+	public func clearCache() -> Result {
+		switch FileManager.default.removeFile(atURL: self.cacheFile) {
+		case .ok:
+			break // continue processing
+		case .error(let err):
+			return .error(err)
+		}
+		return self.load()
+	}
+
 	public func value(forPath path: CNValuePath) -> CNValue? {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
