@@ -139,7 +139,19 @@ public class CNValueParser
 				case .DoubleToken(let value):	result = .numberValue(NSNumber(value: value))
 				case .StringToken(let value):	result = .stringValue(value)
 				case .TextToken(let value):	result = .stringValue(value)
-				default: throw NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function)
+				case .ReservedWordToken(let rid):
+					throw NSError.parseError(message: "Reserved word is not supported: \(rid)", location: #function)
+				case .SymbolToken(_):
+					throw NSError.parseError(message: "Can not happen (0)", location: #function)
+				case .IdentifierToken(let str):
+					switch str.lowercased() {
+					case "null":
+						result = .nullValue
+					default:
+						throw NSError.parseError(message: "Unknown identifier: \(str)", location: #function)
+					}
+				case .CommentToken(_):
+					throw NSError.parseError(message: "Can not happen (1)", location: #function)
 				}
 			}
 			return result
