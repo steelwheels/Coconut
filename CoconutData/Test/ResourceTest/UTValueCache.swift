@@ -31,12 +31,6 @@ private func loadStorage() -> CNValueStorage? {
 	}
 	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "root", fileExtension: "json", subdirectory: nil)
 
-	NSLog("Copy from \(srcfile.path) to \(cachefile.path)")
-	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) else {
-		NSLog("Failed to copy root.json")
-		return nil
-	}
-
 	let srcdir   = srcfile.deletingLastPathComponent()
 	let cachedir = cachefile.deletingLastPathComponent()
 

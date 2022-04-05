@@ -36,20 +36,19 @@ public class CNValueReference
 			/* Copy the source file into cache file */
 			let srcfile   = srcdir.appendingPathComponent(self.relativePath)
 			let cachefile = cachedir.appendingPathComponent(self.relativePath)
-			if !FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) {
-				CNLog(logLevel: .error, message: "Failed to copy file", atFunction: #function, inFile: #file)
+
+			guard let contents = CNValueStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
+				CNLog(logLevel: .error, message: "Failed to create cache file: \(cachefile.path)", atFunction: #function, inFile: #file)
 				return nil
 			}
 			var result: CNValue? = nil
-			if let source = cachefile.loadContents() {
-				let parser = CNValueParser()
-				switch parser.parse(source: source as String) {
-				case .ok(let val):
-					mContext = val
-					result   = val
-				case .error(let err):
-					CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
-				}
+			let parser = CNValueParser()
+			switch parser.parse(source: contents) {
+			case .ok(let val):
+				mContext = val
+				result   = val
+			case .error(let err):
+				CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
 			}
 			return result
 		}

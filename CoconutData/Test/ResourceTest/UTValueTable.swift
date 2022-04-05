@@ -67,12 +67,7 @@ private func allocateTable() -> (CNValueTable, CNValueTable)? {
 		NSLog("Failed to allocate source url")
 		return nil
 	}
-
 	let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data")
-	guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) else {
-		NSLog("Failed to copy value table")
-		return nil
-	}
 
 	let srcdir   = srcfile.deletingLastPathComponent()
 	let cachedir = cachefile.deletingLastPathComponent()

@@ -49,17 +49,15 @@ public class CNValueStorage
 		/* Copy source file to cache file */
 		let srcfile   = self.sourceFile
 		let cachefile = self.cacheFile
-		guard FileManager.default.copyFileIfItIsNotExist(sourceFile: srcfile, destinationFile: cachefile) else {
-			return .error(NSError.fileError(message: "Failed to copy: \(srcfile.path) to \(cachefile.path)"))
-		}
-		/* Load from cache file */
-		guard let ctxt = cachefile.loadContents() else {
-			let err = NSError.fileError(message: "Failed to read file from \(cachefile.path)")
+
+		guard let contents = CNValueStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
+			let err = NSError.fileError(message: "Failed to create cache file: \(cachefile.path)")
 			return .error(err)
 		}
+
 		let parser = CNValueParser()
 		let result: Result
-		switch parser.parse(source: ctxt as String) {
+		switch parser.parse(source: contents as String) {
 		case .ok(let val):
 			mRootValue = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 			result = .ok(val)
@@ -67,6 +65,26 @@ public class CNValueStorage
 			result = .error(err)
 		}
 		return result
+	}
+
+	public static func createCacheFile(cacheFile cache: URL, sourceFile source: URL) -> String? {
+		let fmanager = FileManager.default
+		guard fmanager.fileExists(atURL: source) else {
+			CNLog(logLevel: .error, message: "Source file \(source.path) is NOT exist", atFunction: #function, inFile: #file)
+			return nil
+		}
+		if fmanager.fileExists(atURL: cache){
+			/* Already exist */
+			return cache.loadContents() as String?
+		} else {
+			/* File is not exist */
+			if fmanager.copyFile(sourceFile: source, destinationFile: cache, doReplace: false) {
+				return cache.loadContents() as String?
+			} else {
+				CNLog(logLevel: .error, message: "Failed to create cache file: \(cache.path)", atFunction: #function, inFile: #file)
+				return nil
+			}
+		}
 	}
 
 	public func clearCache() -> Result {

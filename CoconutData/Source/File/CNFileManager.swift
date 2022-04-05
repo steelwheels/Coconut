@@ -195,7 +195,7 @@ public extension FileManager
 		return true
 	}
 
-	func copyFile(sourceFile srcurl: URL, destinationFile dsturl: URL) -> Bool {
+	func copyFile(sourceFile srcurl: URL, destinationFile dsturl: URL, doReplace dorep: Bool) -> Bool {
 		let fmanager = FileManager.default
 
 		guard fmanager.fileExists(atURL: srcurl) else {
@@ -203,6 +203,10 @@ public extension FileManager
 			return false
 		}
 		do {
+			if dorep && fmanager.fileExists(atURL: dsturl) {
+				/* Remove destination */
+				try fmanager.removeItem(at: dsturl)
+			}
 			if dsturl.isFileURL {
 				let dstdir = dsturl.deletingLastPathComponent()
 				if !self.fileExists(atPath: dstdir.path) {
@@ -219,22 +223,6 @@ public extension FileManager
 			return false
 		}
 		return true
-	}
-
-	func copyFileIfItIsNotExist(sourceFile srcurl: URL, destinationFile dsturl: URL) -> Bool {
-		let fmanager = FileManager.default
-
-		guard fmanager.fileExists(atURL: srcurl) else {
-			CNLog(logLevel: .error, message: "Source file \(srcurl.path) is NOT exist", atFunction: #function, inFile: #file)
-			return false
-		}
-		if fmanager.fileExists(atURL: dsturl){
-			/* Already exist */
-			CNLog(logLevel: .debug, message: "Destination file \(dsturl.path) is already exist", atFunction: #function, inFile: #file)
-			return true
-		} else {
-			return copyFile(sourceFile: srcurl, destinationFile: dsturl)
-		}
 	}
 	
 	var usersHomeDirectory: URL {
