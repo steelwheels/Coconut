@@ -712,7 +712,7 @@ public enum CNValue {
 			let url = URL(fileURLWithPath: src)
 			result = .URLValue(url)
 		case .segmentType:
-			result = .segmentValue(CNValueSegment(relativePath: src))
+			result = .segmentValue(CNValueSegment(filePath: src))
 		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType,
 		     .colorType, .imageType, .recordType, .objectType:
 			CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)

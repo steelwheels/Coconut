@@ -9,21 +9,21 @@ import Foundation
 
 public class CNValueSegment
 {
-	public static let ClassName		= "segment"
-	public static let RelativePathItem	= "relativePath"
+	public static let ClassName	= "segment"
+	public static let FileItem	= "file"
 
-	public var relativePath	: String
+	public var  filePath	: String
 	private var mContext	: CNValue?
 
-	public init(relativePath rpath: String){
-		relativePath	= rpath
+	public init(filePath rpath: String){
+		filePath	= rpath
 		mContext	= nil
 	}
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueSegment? {
-		if let rpathval = val[CNValueSegment.RelativePathItem] {
+		if let rpathval = val[CNValueSegment.FileItem] {
 			if let rpath = rpathval.toString() {
-				return CNValueSegment(relativePath: rpath)
+				return CNValueSegment(filePath: rpath)
 			}
 		}
 		return nil
@@ -34,8 +34,8 @@ public class CNValueSegment
 			return ctxt
 		} else {
 			/* Copy the source file into cache file */
-			let srcfile   = srcdir.appendingPathComponent(self.relativePath)
-			let cachefile = cachedir.appendingPathComponent(self.relativePath)
+			let srcfile   = srcdir.appendingPathComponent(self.filePath)
+			let cachefile = cachedir.appendingPathComponent(self.filePath)
 
 			guard let contents = CNValueStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
 				CNLog(logLevel: .error, message: "Failed to create cache file: \(cachefile.path)", atFunction: #function, inFile: #file)
@@ -56,7 +56,7 @@ public class CNValueSegment
 
 	public func store(toCacheDirectory cachedir: URL) -> Bool {
 		if let context = mContext {
-			let file = cachedir.appendingPathComponent(self.relativePath)
+			let file = cachedir.appendingPathComponent(self.filePath)
 			let txt  = context.toText().toStrings().joined(separator: "\n")
 			return file.storeContents(contents: txt)
 		} else {
@@ -66,16 +66,16 @@ public class CNValueSegment
 
 	func toValue() -> Dictionary<String, CNValue> {
 		let result: Dictionary<String, CNValue> = [
-			"class"				: .stringValue(CNValueSegment.ClassName),
-			CNValueSegment.RelativePathItem	: .stringValue(self.relativePath)
+			"class"			: .stringValue(CNValueSegment.ClassName),
+			CNValueSegment.FileItem	: .stringValue(self.filePath)
 		]
 		return result
 	}
 
 	func compare(_ val: CNValueSegment) -> ComparisonResult {
-		if self.relativePath < val.relativePath {
+		if self.filePath < val.filePath {
 			return .orderedAscending
-		} else if self.relativePath > val.relativePath {
+		} else if self.filePath > val.filePath {
 			return .orderedDescending
 		} else {
 			return .orderedSame

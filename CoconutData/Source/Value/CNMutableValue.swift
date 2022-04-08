@@ -436,10 +436,10 @@ public class CNMutableValueSegment: CNMutableValue
 	public var context: CNMutableValue? { get { return mContext         }}
 
 	public var sourceFile: URL { get {
-		return mSourceDirectory.appendingPathComponent(mSegmentValue.relativePath)
+		return mSourceDirectory.appendingPathComponent(mSegmentValue.filePath)
 	}}
 	public var cacheFile: URL { get {
-		return mCacheDirectory.appendingPathComponent(mSegmentValue.relativePath)
+		return mCacheDirectory.appendingPathComponent(mSegmentValue.filePath)
 	}}
 
 	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
