@@ -104,8 +104,8 @@ public class CNValueStorage
 		if let mval = mRootValue.value(forPath: path.elements) {
 			let result: CNValue
 			switch mval.type {
-			case .reference:
-				if let refval = mval as? CNMutableValueReference {
+			case .segment:
+				if let refval = mval as? CNMutableValueSegment {
 					if let cval = refval.context {
 						result = cval.toValue()
 					} else {
@@ -197,8 +197,8 @@ public class CNValueStorage
 				result = false
 			}
 		}
-		/* save referenced values */
-		let refs = CNAllReferencesInValue(value: val)
+		/* save segmented values */
+		let refs = CNAllSegmentsInValue(value: val)
 		for ref in refs {
 			if let cval = ref.context {
 				if !save(value: cval, outFile: ref.cacheFile) {

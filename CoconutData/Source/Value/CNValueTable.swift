@@ -152,8 +152,6 @@ public class CNValueTable: CNTable
 				result = true
 			}
 		}
-		/* Clear cache */
-		mRecordValuesCache = nil
 		return result
 	}
 
@@ -231,7 +229,7 @@ public class CNValueTable: CNTable
 				return result
 			}
 		}
-		CNLog(logLevel: .error, message: "Invalid \"\(CNValueTable.RecordsItem)\" property", atFunction: #function, inFile: #file)
+		CNLog(logLevel: .error, message: "No \"\(CNValueTable.RecordsItem)\" property at \(recordPath().description)", atFunction: #function, inFile: #file)
 		return []
 	}
 

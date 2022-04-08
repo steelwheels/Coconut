@@ -1,15 +1,15 @@
 /*
- * @file	CNValueReference.swift
- * @brief	Define CNValueReference class
+ * @file	CNValueSegment.swift
+ * @brief	Define CNValueSegment class
  * @par Copyright
  *   Copyright (C) 2021-2022 Steel Wheels Project
  */
 
 import Foundation
 
-public class CNValueReference
+public class CNValueSegment
 {
-	public static let ClassName		= "reference"
+	public static let ClassName		= "segment"
 	public static let RelativePathItem	= "relativePath"
 
 	public var relativePath	: String
@@ -20,10 +20,10 @@ public class CNValueReference
 		mContext	= nil
 	}
 
-	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueReference? {
-		if let rpathval = val[CNValueReference.RelativePathItem] {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueSegment? {
+		if let rpathval = val[CNValueSegment.RelativePathItem] {
 			if let rpath = rpathval.toString() {
-				return CNValueReference(relativePath: rpath)
+				return CNValueSegment(relativePath: rpath)
 			}
 		}
 		return nil
@@ -66,13 +66,13 @@ public class CNValueReference
 
 	func toValue() -> Dictionary<String, CNValue> {
 		let result: Dictionary<String, CNValue> = [
-			"class"					: .stringValue(CNValueReference.ClassName),
-			CNValueReference.RelativePathItem	: .stringValue(self.relativePath)
+			"class"				: .stringValue(CNValueSegment.ClassName),
+			CNValueSegment.RelativePathItem	: .stringValue(self.relativePath)
 		]
 		return result
 	}
 
-	func compare(_ val: CNValueReference) -> ComparisonResult {
+	func compare(_ val: CNValueSegment) -> ComparisonResult {
 		if self.relativePath < val.relativePath {
 			return .orderedAscending
 		} else if self.relativePath > val.relativePath {

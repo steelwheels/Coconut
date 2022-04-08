@@ -13,7 +13,7 @@ public class CNMutableValue
 		case scaler
 		case array
 		case dictionary
-		case reference
+		case segment
 	}
 
 	private var mType:    ValueType
@@ -416,19 +416,19 @@ public class CNMutableDictionaryValue: CNMutableValue
 	}
 }
 
-public class CNMutableValueReference: CNMutableValue
+public class CNMutableValueSegment: CNMutableValue
 {
-	private var mReferenceValue: 	CNValueReference
+	private var mSegmentValue: 	CNValueSegment
 	private var mSourceDirectory:	URL
 	private var mCacheDirectory:	URL
 	private var mContext:		CNMutableValue?
 
-	public init(value val: CNValueReference, sourceDirectory srcdir: URL, cacheDirectory cachedir: URL){
-		mReferenceValue 	= val
+	public init(value val: CNValueSegment, sourceDirectory srcdir: URL, cacheDirectory cachedir: URL){
+		mSegmentValue 		= val
 		mSourceDirectory	= srcdir
 		mCacheDirectory		= cachedir
 		mContext		= nil
-		super.init(type: .reference)
+		super.init(type: .segment)
 	}
 
 	public var sourceDirectory: URL     { get { return mSourceDirectory }}
@@ -436,10 +436,10 @@ public class CNMutableValueReference: CNMutableValue
 	public var context: CNMutableValue? { get { return mContext         }}
 
 	public var sourceFile: URL { get {
-		return mSourceDirectory.appendingPathComponent(mReferenceValue.relativePath)
+		return mSourceDirectory.appendingPathComponent(mSegmentValue.relativePath)
 	}}
 	public var cacheFile: URL { get {
-		return mCacheDirectory.appendingPathComponent(mReferenceValue.relativePath)
+		return mCacheDirectory.appendingPathComponent(mSegmentValue.relativePath)
 	}}
 
 	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
@@ -487,7 +487,7 @@ public class CNMutableValueReference: CNMutableValue
 		if let ctxt = mContext {
 			result = ctxt
 		} else {
-			if let src = mReferenceValue.load(fromSourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory) {
+			if let src = mSegmentValue.load(fromSourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory) {
 				let ctxt = CNValueToMutableValue(from: src, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 				mContext = ctxt
 				result = ctxt
@@ -500,11 +500,11 @@ public class CNMutableValueReference: CNMutableValue
 	}
 
 	public override func clone() -> CNMutableValue {
-		return CNMutableValueReference(value: mReferenceValue, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
+		return CNMutableValueSegment(value: mSegmentValue, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 	}
 
 	public override func toValue() -> CNValue {
-		return .reference(mReferenceValue)
+		return .segmentValue(mSegmentValue)
 	}
 }
 
@@ -554,8 +554,8 @@ public func CNValueToMutableValue(from val: CNValue, sourceDirectory srcdir: URL
 			newdict.set(value: newelm, forKey: key)
 		}
 		result = newdict
-	case .reference(let ref):
-		let newref = CNMutableValueReference(value: ref, sourceDirectory: srcdir, cacheDirectory: cachedir)
+	case .segmentValue(let ref):
+		let newref = CNMutableValueSegment(value: ref, sourceDirectory: srcdir, cacheDirectory: cachedir)
 		result = newref
 	default:
 		let newscalar = CNMutableScalarValue(scalarValue: val)
@@ -564,15 +564,15 @@ public func CNValueToMutableValue(from val: CNValue, sourceDirectory srcdir: URL
 	return result
 }
 
-public func CNAllReferencesInValue(value val: CNMutableValue) -> Array<CNMutableValueReference> {
-	var result: Array<CNMutableValueReference> = []
+public func CNAllSegmentsInValue(value val: CNMutableValue) -> Array<CNMutableValueSegment> {
+	var result: Array<CNMutableValueSegment> = []
 	switch val.type {
 	case .scaler:
 		break
 	case .dictionary:
 		if let dict = val as? CNMutableDictionaryValue {
 			for child in dict.values {
-				let cres = CNAllReferencesInValue(value: child)
+				let cres = CNAllSegmentsInValue(value: child)
 				result.append(contentsOf: cres)
 			}
 		} else {
@@ -581,14 +581,14 @@ public func CNAllReferencesInValue(value val: CNMutableValue) -> Array<CNMutable
 	case .array:
 		if let arr = val as? CNMutableArrayValue {
 			for child in arr.values {
-				let cres = CNAllReferencesInValue(value: child)
+				let cres = CNAllSegmentsInValue(value: child)
 				result.append(contentsOf: cres)
 			}
 		} else {
 			CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
 		}
-	case .reference:
-		if let ref = val as? CNMutableValueReference {
+	case .segment:
+		if let ref = val as? CNMutableValueSegment {
 			result.append(ref)
 		} else {
 			CNLog(logLevel: .error, message: "Can not happen (3)", atFunction: #function, inFile: #file)
@@ -604,7 +604,7 @@ extension CNMutableValue {
 				return true
 			} else {
 				switch self.type {
-				case .scaler, .reference:
+				case .scaler, .segment:
 					break
 				case .dictionary:
 					if let dict = self as? CNMutableDictionaryValue {
@@ -633,7 +633,7 @@ extension CNMutableValue {
 		set(newval){
 			self.isDirty = newval
 			switch self.type {
-			case .scaler, .reference:
+			case .scaler, .segment:
 				break // already set
 			case .dictionary:
 				if let dict = self as? CNMutableDictionaryValue {

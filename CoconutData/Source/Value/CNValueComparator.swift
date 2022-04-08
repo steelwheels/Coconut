@@ -98,8 +98,8 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 		CNLog(logLevel: .error, message: "Failed to compare record", atFunction: #function, inFile: #file)
 	case .objectType:
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
-	case .referenceType:
-		if let s0 = val0.toReference(), let s1 = val1.toReference() {
+	case .segmentType:
+		if let s0 = val0.toSegment(), let s1 = val1.toSegment() {
 			result = s0.compare(s1)
 		}
 	}

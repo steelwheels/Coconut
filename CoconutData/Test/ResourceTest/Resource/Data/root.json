@@ -6,7 +6,7 @@
 		e: 34.56
 	}
 	f: {
-		class: 		"reference",
+		class: 		"segment",
 		relativePath:	"sub.json"
 	}
 	g: [

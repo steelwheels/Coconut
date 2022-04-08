@@ -32,7 +32,7 @@ public enum CNValueType: Int
 	case	imageType
 	case	recordType
 	case	objectType
-	case	referenceType
+	case	segmentType
 
 	public var description: String { get {
 		let result: String
@@ -54,7 +54,7 @@ public enum CNValueType: Int
 		case .imageType:	result = "Image"
 		case .recordType:	result = "Record"
 		case .objectType:	result = "Object"
-		case .referenceType:	result = "Reference"
+		case .segmentType:	result = "Segment"
 		}
 		return result
 	}}
@@ -77,7 +77,7 @@ public enum CNValueType: Int
 		switch typ {
 		case .nullType, .boolType, .numberType, .stringType, .dateType, .URLType, .imageType, .objectType:
 			result = true
-		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType, .recordType, .referenceType:
+		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType, .recordType, .segmentType:
 			result = false
 		}
 		return result
@@ -102,7 +102,7 @@ public enum CNValue {
 	case imageValue(_ val: CNImage)
 	case recordValue(_ val: CNRecord)
 	case objectValue(_ val: NSObject)
-	case reference(_ val: CNValueReference)
+	case segmentValue(_ val: CNValueSegment)
 
 	public var valueType: CNValueType {
 		get {
@@ -125,7 +125,7 @@ public enum CNValue {
 			case .imageValue(_):		result = .imageType
 			case .recordValue(_):		result = .recordType
 			case .objectValue(_):		result = .objectType
-			case .reference(_):		result = .referenceType
+			case .segmentValue(_):		result = .segmentType
 			}
 			return result
 		}
@@ -281,10 +281,10 @@ public enum CNValue {
 		return result
 	}
 
-	public func toReference() -> CNValueReference? {
-		let result: CNValueReference?
+	public func toSegment() -> CNValueSegment? {
+		let result: CNValueSegment?
 		switch self {
-		case .reference(let obj):	result = obj
+		case .segmentValue(let obj):	result = obj
 		default:			result = nil
 		}
 		return result
@@ -402,9 +402,9 @@ public enum CNValue {
 		}
 	}
 
-	public func referenceProperty(identifier ident: String) -> CNValueReference? {
+	public func segmentProperty(identifier ident: String) -> CNValueSegment? {
 		if let elm = valueProperty(identifier: ident){
-			return elm.toReference()
+			return elm.toSegment()
 		} else {
 			return nil
 		}
@@ -439,7 +439,7 @@ public enum CNValue {
 			result = true
 		case .boolValue(_), .numberValue(_), .dateValue(_), .rangeValue(_), .pointValue(_),
 		     .sizeValue(_), .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_),
-		     .imageValue(_), .objectValue(_), .reference(_):
+		     .imageValue(_), .objectValue(_), .segmentValue(_):
 			result = false
 		case .stringValue(let str):
 			result = str.isEmpty
@@ -503,7 +503,7 @@ public enum CNValue {
 		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
 			result = CNTextLine(string: "object(\(classname))")
-		case .reference(let val):
+		case .segmentValue(let val):
 			result = dictionaryToText(dictionary: val.toValue())
 		}
 		return result
@@ -607,7 +607,7 @@ public enum CNValue {
 			result = val
 		case .recordValue(let val):
 			result = val
-		case .reference(let val):
+		case .segmentValue(let val):
 			result = val
 		case .dictionaryValue(let dict):
 			var newdict: Dictionary<String, Any> = [:]
@@ -651,8 +651,8 @@ public enum CNValue {
 			result = .imageValue(val)
 		} else if let val = obj as? CNRecord {
 			result = .recordValue(val)
-		} else if let val = obj as? CNValueReference {
-			result = .reference(val)
+		} else if let val = obj as? CNValueSegment {
+			result = .segmentValue(val)
 		} else if let val = obj as? Dictionary<String, Any> {
 			var newdict: Dictionary<String, CNValue> = [:]
 			for (key, elm) in val {
@@ -711,8 +711,8 @@ public enum CNValue {
 		case .URLType:
 			let url = URL(fileURLWithPath: src)
 			result = .URLValue(url)
-		case .referenceType:
-			result = .reference(CNValueReference(relativePath: src))
+		case .segmentType:
+			result = .segmentValue(CNValueSegment(relativePath: src))
 		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType,
 		     .colorType, .imageType, .recordType, .objectType:
 			CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
@@ -742,7 +742,7 @@ public enum CNValue {
 			result = src.toValue()
 		case .recordValue(let src):
 			result = src.toValue()
-		case .reference(let src):
+		case .segmentValue(let src):
 			result = src.toValue()
 		}
 		return result
@@ -781,9 +781,9 @@ public enum CNValue {
 					if let record = CNRecord.fromValue(value: dict) {
 						result = .recordValue(record)
 					}
-				case CNValueReference.ClassName:
-					if let ref = CNValueReference.fromValue(value: dict) {
-						result = .reference(ref)
+				case CNValueSegment.ClassName:
+					if let ref = CNValueSegment.fromValue(value: dict) {
+						result = .segmentValue(ref)
 					}
 				default:
 					break
