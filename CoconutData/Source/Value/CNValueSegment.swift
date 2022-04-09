@@ -21,9 +21,13 @@ public class CNValueSegment
 	}
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueSegment? {
-		if let rpathval = val[CNValueSegment.FileItem] {
-			if let rpath = rpathval.toString() {
-				return CNValueSegment(filePath: rpath)
+		if CNValue.hasClassName(inValue: val, className: CNValueSegment.ClassName) {
+			if let rpathval = val[CNValueSegment.FileItem] {
+				if let rpath = rpathval.toString() {
+					return CNValueSegment(filePath: rpath)
+				}
+			} else {
+				CNLog(logLevel: .error, message: "No \(CNValueSegment.FileItem) property", atFunction: #function, inFile: #file)
 			}
 		}
 		return nil
