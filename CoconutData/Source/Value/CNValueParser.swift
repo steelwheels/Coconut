@@ -235,7 +235,7 @@ public class CNValueParser
 		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_),
 		     .dateValue(_), .rangeValue(_), .pointValue(_), .sizeValue(_),
 		     .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_), .imageValue(_),
-		     .recordValue(_), .objectValue(_), .segmentValue(_):
+		     .recordValue(_), .objectValue(_), .segmentValue(_), .pointerValue(_):
 			dst = src
 		case .dictionaryValue(let dict):
 			if let obj = CNValue.dictionaryToValue(dictionary: dict) {

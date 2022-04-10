@@ -14,6 +14,7 @@ public class CNMutableValue
 		case array
 		case dictionary
 		case segment
+		case pointer
 	}
 
 	private var mType:    ValueType
@@ -26,22 +27,38 @@ public class CNMutableValue
 		isDirty	= false
 	}
 
-	open func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
+	public func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
+		return self._value(forPath: path, in: self)
+	}
+
+	public func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+		return self._set(value: val, forPath: path, in: self)
+	}
+
+	public func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+		return self._append(value: val, forPath: path, in: self)
+	}
+
+	open func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
+		return self._delete(forPath: path, in: self)
+	}
+
+	open func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return nil
 	}
 
-	open func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	open func _set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
 	}
 
-	open func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	open func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
 	}
 
-	open func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
+	open func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
 	}
@@ -66,7 +83,7 @@ public class CNMutableScalarValue: CNMutableValue
 		super.init(type: .scaler)
 	}
 
-	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
+	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		let result: CNMutableValue?
 		if path.count == 0 {
 			let newval = CNMutableScalarValue(scalarValue: mScalarValue)
@@ -78,7 +95,7 @@ public class CNMutableScalarValue: CNMutableValue
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if path.count == 0 {
 			mScalarValue = val.toValue()
@@ -91,12 +108,12 @@ public class CNMutableScalarValue: CNMutableValue
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		return false
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		return false
 	}
@@ -125,7 +142,7 @@ public class CNMutableArrayValue: CNMutableValue
 		mArrayValue.append(val)
 	}
 
-	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
+	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return nil
@@ -137,26 +154,17 @@ public class CNMutableArrayValue: CNMutableValue
 			result = nil
 		case .index(let idx):
 			let rest = Array(path.dropFirst())
-			if rest.count == 0 {
-				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx]
-				} else {
-					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
-					result = nil
-				}
+			if 0<=idx && idx<mArrayValue.count {
+				result = mArrayValue[idx]._value(forPath: rest, in: root)
 			} else {
-				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx].value(forPath: rest)
-				} else {
-					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
-					result = nil
-				}
+				CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
+				result = nil
 			}
 		}
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return false
@@ -183,7 +191,7 @@ public class CNMutableArrayValue: CNMutableValue
 				}
 			} else {
 				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx].set(value: val, forPath: rest)
+					result = mArrayValue[idx]._set(value: val, forPath: rest, in: root)
 				} else {
 					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 					result = false
@@ -193,7 +201,7 @@ public class CNMutableArrayValue: CNMutableValue
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if let first = path.first {
 			switch first {
@@ -205,7 +213,7 @@ public class CNMutableArrayValue: CNMutableValue
 					let dst  = mArrayValue[idx]
 					let rest = Array(path.dropFirst())
 					let dval = val.clone() ; dval.isDirty = true
-					result = dst.append(value: dval, forPath: rest)
+					result = dst._append(value: dval, forPath: rest, in: root)
 				} else {
 					CNLog(logLevel: .error, message: "Array index overflow: \(idx)", atFunction: #function, inFile: #file)
 					result = false
@@ -219,7 +227,7 @@ public class CNMutableArrayValue: CNMutableValue
 		return result
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return false
@@ -241,7 +249,7 @@ public class CNMutableArrayValue: CNMutableValue
 				}
 			} else {
 				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx].delete(forPath: rest)
+					result = mArrayValue[idx]._delete(forPath: rest, in: root)
 				} else {
 					result = false
 				}
@@ -283,7 +291,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		mDictionaryValue[key] = val
 	}
 
-	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
+	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return nil
@@ -292,18 +300,10 @@ public class CNMutableDictionaryValue: CNMutableValue
 		switch first {
 		case .member(let member):
 			let rest = Array(path.dropFirst(1))
-			if rest.count == 0 {
-				if let targ = mDictionaryValue[member] {
-					result = targ
-				} else {
-					result = nil
-				}
+			if let targ = mDictionaryValue[member] {
+				result = targ._value(forPath: rest, in: root)
 			} else {
-				if let targ = mDictionaryValue[member] {
-					result = targ.value(forPath: rest)
-				} else {
-					result = nil
-				}
+				result = nil
 			}
 		case .index(let idx):
 			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
@@ -312,7 +312,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
@@ -327,7 +327,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 				result = true
 			} else {
 				if let dst = mDictionaryValue[member] {
-					result = dst.set(value: val, forPath: rest)
+					result = dst._set(value: val, forPath: rest, in: root)
 				} else {
 					/* append new sub-tree */
 					let newval = CNMakePathValue(value: val, forPath: rest)
@@ -342,7 +342,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
@@ -352,7 +352,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		case .member(let member):
 			let rest = Array(path.dropFirst(1))
 			if let dst = mDictionaryValue[member] {
-				result = dst.append(value: val, forPath: rest)
+				result = dst._append(value: val, forPath: rest, in: root)
 			} else {
 				/* append new sub-tree */
 				let newval = CNMakePathValue(value: val, forPath: rest)
@@ -366,7 +366,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		guard let first = path.first else {
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
@@ -386,7 +386,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 				}
 			} else {
 				if let dst = mDictionaryValue[member] {
-					result = dst.delete(forPath: rest)
+					result = dst._delete(forPath: rest, in: root)
 				} else {
 					CNLog(logLevel: .error, message: "Unexpected key: \(member)", atFunction: #function, inFile: #file)
 					result = false
@@ -442,40 +442,40 @@ public class CNMutableValueSegment: CNMutableValue
 		return mCacheDirectory.appendingPathComponent(mSegmentValue.filePath)
 	}}
 
-	public override func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
+	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		let result: CNMutableValue?
 		if let val = load() {
-			result = val.value(forPath: path)
+			result = val._value(forPath: path, in: root)
 		} else {
 			result = nil
 		}
 		return result
 	}
 
-	public override func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if let dst = load() {
-			result = dst.set(value: val, forPath: path)
+			result = dst._set(value: val, forPath: path, in: root)
 		} else {
 			result = false
 		}
 		return result
 	}
 
-	public override func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if let dst = load() {
-			result = dst.append(value: val, forPath: path)
+			result = dst._append(value: val, forPath: path, in: root)
 		} else {
 			result = false
 		}
 		return result
 	}
 
-	public override func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
+	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if let dst = load() {
-			result = dst.delete(forPath: path)
+			result = dst._delete(forPath: path, in: root)
 		} else {
 			result = false
 		}
@@ -505,6 +505,78 @@ public class CNMutableValueSegment: CNMutableValue
 
 	public override func toValue() -> CNValue {
 		return .segmentValue(mSegmentValue)
+	}
+}
+
+
+public class CNMutablePointerValue: CNMutableValue
+{
+	private var mPointerValue:	CNPointerValue
+	private var mContext:		CNMutableValue?
+
+	public init(pointer val: CNPointerValue){
+		mPointerValue		= val
+		mContext		= nil
+		super.init(type: .pointer)
+	}
+
+	public var context: CNMutableValue? { get { return mContext         }}
+
+	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
+		let result: CNMutableValue?
+		if let pvalue = pointedValue(root: root) {
+			result = pvalue._value(forPath: path, in: root)
+		} else {
+			result = nil
+		}
+		return result
+	}
+
+	public override func _set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
+		let result: Bool
+		if let pvalue = pointedValue(root: root) {
+			result = pvalue._set(value: val, forPath: path, in: root)
+		} else {
+			result = false
+		}
+		return result
+	}
+
+	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
+		let result: Bool
+		if let pvalue = pointedValue(root: root) {
+			result = pvalue._append(value: val, forPath: path, in: root)
+		} else {
+			result = false
+		}
+		return result
+	}
+
+	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
+		let result: Bool
+		if let pvalue = pointedValue(root: root) {
+			result = pvalue._delete(forPath: path, in: root)
+		} else {
+			result = false
+		}
+		return result
+	}
+
+	private func pointedValue(root rtval: CNMutableValue) -> CNMutableValue? {
+		if let val = rtval._value(forPath: mPointerValue.path.elements, in: rtval) {
+			return val
+		} else {
+			CNLog(logLevel: .error, message: "Pointed value is not found", atFunction: #function, inFile: #file)
+			return nil
+		}
+	}
+
+	public override func clone() -> CNMutableValue {
+		return CNMutablePointerValue(pointer: mPointerValue)
+	}
+
+	public override func toValue() -> CNValue {
+		return .pointerValue(mPointerValue)
 	}
 }
 
@@ -557,6 +629,9 @@ public func CNValueToMutableValue(from val: CNValue, sourceDirectory srcdir: URL
 	case .segmentValue(let ref):
 		let newref = CNMutableValueSegment(value: ref, sourceDirectory: srcdir, cacheDirectory: cachedir)
 		result = newref
+	case .pointerValue(let ptr):
+		let newptr = CNMutablePointerValue(pointer: ptr)
+		result = newptr
 	default:
 		let newscalar = CNMutableScalarValue(scalarValue: val)
 		result = newscalar
@@ -593,6 +668,8 @@ public func CNAllSegmentsInValue(value val: CNMutableValue) -> Array<CNMutableVa
 		} else {
 			CNLog(logLevel: .error, message: "Can not happen (3)", atFunction: #function, inFile: #file)
 		}
+	case .pointer:
+		break
 	}
 	return result
 }
@@ -626,6 +703,8 @@ extension CNMutableValue {
 					} else {
 						CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
 					}
+				case .pointer:
+					break
 				}
 				return false
 			}
@@ -651,6 +730,8 @@ extension CNMutableValue {
 				} else {
 					CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
 				}
+			case .pointer:
+				break // already set
 			}
 		}
 	}

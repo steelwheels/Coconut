@@ -102,6 +102,10 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 		if let s0 = val0.toSegment(), let s1 = val1.toSegment() {
 			result = s0.compare(s1)
 		}
+	case .pointerType:
+		if let s0 = val0.toPointer(), let s1 = val1.toPointer() {
+			result = s0.compare(s1)
+		}
 	}
 
 	if let res = result {

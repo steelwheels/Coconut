@@ -167,4 +167,16 @@ public class CNValuePath
 		}
 		return finished && result.count > 0 ? result : nil
 	}
+
+	public func compare(_ val: CNValuePath) -> ComparisonResult {
+		let selfstr = self.mExpression
+		let srcstr  = val.mExpression
+		if selfstr == srcstr {
+			return .orderedSame
+		} else if selfstr > srcstr {
+			return .orderedDescending
+		} else {
+			return .orderedAscending
+		}
+	}
 }

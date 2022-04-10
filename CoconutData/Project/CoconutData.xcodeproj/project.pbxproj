@@ -112,6 +112,8 @@
 		05A44F1425C24D0D0086033B /* UTMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F1325C24D0D0086033B /* UTMatrix.swift */; };
 		05A501B526A4203E00A992F9 /* CNValueComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A501B426A4203E00A992F9 /* CNValueComparator.swift */; };
 		05A501B626A4203E00A992F9 /* CNValueComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A501B426A4203E00A992F9 /* CNValueComparator.swift */; };
+		05A506B128016FA100F5B53A /* CNValuePointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A506B028016FA100F5B53A /* CNValuePointer.swift */; };
+		05A506B228016FA100F5B53A /* CNValuePointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A506B028016FA100F5B53A /* CNValuePointer.swift */; };
 		05AC005927587A0F00B2AFB8 /* hand-point-up.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05AC0058275879F400B2AFB8 /* hand-point-up.png */; };
 		05AC005D27587A2000B2AFB8 /* hand-point-up.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05AC0058275879F400B2AFB8 /* hand-point-up.png */; };
 		05B32C88251501B1000D1411 /* CoconutData_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B32C86251501B1000D1411 /* CoconutData_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -498,6 +500,7 @@
 		05A44F0D25C22B320086033B /* CNMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNMatrix.swift; sourceTree = "<group>"; };
 		05A44F1325C24D0D0086033B /* UTMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMatrix.swift; sourceTree = "<group>"; };
 		05A501B426A4203E00A992F9 /* CNValueComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueComparator.swift; sourceTree = "<group>"; };
+		05A506B028016FA100F5B53A /* CNValuePointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValuePointer.swift; sourceTree = "<group>"; };
 		05AC0058275879F400B2AFB8 /* hand-point-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hand-point-up.png"; sourceTree = "<group>"; };
 		05B32C83251501B1000D1411 /* CoconutData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoconutData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B32C86251501B1000D1411 /* CoconutData_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoconutData_macOS.h; sourceTree = "<group>"; };
@@ -849,6 +852,7 @@
 				05A501B426A4203E00A992F9 /* CNValueComparator.swift */,
 				05B32CA02515025E000D1411 /* CNValueParser.swift */,
 				05484963278A6D1800642FAC /* CNValuePath.swift */,
+				05A506B028016FA100F5B53A /* CNValuePointer.swift */,
 				05B7B1AE277606810077DEDC /* CNValueSegment.swift */,
 				05F969AF26467E7E00E676C5 /* CNValueTable.swift */,
 			);
@@ -1409,6 +1413,7 @@
 				05B32D7A25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7425150945000D1411 /* CNCharacter.swift in Sources */,
 				05F4AA21263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */,
+				05A506B128016FA100F5B53A /* CNValuePointer.swift in Sources */,
 				05B32D5C25150926000D1411 /* CNExitCode.swift in Sources */,
 				053C3A99275FA729009FA25D /* CNRange.swift in Sources */,
 				05E88DEB26AA9F1B00FF993E /* CNImage.swift in Sources */,
@@ -1504,6 +1509,7 @@
 				05B32D7B25150945000D1411 /* CNStack.swift in Sources */,
 				05B32D7525150945000D1411 /* CNCharacter.swift in Sources */,
 				05F4AA22263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */,
+				05A506B228016FA100F5B53A /* CNValuePointer.swift in Sources */,
 				05B32D5D25150926000D1411 /* CNExitCode.swift in Sources */,
 				053C3A9A275FA729009FA25D /* CNRange.swift in Sources */,
 				05E88DEC26AA9F1B00FF993E /* CNImage.swift in Sources */,

@@ -33,6 +33,7 @@ public enum CNValueType: Int
 	case	recordType
 	case	objectType
 	case	segmentType
+	case	pointerType
 
 	public var description: String { get {
 		let result: String
@@ -55,6 +56,7 @@ public enum CNValueType: Int
 		case .recordType:	result = "Record"
 		case .objectType:	result = "Object"
 		case .segmentType:	result = "Segment"
+		case .pointerType:	result = "Pointer"
 		}
 		return result
 	}}
@@ -69,18 +71,6 @@ public enum CNValueType: Int
 		} else {
 			return .orderedAscending
 		}
-	}
-
-	/* Return true when the value has single data */
-	public static func isPrimitive(type typ: CNValueType) -> Bool {
-		let result: Bool
-		switch typ {
-		case .nullType, .boolType, .numberType, .stringType, .dateType, .URLType, .imageType, .objectType:
-			result = true
-		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType, .colorType, .recordType, .segmentType:
-			result = false
-		}
-		return result
 	}
 }
 
@@ -103,6 +93,7 @@ public enum CNValue {
 	case recordValue(_ val: CNRecord)
 	case objectValue(_ val: NSObject)
 	case segmentValue(_ val: CNValueSegment)
+	case pointerValue(_ val: CNPointerValue)
 
 	public var valueType: CNValueType {
 		get {
@@ -126,6 +117,7 @@ public enum CNValue {
 			case .recordValue(_):		result = .recordType
 			case .objectValue(_):		result = .objectType
 			case .segmentValue(_):		result = .segmentType
+			case .pointerValue(_):		result = .pointerType
 			}
 			return result
 		}
@@ -290,6 +282,15 @@ public enum CNValue {
 		return result
 	}
 
+	public func toPointer() -> CNPointerValue? {
+		let result: CNPointerValue?
+		switch self {
+		case .pointerValue(let obj):	result = obj
+		default:			result = nil
+		}
+		return result
+	}
+
 	public func boolProperty(identifier ident: String) ->  Bool? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toBool()
@@ -410,6 +411,14 @@ public enum CNValue {
 		}
 	}
 
+	public func pointerProperty(identifier ident: String) -> CNPointerValue? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toPointer()
+		} else {
+			return nil
+		}
+	}
+
 	public func valueProperty(identifier ident: String) -> CNValue? {
 		let result: CNValue?
 		switch self {
@@ -428,27 +437,6 @@ public enum CNValue {
 			result = dict.count
 		default:
 			result = nil
-		}
-		return result
-	}
-
-	public func isEmpty() -> Bool {
-		let result: Bool
-		switch self {
-		case .nullValue:
-			result = true
-		case .boolValue(_), .numberValue(_), .dateValue(_), .rangeValue(_), .pointValue(_),
-		     .sizeValue(_), .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_),
-		     .imageValue(_), .objectValue(_), .segmentValue(_):
-			result = false
-		case .stringValue(let str):
-			result = str.isEmpty
-		case .dictionaryValue(let dict):
-			result = dict.count == 0
-		case .arrayValue(let arr):
-			result = arr.count == 0
-		case .recordValue(let rec):
-			result = rec.fieldCount == 0
 		}
 		return result
 	}
@@ -504,6 +492,8 @@ public enum CNValue {
 			let classname = String(describing: type(of: val))
 			result = CNTextLine(string: "object(\(classname))")
 		case .segmentValue(let val):
+			result = dictionaryToText(dictionary: val.toValue())
+		case .pointerValue(let val):
 			result = dictionaryToText(dictionary: val.toValue())
 		}
 		return result
@@ -609,6 +599,8 @@ public enum CNValue {
 			result = val
 		case .segmentValue(let val):
 			result = val
+		case .pointerValue(let val):
+			result = val
 		case .dictionaryValue(let dict):
 			var newdict: Dictionary<String, Any> = [:]
 			for (key, elm) in dict {
@@ -653,6 +645,8 @@ public enum CNValue {
 			result = .recordValue(val)
 		} else if let val = obj as? CNValueSegment {
 			result = .segmentValue(val)
+		} else if let val = obj as? CNPointerValue {
+			result = .pointerValue(val)
 		} else if let val = obj as? Dictionary<String, Any> {
 			var newdict: Dictionary<String, CNValue> = [:]
 			for (key, elm) in val {
@@ -678,72 +672,6 @@ public enum CNValue {
 			result = .objectValue(val)
 		} else {
 			result = nil
-		}
-		return result
-	}
-
-	public static func stringToValue(type typ: CNValueType, source src: String) -> CNValue? {
-		var result: CNValue? = nil
-		switch typ {
-		case .nullType:
-			result = .nullValue
-		case .boolType:
-			switch src.caseInsensitiveCompare("true") {
-			case .orderedSame:
-				result = .boolValue(true)
-			case .orderedDescending, .orderedAscending:
-				result = .boolValue(false)
-			}
-		case .numberType:
-			if let dblval = Double(src) {
-				if dblval.truncatingRemainder(dividingBy: 1) == 0.0 {
-					result = .numberValue(NSNumber(value: Int(dblval)))
-				} else {
-					result = .numberValue(NSNumber(value: dblval))
-				}
-			}
-		case .stringType:
-			result = .stringValue(src)
-		case .dateType:
-			if let date = dateFromString(string: src) {
-				result = .dateValue(date)
-			}
-		case .URLType:
-			let url = URL(fileURLWithPath: src)
-			result = .URLValue(url)
-		case .segmentType:
-			result = .segmentValue(CNValueSegment(filePath: src))
-		case .rangeType, .pointType, .sizeType, .rectType, .enumType, .dictionaryType, .arrayType,
-		     .colorType, .imageType, .recordType, .objectType:
-			CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
-		}
-		return result
-	}
-
-	public static func valueToDictionary(value val: CNValue) -> Dictionary<String, CNValue>? {
-		var result: Dictionary<String, CNValue>? = nil
-		switch val {
-		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_), .dateValue(_),
-		     .arrayValue(_), .URLValue(_), .imageValue(_), .objectValue(_):
-			break
-		case .rangeValue(let src):
-			result = src.toValue()
-		case .pointValue(let src):
-			result = src.toValue()
-		case .sizeValue(let src):
-			result = src.toValue()
-		case .rectValue(let src):
-			result = src.toValue()
-		case .dictionaryValue(let src):
-			result = src
-		case .colorValue(let src):
-			result = src.toValue()
-		case .enumValue(let src):
-			result = src.toValue()
-		case .recordValue(let src):
-			result = src.toValue()
-		case .segmentValue(let src):
-			result = src.toValue()
 		}
 		return result
 	}
@@ -784,6 +712,10 @@ public enum CNValue {
 				case CNValueSegment.ClassName:
 					if let ref = CNValueSegment.fromValue(value: dict) {
 						result = .segmentValue(ref)
+					}
+				case CNPointerValue.ClassName:
+					if let ptr = CNPointerValue.fromValue(value: dict) {
+						result = .pointerValue(ptr)
 					}
 				default:
 					break
