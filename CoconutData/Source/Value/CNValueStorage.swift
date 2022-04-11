@@ -188,10 +188,10 @@ public class CNValueStorage
 	private func save(value val: CNMutableValue, outFile file: URL) -> Bool {
 		/* save it self */
 		var result = true
-		if val.needsToSave {
+		if mRootValue.isDirty {
 			let txt = val.toValue().toText().toStrings().joined(separator: "\n")
 			if file.storeContents(contents: txt + "\n") {
-				val.needsToSave = false
+				val.isDirty = false
 			} else {
 				CNLog(logLevel: .error, message: "Failed to store storage: \(file.path)", atFunction: #function, inFile: #file)
 				result = false

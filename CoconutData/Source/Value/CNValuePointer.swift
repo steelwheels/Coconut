@@ -38,7 +38,7 @@ public class CNPointerValue
 		let pathstr = CNValuePath.toExpression(elements: mPath.elements)
 		let result: Dictionary<String, CNValue> = [
 			"class"			: .stringValue(CNPointerValue.ClassName),
-			CNValueSegment.FileItem	: .stringValue(pathstr)
+			CNPointerValue.PathItem	: .stringValue(pathstr)
 		]
 		return result
 	}
