@@ -220,6 +220,10 @@ public class CNValueTable: CNTable
 				for elm in arr {
 					if let dict = elm.toDictionary() {
 						result.append(dict)
+					} else if let ptr = elm.toPointer() {
+						if let dict = pointedRecord(by: ptr) {
+							result.append(dict)
+						}
 					} else {
 						CNLog(logLevel: .error, message: "Record value must be dictionary", atFunction: #function, inFile: #file)
 					}
@@ -231,6 +235,15 @@ public class CNValueTable: CNTable
 		}
 		CNLog(logLevel: .error, message: "No \"\(CNValueTable.RecordsItem)\" property at \(recordPath().description)", atFunction: #function, inFile: #file)
 		return []
+	}
+
+	private func pointedRecord(by ptr: CNPointerValue) -> Dictionary<String, CNValue>? {
+		if let val = mValueStorage.value(forPath: ptr.path) {
+			if let dict = val.toDictionary() {
+				return dict
+			}
+		}
+		return nil
 	}
 
 	public func save() -> Bool {

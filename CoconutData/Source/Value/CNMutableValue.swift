@@ -39,7 +39,7 @@ public class CNMutableValue
 		return self._append(value: val, forPath: path, in: self)
 	}
 
-	open func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
+	public func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
 		return self._delete(forPath: path, in: self)
 	}
 
