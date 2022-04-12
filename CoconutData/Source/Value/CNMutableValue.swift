@@ -63,6 +63,11 @@ public class CNMutableValue
 		return false
 	}
 
+	open func find(forProperty prop: String) -> Array<CNMutableValue> {
+		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
+		return []
+	}
+
 	open func clone() -> CNMutableValue {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return CNMutableValue(type: mType)
@@ -86,8 +91,7 @@ public class CNMutableScalarValue: CNMutableValue
 	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		let result: CNMutableValue?
 		if path.count == 0 {
-			let newval = CNMutableScalarValue(scalarValue: mScalarValue)
-			result = newval
+			result = self.clone()
 		} else {
 			CNLog(logLevel: .error, message: "Non-empty path for scalar value", atFunction: #function, inFile: #file)
 			result = nil
@@ -118,6 +122,10 @@ public class CNMutableScalarValue: CNMutableValue
 		return false
 	}
 
+	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
+		return []
+	}
+
 	public override func clone() -> CNMutableValue {
 		return CNMutableScalarValue(scalarValue: mScalarValue)
 	}
@@ -144,8 +152,8 @@ public class CNMutableArrayValue: CNMutableValue
 
 	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		guard let first = path.first else {
-			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
-			return nil
+			/* Return entire array */
+			return self.clone()
 		}
 		let result: CNMutableValue?
 		switch first {
@@ -256,6 +264,17 @@ public class CNMutableArrayValue: CNMutableValue
 				} else {
 					result = false
 				}
+			}
+		}
+		return result
+	}
+
+	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
+		var result: Array<CNMutableValue> = []
+		for elm in mArrayValue {
+			let subres = elm.find(forProperty: prop)
+			if subres.count > 0 {
+				result.append(contentsOf: subres)
 			}
 		}
 		return result
@@ -405,6 +424,21 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return result
 	}
 
+	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
+		if let val = mDictionaryValue[prop] {
+			return [val]
+		} else {
+			var result: Array<CNMutableValue> = []
+			for elm in mDictionaryValue.values {
+				let subres = elm.find(forProperty: prop)
+				if subres.count > 0 {
+					result.append(contentsOf: subres)
+				}
+			}
+			return result
+		}
+	}
+
 	public override func clone() -> CNMutableValue {
 		let result = CNMutableDictionaryValue()
 		for (key, elm) in mDictionaryValue {
@@ -505,6 +539,16 @@ public class CNMutableValueSegment: CNMutableValue
 		return result
 	}
 
+	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
+		let result: Array<CNMutableValue>
+		if let dst = load() {
+			result = dst.find(forProperty: prop)
+		} else {
+			result = []
+		}
+		return result
+	}
+
 	public override func clone() -> CNMutableValue {
 		return CNMutableValueSegment(value: mSegmentValue, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 	}
@@ -597,6 +641,10 @@ public class CNMutablePointerValue: CNMutableValue
 			CNLog(logLevel: .error, message: "Pointed value is not found", atFunction: #function, inFile: #file)
 			return nil
 		}
+	}
+
+	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
+		return []
 	}
 
 	public override func clone() -> CNMutableValue {

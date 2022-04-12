@@ -24,8 +24,8 @@ public class CNPointerValue
 		if CNValue.hasClassName(inValue: val, className: CNPointerValue.ClassName) {
 			if let pathval = val[CNPointerValue.PathItem] {
 				if let pathstr = pathval.toString() {
-					if let pathelm = CNValuePath.pathExpression(string: pathstr) {
-						let path = CNValuePath(elements: pathelm)
+					if let (ident, pathelm) = CNValuePath.pathExpression(string: pathstr) {
+						let path = CNValuePath(identifier: ident, elements: pathelm)
 						return CNPointerValue(path: path)
 					}
 				}

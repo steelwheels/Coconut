@@ -35,8 +35,9 @@ public class CNValuePath
 		}
 	}
 
-	private var mElements:   Array<Element>
-	private var mExpression: String
+	private var mIdentifier:	String?
+	private var mElements:   	Array<Element>
+	private var mExpression: 	String
 
 	public var elements: Array<Element> { get {
 		return mElements
@@ -46,18 +47,21 @@ public class CNValuePath
 		return mExpression
 	}}
 
-	public init(elements elms: Array<Element>){
+	public init(identifier ident: String?, elements elms: Array<Element>){
+		mIdentifier = ident
 		mElements   = elms
 		mExpression = CNValuePath.toExpression(elements: elms)
 	}
 
-	public init(member memb: String){
+	public init(identifier ident: String?, member memb: String){
+		mIdentifier = ident
 		mElements   = [ .member(memb) ]
 		mExpression = CNValuePath.toExpression(elements: mElements)
 	}
 
-	public init(path pth: CNValuePath, subPath subs: Array<Element>){
-		mElements = []
+	public init(identifier ident: String?, path pth: CNValuePath, subPath subs: Array<Element>){
+		mIdentifier = ident
+		mElements   = []
 		for src in pth.elements {
 			mElements.append(src)
 		}
@@ -118,10 +122,22 @@ public class CNValuePath
 		return result
 	}
 
-	public static func pathExpression(string str: String) -> Array<Element>? {
-		var result: Array<Element> = []
-		var finished               = true
-		let members = str.components(separatedBy: ".")
+	public static func pathExpression(string str: String) -> (String?, Array<Element>)? {
+		var resident:	String?		= nil
+		var reselms:	Array<Element>	= []
+		var finished               	= true
+		var members = str.components(separatedBy: ".")
+
+		/* Pickup first identifier */
+		if let firstmemb = members.first {
+			if firstmemb.first == "@" {
+				resident = String(firstmemb.dropFirst())
+				members  = Array(members.dropFirst())
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Empty expression: \(str)")
+			finished = false
+		}
 		for member in members {
 			if members.isEmpty {
 				CNLog(logLevel: .error, message: "No member name: \(str)")
@@ -137,7 +153,7 @@ public class CNValuePath
 					finished = false
 					break
 				}
-				result.append(.member(firststr))
+				reselms.append(.member(firststr))
 
 				/* Decode rest components */
 				let rests = elms.dropFirst()
@@ -146,7 +162,7 @@ public class CNValuePath
 						if rest.last == "]" {
 							let idxstr = rest.dropLast()
 							if let idx = Int(idxstr) {
-								result.append(.index(idx))
+								reselms.append(.index(idx))
 							} else {
 								CNLog(logLevel: .error, message: "Invalid index: \(idxstr) in \(str)")
 								finished = false
@@ -165,7 +181,11 @@ public class CNValuePath
 				break
 			}
 		}
-		return finished && result.count > 0 ? result : nil
+		if finished && reselms.count > 0 {
+			return (resident, reselms)
+		} else {
+			return nil
+		}
 	}
 
 	public func compare(_ val: CNValuePath) -> ComparisonResult {

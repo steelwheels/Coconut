@@ -147,7 +147,7 @@ public class CNValueTable: CNTable
 	public func remove(at row: Int) -> Bool {
 		var result = false
 		if 0<=row && row<self.recordCount {
-			let elmpath = CNValuePath(path: recordPath(), subPath: [.index(row)])
+			let elmpath = CNValuePath(identifier: nil, path: recordPath(), subPath: [.index(row)])
 			if mValueStorage.delete(forPath: elmpath) {
 				result = true
 			}
@@ -186,15 +186,15 @@ public class CNValueTable: CNTable
 	}
 
 	private func columnNamesPath() -> CNValuePath {
-		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.ColumnNamesItem)])
+		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.ColumnNamesItem)])
 	}
 
 	private func recordPath() -> CNValuePath {
-		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.RecordsItem)])
+		return CNValuePath(identifier: nil,path: mPath, subPath: [.member(CNValueTable.RecordsItem)])
 	}
 
 	private func recordFieldPath(index idx: Int, field fld: String) -> CNValuePath {
-		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.RecordsItem), .index(idx), .member(fld)])
+		return CNValuePath(identifier: nil,path: mPath, subPath: [.member(CNValueTable.RecordsItem), .index(idx), .member(fld)])
 	}
 
 	private func recordValues() -> Array<Dictionary<String, CNValue>> {
