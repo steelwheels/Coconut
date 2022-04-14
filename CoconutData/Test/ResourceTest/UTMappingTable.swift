@@ -40,7 +40,7 @@ private func allocateTable() -> CNValueTable? {
 	let storage  = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
 	switch storage.clearCache() {
 	case .ok(_):
-		let table = CNValueTable(path: CNValuePath(elements: [.member("persons")]), valueStorage: storage)
+		let table = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
 		NSLog("record count: \(table.recordCount)")
 		NSLog("field name:   \(table.allFieldNames)")
 

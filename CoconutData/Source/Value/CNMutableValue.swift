@@ -27,16 +27,16 @@ public class CNMutableValue
 		isDirty		= false
 	}
 
-	public func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
-		return self._value(forPath: path, in: self)
+	public func value(forPath path: CNValuePath) -> CNMutableValue? {
+		return self._value(forPath: path.elements, in: self)
 	}
 
-	public func set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
-		return self._set(value: val, forPath: path, in: self)
+	public func set(value val: CNMutableValue, forPath path: CNValuePath) -> Bool {
+		return self._set(value: val, forPath: path.elements, in: self)
 	}
 
-	public func append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> Bool {
-		return self._append(value: val, forPath: path, in: self)
+	public func append(value val: CNMutableValue, forPath path: CNValuePath) -> Bool {
+		return self._append(value: val, forPath: path.elements, in: self)
 	}
 
 	public func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
@@ -61,11 +61,6 @@ public class CNMutableValue
 	open func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
-	}
-
-	open func find(forProperty prop: String) -> Array<CNMutableValue> {
-		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
-		return []
 	}
 
 	open func clone() -> CNMutableValue {
@@ -122,10 +117,6 @@ public class CNMutableScalarValue: CNMutableValue
 		return false
 	}
 
-	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
-		return []
-	}
-
 	public override func clone() -> CNMutableValue {
 		return CNMutableScalarValue(scalarValue: mScalarValue)
 	}
@@ -155,17 +146,32 @@ public class CNMutableArrayValue: CNMutableValue
 			/* Return entire array */
 			return self.clone()
 		}
+		let rest = Array(path.dropFirst())
 		let result: CNMutableValue?
 		switch first {
 		case .member(let member):
 			CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
 			result = nil
 		case .index(let idx):
-			let rest = Array(path.dropFirst())
+
 			if 0<=idx && idx<mArrayValue.count {
 				result = mArrayValue[idx]._value(forPath: rest, in: root)
 			} else {
 				CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
+				result = nil
+			}
+		case .keyAndValue(let srckey, let srcval):
+			if let (_, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Return child itself */
+					result = curdict
+				} else {
+					/* Trace child */
+					result = curdict._value(forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
 				result = nil
 			}
 		}
@@ -177,13 +183,13 @@ public class CNMutableArrayValue: CNMutableValue
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return false
 		}
+		let rest = Array(path.dropFirst())
 		let result: Bool
 		switch first {
 		case .member(let member):
 			CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
 			result = false
 		case .index(let idx):
-			let rest = Array(path.dropFirst())
 			if rest.count == 0 {
 				if 0<=idx && idx<mArrayValue.count {
 					let dval = val.clone()
@@ -207,6 +213,22 @@ public class CNMutableArrayValue: CNMutableValue
 					result = false
 				}
 			}
+		case .keyAndValue(let srckey, let srcval):
+			if let (curidx, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Replace child itself */
+					mArrayValue[curidx] = val
+					root.isDirty = true
+					result = true
+				} else {
+					/* Trace child */
+					result = curdict._set(value: val, forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = false
+			}
 		}
 		return result
 	}
@@ -214,6 +236,7 @@ public class CNMutableArrayValue: CNMutableValue
 	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if let first = path.first {
+			let rest = Array(path.dropFirst())
 			switch first {
 			case .member(let member):
 				CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
@@ -221,11 +244,26 @@ public class CNMutableArrayValue: CNMutableValue
 			case .index(let idx):
 				if 0<=idx && idx<mArrayValue.count {
 					let dst  = mArrayValue[idx]
-					let rest = Array(path.dropFirst())
+
 					let dval = val.clone()
 					result = dst._append(value: dval, forPath: rest, in: root)
 				} else {
 					CNLog(logLevel: .error, message: "Array index overflow: \(idx)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			case .keyAndValue(let srckey, let srcval):
+				if let (_, curdict) = searchChild(key: srckey, value: srcval) {
+					if rest.count == 0 {
+						let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+						CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+						result = false
+					} else {
+						/* Trace child */
+						result = curdict._append(value: val, forPath: rest, in: root)
+					}
+				} else {
+					let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+					CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
 					result = false
 				}
 			}
@@ -243,13 +281,13 @@ public class CNMutableArrayValue: CNMutableValue
 			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
 			return false
 		}
+		let rest = Array(path.dropFirst())
 		let result: Bool
 		switch first {
 		case .member(let member):
 			CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
 			result = false
 		case .index(let idx):
-			let rest = Array(path.dropFirst())
 			if rest.count == 0 {
 				if 0<=idx && idx<mArrayValue.count {
 					mArrayValue.remove(at: idx)
@@ -265,19 +303,37 @@ public class CNMutableArrayValue: CNMutableValue
 					result = false
 				}
 			}
+		case .keyAndValue(let srckey, let srcval):
+			if let (curidx, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Delete child itself */
+					mArrayValue.remove(at: curidx)
+					root.isDirty = true
+					result = true
+				} else {
+					/* Trace child */
+					result = curdict._delete(forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = false
+			}
 		}
 		return result
 	}
 
-	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
-		var result: Array<CNMutableValue> = []
-		for elm in mArrayValue {
-			let subres = elm.find(forProperty: prop)
-			if subres.count > 0 {
-				result.append(contentsOf: subres)
+	private func searchChild(key srckey: String, value srcval: CNValue) -> (Int, CNMutableDictionaryValue)? {
+		for i in 0..<mArrayValue.count {
+			if let dict = mArrayValue[i] as? CNMutableDictionaryValue {
+				if let curval = dict.get(forKey: srckey) {
+					if CNIsSameValue(nativeValue0: curval.toValue(), nativeValue1: srcval){
+						return (i, dict)
+					}
+				}
 			}
 		}
-		return result
+		return nil
 	}
 
 	public override func clone() -> CNMutableValue {
@@ -313,15 +369,19 @@ public class CNMutableDictionaryValue: CNMutableValue
 		mDictionaryValue[key] = val
 	}
 
+	public func get(forKey key: String) -> CNMutableValue? {
+		return mDictionaryValue[key]
+	}
+
 	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		guard let first = path.first else {
 			/* Return entire dicrectory */
 			return self.clone()
 		}
+		let rest = Array(path.dropFirst(1))
 		let result: CNMutableValue?
 		switch first {
 		case .member(let member):
-			let rest = Array(path.dropFirst(1))
 			if let targ = mDictionaryValue[member] {
 				result = targ._value(forPath: rest, in: root)
 			} else {
@@ -330,6 +390,20 @@ public class CNMutableDictionaryValue: CNMutableValue
 		case .index(let idx):
 			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
 			result = nil
+		case .keyAndValue(let srckey, let srcval):
+			if let (_, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Return child itself */
+					result = curdict
+				} else {
+					/* Trace child */
+					result = curdict._value(forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = nil
+			}
 		}
 		return result
 	}
@@ -339,10 +413,10 @@ public class CNMutableDictionaryValue: CNMutableValue
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
 		}
+		let rest = Array(path.dropFirst(1))
 		let result: Bool
 		switch first {
 		case .member(let member):
-			let rest = Array(path.dropFirst(1))
 			if rest.count == 0 {
 				let dval = val.clone()
 				mDictionaryValue[member] = dval
@@ -353,8 +427,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 					result = dst._set(value: val, forPath: rest, in: root)
 				} else {
 					/* append new sub-tree */
-					let newval = CNMakePathValue(value: val, forPath: rest)
-					mDictionaryValue[member] = newval
+					mDictionaryValue[member] = val.clone()
 					root.isDirty = true
 					result = true
 				}
@@ -362,6 +435,22 @@ public class CNMutableDictionaryValue: CNMutableValue
 		case .index(let idx):
 			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
 			result = false
+		case .keyAndValue(let srckey, let srcval):
+			if let (curkey, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Replace child itself */
+					mDictionaryValue[curkey] = val
+					root.isDirty = true
+					result = true
+				} else {
+					/* Trace child */
+					result = curdict._set(value: val, forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = false
+			}
 		}
 		return result
 	}
@@ -371,22 +460,35 @@ public class CNMutableDictionaryValue: CNMutableValue
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
 		}
+		let rest = Array(path.dropFirst(1))
 		let result: Bool
 		switch first {
 		case .member(let member):
-			let rest = Array(path.dropFirst(1))
 			if let dst = mDictionaryValue[member] {
 				result = dst._append(value: val, forPath: rest, in: root)
 			} else {
-				/* append new sub-tree */
-				let newval = CNMakePathValue(value: val, forPath: rest)
-				mDictionaryValue[member] = newval
+				mDictionaryValue[member] = val.clone()
 				root.isDirty = true
 				result = true
 			}
 		case .index(let idx):
 			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
 			result = false
+		case .keyAndValue(let srckey, let srcval):
+			if let (_, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+					CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+					result = false
+				} else {
+					/* Trace child */
+					result = curdict._append(value: val, forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = false
+			}
 		}
 		return result
 	}
@@ -396,10 +498,10 @@ public class CNMutableDictionaryValue: CNMutableValue
 			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
 			return false
 		}
+		let rest = Array(path.dropFirst(1))
 		let result: Bool
 		switch first {
 		case .member(let member):
-			let rest = Array(path.dropFirst(1))
 			if rest.count == 0 {
 				if let _ = mDictionaryValue[member] {
 					mDictionaryValue.removeValue(forKey: member)
@@ -420,23 +522,37 @@ public class CNMutableDictionaryValue: CNMutableValue
 		case .index(let idx):
 			CNLog(logLevel: .error, message: "Dictionary key is required but index is given: \(idx)", atFunction: #function, inFile: #file)
 			result = false
+		case .keyAndValue(let srckey, let srcval):
+			if let (curkey, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Delete child itself */
+					mDictionaryValue[curkey] = nil
+					root.isDirty = true
+					result = true
+				} else {
+					/* Trace child */
+					result = curdict._delete(forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = false
+			}
 		}
 		return result
 	}
 
-	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
-		if let val = mDictionaryValue[prop] {
-			return [val]
-		} else {
-			var result: Array<CNMutableValue> = []
-			for elm in mDictionaryValue.values {
-				let subres = elm.find(forProperty: prop)
-				if subres.count > 0 {
-					result.append(contentsOf: subres)
+	private func searchChild(key srckey: String, value srcval: CNValue) -> (String, CNMutableDictionaryValue)? {
+		for key in mDictionaryValue.keys {
+			if let dict = mDictionaryValue[key] as? CNMutableDictionaryValue {
+				if let curval = dict.get(forKey: srckey) {
+					if CNIsSameValue(nativeValue0: curval.toValue(), nativeValue1: srcval){
+						return (key, dict)
+					}
 				}
 			}
-			return result
 		}
+		return nil
 	}
 
 	public override func clone() -> CNMutableValue {
@@ -539,16 +655,6 @@ public class CNMutableValueSegment: CNMutableValue
 		return result
 	}
 
-	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
-		let result: Array<CNMutableValue>
-		if let dst = load() {
-			result = dst.find(forProperty: prop)
-		} else {
-			result = []
-		}
-		return result
-	}
-
 	public override func clone() -> CNMutableValue {
 		return CNMutableValueSegment(value: mSegmentValue, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 	}
@@ -643,46 +749,12 @@ public class CNMutablePointerValue: CNMutableValue
 		}
 	}
 
-	open override func find(forProperty prop: String) -> Array<CNMutableValue> {
-		return []
-	}
-
 	public override func clone() -> CNMutableValue {
 		return CNMutablePointerValue(pointer: mPointerValue)
 	}
 
 	public override func toValue() -> CNValue {
 		return .pointerValue(mPointerValue)
-	}
-}
-
-private func CNMakePathValue(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>) -> CNMutableValue {
-	if path.count == 0 {
-		return val
-	} else {
-		guard let first = path.first else {
-			CNLog(logLevel: .error, message: "Empty path for dictionary value", atFunction: #function, inFile: #file)
-			return val
-		}
-		let result: CNMutableValue
-		switch first {
-		case .member(let member):
-			let rest    = Array(path.dropFirst(1))
-			let subval  = CNMakePathValue(value: val, forPath: rest)
-			let newdict = CNMutableDictionaryValue()
-			newdict.set(value: subval, forKey: member)
-			result = newdict
-		case .index(let idx):
-			let rest    = Array(path.dropFirst(1))
-			let subval  = CNMakePathValue(value: val, forPath: rest)
-			let newarr  = CNMutableArrayValue()
-			for _ in 0..<idx {
-				newarr.append(value: CNMutableScalarValue(scalarValue: .nullValue))
-			}
-			newarr.append(value: subval)
-			result = newarr
-		}
-		return result
 	}
 }
 

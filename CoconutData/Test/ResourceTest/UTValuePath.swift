@@ -28,10 +28,10 @@ public func UTValuePath() -> Bool
 }
 
 private func testValuePath(string str: String, expectedCount ecount: Int) -> Bool {
-	if let elements = CNValuePath.pathExpression(string: str) {
-		if elements.count == ecount {
+	if let path = allocValuePath(expression: str) {
+		if path.elements.count == ecount {
 			NSLog("str:\(str) -> ")
-			for elm in elements {
+			for elm in path.elements {
 				dumpElement(element: elm)
 			}
 			return true
@@ -51,5 +51,18 @@ private func dumpElement(element elm: CNValuePath.Element){
 		NSLog(" - member(\(str))")
 	case .index(let idx):
 		NSLog(" - index(\(idx))")
+	case .keyAndValue(let str, let val):
+		let txt = val.toText().toStrings().joined(separator: "\n")
+		NSLog(" - key(\(str)) & value(\(txt))")
+	}
+}
+
+private func allocValuePath(expression exp: String) -> CNValuePath?
+{
+	if let (ident, elms) = CNValuePath.pathExpression(string: exp) {
+		return CNValuePath(identifier: ident, elements: elms)
+	} else {
+		NSLog("Invalid path expression: \(exp)")
+		return nil
 	}
 }

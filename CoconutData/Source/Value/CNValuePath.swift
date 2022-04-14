@@ -10,8 +10,9 @@ import Foundation
 public class CNValuePath
 {
 	public enum Element {
-		case member(String)		// member name
-		case index(Int)			// array index
+		case member(String)			// member name
+		case index(Int)				// array index to select array element
+		case keyAndValue(String, CNValue)	// key and it's value to select array element
 
 		static func isSame(source0 src0: Element, source1 src1: Element) -> Bool {
 			let result: Bool
@@ -20,15 +21,31 @@ public class CNValuePath
 				switch src1 {
 				case .member(let memb1):
 					result = memb0 == memb1
-				case .index(_):
+				case .index(_), .keyAndValue(_, _):
 					result = false
 				}
 			case .index(let idx0):
 				switch src1 {
-				case .member(_):
+				case .member(_), .keyAndValue(_, _):
 					result = false
 				case .index(let idx1):
 					result = idx0 == idx1
+				}
+			case .keyAndValue(let key0, let val0):
+				switch src1 {
+				case .member(_), .index(_):
+					result = false
+				case .keyAndValue(let key1, let val1):
+					if key0 == key1 {
+						switch CNCompareValue(nativeValue0: val0, nativeValue1: val1){
+						case .orderedAscending, .orderedDescending:
+							result = false
+						case .orderedSame:
+							result = true
+						}
+					} else {
+						result = false
+					}
 				}
 			}
 			return result
@@ -96,8 +113,13 @@ public class CNValuePath
 				result += ", "
 			}
 			switch elm {
-			case .member(let str): result += ".member(\(str))"
-			case .index(let idx):  result += ".index(\(idx))"
+			case .member(let str):
+				result += ".member(\(str))"
+			case .index(let idx):
+				result += ".index(\(idx))"
+			case .keyAndValue(let key, let val):
+				let txt = val.toText().toStrings().joined(separator: "\n")
+				result += ".keyAndValue(\(key), \(txt))"
 			}
 		}
 		return result
@@ -117,6 +139,9 @@ public class CNValuePath
 				result    += str
 			case .index(let idx):
 				result    += "[\(idx)]"
+			case .keyAndValue(let key, let val):
+				let txt = val.toText().toStrings().joined(separator: "\n")
+				result 	  += "[\(key):\(txt)]"
 			}
 		}
 		return result

@@ -70,28 +70,28 @@ private func accessTest() -> Bool
 	dumpValue(value: rval)
 
 	NSLog("get value \"a\"")
-	let patha = CNValuePath(elements: [.member("a")])
+	let patha = CNValuePath(identifier: nil, elements: [.member("a")])
 	if getValue(path: patha, in: mval) == nil{
 		NSLog("Failed to get a")
 		return false
 	}
 
 	NSLog("get value \"c.d\"")
-	let pathcd = CNValuePath(elements: [.member("c"), .member("d")])
+	let pathcd = CNValuePath(identifier: nil, elements: [.member("c"), .member("d")])
 	if getValue(path: pathcd, in: mval) == nil{
 		NSLog("Failed to get c.d")
 		return false
 	}
 
 	NSLog("get value \"f.s1\"")
-	let pathfs1 = CNValuePath(elements: [.member("f"), .member("s1")])
+	let pathfs1 = CNValuePath(identifier: nil, elements: [.member("f"), .member("s1")])
 	if getValue(path: pathfs1, in: mval) == nil{
 		NSLog("Failed to get f.s1")
 		return false
 	}
 
 	NSLog("get value \"g[1]\"")
-	let pathg1 = CNValuePath(elements: [.member("g"), .index(1)])
+	let pathg1 = CNValuePath(identifier: nil, elements: [.member("g"), .index(1)])
 	if getValue(path: pathg1, in: mval) == nil{
 		NSLog("Failed to get g[1]")
 		return false
@@ -108,7 +108,7 @@ private func accessTest() -> Bool
 	}
 
 	NSLog("append value \"g[5]\"")
-	let pathg5 = CNValuePath(elements: [.member("g"), .index(5)])
+	let pathg5 = CNValuePath(identifier:nil, elements: [.member("g"), .index(5)])
 	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .numberValue(NSNumber(floatLiteral: 0.5))), forPath: pathg5){
 		return false
 	}
@@ -119,13 +119,13 @@ private func accessTest() -> Bool
 	let dict = CNMutableDictionaryValue()
 	dict.set(value: m0, forKey: "m0")
 	dict.set(value: m1, forKey: "m1")
-	let pathh = CNValuePath(elements: [.member("h") ])
+	let pathh = CNValuePath(identifier:nil, elements: [.member("h") ])
 	if !setValue(destination: mval, source: dict, forPath: pathh){
 		return false
 	}
 
 	NSLog("override value \"h.m0\"")
-	let pathhm0 = CNValuePath(elements: [.member("h"), .member("m0") ])
+	let pathhm0 = CNValuePath(identifier:nil, elements: [.member("h"), .member("m0") ])
 	if !setValue(destination: mval, source: dict, forPath: pathhm0){
 		return false
 	}
@@ -135,13 +135,13 @@ private func accessTest() -> Bool
 	dumpValue(value: cval)
 
 	NSLog("delete value \"g[3]\"")
-	let pathg3 = CNValuePath(elements: [.member("g"), .index(3)])
+	let pathg3 = CNValuePath(identifier:nil, elements: [.member("g"), .index(3)])
 	if !deleteValue(destination: mval, forPath: pathg3){
 		return false
 	}
 
 	NSLog("delete value \"h.m0.m1\"")
-	let pathhm0m1 = CNValuePath(elements: [.member("h"), .member("m0"), .member("m1") ])
+	let pathhm0m1 = CNValuePath(identifier:nil, elements: [.member("h"), .member("m0"), .member("m1") ])
 	if !deleteValue(destination: mval, forPath: pathhm0m1){
 		return false
 	}
@@ -154,7 +154,7 @@ private func accessTest() -> Bool
 }
 
 private func setValue(destination dst: CNMutableValue, source src: CNMutableValue, forPath path: CNValuePath) -> Bool {
-	if dst.set(value: src, forPath: path.elements) {
+	if dst.set(value: src, forPath: path) {
 		if let _ = getValue(path: path, in: dst) {
 			return true
 		} else {
@@ -168,7 +168,7 @@ private func setValue(destination dst: CNMutableValue, source src: CNMutableValu
 }
 
 private func getValue(path pth: CNValuePath, in owner: CNMutableValue) -> CNMutableValue? {
-	if let val = owner.value(forPath: pth.elements) {
+	if let val = owner.value(forPath: pth) {
 		dumpValue(value: val.toValue())
 		return val
 	} else {

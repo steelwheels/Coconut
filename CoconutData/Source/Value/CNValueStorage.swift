@@ -101,7 +101,7 @@ public class CNValueStorage
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
 
-		if let mval = mRootValue.value(forPath: path.elements) {
+		if let mval = mRootValue.value(forPath: path) {
 			let result: CNValue
 			switch mval.type {
 			case .segment:
@@ -129,7 +129,7 @@ public class CNValueStorage
 		mLock.lock() ; defer { mLock.unlock() }
 
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-		if mRootValue.set(value: mval, forPath: path.elements) {
+		if mRootValue.set(value: mval, forPath: path) {
 			mValueCache.setDirty(at: path)
 			return true
 		} else {
@@ -142,7 +142,7 @@ public class CNValueStorage
 		mLock.lock() ; defer { mLock.unlock() }
 
 		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-		if mRootValue.append(value: mval, forPath: path.elements) {
+		if mRootValue.append(value: mval, forPath: path) {
 			mValueCache.setDirty(at: path)
 			return true
 		} else {

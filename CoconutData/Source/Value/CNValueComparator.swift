@@ -116,6 +116,18 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 	}
 }
 
+public func CNIsSameValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValue) -> Bool
+{
+	let result: Bool
+	switch CNCompareValue(nativeValue0: val0, nativeValue1: val1) {
+	case .orderedAscending, .orderedDescending:
+		result = false
+	case .orderedSame:
+		result = true
+	}
+	return result
+}
+
 private func compare(bool0 s0: Bool, bool1 s1: Bool) -> ComparisonResult {
 	let result: ComparisonResult
 	if s0 == s1 {
