@@ -60,11 +60,8 @@ public class CNResourceInstaller
 							 attributes: nil)
 			}
 			return nil
-		} catch let err as NSError {
-			return err
 		} catch {
-			let err = NSError.fileError(message: "Failed to create directory: \(targdir.path)")
-			return err
+			return error as NSError
 		}
 	}
 
@@ -73,11 +70,8 @@ public class CNResourceInstaller
 		do {
 			try fmgr.removeItem(at: dir)
 			return nil
-		} catch let err as NSError {
-			return err
 		} catch {
-			let err = NSError.fileError(message: "Failed to remove directory: \(dir.path)")
-			return err
+			return error as NSError
 		}
 	}
 
@@ -86,54 +80,8 @@ public class CNResourceInstaller
 		do {
 			try fmgr.copyItem(at: srcdir, to: dstdir)
 			return nil
-		} catch let err as NSError {
-			return err
 		} catch {
-			return NSError.fileError(message: "Failed to copy file from \(srcdir.path) to \(dstdir.path)")
+			return error as NSError
 		}
 	}
-
-	/*
-	private func copyFile(targetDirectory dstdir: URL, sourceDirectory srcdir: String?, sourceName srcname: String?, sourceExtension srcext: String, forClass fclass: AnyClass?) -> NSError? {
-		/* Correct source URLs */
-		let srcurls: Array<URL>
-		if let sname = srcname {
-			if let srcurl = CNFilePath.URLForResourceFile(fileName: sname, fileExtension: srcext, subdirectory: srcdir, forClass: fclass){
-				srcurls = [srcurl]
-			} else {
-				return NSError.fileError(message: "Source file is not found: name=\(sname), extension=\(srcext)")
-			}
-		} else {
-			switch CNFilePath.URLsForResourceFiles(fileExtension: srcext, subdirectory: srcdir, forClass: fclass) {
-			case .ok(let urls):
-				srcurls = urls
-			case .error(let err):
-				return err
-			}
-		}
-		if srcurls.count == 0 {
-			return NSError.fileError(message: "Source file is not found: extension=\(srcext)")
-		}
-
-		/* Copy files */
-		for srcurl in srcurls {
-			let srcname = srcurl.lastPathComponent
-			if srcname.count > 0 {
-				let dstfile = dstdir.appendingPathComponent(srcname)
-				do {
-					mConsole.print(string: "Copy from \(srcurl.path) to \(dstfile.path)\n")
-					let fmgr    = FileManager.default
-					try fmgr.copyItem(at: srcurl, to: dstfile)
-					return nil
-				} catch let err as NSError {
-					return err
-				} catch {
-					return NSError.fileError(message: "Failed to copy file from \(srcurl.path) to \(dstfile.path)")
-				}
-			} else {
-				return NSError.fileError(message: "Failed to get source file name: \(srcurl.path)")
-			}
-		}
-		return nil
-	}*/
 }

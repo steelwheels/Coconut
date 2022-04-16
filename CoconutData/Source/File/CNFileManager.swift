@@ -66,10 +66,8 @@ public extension FileManager
 		do {
 			try self.removeItem(at: url)
 			return .ok
-		} catch let err as NSError {
-			return .error(err)
-		} catch {
-			return .error(NSError.unknownError())
+		} catch  {
+			return .error(error as NSError)
 		}
 	}
 
@@ -85,10 +83,8 @@ public extension FileManager
 		do {
 			try createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
 			return .ok
-		} catch let err as NSError {
-			return .error(err)
 		} catch {
-			return .error(NSError.unknownError())
+			return .error(error as NSError)
 		}
 	}
 
@@ -120,11 +116,8 @@ public extension FileManager
 				file = CNFile(access: .writer, fileHandle: handle)
 			}
 			return .ok(file)
-		} catch let err as NSError {
-			return .error(err)
 		} catch {
-			let err = NSError.fileError(message: "Failed to open URL \"\(url.absoluteString)\"")
-			return .error(err)
+			return .error(error as NSError)
 		}
 	}
 
@@ -215,11 +208,9 @@ public extension FileManager
 				}
 			}
 			try fmanager.copyItem(at: srcurl, to: dsturl)
-		} catch let err as NSError {
-			CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
-			return false
 		} catch {
-			CNLog(logLevel: .error, message: "Failed to copy file: \(srcurl.path) -> \(dsturl.path)", atFunction: #function, inFile: #file)
+			let err = error as NSError
+			CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
 			return false
 		}
 		return true

@@ -35,10 +35,8 @@ public class CNValueParser
 				} else {
 					result = .error(NSError.parseError(message: "Unexpected end of stream", location: #function))
 				}
-			} catch let err as NSError {
-				result = .error(err)
 			} catch {
-				result = .error(NSError.parseError(message: "Unknown error", location: #function))
+				result = .error(error as NSError)
 			}
 		case .error(let err):
 			result = .error(err)

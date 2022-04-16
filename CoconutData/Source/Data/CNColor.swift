@@ -127,8 +127,8 @@ public extension CNColor
 	func toData() -> Data? {
 		do {
 			return try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
-		}
-		catch let err as NSError {
+		} catch {
+			let err = error as NSError
 			CNLog(logLevel: .error, message: "\(#file): \(err.description)")
 		}
 		return nil
@@ -139,8 +139,8 @@ public extension CNColor
 			if let color = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [CNColor.self], from: data) as? CNColor {
 				return color
 			}
-		}
-		catch let err as NSError {
+		} catch {
+			let err = error as NSError
 			CNLog(logLevel: .error, message: "\(#file): \(err.description)")
 		}
 		return nil

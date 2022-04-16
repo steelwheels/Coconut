@@ -11,6 +11,27 @@ import Foundation
 public func UTValuePath() -> Bool
 {
 	NSLog("*** UTValuePath")
+	let res0 = testParser()
+	let res1 = testPath()
+	return res0 && res1
+}
+
+public func testParser() -> Bool
+{
+	NSLog("**** testParser")
+	let res0 = testParseResult(string: "a")
+	return res0
+}
+
+
+private func testParseResult(string str: String) -> Bool
+{
+	return true
+}
+
+private func testPath() -> Bool
+{
+	NSLog("**** testPath")
 	let res0 = testValuePath(string: "a",				expectedCount: 1)
 	let res1 = testValuePath(string: "a.b",				expectedCount: 2)
 	let res2 = testValuePath(string: "a.b.c",			expectedCount: 3)

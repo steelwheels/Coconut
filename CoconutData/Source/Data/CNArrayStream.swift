@@ -71,7 +71,11 @@ public class CNArrayStream<T>
 	}
 
 	public func isEmpty() -> Bool {
-		return (mIndex < mCount)
+		if mIndex < mCount {
+			return false
+		} else {
+			return true
+		}
 	}
 
 	public func append(item newitem: T){

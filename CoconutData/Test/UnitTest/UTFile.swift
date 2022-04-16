@@ -32,8 +32,7 @@ public func testFile(console cons: CNConsole) -> Bool
 		cons.print(string: "ReadDone: \(file.readDone)\n")
 		cons.print(string: "testFile: OK\n")
 		return true
-	}
-	catch {
+	} catch {
 		cons.print(string: "[Error] Failed to read Info.plist\n")
 	}
 	cons.print(string: "testFile: NG\n")

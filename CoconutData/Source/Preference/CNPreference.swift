@@ -309,8 +309,8 @@ public class CNBookmarkPreference: CNPreferenceTable
 				let data = try url.bookmarkData(options: .suitableForBookmarkFile, includingResourceValuesForKeys: nil, relativeTo: nil)
 			#endif
 			return data
-		}
-		catch let err as NSError {
+		} catch {
+			let err = error as NSError
 			fatalError("\(err.description)")
 		}
 	}
@@ -326,7 +326,8 @@ public class CNBookmarkPreference: CNPreferenceTable
 			return newurl
 		}
 		catch {
-			CNLog(logLevel: .error, message: "Failed to resolve bookmark", atFunction: #function, inFile: #file)
+			let err = error as NSError
+			CNLog(logLevel: .error, message: err.description, atFunction: #function, inFile: #file)
 			return nil
 		}
 	}

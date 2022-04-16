@@ -234,7 +234,7 @@ private class CNTokenizer
 			let tokens  = try stringToTokens(stream: stream)
 			let mtokens = mergeTokens(tokens: tokens)
 			return .ok(mtokens)
-		} catch let error {
+		} catch {
 			return .error(error as NSError)
 		}
 	}
@@ -243,7 +243,7 @@ private class CNTokenizer
 		do {
 			let tokens = try stringToTokens(stream: srcstrm)
 			return .ok(tokens)
-		} catch let error {
+		} catch {
 			return .error(error as NSError)
 		}
 	}

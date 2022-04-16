@@ -356,10 +356,8 @@ public enum CNEscapeCode
 		do {
 			let result = try decodeString(string: src)
 			return .ok(result)
-		} catch let err as NSError {
-			return .error(err)
 		} catch {
-			return .error(NSError.unknownError())
+			return .error(error as NSError)
 		}
 	}
 

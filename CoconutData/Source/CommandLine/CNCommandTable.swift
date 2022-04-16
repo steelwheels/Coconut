@@ -29,8 +29,7 @@ public class CNCommandTable
 					let pathname = path + "/" + fname
 					mCommandTable[fname] = pathname
 				}
-			}
-			catch  {
+			} catch  {
 				// Ignore the error
 			}
 		}
