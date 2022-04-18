@@ -10,19 +10,17 @@ import Foundation
 public class CNStringStream
 {
 	private var mString:		String
-	private var mStartIndex:	String.Index
-	private var mEndIndex:		String.Index
+	private var mCurrentIndex:	String.Index
 
 	public required init(string src: String){
 		mString		= src
-		mStartIndex	= src.startIndex
-		mEndIndex	= src.endIndex
+		mCurrentIndex	= src.startIndex
 	}
 
 	public func getc() -> Character? {
-		if mStartIndex < mEndIndex {
-			let c: Character = mString[mStartIndex]
-			mStartIndex = mString.index(after: mStartIndex)
+		if mCurrentIndex < mString.endIndex {
+			let c: Character = mString[mCurrentIndex]
+			mCurrentIndex = mString.index(after: mCurrentIndex)
 			return c
 		} else {
 			return nil
@@ -60,27 +58,24 @@ public class CNStringStream
 	}
 
 	public func ungetc() -> Character? {
-		if mString.startIndex < mStartIndex {
-			mStartIndex = mString.index(before: mStartIndex)
-			return mString[mStartIndex]
+		if mString.startIndex < mCurrentIndex {
+			mCurrentIndex = mString.index(before: mCurrentIndex)
+			return mString[mCurrentIndex]
 		} else {
 			return nil
 		}
 	}
 
 	public func peek(offset ofst: Int) -> Character? {
-		if mStartIndex < mEndIndex {
-			var idx = mStartIndex
-			for _ in 0..<ofst {
+		var idx = mCurrentIndex
+		for _ in 0..<ofst {
+			if idx < mString.endIndex {
 				idx = mString.index(after: idx)
-				if !(idx < mEndIndex) {
-					return nil
-				}
+			} else {
+				break
 			}
-			return mString[idx]
-		} else {
-			return nil
 		}
+		return idx < mString.endIndex ? mString[idx] : nil
 	}
 
 	public func skip(count cnt: Int){
@@ -101,7 +96,7 @@ public class CNStringStream
 	}
 
 	public func isEmpty() -> Bool {
-		if mStartIndex < mEndIndex {
+		if mCurrentIndex < mString.endIndex {
 			return false
 		} else {
 			return true
@@ -109,14 +104,14 @@ public class CNStringStream
 	}
 
 	public func splitByFirstCharacter(characters chars: Array<Character>) -> (CNStringStream, CNStringStream)? {
-		var currentidx = mStartIndex
-		while currentidx < mEndIndex {
+		var currentidx = mCurrentIndex
+		while currentidx < mString.endIndex {
 			let c: Character = mString[currentidx]
 			for targ in chars {
 				if targ == c {
 					let nextidx = mString.index(after: currentidx)
-					let stra    = String(mString[mStartIndex..<currentidx])
-					let strb    = String(mString[nextidx..<mEndIndex])
+					let stra    = String(mString[mCurrentIndex..<currentidx])
+					let strb    = String(mString[nextidx..<mString.endIndex])
 					return (CNStringStream(string: stra), CNStringStream(string: strb))
 				}
 			}
@@ -126,8 +121,8 @@ public class CNStringStream
 	}
 
 	public func toString() -> String? {
-		if mStartIndex < mEndIndex {
-			return String(mString[mStartIndex..<mEndIndex])
+		if mCurrentIndex < mString.endIndex {
+			return String(mString[mCurrentIndex ..< mString.endIndex])
 		} else {
 			return nil
 		}
@@ -151,9 +146,8 @@ public class CNStringStream
 
 	public var description: String {
 		get {
-			let sidx = mStartIndex.utf16Offset(in: mString)
-			let eidx = mEndIndex.utf16Offset(in: mString)
-			return "String(\"\(mString)\")[\(sidx):\(eidx)]"
+			let str = String(mString[mCurrentIndex ..< mString.endIndex])
+			return "String(\"\(str)\")"
 		}
 	}
 }

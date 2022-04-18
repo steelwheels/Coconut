@@ -67,8 +67,6 @@
 		0562ACC5273AC19200B90BE2 /* pencil-circule.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0562ACC0273AC15B00B90BE2 /* pencil-circule.png */; };
 		056F5702278AB95B0078C25D /* CNMutableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056F5701278AB95B0078C25D /* CNMutableValue.swift */; };
 		056F5703278AB95B0078C25D /* CNMutableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056F5701278AB95B0078C25D /* CNMutableValue.swift */; };
-		05757751278C2F190065D89E /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; };
-		05757752278C2F190065D89E /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		057588E72629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */; };
 		057588E82629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */; };
 		057623E026A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */; };
@@ -236,6 +234,8 @@
 		05BD9FA92745445B00D43064 /* oval.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA22745443200D43064 /* oval.png */; };
 		05BEE0EE2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
 		05BEE0EF2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
+		05D0C7EC280BB22F00CE3AFC /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; };
+		05D0C7ED280BB22F00CE3AFC /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05DDE3D1275BA2D7009F0B6E /* UTVectorGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */; };
 		05E45BCB2736CD290034254D /* rectangle-filled-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BC92736CD070034254D /* rectangle-filled-rounded.png */; };
 		05E45BCC2736CD290034254D /* rectangle-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BCA2736CD070034254D /* rectangle-rounded.png */; };
@@ -339,17 +339,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		05757753278C2F190065D89E /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				05757752278C2F190065D89E /* CoconutData.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0596C5622722E30F00E9A24F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -422,6 +411,17 @@
 				05A1B01B2776E4650091D527 /* sub.json in CopyFiles */,
 				05A1B0082776CA830091D527 /* root.json in CopyFiles */,
 			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05D0C7EE280BB22F00CE3AFC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				05D0C7ED280BB22F00CE3AFC /* CoconutData.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		05FC5C54255FF9DB006C3664 /* CopyFiles */ = {
@@ -621,7 +621,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05757751278C2F190065D89E /* CoconutData.xcframework in Frameworks */,
+				05D0C7EC280BB22F00CE3AFC /* CoconutData.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1111,7 +1111,7 @@
 				05A1AFC32776BBDF0091D527 /* Resources */,
 				05A1B0072776CA710091D527 /* CopyFiles */,
 				05757748278C2E9C0065D89E /* Frameworks */,
-				05757753278C2F190065D89E /* Embed Frameworks */,
+				05D0C7EE280BB22F00CE3AFC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1673,6 +1673,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = time;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1699,12 +1700,12 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ../Test/ResourceTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(HOME)/Library/Frameworks",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
@@ -1726,6 +1727,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_OPTIMIZATION = time;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1748,21 +1750,23 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ../Test/ResourceTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(HOME)/Library/Frameworks",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.ResourceTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -1987,6 +1991,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutData-macOS";
 				PRODUCT_NAME = CoconutData;
 				PROVISIONING_PROFILE_SPECIFIER = "";

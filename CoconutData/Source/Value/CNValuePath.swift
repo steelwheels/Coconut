@@ -225,15 +225,3 @@ public class CNValuePath
 		}
 	}
 }
-
-public class CNValuePathParser
-{
-	public enum Result {
-		case ok(CNValuePath)
-		case error(NSError)
-	}
-
-	public class func parse(string str: String) -> Result {
-		return .error(NSError.parseError(message: "Syntax error"))
-	}
-}

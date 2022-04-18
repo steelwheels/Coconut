@@ -11,26 +11,19 @@ public class CNArrayStream<T>
 {
 	private var mArray	: Array<T>
 	private var mIndex	: Int
-	private var mCount	: Int
 
 	public init(){
 		mArray		= []
 		mIndex		= 0
-		mCount		= 0
 	}
 
 	public init(source src: Array<T>){
 		mArray		= src
 		mIndex		= 0
-		mCount		= src.count
-	}
-
-	public var count: Int {
-		get { return mCount - mIndex  }
 	}
 
 	public func get() -> T? {
-		if mIndex < mCount {
+		if mIndex < mArray.count {
 			let result = mArray[mIndex]
 			mIndex += 1
 			return result
@@ -63,7 +56,7 @@ public class CNArrayStream<T>
 
 	public func peek(offset ofst: Int) -> T? {
 		let idx = mIndex + ofst
-		if idx < mCount {
+		if 0<=idx && idx < mArray.count {
 			return mArray[idx]
 		} else {
 			return nil
@@ -71,7 +64,7 @@ public class CNArrayStream<T>
 	}
 
 	public func isEmpty() -> Bool {
-		if mIndex < mCount {
+		if mIndex < mArray.count {
 			return false
 		} else {
 			return true
@@ -80,13 +73,12 @@ public class CNArrayStream<T>
 
 	public func append(item newitem: T){
 		mArray.append(newitem)
-		mCount = mArray.count
 	}
 
 	public func trace(trace trc: (_ src: T) -> Bool) -> Array<T> {
 		var result: Array<T> = []
 		var newidx: Int = mIndex
-		for i in mIndex..<mCount {
+		for i in mIndex..<mArray.count {
 			let elm = mArray[i]
 			if trc(elm) {
 				result.append(elm)
@@ -100,7 +92,7 @@ public class CNArrayStream<T>
 	}
 
 	public var description: String {
-		return "Array[\(mIndex):\(mCount)]"
+		return "Array[\(mIndex)/\(mArray.count)]"
 	}
 }
 

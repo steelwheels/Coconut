@@ -15,10 +15,6 @@ public class CNTokenStream
 		mStream = CNArrayStream(source: src)
 	}
 
-	public var count: Int {
-		get { return mStream.count }
-	}
-
 	public var lineNo: Int? {
 		if let token = mStream.peek(offset: 0) {
 			return token.lineNo
