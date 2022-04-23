@@ -133,7 +133,7 @@ public class CNValueStorage
 		if let elms = normalizeValuePath(valuePath: path) {
 			let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 			if mRootValue.set(value: mval, forPath: elms) {
-				mRootValue.clearLabelTable()
+				mRootValue.labelTable().clear()
 				mValueCache.setDirty(at: path)
 				return true
 			} else {
@@ -150,7 +150,7 @@ public class CNValueStorage
 		if let elms = normalizeValuePath(valuePath: path) {
 			let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 			if mRootValue.append(value: mval, forPath: elms) {
-				mRootValue.clearLabelTable()
+				mRootValue.labelTable().clear()
 				mValueCache.setDirty(at: path)
 				return true
 			} else {
@@ -167,7 +167,7 @@ public class CNValueStorage
 		mValueCache.setDirty(at: path)
 		if let elms = normalizeValuePath(valuePath: path) {
 			if mRootValue.delete(forPath: elms) {
-				mRootValue.clearLabelTable()
+				mRootValue.labelTable().clear()
 				mValueCache.setDirty(at: path)
 				return true
 			} else {
@@ -180,7 +180,7 @@ public class CNValueStorage
 
 	private func normalizeValuePath(valuePath path: CNValuePath) -> Array<CNValuePath.Element>? {
 		if let ident = path.identifier {
-			if var topelms = searchLabel(label: ident) {
+			if var topelms = mRootValue.labelTable().labelToPath(label: ident, in: mRootValue) {
 				topelms.append(contentsOf: path.elements)
 				return topelms
 			} else {
@@ -188,11 +188,6 @@ public class CNValueStorage
 			}
 		}
 		return path.elements
-	}
-
-	private func searchLabel(label lbl: String) -> Array<CNValuePath.Element>? {
-		let table = CNMutableValue.labelTable(in: mRootValue)
-		return table[lbl]
 	}
 
 	public func save() -> Bool {

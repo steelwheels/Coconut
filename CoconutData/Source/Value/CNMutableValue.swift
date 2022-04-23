@@ -9,8 +9,6 @@ import Foundation
 
 public class CNMutableValue
 {
-	public typealias LabelTable = Dictionary<String, Array<CNValuePath.Element>>
-
 	public enum ValueType {
 		case scaler
 		case array
@@ -20,16 +18,14 @@ public class CNMutableValue
 	}
 
 	private var 	mType:    	ValueType
-
+	private var	mLabelTable:	CNValueLabels?
 	public var	type:    	ValueType { get { return mType    }}
 	public var 	isDirty:	Bool
 
-	private var	mLabelTable:	LabelTable?
-
 	public init(type t: ValueType){
 		mType		= t
-		isDirty		= false
 		mLabelTable	= nil
+		isDirty		= false
 	}
 
 	public func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
@@ -52,18 +48,18 @@ public class CNMutableValue
 		return self._search(name: nm, value: val, in: self)
 	}
 
-	public static func labelTable(in root: CNMutableValue) -> LabelTable {
-		if let table = root.mLabelTable {
+	public func labelTable() -> CNValueLabels {
+		if let table = mLabelTable {
 			return table
 		} else {
-			let newtable = root._makeLabelTable(path: [])
-			root.mLabelTable  = newtable
-			return newtable
+			let newtbl  = CNValueLabels()
+			mLabelTable = newtbl
+			return newtbl
 		}
 	}
 
-	public func clearLabelTable(){
-		mLabelTable = nil
+	public func makeLabelTable(property name: String) -> Dictionary<String, Array<CNValuePath.Element>> {
+		return _makeLabelTable(property: name, path: [])
 	}
 
 	open func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
@@ -91,7 +87,7 @@ public class CNMutableValue
 		return nil
 	}
 
-	open func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+	open func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return [:]
 	}
@@ -156,7 +152,7 @@ public class CNMutableScalarValue: CNMutableValue
 		return nil // not found
 	}
 
-	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+	public override func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
 		/* Not mached */
 		return [:]
 	}
@@ -391,13 +387,13 @@ public class CNMutableArrayValue: CNMutableValue
 		return nil
 	}
 
-	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+	public override func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
 		var result: Dictionary<String, Array<CNValuePath.Element>> = [:]
 		for i in 0..<mArrayValue.count {
 			var curpath: Array<CNValuePath.Element> = []
 			curpath.append(contentsOf: pth)
 			curpath.append(.index(i))
-			let subres = mArrayValue[i]._makeLabelTable(path: curpath)
+			let subres = mArrayValue[i]._makeLabelTable(property: name, path: curpath)
 			for (skey, sval) in subres {
 				result[skey] = sval
 			}
@@ -645,10 +641,10 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return nil
 	}
 
-	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+	public override func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
 		var result: Dictionary<String, Array<CNValuePath.Element>> = [:]
 		/* Update itsel */
-		if let val = mDictionaryValue["id"] {
+		if let val = mDictionaryValue[name] {
 			if let obj = val as? CNMutableScalarValue {
 				switch obj.toValue() {
 				case .stringValue(let label):
@@ -663,7 +659,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 			var curpath: Array<CNValuePath.Element> = []
 			curpath.append(contentsOf: pth)
 			curpath.append(.member(key))
-			let subres = val._makeLabelTable(path: curpath)
+			let subres = val._makeLabelTable(property: name, path: curpath)
 			for (skey, sval) in subres {
 				result[skey] = sval
 			}
@@ -781,9 +777,9 @@ public class CNMutableValueSegment: CNMutableValue
 		return result
 	}
 
-	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+	public override func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
 		if let dst = load() {
-			return dst._makeLabelTable(path: pth)
+			return dst._makeLabelTable(property: name, path: pth)
 		} else {
 			return [:]
 		}
@@ -885,21 +881,7 @@ public class CNMutablePointerValue: CNMutableValue
 	}
 
 	private func pointedValue(in root: CNMutableValue) -> CNMutableValue? {
-		let elms: Array<CNValuePath.Element>
-		if let ident = mPointerValue.path.identifier {
-			let table = CNMutableValue.labelTable(in: root)
-			if let top = table[ident] {
-				var fullelms = top
-				fullelms.append(contentsOf: mPointerValue.path.elements)
-				elms = fullelms
-			} else {
-				CNLog(logLevel: .error, message: "Label \(ident) is not found: \(mPointerValue.path.description)", atFunction: #function, inFile: #file)
-				elms = mPointerValue.path.elements
-			}
-		} else {
-			elms = mPointerValue.path.elements
-		}
-
+		let elms = root.labelTable().pointerToPath(pointer: mPointerValue, in: root)
 		let result: CNMutableValue?
 		if let val = root._value(forPath: elms, in: root) {
 			result = val
@@ -911,7 +893,7 @@ public class CNMutablePointerValue: CNMutableValue
 		return result
 	}
 
-	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+	public override func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
 		return [:]
 	}
 
