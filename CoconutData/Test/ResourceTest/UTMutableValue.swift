@@ -178,7 +178,7 @@ private func getValue(path pth: CNValuePath, in owner: CNMutableValue) -> CNMuta
 }
 
 private func deleteValue(destination dst: CNMutableValue, forPath path: CNValuePath) -> Bool {
-	if dst.delete(forPath: path.elements) {
+	if dst.delete(forPath: path) {
 		dumpValue(value: dst.toValue())
 		return true
 	} else {

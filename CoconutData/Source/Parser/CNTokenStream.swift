@@ -2,7 +2,7 @@
  * @file	CNTokenStream.swift
  * @brief	Define CNArrayStream class
  * @par Copyright
- *   Copyright (C) 2017 Steel Wheels Project
+ *   Copyright (C) 2017 -2022 Steel Wheels Project
  */
 
 import Foundation
@@ -51,6 +51,16 @@ public class CNTokenStream
 		return false
 	}
 
+	public func requireReservedWord() -> Int? {
+		if let token = mStream.get() {
+			if let val = token.getReservedWord() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
+	}
+
 	public func getSymbol() -> Character? {
 		if let token = mStream.get() {
 			return token.getSymbol()
@@ -69,6 +79,16 @@ public class CNTokenStream
 			let _ = mStream.unget()
 		}
 		return false
+	}
+
+	public func requireSymbol() -> Character? {
+		if let token = mStream.get() {
+			if let val = token.getSymbol() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
 	}
 
 	public func getIdentifier() -> String? {
@@ -91,7 +111,7 @@ public class CNTokenStream
 		return  false
 	}
 
-	public func requireAnyIdentifier() -> String? {
+	public func requireIdentifier() -> String? {
 		if let token = mStream.get() {
 			if let val = token.getIdentifier() {
 				return val
@@ -121,6 +141,16 @@ public class CNTokenStream
 		return false
 	}
 
+	public func requireBool() -> Bool? {
+		if let token = mStream.get() {
+			if let val = token.getBool() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
+	}
+
 	public func getInt() -> Int? {
 		if let token = mStream.get() {
 			return token.getInt()
@@ -139,6 +169,16 @@ public class CNTokenStream
 			let _ = mStream.unget()
 		}
 		return false
+	}
+
+	public func requireInt() -> Int? {
+		if let token = mStream.get() {
+			if let val = token.getInt() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
 	}
 
 	public func getUInt() -> UInt? {
@@ -161,6 +201,16 @@ public class CNTokenStream
 		return false
 	}
 
+	public func requireUInt() -> UInt? {
+		if let token = mStream.get() {
+			if let val = token.getUInt() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
+	}
+
 	public func getDouble() -> Double? {
 		if let token = mStream.get() {
 			return token.getDouble()
@@ -181,28 +231,12 @@ public class CNTokenStream
 		return false
 	}
 
-	public func getAnyInt() -> Int? {
+	public func requireDouble() -> Double? {
 		if let token = mStream.get() {
-			if let val = token.getInt() {
-				return val
-			} else if let val = token.getUInt() {
-				return Int(val)
-			} else if let val = token.getDouble() {
-				return Int(val)
-			}
-		}
-		return nil
-	}
-
-	public func getAnyDouble() -> Double? {
-		if let token = mStream.get() {
-			if let val = token.getInt() {
-				return Double(val)
-			} else if let val = token.getUInt() {
-				return Double(val)
-			} else if let val = token.getDouble() {
+			if let val = token.getDouble() {
 				return val
 			}
+			let _ = mStream.unget()
 		}
 		return nil
 	}
@@ -227,6 +261,16 @@ public class CNTokenStream
 		return false
 	}
 
+	public func requireString() -> String? {
+		if let token = mStream.get() {
+			if let val = token.getString() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
+	}
+
 	public func getText() -> String? {
 		if let token = mStream.get() {
 			return token.getText()
@@ -245,6 +289,16 @@ public class CNTokenStream
 			let _ = mStream.unget()
 		}
 		return false
+	}
+
+	public func requireText() -> String? {
+		if let token = mStream.get() {
+			if let val = token.getText() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
 	}
 
 	public func unget() -> CNToken? {

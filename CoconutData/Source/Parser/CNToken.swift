@@ -23,25 +23,25 @@ public enum CNTokenType {
 		let result: String
 		switch self {
 		case .ReservedWordToken(let val):
-			result = "ReservedWord(\(val))"
+			result = "reserved word: \(val)"
 		case .SymbolToken(let val):
-			result = "SymbolToken(\(val))"
+			result = "symbol: \(val)"
 		case .IdentifierToken(let val):
-			result = "IdentifierToken(\(val))"
+			result = "identifier: \(val)"
 		case .BoolToken(let val):
-			result = "BoolToken(\(val))"
+			result = "\(val)"
 		case .IntToken(let val):
-			result = "IntToken(\(val))"
+			result = "\(val)"
 		case .UIntToken(let val):
-			result = "UIntToken(\(val))"
+			result = "\(val)"
 		case .DoubleToken(let val):
-			result = "DoubleToken(\(val))"
+			result = "\(val)"
 		case .StringToken(let val):
-			result = "StringToken(\(val))"
+			result = "\(val)"
 		case .TextToken(let val):
-			result = "TextToken(\(val))"
+			result = "\(val)"
 		case .CommentToken(let val):
-			result = "CommentToken(\(val))"
+			result = "\(val)"
 		}
 		return result
 	}
@@ -183,7 +183,7 @@ public struct CNToken {
 		case .IdentifierToken(let val):
 			result = "\(val)"
 		case .BoolToken(let val):
-			if val { result = "true" } else { result = "false" }
+			result = "\(val)"
 		case .IntToken(let val):
 			result = "\(val)"
 		case .UIntToken(let val):

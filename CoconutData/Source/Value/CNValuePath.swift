@@ -56,6 +56,10 @@ public class CNValuePath
 	private var mElements:   	Array<Element>
 	private var mExpression: 	String
 
+	public var identifier: String? { get {
+		return mIdentifier
+	}}
+
 	public var elements: Array<Element> { get {
 		return mElements
 	}}
@@ -67,13 +71,13 @@ public class CNValuePath
 	public init(identifier ident: String?, elements elms: Array<Element>){
 		mIdentifier = ident
 		mElements   = elms
-		mExpression = CNValuePath.toExpression(elements: elms)
+		mExpression = CNValuePath.toExpression(identifier: ident, elements: elms)
 	}
 
 	public init(identifier ident: String?, member memb: String){
 		mIdentifier = ident
 		mElements   = [ .member(memb) ]
-		mExpression = CNValuePath.toExpression(elements: mElements)
+		mExpression = CNValuePath.toExpression(identifier: ident, elements: mElements)
 	}
 
 	public init(identifier ident: String?, path pth: CNValuePath, subPath subs: Array<Element>){
@@ -85,7 +89,7 @@ public class CNValuePath
 		for subs in subs {
 			mElements.append(subs)
 		}
-		mExpression = CNValuePath.toExpression(elements: mElements)
+		mExpression = CNValuePath.toExpression(identifier: ident, elements: mElements)
 	}
 
 	public func isIncluded(in targ: CNValuePath) -> Bool {
@@ -105,29 +109,33 @@ public class CNValuePath
 
 	public var description: String { get {
 		var result = ""
-		var is1st = true
+		var is1st  = true
 		for elm in mElements {
-			if is1st {
-				is1st = false
-			} else {
-				result += ", "
-			}
 			switch elm {
 			case .member(let str):
-				result += ".member(\(str))"
+				if is1st {
+					is1st = false
+				} else {
+					result += "."
+				}
+				result += "\(str)"
 			case .index(let idx):
-				result += ".index(\(idx))"
+				result += "[\(idx)]"
 			case .keyAndValue(let key, let val):
 				let txt = val.toText().toStrings().joined(separator: "\n")
-				result += ".keyAndValue(\(key), \(txt))"
+				result += "[\(key), \(txt)]"
 			}
 		}
 		return result
 	}}
 
-	public static func toExpression(elements elms: Array<Element>) -> String {
+	public static func toExpression(identifier ident: String?, elements elms: Array<Element>) -> String {
 		var result: String = ""
 		var is1st:  Bool   = true
+		if let str = ident {
+			result = "@" + str
+			is1st  = false
+		}
 		for elm in elms {
 			switch elm {
 			case .member(let str):
@@ -148,68 +156,126 @@ public class CNValuePath
 	}
 
 	public static func pathExpression(string str: String) -> (String?, Array<Element>)? {
-		var resident:	String?		= nil
-		var reselms:	Array<Element>	= []
-		var finished               	= true
-		var members = str.components(separatedBy: ".")
-
-		/* Pickup first identifier */
-		if let firstmemb = members.first {
-			if firstmemb.first == "@" {
-				resident = String(firstmemb.dropFirst())
-				members  = Array(members.dropFirst())
-			}
-		} else {
-			CNLog(logLevel: .error, message: "Empty expression: \(str)")
-			finished = false
+		let result: (String?, Array<Element>)?
+		let conf = CNParserConfig(allowIdentiferHasPeriod: false)
+		switch CNStringToToken(string: str, config: conf) {
+		case .ok(let tokens):
+			let stream = CNTokenStream(source: tokens)
+			result = pathExpression(stream: stream)
+		case .error(let err):
+			CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
+			result = nil
 		}
-		for member in members {
-			if members.isEmpty {
-				CNLog(logLevel: .error, message: "No member name: \(str)")
-				finished = false
-				break
-			}
-			let elms = member.components(separatedBy: "[")
-			if let first = elms.first {
-				/* Decode 1st component */
-				let firststr = String(first)
-				if firststr.isEmpty {
-					CNLog(logLevel: .error, message: "No member name: \(str)")
-					finished = false
-					break
-				}
-				reselms.append(.member(firststr))
+		return result
+	}
 
-				/* Decode rest components */
-				let rests = elms.dropFirst()
-				if rests.count > 0 {
-					for rest in rests {
-						if rest.last == "]" {
-							let idxstr = rest.dropLast()
-							if let idx = Int(idxstr) {
-								reselms.append(.index(idx))
-							} else {
-								CNLog(logLevel: .error, message: "Invalid index: \(idxstr) in \(str)")
-								finished = false
-								break
-							}
-						} else {
-							CNLog(logLevel: .error, message: "Not closed by \"]\": \(str)")
-							finished = false
-							break
-						}
-					}
+	public static func pathExpression(stream strm: CNTokenStream) -> (String?, Array<Element>)? {
+		guard let ident = pathExpressionIdentifier(stream: strm) else {
+			return nil
+		}
+		guard let members = pathExpressionMembers(stream: strm, hasIdentifier: !ident.isEmpty) else {
+			return nil
+		}
+		return (ident.isEmpty ? nil : ident, members)
+	}
+
+	private static func pathExpressionIdentifier(stream strm: CNTokenStream) -> String? {
+		if strm.requireSymbol(symbol: "@") {
+			if let ident = strm.getIdentifier() {
+				return ident
+			} else {
+				let _ = strm.unget() // unget symbol
+				CNLog(logLevel: .error, message: "Identifier is required for label", atFunction: #function, inFile: #file)
+			}
+		}
+		return ""
+	}
+
+	private static func pathExpressionMembers(stream strm: CNTokenStream, hasIdentifier hasident: Bool) ->  Array<Element>? {
+		var is1st:  Bool = !hasident
+		var result: Array<Element> = []
+		while !strm.isEmpty() {
+			/* Parse comma */
+			if is1st {
+				is1st = false
+			} else if !strm.requireSymbol(symbol: ".") {
+				CNLog(logLevel: .error, message: "Period is expected between members", atFunction: #function, inFile: #file)
+				return nil
+			}
+			/* Parse member */
+			guard let member = strm.getIdentifier() else {
+				CNLog(logLevel: .error, message: "Member for path expression is required", atFunction: #function, inFile: #file)
+				return nil
+			}
+			result.append(.member(member))
+			/* Check "[" symbol */
+			while strm.requireSymbol(symbol: "[") {
+				if let memb = pathExpressionIndex(stream: strm) {
+					result.append(memb)
+				} else {
+					return nil
+				}
+				if !strm.requireSymbol(symbol: "]") {
+					CNLog(logLevel: .error, message: "']' is expected", atFunction: #function, inFile: #file)
+					return nil
+				}
+			}
+		}
+		return result
+	}
+
+	private static func pathExpressionIndex(stream strm: CNTokenStream) ->  Element? {
+		if let index = strm.requireUInt() {
+			return .index(Int(index))
+		} else if let ident = strm.requireIdentifier() {
+			if strm.requireSymbol(symbol: ":") {
+				if let val = requireAnyValue(stream: strm) {
+					return .keyAndValue(ident, val)
+				} else {
+					CNLog(logLevel: .error, message: "Invalid dictionary index \(near(stream: strm))")
+					return nil
 				}
 			} else {
-				CNLog(logLevel: .error, message: "No member name: \(str)")
-				finished = false
-				break
+				CNLog(logLevel: .error, message: "':' is required for dictionary index \(near(stream: strm))")
+				return nil
 			}
+		} else {
+			CNLog(logLevel: .error, message: "Invalid index \(near(stream: strm))")
+			return nil
 		}
-		if finished && reselms.count > 0 {
-			return (resident, reselms)
+	}
+
+	private static func requireAnyValue(stream strm: CNTokenStream) -> CNValue? {
+		if let ival = strm.requireUInt() {
+			return .numberValue(NSNumber(integerLiteral: Int(ival)))
+		} else if let sval = strm.requireIdentifier() {
+			return .stringValue(sval)
 		} else {
 			return nil
+		}
+	}
+
+	public static func description(of val: Dictionary<String, Array<CNValuePath.Element>>) -> CNText {
+		let sect = CNTextSection()
+		sect.header = "{" ; sect.footer = "}"
+		for (key, elm) in val {
+			let subsect = CNTextSection()
+			subsect.header = "\(key): {" ; subsect.footer = "}"
+
+			let desc = toExpression(identifier: nil, elements: elm)
+			let line = CNTextLine(string: desc)
+			subsect.add(text: line)
+
+			sect.add(text: subsect)
+		}
+		return sect
+	}
+
+	private static func near(stream strm: CNTokenStream) -> String {
+		if let token = strm.peek(offset: 0) {
+			return "near " + token.description
+		} else {
+			return ""
 		}
 	}
 

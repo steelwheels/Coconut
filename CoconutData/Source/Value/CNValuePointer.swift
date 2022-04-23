@@ -35,7 +35,7 @@ public class CNPointerValue
 	}
 
 	func toValue() -> Dictionary<String, CNValue> {
-		let pathstr = CNValuePath.toExpression(elements: mPath.elements)
+		let pathstr = CNValuePath.toExpression(identifier: mPath.identifier, elements: mPath.elements)
 		let result: Dictionary<String, CNValue> = [
 			"class"			: .stringValue(CNPointerValue.ClassName),
 			CNPointerValue.PathItem	: .stringValue(pathstr)

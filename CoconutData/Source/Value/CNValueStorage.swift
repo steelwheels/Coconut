@@ -100,25 +100,28 @@ public class CNValueStorage
 	public func value(forPath path: CNValuePath) -> CNValue? {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
-
-		if let mval = mRootValue.value(forPath: path) {
-			let result: CNValue
-			switch mval.type {
-			case .segment:
-				if let refval = mval as? CNMutableValueSegment {
-					if let cval = refval.context {
-						result = cval.toValue()
+		if let elms = normalizeValuePath(valuePath: path) {
+			if let mval = mRootValue.value(forPath: elms) {
+				let result: CNValue
+				switch mval.type {
+				case .segment:
+					if let refval = mval as? CNMutableValueSegment {
+						if let cval = refval.context {
+							result = cval.toValue()
+						} else {
+							result = .nullValue
+						}
 					} else {
+						CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 						result = .nullValue
 					}
-				} else {
-					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-					result = .nullValue
+				default:
+					result = mval.toValue()
 				}
-			default:
-				result = mval.toValue()
+				return result
+			} else {
+				return nil
 			}
-			return result
 		} else {
 			return nil
 		}
@@ -127,11 +130,15 @@ public class CNValueStorage
 	public func set(value val: CNValue, forPath path: CNValuePath) -> Bool {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
-
-		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-		if mRootValue.set(value: mval, forPath: path) {
-			mValueCache.setDirty(at: path)
-			return true
+		if let elms = normalizeValuePath(valuePath: path) {
+			let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
+			if mRootValue.set(value: mval, forPath: elms) {
+				mRootValue.clearLabelTable()
+				mValueCache.setDirty(at: path)
+				return true
+			} else {
+				return false
+			}
 		} else {
 			return false
 		}
@@ -140,11 +147,15 @@ public class CNValueStorage
 	public func append(value val: CNValue, forPath path: CNValuePath) -> Bool {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
-
-		let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-		if mRootValue.append(value: mval, forPath: path) {
-			mValueCache.setDirty(at: path)
-			return true
+		if let elms = normalizeValuePath(valuePath: path) {
+			let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
+			if mRootValue.append(value: mval, forPath: elms) {
+				mRootValue.clearLabelTable()
+				mValueCache.setDirty(at: path)
+				return true
+			} else {
+				return false
+			}
 		} else {
 			return false
 		}
@@ -154,11 +165,34 @@ public class CNValueStorage
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
 		mValueCache.setDirty(at: path)
-		if mRootValue.delete(forPath: path.elements) {
-			return true
+		if let elms = normalizeValuePath(valuePath: path) {
+			if mRootValue.delete(forPath: elms) {
+				mRootValue.clearLabelTable()
+				mValueCache.setDirty(at: path)
+				return true
+			} else {
+				return false
+			}
 		} else {
 			return false
 		}
+	}
+
+	private func normalizeValuePath(valuePath path: CNValuePath) -> Array<CNValuePath.Element>? {
+		if let ident = path.identifier {
+			if var topelms = searchLabel(label: ident) {
+				topelms.append(contentsOf: path.elements)
+				return topelms
+			} else {
+				CNLog(logLevel: .error, message: "Failed to find label: \(ident)", atFunction: #function, inFile: #file)
+			}
+		}
+		return path.elements
+	}
+
+	private func searchLabel(label lbl: String) -> Array<CNValuePath.Element>? {
+		let table = CNMutableValue.labelTable(in: mRootValue)
+		return table[lbl]
 	}
 
 	public func save() -> Bool {

@@ -9,6 +9,8 @@ import Foundation
 
 public class CNMutableValue
 {
+	public typealias LabelTable = Dictionary<String, Array<CNValuePath.Element>>
+
 	public enum ValueType {
 		case scaler
 		case array
@@ -17,30 +19,51 @@ public class CNMutableValue
 		case pointer
 	}
 
-	private var mType:    ValueType
+	private var 	mType:    	ValueType
 
 	public var	type:    	ValueType { get { return mType    }}
-	public var	isDirty:	Bool
+	public var 	isDirty:	Bool
+
+	private var	mLabelTable:	LabelTable?
 
 	public init(type t: ValueType){
 		mType		= t
 		isDirty		= false
+		mLabelTable	= nil
 	}
 
-	public func value(forPath path: CNValuePath) -> CNMutableValue? {
-		return self._value(forPath: path.elements, in: self)
+	public func value(forPath path: Array<CNValuePath.Element>) -> CNMutableValue? {
+		return self._value(forPath: path, in: self)
 	}
 
-	public func set(value val: CNMutableValue, forPath path: CNValuePath) -> Bool {
-		return self._set(value: val, forPath: path.elements, in: self)
+	public func set(value val: CNMutableValue, forPath path:  Array<CNValuePath.Element>) -> Bool {
+		return self._set(value: val, forPath: path, in: self)
 	}
 
-	public func append(value val: CNMutableValue, forPath path: CNValuePath) -> Bool {
-		return self._append(value: val, forPath: path.elements, in: self)
+	public func append(value val: CNMutableValue, forPath path:  Array<CNValuePath.Element>) -> Bool {
+		return self._append(value: val, forPath: path, in: self)
 	}
 
 	public func delete(forPath path: Array<CNValuePath.Element>) -> Bool {
 		return self._delete(forPath: path, in: self)
+	}
+
+	public func search(name nm: String, value val: String) -> Array<CNValuePath.Element>? {
+		return self._search(name: nm, value: val, in: self)
+	}
+
+	public static func labelTable(in root: CNMutableValue) -> LabelTable {
+		if let table = root.mLabelTable {
+			return table
+		} else {
+			let newtable = root._makeLabelTable(path: [])
+			root.mLabelTable  = newtable
+			return newtable
+		}
+	}
+
+	public func clearLabelTable(){
+		mLabelTable = nil
 	}
 
 	open func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
@@ -61,6 +84,16 @@ public class CNMutableValue
 	open func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
 		return false
+	}
+
+	open func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
+		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
+		return nil
+	}
+
+	open func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
+		return [:]
 	}
 
 	open func clone() -> CNMutableValue {
@@ -88,7 +121,8 @@ public class CNMutableScalarValue: CNMutableValue
 		if path.count == 0 {
 			result = self.clone()
 		} else {
-			CNLog(logLevel: .error, message: "Non-empty path for scalar value", atFunction: #function, inFile: #file)
+			let pathdesc = CNValuePath.toExpression(identifier: nil, elements: path)
+			CNLog(logLevel: .error, message: "Non-empty path for scalar value: \(pathdesc)", atFunction: #function, inFile: #file)
 			result = nil
 		}
 		return result
@@ -101,7 +135,8 @@ public class CNMutableScalarValue: CNMutableValue
 			root.isDirty = true
 			result       = true
 		} else {
-			CNLog(logLevel: .error, message: "Non-empty path for scalar value", atFunction: #function, inFile: #file)
+			let pathdesc = CNValuePath.toExpression(identifier: nil, elements: path)
+			CNLog(logLevel: .error, message: "Non-empty path for scalar value: \(pathdesc)", atFunction: #function, inFile: #file)
 			result = false
 		}
 		return result
@@ -115,6 +150,15 @@ public class CNMutableScalarValue: CNMutableValue
 	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		return false
+	}
+
+	public override func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
+		return nil // not found
+	}
+
+	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+		/* Not mached */
+		return [:]
 	}
 
 	public override func clone() -> CNMutableValue {
@@ -336,6 +380,31 @@ public class CNMutableArrayValue: CNMutableValue
 		return nil
 	}
 
+	public override func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
+		for i in 0..<mArrayValue.count {
+			let elm = mArrayValue[i]
+			if var rpath = elm._search(name: nm, value: val, in: root) {
+				rpath.insert(.index(i), at: 0)
+				return rpath
+			}
+		}
+		return nil
+	}
+
+	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+		var result: Dictionary<String, Array<CNValuePath.Element>> = [:]
+		for i in 0..<mArrayValue.count {
+			var curpath: Array<CNValuePath.Element> = []
+			curpath.append(contentsOf: pth)
+			curpath.append(.index(i))
+			let subres = mArrayValue[i]._makeLabelTable(path: curpath)
+			for (skey, sval) in subres {
+				result[skey] = sval
+			}
+		}
+		return result
+	}
+
 	public override func clone() -> CNMutableValue {
 		let result = CNMutableArrayValue()
 		for elm in mArrayValue {
@@ -555,6 +624,53 @@ public class CNMutableDictionaryValue: CNMutableValue
 		return nil
 	}
 
+	public override func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
+		/* Search itself */
+		if let elm = mDictionaryValue[nm] {
+			if let estr = elm.toValue().toString() {
+				if estr == val {
+					return [.member(nm)]
+				}
+			}
+		}
+		/* Search children */
+		for key in mDictionaryValue.keys {
+			if let elm = mDictionaryValue[key] {
+				if var rpath = elm._search(name: nm, value: val, in: root) {
+					rpath.insert(.member(key), at: 0)
+					return rpath
+				}
+			}
+		}
+		return nil
+	}
+
+	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+		var result: Dictionary<String, Array<CNValuePath.Element>> = [:]
+		/* Update itsel */
+		if let val = mDictionaryValue["id"] {
+			if let obj = val as? CNMutableScalarValue {
+				switch obj.toValue() {
+				case .stringValue(let label):
+					result[label] = pth
+				default:
+					CNLog(logLevel: .error, message: "Invalid value for id", atFunction: #function, inFile: #file)
+				}
+			}
+		}
+		/* make table for children */
+		for (key, val) in mDictionaryValue {
+			var curpath: Array<CNValuePath.Element> = []
+			curpath.append(contentsOf: pth)
+			curpath.append(.member(key))
+			let subres = val._makeLabelTable(path: curpath)
+			for (skey, sval) in subres {
+				result[skey] = sval
+			}
+		}
+		return result
+	}
+
 	public override func clone() -> CNMutableValue {
 		let result = CNMutableDictionaryValue()
 		for (key, elm) in mDictionaryValue {
@@ -655,6 +771,24 @@ public class CNMutableValueSegment: CNMutableValue
 		return result
 	}
 
+	public override func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
+		let result: Array<CNValuePath.Element>?
+		if let dst = load() {
+			result = dst._search(name: nm, value: val, in: root)
+		} else {
+			result = nil
+		}
+		return result
+	}
+
+	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+		if let dst = load() {
+			return dst._makeLabelTable(path: pth)
+		} else {
+			return [:]
+		}
+	}
+
 	public override func clone() -> CNMutableValue {
 		return CNMutableValueSegment(value: mSegmentValue, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 	}
@@ -680,7 +814,7 @@ public class CNMutablePointerValue: CNMutableValue
 
 	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
 		let result: CNMutableValue?
-		if let pvalue = pointedValue(root: root) {
+		if let pvalue = pointedValue(in: root) {
 			result = pvalue._value(forPath: path, in: root)
 		} else {
 			result = nil
@@ -701,7 +835,7 @@ public class CNMutablePointerValue: CNMutableValue
 				result = false
 			}
 		} else {
-			if let pvalue = pointedValue(root: root) {
+			if let pvalue = pointedValue(in: root) {
 				result = pvalue._set(value: val, forPath: path, in: root)
 			} else {
 				result = false
@@ -713,7 +847,7 @@ public class CNMutablePointerValue: CNMutableValue
 	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if path.count > 0 {
-			if let pvalue = pointedValue(root: root) {
+			if let pvalue = pointedValue(in: root) {
 				result = pvalue._append(value: val, forPath: path, in: root)
 			} else {
 				result = false
@@ -728,7 +862,7 @@ public class CNMutablePointerValue: CNMutableValue
 	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
 		let result: Bool
 		if path.count > 0 {
-			if let pvalue = pointedValue(root: root) {
+			if let pvalue = pointedValue(in: root) {
 				result = pvalue._delete(forPath: path, in: root)
 			} else {
 				result = false
@@ -740,13 +874,45 @@ public class CNMutablePointerValue: CNMutableValue
 		return result
 	}
 
-	private func pointedValue(root rtval: CNMutableValue) -> CNMutableValue? {
-		if let val = rtval._value(forPath: mPointerValue.path.elements, in: rtval) {
-			return val
+	public override func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
+		let result: Array<CNValuePath.Element>?
+		if let pvalue = pointedValue(in: root) {
+			result = pvalue._search(name: nm, value: val, in: root)
 		} else {
-			CNLog(logLevel: .error, message: "Pointed value is not found", atFunction: #function, inFile: #file)
-			return nil
+			result = nil
 		}
+		return result
+	}
+
+	private func pointedValue(in root: CNMutableValue) -> CNMutableValue? {
+		let elms: Array<CNValuePath.Element>
+		if let ident = mPointerValue.path.identifier {
+			let table = CNMutableValue.labelTable(in: root)
+			if let top = table[ident] {
+				var fullelms = top
+				fullelms.append(contentsOf: mPointerValue.path.elements)
+				elms = fullelms
+			} else {
+				CNLog(logLevel: .error, message: "Label \(ident) is not found: \(mPointerValue.path.description)", atFunction: #function, inFile: #file)
+				elms = mPointerValue.path.elements
+			}
+		} else {
+			elms = mPointerValue.path.elements
+		}
+
+		let result: CNMutableValue?
+		if let val = root._value(forPath: elms, in: root) {
+			result = val
+		} else {
+			let path = CNValuePath.toExpression(identifier: nil, elements: elms)
+			CNLog(logLevel: .error, message: "Pointed value is not found: \(path)")
+			result = nil
+		}
+		return result
+	}
+
+	public override func _makeLabelTable(path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+		return [:]
 	}
 
 	public override func clone() -> CNMutableValue {
