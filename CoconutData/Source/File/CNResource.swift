@@ -9,7 +9,8 @@ import Foundation
 
 private class CNFileResource
 {
-	public typealias LoaderFunc = (_ url: URL) -> Any?
+	public typealias LoaderFunc 	= (_ url: URL) -> Any?
+	public typealias ResetFunc	= (_ url: URL, _ content: Any?) -> Bool
 
 	private var	mPath:		String
 	private var 	mContent:	Any?
@@ -35,6 +36,11 @@ private class CNFileResource
 		}
 	}
 
+	public func reset(packageDirectory url: URL, reset rst: ResetFunc) -> Bool {
+		let pathurl = url.appendingPathComponent(mPath)
+		return rst(pathurl, mContent)
+	}
+
 	public func store(content cnt: Any) {
 		mContent = cnt
 	}
@@ -47,13 +53,16 @@ private class CNFileResource
 private class CNDirectoryResource
 {
 	public typealias LoaderFunc = CNFileResource.LoaderFunc
+	public typealias ResetFunc  = CNFileResource.ResetFunc
 
 	private var mFileMap:	Dictionary<String, Array<CNFileResource>>	// Identifier, Array of file resource
 	private var mLoader:	LoaderFunc
+	private var mReset:	ResetFunc
 
-	public required init(loader ldr: @escaping LoaderFunc){
+	public required init(loader ldr: @escaping LoaderFunc, reset rst: @escaping ResetFunc){
 		mFileMap	= [:]
 		mLoader		= ldr
+		mReset		= rst
 	}
 
 	public func count(identifier ident: String) -> Int? {
@@ -109,6 +118,15 @@ private class CNDirectoryResource
 		return nil
 	}
 
+	public func reset(packageDirectory url: URL, identifier ident: String, index idx: Int) -> Bool {
+		if let files = mFileMap[ident] {
+			if idx < files.count {
+				return files[idx].reset(packageDirectory: url, reset: mReset)
+			}
+		}
+		return false
+	}
+
 	public func identifiers() -> Array<String> {
 		var result: Array<String> = []
 		for (ident, _) in mFileMap {
@@ -137,7 +155,8 @@ private class CNDirectoryResource
 
 open class CNResource
 {
-	public typealias LoaderFunc = (_ url: URL) -> Any?
+	public typealias LoaderFunc 	= (_ url: URL) -> Any?
+	public typealias ResetFunc	= (_ url: URL, _ content: Any?) -> Bool
 
 	private var mPackageDirectory		: URL
 	private var mDirectoryResources		: Dictionary<String, CNDirectoryResource>	// category, directory-resource
@@ -149,8 +168,8 @@ open class CNResource
 		mDirectoryResources	= [:]
 	}
 
-	public func allocate(category cat: String, loader ldr: @escaping LoaderFunc) {
-		mDirectoryResources[cat] = CNDirectoryResource(loader: ldr)
+	public func allocate(category cat: String, loader ldr: @escaping LoaderFunc, reset rst: @escaping ResetFunc) {
+		mDirectoryResources[cat] = CNDirectoryResource(loader: ldr, reset: rst)
 	}
 
 	public func add(category cat: String, identifier ident: String, path pathstr: String) {
@@ -188,6 +207,14 @@ open class CNResource
 	public func load<T>(category cat: String, identifier ident: String, index idx: Int) -> T? {
 		let result:T? = mDirectoryResources[cat]?.load(packageDirectory: mPackageDirectory, identifier: ident, index: idx)
 		return result
+	}
+
+	public func reset(category cat: String, identifier ident: String, index idx: Int) -> Bool {
+		if let dirres = mDirectoryResources[cat] {
+			return dirres.reset(packageDirectory: mPackageDirectory, identifier: ident, index: idx)
+		} else {
+			return false
+		}
 	}
 
 	public func identifiers(category cat: String) -> Array<String>? {

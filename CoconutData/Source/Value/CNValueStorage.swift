@@ -87,7 +87,7 @@ public class CNValueStorage
 		}
 	}
 
-	public func clearCache() -> Result {
+	public func removeCacheFile() -> Result {
 		switch FileManager.default.removeFile(atURL: self.cacheFile) {
 		case .ok:
 			break // continue processing

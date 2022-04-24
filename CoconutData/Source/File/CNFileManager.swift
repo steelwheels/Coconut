@@ -58,6 +58,18 @@ public extension FileManager
 		return fileExists(atPath: url.path)
 	}
 
+	func isReadableFile(atURL url: URL) -> Bool {
+		return isReadableFile(atPath: url.path)
+	}
+
+	func isWritableFile(atURL url: URL) -> Bool {
+		return isWritableFile(atPath: url.path)
+	}
+
+	func isDeletableFile(atURL url: URL) -> Bool {
+		return isDeletableFile(atPath: url.path)
+	}
+
 	func createFile(atURL url: URL, contents data: Data?, attributes attr: [FileAttributeKey:Any]?) -> Bool {
 		return createFile(atPath: url.absoluteString, contents: data, attributes: attr)
 	}
