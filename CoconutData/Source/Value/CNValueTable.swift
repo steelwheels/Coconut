@@ -9,11 +9,13 @@ import Foundation
 
 public class CNValueTable: CNTable
 {
-	private static let ColumnNamesItem	= "columnNames"
-	private static let RecordsItem		= "records"
+	public static let ColumnNamesItem	= "columnNames"
+	public static let RecordsItem		= "records"
+	public static let IdItem		= "id"
 
 	private var mPath:		CNValuePath
 	private var mValueStorage:	CNValueStorage
+	private var mIdentifier:	String?
 
 	private var mColumnNamesCacheId:	Int
 	private var mColumnNamesCache:  	Array<String>?
@@ -23,6 +25,7 @@ public class CNValueTable: CNTable
 	public init(path pth: CNValuePath, valueStorage storage: CNValueStorage) {
 		mPath			= pth
 		mValueStorage		= storage
+		mIdentifier		= ""
 		mColumnNamesCacheId	= 0
 		mColumnNamesCache	= nil
 		mRecordValuesCacheId	= 0
@@ -33,6 +36,10 @@ public class CNValueTable: CNTable
 			let msg = "No root object on storage: path=\(pth.description), storage=\(mValueStorage.description)"
 			CNLog(logLevel: .error, message: msg, atFunction: #function, inFile: #file)
 		}
+
+		/* Get/set identifier */
+		mIdentifier = idValue()
+
 		/* Allocate cache */
 		mColumnNamesCacheId  = addColumnNameCache()
 		mRecordValuesCacheId = addRecordValueCache()
@@ -50,6 +57,10 @@ public class CNValueTable: CNTable
 	public func addRecordValueCache() -> Int {
 		return mValueStorage.cache.add(accessor: recordPath())
 	}
+
+	public var identifier: String? { get {
+		return mIdentifier
+	}}
 
 	public var cache: CNTableCache { get {
 		return mValueStorage.cache
@@ -112,6 +123,25 @@ public class CNValueTable: CNTable
 		}
 	}
 
+	public func pointer(value val: CNValue, forField field: String) -> CNPointerValue? {
+		guard let ident = mIdentifier else {
+			CNLog(logLevel: .error, message: "The property \(CNValueTable.IdItem) is required to make value path", atFunction: #function, inFile: #file)
+			return nil
+		}
+		let recs = search(value: val, forField: field)
+		guard recs.count > 0 else {
+			let valtxt = val.toText().toStrings().joined(separator: "\n")
+			CNLog(logLevel: .error, message: "No matched record for \(field):\(valtxt)", atFunction: #function, inFile: #file)
+			return nil
+		}
+		let elements: Array<CNValuePath.Element> = [
+			.member(CNValueTable.RecordsItem),
+			.keyAndValue(field, val)
+		]
+		let path = CNValuePath(identifier: ident, elements: elements)
+		return CNPointerValue(path: path)
+	}
+
 	public func search(value val: CNValue, forField field: String) -> Array<CNRecord> {
 		let dicts = self.recordValues()
 		var result: Array<CNRecord> = []
@@ -141,6 +171,17 @@ public class CNValueTable: CNTable
 		}
 		if !mValueStorage.append(value: .dictionaryValue(contents), forPath: recordPath()) {
 			CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
+		}
+	}
+
+	public func append(pointer ptr: CNPointerValue) {
+		guard let ident = mIdentifier else {
+			CNLog(logLevel: .error, message: "The property \(CNValueTable.IdItem) is required to append pointer value", atFunction: #function, inFile: #file)
+			return
+		}
+		let elms: Array<CNValuePath.Element> = [.member(CNValueTable.RecordsItem)]
+		if !mValueStorage.append(value: .pointerValue(ptr), forPath: CNValuePath(identifier: ident, elements: elms)) {
+			CNLog(logLevel: .error, message: "Failed to append pointer", atFunction: #function, inFile: #file)
 		}
 	}
 
@@ -190,11 +231,25 @@ public class CNValueTable: CNTable
 	}
 
 	private func recordPath() -> CNValuePath {
-		return CNValuePath(identifier: nil,path: mPath, subPath: [.member(CNValueTable.RecordsItem)])
+		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.RecordsItem)])
+	}
+
+	private func idPath() -> CNValuePath {
+		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.IdItem)])
 	}
 
 	private func recordFieldPath(index idx: Int, field fld: String) -> CNValuePath {
 		return CNValuePath(identifier: nil,path: mPath, subPath: [.member(CNValueTable.RecordsItem), .index(idx), .member(fld)])
+	}
+
+	private func idValue() -> String? {
+		let path = idPath()
+		if let val = mValueStorage.value(forPath: path) {
+			if let str = val.toString() {
+				return str
+			}
+		}
+		return nil
 	}
 
 	private func recordValues() -> Array<Dictionary<String, CNValue>> {

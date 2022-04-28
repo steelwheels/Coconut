@@ -25,14 +25,18 @@ public protocol CNTable
 	func addRecordValueCache() -> Int
 	var cache: CNTableCache { get }
 
+	var identifier: String? { get }
 	var recordCount: Int { get }
 
 	var allFieldNames:    Array<String> { get }
 	func fieldName(at index: Int) -> String?
 
 	func record(at row: Int) -> CNRecord?
+	func pointer(value val: CNValue, forField field: String) -> CNPointerValue?
+
 	func search(value val: CNValue, forField field: String) -> Array<CNRecord>
 	func append(record rcd: CNRecord)
+	func append(pointer ptr: CNPointerValue)
 	func remove(at row: Int) -> Bool
 	func save() -> Bool
 

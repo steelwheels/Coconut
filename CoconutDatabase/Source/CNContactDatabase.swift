@@ -51,6 +51,10 @@ public class CNContactDatabase: CNTable
 		return mCache.add()
 	}
 
+	public var identifier: String? { get {
+		return nil
+	}}
+
 	public var cache: CNTableCache { get {
 		return mCache
 	}}
@@ -75,6 +79,11 @@ public class CNContactDatabase: CNTable
 		}
 	}
 
+	public func pointer(value val: CNValue, forField field: String) -> CNPointerValue? {
+		CNLog(logLevel: .error, message: "Not supported yet", atFunction: #function, inFile: #file)
+		return nil
+	}
+	
 	public func search(value srcval: CNValue, forField field: String) -> Array<CNRecord> {
 		var result: Array<CNRecord> = []
 		let recnum = mRecords.count
@@ -95,6 +104,10 @@ public class CNContactDatabase: CNTable
 	public func append(record rcd: CNRecord) {
 		mRecords.append(rcd)
 		mCache.setDirty()
+	}
+
+	public func append(pointer ptr: CNPointerValue) {
+		CNLog(logLevel: .error, message: "Not supported yet", atFunction: #function, inFile: #file)
 	}
 
 	public func remove(at row: Int) -> Bool {

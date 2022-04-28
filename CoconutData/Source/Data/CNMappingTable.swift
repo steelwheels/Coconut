@@ -41,6 +41,10 @@ public class CNMappingTable: CNTable
 		return mSourceTable.addRecordValueCache()
 	}
 
+	public var identifier: String? { get {
+		return mSourceTable.identifier
+	}}
+
 	public var cache: CNTableCache { get {
 		return mSourceTable.cache
 	}}
@@ -67,16 +71,32 @@ public class CNMappingTable: CNTable
 		}
 	}
 
+	public func pointer(value val: CNValue, forField field: String) -> CNPointerValue? {
+		guard let ident = mSourceTable.identifier else {
+			CNLog(logLevel: .error, message: "The property \"\(CNValueTable.IdItem)\" is required to make value path", atFunction: #function, inFile: #file)
+			return nil
+		}
+		let recs = search(value: val, forField: field)
+		guard recs.count > 0 else {
+			let valtxt = val.toText().toStrings().joined(separator: "\n")
+			CNLog(logLevel: .error, message: "No matched record for \(field):\(valtxt)", atFunction: #function, inFile: #file)
+			return nil
+		}
+		let elements: Array<CNValuePath.Element> = [
+			.member(CNValueTable.RecordsItem),
+			.keyAndValue(field, val)
+		]
+		let path = CNValuePath(identifier: ident, elements: elements)
+		return CNPointerValue(path: path)
+	}
+
 	public func search(value val: CNValue, forField field: String) -> Array<CNRecord> {
 		var result: Array<CNRecord> = []
 		let recs = getRecords()
 		for rec in recs {
 			if let rval = rec.value(ofField: field) {
-				switch CNCompareValue(nativeValue0: rval, nativeValue1: val) {
-				case .orderedSame:
+				if CNIsSameValue(nativeValue0: rval, nativeValue1: val) {
 					result.append(rec)
-				case .orderedAscending, .orderedDescending:
-					break
 				}
 			}
 		}
@@ -85,6 +105,10 @@ public class CNMappingTable: CNTable
 
 	public func append(record rcd: CNRecord) {
 		mSourceTable.append(record: rcd)
+	}
+
+	public func append(pointer ptr: CNPointerValue) {
+		mSourceTable.append(pointer: ptr)
 	}
 
 	public func remove(at row: Int) -> Bool {
