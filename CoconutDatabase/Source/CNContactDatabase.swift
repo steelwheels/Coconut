@@ -200,7 +200,7 @@ public class CNContactDatabase: CNTable
 	}
 
 	public static func makeRecord(from contact: CNContact) -> CNRecord {
-		let record = CNRecord()
+		let record = CNValueRecord()
 		let num    = CNContactField.numberOfFields
 		for i in 0..<num {
 			if let field = CNContactField(rawValue: i), let name = CNContactField.fieldName(at: i) {

@@ -154,7 +154,7 @@ private func accessTest() -> Bool
 }
 
 private func setValue(destination dst: CNMutableValue, source src: CNMutableValue, forPath path: CNValuePath) -> Bool {
-	if dst.set(value: src, forPath: path) {
+	if dst.set(value: src, forPath: path.elements) {
 		if let _ = getValue(path: path, in: dst) {
 			return true
 		} else {
@@ -168,7 +168,7 @@ private func setValue(destination dst: CNMutableValue, source src: CNMutableValu
 }
 
 private func getValue(path pth: CNValuePath, in owner: CNMutableValue) -> CNMutableValue? {
-	if let val = owner.value(forPath: pth) {
+	if let val = owner.value(forPath: pth.elements) {
 		dumpValue(value: val.toValue())
 		return val
 	} else {
@@ -178,7 +178,7 @@ private func getValue(path pth: CNValuePath, in owner: CNMutableValue) -> CNMuta
 }
 
 private func deleteValue(destination dst: CNMutableValue, forPath path: CNValuePath) -> Bool {
-	if dst.delete(forPath: path) {
+	if dst.delete(forPath: path.elements) {
 		dumpValue(value: dst.toValue())
 		return true
 	} else {

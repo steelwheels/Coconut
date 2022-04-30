@@ -201,31 +201,44 @@ public extension FileManager
 	}
 
 	func copyFile(sourceFile srcurl: URL, destinationFile dsturl: URL, doReplace dorep: Bool) -> Bool {
-		let fmanager = FileManager.default
-
-		guard fmanager.fileExists(atURL: srcurl) else {
+		guard self.fileExists(atURL: srcurl) else {
 			CNLog(logLevel: .error, message: "Source file \(srcurl.path) is NOT exist", atFunction: #function, inFile: #file)
 			return false
 		}
+		var result = true
 		do {
-			if dorep && fmanager.fileExists(atURL: dsturl) {
-				/* Remove destination */
-				try fmanager.removeItem(at: dsturl)
-			}
+			/* Make directory */
+			let dstdir: URL
 			if dsturl.isFileURL {
-				let dstdir = dsturl.deletingLastPathComponent()
-				if !self.fileExists(atPath: dstdir.path) {
-					CNLog(logLevel: .debug, message: "Create Directory: \(dstdir.path)", atFunction: #function, inFile: #file)
-					try fmanager.createDirectory(at: dstdir, withIntermediateDirectories: false, attributes: nil)
+				dstdir = dsturl.deletingLastPathComponent()
+			} else {
+				dstdir = dsturl
+			}
+			if !self.fileExists(atPath: dstdir.path) {
+				CNLog(logLevel: .detail, message: "Create Directory: \(dstdir.path)", atFunction: #function, inFile: #file)
+				try self.createDirectory(at: dstdir, withIntermediateDirectories: true, attributes: nil)
+			}
+			if dorep {
+				/* Remove current file */
+				if self.fileExists(atURL: dsturl){
+					try self.removeItem(at: dsturl)
+				}
+				/* Copy the file */
+				try self.copyItem(at: srcurl, to: dsturl)
+			} else {
+				if self.fileExists(atURL: dsturl){
+					/* Skip to copy */
+				} else {
+					/* Copy the file */
+					try self.copyItem(at: srcurl, to: dsturl)
 				}
 			}
-			try fmanager.copyItem(at: srcurl, to: dsturl)
 		} catch {
 			let err = error as NSError
 			CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
-			return false
+			result = false
 		}
-		return true
+		return result
 	}
 	
 	var usersHomeDirectory: URL {

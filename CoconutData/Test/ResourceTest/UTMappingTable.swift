@@ -38,17 +38,17 @@ private func allocateTable() -> CNValueTable? {
 	let srcdir   = srcfile.deletingLastPathComponent()
 	let cachedir = cachefile.deletingLastPathComponent()
 	let storage  = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
-	switch storage.clearCache() {
-	case .ok(_):
+	//switch storage.removeCacheFile() {
+	//case .ok(_):
 		let table = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
 		NSLog("record count: \(table.recordCount)")
 		NSLog("field name:   \(table.allFieldNames)")
 
 		return table
-	case .error(let err):
-		NSLog("Failed to load storage: \(err.toString())")
-		return nil
-	}
+	//case .error(let err):
+	//	NSLog("Failed to load storage: \(err.toString())")
+	//	return nil
+	//}
 }
 
 private func updateTable(table tbl: CNValueTable)
@@ -56,12 +56,12 @@ private func updateTable(table tbl: CNValueTable)
 	NSLog("* Add record to table")
 	var result = true
 
-	let rec0   = CNRecord()
+	let rec0   = CNValueRecord()
 	result = rec0.setValue(value: .stringValue("Shizuka"), forField: "name") && result
 	result = rec0.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	tbl.append(record: rec0)
 
-	let rec1   = CNRecord()
+	let rec1   = CNValueRecord()
 	result = rec1.setValue(value: .stringValue("Suneo"), forField: "name") && result
 	result = rec1.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	tbl.append(record: rec1)

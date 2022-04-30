@@ -9,20 +9,24 @@ import Foundation
 
 public class CNMappingTable: CNTable
 {
+	public typealias VirtualFieldCallback = (String, Int) -> CNValue	// (field-name, row-index) -> Value
+
 	public typealias FilterFunction = (_ rec: CNRecord) -> Bool
 
-	private var mSourceTable:	CNTable
-	private var mCacheId:		Int
-	private var mRecords:		Array<CNRecord>
-	private var mRecordIndexes:	Array<Int>
-	private var mFilterFunc:	FilterFunction?
+	private var mSourceTable:		CNTable
+	private var mCacheId:			Int
+	private var mRecords:			Array<CNRecord>
+	private var mRecordIndexes:		Array<Int>
+	private var mFilterFunc:		FilterFunction?
+	private var mVirtualFieldCallbacks:	Dictionary<String, VirtualFieldCallback>
 
 	public init(sourceTable table: CNTable){
-		mSourceTable 	= table
-		mCacheId     	= table.addRecordValueCache()
-		mRecords	= []
-		mRecordIndexes	= []
-		mFilterFunc	= nil
+		mSourceTable 		= table
+		mCacheId     		= table.addRecordValueCache()
+		mRecords		= []
+		mRecordIndexes		= []
+		mFilterFunc		= nil
+		mVirtualFieldCallbacks	= [:]
 	}
 
 	deinit {
@@ -55,11 +59,23 @@ public class CNMappingTable: CNTable
 	}}
 
 	public var allFieldNames: Array<String> { get {
-		return mSourceTable.allFieldNames
+		var names = mSourceTable.allFieldNames
+		names.append(contentsOf: mVirtualFieldCallbacks.keys)
+		return names
 	}}
 
 	public func fieldName(at index: Int) -> String? {
 		return mSourceTable.fieldName(at: index)
+	}
+
+	public func addVirtualField(name field: String, callbackFunction cbfunc: @escaping VirtualFieldCallback) {
+		mVirtualFieldCallbacks[field] = cbfunc
+	}
+
+	public func mergeVirtualFields(callbacks cbfuncs: Dictionary<String, VirtualFieldCallback>) {
+		for (key, val) in cbfuncs {
+			mVirtualFieldCallbacks[key] = val
+		}
 	}
 
 	public func record(at row: Int) -> CNRecord? {
@@ -147,8 +163,9 @@ public class CNMappingTable: CNTable
 			mRecordIndexes = []
 			for i in 0..<mSourceTable.recordCount {
 				if let rec = mSourceTable.record(at: i) {
-					if filterfunc(rec){
-						mRecords.append(rec)
+					let newrec = CNMappingRecord(sourceRecord: rec)
+					if filterfunc(newrec){
+						mRecords.append(newrec)
 						mRecordIndexes.append(i)
 					}
 				}

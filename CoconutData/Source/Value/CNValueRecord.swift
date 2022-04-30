@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class CNRecord
+public class CNValueRecord: CNRecord
 {
 	static let ClassName = "record"
 
@@ -15,7 +15,7 @@ public class CNRecord
 	private var mIndex:	Int
 	private var mCache:	Dictionary<String, CNValue>
 
-	public var index: Int? { get { return mIndex} }
+	public var index: Int { get { return mIndex} }
 
 	public init(table tbl: CNValueTable, index idx: Int){
 		mTable		= tbl
@@ -69,14 +69,14 @@ public class CNRecord
 				result[field] = val
 			}
 		}
-		CNValue.setClassName(toValue: &result, className: CNRecord.ClassName)
+		CNValue.setClassName(toValue: &result, className: CNValueRecord.ClassName)
 		return result
 	}
 
-	static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
-		if CNValue.hasClassName(inValue: val, className: CNRecord.ClassName) {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
+		if CNValue.hasClassName(inValue: val, className: CNValueRecord.ClassName) {
 			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)
-			let newrec = CNRecord()
+			let newrec = CNValueRecord()
 			newrec.mCache = dupval
 			return newrec
 		} else {

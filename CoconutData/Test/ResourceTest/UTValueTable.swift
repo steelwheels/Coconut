@@ -35,7 +35,7 @@ public func UTValueTable() -> Bool
 
 	/* add record */
 	NSLog("**** Add record to table")
-	let rec0_1 = CNRecord()
+	let rec0_1 = CNValueRecord()
 	result = rec0_1.setValue(value: .stringValue("Shizuka"), forField: "name") && result
 	result = rec0_1.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	table0.append(record: rec0_1)

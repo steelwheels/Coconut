@@ -98,7 +98,7 @@ public class CNValueParser
 				}
 				return .dictionaryValue(result)
 			default:
-				break
+				throw NSError.parseError(message: "Unexpected symbol \(c)", location: #function)
 			}
 		}
 		if let token = stream.get() {

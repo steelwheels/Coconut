@@ -117,7 +117,7 @@ public class CNValueTable: CNTable
 		let recvals = self.recordValues()
 		let cnt = recvals.count
 		if 0<=row && row<cnt {
-			return CNRecord(table: self, index: row)
+			return CNValueRecord(table: self, index: row)
 		} else {
 			return nil
 		}
@@ -150,7 +150,7 @@ public class CNValueTable: CNTable
 			if let dval = dicts[i][field] {
 				switch CNCompareValue(nativeValue0: dval, nativeValue1: val) {
 				case .orderedSame:
-					let newrec = CNRecord(table: self, index: i)
+					let newrec = CNValueRecord(table: self, index: i)
 					result.append(newrec)
 				case .orderedAscending, .orderedDescending:
 					break
@@ -199,7 +199,7 @@ public class CNValueTable: CNTable
 	public func forEach(callback cbfunc: (CNRecord) -> Void) {
 		let dicts = self.recordValues()
 		for i in 0..<dicts.count {
-			let newrec = CNRecord(table: self, index: i)
+			let newrec = CNValueRecord(table: self, index: i)
 			cbfunc(newrec)
 		}
 	}
