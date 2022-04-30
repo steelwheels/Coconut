@@ -240,7 +240,7 @@ public extension FileManager
 		}
 		return result
 	}
-	
+
 	var usersHomeDirectory: URL {
 		get {
 			#if os(OSX)

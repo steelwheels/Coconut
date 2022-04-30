@@ -25,7 +25,7 @@ public func main() {
 
 	console.print(string: "** unixCommands\n")
 	let res2 = testUnixCommand(console: console)
-	
+
 	console.print(string: "** testShell\n")
 	let res3 = testShell(console: console)
 

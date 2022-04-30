@@ -83,7 +83,7 @@ public class CNContactDatabase: CNTable
 		CNLog(logLevel: .error, message: "Not supported yet", atFunction: #function, inFile: #file)
 		return nil
 	}
-	
+
 	public func search(value srcval: CNValue, forField field: String) -> Array<CNRecord> {
 		var result: Array<CNRecord> = []
 		let recnum = mRecords.count

@@ -44,7 +44,7 @@ public class CNValueRecord: CNRecord
 			return Array(mCache.keys)
 		}
 	}}
-	
+
 	public func value(ofField name: String) -> CNValue? {
 		if let tbl = mTable {
 			return tbl.getRecordValue(index: mIndex, field: name)

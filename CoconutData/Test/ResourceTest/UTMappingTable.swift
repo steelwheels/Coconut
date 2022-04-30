@@ -21,7 +21,7 @@ public func UTMappingTable() -> Bool
 	maptable.setFilter(filterFunction: {
 		(_ rec: CNRecord) -> Bool in return mapRecord(record: rec)
 	})
-	
+
 	updateTable(table: table)
 	NSLog("1) record count: \(maptable.recordCount)")
 
