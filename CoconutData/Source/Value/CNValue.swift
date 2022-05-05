@@ -61,6 +61,37 @@ public enum CNValueType: Int
 		return result
 	}}
 
+	public static func decode(string str: String) -> CNValueType? {
+		let result: CNValueType?
+		switch str {
+		case "Null":		result = .nullType
+		case "Bool":		result = .boolType
+		case "Number":		result = .numberType
+		case "Int":		result = .numberType
+		case "UInt":		result = .numberType
+		case "Float":		result = .numberType
+		case "String":		result = .stringType
+		case "Date":		result = .dateType
+		case "Range":		result = .rangeType
+		case "Point":		result = .pointType
+		case "Size":		result = .sizeType
+		case "Rect":		result = .rectType
+		case "Enum":		result = .enumType
+		case "Dictionary":	result = .dictionaryType
+		case "Array":		result = .arrayType
+		case "URL":		result = .URLType
+		case "Color":		result = .colorType
+		case "Image":		result = .imageType
+		case "Record":		result = .recordType
+		case "Object":		result = .objectType
+		case "Segment":		result = .segmentType
+		case "Pointer":		result = .pointType
+		default:		result = nil
+		}
+		return result
+	}
+
+
 	public func compare(_ dst: CNValueType) -> ComparisonResult {
 		let srcv = self.rawValue
 		let dstv = dst.rawValue
