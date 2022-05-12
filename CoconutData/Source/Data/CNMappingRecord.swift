@@ -14,9 +14,9 @@ public class CNMappingRecord: CNRecord
 	private var mSourceRecord:		CNRecord
 	private var mVirtualFieldCallbacks:	Dictionary<String, VirtualFieldCallback>
 
-	public init(sourceRecord rec: CNRecord){
+	public init(sourceRecord rec: CNRecord, virtualFields fields: Dictionary<String, VirtualFieldCallback>){
 		mSourceRecord		= rec
-		mVirtualFieldCallbacks	= [:]
+		mVirtualFieldCallbacks	= fields
 	}
 
 	public var index: Int { get {
@@ -35,7 +35,7 @@ public class CNMappingRecord: CNRecord
 
 	public func value(ofField name: String) -> CNValue? {
 		if let cbfunc = mVirtualFieldCallbacks[name] {
-			return cbfunc(name, mSourceRecord.index)
+			return cbfunc(self)
 		} else {
 			return mSourceRecord.value(ofField: name)
 		}

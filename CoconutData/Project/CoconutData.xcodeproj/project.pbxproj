@@ -856,14 +856,14 @@
 				05B32CA72515025E000D1411 /* CNStruct.swift */,
 				05B32CA32515025E000D1411 /* CNValue.swift */,
 				052E8F8B27F5E3E500EDEC17 /* CNValueCache.swift */,
-				05A1AFB8277689F90091D527 /* CNValueStorage.swift */,
 				05A501B426A4203E00A992F9 /* CNValueComparator.swift */,
 				050E87172813D09000E84644 /* CNValueLabels.swift */,
 				05B32CA02515025E000D1411 /* CNValueParser.swift */,
 				05484963278A6D1800642FAC /* CNValuePath.swift */,
 				05A506B028016FA100F5B53A /* CNValuePointer.swift */,
-				05B7B1AE277606810077DEDC /* CNValueSegment.swift */,
 				0550399F277D7DC0007FA515 /* CNValueRecord.swift */,
+				05B7B1AE277606810077DEDC /* CNValueSegment.swift */,
+				05A1AFB8277689F90091D527 /* CNValueStorage.swift */,
 				05F969AF26467E7E00E676C5 /* CNValueTable.swift */,
 			);
 			path = Value;

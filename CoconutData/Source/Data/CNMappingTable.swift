@@ -9,7 +9,7 @@ import Foundation
 
 public class CNMappingTable: CNTable
 {
-	public typealias VirtualFieldCallback = (String, Int) -> CNValue	// (field-name, row-index) -> Value
+	public typealias VirtualFieldCallback = (_ rec: CNRecord) -> CNValue	// (field-name, row-index) -> Value
 
 	public typealias FilterFunction = (_ rec: CNRecord) -> Bool
 
@@ -163,7 +163,7 @@ public class CNMappingTable: CNTable
 			mRecordIndexes = []
 			for i in 0..<mSourceTable.recordCount {
 				if let rec = mSourceTable.record(at: i) {
-					let newrec = CNMappingRecord(sourceRecord: rec)
+					let newrec = CNMappingRecord(sourceRecord: rec, virtualFields: mVirtualFieldCallbacks)
 					if filterfunc(newrec){
 						mRecords.append(newrec)
 						mRecordIndexes.append(i)
