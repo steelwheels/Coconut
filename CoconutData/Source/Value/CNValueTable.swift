@@ -2,14 +2,14 @@
  * @file	CNValueTable.swift
  * @brief	Define CNValueTable class
  * @par Copyright
- *   Copyright (C) 2021 Steel Wheels Project
+ *   Copyright (C) 2021-2022 Steel Wheels Project
  */
 
 import Foundation
 
 public class CNValueTable: CNTable
 {
-	public static let ColumnNamesItem	= "columnNames"
+	public static let DefaultFieldsItem	= "defaultFields"
 	public static let RecordsItem		= "records"
 	public static let IdItem		= "id"
 
@@ -17,8 +17,8 @@ public class CNValueTable: CNTable
 	private var mValueStorage:	CNValueStorage
 	private var mIdentifier:	String?
 
-	private var mColumnNamesCacheId:	Int
-	private var mColumnNamesCache:  	Array<String>?
+	private var mDefaultFieldsCacheId:	Int
+	private var mDefaultFieldsCache:  	Dictionary<String, CNValue>?
 	private var mRecordValuesCacheId:	Int
 	private var mRecordValuesCache:		Array<Dictionary<String, CNValue>>?
 
@@ -26,8 +26,8 @@ public class CNValueTable: CNTable
 		mPath			= pth
 		mValueStorage		= storage
 		mIdentifier		= ""
-		mColumnNamesCacheId	= 0
-		mColumnNamesCache	= nil
+		mDefaultFieldsCacheId	= 0
+		mDefaultFieldsCache	= nil
 		mRecordValuesCacheId	= 0
 		mRecordValuesCache	= nil
 
@@ -41,17 +41,17 @@ public class CNValueTable: CNTable
 		mIdentifier = idValue()
 
 		/* Allocate cache */
-		mColumnNamesCacheId  = addColumnNameCache()
-		mRecordValuesCacheId = addRecordValueCache()
+		mDefaultFieldsCacheId = addDefaultFieldsCache()
+		mRecordValuesCacheId  = addRecordValueCache()
 	}
 
 	deinit {
-		mValueStorage.cache.remove(cacheId: mColumnNamesCacheId )
+		mValueStorage.cache.remove(cacheId: mDefaultFieldsCacheId)
 		mValueStorage.cache.remove(cacheId: mRecordValuesCacheId)
 	}
 
-	public func addColumnNameCache() -> Int {
-		return mValueStorage.cache.add(accessor: columnNamesPath())
+	public func addDefaultFieldsCache() -> Int {
+		return mValueStorage.cache.add(accessor: defaultFieldsPath())
 	}
 
 	public func addRecordValueCache() -> Int {
@@ -70,42 +70,34 @@ public class CNValueTable: CNTable
 		return recordValues().count
 	}}
 
-	public var allFieldNames: Array<String> { get {
-		if mValueStorage.cache.isDirty(cacheId: mColumnNamesCacheId) {
-			let cache = allocateAllFieldNames()
-			mColumnNamesCache = cache
-			mValueStorage.cache.setClean(cacheId: mColumnNamesCacheId)
+	public var defaultFields: Dictionary<String, CNValue> { get {
+		if mValueStorage.cache.isDirty(cacheId: mDefaultFieldsCacheId) {
+			let cache = allocateDefaultFields()
+			mDefaultFieldsCache = cache
+			mValueStorage.cache.setClean(cacheId: mDefaultFieldsCacheId)
 			return cache
 		} else {
-			if let cache = mColumnNamesCache {
+			if let cache = mDefaultFieldsCache {
 				return cache
 			} else {
 				CNLog(logLevel: .error, message: "No cache", atFunction: #function, inFile: #file)
-				return []
+				return [:]
 			}
 		}
 	}}
 
-	private func allocateAllFieldNames() -> Array<String> {
-		if let val = mValueStorage.value(forPath: columnNamesPath()) {
-			if let arr = val.toArray() {
-				var result: Array<String> = []
-				for elm in arr {
-					if let str = elm.toString() {
-						result.append(str)
-					} else {
-						CNLog(logLevel: .error, message: "Column name must be string", atFunction: #function, inFile: #file)
-					}
-				}
-				return result
+	private func allocateDefaultFields() -> Dictionary<String, CNValue> {
+		if let val = mValueStorage.value(forPath: defaultFieldsPath()) {
+			if let dict = val.toDictionary() {
+				return dict
 			}
 		}
-		CNLog(logLevel: .error, message: "No \"\(CNValueTable.ColumnNamesItem)\" property", atFunction: #function, inFile: #file)
-		return []
+		CNLog(logLevel: .error, message: "No \"\(CNValueTable.DefaultFieldsItem)\" property", atFunction: #function, inFile: #file)
+		return [:]
 	}
 
 	public func fieldName(at index: Int) -> String? {
-		let names = self.allFieldNames
+		let names = defaultFields.keys.sorted()
 		if 0<=index && index<names.count {
 			return names[index]
 		} else {
@@ -226,8 +218,8 @@ public class CNValueTable: CNTable
 		}
 	}
 
-	private func columnNamesPath() -> CNValuePath {
-		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.ColumnNamesItem)])
+	private func defaultFieldsPath() -> CNValuePath {
+		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.DefaultFieldsItem)])
 	}
 
 	private func recordPath() -> CNValuePath {

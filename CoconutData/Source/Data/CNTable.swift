@@ -21,14 +21,14 @@ public protocol CNTableCache
 
 public protocol CNTable
 {
-	func addColumnNameCache() -> Int
+	func addDefaultFieldsCache() -> Int
 	func addRecordValueCache() -> Int
 	var cache: CNTableCache { get }
 
 	var identifier: String? { get }
 	var recordCount: Int { get }
 
-	var allFieldNames:    Array<String> { get }
+	var defaultFields:    Dictionary<String, CNValue> { get }
 	func fieldName(at index: Int) -> String?
 
 	func record(at row: Int) -> CNRecord?

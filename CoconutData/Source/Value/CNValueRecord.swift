@@ -31,7 +31,7 @@ public class CNValueRecord: CNRecord
 
 	public var fieldCount: Int		{ get {
 		if let tbl = mTable {
-			return tbl.allFieldNames.count
+			return tbl.defaultFields.count
 		} else {
 			return mCache.keys.count
 		}
@@ -39,7 +39,7 @@ public class CNValueRecord: CNRecord
 
 	public var fieldNames: Array<String>	{ get {
 		if let tbl = mTable {
-			return tbl.allFieldNames
+			return Array(tbl.defaultFields.keys)
 		} else {
 			return Array(mCache.keys)
 		}

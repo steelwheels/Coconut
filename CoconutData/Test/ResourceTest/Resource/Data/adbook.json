@@ -1,7 +1,10 @@
 {
 	persons: {
 		class:		"Table",
-		columnNames:	["name", "age"],
+		defaultFields: {
+			name:		"",
+			age:		0
+		},
 		records: [
 			{
 				name: "Nobita",

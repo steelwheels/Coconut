@@ -43,7 +43,7 @@ public class CNContactDatabase: CNTable
 		mCache		= CNContactCache()
 	}
 
-	public func addColumnNameCache() -> Int {
+	public func addDefaultFieldsCache() -> Int {
 		return mCache.add()
 	}
 
@@ -63,8 +63,12 @@ public class CNContactDatabase: CNTable
 		return mRecords.count
 	}}
 
-	public var allFieldNames: Array<String> { get {
-		return CNContactField.allFieldNames
+	public var defaultFields: Dictionary<String, CNValue> { get {
+		var result: Dictionary<String, CNValue> = [:]
+		for name in CNContactField.allFieldNames {
+			result[name] = .stringValue("")
+		}
+		return result
 	}}
 
 	public func fieldName(at index: Int) -> String? {

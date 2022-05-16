@@ -37,8 +37,8 @@ public class CNMappingTable: CNTable
 		mFilterFunc = mfunc
 	}
 
-	public func addColumnNameCache() -> Int {
-		return mSourceTable.addColumnNameCache()
+	public func addDefaultFieldsCache() -> Int {
+		return mSourceTable.addDefaultFieldsCache()
 	}
 
 	public func addRecordValueCache() -> Int {
@@ -58,10 +58,12 @@ public class CNMappingTable: CNTable
 		return recs.count
 	}}
 
-	public var allFieldNames: Array<String> { get {
-		var names = mSourceTable.allFieldNames
-		names.append(contentsOf: mVirtualFieldCallbacks.keys)
-		return names
+	public var defaultFields: Dictionary<String, CNValue> { get {
+		var fields = mSourceTable.defaultFields
+		for vkey in mVirtualFieldCallbacks {
+			fields[vkey.key] = .nullValue
+		}
+		return fields
 	}}
 
 	public func fieldName(at index: Int) -> String? {
