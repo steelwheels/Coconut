@@ -153,16 +153,10 @@ public class CNValueTable: CNTable
 	}
 
 	public func append(record rcd: CNRecord) {
-		/* Append the contents of record */
-		var contents : Dictionary<String, CNValue> = [:]
-		let fields = rcd.fieldNames
-		for field in fields {
-			if let val = rcd.value(ofField: field) {
-				contents[field] = val
+		if let cached = rcd.cachedValues() {
+			if !mValueStorage.append(value: .dictionaryValue(cached), forPath: recordPath()) {
+				CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
 			}
-		}
-		if !mValueStorage.append(value: .dictionaryValue(contents), forPath: recordPath()) {
-			CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
 		}
 	}
 

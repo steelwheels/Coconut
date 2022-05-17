@@ -50,6 +50,10 @@ public class CNMappingRecord: CNRecord
 		}
 	}
 
+	public func cachedValues() -> Dictionary<String, CNValue>? {
+		return mSourceRecord.cachedValues()
+	}
+
 	public func toValue() -> Dictionary<String, CNValue> {
 		return mSourceRecord.toValue()
 	}

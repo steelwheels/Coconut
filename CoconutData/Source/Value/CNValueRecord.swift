@@ -47,7 +47,11 @@ public class CNValueRecord: CNRecord
 
 	public func value(ofField name: String) -> CNValue? {
 		if let tbl = mTable {
-			return tbl.getRecordValue(index: mIndex, field: name)
+			if let val = tbl.getRecordValue(index: mIndex, field: name) {
+				return val
+			} else {
+				return tbl.defaultFields[name]
+			}
 		} else {
 			return mCache[name]
 		}
@@ -55,10 +59,23 @@ public class CNValueRecord: CNRecord
 
 	public func setValue(value val: CNValue, forField name: String) -> Bool {
 		if let tbl = mTable {
+			if let curval = tbl.getRecordValue(index: mIndex, field: name) {
+				if CNIsSameValue(nativeValue0: curval, nativeValue1: val) {
+					return true // already set
+				}
+			}
 			return tbl.setRecordValue(val, index: mIndex, field: name)
 		} else {
 			mCache[name] = val
 			return true
+		}
+	}
+
+	public func cachedValues() -> Dictionary<String, CNValue>? {
+		if let _ = mTable {
+			return [:]	// No cached values
+		} else {
+			return mCache
 		}
 	}
 
