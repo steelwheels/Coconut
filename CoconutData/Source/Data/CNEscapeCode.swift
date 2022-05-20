@@ -354,20 +354,19 @@ public enum CNEscapeCode
 
 	public static func decode(string src: String) -> DecodeResult {
 		do {
-			let result = try decodeString(string: src)
+			let strm   = CNStringStream(string: src)
+			let result = try decodeString(stream: strm)
 			return .ok(result)
 		} catch {
 			return .error(error as NSError)
 		}
 	}
 
-	private static func decodeString(string src: String) throws -> Array<CNEscapeCode> {
+	private static func decodeString(stream strm: CNStringStream) throws -> Array<CNEscapeCode> {
 		var result: Array<CNEscapeCode> = []
-		var idx    = src.startIndex
-		let end    = src.endIndex
 		var substr = ""
-		while  idx < end {
-			let (c0, idx0) = try nextChar(string: src, index: idx)
+		while !strm.isEmpty() {
+			let c0 = try nextChar(stream: strm)
 			switch c0 {
 			case Character.ESC:
 				/* Save current sub string */
@@ -376,22 +375,18 @@ public enum CNEscapeCode
 					substr = ""
 				}
 				/* get next char */
-				let (c1, idx1) = try nextChar(string: src, index: idx0)
+				let c1 = try nextChar(stream: strm)
 				switch c1 {
 				case "[":
 					/* Decode escape sequence */
-					let (idx2, command2) = try decodeEscapeSequence(string: src, index: idx1)
-					result.append(contentsOf: command2)
-					idx = idx2
+					let commands = try decodeEscapeSequence(stream: strm)
+					result.append(contentsOf: commands)
 				case "7":
 					result.append(.saveCursorPosition)
-					idx = idx1
 				case "8":
 					result.append(.restoreCursorPosition)
-					idx = idx1
 				default:
 					result.append(.string("\(c0)\(c1)"))
-					idx = idx1
 				}
 			case Character.LF, Character.CR:
 				/* Save current sub string */
@@ -401,7 +396,6 @@ public enum CNEscapeCode
 				}
 				/* add newline */
 				result.append(.newline)
-				idx = idx0
 			case Character.TAB:
 				/* Save current sub string */
 				if substr.count > 0 {
@@ -410,7 +404,6 @@ public enum CNEscapeCode
 				}
 				/* add tab */
 				result.append(.tab)
-				idx = idx0
 			case Character.BS:
 				/* Save current sub string */
 				if substr.count > 0 {
@@ -419,7 +412,6 @@ public enum CNEscapeCode
 				}
 				/* add backspace */
 				result.append(.backspace)
-				idx = idx0
 			case Character.DEL:
 				/* Save current sub string */
 				if substr.count > 0 {
@@ -428,7 +420,6 @@ public enum CNEscapeCode
 				}
 				/* add delete */
 				result.append(.delete)
-				idx = idx0
 			case Character.EOT:
 				/* Save current sub string */
 				if substr.count > 0 {
@@ -437,10 +428,8 @@ public enum CNEscapeCode
 				}
 				/* add delete */
 				result.append(.eot)
-				idx = idx0
 			default:
 				substr.append(c0)
-				idx = idx0
 			}
 		}
 		/* Unsaved string */
@@ -451,9 +440,9 @@ public enum CNEscapeCode
 		return result
 	}
 
-	private static func decodeEscapeSequence(string src: String, index idx: String.Index) throws -> (String.Index, Array<CNEscapeCode>) {
-		let (idx1, tokens) = try decodeStringToTokens(string: src, index: idx)
-		let tokennum       = tokens.count
+	private static func decodeEscapeSequence(stream strm: CNStringStream) throws -> Array<CNEscapeCode> {
+		let tokens   = try decodeStringToTokens(stream: strm)
+		let tokennum = tokens.count
 		if tokennum == 0 {
 			throw incompleteSequenceError()
 		}
@@ -532,7 +521,7 @@ public enum CNEscapeCode
 		} else {
 			throw incompleteSequenceError()
 		}
-		return (idx1, results)
+		return results
 	}
 
 	private static func decodeCharacterAttributes(parameters params: Array<Int>) throws -> Array<CNEscapeCode> {
@@ -681,56 +670,50 @@ public enum CNEscapeCode
 		throw invalidCommandAndParameterError(command: c, parameter: -1)
 	}
 
-	private static func decodeStringToTokens(string src: String, index idx: String.Index) throws -> (String.Index, Array<CNToken>) {
+	private static func decodeStringToTokens(stream strm: CNStringStream) throws -> Array<CNToken> {
 		var result: Array<CNToken> = []
-		var idx0 = idx
-		let end  = src.endIndex
-		while idx0 < end {
-			let (i1, idx1) = try nextInt(string: src, index: idx0)
-			if let ival = i1 {
+		while !strm.isEmpty() {
+			if let ival = try nextInt(stream: strm) {
 				let newtoken = CNToken(type: .IntToken(ival), lineNo: 0)
 				result.append(newtoken)
-				idx0 = idx1
 			} else {
-				let (c2, idx2) = try nextChar(string: src, index: idx0)
+				let c2 = try nextChar(stream: strm)
 				let newtoken = CNToken(type: .SymbolToken(c2), lineNo: 0)
 				result.append(newtoken)
-				idx0 = idx2
-
 				/* Finish at the alphabet */
 				if c2.isLetter {
-					return (idx0, result)
+					return result
 				}
 			}
 
 		}
-		return (idx0, result)
+		return result
 	}
 
-	private static func nextInt(string src: String, index idx: String.Index) throws -> (Int?, String.Index) {
-		let (c0, idx0) = try nextChar(string: src, index: idx)
+	private static func nextInt(stream strm: CNStringStream) throws -> Int? {
+		let c0 = try nextChar(stream: strm)
 		if let digit = c0.toInt() {
-			var result              	= digit
-			var idx1 	: String.Index	= idx0
+			var result = digit
 			var docont = true
 			while docont {
-				let (c2, idx2) = try nextChar(string: src, index: idx1)
+				let c2 = try nextChar(stream: strm)
 				if let digit = c2.toInt() {
 					result = result * 10 + digit
-					idx1   = idx2
 				} else {
+					let _ = strm.ungetc() // unget c2
 					docont = false
 				}
 			}
-			return (Int(result), idx1)
+			return Int(result)
 		} else {
-			return (nil, idx)
+			let _ = strm.ungetc() // unget c0
+			return nil
 		}
 	}
 
-	private static func nextChar(string src: String, index idx: String.Index) throws -> (Character, String.Index) {
-		if idx < src.endIndex {
-			return (src[idx], src.index(after: idx))
+	private static func nextChar(stream strm: CNStringStream) throws -> Character {
+		if let c = strm.getc() {
+			return c
 		} else {
 			throw incompleteSequenceError()
 		}

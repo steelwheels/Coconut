@@ -17,6 +17,9 @@ public func testResource(console cons: CNConsole) -> Bool
 		(_ url: URL) -> Any? in
 		cons.print(string: "Load resource for \(url.absoluteString)\n")
 		return NSNumber(value: 1.23)
+	}, reset: {
+		(_ url: URL, _ content: Any?) -> Bool in
+		return true
 	})
 	resource.add(category: "Number", identifier: "number0", path: "a.num")
 
