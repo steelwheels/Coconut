@@ -1,0 +1,14 @@
+{
+	class:		"enumTable",
+	definitions: {
+		type_a: {
+			memb_a_0:	1,
+			memb_a_1:	2
+		},
+		type_b: {
+			memb_b_0:	3,
+			memb_b_1:	4	
+		}
+	}
+}
+

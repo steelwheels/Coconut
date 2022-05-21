@@ -76,11 +76,11 @@ private func allocateTable() -> (CNValueTable, CNValueTable)? {
 	case .ok(_):
 		let table0 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
 		NSLog("record count [0]: \(table0.recordCount)")
-		NSLog("field names  [0]:  \(table0.allFieldNames)")
+		NSLog("field names  [0]: \(table0.fieldNames)")
 
 		let table1 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
 		NSLog("record count [1]: \(table1.recordCount)")
-		NSLog("field names  [1]:  \(table1.allFieldNames)")
+		NSLog("field names  [1]: \(table1.fieldNames)")
 
 		return (table0, table1)
 	case .error(let err):

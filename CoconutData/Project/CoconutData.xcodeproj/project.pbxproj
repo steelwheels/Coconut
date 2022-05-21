@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0504D17C2751C24900EFE0D7 /* CNOval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0504D17B2751C24900EFE0D7 /* CNOval.swift */; };
 		0504D17D2751C24900EFE0D7 /* CNOval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0504D17B2751C24900EFE0D7 /* CNOval.swift */; };
+		05084D13283880E900432602 /* UTEnumValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05084D12283880E900432602 /* UTEnumValue.swift */; };
+		05084D1A2838B10200432602 /* enum.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05084D0D283880A200432602 /* enum.json */; };
 		050E87182813D09000E84644 /* CNValueLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050E87172813D09000E84644 /* CNValueLabels.swift */; };
 		050E87192813D09000E84644 /* CNValueLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050E87172813D09000E84644 /* CNValueLabels.swift */; };
 		0512074B274E6DD200189550 /* CNRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0512074A274E6DD200189550 /* CNRect.swift */; };
@@ -413,6 +415,7 @@
 			dstPath = Data;
 			dstSubfolderSpec = 7;
 			files = (
+				05084D1A2838B10200432602 /* enum.json in CopyFiles */,
 				052D71FF277EF21600B4C7EB /* adbook.json in CopyFiles */,
 				05A1B01B2776E4650091D527 /* sub.json in CopyFiles */,
 				05A1B0082776CA830091D527 /* root.json in CopyFiles */,
@@ -444,6 +447,8 @@
 
 /* Begin PBXFileReference section */
 		0504D17B2751C24900EFE0D7 /* CNOval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNOval.swift; sourceTree = "<group>"; };
+		05084D0D283880A200432602 /* enum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enum.json; sourceTree = "<group>"; };
+		05084D12283880E900432602 /* UTEnumValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTEnumValue.swift; sourceTree = "<group>"; };
 		050E87172813D09000E84644 /* CNValueLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueLabels.swift; sourceTree = "<group>"; };
 		0512074A274E6DD200189550 /* CNRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRect.swift; sourceTree = "<group>"; };
 		0516F94426351DB60051B5A5 /* CNPipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPipe.swift; sourceTree = "<group>"; };
@@ -754,6 +759,7 @@
 				05A1AFF42776C3F40091D527 /* UTValueCache.swift */,
 				052D71F5277EEE6F00B4C7EB /* UTValueTable.swift */,
 				052F30F3278F246500CADA5C /* UTValuePath.swift */,
+				05084D12283880E900432602 /* UTEnumValue.swift */,
 			);
 			path = ResourceTest;
 			sourceTree = "<group>";
@@ -770,6 +776,7 @@
 			isa = PBXGroup;
 			children = (
 				052D71FA277EF20100B4C7EB /* adbook.json */,
+				05084D0D283880A200432602 /* enum.json */,
 				05A1AFEF2776C0A50091D527 /* root.json */,
 				05A1B0132776E44B0091D527 /* sub.json */,
 			);
@@ -1339,6 +1346,7 @@
 				05A1AFC82776BBDF0091D527 /* AppDelegate.swift in Sources */,
 				053EC40927F7CEC10053FE24 /* UTMappingTable.swift in Sources */,
 				052D71F6277EEE6F00B4C7EB /* UTValueTable.swift in Sources */,
+				05084D13283880E900432602 /* UTEnumValue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

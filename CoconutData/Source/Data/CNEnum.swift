@@ -112,7 +112,8 @@ public class CNEnumType
 
 public class CNEnumTable
 {
-	public static let ClassName		= "enumTable"
+	public static let  ClassName		= "enumTable"
+	private static let definitionsItem	= "definitions"
 
 	private var mTypes:		Dictionary<String, CNEnumType>
 
@@ -149,7 +150,46 @@ public class CNEnumTable
 		}
 	}
 
-	public static func fromValue(value topval: Dictionary<String, CNValue>) -> Result<CNEnumTable, NSError> {
+	public func merge(enumTable src: CNEnumTable) {
+		for (key, val) in src.mTypes {
+			mTypes[key] = val
+		}
+	}
+
+	public static func fromValue(value topval: CNValue) -> Result<CNEnumTable, NSError> {
+		guard let dictval = topval.toDictionary() else {
+			return .failure(NSError.parseError(message: "Top value must be dictionary"))
+		}
+		guard hasClassName(value: dictval) else {
+			return .failure(NSError.parseError(message: "Class name \"\(CNEnumTable.ClassName)\" is required"))
+		}
+		if let defs = hasDefinitions(value: dictval) {
+			return fromValue(value: defs)
+		} else {
+			return .failure(NSError.parseError(message: "No valid definitions in enum table"))
+		}
+	}
+
+	private static func hasClassName(value val: Dictionary<String, CNValue>) -> Bool {
+		if let clsval = val["class"] {
+			if let clsstr = clsval.toString() {
+				if clsstr == CNEnumTable.ClassName {
+					return true
+				}
+			}
+		}
+		return false
+	}
+
+	private static func hasDefinitions(value val: Dictionary<String, CNValue>) -> Dictionary<String, CNValue>? {
+		if let val = val[CNEnumTable.definitionsItem] {
+			return val.toDictionary()
+		} else {
+			return nil
+		}
+	}
+
+	private static func fromValue(value topval: Dictionary<String, CNValue>) -> Result<CNEnumTable, NSError> {
 		let result = CNEnumTable()
 		for (key, val) in topval {
 			switch val {
@@ -174,8 +214,8 @@ public class CNEnumTable
 			members[key] = .dictionaryValue(etype.toValue())
 		}
 		let result: Dictionary<String, CNValue> = [
-			"class":	.stringValue(CNEnumTable.ClassName),
-			"value":	.dictionaryValue(members)
+			"class":			.stringValue(CNEnumTable.ClassName),
+			CNEnumTable.definitionsItem:	.dictionaryValue(members)
 		]
 		return result
 	}

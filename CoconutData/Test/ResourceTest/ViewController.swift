@@ -29,7 +29,8 @@ class ViewController: NSViewController {
 		let res2 = UTValueStorage()
 		let res3 = UTValueTable()
 		let res4 = UTMappingTable()
-		if res0 && res1 && res2 && res3 && res4 {
+		let res5 = UTEnumTable()
+		if res0 && res1 && res2 && res3 && res4 && res5 {
 			NSLog("Summary: OK")
 		} else {
 			NSLog("Summary: Error (\(res0), \(res1), \(res2), \(res3), \(res4)")

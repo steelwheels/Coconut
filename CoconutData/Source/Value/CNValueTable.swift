@@ -96,6 +96,10 @@ public class CNValueTable: CNTable
 		return [:]
 	}
 
+	public var fieldNames: Array<String> { get {
+		return Array(defaultFields.keys)
+	}}
+
 	public func fieldName(at index: Int) -> String? {
 		let names = defaultFields.keys.sorted()
 		if 0<=index && index<names.count {
