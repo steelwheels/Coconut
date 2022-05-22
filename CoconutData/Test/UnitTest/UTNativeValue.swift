@@ -26,11 +26,11 @@ private func parseValue(string str: String, console cons: CNConsole) -> Bool {
 
 	let result: Bool
 	switch parser.parse(source: str) {
-	case .ok(let val):
+	case .success(let val):
 		let valstr = val.toText().toStrings().joined(separator: "\n")
 		cons.print(string: "result: \(valstr)\n")
 		result = true
-	case .error(let err):
+	case .failure(let err):
 		cons.print(string: "result: [Error] \(err.description)")
 		result = false
 	}

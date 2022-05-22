@@ -12,8 +12,6 @@ import Foundation
 
 public class CNValueStorage
 {
-	public typealias Result = CNValueParser.Result
-
 	private var mSourceDirectory:		URL
 	private var mCacheDirectory:		URL
 	private var mFilePath:			String
@@ -42,7 +40,7 @@ public class CNValueStorage
 	private var sourceFile: URL { get { return mSourceDirectory.appendingPathComponent(mFilePath)	}}
 	private var cacheFile:  URL { get { return mCacheDirectory.appendingPathComponent(mFilePath)	}}
 
-	public func load() -> Result {
+	public func load() -> Result<CNValue, NSError> {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
 
@@ -52,17 +50,17 @@ public class CNValueStorage
 
 		guard let contents = CNValueStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
 			let err = NSError.fileError(message: "Failed to create cache file: \(cachefile.path)")
-			return .error(err)
+			return .failure(err)
 		}
 
 		let parser = CNValueParser()
-		let result: Result
+		let result: Result<CNValue, NSError>
 		switch parser.parse(source: contents as String) {
-		case .ok(let val):
+		case .success(let val):
 			mRootValue = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-			result = .ok(val)
-		case .error(let err):
-			result = .error(err)
+			result = .success(val)
+		case .failure(let err):
+			result = .failure(err)
 		}
 		return result
 	}
@@ -87,12 +85,12 @@ public class CNValueStorage
 		}
 	}
 
-	public func removeCacheFile() -> Result {
+	public func removeCacheFile() -> Result<CNValue, NSError> {
 		switch FileManager.default.removeFile(atURL: self.cacheFile) {
 		case .ok:
 			break // continue processing
 		case .error(let err):
-			return .error(err)
+			return .failure(err)
 		}
 		return self.load()
 	}

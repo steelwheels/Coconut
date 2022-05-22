@@ -48,10 +48,10 @@ public class CNValueSegment
 			var result: CNValue? = nil
 			let parser = CNValueParser()
 			switch parser.parse(source: contents) {
-			case .ok(let val):
+			case .success(let val):
 				mContext = val
 				result   = val
-			case .error(let err):
+			case .failure(let err):
 				CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
 			}
 			return result

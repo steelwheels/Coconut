@@ -150,6 +150,16 @@ public class CNEnumTable
 		}
 	}
 
+	public func search(byMemberName name: String) -> Array<CNEnumType>? {
+		var result: Array<CNEnumType> = []
+		for (_, etype) in mTypes {
+			if let _ = etype.search(byName: name) {
+				result.append(etype)
+			}
+		}
+		return result
+	}
+
 	public func merge(enumTable src: CNEnumTable) {
 		for (key, val) in src.mTypes {
 			mTypes[key] = val

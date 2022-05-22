@@ -134,9 +134,9 @@ public extension URL
 		if let str = self.loadContents() {
 			let parser = CNValueParser()
 			switch parser.parse(source: str as String) {
-			case .ok(let val):
+			case .success(let val):
 				result = val
-			case .error(let err):
+			case .failure(let err):
 				CNLog(logLevel: .error, message: "Error: \(err.description)", atFunction: #function, inFile: #file)
 			}
 		}
