@@ -115,23 +115,45 @@ public class CNEnumTable
 	public static let  ClassName		= "enumTable"
 	private static let definitionsItem	= "definitions"
 
-	private var mTypes:		Dictionary<String, CNEnumType>
+	private var      mTypes:	Dictionary<String, CNEnumType>
+	private weak var mParent:	CNEnumTable?
 
-	public static var mDefaultTable: CNEnumTable? = nil
+	private static var mEnumTables = CNStack<CNEnumTable>()
 
-	public static func defaultTable() -> CNEnumTable {
-		if let table = mDefaultTable {
-			return table
-		} else {
+	public static func currentEnumTable() -> CNEnumTable {
+		if mEnumTables.count == 0 {
 			let table = CNEnumTable()
 			table.setDefaultValues()
-			mDefaultTable = table
-			return table
+			mEnumTables.push(table)
+		}
+		if let top = mEnumTables.peek() {
+			return top
+		} else {
+			fatalError("Can not happen")
+		}
+	}
+
+	public static func pushEnumTable(enumTable etable: CNEnumTable) {
+		let parent = CNEnumTable.currentEnumTable()
+		etable.setParent(enumTable: parent)
+		mEnumTables.push(etable)
+	}
+
+	public static func popEnumTable() {
+		if mEnumTables.count > 1 {
+			let _ = mEnumTables.pop()
+		} else {
+			CNLog(logLevel: .error, message: "Popup enum table stack was failed", atFunction: #function, inFile: #file)
 		}
 	}
 
 	public init(){
 		mTypes		= [:]
+		mParent		= nil
+	}
+
+	public func setParent(enumTable etable: CNEnumTable) {
+		mParent = etable
 	}
 
 	public var typeNames: Array<String> { get {
@@ -145,19 +167,34 @@ public class CNEnumTable
 	public func search(byTypeName name: String) -> CNEnumType? {
 		if let etype = mTypes[name] {
 			return etype
+		} else if let parent = mParent {
+			return parent.search(byTypeName: name)
 		} else {
 			return nil
 		}
 	}
 
-	public func search(byMemberName name: String) -> Array<CNEnumType>? {
-		var result: Array<CNEnumType> = []
+	public func search(byMemberName name: String) -> Array<Int>? {
+		var result: Array<Int> = []
 		for (_, etype) in mTypes {
-			if let _ = etype.search(byName: name) {
-				result.append(etype)
+			if let enm = etype.search(byName: name) {
+				result.append(enm.value)
 			}
 		}
 		return result
+	}
+
+	public func search(byTypeName tname: String, memberName mname: String) -> Int? {
+		if let etype = self.search(byTypeName: tname) {
+			if let enm = etype.search(byName: mname) {
+				return enm.value
+			}
+		}
+		if let parent = mParent {
+			return parent.search(byTypeName: tname, memberName: mname)
+		} else {
+			return nil
+		}
 	}
 
 	public func merge(enumTable src: CNEnumTable) {

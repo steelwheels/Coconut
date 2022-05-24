@@ -171,12 +171,23 @@ public class CNValueParser
 						return .failure(err)
 					}
 				} else if c == "{" {
-					let _   = stream.unget() // unget for previous "["
+					let _   = stream.unget() // unget for previous "{"
 					switch parseObject(tokenStream: stream) {
 					case .success(let val):
 						result = val
 					case .failure(let err):
 						return .failure(err)
+					}
+				} else if c == "." {
+					if let ident = stream.getIdentifier() {
+						switch parseEnumValue(typeName: nil, memberName: ident) {
+						case .success(let val):
+							result = val
+						case .failure(let err):
+							return .failure(err)
+						}
+					} else {
+						return .failure(NSError.parseError(message: "Unexpected symbol \".\"", location: #function))
 					}
 				} else {
 					return .failure(NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function))
@@ -198,7 +209,12 @@ public class CNValueParser
 					case "null":
 						result = .nullValue
 					default:
-						return .failure(NSError.parseError(message: "Unknown identifier: \(str)", location: #function))
+						switch parseEnumValue(typeName: str, tokenStream: stream) {
+						case .success(let val):
+							result = val
+						case .failure(let err):
+							return .failure(err)
+						}
 					}
 				case .CommentToken(_):
 					return .failure(NSError.parseError(message: "Can not happen (1)", location: #function))
@@ -207,6 +223,38 @@ public class CNValueParser
 			return .success(result)
 		} else {
 			return .failure(NSError.parseError(message: "Unexpected end of stream", location: #function))
+		}
+	}
+
+	public func parseEnumValue(typeName tname: String, tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
+		guard let sym = stream.getSymbol() else {
+			return .failure(NSError.parseError(message: "\".\" is required after enum type"))
+		}
+		guard sym == "." else {
+			return .failure(NSError.parseError(message: "\".\" is required after enum type"))
+		}
+		guard let mname = stream.getIdentifier() else {
+			return .failure(NSError.parseError(message: "Enum member name is required after \".\""))
+		}
+		return parseEnumValue(typeName: tname, memberName: mname)
+	}
+
+	public func parseEnumValue(typeName tnamep: String?, memberName mname: String) -> Result<CNValue, NSError> {
+		let etable = CNEnumTable.currentEnumTable()
+		if let tname = tnamep {
+			if let val = etable.search(byTypeName: tname, memberName: mname) {
+				return .success(CNValue.numberValue(NSNumber(integerLiteral: val)))
+			}
+			return .failure(NSError.parseError(message: "Enumvalue \(tname).\(mname) is not found"))
+		} else {
+			if let vals = etable.search(byMemberName: mname) {
+				if vals.count == 1 {
+					return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
+				} else {
+					return .failure(NSError.parseError(message: "Enum member .\(mname) is used for multiple enum types"))
+				}
+			}
+			return .failure(NSError.parseError(message: "Enum member .\(mname) is not found"))
 		}
 	}
 
