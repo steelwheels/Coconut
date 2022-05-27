@@ -133,6 +133,10 @@ public class CNEnumTable
 		}
 	}
 
+	public static func allEnumTables() -> Array<CNEnumTable> {
+		return mEnumTables.peekAll()
+	}
+
 	public static func pushEnumTable(enumTable etable: CNEnumTable) {
 		let parent = CNEnumTable.currentEnumTable()
 		etable.setParent(enumTable: parent)
@@ -160,6 +164,10 @@ public class CNEnumTable
 		return Array(mTypes.keys)
 	}}
 
+	public var count: Int { get {
+		return mTypes.count
+	}}
+
 	public func add(enumType etype: CNEnumType){
 		mTypes[etype.typeName] = etype
 	}
@@ -174,12 +182,16 @@ public class CNEnumTable
 		}
 	}
 
-	public func search(byMemberName name: String) -> Array<Int>? {
+	public func search(byMemberName name: String) -> Array<Int> {
 		var result: Array<Int> = []
+		/* User defined value is first */
 		for (_, etype) in mTypes {
 			if let enm = etype.search(byName: name) {
 				result.append(enm.value)
 			}
+		}
+		if let parent = mParent {
+			result.append(contentsOf: parent.search(byMemberName: name))
 		}
 		return result
 	}
@@ -203,7 +215,7 @@ public class CNEnumTable
 		}
 	}
 
-	public static func fromValue(value topval: CNValue) -> Result<CNEnumTable, NSError> {
+	public static func fromValue(value topval: CNValue) -> Result<CNEnumTable?, NSError> {
 		guard let dictval = topval.toDictionary() else {
 			return .failure(NSError.parseError(message: "Top value must be dictionary"))
 		}
@@ -236,7 +248,7 @@ public class CNEnumTable
 		}
 	}
 
-	private static func fromValue(value topval: Dictionary<String, CNValue>) -> Result<CNEnumTable, NSError> {
+	private static func fromValue(value topval: Dictionary<String, CNValue>) -> Result<CNEnumTable?, NSError> {
 		let result = CNEnumTable()
 		for (key, val) in topval {
 			switch val {
@@ -252,7 +264,7 @@ public class CNEnumTable
 				return .failure(err)
 			}
 		}
-		return .success(result)
+		return .success(result.count > 0 ? result: nil)
 	}
 
 	public func toValue() -> Dictionary<String, CNValue> {

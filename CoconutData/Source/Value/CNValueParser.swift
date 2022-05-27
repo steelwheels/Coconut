@@ -247,14 +247,16 @@ public class CNValueParser
 			}
 			return .failure(NSError.parseError(message: "Enumvalue \(tname).\(mname) is not found"))
 		} else {
-			if let vals = etable.search(byMemberName: mname) {
-				if vals.count == 1 {
-					return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
-				} else {
-					return .failure(NSError.parseError(message: "Enum member .\(mname) is used for multiple enum types"))
-				}
+			let vals = etable.search(byMemberName: mname)
+			switch vals.count {
+			case 0:
+				return .failure(NSError.parseError(message: "Enum member .\(mname) is not found"))
+			case 1:
+				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
+			default: // 2 or more
+				CNLog(logLevel: .error, message: "Enum member .\(mname) is used by multiple enum types", atFunction: #function, inFile: #file)
+				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
 			}
-			return .failure(NSError.parseError(message: "Enum member .\(mname) is not found"))
 		}
 	}
 
