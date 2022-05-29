@@ -153,6 +153,65 @@ public class CNLabeledText: CNText
 	}
 }
 
+public class CNTextList: CNText
+{
+	private var mItems:	Array<CNText>
+	public  var separator:	String
+
+	public init(){
+		mItems		= []
+		separator	= ""
+	}
+
+	public func add(text src: CNText){
+		mItems.append(src)
+	}
+
+	public func append(string src: String) {
+		if let item = mItems.last {
+			item.append(string: src)
+		} else {
+			let line = CNTextLine(string: src)
+			mItems.append(line)
+		}
+	}
+
+	public func insert(text src: CNText, at pos: Int) {
+		mItems.insert(src, at: pos)
+	}
+
+	public func prepend(string src: String) {
+		if mItems.count > 0 {
+			mItems[0].prepend(string: src)
+		} else {
+			let line = CNTextLine(string: src)
+			mItems.append(line)
+		}
+	}
+
+	public func toStrings(indent idt: Int) -> Array<String> {
+		var result: Array<String> = []
+		let count = mItems.count
+		guard count > 0 else {
+			return []
+		}
+		let idtstr  = indentString(indent: idt)
+		let lastidx = count - 1
+		for i in 0..<count {
+			let substrs = mItems[i].toStrings()
+			if substrs.count > 0 {
+				for substr in substrs {
+					result.append(idtstr + substr)
+				}
+				if i != lastidx {
+					result[result.count - 1] += separator
+				}
+			}
+		}
+		return result
+	}
+}
+
 public class CNTextSection: CNText
 {
 	public var header: String

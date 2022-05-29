@@ -160,6 +160,10 @@ public class CNEnumTable
 		mParent = etable
 	}
 
+	public var allTypes: Dictionary<String, CNEnumType> { get {
+		return mTypes
+	}}
+
 	public var typeNames: Array<String> { get {
 		return Array(mTypes.keys)
 	}}
