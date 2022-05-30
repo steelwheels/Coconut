@@ -121,11 +121,7 @@ public class CNEnumTable
 	private static var mEnumTables = CNStack<CNEnumTable>()
 
 	public static func currentEnumTable() -> CNEnumTable {
-		if mEnumTables.count == 0 {
-			let table = CNEnumTable()
-			table.setDefaultValues()
-			mEnumTables.push(table)
-		}
+		allocateDefaultEnumTable()
 		if let top = mEnumTables.peek() {
 			return top
 		} else {
@@ -134,6 +130,7 @@ public class CNEnumTable
 	}
 
 	public static func allEnumTables() -> Array<CNEnumTable> {
+		allocateDefaultEnumTable()
 		return mEnumTables.peekAll()
 	}
 
@@ -148,6 +145,14 @@ public class CNEnumTable
 			let _ = mEnumTables.pop()
 		} else {
 			CNLog(logLevel: .error, message: "Popup enum table stack was failed", atFunction: #function, inFile: #file)
+		}
+	}
+
+	private static func allocateDefaultEnumTable() {
+		if mEnumTables.count == 0 {
+			let table = CNEnumTable()
+			table.setDefaultValues()
+			mEnumTables.push(table)
 		}
 	}
 
