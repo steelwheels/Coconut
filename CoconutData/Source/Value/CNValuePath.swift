@@ -273,7 +273,7 @@ public class CNValuePath
 
 	private static func near(stream strm: CNTokenStream) -> String {
 		if let token = strm.peek(offset: 0) {
-			return "near " + token.description
+			return "near " + token.toString()
 		} else {
 			return ""
 		}

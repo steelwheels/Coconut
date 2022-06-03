@@ -750,7 +750,7 @@ public class CNMutableValueSegment: CNMutableValue
 		return result
 	}
 
-	private func load() -> CNMutableValue? {
+	fileprivate func load() -> CNMutableValue? {
 		let result:  CNMutableValue?
 		if let ctxt = mContext {
 			result = ctxt
@@ -760,7 +760,7 @@ public class CNMutableValueSegment: CNMutableValue
 				mContext = ctxt
 				result = ctxt
 			} else {
-				CNLog(logLevel: .error, message: "Failed to load: \(mCacheDirectory.path)", atFunction: #function, inFile: #file)
+				CNLog(logLevel: .error, message: "Failed to load: source=\(self.sourceFile.path) cache=\(self.cacheFile.path)")
 				result = nil
 			}
 		}
@@ -935,7 +935,13 @@ public func CNValueToMutableValue(from val: CNValue, sourceDirectory srcdir: URL
 	return result
 }
 
-public func CNAllSegmentsInValue(value val: CNMutableValue) -> Array<CNMutableValueSegment> {
+public enum CNValueSegmentTraceOption {
+	case noTrace
+	case traceNonNull
+	case traceAll
+}
+
+public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNValueSegmentTraceOption) -> Array<CNMutableValueSegment> {
 	var result: Array<CNMutableValueSegment> = []
 	switch val.type {
 	case .scaler:
@@ -943,7 +949,7 @@ public func CNAllSegmentsInValue(value val: CNMutableValue) -> Array<CNMutableVa
 	case .dictionary:
 		if let dict = val as? CNMutableDictionaryValue {
 			for child in dict.values {
-				let cres = CNAllSegmentsInValue(value: child)
+				let cres = CNSegmentsInValue(value: child, traceOption: trace)
 				result.append(contentsOf: cres)
 			}
 		} else {
@@ -952,7 +958,7 @@ public func CNAllSegmentsInValue(value val: CNMutableValue) -> Array<CNMutableVa
 	case .array:
 		if let arr = val as? CNMutableArrayValue {
 			for child in arr.values {
-				let cres = CNAllSegmentsInValue(value: child)
+				let cres = CNSegmentsInValue(value: child, traceOption: trace)
 				result.append(contentsOf: cres)
 			}
 		} else {
@@ -961,6 +967,20 @@ public func CNAllSegmentsInValue(value val: CNMutableValue) -> Array<CNMutableVa
 	case .segment:
 		if let ref = val as? CNMutableValueSegment {
 			result.append(ref)
+			switch trace {
+			case .noTrace:
+				break
+			case .traceNonNull:
+				if let ctxt = ref.context {
+					let cres = CNSegmentsInValue(value: ctxt, traceOption: trace)
+					result.append(contentsOf: cres)
+				}
+			case .traceAll:
+				if let ctxt = ref.load() {
+					let cres = CNSegmentsInValue(value: ctxt, traceOption: trace)
+					result.append(contentsOf: cres)
+				}
+			}
 		} else {
 			CNLog(logLevel: .error, message: "Can not happen (3)", atFunction: #function, inFile: #file)
 		}

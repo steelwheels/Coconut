@@ -188,6 +188,10 @@ public class CNValueStorage
 		return path.elements
 	}
 
+	public func segments(traceOption trace: CNValueSegmentTraceOption) -> Array<CNMutableValueSegment> {
+		return CNSegmentsInValue(value: mRootValue, traceOption: trace)
+	}
+
 	public func save() -> Bool {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
@@ -225,7 +229,7 @@ public class CNValueStorage
 			}
 		}
 		/* save segmented values */
-		let refs = CNAllSegmentsInValue(value: val)
+		let refs = CNSegmentsInValue(value: val, traceOption: .traceNonNull)
 		for ref in refs {
 			if let cval = ref.context {
 				if !save(value: cval, outFile: ref.cacheFile) {

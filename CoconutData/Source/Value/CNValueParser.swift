@@ -32,7 +32,7 @@ public class CNValueParser
 		case .ok(let tokens):
 			if tokens.count > 0 {
 				/* Parse object */
-				switch parseObject(tokenStream: CNTokenStream(source: tokens)) {
+				switch parseValue(tokenStream: CNTokenStream(source: tokens)) {
 				case .success(let val):
 					let dec = decodeObject(value: val)
 					result = .success(dec)
@@ -40,7 +40,7 @@ public class CNValueParser
 					result = .failure(err)
 				}
 			} else {
-				result = .failure(NSError.parseError(message: "Unexpected end of stream", location: #function))
+				result = .failure(NSError.parseError(message: "No contents"))
 			}
 		case .error(let err):
 			result = .failure(err)
@@ -55,259 +55,6 @@ public class CNValueParser
 			result.append(parts[0])
 		}
 		return result
-	}
-
-	private func parseObject(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
-		if let c = checkSymbol(in: stream) {
-			switch c {
-			case "[":
-				var result: Array<CNValue> = []
-				var is1st = true
-				parse_loop: while true {
-					if let c = checkSymbol(in: stream) {
-						if c == "]" {
-							break parse_loop
-						} else if !is1st && c == "," {
-							/* Continue */
-						} else {
-							/* Ignore */
-							let _ = stream.unget()
-						}
-					}
-					switch parseValue(tokenStream: stream) {
-					case .success(let val):
-						result.append(val)
-					case .failure(let err):
-						return .failure(err)
-					}
-					is1st = false
-				}
-				return .success(.arrayValue(result))
-			case "{":
-				var result: Dictionary<String, CNValue> = [:]
-				var is1st = true
-				parse_loop: while true {
-					if let c = checkSymbol(in: stream) {
-						if c == "}" {
-							break parse_loop
-						} else if !is1st && c == "," {
-							/* Continue */
-						} else {
-							/* Ignore */
-							let _ = stream.unget()
-						}
-					}
-					switch parseProperty(tokenStream: stream) {
-					case .success(let prop):
-						result[prop.name] = prop.value
-					case .failure(let err):
-						return .failure(err)
-					}
-					is1st = false
-				}
-				return .success(.dictionaryValue(result))
-			default:
-				return .failure(NSError.parseError(message: "Unexpected symbol \(c)", location: #function))
-			}
-		}
-		if let token = stream.get() {
-			return .failure(NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function))
-		} else {
-			return .failure(NSError.parseError(message: "Unexpected end of token", location: #function))
-		}
-	}
-
-	public func parseArrayValue(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
-		var vals: Array<CNValue> = []
-		var is1st = true
-		parse_loop: while true {
-			if let c = checkSymbol(in: stream) {
-				if c == "]" {
-					break parse_loop
-				} else if c == "," && !is1st {
-					/* Continue */
-				} else  {
-					/* ignore */
-					let _ = stream.unget()
-				}
-			}
-			switch parseValue(tokenStream: stream) {
-			case .success(let val):
-				vals.append(val)
-			case .failure(let err):
-				return .failure(err)
-			}
-			is1st = false
-		}
-		return .success(.arrayValue(vals))
-	}
-
-	private func parseProperty(tokenStream stream: CNTokenStream) -> Result<Property, NSError> {
-		if let ident = checkIdentifier(in: stream) {
-			if let err = requireSymbol(symbol: ":", in: stream) {
-				return .failure(err)
-			} else {
-				switch parseValue(tokenStream: stream) {
-				case .success(let val):
-					return .success(Property(name: ident, value: val))
-				case .failure(let err):
-					return .failure(err)
-				}
-			}
-		} else {
-			return .failure(NSError.parseError(message: "Identifier for property is required"))
-		}
-	}
-
-	public func parseValue(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
-		if let token = stream.get() {
-			let result: CNValue
-			if let c = token.getSymbol() {
-				if c == "[" {
-					switch parseArrayValue(tokenStream: stream) {
-					case .success(let val):
-						result = val
-					case .failure(let err):
-						return .failure(err)
-					}
-				} else if c == "{" {
-					let _   = stream.unget() // unget for previous "{"
-					switch parseObject(tokenStream: stream) {
-					case .success(let val):
-						result = val
-					case .failure(let err):
-						return .failure(err)
-					}
-				} else if c == "." {
-					if let ident = stream.getIdentifier() {
-						switch parseEnumValue(typeName: nil, memberName: ident) {
-						case .success(let val):
-							result = val
-						case .failure(let err):
-							return .failure(err)
-						}
-					} else {
-						return .failure(NSError.parseError(message: "Unexpected symbol \".\"", location: #function))
-					}
-				} else {
-					return .failure(NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function))
-				}
-			} else {
-				switch token.type {
-				case .BoolToken(let value):	result = .numberValue(NSNumber(value: value))
-				case .IntToken(let value):	result = .numberValue(NSNumber(value: value))
-				case .UIntToken(let value):	result = .numberValue(NSNumber(value: value))
-				case .DoubleToken(let value):	result = .numberValue(NSNumber(value: value))
-				case .StringToken(let value):	result = .stringValue(value)
-				case .TextToken(let value):	result = .stringValue(value)
-				case .ReservedWordToken(let rid):
-					return .failure(NSError.parseError(message: "Reserved word is not supported: \(rid)", location: #function))
-				case .SymbolToken(_):
-					return .failure(NSError.parseError(message: "Can not happen (0)", location: #function))
-				case .IdentifierToken(let str):
-					switch str.lowercased() {
-					case "null":
-						result = .nullValue
-					default:
-						switch parseEnumValue(typeName: str, tokenStream: stream) {
-						case .success(let val):
-							result = val
-						case .failure(let err):
-							return .failure(err)
-						}
-					}
-				case .CommentToken(_):
-					return .failure(NSError.parseError(message: "Can not happen (1)", location: #function))
-				}
-			}
-			return .success(result)
-		} else {
-			return .failure(NSError.parseError(message: "Unexpected end of stream", location: #function))
-		}
-	}
-
-	public func parseEnumValue(typeName tname: String, tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
-		guard let sym = stream.getSymbol() else {
-			return .failure(NSError.parseError(message: "\".\" is required after enum type"))
-		}
-		guard sym == "." else {
-			return .failure(NSError.parseError(message: "\".\" is required after enum type"))
-		}
-		guard let mname = stream.getIdentifier() else {
-			return .failure(NSError.parseError(message: "Enum member name is required after \".\""))
-		}
-		return parseEnumValue(typeName: tname, memberName: mname)
-	}
-
-	public func parseEnumValue(typeName tnamep: String?, memberName mname: String) -> Result<CNValue, NSError> {
-		let etable = CNEnumTable.currentEnumTable()
-		if let tname = tnamep {
-			if let val = etable.search(byTypeName: tname, memberName: mname) {
-				return .success(CNValue.numberValue(NSNumber(integerLiteral: val)))
-			}
-			return .failure(NSError.parseError(message: "Enumvalue \(tname).\(mname) is not found"))
-		} else {
-			let vals = etable.search(byMemberName: mname)
-			switch vals.count {
-			case 0:
-				return .failure(NSError.parseError(message: "Enum member .\(mname) is not found"))
-			case 1:
-				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
-			default: // 2 or more
-				CNLog(logLevel: .error, message: "Enum member .\(mname) is used by multiple enum types", atFunction: #function, inFile: #file)
-				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
-			}
-		}
-	}
-
-	private func requireSymbol(symbol sym: Character, in stream: CNTokenStream) -> NSError? {
-		if let token = stream.get() {
-			if let c = token.getSymbol() {
-				if c == sym {
-					return nil // No error
-				} else {
-					return NSError.parseError(message: "Unexpected symbol \(c)", location: #function)
-				}
-			} else {
-				return NSError.parseError(message: "Unexpected token \(token.description) at \(token.lineNo)", location: #function)
-			}
-		} else {
-			return NSError.parseError(message: "Unexpected end of stream", location: #function)
-		}
-	}
-
-	private func checkSymbol(in stream: CNTokenStream) -> Character? {
-		if let token = stream.get() {
-			if let c = token.getSymbol() {
-				return c
-			} else {
-				let _ = stream.unget()
-				return nil
-			}
-		} else {
-			return nil
-		}
-	}
-
-	private func checkIdentifier(in stream: CNTokenStream) -> String? {
-		if let token = stream.get() {
-			if let ident = token.getIdentifier() {
-				return ident
-			} else {
-				let _ = stream.unget()
-				return nil
-			}
-		} else {
-			return nil
-		}
-	}
-
-	private func lineNo(tokenStream stream: CNTokenStream) -> Int {
-		if let no = stream.lineNo {
-			return no
-		} else {
-			return 0
-		}
 	}
 
 	private func decodeObject(value src: CNValue) -> CNValue {
@@ -337,6 +84,167 @@ public class CNValueParser
 			dst = .arrayValue(newarr)
 		}
 		return dst
+	}
+
+	private func parseValue(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
+		if let c = stream.requireSymbol() {
+			switch c {
+			case "{":
+				let _ = stream.unget()
+				return parseObjectValue(tokenStream: stream)
+			case "[":
+				let _ = stream.unget()
+				return parseArrayValue(tokenStream: stream)
+			default:
+				return .failure(NSError.parseError(message: "Unexpected symbol \"\(c)\" \(near(stream))"))
+			}
+		} else {
+			return parseScalarValue(tokenStream: stream)
+		}
+	}
+
+	private func parseObjectValue(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
+		guard stream.requireSymbol() == "{" else {
+			return .failure(NSError.parseError(message: "Symbol \"{\" is required \(near(stream))"))
+		}
+		var result: Dictionary<String, CNValue> = [:]
+		var is1st = true
+		parse_loop: while true {
+			if stream.requireSymbol(symbol: "}") {
+				break parse_loop
+			}
+			if !is1st {
+				/* ignore comma (option) */
+				let _ = stream.requireSymbol(symbol: ",")
+			}
+			switch parseProperty(tokenStream: stream) {
+			case .success(let prop):
+				result[prop.name] = prop.value
+			case .failure(let err):
+				return .failure(err)
+			}
+			is1st = false
+		}
+		return .success(.dictionaryValue(result))
+	}
+
+	private func parseArrayValue(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
+		guard stream.requireSymbol() == "[" else {
+			return .failure(NSError.parseError(message: "Symbol \"{\" is required \(near(stream))"))
+		}
+		var result: Array<CNValue> = []
+		var is1st = true
+		parse_loop: while true {
+			if stream.requireSymbol(symbol: "]") {
+				break parse_loop
+			}
+			if !is1st {
+				/* Ignore comma (option) */
+				let _ = stream.requireSymbol(symbol: ",")
+			}
+			switch parseValue(tokenStream: stream) {
+			case .success(let elm):
+				result.append(elm)
+			case .failure(let err):
+				return .failure(err)
+			}
+			is1st = false
+		}
+		return .success(.arrayValue(result))
+	}
+
+	private func parseProperty(tokenStream stream: CNTokenStream) -> Result<Property, NSError> {
+		guard let ident = stream.requireIdentifier() else {
+			return .failure(NSError.parseError(message: "Identifier for property name is required \(near(stream))"))
+		}
+		guard stream.requireSymbol(symbol: ":") else {
+			return .failure(NSError.parseError(message: "Symbol \":\" is required between property name and value\(near(stream))"))
+		}
+		switch parseValue(tokenStream: stream) {
+		case .success(let val):
+			return .success(Property(name: ident, value: val))
+		case .failure(let err):
+			return .failure(err)
+		}
+	}
+
+	private func parseScalarValue(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
+		guard let token = stream.get() else {
+			return .failure(NSError.parseError(message: "Unexpected end of stream \(near(stream))"))
+		}
+		let result: CNValue
+		switch token.type {
+		case .BoolToken(let value):	result = .numberValue(NSNumber(value: value))
+		case .IntToken(let value):	result = .numberValue(NSNumber(value: value))
+		case .UIntToken(let value):	result = .numberValue(NSNumber(value: value))
+		case .DoubleToken(let value):	result = .numberValue(NSNumber(value: value))
+		case .StringToken(let value):	result = .stringValue(value)
+		case .TextToken(let value):	result = .stringValue(value)
+		case .ReservedWordToken(let rid):
+			return .failure(NSError.parseError(message: "Reserved word is not supported: \(rid) \(near(stream))"))
+		case .SymbolToken(_):
+			return .failure(NSError.parseError(message: "Can not happen (0) \(near(stream))"))
+		case .IdentifierToken(let str):
+			switch str.lowercased() {
+			case "null":
+				result = .nullValue
+			default:
+				switch parseEnumValue(typeName: str, tokenStream: stream) {
+				case .success(let val):
+					result = val
+				case .failure(let err):
+					return .failure(err)
+				}
+			}
+		case .CommentToken(_):
+			return .failure(NSError.parseError(message: "Can not happen \(near(stream))"))
+		}
+		return .success(result)
+	}
+
+	public func parseEnumValue(typeName tname: String, tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
+		guard let sym = stream.getSymbol() else {
+			return .failure(NSError.parseError(message: "\".\" is required after enum type  \(near(stream))"))
+		}
+		guard sym == "." else {
+			return .failure(NSError.parseError(message: "\".\" is required after enum type \(near(stream))"))
+		}
+		guard let mname = stream.getIdentifier() else {
+			return .failure(NSError.parseError(message: "Enum member name is required after \".\" \(near(stream))"))
+		}
+		return parseEnumValue(typeName: tname, memberName: mname, tokenStream: stream)
+	}
+
+	public func parseEnumValue(typeName tnamep: String?, memberName mname: String, tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
+		let etable = CNEnumTable.currentEnumTable()
+		if let tname = tnamep {
+			if let val = etable.search(byTypeName: tname, memberName: mname) {
+				return .success(CNValue.numberValue(NSNumber(integerLiteral: val)))
+			}
+			return .failure(NSError.parseError(message: "Enumvalue \(tname).\(mname) is not found \(near(stream))"))
+		} else {
+			let vals = etable.search(byMemberName: mname)
+			switch vals.count {
+			case 0:
+				return .failure(NSError.parseError(message: "Enum member .\(mname) is not found \(near(stream))"))
+			case 1:
+				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
+			default: // 2 or more
+				CNLog(logLevel: .error, message: "Enum member .\(mname) is used by multiple enum types \(near(stream))")
+				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
+			}
+		}
+	}
+
+	private func near(_ strm: CNTokenStream) -> String {
+		var result = ""
+		if let token = strm.peek(offset: 0) {
+			result += ": near \"" + token.toString() + "\""
+		}
+		if let no = strm.lineNo {
+			result += " at line \(no)"
+		}
+		return result
 	}
 }
 
