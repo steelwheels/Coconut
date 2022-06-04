@@ -68,7 +68,7 @@ public class CNEnumType
 	}
 
 	public func add(members membs: Dictionary<String, Int>){
-		for key in membs.keys {
+		for key in membs.keys.sorted() {
 			if let val = membs[key] {
 				self.add(name: key, value: val)
 			}
