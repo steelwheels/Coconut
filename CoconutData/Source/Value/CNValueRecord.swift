@@ -11,71 +11,82 @@ public class CNValueRecord: CNRecord
 {
 	static let ClassName = "record"
 
-	private var mTable:	CNValueTable?
-	private var mIndex:	Int
-	private var mCache:	Dictionary<String, CNValue>
-
-	public var index: Int { get { return mIndex} }
-
-	public init(table tbl: CNValueTable, index idx: Int){
-		mTable		= tbl
-		mIndex		= idx
-		mCache		= [:]
+	private enum SourceData {
+		case table(CNValueTable, Int)			// (Source table, index)
+		case cache(Dictionary<String, CNValue>)		// (property-name, property-value)
 	}
 
-	public init(){
-		mTable		= nil
-		mIndex		= 0
-		mCache		= [:]
+	private var mSource:	SourceData
+
+	public var index: Int? { get {
+		switch mSource {
+		case .table(_, let idx):	return idx
+		case .cache(_):			return nil
+		}
+	}}
+
+	public init(table tbl: CNValueTable, index idx: Int){
+		mSource	= .table(tbl, idx)
+	}
+
+	public init(defaultFields fields: Dictionary<String, CNValue>){
+		mSource = .cache(fields)
 	}
 
 	public var fieldCount: Int		{ get {
-		if let tbl = mTable {
+		switch mSource {
+		case .table(let tbl, _):
 			return tbl.defaultFields.count
-		} else {
-			return mCache.keys.count
+		case .cache(let dict):
+			return dict.count
 		}
 	}}
 
 	public var fieldNames: Array<String>	{ get {
-		if let tbl = mTable {
+		switch mSource {
+		case .table(let tbl, _):
 			return Array(tbl.defaultFields.keys)
-		} else {
-			return Array(mCache.keys)
+		case .cache(let dict):
+			return Array(dict.keys)
 		}
 	}}
 
 	public func value(ofField name: String) -> CNValue? {
-		if let tbl = mTable {
-			if let val = tbl.getRecordValue(index: mIndex, field: name) {
+		switch mSource {
+		case .table(let tbl, let idx):
+			if let val = tbl.getRecordValue(index: idx, field: name) {
 				return val
 			} else {
 				return tbl.defaultFields[name]
 			}
-		} else {
-			return mCache[name]
+		case .cache(let dict):
+			return dict[name]
 		}
 	}
 
 	public func setValue(value val: CNValue, forField name: String) -> Bool {
-		if let tbl = mTable {
-			if let curval = tbl.getRecordValue(index: mIndex, field: name) {
+		switch mSource {
+		case .table(let tbl, let idx):
+			if let curval = tbl.getRecordValue(index: idx, field: name) {
 				if CNIsSameValue(nativeValue0: curval, nativeValue1: val) {
 					return true // already set
 				}
 			}
-			return tbl.setRecordValue(val, index: mIndex, field: name)
-		} else {
-			mCache[name] = val
+			return tbl.setRecordValue(val, index: idx, field: name)
+		case .cache(let dict):
+			var newdict   = dict
+			newdict[name] = val
+			mSource       = .cache(newdict)
 			return true
 		}
 	}
 
 	public func cachedValues() -> Dictionary<String, CNValue>? {
-		if let _ = mTable {
-			return [:]	// No cached values
-		} else {
-			return mCache
+		switch mSource {
+		case .table(_, _):
+			return nil
+		case .cache(let dict):
+			return dict
 		}
 	}
 
@@ -93,8 +104,7 @@ public class CNValueRecord: CNRecord
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
 		if CNValue.hasClassName(inValue: val, className: CNValueRecord.ClassName) {
 			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)
-			let newrec = CNValueRecord()
-			newrec.mCache = dupval
+			let newrec = CNValueRecord(defaultFields: dupval)
 			return newrec
 		} else {
 			return nil

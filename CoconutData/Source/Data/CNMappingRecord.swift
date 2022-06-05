@@ -19,7 +19,7 @@ public class CNMappingRecord: CNRecord
 		mVirtualFieldCallbacks	= fields
 	}
 
-	public var index: Int { get {
+	public var index: Int? { get {
 		return mSourceRecord.index
 	}}
 

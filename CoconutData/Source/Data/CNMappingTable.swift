@@ -80,6 +80,10 @@ public class CNMappingTable: CNTable
 		}
 	}
 
+	public func newRecord() -> CNRecord {
+		return mSourceTable.newRecord()
+	}
+
 	public func record(at row: Int) -> CNRecord? {
 		let recs = getRecords()
 		if 0<=row && row<recs.count {

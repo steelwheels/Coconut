@@ -95,6 +95,17 @@ public class CNValueParser
 			case "[":
 				let _ = stream.unget()
 				return parseArrayValue(tokenStream: stream)
+			case ".":
+				if let ident = stream.requireIdentifier() {
+					switch parseEnumValue(typeName: nil, memberName: ident, tokenStream: stream){
+					case .success(let val):
+						return .success(val)
+					case .failure(let err):
+						return .failure(err)
+					}
+				} else {
+					return .failure(NSError.parseError(message: "Enum member identifier is required after \".\" \(near(stream))"))
+				}
 			default:
 				return .failure(NSError.parseError(message: "Unexpected symbol \"\(c)\" \(near(stream))"))
 			}

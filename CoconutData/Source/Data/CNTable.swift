@@ -31,6 +31,7 @@ public protocol CNTable
 	var defaultFields:    Dictionary<String, CNValue> { get }
 	func fieldName(at index: Int) -> String?
 
+	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
 	func pointer(value val: CNValue, forField field: String) -> CNPointerValue?
 

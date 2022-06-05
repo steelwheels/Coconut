@@ -109,6 +109,10 @@ public class CNValueTable: CNTable
 		}
 	}
 
+	public func newRecord() -> CNRecord {
+		return CNValueRecord(defaultFields: self.defaultFields)
+	}
+
 	public func record(at row: Int) -> CNRecord? {
 		let recvals = self.recordValues()
 		let cnt = recvals.count
@@ -157,6 +161,9 @@ public class CNValueTable: CNTable
 	}
 
 	public func append(record rcd: CNRecord) {
+		if rcd.index != nil {
+			CNLog(logLevel: .error, message: "The record has already index")
+		}
 		if let cached = rcd.cachedValues() {
 			if !mValueStorage.append(value: .dictionaryValue(cached), forPath: recordPath()) {
 				CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)

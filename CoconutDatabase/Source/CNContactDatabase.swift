@@ -75,6 +75,10 @@ public class CNContactDatabase: CNTable
 		return CNContactField.fieldName(at: index)
 	}
 
+	public func newRecord() -> CNRecord {
+		return CNValueRecord(defaultFields: self.defaultFields)
+	}
+
 	public func record(at row: Int) -> CNRecord? {
 		if 0<=row && row<mRecords.count {
 			return mRecords[row]
@@ -204,16 +208,16 @@ public class CNContactDatabase: CNTable
 	}
 
 	public static func makeRecord(from contact: CNContact) -> CNRecord {
-		let record = CNValueRecord()
+		var result : Dictionary<String, CNValue> = [:]
 		let num    = CNContactField.numberOfFields
 		for i in 0..<num {
 			if let field = CNContactField(rawValue: i), let name = CNContactField.fieldName(at: i) {
 				if let value = self.value(ofField: field, in: contact) {
-					let _ = record.setValue(value: value, forField: name)
+					result[name] = value
 				}
 			}
 		}
-		return record
+		return CNValueRecord(defaultFields: result)
 	}
 
 	public func toValue() -> CNValue {

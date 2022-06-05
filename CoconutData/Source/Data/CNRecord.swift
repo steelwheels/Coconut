@@ -11,7 +11,7 @@ public protocol CNRecord
 {
 	var fieldCount: Int		{ get }
 	var fieldNames: Array<String>	{ get }
-	var index: Int			{ get }
+	var index: Int?			{ get }
 
 	func value(ofField name: String) -> CNValue?
 	func setValue(value val: CNValue, forField name: String) -> Bool
