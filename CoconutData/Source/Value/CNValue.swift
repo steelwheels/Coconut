@@ -745,8 +745,11 @@ public enum CNValue {
 						result = .segmentValue(ref)
 					}
 				case CNPointerValue.ClassName:
-					if let ptr = CNPointerValue.fromValue(value: dict) {
+					switch CNPointerValue.fromValue(value: dict) {
+					case .success(let ptr):
 						result = .pointerValue(ptr)
+					case .failure(let err):
+						CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
 					}
 				default:
 					break

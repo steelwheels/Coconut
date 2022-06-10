@@ -20,18 +20,20 @@ public class CNPointerValue
 		mPath	= p
 	}
 
-	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNPointerValue? {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> Result<CNPointerValue, NSError> {
 		if CNValue.hasClassName(inValue: val, className: CNPointerValue.ClassName) {
 			if let pathval = val[CNPointerValue.PathItem] {
 				if let pathstr = pathval.toString() {
-					if let (ident, pathelm) = CNValuePath.pathExpression(string: pathstr) {
-						let path = CNValuePath(identifier: ident, elements: pathelm)
-						return CNPointerValue(path: path)
+					switch CNValuePath.pathExpression(string: pathstr) {
+					case .success(let path):
+						return .success(CNPointerValue(path: path))
+					case .failure(let err):
+						return .failure(err)
 					}
 				}
 			}
 		}
-		return nil
+		return .failure(NSError.parseError(message: "Incorrect format for \(CNPointerValue.ClassName) class"))
 	}
 
 	func toValue() -> Dictionary<String, CNValue> {

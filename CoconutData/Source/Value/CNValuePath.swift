@@ -52,6 +52,16 @@ public class CNValuePath
 		}
 	}
 
+	private struct Elements {
+		var 	firstIdent:	String?
+		var 	elements:	Array<Element>
+
+		public init(firstIdentifier fidt: String?, elements elms: Array<Element>){
+			firstIdent	= fidt
+			elements	= elms
+		}
+	}
+
 	private var mIdentifier:	String?
 	private var mElements:   	Array<Element>
 	private var mExpression: 	String
@@ -155,43 +165,50 @@ public class CNValuePath
 		return result
 	}
 
-	public static func pathExpression(string str: String) -> (String?, Array<Element>)? {
-		let result: (String?, Array<Element>)?
+	public static func pathExpression(string str: String) -> Result<CNValuePath, NSError> {
 		let conf = CNParserConfig(allowIdentiferHasPeriod: false)
 		switch CNStringToToken(string: str, config: conf) {
 		case .ok(let tokens):
 			let stream = CNTokenStream(source: tokens)
-			result = pathExpression(stream: stream)
+			switch pathExpression(stream: stream) {
+			case .success(let elms):
+				let path = CNValuePath(identifier: elms.firstIdent, elements: elms.elements)
+				return .success(path)
+			case .failure(let err):
+				return .failure(err)
+			}
 		case .error(let err):
-			CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
-			result = nil
+			return .failure(err)
 		}
-		return result
 	}
 
-	public static func pathExpression(stream strm: CNTokenStream) -> (String?, Array<Element>)? {
-		guard let ident = pathExpressionIdentifier(stream: strm) else {
-			return nil
+	private static func pathExpression(stream strm: CNTokenStream) -> Result<Elements, NSError> {
+		switch pathExpressionIdentifier(stream: strm) {
+		case .success(let identp):
+			switch pathExpressionMembers(stream: strm, hasIdentifier: identp != nil) {
+			case .success(let elms):
+				return .success(Elements(firstIdentifier: identp, elements: elms))
+			case .failure(let err):
+				return .failure(err)
+			}
+		case .failure(let err):
+			return .failure(err)
 		}
-		guard let members = pathExpressionMembers(stream: strm, hasIdentifier: !ident.isEmpty) else {
-			return nil
-		}
-		return (ident.isEmpty ? nil : ident, members)
 	}
 
-	private static func pathExpressionIdentifier(stream strm: CNTokenStream) -> String? {
+	private static func pathExpressionIdentifier(stream strm: CNTokenStream) -> Result<String?, NSError> {
 		if strm.requireSymbol(symbol: "@") {
 			if let ident = strm.getIdentifier() {
-				return ident
+				return .success(ident)
 			} else {
 				let _ = strm.unget() // unget symbol
 				CNLog(logLevel: .error, message: "Identifier is required for label", atFunction: #function, inFile: #file)
 			}
 		}
-		return ""
+		return .success(nil)
 	}
 
-	private static func pathExpressionMembers(stream strm: CNTokenStream, hasIdentifier hasident: Bool) ->  Array<Element>? {
+	private static func pathExpressionMembers(stream strm: CNTokenStream, hasIdentifier hasident: Bool) ->  Result<Array<Element>, NSError> {
 		var is1st:  Bool = !hasident
 		var result: Array<Element> = []
 		while !strm.isEmpty() {
@@ -199,59 +216,55 @@ public class CNValuePath
 			if is1st {
 				is1st = false
 			} else if !strm.requireSymbol(symbol: ".") {
-				CNLog(logLevel: .error, message: "Period is expected between members", atFunction: #function, inFile: #file)
-				return nil
+				return .failure(NSError.parseError(message: "Period is expected between members \(near(stream: strm))"))
 			}
 			/* Parse member */
 			guard let member = strm.getIdentifier() else {
-				CNLog(logLevel: .error, message: "Member for path expression is required", atFunction: #function, inFile: #file)
-				return nil
+				return .failure(NSError.parseError(message: "Member for path expression is required \(near(stream: strm))"))
 			}
 			result.append(.member(member))
 			/* Check "[" symbol */
 			while strm.requireSymbol(symbol: "[") {
-				if let memb = pathExpressionIndex(stream: strm) {
-					result.append(memb)
-				} else {
-					return nil
+				switch pathExpressionIndex(stream: strm) {
+				case .success(let elm):
+					result.append(elm)
+				case .failure(let err):
+					return .failure(err)
 				}
 				if !strm.requireSymbol(symbol: "]") {
-					CNLog(logLevel: .error, message: "']' is expected", atFunction: #function, inFile: #file)
-					return nil
+					return .failure(NSError.parseError(message: "']' is expected"))
 				}
 			}
 		}
-		return result
+		return .success(result)
 	}
 
-	private static func pathExpressionIndex(stream strm: CNTokenStream) ->  Element? {
+	private static func pathExpressionIndex(stream strm: CNTokenStream) ->  Result<Element, NSError> {
 		if let index = strm.requireUInt() {
-			return .index(Int(index))
+			return .success(.index(Int(index)))
 		} else if let ident = strm.requireIdentifier() {
 			if strm.requireSymbol(symbol: ":") {
-				if let val = requireAnyValue(stream: strm) {
-					return .keyAndValue(ident, val)
-				} else {
-					CNLog(logLevel: .error, message: "Invalid dictionary index \(near(stream: strm))")
-					return nil
+				switch requireAnyValue(stream: strm) {
+				case .success(let val):
+					return .success(.keyAndValue(ident, val))
+				case .failure(_):
+					return .failure(NSError.parseError(message: "Value to select dictionary element is required \(near(stream: strm))"))
 				}
 			} else {
-				CNLog(logLevel: .error, message: "':' is required for dictionary index \(near(stream: strm))")
-				return nil
+				return .failure(NSError.parseError(message: "':' is required between dictionary key and value \(near(stream: strm))"))
 			}
 		} else {
-			CNLog(logLevel: .error, message: "Invalid index \(near(stream: strm))")
-			return nil
+			return .failure(NSError.parseError(message: "Invalid index \(near(stream: strm))"))
 		}
 	}
 
-	private static func requireAnyValue(stream strm: CNTokenStream) -> CNValue? {
+	private static func requireAnyValue(stream strm: CNTokenStream) -> Result<CNValue, NSError> {
 		if let ival = strm.requireUInt() {
-			return .numberValue(NSNumber(integerLiteral: Int(ival)))
+			return .success(.numberValue(NSNumber(integerLiteral: Int(ival))))
 		} else if let sval = strm.requireIdentifier() {
-			return .stringValue(sval)
+			return .success(.stringValue(sval))
 		} else {
-			return nil
+			return .failure(NSError.parseError(message: "immediate value is required"))
 		}
 	}
 
