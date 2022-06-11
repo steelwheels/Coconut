@@ -9,7 +9,9 @@ import Foundation
 
 public class CNValueRecord: CNRecord
 {
-	static let ClassName = "record"
+	public static let 	RecordIdItem	= "recordId"
+
+	static let 		ClassName = "record"
 
 	private enum SourceData {
 		case table(CNValueTable, Int)			// (Source table, index)

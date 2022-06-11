@@ -482,13 +482,18 @@ public enum CNValue {
 		case .numberValue(let val):
 			result = CNTextLine(string: val.stringValue)
 		case .stringValue(let val):
-			result = CNTextLine(string: "\"" + val + "\"")
+			let txt = CNStringUtil.insertEscapeForQuote(source: val)
+			result = CNTextLine(string: "\"" + txt + "\"")
 		case .dateValue(let val):
-			result = CNTextLine(string: "\"" + CNValue.stringFromDate(date: val) + "\"")
+			let str = CNValue.stringFromDate(date: val)
+			let txt = CNStringUtil.insertEscapeForQuote(source: str)
+			result = CNTextLine(string: "\"" + txt + "\"")
 		case .enumValue(let val):
 			result = dictionaryToText(dictionary: val.toValue())
 		case .rangeValue(let val):
-			result = CNTextLine(string: "\"" + val.description + "\"")
+			let str = val.description
+			let txt = CNStringUtil.insertEscapeForQuote(source: str)
+			result = CNTextLine(string: "\"" + txt + "\"")
 		case .pointValue(let val):
 			result = dictionaryToText(dictionary: val.toValue())
 		case .sizeValue(let val):
@@ -500,7 +505,9 @@ public enum CNValue {
 		case .arrayValue(let val):
 			result = arrayToText(array: val)
 		case .URLValue(let val):
-			result = CNTextLine(string: "\"" + val.path + "\"")
+			let str = val.path
+			let txt = CNStringUtil.insertEscapeForQuote(source: str)
+			result = CNTextLine(string: "\"" + txt + "\"")
 		case .colorValue(let val):
 			result = dictionaryToText(dictionary: val.toValue())
 		case .imageValue(let val):

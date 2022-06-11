@@ -90,8 +90,8 @@ public class CNValuePath
 		mExpression = CNValuePath.toExpression(identifier: ident, elements: mElements)
 	}
 
-	public init(identifier ident: String?, path pth: CNValuePath, subPath subs: Array<Element>){
-		mIdentifier = ident
+	public init(path pth: CNValuePath, subPath subs: Array<Element>){
+		mIdentifier = pth.identifier
 		mElements   = []
 		for src in pth.elements {
 			mElements.append(src)
@@ -99,7 +99,7 @@ public class CNValuePath
 		for subs in subs {
 			mElements.append(subs)
 		}
-		mExpression = CNValuePath.toExpression(identifier: ident, elements: mElements)
+		mExpression = CNValuePath.toExpression(identifier: pth.identifier, elements: mElements)
 	}
 
 	public func isIncluded(in targ: CNValuePath) -> Bool {
@@ -133,7 +133,7 @@ public class CNValuePath
 				result += "[\(idx)]"
 			case .keyAndValue(let key, let val):
 				let txt = val.toText().toStrings().joined(separator: "\n")
-				result += "[\(key), \(txt)]"
+				result += "[\(key):\(txt)]"
 			}
 		}
 		return result
@@ -158,8 +158,15 @@ public class CNValuePath
 			case .index(let idx):
 				result    += "[\(idx)]"
 			case .keyAndValue(let key, let val):
-				let txt = val.toText().toStrings().joined(separator: "\n")
-				result 	  += "[\(key):\(txt)]"
+				let path: String
+				switch val {
+				case .stringValue(let str):
+					let quote = "\""
+					path = quote + str + quote
+				default:
+					path = val.toText().toStrings().joined(separator: "\n")
+				}
+				result 	  += "[\(key):\(path)]"
 			}
 		}
 		return result
@@ -247,8 +254,8 @@ public class CNValuePath
 				switch requireAnyValue(stream: strm) {
 				case .success(let val):
 					return .success(.keyAndValue(ident, val))
-				case .failure(_):
-					return .failure(NSError.parseError(message: "Value to select dictionary element is required \(near(stream: strm))"))
+				case .failure(let err):
+					return .failure(err)
 				}
 			} else {
 				return .failure(NSError.parseError(message: "':' is required between dictionary key and value \(near(stream: strm))"))
@@ -263,8 +270,10 @@ public class CNValuePath
 			return .success(.numberValue(NSNumber(integerLiteral: Int(ival))))
 		} else if let sval = strm.requireIdentifier() {
 			return .success(.stringValue(sval))
+		} else if let sval = strm.requireString() {
+			return .success(.stringValue(sval))
 		} else {
-			return .failure(NSError.parseError(message: "immediate value is required"))
+			return .failure(NSError.parseError(message: "immediate value is required for value in key-value index"))
 		}
 	}
 

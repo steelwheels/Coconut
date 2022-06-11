@@ -376,28 +376,11 @@ private class CNTokenizer
 	}
 
 	private func getStringTokenFromStream(stream srcstream: CNStringStream) throws -> CNToken {
-		let _ = srcstream.getc() // drop first "
-		var prevprevchar: Character? = nil
-		var prevchar:     Character? = nil
-		var hasquot		     = false
-		let resstr = getAnyStringFromStream(stream: srcstream, matchingFunc: {
-			(_ c: Character) -> Bool in
-			if c == "\"" {
-				let hasescape = (prevprevchar != "\\" && prevchar == "\\")
-				if !hasescape {
-					hasquot = true
-					return false
-				}
-			}
-			prevprevchar = prevchar
-			prevchar     = c
-			return true
-		})
-		if hasquot {
-			let _ = srcstream.getc() // drop last "
-			return CNToken(type: .StringToken(resstr), lineNo: mCurrentLine)
-		} else {
-			throw NSError.parseError(message: "String value is not ended by \" but \"\(resstr)\" is given", location: #function)
+		switch CNStringUtil.removeEscapeForQuote(source: srcstream) {
+		case .success(let str):
+			return CNToken(type: .StringToken(str), lineNo: mCurrentLine)
+		case .failure(let err):
+			throw err
 		}
 	}
 

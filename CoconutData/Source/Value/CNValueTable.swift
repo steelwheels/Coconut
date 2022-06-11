@@ -123,6 +123,40 @@ public class CNValueTable: CNTable
 		}
 	}
 
+	public func append(record rcd: CNRecord) {
+		if rcd.index != nil {
+			CNLog(logLevel: .error, message: "The record has already index")
+			return
+		}
+		if let cached = rcd.cachedValues() {
+			if !mValueStorage.append(value: .dictionaryValue(cached), forPath: recordPath()) {
+				CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
+			}
+		}
+	}
+
+	public func append(pointer ptr: CNPointerValue) {
+		guard let ident = mIdentifier else {
+			CNLog(logLevel: .error, message: "The property \(CNValueTable.IdItem) is required to append pointer value", atFunction: #function, inFile: #file)
+			return
+		}
+		let elms: Array<CNValuePath.Element> = [.member(CNValueTable.RecordsItem)]
+		if !mValueStorage.append(value: .pointerValue(ptr), forPath: CNValuePath(identifier: ident, elements: elms)) {
+			CNLog(logLevel: .error, message: "Failed to append pointer", atFunction: #function, inFile: #file)
+		}
+	}
+
+	public func remove(at row: Int) -> Bool {
+		var result = false
+		if 0<=row && row<self.recordCount {
+			let elmpath = CNValuePath(path: recordPath(), subPath: [.index(row)])
+			if mValueStorage.delete(forPath: elmpath) {
+				result = true
+			}
+		}
+		return result
+	}
+	
 	public func pointer(value val: CNValue, forField field: String) -> CNPointerValue? {
 		guard let ident = mIdentifier else {
 			CNLog(logLevel: .error, message: "The property \(CNValueTable.IdItem) is required to make value path", atFunction: #function, inFile: #file)
@@ -160,39 +194,6 @@ public class CNValueTable: CNTable
 		return result
 	}
 
-	public func append(record rcd: CNRecord) {
-		if rcd.index != nil {
-			CNLog(logLevel: .error, message: "The record has already index")
-		}
-		if let cached = rcd.cachedValues() {
-			if !mValueStorage.append(value: .dictionaryValue(cached), forPath: recordPath()) {
-				CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
-			}
-		}
-	}
-
-	public func append(pointer ptr: CNPointerValue) {
-		guard let ident = mIdentifier else {
-			CNLog(logLevel: .error, message: "The property \(CNValueTable.IdItem) is required to append pointer value", atFunction: #function, inFile: #file)
-			return
-		}
-		let elms: Array<CNValuePath.Element> = [.member(CNValueTable.RecordsItem)]
-		if !mValueStorage.append(value: .pointerValue(ptr), forPath: CNValuePath(identifier: ident, elements: elms)) {
-			CNLog(logLevel: .error, message: "Failed to append pointer", atFunction: #function, inFile: #file)
-		}
-	}
-
-	public func remove(at row: Int) -> Bool {
-		var result = false
-		if 0<=row && row<self.recordCount {
-			let elmpath = CNValuePath(identifier: nil, path: recordPath(), subPath: [.index(row)])
-			if mValueStorage.delete(forPath: elmpath) {
-				result = true
-			}
-		}
-		return result
-	}
-
 	public func forEach(callback cbfunc: (CNRecord) -> Void) {
 		let dicts = self.recordValues()
 		for i in 0..<dicts.count {
@@ -224,19 +225,19 @@ public class CNValueTable: CNTable
 	}
 
 	private func defaultFieldsPath() -> CNValuePath {
-		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.DefaultFieldsItem)])
+		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.DefaultFieldsItem)])
 	}
 
 	private func recordPath() -> CNValuePath {
-		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.RecordsItem)])
+		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.RecordsItem)])
 	}
 
 	private func idPath() -> CNValuePath {
-		return CNValuePath(identifier: nil, path: mPath, subPath: [.member(CNValueTable.IdItem)])
+		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.IdItem)])
 	}
 
 	private func recordFieldPath(index idx: Int, field fld: String) -> CNValuePath {
-		return CNValuePath(identifier: nil,path: mPath, subPath: [.member(CNValueTable.RecordsItem), .index(idx), .member(fld)])
+		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.RecordsItem), .index(idx), .member(fld)])
 	}
 
 	private func idValue() -> String? {

@@ -47,6 +47,65 @@ public extension String
 
 public class CNStringUtil
 {
+	public class func insertEscapeForQuote(source src: String) -> String {
+		let stream     = CNStringStream(string: src)
+		var result     = ""
+		var didescaped = false
+		while let c = stream.getc() {
+			switch c {
+			case "\"":
+				result.append("\\")
+				result.append(c)
+				didescaped = false
+			case "\\":
+				didescaped = true		// escape is skipped
+			default:
+				if didescaped {
+					result.append("\\")
+					didescaped = false
+				}
+				result.append(c)
+			}
+		}
+		if didescaped { // last escape
+			result.append("\\")
+			didescaped = false
+		}
+		return result
+	}
+
+	public class func removeEscapeForQuote(source strm: CNStringStream) -> Result<String, NSError> {
+		let _ = strm.getc() // drop first "
+		var result      = ""
+		var didescaped  = false
+		var didfinished = false
+		loop: while let c = strm.getc() {
+			switch c {
+			case "\\":
+				didescaped = true
+			case "\"":
+				if didescaped {
+					result.append(c)
+					didescaped = false
+				} else {
+					didfinished = true
+					break loop
+				}
+			default:
+				if didescaped {
+					result.append("\\")
+					didescaped = false
+				}
+				result.append(c)
+			}
+		}
+		if didfinished {
+			return .success(result)
+		} else {
+			return .failure(NSError.parseError(message: "'\"' is NOT found to close the string"))
+		}
+	}
+
 	public class func divideByQuote(sourceString src: String, quote qchar: Character) -> Array<String>
 	{
 		var result: Array<String> = []
