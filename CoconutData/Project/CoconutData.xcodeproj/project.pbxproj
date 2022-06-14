@@ -30,6 +30,9 @@
 		052E8F8C27F5E3E500EDEC17 /* CNValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E8F8B27F5E3E500EDEC17 /* CNValueCache.swift */; };
 		052E8F8D27F5E3E500EDEC17 /* CNValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E8F8B27F5E3E500EDEC17 /* CNValueCache.swift */; };
 		052F30F4278F246500CADA5C /* UTValuePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052F30F3278F246500CADA5C /* UTValuePath.swift */; };
+		0535D84B28560FBE00FD720C /* CNValueSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535D84A28560FBE00FD720C /* CNValueSet.swift */; };
+		0535D84C28560FBE00FD720C /* CNValueSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535D84A28560FBE00FD720C /* CNValueSet.swift */; };
+		0535D8542856198900FD720C /* UTValueSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535D8532856198900FD720C /* UTValueSet.swift */; };
 		0537C0B2273CC340003B742E /* rectangle-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A7273CC320003B742E /* rectangle-filled.png */; };
 		0537C0B3273CC340003B742E /* rectangle.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A6273CC320003B742E /* rectangle.png */; };
 		0537C0BA273CC353003B742E /* rectangle-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A7273CC320003B742E /* rectangle-filled.png */; };
@@ -461,6 +464,8 @@
 		052E27DF2625E5EF00414C26 /* UTCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCommandTable.swift; sourceTree = "<group>"; };
 		052E8F8B27F5E3E500EDEC17 /* CNValueCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValueCache.swift; sourceTree = "<group>"; };
 		052F30F3278F246500CADA5C /* UTValuePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValuePath.swift; sourceTree = "<group>"; };
+		0535D84A28560FBE00FD720C /* CNValueSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueSet.swift; sourceTree = "<group>"; };
+		0535D8532856198900FD720C /* UTValueSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValueSet.swift; sourceTree = "<group>"; };
 		0537C0A6273CC320003B742E /* rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectangle.png; sourceTree = "<group>"; };
 		0537C0A7273CC320003B742E /* rectangle-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-filled.png"; sourceTree = "<group>"; };
 		053AE54A25D55D380007056B /* CNBitmapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapData.swift; sourceTree = "<group>"; };
@@ -698,6 +703,7 @@
 				055C8AEA25DD62F50053510B /* UTToken.swift */,
 				059BA6D2256B20B500893641 /* UTType.swift */,
 				05FC3861255FEC1D004CA79E /* UTURL.swift */,
+				0535D8532856198900FD720C /* UTValueSet.swift */,
 				05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */,
 			);
 			path = UnitTest;
@@ -870,6 +876,7 @@
 				05A506B028016FA100F5B53A /* CNValuePointer.swift */,
 				0550399F277D7DC0007FA515 /* CNValueRecord.swift */,
 				05B7B1AE277606810077DEDC /* CNValueSegment.swift */,
+				0535D84A28560FBE00FD720C /* CNValueSet.swift */,
 				05A1AFB8277689F90091D527 /* CNValueStorage.swift */,
 				05F969AF26467E7E00E676C5 /* CNValueTable.swift */,
 			);
@@ -1316,6 +1323,7 @@
 				051EE76625E24C3A006FED4D /* UTBitmap.swift in Sources */,
 				05FC3875255FEC1E004CA79E /* UTColor.swift in Sources */,
 				05FC3885255FEC1E004CA79E /* UTFilePath.swift in Sources */,
+				0535D8542856198900FD720C /* UTValueSet.swift in Sources */,
 				05FC3887255FEC1E004CA79E /* UTProcess.swift in Sources */,
 				05FC387C255FEC1E004CA79E /* UTURL.swift in Sources */,
 				05FC387A255FEC1E004CA79E /* UTFontManager.swift in Sources */,
@@ -1354,6 +1362,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0535D84B28560FBE00FD720C /* CNValueSet.swift in Sources */,
 				05B32CF325150328000D1411 /* CNPreferenceTable.swift in Sources */,
 				05B32D0225150368000D1411 /* CNTokenStream.swift in Sources */,
 				05B32CE3251502E7000D1411 /* CNEnvironment.swift in Sources */,
@@ -1453,6 +1462,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0535D84C28560FBE00FD720C /* CNValueSet.swift in Sources */,
 				05B32CF425150328000D1411 /* CNPreferenceTable.swift in Sources */,
 				05B32D0325150368000D1411 /* CNTokenStream.swift in Sources */,
 				05B32CE4251502E7000D1411 /* CNEnvironment.swift in Sources */,

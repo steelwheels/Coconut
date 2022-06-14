@@ -10,7 +10,7 @@ import Foundation
 
 public func testVectorGraphics(console cons: CNConsole) -> Bool
 {
-	NSLog("Decode/ecode graphics objects")
+	cons.print(string: "Decode/ecode graphics objects")
 	return valueTest(console: cons)
 }
 

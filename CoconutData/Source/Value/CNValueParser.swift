@@ -60,7 +60,7 @@ public class CNValueParser
 	private func decodeObject(value src: CNValue) -> CNValue {
 		let dst: CNValue
 		switch src {
-		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_),
+		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_), .setValue(_),
 		     .dateValue(_), .rangeValue(_), .pointValue(_), .sizeValue(_),
 		     .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_), .imageValue(_),
 		     .recordValue(_), .objectValue(_), .segmentValue(_), .pointerValue(_):

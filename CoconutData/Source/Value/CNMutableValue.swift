@@ -9,15 +9,26 @@ import Foundation
 
 public class CNMutableValue
 {
-	public enum ValueType {
-		case scaler
-		case array
-		case dictionary
-		case segment
-		case pointer
+	public enum ValueType: Int {
+		case scaler		= 0
+		case array		= 1
+		case set		= 2
+		case dictionary		= 3
+		case segment		= 4
+		case pointer		= 5
+
+		public func compare(type t: ValueType) -> ComparisonResult {
+			if self.rawValue < t.rawValue {
+				return .orderedAscending
+			} else if self.rawValue == t.rawValue {
+				return .orderedSame
+			} else {
+				return .orderedDescending
+			}
+		}
 	}
 
-	private var 	mType:    	ValueType
+	fileprivate var mType:    	ValueType
 	private var	mLabelTable:	CNValueLabels?
 	public var	type:    	ValueType { get { return mType    }}
 	public var 	isDirty:	Bool
@@ -168,17 +179,17 @@ public class CNMutableScalarValue: CNMutableValue
 
 public class CNMutableArrayValue: CNMutableValue
 {
-	private var mArrayValue:	Array<CNMutableValue>
+	private var mValues:	Array<CNMutableValue>
 
 	public init(){
-		mArrayValue = []
+		mValues = []
 		super.init(type: .array)
 	}
 
-	public var values: Array<CNMutableValue> { get { return mArrayValue }}
+	public var values: Array<CNMutableValue> { get { return mValues }}
 
 	public func append(value val: CNMutableValue){
-		mArrayValue.append(val)
+		mValues.append(val)
 	}
 
 	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
@@ -194,8 +205,8 @@ public class CNMutableArrayValue: CNMutableValue
 			result = nil
 		case .index(let idx):
 
-			if 0<=idx && idx<mArrayValue.count {
-				result = mArrayValue[idx]._value(forPath: rest, in: root)
+			if 0<=idx && idx<mValues.count {
+				result = mValues[idx]._value(forPath: rest, in: root)
 			} else {
 				CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 				result = nil
@@ -231,14 +242,14 @@ public class CNMutableArrayValue: CNMutableValue
 			result = false
 		case .index(let idx):
 			if rest.count == 0 {
-				if 0<=idx && idx<mArrayValue.count {
+				if 0<=idx && idx<mValues.count {
 					let dval = val.clone()
-					mArrayValue[idx] = dval
+					mValues[idx] = dval
 					root.isDirty = true
 					result = true
-				} else if idx == mArrayValue.count {
+				} else if idx == mValues.count {
 					let dval = val.clone()
-					mArrayValue.append(dval)
+					mValues.append(dval)
 					root.isDirty = true
 					result = true
 				} else {
@@ -246,8 +257,8 @@ public class CNMutableArrayValue: CNMutableValue
 					result = false
 				}
 			} else {
-				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx]._set(value: val, forPath: rest, in: root)
+				if 0<=idx && idx<mValues.count {
+					result = mValues[idx]._set(value: val, forPath: rest, in: root)
 				} else {
 					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
 					result = false
@@ -257,7 +268,7 @@ public class CNMutableArrayValue: CNMutableValue
 			if let (curidx, curdict) = searchChild(key: srckey, value: srcval) {
 				if rest.count == 0 {
 					/* Replace child itself */
-					mArrayValue[curidx] = val
+					mValues[curidx] = val
 					root.isDirty = true
 					result = true
 				} else {
@@ -282,8 +293,269 @@ public class CNMutableArrayValue: CNMutableValue
 				CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
 				result = false
 			case .index(let idx):
-				if 0<=idx && idx<mArrayValue.count {
-					let dst  = mArrayValue[idx]
+				if 0<=idx && idx<mValues.count {
+					let dst  = mValues[idx]
+					let dval = val.clone()
+					result = dst._append(value: dval, forPath: rest, in: root)
+				} else {
+					CNLog(logLevel: .error, message: "Array index overflow: \(idx)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			case .keyAndValue(let srckey, let srcval):
+				if let (_, curdict) = searchChild(key: srckey, value: srcval) {
+					if rest.count == 0 {
+						let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+						CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+						result = false
+					} else {
+						/* Trace child */
+						result = curdict._append(value: val, forPath: rest, in: root)
+					}
+				} else {
+					let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+					CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			}
+		} else {
+			let dval = val.clone()
+			mValues.append(dval)
+			root.isDirty = true
+			result = true
+		}
+		return result
+	}
+
+	public override func _delete(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
+		guard let first = path.first else {
+			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
+			return false
+		}
+		let rest = Array(path.dropFirst())
+		let result: Bool
+		switch first {
+		case .member(let member):
+			CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
+			result = false
+		case .index(let idx):
+			if rest.count == 0 {
+				if 0<=idx && idx<mValues.count {
+					mValues.remove(at: idx)
+					root.isDirty = true
+					result = true
+				} else {
+					result = false
+				}
+			} else {
+				if 0<=idx && idx<mValues.count {
+					result = mValues[idx]._delete(forPath: rest, in: root)
+				} else {
+					result = false
+				}
+			}
+		case .keyAndValue(let srckey, let srcval):
+			if let (curidx, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Delete child itself */
+					mValues.remove(at: curidx)
+					root.isDirty = true
+					result = true
+				} else {
+					/* Trace child */
+					result = curdict._delete(forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = false
+			}
+		}
+		return result
+	}
+
+	private func searchChild(key srckey: String, value srcval: CNValue) -> (Int, CNMutableDictionaryValue)? {
+		for i in 0..<mValues.count {
+			if let dict = mValues[i] as? CNMutableDictionaryValue {
+				if let curval = dict.get(forKey: srckey) {
+					if CNIsSameValue(nativeValue0: curval.toValue(), nativeValue1: srcval){
+						return (i, dict)
+					}
+				}
+			}
+		}
+		return nil
+	}
+
+	public override func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
+		for i in 0..<mValues.count {
+			let elm = mValues[i]
+			if var rpath = elm._search(name: nm, value: val, in: root) {
+				rpath.insert(.index(i), at: 0)
+				return rpath
+			}
+		}
+		return nil
+	}
+
+	public override func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
+		var result: Dictionary<String, Array<CNValuePath.Element>> = [:]
+		for i in 0..<mValues.count {
+			var curpath: Array<CNValuePath.Element> = []
+			curpath.append(contentsOf: pth)
+			curpath.append(.index(i))
+			let subres = mValues[i]._makeLabelTable(property: name, path: curpath)
+			for (skey, sval) in subres {
+				result[skey] = sval
+			}
+		}
+		return result
+	}
+
+	public override func clone() -> CNMutableValue {
+		let result = CNMutableArrayValue()
+		for elm in mValues {
+			result.append(value: elm.clone())
+		}
+		return result
+	}
+
+	public override func toValue() -> CNValue {
+		var result: Array<CNValue> = []
+		for elm in mValues {
+			result.append(elm.toValue())
+		}
+		return .arrayValue(result)
+	}
+}
+
+public class CNMutableSetValue: CNMutableValue
+{
+	private var mValues:		Array<CNMutableValue>
+
+	public init(){
+		mValues = []
+		super.init(type: .array)
+	}
+
+	public var values: Array<CNMutableValue> { get { return mValues }}
+
+	public func append(value src: CNMutableValue){
+		for i in 0..<mValues.count {
+			switch CNCompareMutableValue(value0: src, value1: mValues[i]) {
+			case .orderedAscending:		// src < mValues
+				break 	// continue
+			case .orderedDescending:	// src > mValues[i]
+				mValues.insert(src, at: i+1)
+				return 	// inserted
+			case .orderedSame:
+				return	// already defined
+			}
+		}
+		mValues.append(src)
+	}
+
+	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> CNMutableValue? {
+		guard let first = path.first else {
+			/* Return entire array */
+			return self.clone()
+		}
+		let rest = Array(path.dropFirst())
+		let result: CNMutableValue?
+		switch first {
+		case .member(let member):
+			CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
+			result = nil
+		case .index(let idx):
+			if 0<=idx && idx<mValues.count {
+				result = mValues[idx]._value(forPath: rest, in: root)
+			} else {
+				CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
+				result = nil
+			}
+		case .keyAndValue(let srckey, let srcval):
+			if let (_, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Return child itself */
+					result = curdict
+				} else {
+					/* Trace child */
+					result = curdict._value(forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = nil
+			}
+		}
+		return result
+	}
+
+	public override func _set(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
+		guard let first = path.first else {
+			CNLog(logLevel: .error, message: "Empty path for array value", atFunction: #function, inFile: #file)
+			return false
+		}
+		let rest = Array(path.dropFirst())
+		let result: Bool
+		switch first {
+		case .member(let member):
+			CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
+			result = false
+		case .index(let idx):
+			if rest.count == 0 {
+				if 0<=idx && idx<mValues.count {
+					let dval = val.clone()
+					mValues[idx] = dval
+					root.isDirty = true
+					result = true
+				} else if idx == mValues.count {
+					let dval = val.clone()
+					mValues.append(dval)
+					root.isDirty = true
+					result = true
+				} else {
+					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			} else {
+				if 0<=idx && idx<mValues.count {
+					result = mValues[idx]._set(value: val, forPath: rest, in: root)
+				} else {
+					CNLog(logLevel: .error, message: "Invalid array index: \(idx)", atFunction: #function, inFile: #file)
+					result = false
+				}
+			}
+		case .keyAndValue(let srckey, let srcval):
+			if let (curidx, curdict) = searchChild(key: srckey, value: srcval) {
+				if rest.count == 0 {
+					/* Replace child itself */
+					mValues[curidx] = val
+					root.isDirty = true
+					result = true
+				} else {
+					/* Trace child */
+					result = curdict._set(value: val, forPath: rest, in: root)
+				}
+			} else {
+				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
+				CNLog(logLevel: .error, message: "Invalid key or value: \(srckey):\(valtxt)", atFunction: #function, inFile: #file)
+				result = false
+			}
+		}
+		return result
+	}
+
+	public override func _append(value val: CNMutableValue, forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Bool {
+		let result: Bool
+		if let first = path.first {
+			let rest = Array(path.dropFirst())
+			switch first {
+			case .member(let member):
+				CNLog(logLevel: .error, message: "Array index is required but key is given: \(member)", atFunction: #function, inFile: #file)
+				result = false
+			case .index(let idx):
+				if 0<=idx && idx<mValues.count {
+					let dst  = mValues[idx]
 
 					let dval = val.clone()
 					result = dst._append(value: dval, forPath: rest, in: root)
@@ -309,7 +581,7 @@ public class CNMutableArrayValue: CNMutableValue
 			}
 		} else {
 			let dval = val.clone()
-			mArrayValue.append(dval)
+			mValues.append(dval)
 			root.isDirty = true
 			result = true
 		}
@@ -329,16 +601,16 @@ public class CNMutableArrayValue: CNMutableValue
 			result = false
 		case .index(let idx):
 			if rest.count == 0 {
-				if 0<=idx && idx<mArrayValue.count {
-					mArrayValue.remove(at: idx)
+				if 0<=idx && idx<mValues.count {
+					mValues.remove(at: idx)
 					root.isDirty = true
 					result = true
 				} else {
 					result = false
 				}
 			} else {
-				if 0<=idx && idx<mArrayValue.count {
-					result = mArrayValue[idx]._delete(forPath: rest, in: root)
+				if 0<=idx && idx<mValues.count {
+					result = mValues[idx]._delete(forPath: rest, in: root)
 				} else {
 					result = false
 				}
@@ -347,7 +619,7 @@ public class CNMutableArrayValue: CNMutableValue
 			if let (curidx, curdict) = searchChild(key: srckey, value: srcval) {
 				if rest.count == 0 {
 					/* Delete child itself */
-					mArrayValue.remove(at: curidx)
+					mValues.remove(at: curidx)
 					root.isDirty = true
 					result = true
 				} else {
@@ -364,8 +636,8 @@ public class CNMutableArrayValue: CNMutableValue
 	}
 
 	private func searchChild(key srckey: String, value srcval: CNValue) -> (Int, CNMutableDictionaryValue)? {
-		for i in 0..<mArrayValue.count {
-			if let dict = mArrayValue[i] as? CNMutableDictionaryValue {
+		for i in 0..<mValues.count {
+			if let dict = mValues[i] as? CNMutableDictionaryValue {
 				if let curval = dict.get(forKey: srckey) {
 					if CNIsSameValue(nativeValue0: curval.toValue(), nativeValue1: srcval){
 						return (i, dict)
@@ -377,8 +649,8 @@ public class CNMutableArrayValue: CNMutableValue
 	}
 
 	public override func _search(name nm: String, value val: String, in root: CNMutableValue) -> Array<CNValuePath.Element>? {
-		for i in 0..<mArrayValue.count {
-			let elm = mArrayValue[i]
+		for i in 0..<mValues.count {
+			let elm = mValues[i]
 			if var rpath = elm._search(name: nm, value: val, in: root) {
 				rpath.insert(.index(i), at: 0)
 				return rpath
@@ -389,11 +661,11 @@ public class CNMutableArrayValue: CNMutableValue
 
 	public override func _makeLabelTable(property name: String, path pth: Array<CNValuePath.Element>) -> Dictionary<String, Array<CNValuePath.Element>> {
 		var result: Dictionary<String, Array<CNValuePath.Element>> = [:]
-		for i in 0..<mArrayValue.count {
+		for i in 0..<mValues.count {
 			var curpath: Array<CNValuePath.Element> = []
 			curpath.append(contentsOf: pth)
 			curpath.append(.index(i))
-			let subres = mArrayValue[i]._makeLabelTable(property: name, path: curpath)
+			let subres = mValues[i]._makeLabelTable(property: name, path: curpath)
 			for (skey, sval) in subres {
 				result[skey] = sval
 			}
@@ -403,7 +675,7 @@ public class CNMutableArrayValue: CNMutableValue
 
 	public override func clone() -> CNMutableValue {
 		let result = CNMutableArrayValue()
-		for elm in mArrayValue {
+		for elm in mValues {
 			result.append(value: elm.clone())
 		}
 		return result
@@ -411,7 +683,7 @@ public class CNMutableArrayValue: CNMutableValue
 
 	public override func toValue() -> CNValue {
 		var result: Array<CNValue> = []
-		for elm in mArrayValue {
+		for elm in mValues {
 			result.append(elm.toValue())
 		}
 		return .arrayValue(result)
@@ -964,6 +1236,15 @@ public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNVa
 		} else {
 			CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
 		}
+	case .set:
+		if let set = val as? CNMutableSetValue {
+			for child in set.values {
+				let cres = CNSegmentsInValue(value: child, traceOption: trace)
+				result.append(contentsOf: cres)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Can not happen (3)", atFunction: #function, inFile: #file)
+		}
 	case .segment:
 		if let ref = val as? CNMutableValueSegment {
 			result.append(ref)
@@ -990,4 +1271,14 @@ public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNVa
 	return result
 }
 
+public func CNCompareMutableValue(value0 v0: CNMutableValue, value1 v1: CNMutableValue) -> ComparisonResult {
+	switch v0.mType.compare(type: v1.mType) {
+	case .orderedAscending:
+		return .orderedAscending
+	case .orderedDescending:
+		return .orderedDescending
+	case .orderedSame:
+		return CNCompareValue(nativeValue0: v0.toValue(), nativeValue1: v1.toValue())
+	}
+}
 

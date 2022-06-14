@@ -27,6 +27,7 @@ public enum CNValueType: Int
 	case	enumType
 	case	dictionaryType
 	case	arrayType
+	case	setType
 	case	URLType
 	case	colorType
 	case	imageType
@@ -50,6 +51,7 @@ public enum CNValueType: Int
 		case .enumType:		result = "Enum"
 		case .dictionaryType:	result = "Dictionary"
 		case .arrayType:	result = "Array"
+		case .setType:		result = "Set"
 		case .URLType:		result = "URL"
 		case .colorType:	result = "Color"
 		case .imageType:	result = "Image"
@@ -79,6 +81,7 @@ public enum CNValueType: Int
 		case "Enum":		result = .enumType
 		case "Dictionary":	result = .dictionaryType
 		case "Array":		result = .arrayType
+		case "Set":		result = .setType
 		case "URL":		result = .URLType
 		case "Color":		result = .colorType
 		case "Image":		result = .imageType
@@ -118,6 +121,7 @@ public enum CNValue {
 	case enumValue(_ val: CNEnum)
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
+	case setValue(_ val: CNValueSet)
 	case URLValue(_ val: URL)
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
@@ -142,6 +146,7 @@ public enum CNValue {
 			case .enumValue(_):		result = .enumType
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
+			case .setValue(_):		result = .setType
 			case .URLValue(_):		result = .URLType
 			case .colorValue(_):		result = .colorType
 			case .imageValue(_):		result = .imageType
@@ -253,6 +258,15 @@ public enum CNValue {
 		let result: Array<CNValue>?
 		switch self {
 		case .arrayValue(let obj):	result = obj
+		default:			result = nil
+		}
+		return result
+	}
+
+	public func toSet() -> CNValueSet? {
+		let result: CNValueSet?
+		switch self {
+		case .setValue(let obj):	result = obj
 		default:			result = nil
 		}
 		return result
@@ -402,6 +416,14 @@ public enum CNValue {
 		}
 	}
 
+	public func setProperty(identifier ident: String) -> CNValueSet? {
+		if let elm = valueProperty(identifier: ident){
+			return elm.toSet()
+		} else {
+			return nil
+		}
+	}
+
 	public func URLProperty(identifier ident: String) -> URL? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toURL()
@@ -504,6 +526,8 @@ public enum CNValue {
 			result = dictionaryToText(dictionary: val)
 		case .arrayValue(let val):
 			result = arrayToText(array: val)
+		case .setValue(let val):
+			result = val.toText()
 		case .URLValue(let val):
 			let str = val.path
 			let txt = CNStringUtil.insertEscapeForQuote(source: str)
@@ -651,6 +675,12 @@ public enum CNValue {
 				newarr.append(elm.toAny())
 			}
 			result = newarr
+		case .setValue(let sval):
+			var newarr: Array<Any> = []
+			for elm in sval.values {
+				newarr.append(elm.toAny())
+			}
+			result = newarr
 		}
 		return result
 	}
@@ -742,6 +772,10 @@ public enum CNValue {
 				case NSRange.ClassName:
 					if let range = NSRange.fromValue(value: dict) {
 						result = .rangeValue(range)
+					}
+				case CNValueSet.ClassName:
+					if let valset = CNValueSet.fromValue(value: dict) {
+						result = .setValue(valset)
 					}
 				case CNValueRecord.ClassName:
 					if let record = CNValueRecord.fromValue(value: dict) {

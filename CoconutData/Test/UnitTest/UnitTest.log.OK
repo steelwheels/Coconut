@@ -15,19 +15,19 @@ testPreference .. OK
 testFontManager .. OK
 * testStringStream
 - Test string stream to token
-[INIT] String(" (ab, c1, da_) : e01 > hoge fuga")[0:32]
-[STREAM-A] String(" (ab, c1, da_) : e01 ")[0:21]
-[STREAM-B] String(" hoge fuga")[0:10]
+[INIT] String(" (ab, c1, da_) : e01 > hoge fuga")
+[STREAM-A] String(" (ab, c1, da_) : e01 ")
+[STREAM-B] String(" hoge fuga")
 <Tokens>
-SymbolToken(()
-IdentifierToken(ab)
-SymbolToken(,)
-IdentifierToken(c1)
-SymbolToken(,)
-IdentifierToken(da_)
-SymbolToken())
-SymbolToken(:)
-IdentifierToken(e01)
+symbol: (
+identifier: ab
+symbol: ,
+identifier: c1
+symbol: ,
+identifier: da_
+symbol: )
+symbol: :
+identifier: e01
 - Test string stream to decode
 Decoded value: 1234 ... OK
 Remained: a .. OK
@@ -504,28 +504,29 @@ firstWord: "/path/script.js `{args: "a"}`" => ("/path/script.js", "`{args: "a"}`
 * testToken
 Source: "hello, world !!"
 Result:
- IdentifierToken(hello)
- SymbolToken(,)
- IdentifierToken(world)
- SymbolToken(!)
- SymbolToken(!)
+ identifier: hello
+ symbol: ,
+ identifier: world
+ symbol: !
+ symbol: !
 Source: "hello//comment
 world!!"
 Result:
- IdentifierToken(hello)
- IdentifierToken(world)
- SymbolToken(!)
- SymbolToken(!)
+ identifier: hello
+ identifier: world
+ symbol: !
+ symbol: !
 Source: "a // comment
 "
 Result:
- IdentifierToken(a)
+ identifier: a
 Source: "b // comment"
 Result:
- IdentifierToken(b)
+ identifier: b
 * testURL
 nullURL = file:///dev/null
 testURL .. OK
+* testValueSets
 * testQueue
 Initial: {1st:-1, next:0, count:0 }
 []
@@ -626,8 +627,6 @@ testFileManager .. NG
 * testObserver
 isExecuting -> true
 testObserver (d) .. OK
-[0] -> true
-testObserver (a) .. OK
 * testOperation
 Wait for finish operations
 testOperation ... OK
@@ -1406,75 +1405,24 @@ result: [
 ]
 source: [10, 20]
 result: [
-  10
+  10,
   20
 ]
 source: [[10, 20], ["a", "b"]]
 result: [
   [
-    10
+    10,
     20
-  ]
+  ],
   [
-    a
-    b
+    "a",
+    "b"
   ]
 ]
 Compare null and null ...  equal(==) -> OK
 Compare 1.23 and 1.23 ...  equal(==) -> OK
 Compare 1.23 and 12.3 ...  ascending(<) -> OK
 Compare 0 and 12.3 ...  ascending(<) -> OK
-* testNativeValueTable
-* Initial table
------
-[
-]
------
-* Add 1st item
------
-[
-  {
-    c0 0/0 
-  }
-]
------
-* Add 2nd item
------
-[
-  {
-    c0 0/0 
-  }
-  {
-    c1 1/1 
-  }
-]
------
-* Set 5x3 item
------
-[
-  {
-    c0 0/0 
-    c1 1/0 
-    c2 2/0 
-    c3 3/0 
-    c4 4/0 
-  }
-  {
-    c0 0/1 
-    c1 1/1 
-    c2 2/1 
-    c3 3/1 
-    c4 4/1 
-  }
-  {
-    c0 0/2 
-    c1 1/2 
-    c2 2/2 
-    c3 3/2 
-    c4 4/2 
-  }
-]
------
 * testText
 Result of toString:
 header: {
@@ -1484,4 +1432,16 @@ header: {
   C2  C0      
       C1      
 }
+* vectorGraphics
+2022-06-12 22:01:16.393 UnitTest[57694:946279] Decode/ecode graphics objects
+point0:: {
+  class: "point",
+  x: 12,
+  y: 34
+}OK: point0 (0)
+size0:: {
+  class: "size",
+  height: 34,
+  width: 12
+}OK: size0 (0)
 [Result] NG
