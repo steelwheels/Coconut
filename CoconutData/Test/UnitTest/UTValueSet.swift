@@ -12,66 +12,48 @@ public func testValueSet(console cons: CNConsole) -> Bool
 {
 	var result = true
 
-	let set0 = CNValueSet()
-	cons.print(string: "* initial set\n")
-	printValues(values: set0.values, console: cons)
+	let elm0: CNValue = .boolValue(true)
+	let elm1: CNValue = .boolValue(false)
+	let arr0: CNValue = .arrayValue([elm0, elm1])
 
-	cons.print(string: "* insert to set\n")
-	insert(set0, 1)
-	insert(set0, 5)
-	insert(set0, 3)
-	printValues(values: set0.values, console: cons)
-
-	cons.print(string: "* check context of the set\n")
-	if set0.has(value: intToValue(1)) {
-		cons.print(string: "has 1 ... OK\n")
+	let dict0: Dictionary<String, CNValue> = [
+		"class":	.stringValue(CNValueSet.ClassName),
+		"values":	arr0
+	]
+	if CNValueSet.isSet(dictionary: dict0) {
+		cons.print(string: "isSet ... OK\n")
 	} else {
-		cons.print(string: "not have 1 ... Error\n")
+		cons.print(string: "isSet ... Error\n")
+		result = false
+	}
+	if let val = CNValueSet.fromValue(value: dict0) {
+		let txt = val.toText().toStrings().joined(separator: "\n")
+		cons.print(string: "fromValue ... OK -> \(txt)\n")
+	} else {
+		cons.print(string: "fromValue ... Error\n")
 		result = false
 	}
 
-	cons.print(string: "* check context of the set\n")
-	if set0.has(value: intToValue(2)) {
-		cons.print(string: "has 2 ... Error\n")
-		result = false
-	} else {
-		cons.print(string: "not have 2 ... OK\n")
-	}
+	let elm10: CNValue = .numberValue(NSNumber(integerLiteral: 1))
+	let elm11: CNValue = .numberValue(NSNumber(integerLiteral: 3))
+	var arr12 = [elm10, elm11]
+	CNValueSet.insert(target: &arr12, element: .numberValue(NSNumber(integerLiteral: 2)))
+	let txt13 = CNValue.arrayValue(arr12).toText().toStrings().joined(separator: "\n")
+	cons.print(string: "Insert ... \(txt13)\n")
 
-	cons.print(string: "* remove from set\n")
-	if remove(set0, 3) {
-		cons.print(string: "remove 3 ... OK\n")
-	} else {
-		cons.print(string: "failed to remove 3 ... Error\n")
+	let elm20: CNValue = .numberValue(NSNumber(integerLiteral: 1))
+	let elm21: CNValue = .numberValue(NSNumber(integerLiteral: 2))
+	let elm22: CNValue = .numberValue(NSNumber(integerLiteral: 3))
+	let arr23 = [elm20, elm21, elm22]
+
+	switch CNValueSet.compare(set0: arr12, set1: arr23) {
+	case .orderedAscending, .orderedDescending:
+		cons.print(string: "compare ... Error\n")
 		result = false
+	case .orderedSame:
+		cons.print(string: "compare ... OK\n")
 	}
-	printValues(values: set0.values, console: cons)
 
 	return result
 }
 
-private func intToValue(_ val: Int) -> CNValue {
-	return CNValue.numberValue(NSNumber(integerLiteral: val))
-}
-
-private func insert(_ dst: CNValueSet, _ val: Int){
-	dst.insert(value: intToValue(val))
-}
-
-private func remove(_ dst: CNValueSet, _ val: Int) -> Bool {
-	return dst.remove(value: intToValue(val))
-}
-
-private func has(_ src: CNValueSet, _ val: Int) -> Bool {
-	return src.has(value: intToValue(val))
-}
-
-private func printValues(values vals: Array<CNValue>, console cons: CNConsole){
-	cons.print(string: "[")
-	for val in vals {
-		let txt = val.toText().toStrings().joined(separator: "\n")
-		cons.print(string: txt)
-		cons.print(string: ", ")
-	}
-	cons.print(string: "]\n")
-}

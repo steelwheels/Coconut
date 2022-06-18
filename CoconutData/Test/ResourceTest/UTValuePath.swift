@@ -70,10 +70,11 @@ private func dumpElement(element elm: CNValuePath.Element){
 
 private func allocValuePath(expression exp: String) -> CNValuePath?
 {
-	if let (ident, elms) = CNValuePath.pathExpression(string: exp) {
-		return CNValuePath(identifier: ident, elements: elms)
-	} else {
-		NSLog("Invalid path expression: \(exp)")
+	switch CNValuePath.pathExpression(string: exp) {
+	case .success(let path):
+		return path
+	case .failure(let err):
+		NSLog("Invalid path expression: \(exp) \(err.toString())")
 		return nil
 	}
 }

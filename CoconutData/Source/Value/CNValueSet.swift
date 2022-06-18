@@ -11,92 +11,70 @@ public class CNValueSet
 {
 	public static let ClassName	= "Set"
 
-	/* The element is sorted in ascending order */
-	private var mValues:	Array<CNValue>
-
-	public init(){
-		mValues = []
-	}
-
-	public var values: Array<CNValue> { get {
-		return mValues
-	}}
-
-	public var count: Int { get {
-		return mValues.count
-	}}
-
-	public func insert(value src: CNValue){
-		for i in 0..<mValues.count {
-			switch CNCompareValue(nativeValue0: src, nativeValue1: mValues[i]) {
-			case .orderedAscending:		// src < mValues
-				mValues.insert(src, at: i)
-				return	// finish insertions
-			case .orderedSame:		// src == mValues
-				return	// already defined
-			case .orderedDescending:	//       mValues[i] < src
-				break	// continue
-			}
-		}
-		mValues.append(src)
-	}
-
-	public func remove(value src: CNValue) -> Bool {
-		for i in 0..<mValues.count {
-			switch CNCompareValue(nativeValue0: src, nativeValue1: mValues[i]) {
-			case .orderedAscending:		// src < mValues[i]
-				return false		// continue
-			case .orderedDescending:	// src > mValues[i]
-				break		// continue
-			case .orderedSame:
-				mValues.remove(at: i)
-				return true	// Removed
-			}
-		}
-		return false // not found
-	}
-
-	public func has(value src: CNValue) -> Bool {
-		for i in 0..<mValues.count {
-			switch CNCompareValue(nativeValue0: src, nativeValue1: mValues[i]) {
-			case .orderedAscending:		// mValues[i] < src
-				break		// continue
-			case .orderedDescending:	// src < mValues[i]
-				return false	// Not found
-			case .orderedSame:
-				return true	// Found
+	public static func isSet(dictionary dict: Dictionary<String, CNValue>) -> Bool {
+		if let clsname = dict["class"] {
+			switch clsname {
+			case .stringValue(let str):
+				return str == CNValueSet.ClassName
+			default:
+				break
 			}
 		}
 		return false
 	}
 
-	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueSet? {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValue? {
 		guard CNValue.hasClassName(inValue: val, className: CNValueSet.ClassName) else {
 			return nil
 		}
 		if let vals = val["values"] {
-			if let arr = vals.toArray() {
-				let newval = CNValueSet()
-				for elm in arr {
-					newval.insert(value: elm)
+			if let srcs = vals.toArray() {
+				var newarr: Array<CNValue> = []
+				for elm in srcs {
+					CNValueSet.insert(target: &newarr, element: elm)
 				}
-				return newval
+				return .setValue(newarr)
 			}
 		}
 		return nil
 	}
 
-	public func toValue() -> Dictionary<String, CNValue> {
-		let result: Dictionary<String, CNValue> = [
-			"class"  : .stringValue(CNValueSet.ClassName),
-			"values" : .arrayValue(self.values)
-		]
-		return result
+	public static func insert(target targ: inout Array<CNValue>, element elm: CNValue) {
+		let cnt = targ.count
+		for i in 0..<cnt {
+			switch CNCompareValue(nativeValue0: elm, nativeValue1: targ[i]) {
+			case .orderedAscending:		// src < mValues
+				targ.insert(elm, at: i)
+				return	// finish insertions
+			case .orderedSame:		// src == mValues
+				return	// already defined
+			case .orderedDescending:	//       mValues[i] < src
+				break   // continue
+			}
+		}
+		targ.append(elm)
 	}
 
-	public func toText() -> CNText {
-		let val: CNValue = .dictionaryValue(self.toValue())
-		return val.toText()
+	public static func compare(set0 s0: Array<CNValue>, set1 s1: Array<CNValue>) -> ComparisonResult {
+		let c0 = s0.count
+		let c1 = s1.count
+		if(c0 < c1){
+			return .orderedAscending
+		} else if(c0 > c1) {
+			return .orderedDescending
+		} else { // c0 == c1
+			for i in 0..<c0 {
+				switch CNCompareValue(nativeValue0: s0[i], nativeValue1: s1[i]) {
+				case .orderedAscending:
+					return .orderedAscending
+				case .orderedSame:
+					break	// continue
+				case .orderedDescending:
+					return .orderedDescending
+				}
+			}
+			return .orderedSame
+		}
 	}
 }
 

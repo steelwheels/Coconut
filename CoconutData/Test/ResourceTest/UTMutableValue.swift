@@ -25,6 +25,7 @@ public func UTMutableValue() -> Bool
 private func unitTest() -> Bool
 {
 	NSLog("- MutableScalarValue")
+	let scalar0 = allocateScalar(intValue: 0)
 	let scalar1 = allocateScalar(intValue: 1)
 	let scalar2 = allocateScalar(intValue: 2)
 	let scr1txt = scalar1.toValue().toText().toStrings().joined(separator: "\n")
@@ -44,6 +45,14 @@ private func unitTest() -> Bool
 	let dicttxt = dict.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("dict -> \(dicttxt)")
 
+	NSLog("- MutableSetValue")
+	let set0 = CNMutableSetValue()
+	set0.append(value: scalar2)
+	set0.append(value: scalar0)
+	set0.append(value: scalar1)
+	let set0txt = set0.toValue().toText().toStrings().joined(separator: "\n")
+	NSLog("set0 -> \(set0txt)")
+	
 	return true
 }
 
@@ -86,6 +95,13 @@ private func accessTest() -> Bool
 	NSLog("get value \"f.s1\"")
 	let pathfs1 = CNValuePath(identifier: nil, elements: [.member("f"), .member("s1")])
 	if getValue(path: pathfs1, in: mval) == nil{
+		NSLog("Failed to get f.s1")
+		return false
+	}
+
+	NSLog("get value \"f.s2\"")
+	let pathfs2 = CNValuePath(identifier: nil, elements: [.member("f"), .member("s2")])
+	if getValue(path: pathfs2, in: mval) == nil{
 		NSLog("Failed to get f.s1")
 		return false
 	}

@@ -121,7 +121,7 @@ public enum CNValue {
 	case enumValue(_ val: CNEnum)
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
-	case setValue(_ val: CNValueSet)
+	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
 	case URLValue(_ val: URL)
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
@@ -263,8 +263,8 @@ public enum CNValue {
 		return result
 	}
 
-	public func toSet() -> CNValueSet? {
-		let result: CNValueSet?
+	public func toSet() -> Array<CNValue>? {
+		let result: Array<CNValue>?
 		switch self {
 		case .setValue(let obj):	result = obj
 		default:			result = nil
@@ -416,7 +416,7 @@ public enum CNValue {
 		}
 	}
 
-	public func setProperty(identifier ident: String) -> CNValueSet? {
+	public func setProperty(identifier ident: String) -> Array<CNValue>? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toSet()
 		} else {
@@ -527,7 +527,7 @@ public enum CNValue {
 		case .arrayValue(let val):
 			result = arrayToText(array: val)
 		case .setValue(let val):
-			result = val.toText()
+			result = setToText(set: val)
 		case .URLValue(let val):
 			let str = val.path
 			let txt = CNStringUtil.insertEscapeForQuote(source: str)
@@ -568,6 +568,14 @@ public enum CNValue {
 			sect.add(text: elm.toText())
 		}
 		return sect
+	}
+
+	private func setToText(set vals: Array<CNValue>) -> CNTextSection {
+		let dict: Dictionary<String, CNValue> = [
+			"class":	.stringValue(CNValueSet.ClassName),
+			"values":	.arrayValue(vals)
+		]
+		return dictionaryToText(dictionary: dict)
 	}
 
 	private func dictionaryToText(dictionary dict: Dictionary<String, CNValue>) -> CNTextSection {
@@ -675,9 +683,9 @@ public enum CNValue {
 				newarr.append(elm.toAny())
 			}
 			result = newarr
-		case .setValue(let sval):
+		case .setValue(let arr):
 			var newarr: Array<Any> = []
-			for elm in sval.values {
+			for elm in arr {
 				newarr.append(elm.toAny())
 			}
 			result = newarr
@@ -774,8 +782,8 @@ public enum CNValue {
 						result = .rangeValue(range)
 					}
 				case CNValueSet.ClassName:
-					if let valset = CNValueSet.fromValue(value: dict) {
-						result = .setValue(valset)
+					if let val = CNValueSet.fromValue(value: dict) {
+						result = val
 					}
 				case CNValueRecord.ClassName:
 					if let record = CNValueRecord.fromValue(value: dict) {

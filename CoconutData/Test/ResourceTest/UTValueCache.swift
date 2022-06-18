@@ -37,11 +37,11 @@ private func loadStorage() -> CNValueStorage? {
 	var result: CNValueStorage? = nil
 	let storage = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "root.json")
 	switch storage.load() {
-	case .ok(let value):
+	case .success(let value):
 		let txt = value.toText().toStrings().joined(separator: "\n")
 		NSLog("Loaded storage: \(txt)")
 		result = storage
-	case .error(let err):
+	case .failure(let err):
 		NSLog("Load root ... fail: \(err.description)")
 	}
 	return result
@@ -189,10 +189,11 @@ private func testStorageWrite(target storage: CNValueStorage) -> Bool
 
 private func allocValuePath(expression exp: String) -> CNValuePath?
 {
-	if let (ident, elms) = CNValuePath.pathExpression(string: exp) {
-		return CNValuePath(identifier: ident, elements: elms)
-	} else {
-		NSLog("Invalid path expression: \(exp)")
+	switch CNValuePath.pathExpression(string: exp) {
+	case .success(let path):
+		return path
+	case .failure(let err):
+		NSLog("Invalid path expression: \(exp) \(err.toString())")
 		return nil
 	}
 }

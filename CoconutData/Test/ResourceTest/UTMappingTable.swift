@@ -40,12 +40,12 @@ private func allocateTable() -> CNValueTable? {
 	let storage  = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
 	NSLog("storage = \(storage.toValue().toText().toStrings().joined(separator: "\n"))")
 	switch storage.load() {
-	case .ok(_):
+	case .success(_):
 		let table = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
 		NSLog("record count: \(table.recordCount)")
 		NSLog("field name:   \(table.fieldNames)")
 		return table
-	case .error(let err):
+	case .failure(let err):
 		NSLog("Failed to load storage: \(err.toString())")
 	}
 	return nil
@@ -56,12 +56,18 @@ private func updateTable(table tbl: CNValueTable)
 	NSLog("* Add record to table")
 	var result = true
 
-	let rec0   = CNValueRecord()
+	let rec0 = CNValueRecord(defaultFields: [
+		"name": .stringValue("<no-name>"),
+		"age":	.numberValue(NSNumber(integerLiteral: 0))
+	])
 	result = rec0.setValue(value: .stringValue("Shizuka"), forField: "name") && result
 	result = rec0.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	tbl.append(record: rec0)
 
-	let rec1   = CNValueRecord()
+	let rec1 = CNValueRecord(defaultFields: [
+		"name": .stringValue("<no-name>"),
+		"age":	.numberValue(NSNumber(integerLiteral: 0))
+	])
 	result = rec1.setValue(value: .stringValue("Suneo"), forField: "name") && result
 	result = rec1.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	tbl.append(record: rec1)

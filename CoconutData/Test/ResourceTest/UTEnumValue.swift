@@ -21,11 +21,15 @@ public func UTEnumTable() -> Bool
 		return false
 	}
 	switch CNEnumTable.fromValue(value: srcval) {
-	case .success(let table):
+	case .success(let tablep):
 		NSLog("Read done")
-		let dump = CNValue.dictionaryValue(table.toValue())
-		let txt  = dump.toText().toStrings().joined(separator: "\n")
-		NSLog("Read result: \(txt)")
+		if let table = tablep {
+			let dump = CNValue.dictionaryValue(table.toValue())
+			let txt  = dump.toText().toStrings().joined(separator: "\n")
+			NSLog("Read result: \(txt)")
+		} else {
+			NSLog("Read result: <none>")
+		}
 	case .failure(let err):
 		NSLog("Failed to covert: \(err.toString())")
 		return false

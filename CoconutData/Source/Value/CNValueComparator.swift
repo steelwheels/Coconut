@@ -86,7 +86,7 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 		}
 	case .setType:
 		if let s0 = val0.toSet(), let s1 = val1.toSet() {
-			result = compare(set0: s0, set1: s1)
+			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
 	case .URLType:
 		if let s0 = val0.toURL(), let s1 = val1.toURL() {
@@ -270,17 +270,6 @@ private func compare(array0 s0: Array<CNValue>, array1 s1: Array<CNValue>) -> Co
 		}
 	}
 	return .orderedSame
-}
-
-private func compare(set0 s0: CNValueSet, set1 s1: CNValueSet) -> ComparisonResult {
-	switch compare(int0: s0.count, int1: s1.count) {
-	case .orderedAscending:
-		return .orderedAscending
-	case .orderedDescending:
-		return .orderedDescending
-	case .orderedSame:
-		return compare(array0: s0.values, array1: s1.values)
-	}
 }
 
 private func compare(dictionary0 s0: Dictionary<String, CNValue>, dictionary1 s1: Dictionary<String, CNValue>) -> ComparisonResult {

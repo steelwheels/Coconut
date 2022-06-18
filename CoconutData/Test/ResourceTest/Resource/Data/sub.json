@@ -1,5 +1,9 @@
 {
 	s0: true,
 	s1: "Good morning"
+	s2: {
+		class: "Set",
+		values: [1, 2, 3]
+	}
 }
 

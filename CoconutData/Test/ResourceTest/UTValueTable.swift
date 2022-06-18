@@ -35,7 +35,10 @@ public func UTValueTable() -> Bool
 
 	/* add record */
 	NSLog("**** Add record to table")
-	let rec0_1 = CNValueRecord()
+	let rec0_1 = CNValueRecord(defaultFields: [
+		"name": .stringValue("<no-name>"),
+		"age":	.numberValue(NSNumber(integerLiteral: 0))
+	])
 	result = rec0_1.setValue(value: .stringValue("Shizuka"), forField: "name") && result
 	result = rec0_1.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	table0.append(record: rec0_1)
@@ -73,7 +76,7 @@ private func allocateTable() -> (CNValueTable, CNValueTable)? {
 	let cachedir = cachefile.deletingLastPathComponent()
 	let storage  = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
 	switch storage.load() {
-	case .ok(_):
+	case .success(_):
 		let table0 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
 		NSLog("record count [0]: \(table0.recordCount)")
 		NSLog("field names  [0]: \(table0.fieldNames)")
@@ -83,7 +86,7 @@ private func allocateTable() -> (CNValueTable, CNValueTable)? {
 		NSLog("field names  [1]: \(table1.fieldNames)")
 
 		return (table0, table1)
-	case .error(let err):
+	case .failure(let err):
 		NSLog("Failed to load storage: \(err.toString())")
 		return nil
 	}
