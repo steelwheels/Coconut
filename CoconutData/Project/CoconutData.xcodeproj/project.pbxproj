@@ -22,7 +22,6 @@
 		051EE76625E24C3A006FED4D /* UTBitmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051EE76525E24C3A006FED4D /* UTBitmap.swift */; };
 		05252C5B26E782A50026230C /* UTText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05252C5A26E782A50026230C /* UTText.swift */; };
 		052D71F6277EEE6F00B4C7EB /* UTStorageTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052D71F5277EEE6F00B4C7EB /* UTStorageTable.swift */; };
-		052D71FB277EF20100B4C7EB /* adbook.json in Resources */ = {isa = PBXBuildFile; fileRef = 052D71FA277EF20100B4C7EB /* adbook.json */; };
 		052D71FF277EF21600B4C7EB /* adbook.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 052D71FA277EF20100B4C7EB /* adbook.json */; };
 		052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
 		052E27D52625DCA100414C26 /* CNCommandTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052E27D32625DCA100414C26 /* CNCommandTable.swift */; };
@@ -37,6 +36,10 @@
 		0537C0B3273CC340003B742E /* rectangle.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A6273CC320003B742E /* rectangle.png */; };
 		0537C0BA273CC353003B742E /* rectangle-filled.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A7273CC320003B742E /* rectangle-filled.png */; };
 		0537C0BB273CC353003B742E /* rectangle.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0537C0A6273CC320003B742E /* rectangle.png */; };
+		05392B32285F16610000349B /* CNStorageDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05392B31285F16610000349B /* CNStorageDictionary.swift */; };
+		05392B33285F16610000349B /* CNStorageDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05392B31285F16610000349B /* CNStorageDictionary.swift */; };
+		05392B3B285F1B380000349B /* UTStorageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05392B3A285F1B380000349B /* UTStorageData.swift */; };
+		05392B47285F21E70000349B /* data.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05392B3F285F1C1A0000349B /* data.json */; };
 		053AE54B25D55D380007056B /* CNBitmapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053AE54A25D55D380007056B /* CNBitmapData.swift */; };
 		053AE54C25D55D380007056B /* CNBitmapData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053AE54A25D55D380007056B /* CNBitmapData.swift */; };
 		053C3A99275FA729009FA25D /* CNRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053C3A98275FA729009FA25D /* CNRange.swift */; };
@@ -105,10 +108,8 @@
 		05A1AFCA2776BBDF0091D527 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFC92776BBDF0091D527 /* ViewController.swift */; };
 		05A1AFCC2776BBE80091D527 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05A1AFCB2776BBE80091D527 /* Assets.xcassets */; };
 		05A1AFCF2776BBE80091D527 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05A1AFCD2776BBE80091D527 /* Main.storyboard */; };
-		05A1AFF02776C0A50091D527 /* root.json in Resources */ = {isa = PBXBuildFile; fileRef = 05A1AFEF2776C0A50091D527 /* root.json */; };
 		05A1AFF62776C3F40091D527 /* UTValueCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A1AFF42776C3F40091D527 /* UTValueCache.swift */; };
 		05A1B0082776CA830091D527 /* root.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05A1AFEF2776C0A50091D527 /* root.json */; };
-		05A1B0142776E44B0091D527 /* sub.json in Resources */ = {isa = PBXBuildFile; fileRef = 05A1B0132776E44B0091D527 /* sub.json */; };
 		05A1B01B2776E4650091D527 /* sub.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05A1B0132776E44B0091D527 /* sub.json */; };
 		05A44F0225C223350086033B /* CNGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0125C223350086033B /* CNGraphicsContext.swift */; };
 		05A44F0325C223350086033B /* CNGraphicsContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A44F0125C223350086033B /* CNGraphicsContext.swift */; };
@@ -418,6 +419,7 @@
 			dstPath = Data;
 			dstSubfolderSpec = 7;
 			files = (
+				05392B47285F21E70000349B /* data.json in CopyFiles */,
 				05084D1A2838B10200432602 /* enum.json in CopyFiles */,
 				052D71FF277EF21600B4C7EB /* adbook.json in CopyFiles */,
 				05A1B01B2776E4650091D527 /* sub.json in CopyFiles */,
@@ -468,6 +470,9 @@
 		0535D8532856198900FD720C /* UTValueSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValueSet.swift; sourceTree = "<group>"; };
 		0537C0A6273CC320003B742E /* rectangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rectangle.png; sourceTree = "<group>"; };
 		0537C0A7273CC320003B742E /* rectangle-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-filled.png"; sourceTree = "<group>"; };
+		05392B31285F16610000349B /* CNStorageDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStorageDictionary.swift; sourceTree = "<group>"; };
+		05392B3A285F1B380000349B /* UTStorageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTStorageData.swift; sourceTree = "<group>"; };
+		05392B3F285F1C1A0000349B /* data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 		053AE54A25D55D380007056B /* CNBitmapData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNBitmapData.swift; sourceTree = "<group>"; };
 		053B4EE9255FE176004B9052 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		053C3A98275FA729009FA25D /* CNRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRange.swift; sourceTree = "<group>"; };
@@ -764,6 +769,7 @@
 				0548496C278A888400642FAC /* UTMutableValue.swift */,
 				05A1AFF42776C3F40091D527 /* UTValueCache.swift */,
 				052D71F5277EEE6F00B4C7EB /* UTStorageTable.swift */,
+				05392B3A285F1B380000349B /* UTStorageData.swift */,
 				052F30F3278F246500CADA5C /* UTValuePath.swift */,
 				05084D12283880E900432602 /* UTEnumValue.swift */,
 			);
@@ -782,6 +788,7 @@
 			isa = PBXGroup;
 			children = (
 				052D71FA277EF20100B4C7EB /* adbook.json */,
+				05392B3F285F1C1A0000349B /* data.json */,
 				05084D0D283880A200432602 /* enum.json */,
 				05A1AFEF2776C0A50091D527 /* root.json */,
 				05A1B0132776E44B0091D527 /* sub.json */,
@@ -877,6 +884,7 @@
 				05B7B1AE277606810077DEDC /* CNValueSegment.swift */,
 				0535D84A28560FBE00FD720C /* CNValueSet.swift */,
 				05A1AFB8277689F90091D527 /* CNStorage.swift */,
+				05392B31285F16610000349B /* CNStorageDictionary.swift */,
 				0550399F277D7DC0007FA515 /* CNStorageRecord.swift */,
 				05F969AF26467E7E00E676C5 /* CNStorageTable.swift */,
 			);
@@ -1268,10 +1276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05A1AFF02776C0A50091D527 /* root.json in Resources */,
 				05A1AFCC2776BBE80091D527 /* Assets.xcassets in Resources */,
-				052D71FB277EF20100B4C7EB /* adbook.json in Resources */,
-				05A1B0142776E44B0091D527 /* sub.json in Resources */,
 				05A1AFCF2776BBE80091D527 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1349,6 +1354,7 @@
 			files = (
 				05A1AFF62776C3F40091D527 /* UTValueCache.swift in Sources */,
 				05A1AFCA2776BBDF0091D527 /* ViewController.swift in Sources */,
+				05392B3B285F1B380000349B /* UTStorageData.swift in Sources */,
 				0548496D278A888400642FAC /* UTMutableValue.swift in Sources */,
 				052F30F4278F246500CADA5C /* UTValuePath.swift in Sources */,
 				05A1AFC82776BBDF0091D527 /* AppDelegate.swift in Sources */,
@@ -1392,6 +1398,7 @@
 				05A44F0225C223350086033B /* CNGraphicsContext.swift in Sources */,
 				05B32CAD2515025E000D1411 /* CNValue.swift in Sources */,
 				05FDF1B9276D6350004E2781 /* CNTable.swift in Sources */,
+				05392B32285F16610000349B /* CNStorageDictionary.swift in Sources */,
 				057588E72629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */,
 				05B32D35251508D9000D1411 /* CNAccess.swift in Sources */,
 				05B32D7625150945000D1411 /* CNEscapeCode.swift in Sources */,
@@ -1492,6 +1499,7 @@
 				05B32CD8251502E6000D1411 /* CNOperationContext.swift in Sources */,
 				05FDF1BA276D6350004E2781 /* CNTable.swift in Sources */,
 				05A44F0325C223350086033B /* CNGraphicsContext.swift in Sources */,
+				05392B33285F16610000349B /* CNStorageDictionary.swift in Sources */,
 				057588E82629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */,
 				05B32D36251508D9000D1411 /* CNAccess.swift in Sources */,
 				05B32D7725150945000D1411 /* CNEscapeCode.swift in Sources */,
