@@ -76,7 +76,7 @@ public class CNContactDatabase: CNTable
 	}
 
 	public func newRecord() -> CNRecord {
-		return CNValueRecord(defaultFields: self.defaultFields)
+		return CNStorageRecord(defaultFields: self.defaultFields)
 	}
 
 	public func record(at row: Int) -> CNRecord? {
@@ -217,7 +217,7 @@ public class CNContactDatabase: CNTable
 				}
 			}
 		}
-		return CNValueRecord(defaultFields: result)
+		return CNStorageRecord(defaultFields: result)
 	}
 
 	public func toValue() -> CNValue {

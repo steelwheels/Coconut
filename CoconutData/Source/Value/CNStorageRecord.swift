@@ -1,5 +1,5 @@
 /**
- * @file	CNRecord.swift
+ * @file	CNStorageRecord.swift
  * @brief	Define CNRecord class
  * @par Copyright
  *   Copyright (C) 2021-2022 Steel Wheels Project
@@ -7,14 +7,14 @@
 
 import Foundation
 
-public class CNValueRecord: CNRecord
+public class CNStorageRecord: CNRecord
 {
 	public static let 	RecordIdItem	= "recordId"
 
 	static let 		ClassName = "record"
 
 	private enum SourceData {
-		case table(CNValueTable, Int)			// (Source table, index)
+		case table(CNStorageTable, Int)			// (Source table, index)
 		case cache(Dictionary<String, CNValue>)		// (property-name, property-value)
 	}
 
@@ -27,7 +27,7 @@ public class CNValueRecord: CNRecord
 		}
 	}}
 
-	public init(table tbl: CNValueTable, index idx: Int){
+	public init(table tbl: CNStorageTable, index idx: Int){
 		mSource	= .table(tbl, idx)
 	}
 
@@ -99,14 +99,14 @@ public class CNValueRecord: CNRecord
 				result[field] = val
 			}
 		}
-		CNValue.setClassName(toValue: &result, className: CNValueRecord.ClassName)
+		CNValue.setClassName(toValue: &result, className: CNStorageRecord.ClassName)
 		return result
 	}
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
-		if CNValue.hasClassName(inValue: val, className: CNValueRecord.ClassName) {
+		if CNValue.hasClassName(inValue: val, className: CNStorageRecord.ClassName) {
 			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)
-			let newrec = CNValueRecord(defaultFields: dupval)
+			let newrec = CNStorageRecord(defaultFields: dupval)
 			return newrec
 		} else {
 			return nil

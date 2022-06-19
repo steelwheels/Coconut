@@ -1,13 +1,13 @@
 /**
- * @file	CNValueTable.swift
- * @brief	Define CNValueTable class
+ * @file	CNStorageTable.swift
+ * @brief	Define CNStorageTable class
  * @par Copyright
  *   Copyright (C) 2021-2022 Steel Wheels Project
  */
 
 import Foundation
 
-public class CNValueTable: CNTable
+public class CNStorageTable: CNTable
 {
 	public static let DefaultFieldsItem	= "defaultFields"
 	public static let RecordsItem		= "records"
@@ -92,7 +92,7 @@ public class CNValueTable: CNTable
 				return dict
 			}
 		}
-		CNLog(logLevel: .error, message: "No \"\(CNValueTable.DefaultFieldsItem)\" property", atFunction: #function, inFile: #file)
+		CNLog(logLevel: .error, message: "No \"\(CNStorageTable.DefaultFieldsItem)\" property", atFunction: #function, inFile: #file)
 		return [:]
 	}
 
@@ -110,14 +110,14 @@ public class CNValueTable: CNTable
 	}
 
 	public func newRecord() -> CNRecord {
-		return CNValueRecord(defaultFields: self.defaultFields)
+		return CNStorageRecord(defaultFields: self.defaultFields)
 	}
 
 	public func record(at row: Int) -> CNRecord? {
 		let recvals = self.recordValues()
 		let cnt = recvals.count
 		if 0<=row && row<cnt {
-			return CNValueRecord(table: self, index: row)
+			return CNStorageRecord(table: self, index: row)
 		} else {
 			return nil
 		}
@@ -137,10 +137,10 @@ public class CNValueTable: CNTable
 
 	public func append(pointer ptr: CNPointerValue) {
 		guard let ident = mIdentifier else {
-			CNLog(logLevel: .error, message: "The property \(CNValueTable.IdItem) is required to append pointer value", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "The property \(CNStorageTable.IdItem) is required to append pointer value", atFunction: #function, inFile: #file)
 			return
 		}
-		let elms: Array<CNValuePath.Element> = [.member(CNValueTable.RecordsItem)]
+		let elms: Array<CNValuePath.Element> = [.member(CNStorageTable.RecordsItem)]
 		if !mStorage.append(value: .pointerValue(ptr), forPath: CNValuePath(identifier: ident, elements: elms)) {
 			CNLog(logLevel: .error, message: "Failed to append pointer", atFunction: #function, inFile: #file)
 		}
@@ -159,7 +159,7 @@ public class CNValueTable: CNTable
 	
 	public func pointer(value val: CNValue, forField field: String) -> CNPointerValue? {
 		guard let ident = mIdentifier else {
-			CNLog(logLevel: .error, message: "The property \(CNValueTable.IdItem) is required to make value path", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "The property \(CNStorageTable.IdItem) is required to make value path", atFunction: #function, inFile: #file)
 			return nil
 		}
 		let recs = search(value: val, forField: field)
@@ -169,7 +169,7 @@ public class CNValueTable: CNTable
 			return nil
 		}
 		let elements: Array<CNValuePath.Element> = [
-			.member(CNValueTable.RecordsItem),
+			.member(CNStorageTable.RecordsItem),
 			.keyAndValue(field, val)
 		]
 		let path = CNValuePath(identifier: ident, elements: elements)
@@ -184,7 +184,7 @@ public class CNValueTable: CNTable
 			if let dval = dicts[i][field] {
 				switch CNCompareValue(nativeValue0: dval, nativeValue1: val) {
 				case .orderedSame:
-					let newrec = CNValueRecord(table: self, index: i)
+					let newrec = CNStorageRecord(table: self, index: i)
 					result.append(newrec)
 				case .orderedAscending, .orderedDescending:
 					break
@@ -197,7 +197,7 @@ public class CNValueTable: CNTable
 	public func forEach(callback cbfunc: (CNRecord) -> Void) {
 		let dicts = self.recordValues()
 		for i in 0..<dicts.count {
-			let newrec = CNValueRecord(table: self, index: i)
+			let newrec = CNStorageRecord(table: self, index: i)
 			cbfunc(newrec)
 		}
 	}
@@ -225,19 +225,19 @@ public class CNValueTable: CNTable
 	}
 
 	private func defaultFieldsPath() -> CNValuePath {
-		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.DefaultFieldsItem)])
+		return CNValuePath(path: mPath, subPath: [.member(CNStorageTable.DefaultFieldsItem)])
 	}
 
 	private func recordPath() -> CNValuePath {
-		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.RecordsItem)])
+		return CNValuePath(path: mPath, subPath: [.member(CNStorageTable.RecordsItem)])
 	}
 
 	private func idPath() -> CNValuePath {
-		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.IdItem)])
+		return CNValuePath(path: mPath, subPath: [.member(CNStorageTable.IdItem)])
 	}
 
 	private func recordFieldPath(index idx: Int, field fld: String) -> CNValuePath {
-		return CNValuePath(path: mPath, subPath: [.member(CNValueTable.RecordsItem), .index(idx), .member(fld)])
+		return CNValuePath(path: mPath, subPath: [.member(CNStorageTable.RecordsItem), .index(idx), .member(fld)])
 	}
 
 	private func idValue() -> String? {
@@ -286,7 +286,7 @@ public class CNValueTable: CNTable
 				return result
 			}
 		}
-		CNLog(logLevel: .error, message: "No \"\(CNValueTable.RecordsItem)\" property at \(recordPath().description)", atFunction: #function, inFile: #file)
+		CNLog(logLevel: .error, message: "No \"\(CNStorageTable.RecordsItem)\" property at \(recordPath().description)", atFunction: #function, inFile: #file)
 		return []
 	}
 

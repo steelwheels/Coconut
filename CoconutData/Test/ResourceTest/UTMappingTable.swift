@@ -28,7 +28,7 @@ public func UTMappingTable() -> Bool
 	return true
 }
 
-private func allocateTable() -> CNValueTable? {
+private func allocateTable() -> CNStorageTable? {
 	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
 		NSLog("Failed to allocate source url")
 		return nil
@@ -41,7 +41,7 @@ private func allocateTable() -> CNValueTable? {
 	NSLog("storage = \(storage.toValue().toText().toStrings().joined(separator: "\n"))")
 	switch storage.load() {
 	case .success(_):
-		let table = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
+		let table = CNStorageTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
 		NSLog("record count: \(table.recordCount)")
 		NSLog("field name:   \(table.fieldNames)")
 		return table
@@ -51,12 +51,12 @@ private func allocateTable() -> CNValueTable? {
 	return nil
 }
 
-private func updateTable(table tbl: CNValueTable)
+private func updateTable(table tbl: CNStorageTable)
 {
 	NSLog("* Add record to table")
 	var result = true
 
-	let rec0 = CNValueRecord(defaultFields: [
+	let rec0 = CNStorageRecord(defaultFields: [
 		"name": .stringValue("<no-name>"),
 		"age":	.numberValue(NSNumber(integerLiteral: 0))
 	])
@@ -64,7 +64,7 @@ private func updateTable(table tbl: CNValueTable)
 	result = rec0.setValue(value: .numberValue(NSNumber(integerLiteral: 9)), forField: "age") && result
 	tbl.append(record: rec0)
 
-	let rec1 = CNValueRecord(defaultFields: [
+	let rec1 = CNStorageRecord(defaultFields: [
 		"name": .stringValue("<no-name>"),
 		"age":	.numberValue(NSNumber(integerLiteral: 0))
 	])

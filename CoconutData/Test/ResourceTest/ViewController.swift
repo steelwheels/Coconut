@@ -27,7 +27,7 @@ class ViewController: NSViewController {
 		let res0 = UTMutableValue()
 		let res1 = UTValuePath()
 		let res2 = UTStorage()
-		let res3 = UTValueTable()
+		let res3 = UTStorageTable()
 		let res4 = UTMappingTable()
 		let res5 = UTEnumTable()
 		if res0 && res1 && res2 && res3 && res4 && res5 {

@@ -1,5 +1,5 @@
 //
-//  UTValueTable.swift
+//  UTStorageTable.swift
 //  ResourceTest
 //
 //  Created by Tomoo Hamada on 2021/12/31.
@@ -8,9 +8,9 @@
 import CoconutData
 import Foundation
 
-public func UTValueTable() -> Bool
+public func UTStorageTable() -> Bool
 {
-	NSLog("*** UTValueTable")
+	NSLog("*** UTStorageTable")
 	var result = true
 
 	guard let (table0, table1) = allocateTable() else {
@@ -35,7 +35,7 @@ public func UTValueTable() -> Bool
 
 	/* add record */
 	NSLog("**** Add record to table")
-	let rec0_1 = CNValueRecord(defaultFields: [
+	let rec0_1 = CNStorageRecord(defaultFields: [
 		"name": .stringValue("<no-name>"),
 		"age":	.numberValue(NSNumber(integerLiteral: 0))
 	])
@@ -65,7 +65,7 @@ public func UTValueTable() -> Bool
 	return result
 }
 
-private func allocateTable() -> (CNValueTable, CNValueTable)? {
+private func allocateTable() -> (CNStorageTable, CNStorageTable)? {
 	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "adbook", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
 		NSLog("Failed to allocate source url")
 		return nil
@@ -77,11 +77,11 @@ private func allocateTable() -> (CNValueTable, CNValueTable)? {
 	let storage  = CNStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
 	switch storage.load() {
 	case .success(_):
-		let table0 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
+		let table0 = CNStorageTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
 		NSLog("record count [0]: \(table0.recordCount)")
 		NSLog("field names  [0]: \(table0.fieldNames)")
 
-		let table1 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
+		let table1 = CNStorageTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
 		NSLog("record count [1]: \(table1.recordCount)")
 		NSLog("field names  [1]: \(table1.fieldNames)")
 

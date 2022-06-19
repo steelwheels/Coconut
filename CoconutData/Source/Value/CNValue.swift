@@ -785,8 +785,8 @@ public enum CNValue {
 					if let val = CNValueSet.fromValue(value: dict) {
 						result = val
 					}
-				case CNValueRecord.ClassName:
-					if let record = CNValueRecord.fromValue(value: dict) {
+				case CNStorageRecord.ClassName:
+					if let record = CNStorageRecord.fromValue(value: dict) {
 						result = .recordValue(record)
 					}
 				case CNValueSegment.ClassName:

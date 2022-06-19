@@ -95,7 +95,7 @@ public class CNMappingTable: CNTable
 
 	public func pointer(value val: CNValue, forField field: String) -> CNPointerValue? {
 		guard let ident = mSourceTable.identifier else {
-			CNLog(logLevel: .error, message: "The property \"\(CNValueTable.IdItem)\" is required to make value path", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "The property \"\(CNStorageTable.IdItem)\" is required to make value path", atFunction: #function, inFile: #file)
 			return nil
 		}
 		let recs = search(value: val, forField: field)
@@ -105,7 +105,7 @@ public class CNMappingTable: CNTable
 			return nil
 		}
 		let elements: Array<CNValuePath.Element> = [
-			.member(CNValueTable.RecordsItem),
+			.member(CNStorageTable.RecordsItem),
 			.keyAndValue(field, val)
 		]
 		let path = CNValuePath(identifier: ident, elements: elements)
