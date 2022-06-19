@@ -26,7 +26,7 @@ class ViewController: NSViewController {
 		super.viewDidAppear()
 		let res0 = UTMutableValue()
 		let res1 = UTValuePath()
-		let res2 = UTValueStorage()
+		let res2 = UTStorage()
 		let res3 = UTValueTable()
 		let res4 = UTMappingTable()
 		let res5 = UTEnumTable()

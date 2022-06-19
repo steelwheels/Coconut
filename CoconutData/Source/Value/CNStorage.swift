@@ -1,6 +1,6 @@
 /*
- * @file	CNValueStorage.swift
- * @brief	Define CNValueStorage class
+ * @file	CNStorage.swift
+ * @brief	Define CNStorage class
  * @par Copyright
  *   Copyright (C) 2021 Steel Wheels Project
  */
@@ -10,7 +10,7 @@ import UIKit
 #endif
 import Foundation
 
-public class CNValueStorage
+public class CNStorage
 {
 	private var mSourceDirectory:		URL
 	private var mCacheDirectory:		URL
@@ -48,7 +48,7 @@ public class CNValueStorage
 		let srcfile   = self.sourceFile
 		let cachefile = self.cacheFile
 
-		guard let contents = CNValueStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
+		guard let contents = CNStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
 			let err = NSError.fileError(message: "Failed to create cache file: \(cachefile.path)")
 			return .failure(err)
 		}

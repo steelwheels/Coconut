@@ -14,7 +14,7 @@ public class CNValueTable: CNTable
 	public static let IdItem		= "id"
 
 	private var mPath:		CNValuePath
-	private var mValueStorage:	CNValueStorage
+	private var mStorage:	CNStorage
 	private var mIdentifier:	String?
 
 	private var mDefaultFieldsCacheId:	Int
@@ -22,9 +22,9 @@ public class CNValueTable: CNTable
 	private var mRecordValuesCacheId:	Int
 	private var mRecordValuesCache:		Array<Dictionary<String, CNValue>>?
 
-	public init(path pth: CNValuePath, valueStorage storage: CNValueStorage) {
+	public init(path pth: CNValuePath, storage strg: CNStorage) {
 		mPath			= pth
-		mValueStorage		= storage
+		mStorage		= strg
 		mIdentifier		= ""
 		mDefaultFieldsCacheId	= 0
 		mDefaultFieldsCache	= nil
@@ -32,8 +32,8 @@ public class CNValueTable: CNTable
 		mRecordValuesCache	= nil
 
 		/* check storage */
-		if storage.value(forPath: pth) == nil {
-			let msg = "No root object on storage: path=\(pth.description), storage=\(mValueStorage.description)"
+		if strg.value(forPath: pth) == nil {
+			let msg = "No root object on storage: path=\(pth.description), storage=\(mStorage.description)"
 			CNLog(logLevel: .error, message: msg, atFunction: #function, inFile: #file)
 		}
 
@@ -46,16 +46,16 @@ public class CNValueTable: CNTable
 	}
 
 	deinit {
-		mValueStorage.cache.remove(cacheId: mDefaultFieldsCacheId)
-		mValueStorage.cache.remove(cacheId: mRecordValuesCacheId)
+		mStorage.cache.remove(cacheId: mDefaultFieldsCacheId)
+		mStorage.cache.remove(cacheId: mRecordValuesCacheId)
 	}
 
 	public func addDefaultFieldsCache() -> Int {
-		return mValueStorage.cache.add(accessor: defaultFieldsPath())
+		return mStorage.cache.add(accessor: defaultFieldsPath())
 	}
 
 	public func addRecordValueCache() -> Int {
-		return mValueStorage.cache.add(accessor: recordPath())
+		return mStorage.cache.add(accessor: recordPath())
 	}
 
 	public var identifier: String? { get {
@@ -63,7 +63,7 @@ public class CNValueTable: CNTable
 	}}
 
 	public var cache: CNTableCache { get {
-		return mValueStorage.cache
+		return mStorage.cache
 	}}
 
 	public var recordCount: Int { get {
@@ -71,10 +71,10 @@ public class CNValueTable: CNTable
 	}}
 
 	public var defaultFields: Dictionary<String, CNValue> { get {
-		if mValueStorage.cache.isDirty(cacheId: mDefaultFieldsCacheId) {
+		if mStorage.cache.isDirty(cacheId: mDefaultFieldsCacheId) {
 			let cache = allocateDefaultFields()
 			mDefaultFieldsCache = cache
-			mValueStorage.cache.setClean(cacheId: mDefaultFieldsCacheId)
+			mStorage.cache.setClean(cacheId: mDefaultFieldsCacheId)
 			return cache
 		} else {
 			if let cache = mDefaultFieldsCache {
@@ -87,7 +87,7 @@ public class CNValueTable: CNTable
 	}}
 
 	private func allocateDefaultFields() -> Dictionary<String, CNValue> {
-		if let val = mValueStorage.value(forPath: defaultFieldsPath()) {
+		if let val = mStorage.value(forPath: defaultFieldsPath()) {
 			if let dict = val.toDictionary() {
 				return dict
 			}
@@ -129,7 +129,7 @@ public class CNValueTable: CNTable
 			return
 		}
 		if let cached = rcd.cachedValues() {
-			if !mValueStorage.append(value: .dictionaryValue(cached), forPath: recordPath()) {
+			if !mStorage.append(value: .dictionaryValue(cached), forPath: recordPath()) {
 				CNLog(logLevel: .error, message: "Failed to add record", atFunction: #function, inFile: #file)
 			}
 		}
@@ -141,7 +141,7 @@ public class CNValueTable: CNTable
 			return
 		}
 		let elms: Array<CNValuePath.Element> = [.member(CNValueTable.RecordsItem)]
-		if !mValueStorage.append(value: .pointerValue(ptr), forPath: CNValuePath(identifier: ident, elements: elms)) {
+		if !mStorage.append(value: .pointerValue(ptr), forPath: CNValuePath(identifier: ident, elements: elms)) {
 			CNLog(logLevel: .error, message: "Failed to append pointer", atFunction: #function, inFile: #file)
 		}
 	}
@@ -150,7 +150,7 @@ public class CNValueTable: CNTable
 		var result = false
 		if 0<=row && row<self.recordCount {
 			let elmpath = CNValuePath(path: recordPath(), subPath: [.index(row)])
-			if mValueStorage.delete(forPath: elmpath) {
+			if mStorage.delete(forPath: elmpath) {
 				result = true
 			}
 		}
@@ -217,7 +217,7 @@ public class CNValueTable: CNTable
 
 	public func setRecordValue(_ val: CNValue, index idx: Int, field fld: String) -> Bool {
 		let recpath = recordFieldPath(index: idx, field: fld)
-		if mValueStorage.set(value: val, forPath: recpath) {
+		if mStorage.set(value: val, forPath: recpath) {
 			return true
 		} else {
 			return false
@@ -242,7 +242,7 @@ public class CNValueTable: CNTable
 
 	private func idValue() -> String? {
 		let path = idPath()
-		if let val = mValueStorage.value(forPath: path) {
+		if let val = mStorage.value(forPath: path) {
 			if let str = val.toString() {
 				return str
 			}
@@ -251,10 +251,10 @@ public class CNValueTable: CNTable
 	}
 
 	private func recordValues() -> Array<Dictionary<String, CNValue>> {
-		if mValueStorage.cache.isDirty(cacheId: mRecordValuesCacheId) {
+		if mStorage.cache.isDirty(cacheId: mRecordValuesCacheId) {
 			let cache = allocateRecordValues()
 			mRecordValuesCache = cache
-			mValueStorage.cache.setClean(cacheId: mRecordValuesCacheId)
+			mStorage.cache.setClean(cacheId: mRecordValuesCacheId)
 			return cache
 		} else {
 			if let cache = mRecordValuesCache {
@@ -267,7 +267,7 @@ public class CNValueTable: CNTable
 	}
 
 	private func allocateRecordValues() -> Array<Dictionary<String, CNValue>> {
-		if let val = mValueStorage.value(forPath: recordPath()) {
+		if let val = mStorage.value(forPath: recordPath()) {
 			if let arr = val.toArray() {
 				var result: Array<Dictionary<String, CNValue>> = []
 				for elm in arr {
@@ -291,7 +291,7 @@ public class CNValueTable: CNTable
 	}
 
 	private func pointedRecord(by ptr: CNPointerValue) -> Dictionary<String, CNValue>? {
-		if let val = mValueStorage.value(forPath: ptr.path) {
+		if let val = mStorage.value(forPath: ptr.path) {
 			if let dict = val.toDictionary() {
 				return dict
 			}
@@ -300,11 +300,11 @@ public class CNValueTable: CNTable
 	}
 
 	public func save() -> Bool {
-		return mValueStorage.save()
+		return mStorage.save()
 	}
 
 	public func toValue() -> CNValue {
-		return mValueStorage.toValue()
+		return mStorage.toValue()
 	}
 }
 

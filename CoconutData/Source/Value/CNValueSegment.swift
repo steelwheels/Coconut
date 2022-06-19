@@ -41,7 +41,7 @@ public class CNValueSegment
 			let srcfile   = srcdir.appendingPathComponent(self.filePath)
 			let cachefile = cachedir.appendingPathComponent(self.filePath)
 
-			guard let contents = CNValueStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
+			guard let contents = CNStorage.createCacheFile(cacheFile: cachefile, sourceFile: srcfile) else {
 				CNLog(logLevel: .error, message: "Failed to create cache file: \(cachefile.path)", atFunction: #function, inFile: #file)
 				return nil
 			}

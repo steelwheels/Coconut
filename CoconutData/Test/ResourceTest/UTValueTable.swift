@@ -74,14 +74,14 @@ private func allocateTable() -> (CNValueTable, CNValueTable)? {
 
 	let srcdir   = srcfile.deletingLastPathComponent()
 	let cachedir = cachefile.deletingLastPathComponent()
-	let storage  = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
+	let storage  = CNStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "adbook.json")
 	switch storage.load() {
 	case .success(_):
-		let table0 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
+		let table0 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
 		NSLog("record count [0]: \(table0.recordCount)")
 		NSLog("field names  [0]: \(table0.fieldNames)")
 
-		let table1 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), valueStorage: storage)
+		let table1 = CNValueTable(path: CNValuePath(identifier: nil, elements: [.member("persons")]), storage: storage)
 		NSLog("record count [1]: \(table1.recordCount)")
 		NSLog("field names  [1]: \(table1.fieldNames)")
 

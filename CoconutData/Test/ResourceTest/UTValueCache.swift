@@ -1,5 +1,5 @@
 //
-//  UTValueStorage.swift
+//  UTStorage.swift
 //  CoconutData
 //
 //  Created by Tomoo Hamada on 2021/12/25.
@@ -8,8 +8,8 @@
 import CoconutData
 import Foundation
 
-public func UTValueStorage() -> Bool {
-	NSLog("*** UTValueStorage")
+public func UTStorage() -> Bool {
+	NSLog("*** UStorage")
 
 	guard let storage = loadStorage() else {
 		return false
@@ -24,7 +24,7 @@ public func UTValueStorage() -> Bool {
 	return true
 }
 
-private func loadStorage() -> CNValueStorage? {
+private func loadStorage() -> CNStorage? {
 	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: nil, forClass: ViewController.self) else {
 		NSLog("Failed to allocate source URL")
 		return nil
@@ -34,8 +34,8 @@ private func loadStorage() -> CNValueStorage? {
 	let srcdir   = srcfile.deletingLastPathComponent()
 	let cachedir = cachefile.deletingLastPathComponent()
 
-	var result: CNValueStorage? = nil
-	let storage = CNValueStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "root.json")
+	var result: CNStorage? = nil
+	let storage = CNStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: "root.json")
 	switch storage.load() {
 	case .success(let value):
 		let txt = value.toText().toStrings().joined(separator: "\n")
@@ -47,7 +47,7 @@ private func loadStorage() -> CNValueStorage? {
 	return result
 }
 
-private func testStorageRead(target storage: CNValueStorage) -> Bool
+private func testStorageRead(target storage: CNStorage) -> Bool
 {
 	var result = true
 
@@ -125,7 +125,7 @@ private func testStorageRead(target storage: CNValueStorage) -> Bool
 	return result
 }
 
-private func testStorageWrite(target storage: CNValueStorage) -> Bool
+private func testStorageWrite(target storage: CNStorage) -> Bool
 {
 	var result = true
 
