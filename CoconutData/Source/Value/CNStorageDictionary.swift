@@ -18,30 +18,36 @@ public class CNStorageDictionary
 	}
 
 	public func value(forKey key: String) -> CNValue? {
+		if let dict = getDictionaryValue() {
+			return dict[key]
+		} else {
+			return nil
+		}
+	}
+
+	public func set(value src: CNValue, forKey key: String) -> Bool {
+		if let dict = getDictionaryValue() {
+			var mdict = dict ; mdict[key] = src
+			return setDictionaryValue(value: mdict)
+		} else {
+			return false
+		}
+	}
+
+	private func getDictionaryValue() -> Dictionary<String, CNValue>? {
 		if let val = mStorage.value(forPath: mPath) {
 			switch val {
 			case .dictionaryValue(let dict):
-				return dict[key]
+				return dict
 			default:
 				CNLog(logLevel: .error, message: "Dictionary required on storage", atFunction: #function, inFile: #file)
-				break
 			}
 		}
 		return nil
 	}
 
-	public func set(value src: CNValue, forKey key: String) -> Bool {
-		var result = false
-		if let val = mStorage.value(forPath: mPath) {
-			switch val {
-			case .dictionaryValue(var dict):
-				dict[key] = src	// update value
-				result = mStorage.set(value: .dictionaryValue(dict), forPath: mPath)
-			default:
-				CNLog(logLevel: .error, message: "Dictionary required on storage", atFunction: #function, inFile: #file)
-			}
-		}
-		return result
+	private func setDictionaryValue(value val: Dictionary<String, CNValue>) -> Bool {
+		return mStorage.set(value: .dictionaryValue(val), forPath: mPath)
 	}
 }
 

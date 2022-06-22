@@ -24,6 +24,8 @@ public func UTMutableValue() -> Bool
 
 private func unitTest() -> Bool
 {
+	let nullurl = URL(fileURLWithPath: "/dev/null")
+
 	NSLog("- MutableScalarValue")
 	let scalar0 = allocateScalar(intValue: 0)
 	let scalar1 = allocateScalar(intValue: 1)
@@ -32,21 +34,21 @@ private func unitTest() -> Bool
 	NSLog("scalar1 -> \(scr1txt)")
 
 	NSLog("- MutableArrayValue")
-	let array0 = CNMutableArrayValue()
+	let array0 = CNMutableArrayValue(sourceDirectory: nullurl, cacheDirectory: nullurl)
 	array0.append(value: scalar1)
 	array0.append(value: scalar2)
 	let arrtxt0 = array0.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("array0 -> \(arrtxt0)")
 
 	NSLog("- MutableDictionaryValue")
-	let dict = CNMutableDictionaryValue()
+	let dict = CNMutableDictionaryValue(sourceDirectory: nullurl, cacheDirectory: nullurl)
 	dict.set(value: scalar1, forKey: "a")
 	dict.set(value: scalar2, forKey: "b")
 	let dicttxt = dict.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("dict -> \(dicttxt)")
 
 	NSLog("- MutableSetValue")
-	let set0 = CNMutableSetValue()
+	let set0 = CNMutableSetValue(sourceDirectory: nullurl, cacheDirectory: nullurl)
 	set0.append(value: scalar2)
 	set0.append(value: scalar0)
 	set0.append(value: scalar1)
@@ -73,7 +75,7 @@ private func accessTest() -> Bool
 
 	let srcdir   = srcfile.deletingLastPathComponent()
 	let cachedir = cachefile.deletingLastPathComponent()
-	let mval: CNMutableValue = CNValueToMutableValue(from: initval, sourceDirectory: srcdir, cacheDirectory: cachedir)
+	let mval: CNMutableValue = CNMutableValue.valueToMutableValue(from: initval, sourceDirectory: srcdir, cacheDirectory: cachedir)
 	let rval: CNValue        = mval.toValue()
 	NSLog("mutable-value: ")
 	dumpValue(value: rval)
@@ -114,35 +116,34 @@ private func accessTest() -> Bool
 	}
 
 	NSLog("override value \"a\"")
-	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .boolValue(true)), forPath: patha){
+	if !setValue(destination: mval, source: .boolValue(true), forPath: patha){
 		return false
 	}
 
 	NSLog("override value \"g[1]\"")
-	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .numberValue(NSNumber(floatLiteral: -1.0))), forPath: pathg1){
+	if !setValue(destination: mval, source: .numberValue(NSNumber(floatLiteral: -1.0)), forPath: pathg1){
 		return false
 	}
 
 	NSLog("append value \"g[5]\"")
 	let pathg5 = CNValuePath(identifier:nil, elements: [.member("g"), .index(5)])
-	if !setValue(destination: mval, source: CNMutableScalarValue(scalarValue: .numberValue(NSNumber(floatLiteral: 0.5))), forPath: pathg5){
+	if !setValue(destination: mval, source: .numberValue(NSNumber(floatLiteral: 0.5)), forPath: pathg5){
 		return false
 	}
 
 	NSLog("append value \"h\"")
-	let m0   = CNMutableScalarValue(scalarValue: .stringValue("m0"))
-	let m1   = CNMutableScalarValue(scalarValue: .stringValue("m1"))
-	let dict = CNMutableDictionaryValue()
-	dict.set(value: m0, forKey: "m0")
-	dict.set(value: m1, forKey: "m1")
+	let dict: Dictionary<String, CNValue> = [
+		"m0": .stringValue("m0"),
+		"m1": .stringValue("m1")
+	]
 	let pathh = CNValuePath(identifier:nil, elements: [.member("h") ])
-	if !setValue(destination: mval, source: dict, forPath: pathh){
+	if !setValue(destination: mval, source: .dictionaryValue(dict), forPath: pathh){
 		return false
 	}
 
 	NSLog("override value \"h.m0\"")
 	let pathhm0 = CNValuePath(identifier:nil, elements: [.member("h"), .member("m0") ])
-	if !setValue(destination: mval, source: dict, forPath: pathhm0){
+	if !setValue(destination: mval, source: .dictionaryValue(dict), forPath: pathhm0){
 		return false
 	}
 
@@ -169,44 +170,46 @@ private func accessTest() -> Bool
 	return true
 }
 
-private func setValue(destination dst: CNMutableValue, source src: CNMutableValue, forPath path: CNValuePath) -> Bool {
-	if dst.set(value: src, forPath: path.elements) {
+private func setValue(destination dst: CNMutableValue, source src: CNValue, forPath path: CNValuePath) -> Bool {
+	if let err = dst.set(value: src, forPath: path.elements) {
+		NSLog("Failed to set: \(err.toString())")
+		return false
+	} else {
 		if let _ = getValue(path: path, in: dst) {
 			return true
 		} else {
 			NSLog("Failed to re-get")
 			return false
 		}
-	} else {
-		NSLog("Failed to set")
-		return false
 	}
 }
 
-private func getValue(path pth: CNValuePath, in owner: CNMutableValue) -> CNMutableValue? {
-	if let val = owner.value(forPath: pth.elements) {
-		dumpValue(value: val.toValue())
+private func getValue(path pth: CNValuePath, in owner: CNMutableValue) -> CNValue? {
+	switch owner.value(forPath: pth.elements) {
+	case .success(let val):
+		dumpValue(value: val)
 		return val
-	} else {
-		NSLog("Failed to get")
+	case .failure(let err):
+		NSLog("Failed to get: \(err.toString())")
 		return nil
 	}
 }
 
 private func deleteValue(destination dst: CNMutableValue, forPath path: CNValuePath) -> Bool {
-	if dst.delete(forPath: path.elements) {
+	if let err = dst.delete(forPath: path.elements) {
+		NSLog("Failed to delete: \(err.toString())")
+		return false
+	} else {
 		dumpValue(value: dst.toValue())
 		return true
-	} else {
-		NSLog("Failed to delete")
-		return false
 	}
 }
 
 private func allocateScalar(intValue val: Int) -> CNMutableScalarValue {
-	let val    = CNValue.numberValue(NSNumber(integerLiteral: val))
-	let scalar = CNMutableScalarValue(scalarValue: val)
-	let txt    = scalar.toValue().toText().toStrings().joined(separator: "\n")
+	let nullurl = URL(fileURLWithPath: "/dev/null")
+	let val     = CNValue.numberValue(NSNumber(integerLiteral: val))
+	let scalar  = CNMutableScalarValue(scalarValue: val, sourceDirectory: nullurl, cacheDirectory: nullurl)
+	let txt     = scalar.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("scalar(\(val)) -> \(txt)")
 	return scalar
 }

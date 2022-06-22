@@ -25,7 +25,7 @@ public class CNStorage
 		mSourceDirectory	= srcdir
 		mCacheDirectory		= cachedir
 		mFilePath		= fpath
-		mRootValue		= CNMutableDictionaryValue()
+		mRootValue		= CNMutableDictionaryValue(sourceDirectory: srcdir, cacheDirectory: cachedir)
 		mValueCache		= CNValueCache()
 		mLock			= NSLock()
 	}
@@ -57,7 +57,7 @@ public class CNStorage
 		let result: Result<CNValue, NSError>
 		switch parser.parse(source: contents as String) {
 		case .success(let val):
-			mRootValue = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
+			mRootValue = CNMutableValue.valueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 			result = .success(val)
 		case .failure(let err):
 			result = .failure(err)
@@ -99,60 +99,48 @@ public class CNStorage
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
 		if let elms = normalizeValuePath(valuePath: path) {
-			if let mval = mRootValue.value(forPath: elms) {
-				let result: CNValue
-				switch mval.type {
-				case .segment:
-					if let refval = mval as? CNMutableValueSegment {
-						if let cval = refval.context {
-							result = cval.toValue()
-						} else {
-							result = .nullValue
-						}
-					} else {
-						CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-						result = .nullValue
-					}
-				default:
-					result = mval.toValue()
-				}
-				return result
-			} else {
-				return nil
+			switch mRootValue.value(forPath: elms) {
+			case .success(let val):
+				return val
+			case .failure(let err):
+				CNLog(logLevel: .error, message: "Error: \(err.toString())", atFunction: #function, inFile: #file)
 			}
-		} else {
-			return nil
 		}
+		return nil
 	}
 
 	public func set(value val: CNValue, forPath path: CNValuePath) -> Bool {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
+		var result: Bool
 		if let elms = normalizeValuePath(valuePath: path) {
-			let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-			if mRootValue.set(value: mval, forPath: elms) {
+			if let err = mRootValue.set(value: val, forPath: elms) {
+				/* Some error occured */
+				CNLog(logLevel: .error, message: "Error: \(err.toString())", atFunction: #function, inFile: #file)
+				result = false
+			} else {
+				/* No error */
 				mRootValue.labelTable().clear()
 				mValueCache.setDirty(at: path)
-				return true
-			} else {
-				return false
+				result = true
 			}
 		} else {
-			return false
+			result = false
 		}
+		return result
 	}
 
 	public func append(value val: CNValue, forPath path: CNValuePath) -> Bool {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
 		if let elms = normalizeValuePath(valuePath: path) {
-			let mval = CNValueToMutableValue(from: val, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
-			if mRootValue.append(value: mval, forPath: elms) {
+			if let err = mRootValue.append(value: val, forPath: elms) {
+				CNLog(logLevel: .error, message: "Error: \(err.toString())", atFunction: #function, inFile: #file)
+				return false
+			} else {
 				mRootValue.labelTable().clear()
 				mValueCache.setDirty(at: path)
 				return true
-			} else {
-				return false
 			}
 		} else {
 			return false
@@ -164,12 +152,14 @@ public class CNStorage
 		mLock.lock() ; defer { mLock.unlock() }
 		mValueCache.setDirty(at: path)
 		if let elms = normalizeValuePath(valuePath: path) {
-			if mRootValue.delete(forPath: elms) {
+			if let err = mRootValue.delete(forPath: elms) {
+				CNLog(logLevel: .error, message: "Error: \(err.toString())", atFunction: #function, inFile: #file)
+				return false
+			} else {
+				/* No error */
 				mRootValue.labelTable().clear()
 				mValueCache.setDirty(at: path)
 				return true
-			} else {
-				return false
 			}
 		} else {
 			return false
