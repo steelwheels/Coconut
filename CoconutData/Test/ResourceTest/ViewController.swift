@@ -26,7 +26,7 @@ class ViewController: NSViewController {
 		super.viewDidAppear()
 		let res0 = UTMutableValue()
 		let res1 = UTValuePath()
-		let res2 = UTStorage()
+		let res2 = UTStorageLoader()
 		let res3 = UTStorageTable()
 		let res4 = UTMappingTable()
 		let res5 = UTEnumTable()
@@ -34,7 +34,7 @@ class ViewController: NSViewController {
 		if res0 && res1 && res2 && res3 && res4 && res5 && res6 {
 			NSLog("Summary: OK")
 		} else {
-			NSLog("Summary: Error (\(res0), \(res1), \(res2), \(res3), \(res4)")
+			NSLog("Summary: Error (\(res0), \(res1), \(res2), \(res3), \(res4), \(res5), \(res6))")
 		}
 	}
 

@@ -39,6 +39,14 @@ public class CNValueSet
 		return nil
 	}
 
+	public static func toValue(values vals: Array<CNValue>) -> CNValue {
+		let result: Dictionary<String, CNValue> = [
+			"class":	.stringValue(CNValueSet.ClassName),
+			"values":	.arrayValue(vals)
+		]
+		return .dictionaryValue(result)
+	}
+
 	public static func insert(target targ: inout Array<CNValue>, element elm: CNValue) {
 		let cnt = targ.count
 		for i in 0..<cnt {

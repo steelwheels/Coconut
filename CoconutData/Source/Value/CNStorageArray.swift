@@ -15,6 +15,9 @@ public class CNStorageArray
 	public init(path pth: CNValuePath, storage strg: CNStorage) {
 		mPath		= pth
 		mStorage	= strg
+
+		/* Check */
+		let _ = getArrayValue()
 	}
 
 	public var count: Int { get {
@@ -25,38 +28,28 @@ public class CNStorageArray
 		}
 	}}
 
-	public func value(forKey key: String, at index: Int) -> CNValue? {
+	public var values: Array<CNValue> { get {
 		if let arr = getArrayValue() {
-			if 0<=index && index<arr.count {
-				return arr[index]
-			}
+			return arr
+		} else {
+			return []
 		}
-		return nil
+	}}
+
+	public func value(at index: Int) -> CNValue? {
+		return mStorage.value(forPath: indexPath(index: index))
 	}
 
 	public func set(value src: CNValue, at index: Int) -> Bool {
-		if let arr = getArrayValue() {
-			if 0<=index && index<arr.count {
-				var marr = arr
-				marr[index] = src
-				return setArrayValue(value: marr)
-			} else if index == arr.count {
-				var marr = arr
-				marr.append(src)
-				return setArrayValue(value: marr)
-			}
-		}
-		return false
+		return mStorage.set(value: src, forPath: indexPath(index: index))
 	}
 
 	public func append(value src: CNValue) -> Bool {
-		if let arr = getArrayValue() {
-			var marr = arr
-			marr.append(src)
-			return setArrayValue(value: marr)
-		} else {
-			return false
-		}
+		return mStorage.append(value: src, forPath: mPath)
+	}
+
+	private func indexPath(index idx: Int) -> CNValuePath {
+		return CNValuePath(path: mPath, subPath: [.index(idx)])
 	}
 
 	private func getArrayValue() -> Array<CNValue>? {
@@ -65,14 +58,11 @@ public class CNStorageArray
 			case .arrayValue(let arr):
 				return arr
 			default:
-				CNLog(logLevel: .error, message: "Array required on storage", atFunction: #function, inFile: #file)
+				break
 			}
 		}
+		CNLog(logLevel: .error, message: "Not array value", atFunction: #function, inFile: #file)
 		return nil
-	}
-
-	private func setArrayValue(value val: Array<CNValue>) -> Bool {
-		return mStorage.set(value: .arrayValue(val), forPath: mPath)
 	}
 }
 

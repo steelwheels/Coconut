@@ -22,7 +22,7 @@ public class CNMutableArrayValue: CNMutableValue
 		mValues.append(val)
 	}
 
-	fileprivate func insert(value val: CNMutableValue, at pos: Int) {
+	public func insert(value val: CNMutableValue, at pos: Int) {
 		mValues.insert(val, at: pos)
 	}
 
@@ -247,38 +247,4 @@ public class CNMutableArrayValue: CNMutableValue
 	}
 }
 
-public class CNMutableSetValue: CNMutableArrayValue
-{
-	public override func append(value val: CNMutableValue){
-		let count = self.values.count
-		for i in 0..<count {
-			switch CNCompareMutableValue(value0: val, value1: self.values[i]) {
-			case .orderedAscending:		// src < values[i]
-				super.insert(value: val, at: i)
-				return	// finish insertions
-			case .orderedSame:		// src == values[i]
-				return	// already defined
-			case .orderedDescending:	// values[i] < src
-				break   // continue
-			}
-		}
-		super.append(value: val)
-	}
-
-	public override func clone() -> CNMutableValue {
-		let result = CNMutableSetValue(sourceDirectory: self.sourceDirectory, cacheDirectory: self.cacheDirectory)
-		for elm in self.values {
-			result.append(value: elm.clone())
-		}
-		return result
-	}
-
-	public override func toValue() -> CNValue {
-		var result: Array<CNValue> = []
-		for elm in self.values {
-			CNValueSet.insert(target: &result, element: elm.toValue())
-		}
-		return .setValue(result)
-	}
-}
 

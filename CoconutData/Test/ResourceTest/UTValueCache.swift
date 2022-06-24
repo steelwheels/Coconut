@@ -8,8 +8,8 @@
 import CoconutData
 import Foundation
 
-public func UTStorage() -> Bool {
-	NSLog("*** UStorage")
+public func UTStorageLoader() -> Bool {
+	NSLog("*** UStorageLoader")
 
 	guard let storage = loadStorage() else {
 		return false
@@ -25,7 +25,7 @@ public func UTStorage() -> Bool {
 }
 
 private func loadStorage() -> CNStorage? {
-	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: nil, forClass: ViewController.self) else {
+	guard let srcfile = CNFilePath.URLForResourceFile(fileName: "root", fileExtension: "json", subdirectory: "Data", forClass: ViewController.self) else {
 		NSLog("Failed to allocate source URL")
 		return nil
 	}

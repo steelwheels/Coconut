@@ -20,9 +20,17 @@ public func UTStorageData() -> Bool {
 		return false
 	}
 
-	let res0 = testStorageDictionary(storage: storage)
+	let res0 = testStorageArray(storage: storage)
+	let res1 = testStorageDictionary(storage: storage)
+	let res2 = testStorageSet(storage: storage)
 
-	return res0
+	let summary = res0 && res1 && res2
+	if summary {
+		NSLog("UTStorageData: OK")
+	} else {
+		NSLog("UTStorageData: Error")
+	}
+	return summary
 }
 
 private func loadStorage() -> Result<CNStorage, NSError> {
@@ -80,3 +88,81 @@ private func testStorageDictionary(storage strg: CNStorage) -> Bool {
 
 	return result
 }
+
+private func testStorageArray(storage strg: CNStorage) -> Bool {
+	var result = true
+
+	NSLog("* testStorageArray")
+	let vpath = CNValuePath(identifier: nil, elements: [.member("array0")])
+	let arr0 = CNStorageArray(path: vpath, storage: strg)
+
+	dump(storageArray: arr0)
+
+	if !arr0.append(value: .numberValue(NSNumber(integerLiteral: 3))) {
+		NSLog("Failed to append")
+		result = false
+	}
+	if !arr0.set(value: .numberValue(NSNumber(integerLiteral: 4)), at: 0) {
+		NSLog("Failed to set")
+		result = false
+	}
+	dump(storageArray: arr0)
+
+	return result
+}
+
+private func testStorageSet(storage strg: CNStorage) -> Bool {
+	var result = true
+
+	NSLog("* testStorageSet")
+	let vpath = CNValuePath(identifier: nil, elements: [.member("set0")])
+	let set0 = CNStorageSet(path: vpath, storage: strg)
+
+	dump(storageSet: set0)
+
+	NSLog("insert 4")
+	if !set0.insert(value: .numberValue(NSNumber(integerLiteral: 4))){
+		NSLog("Error: Failed to insert (0)")
+		result = false
+	}
+	dump(storageSet: set0)
+
+	NSLog("insert 2")
+	if !set0.insert(value: .numberValue(NSNumber(integerLiteral: 2))) {
+		NSLog("Error: Failed to insert (1)")
+		result = false
+	}
+	dump(storageSet: set0)
+
+	if set0.values.count != 4 {
+		NSLog("Error: Unexpected element count")
+		result = false
+	}
+
+	return result
+}
+
+private func dump(storageArray arr: CNStorageArray) {
+	NSLog("values = ")
+	let count = arr.values.count
+	var line: String = "["
+	for i in 0..<count {
+		if let val = arr.value(at: i) {
+			line += val.toText().toStrings().joined(separator: "\n") + " "
+		} else {
+			NSLog("Failed to access array")
+		}
+	}
+	line += "]"
+	NSLog("values in array = \(line)")
+}
+
+private func dump(storageSet sset: CNStorageSet) {
+	NSLog("values in set = ")
+	for val in sset.values {
+		let txt = val.toText().toStrings().joined(separator: "\n")
+		NSLog(" * \(txt)")
+	}
+}
+
+

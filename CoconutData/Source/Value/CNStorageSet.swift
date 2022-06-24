@@ -15,6 +15,7 @@ public class CNStorageSet
 	public init(path pth: CNValuePath, storage strg: CNStorage) {
 		mPath		= pth
 		mStorage	= strg
+		let _ = getSetValue()
 	}
 
 	public var count: Int { get {
@@ -25,39 +26,39 @@ public class CNStorageSet
 		}
 	}}
 
-	public func value(forKey key: String, at index: Int) -> CNValue? {
+	public var values: Array<CNValue> { get {
 		if let arr = getSetValue() {
-			if 0<=index && index<arr.count {
-				return arr[index]
-			}
+			return arr
+		} else {
+			return []
 		}
-		return nil
+	}}
+
+	public func value(at index: Int) -> CNValue? {
+		return mStorage.value(forPath: indexPath(index: index))
 	}
 
 	public func insert(value src: CNValue) -> Bool {
-		if let arr = getSetValue() {
-			var marr = arr
-			CNValueSet.insert(target: &marr, element: src)
-			return setSetValue(value: marr)
-		} else {
-			return false
-		}
+		return mStorage.append(value: src, forPath: mPath)
 	}
 
 	private func getSetValue() -> Array<CNValue>? {
 		if let val = mStorage.value(forPath: mPath) {
 			switch val {
-			case .setValue(let arr):
-				return arr
+			case .dictionaryValue(let dict):
+				if let vals = dict["values"] {
+					return vals.toArray()
+				}
 			default:
-				CNLog(logLevel: .error, message: "Array required on storage", atFunction: #function, inFile: #file)
+				break
 			}
 		}
+		CNLog(logLevel: .error, message: "Set required on storage", atFunction: #function, inFile: #file)
 		return nil
 	}
 
-	private func setSetValue(value val: Array<CNValue>) -> Bool {
-		return mStorage.set(value: .setValue(val), forPath: mPath)
+	private func indexPath(index idx: Int) -> CNValuePath {
+		return CNValuePath(path: mPath, subPath: [.index(idx)])
 	}
 }
 

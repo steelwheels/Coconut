@@ -214,9 +214,13 @@ private func allocateScalar(intValue val: Int) -> CNMutableScalarValue {
 	return scalar
 }
 
-private func dumpValue(value val: CNValue) {
-	let txt = val.toText().toStrings().joined(separator: "\n")
-	NSLog("value = \(txt)")
+private func dumpValue(value valp: CNValue?) {
+	if let val = valp {
+		let txt = val.toText().toStrings().joined(separator: "\n")
+		NSLog("value = \(txt)")
+	} else {
+		NSLog("value = nil")
+	}
 }
 
 /*

@@ -15,23 +15,16 @@ public class CNStorageDictionary
 	public init(path pth: CNValuePath, storage strg: CNStorage) {
 		mPath		= pth
 		mStorage	= strg
+
+		let _ = getDictionaryValue()
 	}
 
 	public func value(forKey key: String) -> CNValue? {
-		if let dict = getDictionaryValue() {
-			return dict[key]
-		} else {
-			return nil
-		}
+		return mStorage.value(forPath: memberPath(member: key))
 	}
 
 	public func set(value src: CNValue, forKey key: String) -> Bool {
-		if let dict = getDictionaryValue() {
-			var mdict = dict ; mdict[key] = src
-			return setDictionaryValue(value: mdict)
-		} else {
-			return false
-		}
+		return mStorage.set(value: src, forPath: memberPath(member: key))
 	}
 
 	private func getDictionaryValue() -> Dictionary<String, CNValue>? {
@@ -40,14 +33,15 @@ public class CNStorageDictionary
 			case .dictionaryValue(let dict):
 				return dict
 			default:
-				CNLog(logLevel: .error, message: "Dictionary required on storage", atFunction: #function, inFile: #file)
+				break
 			}
 		}
+		CNLog(logLevel: .error, message: "Dictionary required on storage", atFunction: #function, inFile: #file)
 		return nil
 	}
 
-	private func setDictionaryValue(value val: Dictionary<String, CNValue>) -> Bool {
-		return mStorage.set(value: .dictionaryValue(val), forPath: mPath)
+	private func memberPath(member memb: String) -> CNValuePath {
+		return CNValuePath(path: mPath, subPath: [.member(memb)])
 	}
 }
 

@@ -1,7 +1,14 @@
 {
+	array0: [
+		1, 2, 3
+	]
 	dict0: {
 		a:	10,
 		b:	"hello"
+	}
+	set0: {
+		class:	"Set"
+		values:	[1, 2, 3]
 	}
 }
 
