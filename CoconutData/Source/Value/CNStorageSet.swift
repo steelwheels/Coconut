@@ -7,7 +7,16 @@
 
 import Foundation
 
-public class CNStorageSet
+public protocol CNSet
+{
+	var count: Int { get }
+	var values: Array<CNValue> { get }
+
+	func value(at index: Int) -> CNValue?
+	func insert(value src: CNValue) -> Bool
+}
+
+public class CNStorageSet: CNSet
 {
 	private var mPath:	CNValuePath
 	private var mStorage:	CNStorage

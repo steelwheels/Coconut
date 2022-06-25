@@ -7,7 +7,17 @@
 
 import Foundation
 
-public class CNStorageDictionary
+public protocol CNDictionary
+{
+	var count:  Int            { get }
+	var values: Array<CNValue> { get }
+	var keys:   Array<String>  { get }
+
+	func value(forKey key: String) -> CNValue?
+	func set(value val: CNValue, forKey key: String) -> Bool
+}
+
+public class CNStorageDictionary: CNDictionary
 {
 	private var mPath:	CNValuePath
 	private var mStorage:	CNStorage
@@ -18,6 +28,30 @@ public class CNStorageDictionary
 
 		let _ = getDictionaryValue()
 	}
+
+	public var count: Int { get {
+		if let dict = getDictionaryValue() {
+			return dict.count
+		} else {
+			return 0
+		}
+	}}
+
+	public var values: Array<CNValue> { get {
+		if let dict = getDictionaryValue() {
+			return Array(dict.values)
+		} else {
+			return []
+		}
+	}}
+
+	public var keys: Array<String> { get {
+		if let dict = getDictionaryValue() {
+			return Array(dict.keys)
+		} else {
+			return []
+		}
+	}}
 
 	public func value(forKey key: String) -> CNValue? {
 		return mStorage.value(forPath: memberPath(member: key))

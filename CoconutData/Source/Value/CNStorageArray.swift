@@ -7,7 +7,17 @@
 
 import Foundation
 
-public class CNStorageArray
+public protocol CNArray
+{
+	var count: Int { get }
+	var values: Array<CNValue> { get }
+
+	func value(at index: Int) -> CNValue?
+	func set(value src: CNValue, at index: Int) -> Bool
+	func append(value src: CNValue) -> Bool
+}
+
+public class CNStorageArray: CNArray
 {
 	private var mPath:	CNValuePath
 	private var mStorage:	CNStorage
