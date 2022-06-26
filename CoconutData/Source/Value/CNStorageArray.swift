@@ -13,6 +13,8 @@ public protocol CNArray
 	var values: Array<CNValue> { get }
 
 	func value(at index: Int) -> CNValue?
+	func contains(value src: CNValue) -> Bool
+
 	func set(value src: CNValue, at index: Int) -> Bool
 	func append(value src: CNValue) -> Bool
 }
@@ -56,6 +58,22 @@ public class CNStorageArray: CNArray
 
 	public func append(value src: CNValue) -> Bool {
 		return mStorage.append(value: src, forPath: mPath)
+	}
+
+	public func contains(value src: CNValue) -> Bool {
+		if let vals = getArrayValue() {
+			for val in vals {
+				switch CNCompareValue(nativeValue0: src, nativeValue1: val) {
+				case .orderedAscending:	// src < val[x]
+					break	// continue
+				case .orderedSame:	// src == vals[x]
+					return true
+				case .orderedDescending:
+					break	// contibue
+				}
+			}
+		}
+		return false
 	}
 
 	private func indexPath(index idx: Int) -> CNValuePath {

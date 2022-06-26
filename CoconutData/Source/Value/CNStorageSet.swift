@@ -13,6 +13,8 @@ public protocol CNSet
 	var values: Array<CNValue> { get }
 
 	func value(at index: Int) -> CNValue?
+	func contains(value src: CNValue) -> Bool
+
 	func insert(value src: CNValue) -> Bool
 }
 
@@ -45,6 +47,22 @@ public class CNStorageSet: CNSet
 
 	public func value(at index: Int) -> CNValue? {
 		return mStorage.value(forPath: indexPath(index: index))
+	}
+
+	public func contains(value src: CNValue) -> Bool {
+		if let vals = getSetValue() {
+			for val in vals {
+				switch CNCompareValue(nativeValue0: src, nativeValue1: val) {
+				case .orderedAscending:	// src < val[x]
+					break	// continue
+				case .orderedSame:	// src == vals[x]
+					return true
+				case .orderedDescending:
+					return false	// src < valus
+				}
+			}
+		}
+		return false
 	}
 
 	public func insert(value src: CNValue) -> Bool {
