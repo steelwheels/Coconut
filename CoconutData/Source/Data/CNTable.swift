@@ -43,7 +43,6 @@ public protocol CNTable
 
 	func forEach(callback cbfunc: (_ record: CNRecord) -> Void)
 
-	func sort(byDescriptors descs: CNSortDescriptors)
 	func toValue() -> CNValue
 }
 

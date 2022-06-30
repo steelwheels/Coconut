@@ -406,5 +406,21 @@ public class CNEnumTable
 			"pause":		CNAnimationState.pause.rawValue
 		])
 		self.add(enumType: animstate)
+
+		let compres = CNEnumType(typeName: "ComparisonResult")
+		compres.add(members: [
+			"ascending":		ComparisonResult.orderedAscending.rawValue,
+			"same":			ComparisonResult.orderedSame.rawValue,
+			"descending":		ComparisonResult.orderedDescending.rawValue
+		])
+		self.add(enumType: compres)
+
+		let sortorder = CNEnumType(typeName: "SortOrder")
+		sortorder.add(members: [
+			"increasing":		CNSortOrder.increasing.rawValue,
+			"decreasing":		CNSortOrder.decreasing.rawValue
+		])
+		self.add(enumType: sortorder)
 	}
 }
+

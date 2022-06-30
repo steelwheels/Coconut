@@ -202,10 +202,6 @@ public class CNStorageTable: CNTable
 		}
 	}
 
-	public func sort(byDescriptors descs: CNSortDescriptors) {
-		CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
-	}
-
 	public func getRecordValue(index idx: Int, field fld: String) -> CNValue? {
 		let recs = self.recordValues()
 		if 0<=idx && idx<recs.count {
