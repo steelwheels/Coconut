@@ -417,6 +417,7 @@ public class CNEnumTable
 
 		let sortorder = CNEnumType(typeName: "SortOrder")
 		sortorder.add(members: [
+			"none":			CNSortOrder.none.rawValue,
 			"increasing":		CNSortOrder.increasing.rawValue,
 			"decreasing":		CNSortOrder.decreasing.rawValue
 		])

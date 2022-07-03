@@ -8,7 +8,18 @@
 import Foundation
 
 public enum CNSortOrder: Int {
-	case increasing		// smaller first
-	case decreasing		// bigger first
+	case none		=  0	// No sort
+	case increasing		= -1	// smaller first
+	case decreasing		=  1	// bigger first
+
+	public var description: String { get {
+		let result: String
+		switch self {
+		case .none:		result = "none"
+		case .increasing:	result = "increasing"
+		case .decreasing:	result = "decreasing"
+		}
+		return result
+	}}
 }
 

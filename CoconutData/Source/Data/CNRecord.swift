@@ -22,3 +22,10 @@ public protocol CNRecord
 	func compare(forField name: String, with rec: CNRecord) -> ComparisonResult
 }
 
+public extension CNRecord
+{
+	var description: String { get {
+		let val: CNValue = .dictionaryValue(self.toValue())
+		return val.toText().toStrings().joined(separator: "\n")
+	}}
+}

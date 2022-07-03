@@ -16,8 +16,8 @@ public protocol CNMappingTableProtocol
 	func setFilter(filterFunction mfunc: @escaping FilterFunction)
 	func addVirtualField(name field: String, callbackFunction cbfunc: @escaping VirtualFieldCallback)
 
-	var sortOrder: CNSortOrder? { get set }
-	func set(compareFunction comp: @escaping CompareFunction)
+	var sortOrder: CNSortOrder { get set }
+	func setCompareFunction(compareFunc cfunc: @escaping CompareFunction)
 }
 
 public class CNMappingTable: CNTable, CNMappingTableProtocol
@@ -28,7 +28,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 	private var mRecordIndexes:		Array<Int>
 	private var mFilterFunc:		FilterFunction?
 	private var mCompareFunc:		CompareFunction?
-	private var mSortType:			CNSortOrder?
+	private var mSortOrder:			CNSortOrder
 	private var mVirtualFieldCallbacks:	Dictionary<String, VirtualFieldCallback>
 	private var mDoReload:			Bool
 
@@ -39,7 +39,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		mRecordIndexes		= []
 		mFilterFunc		= nil
 		mCompareFunc		= nil
-		mSortType		= nil
+		mSortOrder 		= .none
 		mVirtualFieldCallbacks	= [:]
 		mDoReload		= false
 	}
@@ -81,6 +81,10 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		return fields
 	}}
 
+	public func setCompareFunction(compareFunc cfunc: @escaping CompareFunction) {
+		mCompareFunc = cfunc ; mDoReload    = true
+	}
+
 	public func fieldName(at index: Int) -> String? {
 		return mSourceTable.fieldName(at: index)
 	}
@@ -95,13 +99,9 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		}
 	}
 
-	public var sortOrder: CNSortOrder? {
-		get         { return mSortType }
-		set(newval) { mSortType = newval ; mDoReload = true }
-	}
-
-	public func set(compareFunction comp: @escaping CompareFunction) {
-		mCompareFunc	= comp ; mDoReload = true
+	public var sortOrder: CNSortOrder {
+		get         { return mSortOrder 			}
+		set(newval) { mSortOrder = newval ; mDoReload = true	}
 	}
 
 	public func newRecord() -> CNRecord {
@@ -202,59 +202,57 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 	}
 
 	private func addRecord(records recs: inout Array<CNRecord>, indices idxs: inout Array<Int>, newRecord newrec: CNRecord, newIndex newidx: Int) {
-		if let stype = mSortType {
-			switch stype {
-			case .increasing:
-				guard let compfunc = mCompareFunc else {
-					recs.append(newrec)
-					idxs.append(newidx)
-					CNLog(logLevel: .error, message: "No callback to sort", atFunction: #function, inFile: #file)
-					return
-				}
-				var added = false
-				loop: for i in 0..<recs.count {
-					switch compfunc(newrec, recs[i]) {
-					case .orderedAscending, .orderedSame:
-						recs.insert(newrec, at: i)
-						idxs.insert(newidx, at: i)
-						added = true
-						break loop
-					case .orderedDescending:
-						break
-					}
-				}
-				if !added {
-					recs.append(newrec)
-					idxs.append(newidx)
-				}
-			case .decreasing:
-				guard let compfunc = mCompareFunc else {
-					recs.append(newrec)
-					idxs.append(newidx)
-					CNLog(logLevel: .error, message: "No callback to sort", atFunction: #function, inFile: #file)
-					return
-				}
-				var added = false
-				loop: for i in 0..<recs.count {
-					switch compfunc(newrec, recs[i]) {
-					case .orderedDescending, .orderedSame:
-						recs.insert(newrec, at: i)
-						idxs.insert(newidx, at: i)
-						added = true
-						break loop
-					case .orderedAscending:
-						break
-					}
-				}
-				if !added {
-					recs.append(newrec)
-					idxs.append(newidx)
-				}
-			}
-		} else {
+		switch mSortOrder {
+		case .none:
 			/* Needless to sort */
 			recs.append(newrec)
 			idxs.append(newidx)
+		case .increasing:
+			guard let compfunc = mCompareFunc else {
+				recs.append(newrec)
+				idxs.append(newidx)
+				CNLog(logLevel: .error, message: "No callback to sort", atFunction: #function, inFile: #file)
+				return
+			}
+			var added = false
+			loop: for i in 0..<recs.count {
+				switch compfunc(newrec, recs[i]) {
+				case .orderedAscending, .orderedSame:
+					recs.insert(newrec, at: i)
+					idxs.insert(newidx, at: i)
+					added = true
+					break loop
+				case .orderedDescending:
+					break
+				}
+			}
+			if !added {
+				recs.append(newrec)
+				idxs.append(newidx)
+			}
+		case .decreasing:
+			guard let compfunc = mCompareFunc else {
+				recs.append(newrec)
+				idxs.append(newidx)
+				CNLog(logLevel: .error, message: "No callback to sort", atFunction: #function, inFile: #file)
+				return
+			}
+			var added = false
+			loop: for i in 0..<recs.count {
+				switch compfunc(newrec, recs[i]) {
+				case .orderedDescending, .orderedSame:
+					recs.insert(newrec, at: i)
+					idxs.insert(newidx, at: i)
+					added = true
+					break loop
+				case .orderedAscending:
+					break
+				}
+			}
+			if !added {
+				recs.append(newrec)
+				idxs.append(newidx)
+			}
 		}
 	}
 }
