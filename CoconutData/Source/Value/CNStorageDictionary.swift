@@ -25,7 +25,6 @@ public class CNStorageDictionary: CNDictionary
 	public init(path pth: CNValuePath, storage strg: CNStorage) {
 		mPath		= pth
 		mStorage	= strg
-
 		let _ = getDictionaryValue()
 	}
 

@@ -14,7 +14,7 @@ public class CNStorageTable: CNTable
 	public static let IdItem		= "id"
 
 	private var mPath:		CNValuePath
-	private var mStorage:	CNStorage
+	private var mStorage:		CNStorage
 	private var mIdentifier:	String?
 
 	private var mDefaultFieldsCacheId:	Int
@@ -41,29 +41,37 @@ public class CNStorageTable: CNTable
 		mIdentifier = idValue()
 
 		/* Allocate cache */
-		mDefaultFieldsCacheId = addDefaultFieldsCache()
-		mRecordValuesCacheId  = addRecordValueCache()
+		mDefaultFieldsCacheId = allocateDefaultFieldsCache()
+		mRecordValuesCacheId  = allocateRecordValuesCache()
 	}
 
 	deinit {
-		mStorage.cache.remove(cacheId: mDefaultFieldsCacheId)
-		mStorage.cache.remove(cacheId: mRecordValuesCacheId)
+		removeCache(cacheId: mDefaultFieldsCacheId)
+		removeCache(cacheId: mRecordValuesCacheId)
 	}
 
-	public func addDefaultFieldsCache() -> Int {
-		return mStorage.cache.add(accessor: defaultFieldsPath())
+	public func allocateDefaultFieldsCache() -> Int {
+		return mStorage.allocateCache(forPath: defaultFieldsPath())
 	}
 
-	public func addRecordValueCache() -> Int {
-		return mStorage.cache.add(accessor: recordPath())
+	public func allocateRecordValuesCache() -> Int {
+		return mStorage.allocateCache(forPath: recordPath())
+	}
+
+	public func removeCache(cacheId cid: Int) {
+		mStorage.removeCache(cacheId: cid)
+	}
+
+	public func isDirty(cacheId cid: Int) -> Bool {
+		return mStorage.isDirty(cacheId: cid)
+	}
+
+	public func setClean(cacheId cid: Int) {
+		mStorage.setClean(cacheId: cid)
 	}
 
 	public var identifier: String? { get {
 		return mIdentifier
-	}}
-
-	public var cache: CNTableCache { get {
-		return mStorage.cache
 	}}
 
 	public var recordCount: Int { get {
@@ -71,10 +79,10 @@ public class CNStorageTable: CNTable
 	}}
 
 	public var defaultFields: Dictionary<String, CNValue> { get {
-		if mStorage.cache.isDirty(cacheId: mDefaultFieldsCacheId) {
+		if isDirty(cacheId: mDefaultFieldsCacheId) {
 			let cache = allocateDefaultFields()
 			mDefaultFieldsCache = cache
-			mStorage.cache.setClean(cacheId: mDefaultFieldsCacheId)
+			setClean(cacheId: mDefaultFieldsCacheId)
 			return cache
 		} else {
 			if let cache = mDefaultFieldsCache {
@@ -247,10 +255,10 @@ public class CNStorageTable: CNTable
 	}
 
 	private func recordValues() -> Array<Dictionary<String, CNValue>> {
-		if mStorage.cache.isDirty(cacheId: mRecordValuesCacheId) {
+		if mStorage.isDirty(cacheId: mRecordValuesCacheId) {
 			let cache = allocateRecordValues()
 			mRecordValuesCache = cache
-			mStorage.cache.setClean(cacheId: mRecordValuesCacheId)
+			setClean(cacheId: mRecordValuesCacheId)
 			return cache
 		} else {
 			if let cache = mRecordValuesCache {

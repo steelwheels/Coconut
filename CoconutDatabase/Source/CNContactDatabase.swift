@@ -11,6 +11,20 @@ import CoconutData
 import Contacts
 import Foundation
 
+private class CNContactCache
+{
+	private var 	mIsDirty:		Bool
+
+	public init(){
+		mIsDirty	= true
+	}
+
+	public var isDirty: Bool {
+		get         { return mIsDirty }
+		set(newval) { mIsDirty = newval }
+	}
+}
+
 public class CNContactDatabase: CNTable
 {
 	/* Define singleton object */
@@ -33,31 +47,73 @@ public class CNContactDatabase: CNTable
 		case loaded			= 4
 	}
 
-	private var mRecords:		Array<CNRecord>
-	private var mState: 		State
-	private var mCache:		CNContactCache
+	private var mRecords:			Array<CNRecord>
+	private var mState: 			State
+	private var mCache:			Dictionary<Int, CNContactCache>
+	private var mNextCacheId:		Int
+	private var mDefaultFieldCacheId:	Int
+	private var mRecordValuesCacheId:	Int
 
 	private init(){
-		mRecords	= []
-		mState		= .undecided
-		mCache		= CNContactCache()
-	}
+		mRecords		= []
+		mState			= .undecided
+		mCache			= [:]
+		mNextCacheId		= 0
+		mDefaultFieldCacheId	= 0
+		mRecordValuesCacheId	= 0
 
-	public func addDefaultFieldsCache() -> Int {
-		return mCache.add()
-	}
-
-	public func addRecordValueCache() -> Int {
-		return mCache.add()
+		mDefaultFieldCacheId	= allocateDefaultFieldsCache()
+		mRecordValuesCacheId	= allocateRecordValuesCache()
 	}
 
 	public var identifier: String? { get {
 		return nil
 	}}
 
-	public var cache: CNTableCache { get {
-		return mCache
-	}}
+	public func allocateDefaultFieldsCache() -> Int {
+		return allocateCache()
+	}
+
+	public func allocateRecordValuesCache() -> Int {
+		return allocateCache()
+	}
+
+	private func allocateCache() -> Int {
+		let newcache = CNContactCache()
+		let cid      = mNextCacheId
+		mCache[cid] = newcache
+		mNextCacheId += 1
+		return cid
+	}
+
+	public func removeCache(cacheId cid: Int) {
+		mCache[cid] = nil
+	}
+
+	public func isDirty(cacheId cid: Int) -> Bool {
+		if let cache = mCache[cid] {
+			return cache.isDirty
+		} else {
+			CNLog(logLevel: .error, message: "Invalid cache id", atFunction: #function, inFile: #file)
+			return false
+		}
+	}
+
+	private func setDirty(cacheId cid: Int) {
+		if let cache = mCache[cid] {
+			cache.isDirty = true
+		} else {
+			CNLog(logLevel: .error, message: "Invalid cache id", atFunction: #function, inFile: #file)
+		}
+	}
+
+	public func setClean(cacheId cid: Int) {
+		if let cache = mCache[cid] {
+			cache.isDirty = false
+		} else {
+			CNLog(logLevel: .error, message: "Invalid cache id", atFunction: #function, inFile: #file)
+		}
+	}
 
 	public var recordCount: Int { get {
 		return mRecords.count
@@ -111,7 +167,7 @@ public class CNContactDatabase: CNTable
 
 	public func append(record rcd: CNRecord) {
 		mRecords.append(rcd)
-		mCache.setDirty()
+		setDirty(cacheId: mRecordValuesCacheId)
 	}
 
 	public func append(pointer ptr: CNPointerValue) {
@@ -120,7 +176,7 @@ public class CNContactDatabase: CNTable
 
 	public func remove(at row: Int) -> Bool {
 		CNLog(logLevel: .error, message: "Not supported yet: \(row)", atFunction: #function, inFile: #file)
-		mCache.setDirty()
+		setDirty(cacheId: mRecordValuesCacheId)
 		return false
 	}
 
@@ -196,7 +252,7 @@ public class CNContactDatabase: CNTable
 					self.mRecords.append(record)
 				})
 				mState = .loaded
-				mCache.setDirty()
+				setDirty(cacheId: mRecordValuesCacheId)
 			} catch {
 				mState = .loadFailed
 			}

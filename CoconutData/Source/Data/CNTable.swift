@@ -12,24 +12,19 @@ public enum CNTableLoadResult {
 	case error(NSError)
 }
 
-public protocol CNTableCache
-{
-	func remove(cacheId cid: Int)
-	func isDirty(cacheId cid: Int) -> Bool
-	func setClean(cacheId cid: Int)
-}
-
 public protocol CNTable
 {
-	func addDefaultFieldsCache() -> Int
-	func addRecordValueCache() -> Int
-	var cache: CNTableCache { get }
-
 	var identifier: String? { get }
 	var recordCount: Int { get }
 
 	var defaultFields:    Dictionary<String, CNValue> { get }
 	func fieldName(at index: Int) -> String?
+
+	func allocateDefaultFieldsCache() -> Int
+	func allocateRecordValuesCache()  -> Int
+	func removeCache(cacheId cid: Int)
+	func isDirty(cacheId cid: Int) -> Bool
+	func setClean(cacheId cid: Int)
 
 	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?

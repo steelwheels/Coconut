@@ -23,7 +23,7 @@ public protocol CNMappingTableProtocol
 public class CNMappingTable: CNTable, CNMappingTableProtocol
 {
 	private var mSourceTable:		CNTable
-	private var mCacheId:			Int
+	private var mRecordValueCacheId:	Int
 	private var mRecords:			Array<CNRecord>
 	private var mRecordIndexes:		Array<Int>
 	private var mFilterFunc:		FilterFunction?
@@ -34,7 +34,6 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 
 	public init(sourceTable table: CNTable){
 		mSourceTable 		= table
-		mCacheId     		= table.addRecordValueCache()
 		mRecords		= []
 		mRecordIndexes		= []
 		mFilterFunc		= nil
@@ -42,30 +41,40 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		mSortOrder 		= .none
 		mVirtualFieldCallbacks	= [:]
 		mDoReload		= false
+
+		mRecordValueCacheId	= table.allocateRecordValuesCache()
 	}
 
 	deinit {
-		mSourceTable.cache.remove(cacheId: mCacheId)
+		mSourceTable.removeCache(cacheId: mRecordValueCacheId)
 	}
 
 	public func setFilter(filterFunction mfunc: @escaping FilterFunction){
 		mFilterFunc = mfunc
 	}
 
-	public func addDefaultFieldsCache() -> Int {
-		return mSourceTable.addDefaultFieldsCache()
+	public func allocateDefaultFieldsCache() -> Int {
+		return mSourceTable.allocateDefaultFieldsCache()
 	}
 
-	public func addRecordValueCache() -> Int {
-		return mSourceTable.addRecordValueCache()
+	public func allocateRecordValuesCache()  -> Int {
+		return mSourceTable.allocateRecordValuesCache()
+	}
+
+	public func removeCache(cacheId cid: Int) {
+		mSourceTable.removeCache(cacheId: cid)
+	}
+
+	public func isDirty(cacheId cid: Int) -> Bool {
+		return mSourceTable.isDirty(cacheId: cid)
+	}
+
+	public func setClean(cacheId cid: Int){
+		mSourceTable.setClean(cacheId: cid)
 	}
 
 	public var identifier: String? { get {
 		return mSourceTable.identifier
-	}}
-
-	public var cache: CNTableCache { get {
-		return mSourceTable.cache
 	}}
 
 	public var recordCount: Int { get {
@@ -184,7 +193,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 
 	private func getRecords() -> Array<CNRecord> {
 		let filterfunc = mFilterFunc ?? { (_ rec: CNRecord) -> Bool in return true }
-		if mDoReload || mSourceTable.cache.isDirty(cacheId: mCacheId) {
+		if mDoReload || isDirty(cacheId: mRecordValueCacheId) {
 			mRecords       = []
 			mRecordIndexes = []
 			for i in 0..<mSourceTable.recordCount {
@@ -195,7 +204,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 					}
 				}
 			}
-			mSourceTable.cache.setClean(cacheId: mCacheId)
+			setClean(cacheId: mRecordValueCacheId)
 			mDoReload = false
 		}
 		return mRecords

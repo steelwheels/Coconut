@@ -8,14 +8,15 @@
 import CoconutData
 import Foundation
 
-public class CNContactCache: CNTableCache
+/*
+public class CNContactCache: CNCacheOperation
 {
-	private var mCacheTable:  Dictionary<Int, Bool>
-	private var mNextCacheId: Int
+	private var mCacheTable: 	Dictionary<Int, Bool>
+	private var mNextCacheId: 	Int
 
 	public init(){
-		mCacheTable  = [:]
-		mNextCacheId = 0
+		mCacheTable  	= [:]
+		mNextCacheId	= 0
 	}
 
 	public func add() -> Int {
@@ -48,4 +49,5 @@ public class CNContactCache: CNTableCache
 		mCacheTable[cid] = false
 	}
 }
+*/
 

@@ -10,13 +10,32 @@ import UIKit
 #endif
 import Foundation
 
+private class CNStorageCache
+{
+	private var	mPath:			CNValuePath
+	private var 	mIsDirty:		Bool
+
+	public init(path p: CNValuePath){
+		mPath		= p
+		mIsDirty	= true
+	}
+
+	public var path: CNValuePath { get { return mPath }}
+
+	public var isDirty: Bool {
+		get         { return mIsDirty }
+		set(newval) { mIsDirty = newval }
+	}
+}
+
 public class CNStorage
 {
 	private var mSourceDirectory:		URL
 	private var mCacheDirectory:		URL
 	private var mFilePath:			String
 	private var mRootValue:			CNMutableValue
-	private var mValueCache:		CNValueCache
+	private var mCache:			Dictionary<Int, CNStorageCache>
+	private var mNextCacheId:		Int
 	private var mLock:			NSLock
 
 	// packdir: Root directory for package (*.jspkg)
@@ -26,13 +45,11 @@ public class CNStorage
 		mCacheDirectory		= cachedir
 		mFilePath		= fpath
 		mRootValue		= CNMutableDictionaryValue(sourceDirectory: srcdir, cacheDirectory: cachedir)
-		mValueCache		= CNValueCache()
+		mCache			= [:]
+		mNextCacheId		= 0
 		mLock			= NSLock()
 	}
 
-	public var cache: CNValueCache { get {
-		return mValueCache
-	}}
 	public var description: String { get {
 		return "{srcdir=\(mSourceDirectory.path), cachedir=\(mCacheDirectory.path), file=\(mFilePath)}"
 	}}
@@ -95,6 +112,46 @@ public class CNStorage
 		return self.load()
 	}
 
+	public func allocateCache(forPath path: CNValuePath) -> Int {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
+		let cache = CNStorageCache(path: path)
+		let cid   = mNextCacheId
+		mCache[mNextCacheId] = cache
+		mNextCacheId += 1
+		return cid
+	}
+
+	public func removeCache(cacheId cid: Int) {
+		mCache[cid] = nil
+	}
+
+	public func isDirty(cacheId cid: Int) -> Bool {
+		if let cache = mCache[cid] {
+			return cache.isDirty
+		} else {
+			CNLog(logLevel: .error, message: "Unknown cache id: \(cid)", atFunction: #function, inFile: #file)
+			return false
+		}
+	}
+
+	private func setDirty(at path: CNValuePath) {
+		for cache in mCache.values {
+			if cache.path.isIncluded(in: path) {
+				cache.isDirty = true
+			}
+		}
+	}
+
+	public func setClean(cacheId cid: Int) {
+		if let cache = mCache[cid] {
+			cache.isDirty = false
+		} else {
+			CNLog(logLevel: .error, message: "Unknown cache id: \(cid)", atFunction: #function, inFile: #file)
+		}
+	}
+
 	public func value(forPath path: CNValuePath) -> CNValue? {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
@@ -110,8 +167,9 @@ public class CNStorage
 	}
 
 	public func set(value val: CNValue, forPath path: CNValuePath) -> Bool {
-		/* Mutex lock */
+		/* Mutex lock and unlock */
 		mLock.lock() ; defer { mLock.unlock() }
+
 		var result: Bool
 		if let elms = normalizeValuePath(valuePath: path) {
 			if let err = mRootValue.set(value: val, forPath: elms) {
@@ -121,7 +179,7 @@ public class CNStorage
 			} else {
 				/* No error */
 				mRootValue.labelTable().clear()
-				mValueCache.setDirty(at: path)
+				setDirty(at: path)
 				result = true
 			}
 		} else {
@@ -131,15 +189,16 @@ public class CNStorage
 	}
 
 	public func append(value val: CNValue, forPath path: CNValuePath) -> Bool {
-		/* Mutex lock */
+		/* Mutex lock and unlock */
 		mLock.lock() ; defer { mLock.unlock() }
+
 		if let elms = normalizeValuePath(valuePath: path) {
 			if let err = mRootValue.append(value: val, forPath: elms) {
 				CNLog(logLevel: .error, message: "Error: \(err.toString())", atFunction: #function, inFile: #file)
 				return false
 			} else {
 				mRootValue.labelTable().clear()
-				mValueCache.setDirty(at: path)
+				setDirty(at: path)
 				return true
 			}
 		} else {
@@ -148,9 +207,10 @@ public class CNStorage
 	}
 
 	public func delete(forPath path: CNValuePath) -> Bool {
-		/* Mutex lock */
+		/* Mutex lock and unlock */
 		mLock.lock() ; defer { mLock.unlock() }
-		mValueCache.setDirty(at: path)
+
+		setDirty(at: path)
 		if let elms = normalizeValuePath(valuePath: path) {
 			if let err = mRootValue.delete(forPath: elms) {
 				CNLog(logLevel: .error, message: "Error: \(err.toString())", atFunction: #function, inFile: #file)
@@ -158,7 +218,6 @@ public class CNStorage
 			} else {
 				/* No error */
 				mRootValue.labelTable().clear()
-				mValueCache.setDirty(at: path)
 				return true
 			}
 		} else {
