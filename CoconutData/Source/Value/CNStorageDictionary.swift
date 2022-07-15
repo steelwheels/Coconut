@@ -28,6 +28,14 @@ public class CNStorageDictionary: CNDictionary
 		let _ = getDictionaryValue()
 	}
 
+	public func allocateEventFunction(eventFunc efunc: @escaping CNStorage.EventFunction) -> Int {
+		return mStorage.allocateEventFunction(forPath: mPath, eventFunc: efunc)
+	}
+
+	public func removeEventFunction(eventFuncId eid: Int) {
+		mStorage.removeEventFunction(eventFuncId: eid)
+	}
+
 	public var count: Int { get {
 		if let dict = getDictionaryValue() {
 			return dict.count

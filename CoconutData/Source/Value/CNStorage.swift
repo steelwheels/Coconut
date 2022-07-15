@@ -28,14 +28,34 @@ private class CNStorageCache
 	}
 }
 
+private class CNStorageCallback
+{
+	public typealias EventFunction = CNStorage.EventFunction
+
+	private var mPath:		CNValuePath
+	private var mEventFunction:	EventFunction
+
+	public init(path p: CNValuePath, eventFunc efunc: @escaping EventFunction){
+		mPath		= p
+		mEventFunction	= efunc
+	}
+
+	public var path: CNValuePath { get { return mPath }}
+	public var eventFunc: EventFunction { get { return mEventFunction }}
+}
+
 public class CNStorage
 {
+	public typealias EventFunction = () -> Void
+
 	private var mSourceDirectory:		URL
 	private var mCacheDirectory:		URL
 	private var mFilePath:			String
 	private var mRootValue:			CNMutableValue
 	private var mCache:			Dictionary<Int, CNStorageCache>
 	private var mNextCacheId:		Int
+	private var mEventFunctions:		Dictionary<Int, CNStorageCallback>
+	private var mNextEventFuncId:		Int
 	private var mLock:			NSLock
 
 	// packdir: Root directory for package (*.jspkg)
@@ -47,6 +67,8 @@ public class CNStorage
 		mRootValue		= CNMutableDictionaryValue(sourceDirectory: srcdir, cacheDirectory: cachedir)
 		mCache			= [:]
 		mNextCacheId		= 0
+		mEventFunctions		= [:]
+		mNextEventFuncId	= 0
 		mLock			= NSLock()
 	}
 
@@ -124,6 +146,9 @@ public class CNStorage
 	}
 
 	public func removeCache(cacheId cid: Int) {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
 		mCache[cid] = nil
 	}
 
@@ -152,6 +177,23 @@ public class CNStorage
 		}
 	}
 
+	public func allocateEventFunction(forPath path: CNValuePath, eventFunc efunc: @escaping EventFunction) -> Int {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+
+		let cbfunc = CNStorageCallback(path: path, eventFunc: efunc)
+		let eid    = mNextEventFuncId
+		mEventFunctions[mNextEventFuncId] = cbfunc
+		mNextEventFuncId += 1
+		return eid
+	}
+
+	public func removeEventFunction(eventFuncId eid: Int) {
+		/* Mutex lock */
+		mLock.lock() ; defer { mLock.unlock() }
+		mEventFunctions[eid] = nil
+	}
+
 	public func value(forPath path: CNValuePath) -> CNValue? {
 		/* Mutex lock */
 		mLock.lock() ; defer { mLock.unlock() }
@@ -168,7 +210,7 @@ public class CNStorage
 
 	public func set(value val: CNValue, forPath path: CNValuePath) -> Bool {
 		/* Mutex lock and unlock */
-		mLock.lock() ; defer { mLock.unlock() }
+		mLock.lock() ; defer { mLock.unlock() ; triggerCallbacks(path: path)}
 
 		var result: Bool
 		if let elms = normalizeValuePath(valuePath: path) {
@@ -190,7 +232,7 @@ public class CNStorage
 
 	public func append(value val: CNValue, forPath path: CNValuePath) -> Bool {
 		/* Mutex lock and unlock */
-		mLock.lock() ; defer { mLock.unlock() }
+		mLock.lock() ; defer { mLock.unlock() ; triggerCallbacks(path: path)}
 
 		if let elms = normalizeValuePath(valuePath: path) {
 			if let err = mRootValue.append(value: val, forPath: elms) {
@@ -235,6 +277,14 @@ public class CNStorage
 			}
 		}
 		return path.elements
+	}
+
+	private func triggerCallbacks(path pth: CNValuePath) {
+		for event in mEventFunctions.values {
+			if event.path.isIncluded(in: pth) {
+				event.eventFunc()
+			}
+		}
 	}
 
 	public func segments(traceOption trace: CNValueSegmentTraceOption) -> Array<CNMutableValueSegment> {

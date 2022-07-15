@@ -70,6 +70,14 @@ public class CNStorageTable: CNTable
 		mStorage.setClean(cacheId: cid)
 	}
 
+	public func allocateEventFunction(eventFunc efunc: @escaping CNStorage.EventFunction) -> Int {
+		return mStorage.allocateEventFunction(forPath: mPath, eventFunc: efunc)
+	}
+
+	public func removeEventFunction(eventFuncId eid: Int) {
+		mStorage.removeEventFunction(eventFuncId: eid)
+	}
+
 	public var identifier: String? { get {
 		return mIdentifier
 	}}
@@ -164,7 +172,7 @@ public class CNStorageTable: CNTable
 		}
 		return result
 	}
-	
+
 	public func pointer(value val: CNValue, forField field: String) -> CNPointerValue? {
 		guard let ident = mIdentifier else {
 			CNLog(logLevel: .error, message: "The property \(CNStorageTable.IdItem) is required to make value path", atFunction: #function, inFile: #file)
