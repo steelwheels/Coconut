@@ -115,6 +115,15 @@ public class CNContactDatabase: CNTable
 		}
 	}
 
+	public func allocateEventFunction(eventFunc efunc: @escaping CNStorage.EventFunction) -> Int {
+		CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
+		return 0
+	}
+
+	public func removeEventFunction(eventFuncId eid: Int) {
+		CNLog(logLevel: .error, message: "Not supported", atFunction: #function, inFile: #file)
+	}
+
 	public var recordCount: Int { get {
 		return mRecords.count
 	}}

@@ -26,6 +26,9 @@ public protocol CNTable
 	func isDirty(cacheId cid: Int) -> Bool
 	func setClean(cacheId cid: Int)
 
+	func allocateEventFunction(eventFunc efunc: @escaping CNStorage.EventFunction) -> Int
+	func removeEventFunction(eventFuncId eid: Int)
+
 	func newRecord() -> CNRecord
 	func record(at row: Int) -> CNRecord?
 	func pointer(value val: CNValue, forField field: String) -> CNPointerValue?

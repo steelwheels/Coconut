@@ -15,6 +15,9 @@ public protocol CNDictionary
 
 	func value(forKey key: String) -> CNValue?
 	func set(value val: CNValue, forKey key: String) -> Bool
+
+	func allocateEventFunction(eventFunc efunc: @escaping CNStorage.EventFunction) -> Int
+	func removeEventFunction(eventFuncId eid: Int)
 }
 
 public class CNStorageDictionary: CNDictionary

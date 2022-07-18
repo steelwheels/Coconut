@@ -73,6 +73,14 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		mSourceTable.setClean(cacheId: cid)
 	}
 
+	public func allocateEventFunction(eventFunc efunc: @escaping CNStorage.EventFunction) -> Int {
+		return mSourceTable.allocateEventFunction(eventFunc: efunc)
+	}
+
+	public func removeEventFunction(eventFuncId eid: Int) {
+		mSourceTable.removeEventFunction(eventFuncId: eid)
+	}
+
 	public var identifier: String? { get {
 		return mSourceTable.identifier
 	}}
