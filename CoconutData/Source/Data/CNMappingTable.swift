@@ -23,14 +23,20 @@ public protocol CNMappingTableProtocol
 public class CNMappingTable: CNTable, CNMappingTableProtocol
 {
 	private var mSourceTable:		CNTable
-	private var mRecordValueCacheId:	Int
-	private var mRecords:			Array<CNRecord>
+	private var mRecords:			Array<CNMappingRecord>
 	private var mRecordIndexes:		Array<Int>
 	private var mFilterFunc:		FilterFunction?
 	private var mCompareFunc:		CompareFunction?
 	private var mSortOrder:			CNSortOrder
 	private var mVirtualFieldCallbacks:	Dictionary<String, VirtualFieldCallback>
-	private var mDoReload:			Bool
+
+	private var mDoReloadFields:		Bool
+	private var mDoReloadRecords:		Bool
+
+	private var mDefaultFieldsCacheId:	Int
+	private var mDefaultFieldsCache:  	Dictionary<String, CNValue>?
+	private var mRecordValuesCacheId:	Int
+	private var mRecordValuesCache:		Array<Dictionary<String, CNValue>>?
 
 	public init(sourceTable table: CNTable){
 		mSourceTable 		= table
@@ -40,13 +46,17 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		mCompareFunc		= nil
 		mSortOrder 		= .none
 		mVirtualFieldCallbacks	= [:]
-		mDoReload		= false
 
-		mRecordValueCacheId	= table.allocateRecordValuesCache()
+		mDoReloadFields		= false
+		mDoReloadRecords	= false
+
+		mDefaultFieldsCacheId	= table.allocateDefaultFieldsCache()
+		mRecordValuesCacheId	= table.allocateRecordValuesCache()
 	}
 
 	deinit {
-		mSourceTable.removeCache(cacheId: mRecordValueCacheId)
+		mSourceTable.removeCache(cacheId: mDefaultFieldsCacheId)
+		mSourceTable.removeCache(cacheId: mRecordValuesCacheId)
 	}
 
 	public func setFilter(filterFunction mfunc: @escaping FilterFunction){
@@ -91,19 +101,44 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 	}}
 
 	public var defaultFields: Dictionary<String, CNValue> { get {
+		if  mDoReloadFields || isDirty(cacheId: mDefaultFieldsCacheId) {
+			let field = allocateDefaultFields()
+			mDefaultFieldsCache = field
+			mDoReloadFields     = false
+			return field
+		} else {
+			if let cache = mDefaultFieldsCache {
+				return cache
+			} else {
+				CNLog(logLevel: .error, message: "No cache", atFunction: #function, inFile: #file)
+				return [:]
+			}
+		}
+	}}
+
+	private func allocateDefaultFields() -> Dictionary<String, CNValue> {
 		var fields = mSourceTable.defaultFields
 		for vkey in mVirtualFieldCallbacks {
 			fields[vkey.key] = .nullValue
 		}
 		return fields
-	}}
-
-	public func setCompareFunction(compareFunc cfunc: @escaping CompareFunction) {
-		mCompareFunc = cfunc ; mDoReload    = true
 	}
 
-	public func fieldName(at index: Int) -> String? {
-		return mSourceTable.fieldName(at: index)
+	public var fieldNames: Array<String> { get {
+		return Array(self.defaultFields.keys)
+	}}
+
+	public func fieldName(at idx: Int) -> String? {
+		let names = Array(self.defaultFields.keys)
+		if 0<=idx && idx<names.count {
+			return names[idx]
+		} else {
+			return nil
+		}
+	}
+
+	public func setCompareFunction(compareFunc cfunc: @escaping CompareFunction) {
+		mCompareFunc = cfunc ; mDoReloadFields = true ; mDoReloadRecords = true
 	}
 
 	public func addVirtualField(name field: String, callbackFunction cbfunc: @escaping VirtualFieldCallback) {
@@ -117,12 +152,13 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 	}
 
 	public var sortOrder: CNSortOrder {
-		get         { return mSortOrder 			}
-		set(newval) { mSortOrder = newval ; mDoReload = true	}
+		get         { return mSortOrder 							}
+		set(newval) { mSortOrder = newval ; mDoReloadFields = true ; mDoReloadRecords = true	}
 	}
 
 	public func newRecord() -> CNRecord {
-		return mSourceTable.newRecord()
+		let newrec = mSourceTable.newRecord()
+		return CNMappingRecord(sourceRecord: newrec, virtualFields: mVirtualFieldCallbacks)
 	}
 
 	public func record(at row: Int) -> CNRecord? {
@@ -157,6 +193,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		var result: Array<CNRecord> = []
 		let recs = getRecords()
 		for rec in recs {
+			CNLog(logLevel: .error, message: "search", atFunction: #function, inFile: #file)
 			if let rval = rec.value(ofField: field) {
 				if CNIsSameValue(nativeValue0: rval, nativeValue1: val) {
 					result.append(rec)
@@ -199,9 +236,9 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		return mSourceTable.toValue()
 	}
 
-	private func getRecords() -> Array<CNRecord> {
+	private func getRecords() -> Array<CNMappingRecord> {
 		let filterfunc = mFilterFunc ?? { (_ rec: CNRecord) -> Bool in return true }
-		if mDoReload || isDirty(cacheId: mRecordValueCacheId) {
+		if mDoReloadRecords || isDirty(cacheId: mRecordValuesCacheId) {
 			mRecords       = []
 			mRecordIndexes = []
 			for i in 0..<mSourceTable.recordCount {
@@ -212,13 +249,13 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 					}
 				}
 			}
-			setClean(cacheId: mRecordValueCacheId)
-			mDoReload = false
+			setClean(cacheId: mRecordValuesCacheId)
+			mDoReloadRecords = false
 		}
 		return mRecords
 	}
 
-	private func addRecord(records recs: inout Array<CNRecord>, indices idxs: inout Array<Int>, newRecord newrec: CNRecord, newIndex newidx: Int) {
+	private func addRecord(records recs: inout Array<CNMappingRecord>, indices idxs: inout Array<Int>, newRecord newrec: CNMappingRecord, newIndex newidx: Int) {
 		switch mSortOrder {
 		case .none:
 			/* Needless to sort */

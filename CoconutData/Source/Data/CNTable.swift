@@ -17,7 +17,8 @@ public protocol CNTable
 	var identifier: String? { get }
 	var recordCount: Int { get }
 
-	var defaultFields:    Dictionary<String, CNValue> { get }
+	var defaultFields:	Dictionary<String, CNValue> { get }
+	var fieldNames: Array<String> { get }
 	func fieldName(at index: Int) -> String?
 
 	func allocateDefaultFieldsCache() -> Int

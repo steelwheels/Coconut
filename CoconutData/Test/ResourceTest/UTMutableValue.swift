@@ -54,7 +54,7 @@ private func unitTest() -> Bool
 	set0.append(value: scalar1)
 	let set0txt = set0.toValue().toText().toStrings().joined(separator: "\n")
 	NSLog("set0 -> \(set0txt)")
-	
+
 	return true
 }
 

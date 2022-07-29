@@ -136,6 +136,10 @@ public class CNContactDatabase: CNTable
 		return result
 	}}
 
+	public var fieldNames: Array<String> { get {
+		return CNContactField.allFieldNames
+	}}
+
 	public func fieldName(at index: Int) -> String? {
 		return CNContactField.fieldName(at: index)
 	}

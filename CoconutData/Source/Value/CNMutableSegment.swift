@@ -14,11 +14,11 @@ public class CNMutableValueSegment: CNMutableValue
 
 	public init(value val: CNValueSegment, sourceDirectory srcdir: URL, cacheDirectory cachedir: URL){
 		mSegmentValue 		= val
-		
+
 		mContext		= nil
 		super.init(type: .segment, sourceDirectory: srcdir, cacheDirectory: cachedir)
 	}
-	
+
 	public var context: CNMutableValue? { get { return mContext         }}
 
 	public var sourceFile: URL { get {

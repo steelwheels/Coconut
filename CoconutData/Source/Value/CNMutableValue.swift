@@ -38,7 +38,7 @@ public class CNMutableValue
 
 	public var sourceDirectory: URL     { get { return mSourceDirectory }}
 	public var cacheDirectory:  URL     { get { return mCacheDirectory  }}
-	
+
 	public init(type t: ValueType, sourceDirectory srcdir: URL, cacheDirectory cachedir: URL){
 		mType			= t
 		mLabelTable		= nil
