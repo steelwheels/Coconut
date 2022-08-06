@@ -39,16 +39,26 @@ public class CNObserverDictionary
 		}
 	}
 
-	public var keys: Array<String> {
-		get {
-			if let result = Array(mValueTable.allKeys) as? Array<String> {
-				return result
-			} else {
-				CNLog(logLevel: .error, message: "", atFunction: #function, inFile: #file)
-				return []
-			}
+	public var keys: Array<String> { get {
+		if let result = Array(mValueTable.allKeys) as? Array<String> {
+			return result
+		} else {
+			CNLog(logLevel: .error, message: "", atFunction: #function, inFile: #file)
+			return []
 		}
-	}
+	}}
+
+	public var count: Int { get {
+		return mValueTable.count
+	}}
+
+	public var values: Array<Any> { get {
+		return mValueTable.allValues
+	}}
+
+	public var core: NSMutableDictionary { get {
+		return mValueTable
+	}}
 
 	public func setValue(_ val: NSObject, forKey key: String){
 		mValueTable.setValue(val, forKey: key)
