@@ -132,8 +132,7 @@ public class CNValuePath
 			case .index(let idx):
 				result += "[\(idx)]"
 			case .keyAndValue(let key, let val):
-				let txt = val.toText().toStrings().joined(separator: "\n")
-				result += "[\(key):\(txt)]"
+				result += "[\(key):\(val.description)]"
 			}
 		}
 		return result
@@ -159,12 +158,12 @@ public class CNValuePath
 				result    += "[\(idx)]"
 			case .keyAndValue(let key, let val):
 				let path: String
+				let quote = "\""
 				switch val {
 				case .stringValue(let str):
-					let quote = "\""
 					path = quote + str + quote
 				default:
-					path = val.toText().toStrings().joined(separator: "\n")
+					path = quote + val.description + quote
 				}
 				result 	  += "[\(key):\(path)]"
 			}

@@ -114,8 +114,7 @@ public class CNEnvironment
 				if let str = valueToString(value: val) {
 					result[key] = str
 				} else {
-					let desc = val.toText().toStrings()
-					CNLog(logLevel: .error, message: "Failed to convert value to string: \(desc)", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "Failed to convert value to string: \(val.description)", atFunction: #function, inFile: #file)
 				}
 			}
 			return result
@@ -216,7 +215,7 @@ public class CNEnvironment
 					}
 					arrstr += str
 				} else {
-					CNLog(logLevel: .error, message: "Failed to convert to string: \(elm.toText().toStrings())", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "Failed to convert to string: \(elm.description)", atFunction: #function, inFile: #file)
 				}
 			}
 			result = arrstr

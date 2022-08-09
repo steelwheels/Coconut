@@ -527,6 +527,20 @@ Result:
 nullURL = file:///dev/null
 testURL .. OK
 * testValueSets
+isSet ... OK
+fromValue ... OK -> {
+  class: "Set",
+  values: [
+      false,
+      true
+    ]
+}
+Insert ... [
+  1,
+  2,
+  3
+]
+compare ... OK
 * testQueue
 Initial: {1st:-1, next:0, count:0 }
 []
@@ -646,8 +660,8 @@ Done (2)
 testOperationQueue: OK
 * testProcess
 Hello, World !!
-END of process
 Process is finished with exit code: 0
+END of process
 Execute process which can not be finished
 Terminate the process
 END of process
@@ -1433,8 +1447,7 @@ header: {
       C1      
 }
 * vectorGraphics
-2022-06-12 22:01:16.393 UnitTest[57694:946279] Decode/ecode graphics objects
-point0:: {
+Decode/ecode graphics objectspoint0:: {
   class: "point",
   x: 12,
   y: 34

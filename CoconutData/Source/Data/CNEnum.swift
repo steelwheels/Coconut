@@ -93,7 +93,7 @@ public class CNEnumType
 			case .numberValue(let num):
 				result.add(member: CNEnum(name: key, value: num.intValue))
 			default:
-				let txt = val.toText().toStrings().joined(separator: "\n")
+				let txt = val.toScript().toStrings().joined(separator: "\n")
 				let err = NSError.parseError(message: "Invalid enum value: \(txt)")
 				return .failure(err)
 			}

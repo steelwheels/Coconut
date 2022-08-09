@@ -20,6 +20,10 @@ public class CNPointerValue
 		mPath	= p
 	}
 
+	public var description: String { get {
+		return self.toValue().description
+	}}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> Result<CNPointerValue, NSError> {
 		if CNValue.hasClassName(inValue: val, className: CNPointerValue.ClassName) {
 			if let pathval = val[CNPointerValue.PathItem] {

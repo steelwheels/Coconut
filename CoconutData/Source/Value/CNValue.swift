@@ -494,97 +494,146 @@ public enum CNValue {
 		return result
 	}
 
-	public func toText() -> CNText {
-		let result: CNText
+	public var description: String { get {
+		let result: String
 		switch self {
 		case .nullValue:
-			result = CNTextLine(string: "null")
+			result = "null"
 		case .boolValue(let val):
-			result = CNTextLine(string: "\(val)")
+			result = val ? "true" : "false"
 		case .numberValue(let val):
-			result = CNTextLine(string: val.stringValue)
+			result = val.stringValue
+		case .stringValue(let val):
+			result = val
+		case .dateValue(let val):
+			result = CNValue.stringFromDate(date: val)
+		case .enumValue(let val):
+			result = val.name
+		case .rangeValue(let val):
+			result = val.description
+		case .pointValue(let val):
+			result = val.description
+		case .sizeValue(let val):
+			result = val.description
+		case .rectValue(let val):
+			result = val.description
+		case .dictionaryValue(let val):
+			var line  = "["
+			var is1st = true
+			let keys  = val.keys.sorted()
+			for key in keys {
+				if is1st { is1st = false } else { line += ", " }
+				if let elm = val[key] {
+					line += key + ":" + elm.description
+				} else {
+					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
+				}
+			}
+			line += "]"
+			result = line
+		case .arrayValue(let val):
+			var line  = "["
+			var is1st = true
+			for elm in val {
+				if is1st { is1st = false } else { line += ", " }
+				line += elm.description
+			}
+			line += "]"
+			result = line
+		case .setValue(let val):
+			var line  = "["
+			var is1st = true
+			for elm in val {
+				if is1st { is1st = false } else { line += ", " }
+				line += elm.description
+			}
+			line += "]"
+			result = line
+		case .URLValue(let val):
+			result = val.path
+		case .colorValue(let val):
+			result = val.description
+		case .imageValue(let val):
+			result = val.description
+		case .recordValue(let val):
+			result = val.description
+		case .objectValue(let val):
+			let classname = String(describing: type(of: val))
+			result = "instanceOf(\(classname))"
+		case .segmentValue(let val):
+			result = val.description
+		case .pointerValue(let val):
+			result = val.description
+		}
+		return result
+	}}
+
+	public func toScript() -> CNText {
+		let dquote = "\""
+		let result: CNText
+		switch self {
+		case .nullValue, .boolValue(_), .numberValue(_), .objectValue(_):
+			// Use description
+			result = CNTextLine(string: self.description)
 		case .stringValue(let val):
 			let txt = CNStringUtil.insertEscapeForQuote(source: val)
 			result = CNTextLine(string: "\"" + txt + "\"")
-		case .dateValue(let val):
-			let str = CNValue.stringFromDate(date: val)
-			let txt = CNStringUtil.insertEscapeForQuote(source: str)
-			result = CNTextLine(string: "\"" + txt + "\"")
+		case .dateValue(_), .rangeValue(_), .URLValue(_):
+			// Use quotest description
+			let txt = CNStringUtil.insertEscapeForQuote(source: self.description)
+			result = CNTextLine(string: dquote + txt + dquote)
 		case .enumValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
-		case .rangeValue(let val):
-			let str = val.description
-			let txt = CNStringUtil.insertEscapeForQuote(source: str)
-			result = CNTextLine(string: "\"" + txt + "\"")
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .pointValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .sizeValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .rectValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .dictionaryValue(let val):
-			result = dictionaryToText(dictionary: val)
+			result = dictionaryToScript(dictionary: val)
 		case .arrayValue(let val):
-			result = arrayToText(array: val)
+			result = arrayToScript(array: val)
 		case .setValue(let val):
-			result = setToText(set: val)
-		case .URLValue(let val):
-			let str = val.path
-			let txt = CNStringUtil.insertEscapeForQuote(source: str)
-			result = CNTextLine(string: "\"" + txt + "\"")
+			result = setToScript(set: val)
 		case .colorValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .imageValue(let val):
-			#if os(OSX)
-				let name: String
-				if let n = val.name() {
-					name = n
-				} else {
-					name = "<unknown>"
-				}
-				let size = val.size
-				result = CNTextLine(string: "{image: name:\(name), size:\(size.width) x \(size.height)}")
-			#else
-				let size = val.size
-				result = CNTextLine(string: "{image: size:\(size.width) x \(size.height)}")
-			#endif
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .recordValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
-		case .objectValue(let val):
-			let classname = String(describing: type(of: val))
-			result = CNTextLine(string: "object(\(classname))")
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .segmentValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
+			result = dictionaryToScript(dictionary: val.toValue())
 		case .pointerValue(let val):
-			result = dictionaryToText(dictionary: val.toValue())
+			result = dictionaryToScript(dictionary: val.toValue())
 		}
 		return result
 	}
 
-	private func arrayToText(array arr: Array<CNValue>) -> CNTextSection {
+	private func arrayToScript(array arr: Array<CNValue>) -> CNTextSection {
 		let sect = CNTextSection()
 		sect.header = "[" ; sect.footer = "]" ; sect.separator = ","
 		for elm in arr {
-			sect.add(text: elm.toText())
+			sect.add(text: elm.toScript())
 		}
 		return sect
 	}
 
-	private func setToText(set vals: Array<CNValue>) -> CNTextSection {
+	private func setToScript(set vals: Array<CNValue>) -> CNTextSection {
 		let dict: Dictionary<String, CNValue> = [
 			"class":	.stringValue(CNValueSet.ClassName),
 			"values":	.arrayValue(vals)
 		]
-		return dictionaryToText(dictionary: dict)
+		return dictionaryToScript(dictionary: dict)
 	}
 
-	private func dictionaryToText(dictionary dict: Dictionary<String, CNValue>) -> CNTextSection {
+	private func dictionaryToScript(dictionary dict: Dictionary<String, CNValue>) -> CNTextSection {
 		let sect = CNTextSection()
 		sect.header = "{" ; sect.footer = "}" ; sect.separator = ","
 		let keys = dict.keys.sorted()
 		for key in keys {
 			if let val = dict[key] {
-				let newtxt = val.toText()
+				let newtxt = val.toScript()
 				let labtxt = CNLabeledText(label: "\(key): ", text: newtxt)
 				sect.add(text: labtxt)
 			}

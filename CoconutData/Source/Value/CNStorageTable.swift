@@ -180,8 +180,7 @@ public class CNStorageTable: CNTable
 		}
 		let recs = search(value: val, forField: field)
 		guard recs.count > 0 else {
-			let valtxt = val.toText().toStrings().joined(separator: "\n")
-			CNLog(logLevel: .error, message: "No matched record for \(field):\(valtxt)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "No matched record for \(field):\(val.description)", atFunction: #function, inFile: #file)
 			return nil
 		}
 		let elements: Array<CNValuePath.Element> = [

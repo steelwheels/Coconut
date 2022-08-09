@@ -27,7 +27,7 @@ private func parseValue(string str: String, console cons: CNConsole) -> Bool {
 	let result: Bool
 	switch parser.parse(source: str) {
 	case .success(let val):
-		let valstr = val.toText().toStrings().joined(separator: "\n")
+		let valstr = val.toScript().toStrings().joined(separator: "\n")
 		cons.print(string: "result: \(valstr)\n")
 		result = true
 	case .failure(let err):
@@ -53,7 +53,7 @@ private func compareValues(console cons: CNConsole) -> Bool {
 }
 
 private func compareValue(value0 val0: CNValue, value1 val1: CNValue, expected exp: ComparisonResult, console cons: CNConsole) -> Bool {
-	cons.print(string: "Compare \(val0.toText().toStrings().joined()) and \(val1.toText().toStrings().joined()) ... ")
+	cons.print(string: "Compare \(val0.toScript().toStrings().joined()) and \(val1.toScript().toStrings().joined()) ... ")
 	let res = CNCompareValue(nativeValue0: val0, nativeValue1: val1)
 	cons.print(string: " \(res.toString()) -> ")
 	if res == exp {

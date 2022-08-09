@@ -54,7 +54,7 @@ private func valueTest(console cons: CNConsole) -> Bool {
 }
 
 private func printValue(message msg: String, value val: CNValue, console cons: CNConsole){
-	let txt = val.toText()
+	let txt = val.toScript()
 	let lines = txt.toStrings().joined(separator: "\n")
 	cons.print(string: msg + ": " + lines)
 }

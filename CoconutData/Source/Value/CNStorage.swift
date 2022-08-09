@@ -319,7 +319,7 @@ public class CNStorage
 		/* save it self */
 		var result = true
 		if mRootValue.isDirty {
-			let txt = val.toValue().toText().toStrings().joined(separator: "\n")
+			let txt = val.toValue().toScript().toStrings().joined(separator: "\n")
 			if file.storeContents(contents: txt + "\n") {
 				val.isDirty = false
 			} else {

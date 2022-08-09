@@ -26,6 +26,6 @@ public extension CNRecord
 {
 	var description: String { get {
 		let val: CNValue = .dictionaryValue(self.toValue())
-		return val.toText().toStrings().joined(separator: "\n")
+		return val.description
 	}}
 }

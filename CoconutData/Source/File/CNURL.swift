@@ -144,7 +144,7 @@ public extension URL
 	}
 
 	func storeValue(value val: CNValue) -> Bool {
-		let str = val.toText().toStrings().joined(separator: "\n")
+		let str = val.toScript().toStrings().joined(separator: "\n")
 		return self.storeContents(contents: str)
 	}
 }

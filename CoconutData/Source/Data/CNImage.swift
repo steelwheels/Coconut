@@ -14,6 +14,8 @@ import UIKit
 
 public extension CNImage
 {
+	private static let ClassName = "Image"
+
 	#if os(OSX)
 	func pngData() -> Data? {
 		if let cgimg = self.cgImage(forProposedRect: nil, context: nil, hints: nil) {
@@ -31,5 +33,12 @@ public extension CNImage
 	}
 	#endif
 
+	func toValue() -> Dictionary<String, CNValue> {
+		let result: Dictionary<String, CNValue> = [
+			"class":	.stringValue(CNImage.ClassName),
+			"size":		.sizeValue(self.size)
+		]
+		return result
+	}
 }
 

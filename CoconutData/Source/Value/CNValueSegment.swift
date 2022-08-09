@@ -20,6 +20,11 @@ public class CNValueSegment
 		mContext	= nil
 	}
 
+	public var description: String { get {
+		let val: CNValue = .dictionaryValue(self.toValue())
+		return val.description
+	}}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueSegment? {
 		if CNValue.hasClassName(inValue: val, className: CNValueSegment.ClassName) {
 			if let rpathval = val[CNValueSegment.FileItem] {
@@ -61,7 +66,7 @@ public class CNValueSegment
 	public func store(toCacheDirectory cachedir: URL) -> Bool {
 		if let context = mContext {
 			let file = cachedir.appendingPathComponent(self.filePath)
-			let txt  = context.toText().toStrings().joined(separator: "\n")
+			let txt  = context.toScript().toStrings().joined(separator: "\n")
 			return file.storeContents(contents: txt)
 		} else {
 			return false

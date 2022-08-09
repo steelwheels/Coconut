@@ -27,7 +27,7 @@ public func testValueSet(console cons: CNConsole) -> Bool
 		result = false
 	}
 	if let val = CNValueSet.fromValue(value: dict0) {
-		let txt = val.toText().toStrings().joined(separator: "\n")
+		let txt = val.toScript().toStrings().joined(separator: "\n")
 		cons.print(string: "fromValue ... OK -> \(txt)\n")
 	} else {
 		cons.print(string: "fromValue ... Error\n")
@@ -38,7 +38,7 @@ public func testValueSet(console cons: CNConsole) -> Bool
 	let elm11: CNValue = .numberValue(NSNumber(integerLiteral: 3))
 	var arr12 = [elm10, elm11]
 	CNValueSet.insert(target: &arr12, element: .numberValue(NSNumber(integerLiteral: 2)))
-	let txt13 = CNValue.arrayValue(arr12).toText().toStrings().joined(separator: "\n")
+	let txt13 = CNValue.arrayValue(arr12).toScript().toStrings().joined(separator: "\n")
 	cons.print(string: "Insert ... \(txt13)\n")
 
 	let elm20: CNValue = .numberValue(NSNumber(integerLiteral: 1))

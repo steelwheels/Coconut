@@ -52,8 +52,7 @@ public class CNMutableArrayValue: CNMutableValue
 					result = curdict._value(forPath: rest, in: root)
 				}
 			} else {
-				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
-				result = .failure(NSError.parseError(message: "Invalid key or value: \(srckey):\(valtxt)"))
+				result = .failure(NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)"))
 			}
 		}
 		return result
@@ -101,8 +100,7 @@ public class CNMutableArrayValue: CNMutableValue
 					result = curdict._set(value: val, forPath: rest, in: root)
 				}
 			} else {
-				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
-				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(valtxt)")
+				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 			}
 		}
 		return result
@@ -124,15 +122,13 @@ public class CNMutableArrayValue: CNMutableValue
 			case .keyAndValue(let srckey, let srcval):
 				if let (_, curdict) = searchChild(key: srckey, value: srcval) {
 					if rest.count == 0 {
-						let valtxt = srcval.toText().toStrings().joined(separator: "\n")
-						result = NSError.parseError(message: "Invalid key or value: \(srckey):\(valtxt)")
+						result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 					} else {
 						/* Trace child */
 						result = curdict._append(value: val, forPath: rest, in: root)
 					}
 				} else {
-					let valtxt = srcval.toText().toStrings().joined(separator: "\n")
-					result = NSError.parseError(message: "Invalid key or value: \(srckey):\(valtxt)")
+					result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 				}
 			}
 		} else {
@@ -180,8 +176,7 @@ public class CNMutableArrayValue: CNMutableValue
 					result = curdict._delete(forPath: rest, in: root)
 				}
 			} else {
-				let valtxt = srcval.toText().toStrings().joined(separator: "\n")
-				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(valtxt)")
+				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 			}
 		}
 		return result
