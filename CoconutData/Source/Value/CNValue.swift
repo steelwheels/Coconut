@@ -508,7 +508,7 @@ public enum CNValue {
 		case .dateValue(let val):
 			result = CNValue.stringFromDate(date: val)
 		case .enumValue(let val):
-			result = val.name
+			result = val.memberName
 		case .rangeValue(let val):
 			result = val.description
 		case .pointValue(let val):
@@ -583,7 +583,8 @@ public enum CNValue {
 			let txt = CNStringUtil.insertEscapeForQuote(source: self.description)
 			result = CNTextLine(string: dquote + txt + dquote)
 		case .enumValue(let val):
-			result = dictionaryToScript(dictionary: val.toValue())
+			let txt = "\(val.typeName).\(val.memberName)"
+			result = CNTextLine(string: txt)
 		case .pointValue(let val):
 			result = dictionaryToScript(dictionary: val.toValue())
 		case .sizeValue(let val):

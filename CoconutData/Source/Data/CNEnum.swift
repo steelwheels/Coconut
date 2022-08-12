@@ -12,35 +12,76 @@ import UIKit
 #endif
 import Foundation
 
-public struct CNEnum {
-	public static let ClassName		= "enum"
+public struct CNEnum
+{
+	public static let ClassName = "enum"
 
-	public var name: 	String
-	public var value:	Int
+	private weak var	mEnumType:	CNEnumType?
+	private var 		mMemberName:	String
 
-	public init(name n: String, value v: Int){
-		name 	= n
-		value	= v
+	public var memberName: String { get {
+		return mMemberName
+	}}
+
+	public init(type t: CNEnumType, member n: String){
+		mEnumType	= t
+		mMemberName	= n
+	}
+
+	public var typeName: String { get {
+		if let etype = mEnumType {
+			return etype.typeName
+		} else {
+			CNLog(logLevel: .error, message: "No owner type", atFunction: #function, inFile: #file)
+			return "?"
+		}
+	}}
+
+	public var value: Int { get {
+		if let etype = mEnumType {
+			if let val = etype.value(forMember: mMemberName) {
+				return val
+			} else {
+				CNLog(logLevel: .error, message: "No value for member \(mMemberName)", atFunction: #function, inFile: #file)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "No owner type", atFunction: #function, inFile: #file)
+		}
+		return 0
+	}}
+
+	public static func fromValue(typeName tname: String, memberName mname: String) -> CNEnum? {
+		let table = CNEnumTable.currentEnumTable()
+		if let etype = table.search(byTypeName: tname) {
+			if let _ = etype.value(forMember: mname) {
+				return CNEnum(type: etype, member: mname)
+			} else {
+				CNLog(logLevel: .error, message: "Enum member is not found. type:\(tname), member:\(mname)", atFunction: #function, inFile: #file)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Enum type is not found: \(tname)", atFunction: #function, inFile: #file)
+		}
+		return nil
 	}
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNEnum? {
-		if let nameval = val["name"], let valval = val["value"] {
-			if let namestr = nameval.toString(), let valnum = valval.toNumber() {
-				return CNEnum(name: namestr, value: valnum.intValue)
+		if let typeval = val["type"], let membval = val["member"] {
+			if let typestr = typeval.toString(), let membstr = membval.toString() {
+				return fromValue(typeName: typestr, memberName: membstr)
 			}
 		}
+		CNLog(logLevel: .error, message: "No such enum value", atFunction: #function, inFile: #file)
 		return nil
 	}
 
 	public func toValue() -> Dictionary<String, CNValue> {
 		let result: Dictionary<String, CNValue> = [
 			"class":	.stringValue(CNEnum.ClassName),
-			"name":		.stringValue(self.name),
-			"value":	.numberValue(NSNumber(integerLiteral: Int(self.value)))
+			"type":		.stringValue(self.typeName),
+			"member":	.stringValue(self.memberName)
 		]
 		return result
 	}
-
 }
 
 public class CNEnumType
@@ -48,23 +89,27 @@ public class CNEnumType
 	public static let ClassName		= "enumType"
 
 	private var mTypeName:		String
-	private var mMembers:		Array<CNEnum>
+	private var mMembers:		Dictionary<String, Int>	// <member-name, value>
 
-	public var typeName: String        { get { return mTypeName }}
-	public var members:  Array<CNEnum> { get { return mMembers  }}
+	public var typeName: String { get {
+		return mTypeName
+	}}
 
 	public init(typeName name: String){
 		mTypeName  = name
-		mMembers   = []
+		mMembers   = [:]
 	}
 
-	public func add(member memb: CNEnum){
-		mMembers.append(memb)
+	public func allocate(name nm: String) -> CNEnum? {
+		if let _ = mMembers[nm] {
+			return CNEnum(type: self, member: nm)
+		} else {
+			return nil
+		}
 	}
 
 	public func add(name nm: String, value val: Int){
-		let newobj = CNEnum(name: nm, value: val)
-		mMembers.append(newobj)
+		mMembers[nm] = val
 	}
 
 	public func add(members membs: Dictionary<String, Int>){
@@ -75,13 +120,12 @@ public class CNEnumType
 		}
 	}
 
-	public func search(byName name: String) -> CNEnum? {
-		for memb in mMembers {
-			if memb.name == name {
-				return memb
-			}
-		}
-		return nil
+	public var names: Array<String> { get {
+		return mMembers.keys.sorted()
+	}}
+
+	public func value(forMember name: String) -> Int? {
+		return mMembers[name]
 	}
 
 	public static func fromValue(typeName name: String, value topval: Dictionary<String, CNValue>) -> Result<CNEnumType, NSError> {
@@ -89,9 +133,9 @@ public class CNEnumType
 		for (key, val) in topval {
 			switch val {
 			case .boolValue(let val):
-				result.add(member: CNEnum(name: key, value: val ? 1 : 0))
+				result.add(name: key, value: val ? 1 : 0)
 			case .numberValue(let num):
-				result.add(member: CNEnum(name: key, value: num.intValue))
+				result.add(name: key, value: num.intValue)
 			default:
 				let txt = val.toScript().toStrings().joined(separator: "\n")
 				let err = NSError.parseError(message: "Invalid enum value: \(txt)")
@@ -103,8 +147,8 @@ public class CNEnumType
 
 	public func toValue() -> Dictionary<String, CNValue> {
 		var result: Dictionary<String, CNValue> = [:]
-		for memb in mMembers {
-			result[memb.name] = .numberValue(NSNumber(integerLiteral: memb.value))
+		for (key, val) in mMembers {
+			result[key] = .numberValue(NSNumber(integerLiteral: val))
 		}
 		return result
 	}
@@ -113,6 +157,7 @@ public class CNEnumType
 public class CNEnumTable
 {
 	public static let  ClassName		= "enumTable"
+
 	private static let definitionsItem	= "definitions"
 
 	private var      mTypes:	Dictionary<String, CNEnumType>
@@ -169,10 +214,6 @@ public class CNEnumTable
 		return mTypes
 	}}
 
-	public var typeNames: Array<String> { get {
-		return Array(mTypes.keys)
-	}}
-
 	public var count: Int { get {
 		return mTypes.count
 	}}
@@ -191,12 +232,12 @@ public class CNEnumTable
 		}
 	}
 
-	public func search(byMemberName name: String) -> Array<Int> {
-		var result: Array<Int> = []
+	public func search(byMemberName name: String) -> Array<CNEnum> {
+		var result: Array<CNEnum> = []
 		/* User defined value is first */
-		for (_, etype) in mTypes {
-			if let enm = etype.search(byName: name) {
-				result.append(enm.value)
+		for etype in mTypes.values {
+			if let eobj = etype.allocate(name: name) {
+				result.append(eobj)
 			}
 		}
 		if let parent = mParent {
@@ -205,30 +246,11 @@ public class CNEnumTable
 		return result
 	}
 
-	public func search(byTypeName tname: String, memberName mname: String) -> Int? {
-		if let etype = self.search(byTypeName: tname) {
-			if let enm = etype.search(byName: mname) {
-				return enm.value
-			}
-		}
-		if let parent = mParent {
-			return parent.search(byTypeName: tname, memberName: mname)
-		} else {
-			return nil
-		}
-	}
-
-	public func merge(enumTable src: CNEnumTable) {
-		for (key, val) in src.mTypes {
-			mTypes[key] = val
-		}
-	}
-
 	public static func fromValue(value topval: CNValue) -> Result<CNEnumTable?, NSError> {
 		guard let dictval = topval.toDictionary() else {
 			return .failure(NSError.parseError(message: "Top value must be dictionary"))
 		}
-		guard hasClassName(value: dictval) else {
+		guard CNValue.hasClassName(inValue: dictval, className: CNEnumTable.ClassName) else {
 			return .failure(NSError.parseError(message: "Class name \"\(CNEnumTable.ClassName)\" is required"))
 		}
 		if let defs = hasDefinitions(value: dictval) {
@@ -236,17 +258,6 @@ public class CNEnumTable
 		} else {
 			return .failure(NSError.parseError(message: "No valid definitions in enum table"))
 		}
-	}
-
-	private static func hasClassName(value val: Dictionary<String, CNValue>) -> Bool {
-		if let clsval = val["class"] {
-			if let clsstr = clsval.toString() {
-				if clsstr == CNEnumTable.ClassName {
-					return true
-				}
-			}
-		}
-		return false
 	}
 
 	private static func hasDefinitions(value val: Dictionary<String, CNValue>) -> Dictionary<String, CNValue>? {
@@ -286,6 +297,12 @@ public class CNEnumTable
 			CNEnumTable.definitionsItem:	.dictionaryValue(members)
 		]
 		return result
+	}
+
+	public func merge(enumTable src: CNEnumTable) {
+		for (key, val) in src.mTypes {
+			mTypes[key] = val
+		}
 	}
 
 	private func setDefaultValues() {

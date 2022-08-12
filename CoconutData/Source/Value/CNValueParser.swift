@@ -229,20 +229,25 @@ public class CNValueParser
 	public func parseEnumValue(typeName tnamep: String?, memberName mname: String, tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {
 		let etable = CNEnumTable.currentEnumTable()
 		if let tname = tnamep {
-			if let val = etable.search(byTypeName: tname, memberName: mname) {
-				return .success(CNValue.numberValue(NSNumber(integerLiteral: val)))
+			if let etype = etable.search(byTypeName: tname) {
+				if let eobj = etype.allocate(name: mname) {
+					return .success(.enumValue(eobj))
+				} else {
+					return .failure(NSError.parseError(message: "Enum type \(tname) does not have member \(mname)"))
+				}
+			} else {
+				return .failure(NSError.parseError(message: "Enum type \(tname) is not exist"))
 			}
-			return .failure(NSError.parseError(message: "Enumvalue \(tname).\(mname) is not found \(near(stream))"))
 		} else {
-			let vals = etable.search(byMemberName: mname)
-			switch vals.count {
+			let eobjs = etable.search(byMemberName: mname)
+			switch eobjs.count {
 			case 0:
 				return .failure(NSError.parseError(message: "Enum member .\(mname) is not found \(near(stream))"))
 			case 1:
-				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
+				return .success(.enumValue(eobjs[0]))
 			default: // 2 or more
 				CNLog(logLevel: .error, message: "Enum member .\(mname) is used by multiple enum types \(near(stream))")
-				return .success(CNValue.numberValue(NSNumber(integerLiteral: vals[0])))
+				return .success(.enumValue(eobjs[0]))
 			}
 		}
 	}

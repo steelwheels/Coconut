@@ -73,6 +73,7 @@
 		05613ADE273431C900A5C0A1 /* line-16p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05613AC4273431A700A5C0A1 /* line-16p.png */; };
 		0562ACC1273AC17700B90BE2 /* pencil-circule.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0562ACC0273AC15B00B90BE2 /* pencil-circule.png */; };
 		0562ACC5273AC19200B90BE2 /* pencil-circule.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0562ACC0273AC15B00B90BE2 /* pencil-circule.png */; };
+		0569108228A384DB004B35BB /* UTEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0569108128A384DB004B35BB /* UTEnum.swift */; };
 		05692FE4286B2CE8006F85F2 /* CNSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05692FE3286B2CE8006F85F2 /* CNSort.swift */; };
 		05692FE5286B2CE8006F85F2 /* CNSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05692FE3286B2CE8006F85F2 /* CNSort.swift */; };
 		056F5702278AB95B0078C25D /* CNMutableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056F5701278AB95B0078C25D /* CNMutableValue.swift */; };
@@ -501,6 +502,7 @@
 		05613AC3273431A700A5C0A1 /* line-2p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line-2p.png"; sourceTree = "<group>"; };
 		05613AC4273431A700A5C0A1 /* line-16p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line-16p.png"; sourceTree = "<group>"; };
 		0562ACC0273AC15B00B90BE2 /* pencil-circule.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pencil-circule.png"; sourceTree = "<group>"; };
+		0569108128A384DB004B35BB /* UTEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTEnum.swift; sourceTree = "<group>"; };
 		05692FE3286B2CE8006F85F2 /* CNSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSort.swift; sourceTree = "<group>"; };
 		056F5701278AB95B0078C25D /* CNMutableValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNMutableValue.swift; sourceTree = "<group>"; };
 		057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandComplementer.swift; sourceTree = "<group>"; };
@@ -701,6 +703,7 @@
 				05FC385A255FEC1C004CA79E /* UTColor.swift */,
 				05FC3857255FEC1C004CA79E /* UTConsole.swift */,
 				05FC3867255FEC1D004CA79E /* UTEnvironment.swift */,
+				0569108128A384DB004B35BB /* UTEnum.swift */,
 				05FC385E255FEC1D004CA79E /* UTEscapeSequence.swift */,
 				05FC3865255FEC1D004CA79E /* UTFile.swift */,
 				05FC385B255FEC1C004CA79E /* UTFileManager.swift */,
@@ -1362,6 +1365,7 @@
 				055C8AEB25DD62F50053510B /* UTToken.swift in Sources */,
 				05FC3897255FECC2004CA79E /* main.swift in Sources */,
 				052E27E02625E5EF00414C26 /* UTCommandTable.swift in Sources */,
+				0569108228A384DB004B35BB /* UTEnum.swift in Sources */,
 				05FC387D255FEC1E004CA79E /* UTOperation.swift in Sources */,
 				05DDE3D1275BA2D7009F0B6E /* UTVectorGraphics.swift in Sources */,
 				05FC3881255FEC1E004CA79E /* UTStringUtil.swift in Sources */,

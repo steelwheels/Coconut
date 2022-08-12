@@ -25,9 +25,21 @@ public extension ComparisonResult
 	}
 }
 
-public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValue) -> ComparisonResult
+private func CNCastToCompareValue(value val: CNValue) -> CNValue {
+	switch val {
+	case .enumValue(let eval):
+		return .numberValue(NSNumber(integerLiteral: eval.value))
+	default:
+		return val
+	}
+}
+
+public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNValue) -> ComparisonResult
 {
-	switch val0.valueType.compare(val1.valueType) {
+	let cval0 = CNCastToCompareValue(value: ival0)
+	let cval1 = CNCastToCompareValue(value: ival1)
+
+	switch cval0.valueType.compare(cval1.valueType) {
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:
@@ -37,63 +49,62 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 	}
 
 	var result: ComparisonResult? = nil
-	switch val0.valueType {
+	switch cval0.valueType {
 	case .nullType:
 		result = .orderedSame
 	case .boolType:
-		if let s0 = val0.toBool(), let s1 = val1.toBool() {
+		if let s0 = cval0.toBool(), let s1 = cval1.toBool() {
 			result = compare(bool0: s0, bool1: s1)
 		}
 	case .numberType:
-		if let s0 = val0.toNumber(), let s1 = val1.toNumber() {
+		if let s0 = cval0.toNumber(), let s1 = cval1.toNumber() {
 			result = s0.compare(s1)
 		}
 	case .stringType:
-		if let s0 = val0.toString(), let s1 = val1.toString() {
+		if let s0 = cval0.toString(), let s1 = cval1.toString() {
 			result = s0.compare(s1)
 		}
 	case .dateType:
-		if let s0 = val0.toDate(), let s1 = val1.toDate() {
+		if let s0 = cval0.toDate(), let s1 = cval1.toDate() {
 			result = s0.compare(s1)
 		}
 	case .rangeType:
-		if let s0 = val0.toRange(), let s1 = val1.toRange() {
+		if let s0 = cval0.toRange(), let s1 = cval1.toRange() {
 			result = compare(range0: s0, range1: s1)
 		}
 	case .pointType:
-		if let s0 = val0.toPoint(), let s1 = val1.toPoint() {
+		if let s0 = cval0.toPoint(), let s1 = cval1.toPoint() {
 			result = compare(point0: s0, point1: s1)
 		}
 	case .sizeType:
-		if let s0 = val0.toSize(), let s1 = val1.toSize() {
+		if let s0 = cval0.toSize(), let s1 = cval1.toSize() {
 			result = compare(size0: s0, size1: s1)
 		}
 	case .rectType:
-		if let s0 = val0.toRect(), let s1 = val1.toRect() {
+		if let s0 = cval0.toRect(), let s1 = cval1.toRect() {
 			result = compare(rect0: s0, rect1: s1)
 		}
 	case .enumType:
-		if let e0 = val0.toEnum(), let e1 = val1.toEnum() {
-			result = compare(enum0: e0, enum1: e1)
-		}
+		/* Cast operation replace this type */
+		CNLog(logLevel: .error, message: "Failed to compare enum", atFunction: #function, inFile: #file)
 	case .dictionaryType:
-		if let s0 = val0.toDictionary(), let s1 = val1.toDictionary() {
+		if let s0 = cval0.toDictionary(), let s1 = cval1.toDictionary() {
 			result = compare(dictionary0: s0, dictionary1: s1)
 		}
 	case .arrayType:
-		if let s0 = val0.toArray(), let s1 = val1.toArray() {
+		if let s0 = cval0.toArray(), let s1 = cval1.toArray() {
 			result = compare(array0: s0, array1: s1)
 		}
 	case .setType:
-		if let s0 = val0.toSet(), let s1 = val1.toSet() {
+		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
 	case .URLType:
-		if let s0 = val0.toURL(), let s1 = val1.toURL() {
+		if let s0 = cval0.toURL(), let s1 = cval1.toURL() {
 			result = compare(URL0: s0, URL1: s1)
 		}
 	case .colorType:
-		if let s0 = val0.toColor(), let s1 = val1.toColor() {
+		if let s0 = cval0.toColor(), let s1 = cval1.toColor() {
 			result = compare(color0: s0, color1: s1)
 		}
 	case .imageType:
@@ -103,11 +114,11 @@ public func CNCompareValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValu
 	case .objectType:
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 	case .segmentType:
-		if let s0 = val0.toSegment(), let s1 = val1.toSegment() {
+		if let s0 = cval0.toSegment(), let s1 = cval1.toSegment() {
 			result = s0.compare(s1)
 		}
 	case .pointerType:
-		if let s0 = val0.toPointer(), let s1 = val1.toPointer() {
+		if let s0 = cval0.toPointer(), let s1 = cval1.toPointer() {
 			result = s0.compare(s1)
 		}
 	}
@@ -194,22 +205,6 @@ private func compare(rect0 s0: CGRect, rect1 s1: CGRect) -> ComparisonResult {
 		result = compare(size0: s0.size, size1: s1.size)
 	}
 	return result
-}
-
-private func compare(enum0 s0: CNEnum, enum1 s1: CNEnum) -> ComparisonResult {
-	if s0.name < s1.name{
-		return .orderedAscending
-	} else if s0.name > s1.name {
-		return .orderedDescending
-	} else { // s0 == s1
-		if s0.value < s1.value {
-			return .orderedAscending
-		} else if s0.value > s1.value {
-			return .orderedDescending
-		} else {
-			return .orderedSame		// Same
-		}
-	}
 }
 
 private func compare(URL0 s0: URL, URL1 s1: URL) -> ComparisonResult {
@@ -337,3 +332,14 @@ private func compare(float0 s0: CGFloat, float1 s1: CGFloat) -> ComparisonResult
 	return result
 }
 
+private func compare(string0 s0: String, string1 s1: String) -> ComparisonResult {
+	let result: ComparisonResult
+	if s0 > s1 {
+		result = .orderedDescending
+	} else if s0 < s1 {
+		result = .orderedAscending
+	} else {
+		result = .orderedSame
+	}
+	return result
+}
