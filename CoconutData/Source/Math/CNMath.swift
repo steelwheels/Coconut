@@ -49,3 +49,11 @@ public func round(value v:Double, atPoint p:Int) -> Double
 	let ival = Int(v * mult)
 	return Double(ival) / mult
 }
+
+public func degreeToRadian(degree deg: Double) -> Double {
+	return deg * Double.pi / 180.0
+}
+
+public func radianToDegree(radian rad: Double) -> Double {
+	return rad * 180.0 / Double.pi
+}

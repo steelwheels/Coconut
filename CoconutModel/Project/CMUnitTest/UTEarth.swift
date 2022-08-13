@@ -13,7 +13,9 @@ import Foundation
 public func testEarth(console cons: CNConsole) -> Bool
 {
 	let ospeed = CNEarthModel.orbitalSpeed()
-	cons.print(string: "[earth] orbital-speed: \(ospeed)\n")
+	let rspeed = CNEarthModel.rotationSpeed(longitude: degreeToRadian(degree: 35.39))
+	cons.print(string: "[earth] orbital-speed:  \(ospeed) [km/s]\n")
+	cons.print(string: "        rotation-speed: \(rspeed) [km/s]\n")
 	return true
 }
 
