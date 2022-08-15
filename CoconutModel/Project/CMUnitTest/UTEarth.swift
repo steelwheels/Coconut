@@ -12,10 +12,13 @@ import Foundation
 
 public func testEarth(console cons: CNConsole) -> Bool
 {
-	let ospeed = CNEarthModel.orbitalSpeed()
-	let rspeed = CNEarthModel.rotationSpeed(longitude: degreeToRadian(degree: 35.39))
-	cons.print(string: "[earth] orbital-speed:  \(ospeed) [km/s]\n")
-	cons.print(string: "        rotation-speed: \(rspeed) [km/s]\n")
+	cons.print(string: "** testEarth\n")
+	let ospeed  = CNEarthModel.orbitalSpeed()
+	let rspeed0 = CNEarthModel.rotationSpeed(longitude: degreeToRadian(degree: CNJapanGeograpicLocations.Tokyo.longitude))
+	let rspeed1 = CNEarthModel.rotationSpeed(longitude: 0.0)
+	cons.print(string: "orbital-speed:  \(ospeed) [km/s]\n")
+	cons.print(string: "rotation-speed: \(rspeed0) [km/s] at Tokyo \n")
+	cons.print(string: "rotation-speed: \(rspeed1) [km/s] on Equator \n")
 	return true
 }
 
