@@ -73,11 +73,20 @@ public class CNStorageRecord: CNRecord
 				if CNIsSameValue(nativeValue0: curval, nativeValue1: val) {
 					return true // already set
 				}
+				let cval = CNCastValue(from: val, to: curval.valueType)
+				return tbl.setRecordValue(cval, index: idx, field: name)
+			} else {
+				return tbl.setRecordValue(val, index: idx, field: name)
 			}
-			return tbl.setRecordValue(val, index: idx, field: name)
 		case .cache(let dict):
 			var newdict   = dict
-			newdict[name] = val
+			let newval: CNValue
+			if let curval = newdict[name] {
+				newval = CNCastValue(from: val, to: curval.valueType)
+			} else {
+				newval = val
+			}
+			newdict[name] = newval
 			mSource       = .cache(newdict)
 			return true
 		}

@@ -16,6 +16,8 @@ public protocol CNDictionary
 	func value(forKey key: String) -> CNValue?
 	func set(value val: CNValue, forKey key: String) -> Bool
 
+	func save() -> Bool
+
 	func allocateEventFunction(eventFunc efunc: @escaping CNStorage.EventFunction) -> Int
 	func removeEventFunction(eventFuncId eid: Int)
 }
@@ -68,7 +70,18 @@ public class CNStorageDictionary: CNDictionary
 	}
 
 	public func set(value src: CNValue, forKey key: String) -> Bool {
-		return mStorage.set(value: src, forPath: memberPath(member: key))
+		let newval: CNValue
+		let path = memberPath(member: key)
+		if let cval = mStorage.value(forPath: path) {
+			newval = CNCastValue(from: src, to: cval.valueType)
+		} else {
+			newval = src
+		}
+		return mStorage.set(value: newval, forPath: memberPath(member: key))
+	}
+
+	public func save() -> Bool {
+		return mStorage.save()
 	}
 
 	private func getDictionaryValue() -> Dictionary<String, CNValue>? {

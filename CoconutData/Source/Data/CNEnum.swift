@@ -128,6 +128,15 @@ public class CNEnumType
 		return mMembers[name]
 	}
 
+	public func search(byValue targ: Int) -> CNEnum? {
+		for (key, val) in mMembers {
+			if targ == val {
+				return CNEnum(type: self, member: key)
+			}
+		}
+		return nil
+	}
+
 	public static func fromValue(typeName name: String, value topval: Dictionary<String, CNValue>) -> Result<CNEnumType, NSError> {
 		let result = CNEnumType(typeName: name)
 		for (key, val) in topval {
@@ -325,29 +334,6 @@ public class CNEnumTable
 			"detail":		CNConfig.LogLevel.detail.rawValue
 		])
 		self.add(enumType: logcode)
-
-		let valtype = CNEnumType(typeName: "ValueType")
-		valtype.add(members: [
-			"nullType":		CNValueType.nullType.rawValue,
-			"boolType":		CNValueType.boolType.rawValue,
-			"numberType":		CNValueType.numberType.rawValue,
-			"stringType":		CNValueType.stringType.rawValue,
-			"dateType":		CNValueType.dateType.rawValue,
-			"rangeType":		CNValueType.rangeType.rawValue,
-			"pointType":		CNValueType.pointType.rawValue,
-			"sizeType":		CNValueType.sizeType.rawValue,
-			"rectType":		CNValueType.rectType.rawValue,
-			"enumType":		CNValueType.enumType.rawValue,
-			"dictionaryType":	CNValueType.dictionaryType.rawValue,
-			"arrayType":		CNValueType.arrayType.rawValue,
-			"URLType":		CNValueType.URLType.rawValue,
-			"colorType":		CNValueType.colorType.rawValue,
-			"imageType":		CNValueType.imageType.rawValue,
-			"recordType":		CNValueType.recordType.rawValue,
-			"segmentType":		CNValueType.segmentType.rawValue,
-			"objectType":		CNValueType.objectType.rawValue
-		])
-		self.add(enumType: valtype)
 
 		let filetype = CNEnumType(typeName: "FileType")
 		filetype.add(members: [

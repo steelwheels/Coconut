@@ -13,7 +13,7 @@ import Foundation
 /**
  * The data to present JSValue as native data
  */
-public enum CNValueType: Int
+public enum CNValueType
 {
 	case	nullType
 	case	boolType
@@ -24,7 +24,7 @@ public enum CNValueType: Int
 	case	pointType
 	case	sizeType
 	case	rectType
-	case	enumType
+	case	enumType(String)	// enum-type name
 	case	dictionaryType
 	case	arrayType
 	case	setType
@@ -39,46 +39,50 @@ public enum CNValueType: Int
 	public var description: String { get {
 		let result: String
 		switch self {
-		case .nullType:		result = "Null"
-		case .boolType:		result = "Bool"
-		case .numberType:	result = "Number"
-		case .stringType:	result = "String"
-		case .dateType:		result = "Date"
-		case .rangeType:	result = "Range"
-		case .pointType:	result = "Point"
-		case .sizeType:		result = "Size"
-		case .rectType:		result = "Rect"
-		case .enumType:		result = "Enum"
-		case .dictionaryType:	result = "Dictionary"
-		case .arrayType:	result = "Array"
-		case .setType:		result = "Set"
-		case .URLType:		result = "URL"
-		case .colorType:	result = "Color"
-		case .imageType:	result = "Image"
-		case .recordType:	result = "Record"
-		case .objectType:	result = "Object"
-		case .segmentType:	result = "Segment"
-		case .pointerType:	result = "Pointer"
+		case .nullType:			result = "Null"
+		case .boolType:			result = "Bool"
+		case .numberType:		result = "Number"
+		case .stringType:		result = "String"
+		case .dateType:			result = "Date"
+		case .rangeType:		result = "Range"
+		case .pointType:		result = "Point"
+		case .sizeType:			result = "Size"
+		case .rectType:			result = "Rect"
+		case .enumType(let etype):	result = "Enum(\(etype))"
+		case .dictionaryType:		result = "Dictionary"
+		case .arrayType:		result = "Array"
+		case .setType:			result = "Set"
+		case .URLType:			result = "URL"
+		case .colorType:		result = "Color"
+		case .imageType:		result = "Image"
+		case .recordType:		result = "Record"
+		case .objectType:		result = "Object"
+		case .segmentType:		result = "Segment"
+		case .pointerType:		result = "Pointer"
 		}
 		return result
 	}}
 
 	public static func decode(string str: String) -> CNValueType? {
+		let (typename, paramp) = CNValueType.decodeType(string: str)
+
 		let result: CNValueType?
-		switch str {
+		switch typename {
 		case "Null":		result = .nullType
 		case "Bool":		result = .boolType
 		case "Number":		result = .numberType
-		case "Int":		result = .numberType
-		case "UInt":		result = .numberType
-		case "Float":		result = .numberType
 		case "String":		result = .stringType
 		case "Date":		result = .dateType
 		case "Range":		result = .rangeType
 		case "Point":		result = .pointType
 		case "Size":		result = .sizeType
 		case "Rect":		result = .rectType
-		case "Enum":		result = .enumType
+		case "Enum":
+			if let param = paramp {
+				result = .enumType(param)
+			} else {
+				result = nil
+			}
 		case "Dictionary":	result = .dictionaryType
 		case "Array":		result = .arrayType
 		case "Set":		result = .setType
@@ -94,16 +98,26 @@ public enum CNValueType: Int
 		return result
 	}
 
+	private static func decodeType(string str: String) -> (String, String?) { // (type-name, parameter)
+		let substrs1 = str.split(separator: "(")
+		if substrs1.count >= 2 {
+			let substrs2 = substrs1[1].split(separator: ")")
+			if substrs2.count >= 2 {
+				return (String(substrs1[0]), String(substrs2[0]))
+			}
+		}
+		return (str, nil)
+	}
 
 	public func compare(_ dst: CNValueType) -> ComparisonResult {
-		let srcv = self.rawValue
-		let dstv = dst.rawValue
-		if srcv > dstv {
+		let srcdesc = self.description
+		let dstdesc = dst.description
+		if srcdesc > dstdesc {
 			return .orderedDescending
-		} else if srcv == dstv {
-			return .orderedSame
-		} else {
+		} else if srcdesc < dstdesc {
 			return .orderedAscending
+		} else {
+			return .orderedSame
 		}
 	}
 }
@@ -143,7 +157,7 @@ public enum CNValue {
 			case .pointValue(_):		result = .pointType
 			case .sizeValue(_):		result = .sizeType
 			case .rectValue(_):		result = .rectType
-			case .enumValue(_):		result = .enumType
+			case .enumValue(let eobj):	result = .enumType(eobj.typeName)
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
 			case .setValue(_):		result = .setType
