@@ -137,17 +137,35 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		}
 	}
 
+	public func searchFieldName(byName name: String) -> Int? {
+		let curnames = self.fieldNames
+		for i in 0..<curnames.count {
+			if curnames[i] == name {
+				return i
+			}
+		}
+		return nil
+	}
+
 	public func setCompareFunction(compareFunc cfunc: @escaping CompareFunction) {
 		mCompareFunc = cfunc ; mDoReloadFields = true ; mDoReloadRecords = true
 	}
 
 	public func addVirtualField(name field: String, callbackFunction cbfunc: @escaping VirtualFieldCallback) {
-		mVirtualFieldCallbacks[field] = cbfunc
+		if self.searchFieldName(byName: field) == nil {
+			mVirtualFieldCallbacks[field] = cbfunc
+		} else {
+			CNLog(logLevel: .error, message: "Field \"\(field)\" is already defined", atFunction: #function, inFile: #file)
+		}
 	}
 
 	public func mergeVirtualFields(callbacks cbfuncs: Dictionary<String, VirtualFieldCallback>) {
 		for (key, val) in cbfuncs {
-			mVirtualFieldCallbacks[key] = val
+			if self.searchFieldName(byName: key) == nil {
+				mVirtualFieldCallbacks[key] = val
+			} else {
+				CNLog(logLevel: .error, message: "Field \"\(key)\" is already defined", atFunction: #function, inFile: #file)
+			}
 		}
 	}
 
