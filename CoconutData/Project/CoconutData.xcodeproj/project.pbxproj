@@ -268,6 +268,8 @@
 		05DDE3D1275BA2D7009F0B6E /* UTVectorGraphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */; };
 		05DE4D4C2864B09500ABA462 /* CNMutableSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DE4D4B2864B09500ABA462 /* CNMutableSet.swift */; };
 		05DE4D4D2864B09500ABA462 /* CNMutableSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DE4D4B2864B09500ABA462 /* CNMutableSet.swift */; };
+		05E3B17228B43F0000E081BF /* CNAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3B17128B43F0000E081BF /* CNAlert.swift */; };
+		05E3B17328B43F0000E081BF /* CNAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3B17128B43F0000E081BF /* CNAlert.swift */; };
 		05E45BCB2736CD290034254D /* rectangle-filled-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BC92736CD070034254D /* rectangle-filled-rounded.png */; };
 		05E45BCC2736CD290034254D /* rectangle-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BCA2736CD070034254D /* rectangle-rounded.png */; };
 		05E45BD02736CD460034254D /* rectangle-filled-rounded.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E45BC92736CD070034254D /* rectangle-filled-rounded.png */; };
@@ -615,6 +617,7 @@
 		05DD2BAA281CA01700C725AD /* CNRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRecord.swift; sourceTree = "<group>"; };
 		05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTVectorGraphics.swift; sourceTree = "<group>"; };
 		05DE4D4B2864B09500ABA462 /* CNMutableSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNMutableSet.swift; sourceTree = "<group>"; };
+		05E3B17128B43F0000E081BF /* CNAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNAlert.swift; sourceTree = "<group>"; };
 		05E45BC92736CD070034254D /* rectangle-filled-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-filled-rounded.png"; sourceTree = "<group>"; };
 		05E45BCA2736CD070034254D /* rectangle-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-rounded.png"; sourceTree = "<group>"; };
 		05E7F00B274E8F7600938598 /* CNVectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVectorManager.swift; sourceTree = "<group>"; };
@@ -1041,6 +1044,7 @@
 		05B32D622515092C000D1411 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				05E3B17128B43F0000E081BF /* CNAlert.swift */,
 				05B32D6925150945000D1411 /* CNArrayStream.swift */,
 				05B32D6525150945000D1411 /* CNAttributedString.swift */,
 				05B32D6325150945000D1411 /* CNCharacter.swift */,
@@ -1481,6 +1485,7 @@
 				05B32CD9251502E6000D1411 /* CNOperationExecutor.swift in Sources */,
 				05E7F00C274E8F7600938598 /* CNVectorManager.swift in Sources */,
 				0504D17C2751C24900EFE0D7 /* CNOval.swift in Sources */,
+				05E3B17228B43F0000E081BF /* CNAlert.swift in Sources */,
 				05B7B1AF277606810077DEDC /* CNValueSegment.swift in Sources */,
 				05B32CDF251502E7000D1411 /* CNOperationQueue.swift in Sources */,
 				05B32D8025150945000D1411 /* CNArrayStream.swift in Sources */,
@@ -1591,6 +1596,7 @@
 				05E7F00D274E8F7600938598 /* CNVectorManager.swift in Sources */,
 				0504D17D2751C24900EFE0D7 /* CNOval.swift in Sources */,
 				05B7B1B0277606810077DEDC /* CNValueSegment.swift in Sources */,
+				05E3B17328B43F0000E081BF /* CNAlert.swift in Sources */,
 				05B32CDA251502E6000D1411 /* CNOperationExecutor.swift in Sources */,
 				05B32CE0251502E7000D1411 /* CNOperationQueue.swift in Sources */,
 				05B32D8125150945000D1411 /* CNArrayStream.swift in Sources */,

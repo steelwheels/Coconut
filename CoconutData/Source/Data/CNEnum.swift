@@ -315,6 +315,14 @@ public class CNEnumTable
 	}
 
 	private func setDefaultValues() {
+		let alertcode = CNEnumType(typeName: "AlertType")
+		alertcode.add(members: [
+			"informational":	CNAlertType.informational.rawValue,
+			"warning":		CNAlertType.warning.rawValue,
+			"critical": 		CNAlertType.critical.rawValue
+		])
+		self.add(enumType: alertcode)
+
 		let exitcode = CNEnumType(typeName: "ExitCode")
 		exitcode.add(members: [
 			"noError": 		CNExitCode.NoError.rawValue,
