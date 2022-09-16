@@ -241,6 +241,39 @@ public class CNTokenStream
 		return nil
 	}
 
+	public func getNumber() -> NSNumber? {
+		if let token = mStream.get() {
+			return token.getNumber()
+		} else {
+			return nil
+		}
+	}
+
+	public func requireNumber(value src: NSNumber) -> Bool {
+		if let token = mStream.get() {
+			if let val = token.getNumber() {
+				switch val.compare(src) {
+				case .orderedAscending, .orderedDescending:
+					return false
+				case .orderedSame:
+					return true
+				}
+			}
+			let _ = mStream.unget()
+		}
+		return false
+	}
+
+	public func requireNumber() -> NSNumber? {
+		if let token = mStream.get() {
+			if let val = token.getNumber() {
+				return val
+			}
+			let _ = mStream.unget()
+		}
+		return nil
+	}
+
 	public func getString() -> String? {
 		if let token = mStream.get() {
 			return token.getString()

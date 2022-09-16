@@ -185,7 +185,7 @@ public class CNEnumTable
 
 	public static func allEnumTables() -> Array<CNEnumTable> {
 		allocateDefaultEnumTable()
-		return mEnumTables.peekAll()
+		return mEnumTables.peekAll(doReverseOrder: true)
 	}
 
 	public static func pushEnumTable(enumTable etable: CNEnumTable) {

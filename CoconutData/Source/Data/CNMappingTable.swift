@@ -119,7 +119,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 	private func allocateDefaultFields() -> Dictionary<String, CNValue> {
 		var fields = mSourceTable.defaultFields
 		for vkey in mVirtualFieldCallbacks {
-			fields[vkey.key] = .nullValue
+			fields[vkey.key] = CNValue.null
 		}
 		return fields
 	}

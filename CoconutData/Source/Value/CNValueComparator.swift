@@ -50,8 +50,6 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 
 	var result: ComparisonResult? = nil
 	switch cval0.valueType {
-	case .nullType:
-		result = .orderedSame
 	case .boolType:
 		if let s0 = cval0.toBool(), let s1 = cval1.toBool() {
 			result = compare(bool0: s0, bool1: s1)

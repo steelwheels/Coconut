@@ -15,7 +15,6 @@ import Foundation
  */
 public enum CNValueType
 {
-	case	nullType
 	case	boolType
 	case	numberType
 	case	stringType
@@ -39,7 +38,6 @@ public enum CNValueType
 	public var description: String { get {
 		let result: String
 		switch self {
-		case .nullType:			result = "Null"
 		case .boolType:			result = "Bool"
 		case .numberType:		result = "Number"
 		case .stringType:		result = "String"
@@ -68,7 +66,6 @@ public enum CNValueType
 
 		let result: CNValueType?
 		switch typename {
-		case "Null":		result = .nullType
 		case "Bool":		result = .boolType
 		case "Number":		result = .numberType
 		case "String":		result = .stringType
@@ -123,7 +120,6 @@ public enum CNValueType
 }
 
 public enum CNValue {
-	case nullValue
 	case boolValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
 	case stringValue(_ val: String)
@@ -140,7 +136,7 @@ public enum CNValue {
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
 	case recordValue(_ val: CNRecord)
-	case objectValue(_ val: NSObject)
+	case objectValue(_ val: NSObject?)	// will be null
 	case segmentValue(_ val: CNValueSegment)
 	case pointerValue(_ val: CNPointerValue)
 
@@ -148,7 +144,6 @@ public enum CNValue {
 		get {
 			let result: CNValueType
 			switch self {
-			case .nullValue:		result = .nullType
 			case .boolValue(_):		result = .boolType
 			case .numberValue(_):		result = .numberType
 			case .stringValue(_):		result = .stringType
@@ -172,6 +167,10 @@ public enum CNValue {
 			return result
 		}
 	}
+
+	public static var null: CNValue { get {
+		return CNValue.objectValue(nil)
+	}}
 
 	public func toBool() -> Bool? {
 		let result: Bool?
@@ -511,8 +510,6 @@ public enum CNValue {
 	public var description: String { get {
 		let result: String
 		switch self {
-		case .nullValue:
-			result = "null"
 		case .boolValue(let val):
 			result = val ? "true" : "false"
 		case .numberValue(let val):
@@ -586,7 +583,7 @@ public enum CNValue {
 		let dquote = "\""
 		let result: CNText
 		switch self {
-		case .nullValue, .boolValue(_), .numberValue(_), .objectValue(_):
+		case .boolValue(_), .numberValue(_), .objectValue(_):
 			// Use description
 			result = CNTextLine(string: self.description)
 		case .stringValue(let val):
@@ -701,8 +698,6 @@ public enum CNValue {
 	public func toAny() -> Any {
 		let result: Any
 		switch self {
-		case .nullValue:
-			result = NSNull()
 		case .boolValue(let val):
 			result = val
 		case .numberValue(let val):
@@ -728,7 +723,11 @@ public enum CNValue {
 		case .imageValue(let val):
 			result = val
 		case .objectValue(let val):
-			result = val
+			if let v = val {
+				result = v
+			} else {
+				result = NSNull()
+			}
 		case .recordValue(let val):
 			result = val
 		case .segmentValue(let val):
@@ -760,7 +759,7 @@ public enum CNValue {
 	public static func anyToValue(object obj: Any) -> CNValue? {
 		var result: CNValue? = nil
 		if let _ = obj as? NSNull {
-			result = .nullValue
+			result = .objectValue(nil)
 		} else if let val = obj as? NSNumber {
 			result = .numberValue(val)
 		} else if let val = obj as? String {

@@ -117,12 +117,12 @@ public class CNMutableValue
 
 	open func clone() -> CNMutableValue {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
-		return CNMutableScalarValue(scalarValue: .nullValue, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
+		return CNMutableScalarValue(scalarValue: CNValue.null, sourceDirectory: mSourceDirectory, cacheDirectory: mCacheDirectory)
 	}
 
 	open func toValue() -> CNValue {
 		CNLog(logLevel: .error, message: "Do override", atFunction: #function, inFile: #file)
-		return .nullValue
+		return CNValue.null
 	}
 
 	public func unmatchedPathError(path pth: Array<CNValuePath.Element>, place pstr: String) -> NSError {

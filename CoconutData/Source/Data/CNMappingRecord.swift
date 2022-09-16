@@ -59,8 +59,8 @@ public class CNMappingRecord: CNRecord
 	}
 
 	public func compare(forField name: String, with rec: CNRecord) -> ComparisonResult {
-		let s0 = self.value(ofField: name) ?? .nullValue
-		let s1 = rec.value(ofField: name)  ?? .nullValue
+		let s0 = self.value(ofField: name) ?? CNValue.null
+		let s1 = rec.value(ofField: name)  ?? CNValue.null
 		return CNCompareValue(nativeValue0: s0, nativeValue1: s1)
 	}
 }

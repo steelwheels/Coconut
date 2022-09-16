@@ -40,8 +40,12 @@ public class CNStack<T>
 		}
 	}
 
-	public func peekAll() -> Array<T> {
-		return mArray.reversed()
+	public func peekAll(doReverseOrder dorev: Bool) -> Array<T> {
+		if dorev {
+			return mArray.reversed()
+		} else {
+			return mArray
+		}
 	}
 }
 

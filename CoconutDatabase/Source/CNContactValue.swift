@@ -311,7 +311,7 @@ public class CNContactDate
 				return .dateValue(date)
 			}
 		}
-		return .nullValue
+		return CNValue.null
 	}
 
 	public static func decode(date src: Date) -> DateComponents {
@@ -358,7 +358,7 @@ public class CNContactImage
 				return .imageValue(img)
 			}
 		}
-		return .nullValue
+		return CNValue.null
 	}
 }
 

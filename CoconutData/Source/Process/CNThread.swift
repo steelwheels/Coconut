@@ -61,7 +61,7 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 	public init(processManager mgr: CNProcessManager, input infile: CNFile, output outfile: CNFile, error errfile: CNFile, environment env: CNEnvironment) {
 		mProcessManager		= mgr
 		mEnvironment		= env
-		mArgument		= .nullValue
+		mArgument		= CNValue.null
 		mStatus			= .Idle
 		mTerminationStatus	= -1
 		mConsole 		= CNFileConsole(input: infile, output: outfile, error: errfile)

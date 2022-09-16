@@ -60,7 +60,7 @@ public class CNValueParser
 	private func decodeObject(value src: CNValue) -> CNValue {
 		let dst: CNValue
 		switch src {
-		case .nullValue, .boolValue(_), .numberValue(_), .stringValue(_), .setValue(_),
+		case .boolValue(_), .numberValue(_), .stringValue(_), .setValue(_),
 		     .dateValue(_), .rangeValue(_), .pointValue(_), .sizeValue(_),
 		     .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_), .imageValue(_),
 		     .recordValue(_), .objectValue(_), .segmentValue(_), .pointerValue(_):
@@ -198,7 +198,7 @@ public class CNValueParser
 		case .IdentifierToken(let str):
 			switch str.lowercased() {
 			case "null":
-				result = .nullValue
+				result = CNValue.null
 			default:
 				switch parseEnumValue(typeName: str, tokenStream: stream) {
 				case .success(let val):

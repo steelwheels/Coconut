@@ -140,6 +140,21 @@ public struct CNToken {
 		return result
 	}
 
+	public func getNumber() -> NSNumber? {
+		let result: NSNumber?
+		switch self.type {
+		case .DoubleToken(let v):
+			result = NSNumber(value: v)
+		case .UIntToken(let v):
+			result = NSNumber(value: v)
+		case .IntToken(let v):
+			result = NSNumber(value: v)
+		default:
+			result = nil
+		}
+		return result
+	}
+
 	public func getString() -> String? {
 		let result: String?
 		switch self.type {
