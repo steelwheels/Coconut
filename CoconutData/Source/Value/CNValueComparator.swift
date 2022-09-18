@@ -93,10 +93,6 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .URLType:
-		if let s0 = cval0.toURL(), let s1 = cval1.toURL() {
-			result = compare(URL0: s0, URL1: s1)
-		}
 	case .colorType:
 		if let s0 = cval0.toColor(), let s1 = cval1.toColor() {
 			result = compare(color0: s0, color1: s1)
@@ -199,10 +195,6 @@ private func compare(rect0 s0: CGRect, rect1 s1: CGRect) -> ComparisonResult {
 		result = compare(size0: s0.size, size1: s1.size)
 	}
 	return result
-}
-
-private func compare(URL0 s0: URL, URL1 s1: URL) -> ComparisonResult {
-	return s0.absoluteString.compare(s1.absoluteString)
 }
 
 private func compare(color0 s0: CNColor, color1 s1: CNColor) -> ComparisonResult {

@@ -62,7 +62,7 @@ public class CNValueParser
 		switch src {
 		case .boolValue(_), .numberValue(_), .stringValue(_), .setValue(_),
 		     .rangeValue(_), .pointValue(_), .sizeValue(_),
-		     .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_), .imageValue(_),
+		     .rectValue(_), .enumValue(_), .colorValue(_), .imageValue(_),
 		     .recordValue(_), .objectValue(_), .segmentValue(_), .pointerValue(_):
 			dst = src
 		case .dictionaryValue(let dict):

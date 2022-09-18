@@ -26,7 +26,6 @@ public enum CNValueType
 	case	dictionaryType
 	case	arrayType
 	case	setType
-	case	URLType
 	case	colorType
 	case	imageType
 	case	recordType
@@ -48,7 +47,6 @@ public enum CNValueType
 		case .dictionaryType:		result = "Dictionary"
 		case .arrayType:		result = "Array"
 		case .setType:			result = "Set"
-		case .URLType:			result = "URL"
 		case .colorType:		result = "Color"
 		case .imageType:		result = "Image"
 		case .recordType:		result = "Record"
@@ -80,7 +78,6 @@ public enum CNValueType
 		case "Dictionary":	result = .dictionaryType
 		case "Array":		result = .arrayType
 		case "Set":		result = .setType
-		case "URL":		result = .URLType
 		case "Color":		result = .colorType
 		case "Image":		result = .imageType
 		case "Record":		result = .recordType
@@ -128,7 +125,6 @@ public enum CNValue {
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
-	case URLValue(_ val: URL)
 	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
 	case recordValue(_ val: CNRecord)
@@ -151,7 +147,6 @@ public enum CNValue {
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
 			case .setValue(_):		result = .setType
-			case .URLValue(_):		result = .URLType
 			case .colorValue(_):		result = .colorType
 			case .imageValue(_):		result = .imageType
 			case .recordValue(_):		result = .recordType
@@ -266,15 +261,6 @@ public enum CNValue {
 		let result: Array<CNValue>?
 		switch self {
 		case .setValue(let obj):	result = obj
-		default:			result = nil
-		}
-		return result
-	}
-
-	public func toURL() -> URL? {
-		let result: URL?
-		switch self {
-		case .URLValue(let url):	result = url
 		default:			result = nil
 		}
 		return result
@@ -415,14 +401,6 @@ public enum CNValue {
 		}
 	}
 
-	public func URLProperty(identifier ident: String) -> URL? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toURL()
-		} else {
-			return nil
-		}
-	}
-
 	public func imageProperty(identifier ident: String) -> CNImage? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toImage()
@@ -536,8 +514,6 @@ public enum CNValue {
 			}
 			line += "]"
 			result = line
-		case .URLValue(let val):
-			result = val.path
 		case .colorValue(let val):
 			result = val.description
 		case .imageValue(let val):
@@ -565,7 +541,7 @@ public enum CNValue {
 		case .stringValue(let val):
 			let txt = CNStringUtil.insertEscapeForQuote(source: val)
 			result = CNTextLine(string: "\"" + txt + "\"")
-		case .rangeValue(_), .URLValue(_):
+		case .rangeValue(_):
 			// Use quotest description
 			let txt = CNStringUtil.insertEscapeForQuote(source: self.description)
 			result = CNTextLine(string: dquote + txt + dquote)
@@ -690,8 +666,6 @@ public enum CNValue {
 			result = val.toValue()
 		case .rectValue(let val):
 			result = val.toValue()
-		case .URLValue(let val):
-			result = val
 		case .colorValue(let val):
 			result = val.toValue()
 		case .imageValue(let val):
@@ -746,8 +720,6 @@ public enum CNValue {
 			result = .sizeValue(val)
 		} else if let val = obj as? CGRect {
 			result = .rectValue(val)
-		} else if let val = obj as? URL {
-			result = .URLValue(val)
 		} else if let val = obj as? CNColor {
 			result = .colorValue(val)
 		} else if let val = obj as? CNImage {

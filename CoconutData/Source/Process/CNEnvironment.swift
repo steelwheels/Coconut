@@ -80,13 +80,13 @@ public class CNEnvironment
 	}
 
 	public func setURL(name nm: String, value val: URL) {
-		set(name: nm, value: .URLValue(val))
+		set(name: nm, value: .objectValue(val as NSURL))
 	}
 
 	public func getURL(name nm: String) -> URL? {
 		if let val = get(name: nm) {
-			if let url = val.toURL() {
-				return url
+			if let url = val.toObject() as? NSURL {
+				return url as URL
 			} else if let str = val.toString() {
 				return URL(fileURLWithPath: str)
 			}
@@ -202,7 +202,6 @@ public class CNEnvironment
 		switch val {
 		case .numberValue(let num):	result = num.stringValue
 		case .stringValue(let str):	result = str
-		case .URLValue(let url):	result = url.path
 		case .arrayValue(let arr):
 			var arrstr: String = ""
 			var is1st:  Bool   = true
@@ -219,6 +218,13 @@ public class CNEnvironment
 				}
 			}
 			result = arrstr
+		case .objectValue(let obj):
+			if let url = obj as? NSURL {
+				result = url.path
+			} else {
+				CNLog(logLevel: .error, message: "Unsupported object", atFunction: #function, inFile: #file)
+				result = nil
+			}
 		default:
 			result = nil
 		}
@@ -228,7 +234,7 @@ public class CNEnvironment
 	private func valueToDirectory(value val: CNValue) -> URL? {
 		var result: URL? = nil
 		let fmgr = FileManager.default
-		if let url = val.toURL() {
+		if let url = val.toObject() as? URL {
 			if fmgr.fileExists(atURL: url) {
 				if fmgr.isAccessible(pathString: url.path, accessType: .ReadAccess) {
 					result = url
