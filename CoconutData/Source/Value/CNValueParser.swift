@@ -61,7 +61,7 @@ public class CNValueParser
 		let dst: CNValue
 		switch src {
 		case .boolValue(_), .numberValue(_), .stringValue(_), .setValue(_),
-		     .dateValue(_), .rangeValue(_), .pointValue(_), .sizeValue(_),
+		     .rangeValue(_), .pointValue(_), .sizeValue(_),
 		     .rectValue(_), .enumValue(_), .URLValue(_), .colorValue(_), .imageValue(_),
 		     .recordValue(_), .objectValue(_), .segmentValue(_), .pointerValue(_):
 			dst = src

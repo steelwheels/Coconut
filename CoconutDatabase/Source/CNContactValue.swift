@@ -308,7 +308,7 @@ public class CNContactDate
 	public static func encode(dateComponents dcomp: DateComponents?) -> CNValue {
 		if let compp = dcomp {
 			if let date = compp.date {
-				return .dateValue(date)
+				return .objectValue(date as NSDate)
 			}
 		}
 		return CNValue.null
@@ -336,8 +336,8 @@ public class CNLabeledDates
 		if let dict = val.toDictionary() {
 			var result: Array<CNLabeledValue<NSDateComponents>> = []
 			for (label, val) in dict {
-				if let date = val.toDate() {
-					let comp   = CNContactDate.decode(date: date)
+				if let date = val.toObject() as? NSDate {
+					let comp   = CNContactDate.decode(date: date as Date)
 					let key    = decodeLabel(label: label)
 					let labstr = CNLabeledValue(label: key, value: comp as NSDateComponents)
 					result.append(labstr)

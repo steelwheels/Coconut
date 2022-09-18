@@ -18,7 +18,6 @@ public enum CNValueType
 	case	boolType
 	case	numberType
 	case	stringType
-	case	dateType
 	case	rangeType
 	case	pointType
 	case	sizeType
@@ -41,7 +40,6 @@ public enum CNValueType
 		case .boolType:			result = "Bool"
 		case .numberType:		result = "Number"
 		case .stringType:		result = "String"
-		case .dateType:			result = "Date"
 		case .rangeType:		result = "Range"
 		case .pointType:		result = "Point"
 		case .sizeType:			result = "Size"
@@ -69,7 +67,6 @@ public enum CNValueType
 		case "Bool":		result = .boolType
 		case "Number":		result = .numberType
 		case "String":		result = .stringType
-		case "Date":		result = .dateType
 		case "Range":		result = .rangeType
 		case "Point":		result = .pointType
 		case "Size":		result = .sizeType
@@ -123,7 +120,6 @@ public enum CNValue {
 	case boolValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
 	case stringValue(_ val: String)
-	case dateValue(_ val: Date)
 	case rangeValue(_ val: NSRange)
 	case pointValue(_ val: CGPoint)
 	case sizeValue(_ val: CGSize)
@@ -147,7 +143,6 @@ public enum CNValue {
 			case .boolValue(_):		result = .boolType
 			case .numberValue(_):		result = .numberType
 			case .stringValue(_):		result = .stringType
-			case .dateValue(_):		result = .dateType
 			case .rangeValue(_):		result = .rangeType
 			case .pointValue(_):		result = .pointType
 			case .sizeValue(_):		result = .sizeType
@@ -194,15 +189,6 @@ public enum CNValue {
 		let result: String?
 		switch self {
 		case .stringValue(let obj):	result = obj
-		default:			result = nil
-		}
-		return result
-	}
-
-	public func toDate() -> Date? {
-		let result: Date?
-		switch self {
-		case .dateValue(let obj):	result = obj
 		default:			result = nil
 		}
 		return result
@@ -373,14 +359,6 @@ public enum CNValue {
 		}
 	}
 
-	public func dateProperty(identifier ident: String) -> Date? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toDate()
-		} else {
-			return nil
-		}
-	}
-
 	public func rangeProperty(identifier ident: String) -> NSRange? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toRange()
@@ -516,8 +494,6 @@ public enum CNValue {
 			result = val.stringValue
 		case .stringValue(let val):
 			result = val
-		case .dateValue(let val):
-			result = CNValue.stringFromDate(date: val)
 		case .enumValue(let val):
 			result = val.memberName
 		case .rangeValue(let val):
@@ -589,7 +565,7 @@ public enum CNValue {
 		case .stringValue(let val):
 			let txt = CNStringUtil.insertEscapeForQuote(source: val)
 			result = CNTextLine(string: "\"" + txt + "\"")
-		case .dateValue(_), .rangeValue(_), .URLValue(_):
+		case .rangeValue(_), .URLValue(_):
 			// Use quotest description
 			let txt = CNStringUtil.insertEscapeForQuote(source: self.description)
 			result = CNTextLine(string: dquote + txt + dquote)
@@ -704,8 +680,6 @@ public enum CNValue {
 			result = val
 		case .stringValue(let val):
 			result = val
-		case .dateValue(let val):
-			result = val
 		case .enumValue(let val):
 			result = val.toValue()
 		case .rangeValue(let val):
@@ -764,8 +738,6 @@ public enum CNValue {
 			result = .numberValue(val)
 		} else if let val = obj as? String {
 			result = .stringValue(val)
-		} else if let val = obj as? Date {
-			result = .dateValue(val)
 		} else if let val = obj as? NSRange {
 			result = .rangeValue(val)
 		} else if let val = obj as? CGPoint {

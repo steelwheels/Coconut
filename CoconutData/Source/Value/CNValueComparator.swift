@@ -62,10 +62,6 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toString(), let s1 = cval1.toString() {
 			result = s0.compare(s1)
 		}
-	case .dateType:
-		if let s0 = cval0.toDate(), let s1 = cval1.toDate() {
-			result = s0.compare(s1)
-		}
 	case .rangeType:
 		if let s0 = cval0.toRange(), let s1 = cval1.toRange() {
 			result = compare(range0: s0, range1: s1)
