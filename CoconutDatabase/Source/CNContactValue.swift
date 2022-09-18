@@ -355,7 +355,7 @@ public class CNContactImage
 	public static func encode(imageData datap: Data?) -> CNValue {
 		if let data = datap {
 			if let img = CNImage(data: data) {
-				return .imageValue(img)
+				return .objectValue(img)
 			}
 		}
 		return CNValue.null

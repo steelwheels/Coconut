@@ -62,10 +62,6 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toString(), let s1 = cval1.toString() {
 			result = s0.compare(s1)
 		}
-	case .rangeType:
-		if let s0 = cval0.toRange(), let s1 = cval1.toRange() {
-			result = compare(range0: s0, range1: s1)
-		}
 	case .pointType:
 		if let s0 = cval0.toPoint(), let s1 = cval1.toPoint() {
 			result = compare(point0: s0, point1: s1)
@@ -93,8 +89,6 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .imageType:
-		CNLog(logLevel: .error, message: "Failed to compare image", atFunction: #function, inFile: #file)
 	case .recordType:
 		CNLog(logLevel: .error, message: "Failed to compare record", atFunction: #function, inFile: #file)
 	case .objectType:
@@ -137,19 +131,6 @@ private func compare(bool0 s0: Bool, bool1 s1: Bool) -> ComparisonResult {
 		result = .orderedDescending
 	} else {       // s0:false, s1: true
 		result = .orderedAscending
-	}
-	return result
-}
-
-private func compare(range0 s0: NSRange, range1 s1: NSRange) -> ComparisonResult {
-	let result: ComparisonResult
-	switch compare(int0: s0.location, int1: s1.location) {
-	case .orderedAscending:
-		result = .orderedAscending
-	case .orderedDescending:
-		result = .orderedDescending
-	case .orderedSame:
-		result = compare(int0: s0.length, int1: s1.length)
 	}
 	return result
 }

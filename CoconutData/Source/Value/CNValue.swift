@@ -18,7 +18,6 @@ public enum CNValueType
 	case	boolType
 	case	numberType
 	case	stringType
-	case	rangeType
 	case	pointType
 	case	sizeType
 	case	rectType
@@ -26,7 +25,6 @@ public enum CNValueType
 	case	dictionaryType
 	case	arrayType
 	case	setType
-	case	imageType
 	case	recordType
 	case	objectType
 	case	segmentType
@@ -38,7 +36,6 @@ public enum CNValueType
 		case .boolType:			result = "Bool"
 		case .numberType:		result = "Number"
 		case .stringType:		result = "String"
-		case .rangeType:		result = "Range"
 		case .pointType:		result = "Point"
 		case .sizeType:			result = "Size"
 		case .rectType:			result = "Rect"
@@ -46,7 +43,6 @@ public enum CNValueType
 		case .dictionaryType:		result = "Dictionary"
 		case .arrayType:		result = "Array"
 		case .setType:			result = "Set"
-		case .imageType:		result = "Image"
 		case .recordType:		result = "Record"
 		case .objectType:		result = "Object"
 		case .segmentType:		result = "Segment"
@@ -63,7 +59,6 @@ public enum CNValueType
 		case "Bool":		result = .boolType
 		case "Number":		result = .numberType
 		case "String":		result = .stringType
-		case "Range":		result = .rangeType
 		case "Point":		result = .pointType
 		case "Size":		result = .sizeType
 		case "Rect":		result = .rectType
@@ -76,7 +71,6 @@ public enum CNValueType
 		case "Dictionary":	result = .dictionaryType
 		case "Array":		result = .arrayType
 		case "Set":		result = .setType
-		case "Image":		result = .imageType
 		case "Record":		result = .recordType
 		case "Object":		result = .objectType
 		case "Segment":		result = .segmentType
@@ -114,7 +108,6 @@ public enum CNValue {
 	case boolValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
 	case stringValue(_ val: String)
-	case rangeValue(_ val: NSRange)
 	case pointValue(_ val: CGPoint)
 	case sizeValue(_ val: CGSize)
 	case rectValue(_ val: CGRect)
@@ -122,7 +115,6 @@ public enum CNValue {
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
-	case imageValue(_ val: CNImage)
 	case recordValue(_ val: CNRecord)
 	case objectValue(_ val: NSObject?)	// will be null
 	case segmentValue(_ val: CNValueSegment)
@@ -135,7 +127,6 @@ public enum CNValue {
 			case .boolValue(_):		result = .boolType
 			case .numberValue(_):		result = .numberType
 			case .stringValue(_):		result = .stringType
-			case .rangeValue(_):		result = .rangeType
 			case .pointValue(_):		result = .pointType
 			case .sizeValue(_):		result = .sizeType
 			case .rectValue(_):		result = .rectType
@@ -143,7 +134,6 @@ public enum CNValue {
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
 			case .setValue(_):		result = .setType
-			case .imageValue(_):		result = .imageType
 			case .recordValue(_):		result = .recordType
 			case .objectValue(_):		result = .objectType
 			case .segmentValue(_):		result = .segmentType
@@ -180,16 +170,6 @@ public enum CNValue {
 		switch self {
 		case .stringValue(let obj):	result = obj
 		default:			result = nil
-		}
-		return result
-	}
-
-	public func toRange() -> NSRange? {
-		let result: NSRange?
-		switch self {
-		case .rangeValue(let range):		result = range
-		case .dictionaryValue(let dict):	result = NSRange.fromValue(value: dict)
-		default:				result = nil
 		}
 		return result
 	}
@@ -261,15 +241,6 @@ public enum CNValue {
 		return result
 	}
 
-	public func toImage() -> CNImage? {
-		let result: CNImage?
-		switch self {
-		case .imageValue(let obj):	result = obj
-		default:			result = nil
-		}
-		return result
-	}
-
 	public func toRecord() -> CNRecord? {
 		let result: CNRecord?
 		switch self {
@@ -330,14 +301,6 @@ public enum CNValue {
 		}
 	}
 
-	public func rangeProperty(identifier ident: String) -> NSRange? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toRange()
-		} else {
-			return nil
-		}
-	}
-
 	public func pointProperty(identifier ident: String) -> CGPoint? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toPoint()
@@ -381,14 +344,6 @@ public enum CNValue {
 	public func setProperty(identifier ident: String) -> Array<CNValue>? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toSet()
-		} else {
-			return nil
-		}
-	}
-
-	public func imageProperty(identifier ident: String) -> CNImage? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toImage()
 		} else {
 			return nil
 		}
@@ -459,8 +414,6 @@ public enum CNValue {
 			result = val
 		case .enumValue(let val):
 			result = val.memberName
-		case .rangeValue(let val):
-			result = val.description
 		case .pointValue(let val):
 			result = val.description
 		case .sizeValue(let val):
@@ -499,8 +452,6 @@ public enum CNValue {
 			}
 			line += "]"
 			result = line
-		case .imageValue(let val):
-			result = val.description
 		case .recordValue(let val):
 			result = val.description
 		case .objectValue(let val):
@@ -515,7 +466,6 @@ public enum CNValue {
 	}}
 
 	public func toScript() -> CNText {
-		let dquote = "\""
 		let result: CNText
 		switch self {
 		case .boolValue(_), .numberValue(_), .objectValue(_):
@@ -524,10 +474,6 @@ public enum CNValue {
 		case .stringValue(let val):
 			let txt = CNStringUtil.insertEscapeForQuote(source: val)
 			result = CNTextLine(string: "\"" + txt + "\"")
-		case .rangeValue(_):
-			// Use quotest description
-			let txt = CNStringUtil.insertEscapeForQuote(source: self.description)
-			result = CNTextLine(string: dquote + txt + dquote)
 		case .enumValue(let val):
 			let txt = "\(val.typeName).\(val.memberName)"
 			result = CNTextLine(string: txt)
@@ -543,8 +489,6 @@ public enum CNValue {
 			result = arrayToScript(array: val)
 		case .setValue(let val):
 			result = setToScript(set: val)
-		case .imageValue(let val):
-			result = dictionaryToScript(dictionary: val.toValue())
 		case .recordValue(let val):
 			result = dictionaryToScript(dictionary: val.toValue())
 		case .segmentValue(let val):
@@ -639,16 +583,12 @@ public enum CNValue {
 			result = val
 		case .enumValue(let val):
 			result = val.toValue()
-		case .rangeValue(let val):
-			result = val.toValue()
 		case .pointValue(let val):
 			result = val.toValue()
 		case .sizeValue(let val):
 			result = val.toValue()
 		case .rectValue(let val):
 			result = val.toValue()
-		case .imageValue(let val):
-			result = val
 		case .objectValue(let val):
 			if let v = val {
 				result = v
@@ -691,16 +631,12 @@ public enum CNValue {
 			result = .numberValue(val)
 		} else if let val = obj as? String {
 			result = .stringValue(val)
-		} else if let val = obj as? NSRange {
-			result = .rangeValue(val)
 		} else if let val = obj as? CGPoint {
 			result = .pointValue(val)
 		} else if let val = obj as? CGSize {
 			result = .sizeValue(val)
 		} else if let val = obj as? CGRect {
 			result = .rectValue(val)
-		} else if let val = obj as? CNImage {
-			result = .imageValue(val)
 		} else if let val = obj as? CNRecord {
 			result = .recordValue(val)
 		} else if let val = obj as? CNValueSegment {
@@ -756,10 +692,6 @@ public enum CNValue {
 				case CNEnum.ClassName:
 					if let eval = CNEnum.fromValue(value: dict) {
 						result = .enumValue(eval)
-					}
-				case NSRange.ClassName:
-					if let range = NSRange.fromValue(value: dict) {
-						result = .rangeValue(range)
 					}
 				case CNValueSet.ClassName:
 					if let val = CNValueSet.fromValue(value: dict) {
