@@ -45,8 +45,6 @@ private func boolInDictionary(dictionary dict: Dictionary<String, CNValue>, forK
 private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGPoint? {
 	if let val = dict[key] {
 		switch val {
-		case .pointValue(let pt):
-			return pt
 		case .dictionaryValue(let dict):
 			return CGPoint.fromValue(value: dict)
 		default:
@@ -59,8 +57,6 @@ private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, for
 private func sizeInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGSize? {
 	if let val = dict[key] {
 		switch val {
-		case .sizeValue(let size):
-			return size
 		case .dictionaryValue(let dict):
 			return CGSize.fromValue(value: dict)
 		default:
@@ -244,6 +240,14 @@ public class CNVectorPath: CNPathObject
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
+	public static func fromValue(value val: CNValue) -> CNVectorPath? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorPath? {
 		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
 			if let pointsval = val["points"] {
@@ -262,8 +266,6 @@ public class CNVectorPath: CNPathObject
 			var result: Array<CGPoint> = []
 			for elm in elms {
 				switch elm {
-				case .pointValue(let pt):
-					result.append(pt)
 				case .dictionaryValue(let dict):
 					if let pt = CGPoint.fromValue(value: dict) {
 						result.append(pt)
@@ -334,6 +336,14 @@ public class CNVectorRect: CNPathObject
 		endPoint	= CGPoint.zero
 		isRounded	= isrnd
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
+	}
+
+	public static func fromValue(value val: CNValue) -> CNVectorRect? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
 	}
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorRect? {
@@ -453,6 +463,14 @@ public class CNVectorOval: CNPathObject
 		super.init(lineWidth: width, doFill: fill, strokeColor: scolor, fillColor: fcolor)
 	}
 
+	public static func fromValue(value val: CNValue) -> CNVectorOval? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorOval? {
 		if let (lwidth, dofill, fcolor, scolor) = CNVectorObject.decode(value: val) {
 			if let center = pointInDictionary(dictionary: val, forKey: "center"),
@@ -526,6 +544,14 @@ public class CNVectorString: CNVectorObject
 		font	    		= fnt
 		mAttributedString	= nil
 		super.init(lineWidth: 1.0, doFill: false, strokeColor: col, fillColor: CNColor.clear)
+	}
+
+	public static func fromValue(value val: CNValue) -> CNVectorString? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
 	}
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorString? {

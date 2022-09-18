@@ -62,18 +62,6 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toString(), let s1 = cval1.toString() {
 			result = s0.compare(s1)
 		}
-	case .pointType:
-		if let s0 = cval0.toPoint(), let s1 = cval1.toPoint() {
-			result = compare(point0: s0, point1: s1)
-		}
-	case .sizeType:
-		if let s0 = cval0.toSize(), let s1 = cval1.toSize() {
-			result = compare(size0: s0, size1: s1)
-		}
-	case .rectType:
-		if let s0 = cval0.toRect(), let s1 = cval1.toRect() {
-			result = compare(rect0: s0, rect1: s1)
-		}
 	case .enumType:
 		/* Cast operation replace this type */
 		CNLog(logLevel: .error, message: "Failed to compare enum", atFunction: #function, inFile: #file)
@@ -131,45 +119,6 @@ private func compare(bool0 s0: Bool, bool1 s1: Bool) -> ComparisonResult {
 		result = .orderedDescending
 	} else {       // s0:false, s1: true
 		result = .orderedAscending
-	}
-	return result
-}
-
-private func compare(point0 s0: CGPoint, point1 s1: CGPoint) -> ComparisonResult {
-	let result: ComparisonResult
-	switch compare(float0: s0.x, float1: s1.x) {
-	case .orderedAscending:
-		result = .orderedAscending
-	case .orderedDescending:
-		result = .orderedDescending
-	case .orderedSame:
-		result = compare(float0: s0.y, float1: s1.y)
-	}
-	return result
-}
-
-private func compare(size0 s0: CGSize, size1 s1: CGSize) -> ComparisonResult {
-	let result: ComparisonResult
-	switch compare(float0: s0.width, float1: s1.width) {
-	case .orderedAscending:
-		result = .orderedAscending
-	case .orderedDescending:
-		result = .orderedDescending
-	case .orderedSame:
-		result = compare(float0: s0.height, float1: s1.height)
-	}
-	return result
-}
-
-private func compare(rect0 s0: CGRect, rect1 s1: CGRect) -> ComparisonResult {
-	let result: ComparisonResult
-	switch compare(point0: s0.origin, point1: s1.origin) {
-	case .orderedAscending:
-		result = .orderedAscending
-	case .orderedDescending:
-		result = .orderedDescending
-	case .orderedSame:
-		result = compare(size0: s0.size, size1: s1.size)
 	}
 	return result
 }

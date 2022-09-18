@@ -23,6 +23,14 @@ public class CNValueSet
 		return false
 	}
 
+	public static func fromValue(value val: CNValue) -> CNValue? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValue? {
 		guard CNValue.hasClassName(inValue: val, className: CNValueSet.ClassName) else {
 			return nil

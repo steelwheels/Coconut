@@ -112,6 +112,14 @@ public class CNStorageRecord: CNRecord
 		return result
 	}
 
+	public static func fromValue(value val: CNValue) -> CNRecord? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
 		if CNValue.hasClassName(inValue: val, className: CNStorageRecord.ClassName) {
 			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)

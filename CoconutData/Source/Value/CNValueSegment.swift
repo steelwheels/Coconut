@@ -25,6 +25,14 @@ public class CNValueSegment
 		return val.description
 	}}
 
+	public static func fromValue(value val: CNValue) -> CNValueSegment? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNValueSegment? {
 		if CNValue.hasClassName(inValue: val, className: CNValueSegment.ClassName) {
 			if let rpathval = val[CNValueSegment.FileItem] {

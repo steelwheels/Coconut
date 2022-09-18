@@ -24,6 +24,14 @@ public class CNPointerValue
 		return self.toValue().description
 	}}
 
+	public static func fromValue(value val: CNValue) -> Result<CNPointerValue, NSError> {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return .failure(NSError.parseError(message: "Incorrect format for \(CNPointerValue.ClassName) class"))
+		}
+	}
+	
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> Result<CNPointerValue, NSError> {
 		if CNValue.hasClassName(inValue: val, className: CNPointerValue.ClassName) {
 			if let pathval = val[CNPointerValue.PathItem] {

@@ -36,7 +36,7 @@ public extension CNImage
 	func toValue() -> Dictionary<String, CNValue> {
 		let result: Dictionary<String, CNValue> = [
 			"class":	.stringValue(CNImage.ClassName),
-			"size":		.sizeValue(self.size)
+			"size":		.dictionaryValue(self.size.toValue())
 		]
 		return result
 	}

@@ -18,9 +18,6 @@ public enum CNValueType
 	case	boolType
 	case	numberType
 	case	stringType
-	case	pointType
-	case	sizeType
-	case	rectType
 	case	enumType(String)	// enum-type name
 	case	dictionaryType
 	case	arrayType
@@ -36,9 +33,6 @@ public enum CNValueType
 		case .boolType:			result = "Bool"
 		case .numberType:		result = "Number"
 		case .stringType:		result = "String"
-		case .pointType:		result = "Point"
-		case .sizeType:			result = "Size"
-		case .rectType:			result = "Rect"
 		case .enumType(let etype):	result = "Enum(\(etype))"
 		case .dictionaryType:		result = "Dictionary"
 		case .arrayType:		result = "Array"
@@ -59,9 +53,6 @@ public enum CNValueType
 		case "Bool":		result = .boolType
 		case "Number":		result = .numberType
 		case "String":		result = .stringType
-		case "Point":		result = .pointType
-		case "Size":		result = .sizeType
-		case "Rect":		result = .rectType
 		case "Enum":
 			if let param = paramp {
 				result = .enumType(param)
@@ -74,7 +65,7 @@ public enum CNValueType
 		case "Record":		result = .recordType
 		case "Object":		result = .objectType
 		case "Segment":		result = .segmentType
-		case "Pointer":		result = .pointType
+		case "Pointer":		result = .pointerType
 		default:		result = nil
 		}
 		return result
@@ -108,9 +99,6 @@ public enum CNValue {
 	case boolValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
 	case stringValue(_ val: String)
-	case pointValue(_ val: CGPoint)
-	case sizeValue(_ val: CGSize)
-	case rectValue(_ val: CGRect)
 	case enumValue(_ val: CNEnum)
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
@@ -127,9 +115,6 @@ public enum CNValue {
 			case .boolValue(_):		result = .boolType
 			case .numberValue(_):		result = .numberType
 			case .stringValue(_):		result = .stringType
-			case .pointValue(_):		result = .pointType
-			case .sizeValue(_):		result = .sizeType
-			case .rectValue(_):		result = .rectType
 			case .enumValue(let eobj):	result = .enumType(eobj.typeName)
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
@@ -170,36 +155,6 @@ public enum CNValue {
 		switch self {
 		case .stringValue(let obj):	result = obj
 		default:			result = nil
-		}
-		return result
-	}
-
-	public func toPoint() -> CGPoint? {
-		let result: CGPoint?
-		switch self {
-		case .pointValue(let pt):		result = pt
-		case .dictionaryValue(let dict):	result = CGPoint.fromValue(value: dict)
-		default:				result = nil
-		}
-		return result
-	}
-
-	public func toSize() -> CGSize? {
-		let result: CGSize?
-		switch self {
-		case .sizeValue(let size):		result = size
-		case .dictionaryValue(let dict):	result = CGSize.fromValue(value: dict)
-		default:				result = nil
-		}
-		return result
-	}
-
-	public func toRect() -> CGRect? {
-		let result: CGRect?
-		switch self {
-		case .rectValue(let rect):		result = rect
-		case .dictionaryValue(let dict):	result = CGRect.fromValue(value: dict)
-		default:				result = nil
 		}
 		return result
 	}
@@ -301,30 +256,6 @@ public enum CNValue {
 		}
 	}
 
-	public func pointProperty(identifier ident: String) -> CGPoint? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toPoint()
-		} else {
-			return nil
-		}
-	}
-
-	public func sizeProperty(identifier ident: String) -> CGSize? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toSize()
-		} else {
-			return nil
-		}
-	}
-
-	public func rectProperty(identifier ident: String) -> CGRect? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toRect()
-		} else {
-			return nil
-		}
-	}
-
 	public func dictionaryProperty(identifier ident: String) -> Dictionary<String, CNValue>? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toDictionary()
@@ -414,12 +345,6 @@ public enum CNValue {
 			result = val
 		case .enumValue(let val):
 			result = val.memberName
-		case .pointValue(let val):
-			result = val.description
-		case .sizeValue(let val):
-			result = val.description
-		case .rectValue(let val):
-			result = val.description
 		case .dictionaryValue(let val):
 			var line  = "["
 			var is1st = true
@@ -477,12 +402,6 @@ public enum CNValue {
 		case .enumValue(let val):
 			let txt = "\(val.typeName).\(val.memberName)"
 			result = CNTextLine(string: txt)
-		case .pointValue(let val):
-			result = dictionaryToScript(dictionary: val.toValue())
-		case .sizeValue(let val):
-			result = dictionaryToScript(dictionary: val.toValue())
-		case .rectValue(let val):
-			result = dictionaryToScript(dictionary: val.toValue())
 		case .dictionaryValue(let val):
 			result = dictionaryToScript(dictionary: val)
 		case .arrayValue(let val):
@@ -583,12 +502,6 @@ public enum CNValue {
 			result = val
 		case .enumValue(let val):
 			result = val.toValue()
-		case .pointValue(let val):
-			result = val.toValue()
-		case .sizeValue(let val):
-			result = val.toValue()
-		case .rectValue(let val):
-			result = val.toValue()
 		case .objectValue(let val):
 			if let v = val {
 				result = v
@@ -631,12 +544,6 @@ public enum CNValue {
 			result = .numberValue(val)
 		} else if let val = obj as? String {
 			result = .stringValue(val)
-		} else if let val = obj as? CGPoint {
-			result = .pointValue(val)
-		} else if let val = obj as? CGSize {
-			result = .sizeValue(val)
-		} else if let val = obj as? CGRect {
-			result = .rectValue(val)
 		} else if let val = obj as? CNRecord {
 			result = .recordValue(val)
 		} else if let val = obj as? CNValueSegment {
@@ -677,18 +584,6 @@ public enum CNValue {
 		if let clsval = dict["class"] {
 			if let clsname = clsval.toString() {
 				switch clsname {
-				case CGPoint.ClassName:
-					if let point = CGPoint.fromValue(value: dict) {
-						result = .pointValue(point)
-					}
-				case CGRect.ClassName:
-					if let rect = CGRect.fromValue(value: dict) {
-						result = .rectValue(rect)
-					}
-				case CGSize.ClassName:
-					if let size = CGSize.fromValue(value: dict) {
-						result = .sizeValue(size)
-					}
 				case CNEnum.ClassName:
 					if let eval = CNEnum.fromValue(value: dict) {
 						result = .enumValue(eval)

@@ -20,6 +20,14 @@ public struct CNOval
 		mRadius		= rad
 	}
 
+	public static func fromValue(value val: CNValue) -> CNOval? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNOval? {
 		if let centerval = val["center"], let radval = val["radius"] {
 			if let centerdict = centerval.toDictionary(), let radius = radval.toNumber() {

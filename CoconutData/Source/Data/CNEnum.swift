@@ -64,6 +64,14 @@ public struct CNEnum
 		return nil
 	}
 
+	public static func fromValue(value val: CNValue) -> CNEnum? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNEnum? {
 		if let typeval = val["type"], let membval = val["member"] {
 			if let typestr = typeval.toString(), let membstr = membval.toString() {

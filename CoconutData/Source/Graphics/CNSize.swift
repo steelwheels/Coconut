@@ -12,6 +12,14 @@ public extension CGSize
 {
 	static let ClassName = "size"
 
+	static func fromValue(value val: CNValue) -> CGSize? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	static func fromValue(value val: Dictionary<String, CNValue>) -> CGSize? {
 		if let wval = val["width"], let hval = val["height"] {
 			if let wnum = wval.toNumber(), let hnum = hval.toNumber() {

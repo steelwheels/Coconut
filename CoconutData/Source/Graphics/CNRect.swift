@@ -12,6 +12,14 @@ public extension CGRect
 {
 	static let ClassName = "rect"
 
+	static func fromValue(value val: CNValue) -> CGRect? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	static func fromValue(value val: Dictionary<String, CNValue>) -> CGRect? {
 		if let xval = val["x"], let yval = val["y"], let wval = val["width"], let hval = val["height"] {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber(), let wnum = wval.toNumber(), let hnum = hval.toNumber() {

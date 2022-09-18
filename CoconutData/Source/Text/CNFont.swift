@@ -15,6 +15,14 @@
 
 public extension CNFont
 {
+	static func fromValue(value val: CNValue) -> CNFont? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	static func fromValue(value val: Dictionary<String, CNValue>) -> CNFont? {
 		if let nameval = val["name"], let sizeval = val["size"] {
 			if let namestr = nameval.toString(), let sizenum = sizeval.toNumber() {

@@ -12,6 +12,14 @@ public extension CGPoint
 {
 	static let ClassName = "point"
 
+	static func fromValue(value val: CNValue) -> CGPoint? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	static func fromValue(value val: Dictionary<String, CNValue>) -> CGPoint? {
 		if let xval = val["x"], let yval = val["y"] {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber() {

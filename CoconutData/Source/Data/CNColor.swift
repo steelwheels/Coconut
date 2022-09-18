@@ -38,6 +38,14 @@ public extension CNColor
 		return result
 	}
 
+	static func fromValue(value val: CNValue) -> CNColor? {
+		if let dict = val.toDictionary() {
+			return fromValue(value: dict)
+		} else {
+			return nil
+		}
+	}
+
 	static func fromValue(value val: Dictionary<String, CNValue>) -> CNColor? {
 		if let rval = val["r"], let gval = val["g"], let bval = val["b"], let aval = val["a"] {
 			if let rnum = rval.toNumber(), let gnum = gval.toNumber(), let bnum = bval.toNumber(), let anum = aval.toNumber() {
