@@ -26,7 +26,6 @@ public enum CNValueType
 	case	dictionaryType
 	case	arrayType
 	case	setType
-	case	colorType
 	case	imageType
 	case	recordType
 	case	objectType
@@ -47,7 +46,6 @@ public enum CNValueType
 		case .dictionaryType:		result = "Dictionary"
 		case .arrayType:		result = "Array"
 		case .setType:			result = "Set"
-		case .colorType:		result = "Color"
 		case .imageType:		result = "Image"
 		case .recordType:		result = "Record"
 		case .objectType:		result = "Object"
@@ -78,7 +76,6 @@ public enum CNValueType
 		case "Dictionary":	result = .dictionaryType
 		case "Array":		result = .arrayType
 		case "Set":		result = .setType
-		case "Color":		result = .colorType
 		case "Image":		result = .imageType
 		case "Record":		result = .recordType
 		case "Object":		result = .objectType
@@ -125,7 +122,6 @@ public enum CNValue {
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
-	case colorValue(_ val: CNColor)
 	case imageValue(_ val: CNImage)
 	case recordValue(_ val: CNRecord)
 	case objectValue(_ val: NSObject?)	// will be null
@@ -147,7 +143,6 @@ public enum CNValue {
 			case .dictionaryValue(_):	result = .dictionaryType
 			case .arrayValue(_):		result = .arrayType
 			case .setValue(_):		result = .setType
-			case .colorValue(_):		result = .colorType
 			case .imageValue(_):		result = .imageType
 			case .recordValue(_):		result = .recordType
 			case .objectValue(_):		result = .objectType
@@ -262,16 +257,6 @@ public enum CNValue {
 		switch self {
 		case .setValue(let obj):	result = obj
 		default:			result = nil
-		}
-		return result
-	}
-
-	public func toColor() -> CNColor? {
-		let result: CNColor?
-		switch self {
-		case .colorValue(let col):		result = col
-		case .dictionaryValue(let dict):	result = CNColor.fromValue(value: dict)
-		default:				result = nil
 		}
 		return result
 	}
@@ -514,8 +499,6 @@ public enum CNValue {
 			}
 			line += "]"
 			result = line
-		case .colorValue(let val):
-			result = val.description
 		case .imageValue(let val):
 			result = val.description
 		case .recordValue(let val):
@@ -560,8 +543,6 @@ public enum CNValue {
 			result = arrayToScript(array: val)
 		case .setValue(let val):
 			result = setToScript(set: val)
-		case .colorValue(let val):
-			result = dictionaryToScript(dictionary: val.toValue())
 		case .imageValue(let val):
 			result = dictionaryToScript(dictionary: val.toValue())
 		case .recordValue(let val):
@@ -666,8 +647,6 @@ public enum CNValue {
 			result = val.toValue()
 		case .rectValue(let val):
 			result = val.toValue()
-		case .colorValue(let val):
-			result = val.toValue()
 		case .imageValue(let val):
 			result = val
 		case .objectValue(let val):
@@ -720,8 +699,6 @@ public enum CNValue {
 			result = .sizeValue(val)
 		} else if let val = obj as? CGRect {
 			result = .rectValue(val)
-		} else if let val = obj as? CNColor {
-			result = .colorValue(val)
 		} else if let val = obj as? CNImage {
 			result = .imageValue(val)
 		} else if let val = obj as? CNRecord {
@@ -775,10 +752,6 @@ public enum CNValue {
 				case CGSize.ClassName:
 					if let size = CGSize.fromValue(value: dict) {
 						result = .sizeValue(size)
-					}
-				case CNColor.ClassName:
-					if let color = CNColor.fromValue(value: dict) {
-						result = .colorValue(color)
 					}
 				case CNEnum.ClassName:
 					if let eval = CNEnum.fromValue(value: dict) {

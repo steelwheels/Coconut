@@ -93,10 +93,6 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .colorType:
-		if let s0 = cval0.toColor(), let s1 = cval1.toColor() {
-			result = compare(color0: s0, color1: s1)
-		}
 	case .imageType:
 		CNLog(logLevel: .error, message: "Failed to compare image", atFunction: #function, inFile: #file)
 	case .recordType:

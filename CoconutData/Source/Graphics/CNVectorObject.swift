@@ -42,20 +42,6 @@ private func boolInDictionary(dictionary dict: Dictionary<String, CNValue>, forK
 	return nil
 }
 
-private func colorInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CNColor? {
-	if let val = dict[key] {
-		switch val {
-		case .colorValue(let col):
-			return col
-		case .dictionaryValue(let dict):
-			return CNColor.fromValue(value: dict)
-		default:
-			break
-		}
-	}
-	return nil
-}
-
 private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGPoint? {
 	if let val = dict[key] {
 		switch val {
@@ -77,6 +63,18 @@ private func sizeInDictionary(dictionary dict: Dictionary<String, CNValue>, forK
 			return size
 		case .dictionaryValue(let dict):
 			return CGSize.fromValue(value: dict)
+		default:
+			break
+		}
+	}
+	return nil
+}
+
+private func objectInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> NSObject? {
+	if let val = dict[key] {
+		switch val {
+		case .objectValue(let obj):
+			return obj
 		default:
 			break
 		}
@@ -196,11 +194,11 @@ open class CNVectorObject
 			CNLog(logLevel: .error, message: "The \"doFill\" property is not found")
 			return nil
 		}
-		guard let fcolor = colorInDictionary(dictionary: val, forKey: "fillColor") else {
+		guard let fcolor = objectInDictionary(dictionary: val, forKey: "fillColor") as? CNColor else {
 			CNLog(logLevel: .error, message: "The \"fillColor\" property is not found")
 			return nil
 		}
-		guard let scolor = colorInDictionary(dictionary: val, forKey: "strokeColor") else {
+		guard let scolor = objectInDictionary(dictionary: val, forKey: "strokeColor") as? CNColor else {
 			CNLog(logLevel: .error, message: "The \"strokeColor\" property is not found")
 			return nil
 		}
