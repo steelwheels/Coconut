@@ -39,7 +39,7 @@ private func parseValue(string str: String, console cons: CNConsole) -> Bool {
 
 private func compareValues(console cons: CNConsole) -> Bool {
 	var result = true
-	result = compareValue(value0: .nullValue, value1: .nullValue, expected: .orderedSame, console: cons) && result
+	result = compareValue(value0: CNValue.null, value1:  CNValue.null, expected: .orderedSame, console: cons) && result
 	result = compareValue(value0: .numberValue(NSNumber(floatLiteral: 1.23)),
 			      value1: .numberValue(NSNumber(floatLiteral: 1.23)),
 			      expected: .orderedSame, console: cons) && result

@@ -29,7 +29,7 @@ public class UTNestedThread: CNThread {
 		if mCount < 3 {
 			let newthread = UTNestedThread(processManager: procmgr, input: self.console.inputFile, output: self.console.outputFile, error: self.console.errorFile, environment: self.environment, count: mCount + 1)
 			//self.console.print(string: "testNestedThread\(mCount): 2.1 mainOperation/main/start\n")
-			newthread.start(argument: .nullValue)
+			newthread.start(argument: CNValue.null)
 			//self.console.print(string: "testNestedThread\(mCount): 2.2 mainOperation/main/waitUntilExit\n")
 			while newthread.status == .Running {
 				/* Wait until exit */
@@ -65,7 +65,7 @@ private func testSimpleThread(processManager procmgr: CNProcessManager, environm
 				    output: 		cons.outputFile,
 				    error:  		cons.errorFile,
 				    environment: 	env)
-	thread.start(argument: .nullValue)
+	thread.start(argument:  CNValue.null)
 	while thread.status == .Running {
 		/* wait until exit */
 	}
@@ -83,7 +83,7 @@ private func testNestedThread(processManager procmgr: CNProcessManager, environm
 				    error:  	cons.errorFile,
 				    environment: env,
 				    count: 	 0)
-	thread.start(argument: .nullValue)
+	thread.start(argument: CNValue.null)
 	while thread.status == .Running {
 		/* wait until exit */
 	}

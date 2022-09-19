@@ -41,40 +41,66 @@ public indirect enum CNValueType
 		return result
 	}}
 
-	/*
-	public static func decode(string str: String) -> CNValueType? {
-		let (typename, paramp) = CNValueType.decodeType(string: str)
-
-		let result: CNValueType?
-		switch typename {
-		case "any":		result = .anyType
-		case "Bool":		result = .boolType
-		case "Number":		result = .numberType
-		case "String":		result = .stringType
-		case "Enum":
-			if let param = paramp {
-				result = .enumType(param)
-			} else {
-				result = nil
-			}
-		case "Dictionary":	result = .dictionaryType
-		case "Array":		result = .arrayType
-		case "Set":		result = .setType
-		case "Object":		result = .objectType
-		default:		result = nil
-		}
+	public func encode() -> String {
+		let result: String
+		switch self {
+		case .anyType:				result = "?"
+		case .boolType:				result = "b"
+		case .numberType:			result = "n"
+		case .stringType:			result = "s"
+		case .enumType(let etype):		result = "e\(etype)"
+		case .dictionaryType(let etype):	result = "d" + etype.encode()
+		case .arrayType(let etype):		result = "a" + etype.encode()
+		case .setType(let etype):		result = "t" + etype.encode()
+		case .objectType:			result = "o"
+  		}
 		return result
-	}*/
+	}
 
-	private static func decodeType(string str: String) -> (String, String?) { // (type-name, parameter)
-		let substrs1 = str.split(separator: "(")
-		if substrs1.count >= 2 {
-			let substrs2 = substrs1[1].split(separator: ")")
-			if substrs2.count >= 2 {
-				return (String(substrs1[0]), String(substrs2[0]))
-			}
+	public static func decode(code cd: String) -> Result<CNValueType, NSError> {
+		guard !cd.isEmpty else {
+			return .failure(NSError.parseError(message: "lack of code"))
 		}
-		return (str, nil)
+		switch cd.first {
+		case "?":	return .success(.anyType)
+		case "b":	return .success(.boolType)
+		case "n":	return .success(.numberType)
+		case "s":	return .success(.stringType)
+		case "e":
+			var ename = cd ; ename.removeFirst()	// remove first "e"
+			if ename.isEmpty {
+				return .failure(NSError.parseError(message: "No enum name"))
+			} else {
+				return .success(.enumType(ename))
+			}
+		case "d":
+			var rest = cd ; rest.removeFirst()	// remove first "d"
+			switch decode(code: rest) {
+			case .success(let etype):
+				return .success(.dictionaryType(etype))
+			case .failure(let err):
+				return .failure(err)
+			}
+		case "a":
+			var rest = cd ; rest.removeFirst()	// remove first "a"
+			switch decode(code: rest) {
+			case .success(let etype):
+				return .success(.arrayType(etype))
+			case .failure(let err):
+				return .failure(err)
+			}
+		case "t":
+			var rest = cd ; rest.removeFirst()	// remove first "t"
+			switch decode(code: rest) {
+			case .success(let etype):
+				return .success(.setType(etype))
+			case .failure(let err):
+				return .failure(err)
+			}
+		case "o":	return .success(.objectType)
+		default:
+			return .failure(NSError.parseError(message: "Unknown type code: \(String(describing: cd.first))"))
+		}
 	}
 
 	public func compare(_ dst: CNValueType) -> ComparisonResult {

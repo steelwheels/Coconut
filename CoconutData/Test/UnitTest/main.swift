@@ -126,6 +126,9 @@ results.append(UTResult(name: "text", result: testText(console: cons)))
 cons.print(string: "* vectorGraphics\n")
 results.append(UTResult(name: "vectorGraphics", result: testVectorGraphics(console: cons)))
 
+cons.print(string: "* testValueType\n")
+results.append(UTResult(name: "valueType", result: testValueType(console: cons)))
+
 var summary = true
 for res in results {
 	if res.result {
