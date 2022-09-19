@@ -36,10 +36,14 @@ public class CNMutablePointerValue: CNMutableValue
 		if path.count == 0 {
 			/* Overide this value */
 			switch val {
-			case .pointerValue(let pval):
-				mPointerValue = pval
-				root.isDirty  = true
-				result = nil
+			case .dictionaryValue(let dict):
+				if let ptr = CNPointerValue.fromValue(value: dict) {
+					mPointerValue = ptr
+					root.isDirty  = true
+					result = nil
+				} else {
+					result = noPointedValueError(path: path, place: #function)
+				}
 			default:
 				result = noPointedValueError(path: path, place: #function)
 			}
@@ -120,7 +124,7 @@ public class CNMutablePointerValue: CNMutableValue
 	}
 
 	public override func toValue() -> CNValue {
-		return .pointerValue(mPointerValue)
+		return .dictionaryValue(mPointerValue.toValue())
 	}
 }
 

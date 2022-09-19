@@ -162,18 +162,20 @@ public class CNMutableValue
 			}
 			result = newset
 		case .dictionaryValue(let dict):
-			let newdict = CNMutableDictionaryValue(sourceDirectory: srcdir, cacheDirectory: cachedir)
-			for (key, elm) in dict {
-				let newelm = valueToMutableValue(from: elm, sourceDirectory: srcdir, cacheDirectory: cachedir)
-				newdict.set(value: newelm, forKey: key)
+			if let seg = CNValueSegment.fromValue(value: dict) {
+				let newseg = CNMutableValueSegment(value: seg, sourceDirectory: srcdir, cacheDirectory: cachedir)
+				result = newseg
+			} else if let ptr = CNPointerValue.fromValue(value: dict) {
+				let newptr = CNMutablePointerValue(pointer: ptr, sourceDirectory: srcdir, cacheDirectory: cachedir)
+				result = newptr
+			} else {
+				let newdict = CNMutableDictionaryValue(sourceDirectory: srcdir, cacheDirectory: cachedir)
+				for (key, elm) in dict {
+					let newelm = valueToMutableValue(from: elm, sourceDirectory: srcdir, cacheDirectory: cachedir)
+					newdict.set(value: newelm, forKey: key)
+				}
+				result = newdict
 			}
-			result = newdict
-		case .segmentValue(let ref):
-			let newref = CNMutableValueSegment(value: ref, sourceDirectory: srcdir, cacheDirectory: cachedir)
-			result = newref
-		case .pointerValue(let ptr):
-			let newptr = CNMutablePointerValue(pointer: ptr, sourceDirectory: srcdir, cacheDirectory: cachedir)
-			result = newptr
 		default:
 			let newscalar = CNMutableScalarValue(scalarValue: val, sourceDirectory: srcdir, cacheDirectory: cachedir)
 			result = newscalar

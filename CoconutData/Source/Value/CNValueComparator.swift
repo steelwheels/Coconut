@@ -77,18 +77,8 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .recordType:
-		CNLog(logLevel: .error, message: "Failed to compare record", atFunction: #function, inFile: #file)
 	case .objectType:
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
-	case .segmentType:
-		if let s0 = cval0.toSegment(), let s1 = cval1.toSegment() {
-			result = s0.compare(s1)
-		}
-	case .pointerType:
-		if let s0 = cval0.toPointer(), let s1 = cval1.toPointer() {
-			result = s0.compare(s1)
-		}
 	}
 
 	if let res = result {

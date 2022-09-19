@@ -24,28 +24,29 @@ public class CNPointerValue
 		return self.toValue().description
 	}}
 
-	public static func fromValue(value val: CNValue) -> Result<CNPointerValue, NSError> {
+	public static func fromValue(value val: CNValue) -> CNPointerValue? {
 		if let dict = val.toDictionary() {
 			return fromValue(value: dict)
 		} else {
-			return .failure(NSError.parseError(message: "Incorrect format for \(CNPointerValue.ClassName) class"))
+			return nil
 		}
 	}
 	
-	public static func fromValue(value val: Dictionary<String, CNValue>) -> Result<CNPointerValue, NSError> {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNPointerValue? {
 		if CNValue.hasClassName(inValue: val, className: CNPointerValue.ClassName) {
 			if let pathval = val[CNPointerValue.PathItem] {
 				if let pathstr = pathval.toString() {
 					switch CNValuePath.pathExpression(string: pathstr) {
 					case .success(let path):
-						return .success(CNPointerValue(path: path))
+						return CNPointerValue(path: path)
 					case .failure(let err):
-						return .failure(err)
+						CNLog(logLevel: .error, message: err.toString())
+						return nil
 					}
 				}
 			}
 		}
-		return .failure(NSError.parseError(message: "Incorrect format for \(CNPointerValue.ClassName) class"))
+		return nil
 	}
 
 	func toValue() -> Dictionary<String, CNValue> {

@@ -117,7 +117,7 @@ public class CNMutableValueSegment: CNMutableValue
 	}
 
 	public override func toValue() -> CNValue {
-		return .segmentValue(mSegmentValue)
+		return .dictionaryValue(mSegmentValue.toValue())
 	}
 }
 

@@ -157,7 +157,7 @@ public class CNStorageTable: CNTable
 			return
 		}
 		let elms: Array<CNValuePath.Element> = [.member(CNStorageTable.RecordsItem)]
-		if !mStorage.append(value: .pointerValue(ptr), forPath: CNValuePath(identifier: ident, elements: elms)) {
+		if !mStorage.append(value: .dictionaryValue(ptr.toValue()), forPath: CNValuePath(identifier: ident, elements: elms)) {
 			CNLog(logLevel: .error, message: "Failed to append pointer", atFunction: #function, inFile: #file)
 		}
 	}
@@ -284,10 +284,6 @@ public class CNStorageTable: CNTable
 				for elm in arr {
 					if let dict = elm.toDictionary() {
 						result.append(dict)
-					} else if let ptr = elm.toPointer() {
-						if let dict = pointedRecord(by: ptr) {
-							result.append(dict)
-						}
 					} else {
 						CNLog(logLevel: .error, message: "Record value must be dictionary", atFunction: #function, inFile: #file)
 					}

@@ -61,7 +61,7 @@ public class CNValueParser
 		let dst: CNValue
 		switch src {
 		case .boolValue(_), .numberValue(_), .stringValue(_), .setValue(_),
-		     .enumValue(_), .recordValue(_), .objectValue(_), .segmentValue(_), .pointerValue(_):
+		     .enumValue(_), .objectValue(_):
 			dst = src
 		case .dictionaryValue(let dict):
 			if let obj = CNValue.dictionaryToValue(dictionary: dict) {
