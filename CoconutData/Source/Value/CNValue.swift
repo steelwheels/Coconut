@@ -13,37 +13,41 @@ import Foundation
 /**
  * The data to present JSValue as native data
  */
-public enum CNValueType
+public indirect enum CNValueType
 {
+	case	anyType
 	case	boolType
 	case	numberType
 	case	stringType
-	case	enumType(String)	// enum-type name
-	case	dictionaryType
-	case	arrayType
-	case	setType
+	case	enumType(String)		// enum-type name
+	case	dictionaryType(CNValueType)	// element type
+	case	arrayType(CNValueType)		// element type
+	case	setType(CNValueType)		// element type
 	case	objectType
 
 	public var description: String { get {
 		let result: String
 		switch self {
-		case .boolType:			result = "Bool"
-		case .numberType:		result = "Number"
-		case .stringType:		result = "String"
-		case .enumType(let etype):	result = "Enum(\(etype))"
-		case .dictionaryType:		result = "Dictionary"
-		case .arrayType:		result = "Array"
-		case .setType:			result = "Set"
-		case .objectType:		result = "Object"
+		case .anyType:				result = "any"
+		case .boolType:				result = "boolean"
+		case .numberType:			result = "number"
+		case .stringType:			result = "string"
+		case .enumType(let etype):		result = etype
+		case .dictionaryType(let etype):	result = "[key: string]:" + etype.description
+		case .arrayType(let etype):		result = etype.description + "[]"
+		case .setType(let etype):		result = "Set<\(etype)>"
+		case .objectType:			result = "Object"
 		}
 		return result
 	}}
 
+	/*
 	public static func decode(string str: String) -> CNValueType? {
 		let (typename, paramp) = CNValueType.decodeType(string: str)
 
 		let result: CNValueType?
 		switch typename {
+		case "any":		result = .anyType
 		case "Bool":		result = .boolType
 		case "Number":		result = .numberType
 		case "String":		result = .stringType
@@ -60,7 +64,7 @@ public enum CNValueType
 		default:		result = nil
 		}
 		return result
-	}
+	}*/
 
 	private static func decodeType(string str: String) -> (String, String?) { // (type-name, parameter)
 		let substrs1 = str.split(separator: "(")
@@ -104,9 +108,9 @@ public enum CNValue {
 			case .numberValue(_):		result = .numberType
 			case .stringValue(_):		result = .stringType
 			case .enumValue(let eobj):	result = .enumType(eobj.typeName)
-			case .dictionaryValue(_):	result = .dictionaryType
-			case .arrayValue(_):		result = .arrayType
-			case .setValue(_):		result = .setType
+			case .dictionaryValue(_):	result = .dictionaryType(.anyType)
+			case .arrayValue(_):		result = .arrayType(.anyType)
+			case .setValue(_):		result = .setType(.anyType)
 			case .objectValue(_):		result = .objectType
 			}
 			return result
