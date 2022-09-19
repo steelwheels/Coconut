@@ -10,10 +10,16 @@ import Foundation
 
 public func testValueType(console cons: CNConsole) -> Bool
 {
+	let etable = CNEnumTable.currentEnumTable()
+	guard let etype = etable.search(byTypeName: "Axis") else {
+		cons.print(string: "Error failed to get enum type for Axis")
+		return false
+	}
+
 	let res0 = valueTypeTest(valueType: .numberType, console: cons)
 	let res1 = valueTypeTest(valueType: .arrayType(.stringType), console: cons)
-	let res2 = valueTypeTest(valueType: .enumType("Axis"), console: cons)
-	let res3 = valueTypeTest(valueType: .dictionaryType(.enumType("Home")), console: cons)
+	let res2 = valueTypeTest(valueType: .enumType(etype), console: cons)
+	let res3 = valueTypeTest(valueType: .dictionaryType(.enumType(etype)), console: cons)
 
 	let result = res0 && res1 && res2 && res3
 	return result

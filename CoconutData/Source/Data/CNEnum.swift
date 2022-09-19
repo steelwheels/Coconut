@@ -19,6 +19,10 @@ public struct CNEnum
 	private weak var	mEnumType:	CNEnumType?
 	private var 		mMemberName:	String
 
+	public var enumType: CNEnumType? { get {
+		return mEnumType
+	}}
+
 	public var memberName: String { get {
 		return mMemberName
 	}}

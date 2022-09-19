@@ -19,11 +19,12 @@ public indirect enum CNValueType
 	case	boolType
 	case	numberType
 	case	stringType
-	case	enumType(String)		// enum-type name
+	case	enumType(CNEnumType)		// enum-type
 	case	dictionaryType(CNValueType)	// element type
 	case	arrayType(CNValueType)		// element type
 	case	setType(CNValueType)		// element type
 	case	objectType
+	case	instanceType(String)		// class name
 
 	public var description: String { get {
 		let result: String
@@ -32,11 +33,12 @@ public indirect enum CNValueType
 		case .boolType:				result = "boolean"
 		case .numberType:			result = "number"
 		case .stringType:			result = "string"
-		case .enumType(let etype):		result = etype
+		case .enumType(let etype):		result = etype.typeName
 		case .dictionaryType(let etype):	result = "[key: string]:" + etype.description
 		case .arrayType(let etype):		result = etype.description + "[]"
 		case .setType(let etype):		result = "Set<\(etype)>"
 		case .objectType:			result = "Object"
+		case .instanceType(let clsname):	result = clsname
 		}
 		return result
 	}}
@@ -48,11 +50,12 @@ public indirect enum CNValueType
 		case .boolType:				result = "b"
 		case .numberType:			result = "n"
 		case .stringType:			result = "s"
-		case .enumType(let etype):		result = "e\(etype)"
+		case .enumType(let etype):		result = "e\(etype.typeName)"
 		case .dictionaryType(let etype):	result = "d" + etype.encode()
 		case .arrayType(let etype):		result = "a" + etype.encode()
 		case .setType(let etype):		result = "t" + etype.encode()
 		case .objectType:			result = "o"
+		case .instanceType(let clsname):	result = "i\(clsname)"
   		}
 		return result
 	}
@@ -71,7 +74,12 @@ public indirect enum CNValueType
 			if ename.isEmpty {
 				return .failure(NSError.parseError(message: "No enum name"))
 			} else {
-				return .success(.enumType(ename))
+				let etable = CNEnumTable.currentEnumTable()
+				if let etype = etable.search(byTypeName: ename) {
+					return .success(.enumType(etype))
+				} else {
+					return .failure(NSError.parseError(message: "Unknown enum type name: \(ename)"))
+				}
 			}
 		case "d":
 			var rest = cd ; rest.removeFirst()	// remove first "d"
@@ -98,6 +106,13 @@ public indirect enum CNValueType
 				return .failure(err)
 			}
 		case "o":	return .success(.objectType)
+		case "i":
+			var iname = cd ; iname.removeFirst()	// remove first "i"
+			if iname.isEmpty {
+				return .failure(NSError.parseError(message: "No instance name"))
+			} else {
+				return .success(.instanceType(iname))
+			}
 		default:
 			return .failure(NSError.parseError(message: "Unknown type code: \(String(describing: cd.first))"))
 		}
@@ -133,11 +148,17 @@ public enum CNValue {
 			case .boolValue(_):		result = .boolType
 			case .numberValue(_):		result = .numberType
 			case .stringValue(_):		result = .stringType
-			case .enumValue(let eobj):	result = .enumType(eobj.typeName)
 			case .dictionaryValue(_):	result = .dictionaryType(.anyType)
 			case .arrayValue(_):		result = .arrayType(.anyType)
 			case .setValue(_):		result = .setType(.anyType)
 			case .objectValue(_):		result = .objectType
+			case .enumValue(let eobj):
+				if let etype = eobj.enumType {
+					result = .enumType(etype)
+				} else {
+					CNLog(logLevel: .error, message: "Failed to get enum type (Can not happen)", atFunction: #function, inFile: #file)
+					result = .anyType
+				}
 			}
 			return result
 		}
