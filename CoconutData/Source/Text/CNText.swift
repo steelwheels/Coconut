@@ -12,6 +12,7 @@ public protocol CNText
 {
 	func append(string src: String)
 	func prepend(string src: String)
+	func isEmpty() -> Bool
 	func toStrings(indent idt: Int) -> Array<String>
 }
 
@@ -84,6 +85,10 @@ public class CNTextLine: CNText
 		mLines = merge(lines0: lines, lines1: mLines)
 	}
 
+	public func isEmpty() -> Bool {
+		return mLines.isEmpty
+	}
+
 	private func merge(lines0 ln0: Array<String>, lines1 ln1: Array<String>) -> Array<String> {
 		if ln0.count == 0 {
 			return ln1
@@ -134,6 +139,10 @@ public class CNLabeledText: CNText
 
 	public func prepend(string src: String) {
 		mText.prepend(string: src)
+	}
+
+	public func isEmpty() -> Bool {
+		return mLabel.isEmpty && mText.isEmpty()
 	}
 
 	public func toStrings(indent idt: Int) -> Array<String> {
@@ -187,6 +196,10 @@ public class CNTextList: CNText
 			let line = CNTextLine(string: src)
 			mItems.append(line)
 		}
+	}
+
+	public func isEmpty() -> Bool {
+		return mItems.isEmpty
 	}
 
 	public func toStrings(indent idt: Int) -> Array<String> {
@@ -253,6 +266,10 @@ public class CNTextSection: CNText
 			let newtxt = CNTextLine(string: src)
 			self.insert(text: newtxt)
 		}
+	}
+
+	public func isEmpty() -> Bool {
+		return self.header.isEmpty && self.footer.isEmpty && mContents.isEmpty
 	}
 
 	public func toStrings(indent idt: Int) -> Array<String> {
@@ -396,6 +413,10 @@ public class CNTextTable: CNText
 			newrec.prepend(string: src)
 			mRecords.append(newrec)
 		}
+	}
+
+	public func isEmpty() -> Bool {
+		return mRecords.isEmpty
 	}
 
 	public var maxColumnCount: Int { get {
