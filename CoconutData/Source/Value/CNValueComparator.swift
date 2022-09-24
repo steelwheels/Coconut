@@ -79,7 +79,7 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .objectType, .instanceType(_):
+	case .objectType(_):
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 	}
 

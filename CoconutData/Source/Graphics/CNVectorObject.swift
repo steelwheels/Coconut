@@ -66,7 +66,7 @@ private func sizeInDictionary(dictionary dict: Dictionary<String, CNValue>, forK
 	return nil
 }
 
-private func objectInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> NSObject? {
+private func objectInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> AnyObject? {
 	if let val = dict[key] {
 		switch val {
 		case .objectValue(let obj):

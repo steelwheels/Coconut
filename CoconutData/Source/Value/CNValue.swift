@@ -23,8 +23,7 @@ public indirect enum CNValueType
 	case	dictionaryType(CNValueType)	// element type
 	case	arrayType(CNValueType)		// element type
 	case	setType(CNValueType)		// element type
-	case	objectType
-	case	instanceType(String)		// class name
+	case	objectType(String?)		// class name or unkown
 
 	public var description: String { get {
 		let result: String
@@ -38,7 +37,6 @@ public indirect enum CNValueType
 		case .arrayType(let etype):		result = etype.description + "[]"
 		case .setType(let etype):		result = "Set<\(etype)>"
 		case .objectType:			result = "Object"
-		case .instanceType(let clsname):	result = clsname
 		}
 		return result
 	}}
@@ -54,8 +52,7 @@ public indirect enum CNValueType
 		case .dictionaryType(let etype):	result = "d" + etype.encode()
 		case .arrayType(let etype):		result = "a" + etype.encode()
 		case .setType(let etype):		result = "t" + etype.encode()
-		case .objectType:			result = "o"
-		case .instanceType(let clsname):	result = "i\(clsname)"
+		case .objectType(let clsname):		result = "o" + (clsname ?? "?")
   		}
 		return result
 	}
@@ -105,13 +102,14 @@ public indirect enum CNValueType
 			case .failure(let err):
 				return .failure(err)
 			}
-		case "o":	return .success(.objectType)
-		case "i":
-			var iname = cd ; iname.removeFirst()	// remove first "i"
-			if iname.isEmpty {
+		case "o":
+			var oname = cd ; oname.removeFirst()	// remove first "o"
+			if oname.isEmpty {
 				return .failure(NSError.parseError(message: "No instance name"))
+			} else if oname == "?" {
+				return .success(.objectType(nil))
 			} else {
-				return .success(.instanceType(iname))
+				return .success(.objectType(oname))
 			}
 		default:
 			return .failure(NSError.parseError(message: "Unknown type code: \(String(describing: cd.first))"))
@@ -139,7 +137,7 @@ public enum CNValue {
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
-	case objectValue(_ val: NSObject?)	// will be null
+	case objectValue(_ val: AnyObject)	// will be null
 
 	public var valueType: CNValueType {
 		get {
@@ -151,7 +149,9 @@ public enum CNValue {
 			case .dictionaryValue(_):	result = .dictionaryType(.anyType)
 			case .arrayValue(_):		result = .arrayType(.anyType)
 			case .setValue(_):		result = .setType(.anyType)
-			case .objectValue(_):		result = .objectType
+			case .objectValue(let obj):
+				let name = String(describing: type(of: obj))
+				result = .objectType(name)
 			case .enumValue(let eobj):
 				if let etype = eobj.enumType {
 					result = .enumType(etype)
@@ -165,7 +165,7 @@ public enum CNValue {
 	}
 
 	public static var null: CNValue { get {
-		return CNValue.objectValue(nil)
+		return CNValue.objectValue(NSNull())
 	}}
 
 	public func toBool() -> Bool? {
@@ -232,8 +232,8 @@ public enum CNValue {
 		return result
 	}
 
-	public func toObject() -> NSObject? {
-		let result: NSObject?
+	public func toObject() -> AnyObject? {
+		let result: AnyObject?
 		switch self {
 		case .objectValue(let obj):	result = obj
 		default:			result = nil
@@ -289,7 +289,7 @@ public enum CNValue {
 		}
 	}
 
-	public func objectProperty(identifier ident: String) -> NSObject? {
+	public func objectProperty(identifier ident: String) -> AnyObject? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toObject()
 		} else {
@@ -476,11 +476,7 @@ public enum CNValue {
 		case .enumValue(let val):
 			result = val.toValue()
 		case .objectValue(let val):
-			if let v = val {
-				result = v
-			} else {
-				result = NSNull()
-			}
+			result = val
 		case .dictionaryValue(let dict):
 			var newdict: Dictionary<String, Any> = [:]
 			for (key, elm) in dict {
@@ -503,10 +499,10 @@ public enum CNValue {
 		return result
 	}
 
-	public static func anyToValue(object obj: Any) -> CNValue? {
-		var result: CNValue? = nil
+	public static func anyToValue(object obj: Any) -> CNValue {
+		var result: CNValue
 		if let _ = obj as? NSNull {
-			result = .objectValue(nil)
+			result = CNValue.null
 		} else if let val = obj as? NSNumber {
 			result = .numberValue(val)
 		} else if let val = obj as? String {
@@ -514,9 +510,8 @@ public enum CNValue {
 		} else if let val = obj as? Dictionary<String, Any> {
 			var newdict: Dictionary<String, CNValue> = [:]
 			for (key, elm) in val {
-				if let child = anyToValue(object: elm) {
-					newdict[key] = child
-				}
+				let child = anyToValue(object: elm)
+				newdict[key] = child
 			}
 			if let val = dictionaryToValue(dictionary: newdict){
 				result = val
@@ -526,16 +521,12 @@ public enum CNValue {
 		} else if let val = obj as? Array<Any> {
 			var newarr: Array<CNValue> = []
 			for elm in val {
-				if let child = anyToValue(object: elm) {
-					newarr.append(child)
-				}
+				let child = anyToValue(object: elm)
+				newarr.append(child)
 			}
 			result = .arrayValue(newarr)
-		} else if let val = obj as? NSObject {
-			// this must be put at the last
-			result = .objectValue(val)
 		} else {
-			result = nil
+			result = .objectValue(obj as AnyObject)
 		}
 		return result
 	}
