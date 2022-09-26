@@ -258,6 +258,8 @@
 		05BD9FA92745445B00D43064 /* oval.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05BD9FA22745443200D43064 /* oval.png */; };
 		05BEE0EE2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
 		05BEE0EF2634E02100178484 /* CNStandardFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BEE0ED2634E02100178484 /* CNStandardFiles.swift */; };
+		05C66A9F28E1D52C00C5F44B /* CNValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C66A9E28E1D52C00C5F44B /* CNValueType.swift */; };
+		05C66AA028E1D52C00C5F44B /* CNValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C66A9E28E1D52C00C5F44B /* CNValueType.swift */; };
 		05D0C7EC280BB22F00CE3AFC /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; };
 		05D0C7ED280BB22F00CE3AFC /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05DD2BA2281C9BEA00C725AD /* CNMappingRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DD2BA1281C9BEA00C725AD /* CNMappingRecord.swift */; };
@@ -612,6 +614,7 @@
 		05BD9FA12745443200D43064 /* oval-filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval-filled.png"; sourceTree = "<group>"; };
 		05BD9FA22745443200D43064 /* oval.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oval.png; sourceTree = "<group>"; };
 		05BEE0ED2634E02100178484 /* CNStandardFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStandardFiles.swift; sourceTree = "<group>"; };
+		05C66A9E28E1D52C00C5F44B /* CNValueType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueType.swift; sourceTree = "<group>"; };
 		05DD2BA1281C9BEA00C725AD /* CNMappingRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNMappingRecord.swift; sourceTree = "<group>"; };
 		05DD2BAA281CA01700C725AD /* CNRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRecord.swift; sourceTree = "<group>"; };
 		05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTVectorGraphics.swift; sourceTree = "<group>"; };
@@ -915,6 +918,7 @@
 				05A506B028016FA100F5B53A /* CNValuePointer.swift */,
 				05B7B1AE277606810077DEDC /* CNValueSegment.swift */,
 				0535D84A28560FBE00FD720C /* CNValueSet.swift */,
+				05C66A9E28E1D52C00C5F44B /* CNValueType.swift */,
 				05A1AFB8277689F90091D527 /* CNStorage.swift */,
 				0585E85D2860ACD900C5C1B8 /* CNStorageArray.swift */,
 				05392B31285F16610000349B /* CNStorageDictionary.swift */,
@@ -1424,6 +1428,7 @@
 				05B32D8C25150946000D1411 /* CNType.swift in Sources */,
 				05B32D9425150946000D1411 /* CNStringUtil.swift in Sources */,
 				055039A0277D7DC0007FA515 /* CNStorageRecord.swift in Sources */,
+				05C66A9F28E1D52C00C5F44B /* CNValueType.swift in Sources */,
 				0559FB1327F719A400FE8726 /* CNMappingTable.swift in Sources */,
 				05B32D4F251508F7000D1411 /* CNAppleEventManager.swift in Sources */,
 				0596C5792722EEF200E9A24F /* CNSymbol.swift in Sources */,
@@ -1534,6 +1539,7 @@
 				05B32D44251508D9000D1411 /* CNConsole.swift in Sources */,
 				05B32CF225150328000D1411 /* CNUserDefaults.swift in Sources */,
 				055039A1277D7DC0007FA515 /* CNStorageRecord.swift in Sources */,
+				05C66AA028E1D52C00C5F44B /* CNValueType.swift in Sources */,
 				0559FB1427F719A400FE8726 /* CNMappingTable.swift in Sources */,
 				0596C57A2722EEF200E9A24F /* CNSymbol.swift in Sources */,
 				05B32D8D25150946000D1411 /* CNType.swift in Sources */,

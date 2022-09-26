@@ -39,7 +39,7 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 	let cval0 = CNCastToCompareValue(value: ival0)
 	let cval1 = CNCastToCompareValue(value: ival1)
 
-	switch cval0.valueType.compare(cval1.valueType) {
+	switch CNValueType.compare(type0: cval0.valueType, type1: cval1.valueType) {
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:

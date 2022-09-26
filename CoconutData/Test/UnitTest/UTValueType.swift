@@ -29,12 +29,13 @@ private func valueTypeTest(valueType vtype: CNValueType, console cons: CNConsole
 {
 	var result = false
 
-	let encstr = vtype.encode()
+	let encstr = CNValueType.encode(valueType: vtype)
 	cons.print(string: "encode: \(encstr)\n")
 	switch CNValueType.decode(code: encstr) {
 	case .success(let revtype):
-		cons.print(string: "reverse decoded: \(revtype.description)\n")
-		switch vtype.compare(revtype) {
+		let revcode = CNValueType.encode(valueType: revtype)
+		cons.print(string: "reverse decoded: \(revcode)\n")
+		switch CNValueType.compare(type0: vtype, type1: revtype) {
 		case .orderedAscending, .orderedDescending:
 			cons.print(string: "Error: Failed to decode/encode\n")
 		case .orderedSame:
