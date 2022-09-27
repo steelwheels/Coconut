@@ -20,8 +20,9 @@ public func testValueType(console cons: CNConsole) -> Bool
 	let res1 = valueTypeTest(valueType: .arrayType(.stringType), console: cons)
 	let res2 = valueTypeTest(valueType: .enumType(etype), console: cons)
 	let res3 = valueTypeTest(valueType: .dictionaryType(.enumType(etype)), console: cons)
-
-	let result = res0 && res1 && res2 && res3
+	let res4 = valueTypeTest(valueType: .functionType(.voidType, [.numberType, .stringType]), console: cons)
+	
+	let result = res0 && res1 && res2 && res3 && res4
 	return result
 }
 

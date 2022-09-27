@@ -18,7 +18,8 @@ public enum CNValue {
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
-	case objectValue(_ val: AnyObject)	// will be null
+	case objectValue(_ val: AnyObject)
+	//case functionValue(_ val: (_ params: Array<CNValue>) -> CNValue)
 
 	public var valueType: CNValueType {
 		get {

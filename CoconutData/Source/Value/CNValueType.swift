@@ -16,15 +16,17 @@ import Foundation
  */
 public indirect enum CNValueType
 {
+	case	voidType
 	case	anyType
 	case	boolType
 	case	numberType
 	case	stringType
-	case	enumType(CNEnumType)		// enum-type
-	case	dictionaryType(CNValueType)	// element type
-	case	arrayType(CNValueType)		// element type
-	case	setType(CNValueType)		// element type
-	case	objectType(String?)		// class name or unkown
+	case	enumType(CNEnumType)				// enum-type
+	case	dictionaryType(CNValueType)			// element type
+	case	arrayType(CNValueType)				// element type
+	case	setType(CNValueType)				// element type
+	case	objectType(String?)				// class name or unkown
+	case	functionType(CNValueType, Array<CNValueType>)	// (return-type, parameter-types)
 
 	public static func encode(valueType vtype: CNValueType) -> String {
 		return CNValueTypeCoder.encode(valueType: vtype)
@@ -49,6 +51,7 @@ public indirect enum CNValueType
 
 private class CNValueTypeCoder
 {
+	private static let 	VoidTypeIdentifier		= "v"
 	private static let	AnyTypeIdentifier		= "y"
 	private static let 	BoolTypeIdentifier		= "b"
 	private static let	NumberTypeIdentifier		= "n"
@@ -58,10 +61,13 @@ private class CNValueTypeCoder
 	private static let	ArrayTypeIdentifier		= "a"
 	private static let	SetTypeIdentifier		= "t"
 	private static let	ObjectTypeIdentifier		= "o"
+	private static let	FunctionTypeIdentifier		= "f"
 
 	public static func encode(valueType vtype: CNValueType) -> String {
 		let result: String
 		switch vtype {
+		case .voidType:
+			result = VoidTypeIdentifier
 		case .anyType:
 			result = AnyTypeIdentifier
 		case .boolType:
@@ -84,6 +90,11 @@ private class CNValueTypeCoder
 		case .objectType(let clsnamep):
 			let clsname = clsnamep ?? "-"
 			result = ObjectTypeIdentifier + "(" + clsname + ")"
+		case .functionType(let rettype, let paramtypes):
+			let retstr   = encode(valueType: rettype)
+			let paramstr = paramtypes.map { encode(valueType: $0) }
+			result = FunctionTypeIdentifier + "(" + retstr + ",["
+				+ paramstr.joined(separator: ",") + "])"
 		}
 		return result
 	}
@@ -105,6 +116,8 @@ private class CNValueTypeCoder
 		}
 		let result: CNValueType
 		switch ident {
+		case VoidTypeIdentifier:
+			result = .voidType
 		case AnyTypeIdentifier:
 			result = .anyType
 		case BoolTypeIdentifier:
@@ -145,6 +158,13 @@ private class CNValueTypeCoder
 			switch decodeClassName(stream: strm) {
 			case .success(let clsname):
 				result = .objectType(clsname)
+			case .failure(let err):
+				return .failure(err)
+			}
+		case FunctionTypeIdentifier:
+			switch decodeFunctionType(stream: strm) {
+			case .success(let (rettype, paramtypes)):
+				result = .functionType(rettype, paramtypes)
 			case .failure(let err):
 				return .failure(err)
 			}
@@ -209,6 +229,56 @@ private class CNValueTypeCoder
 			return .failure(NSError.parseError(message: "\")\" is required for type declaration"))
 		}
 		return .success(clsname)
+	}
+
+	public static func decodeFunctionType(stream strm: CNTokenStream) -> Result<(CNValueType, Array<CNValueType>), NSError> {
+		guard strm.requireSymbol(symbol: "(") else {
+			return .failure(NSError.parseError(message: "\"(\" is required for funtion type declaration"))
+		}
+
+		let rettype: CNValueType
+		switch decode(stream: strm) {
+		case .success(let vtype):
+			rettype = vtype
+		case .failure(let err):
+			return .failure(err)
+		}
+
+		guard strm.requireSymbol(symbol: ",") else {
+			return .failure(NSError.parseError(message: "\",\" is required for function type declaration"))
+		}
+
+		guard strm.requireSymbol(symbol: "[") else {
+			return .failure(NSError.parseError(message: "\"[\" is required for function type declaration"))
+		}
+
+		var paramtypes: Array<CNValueType> = []
+		var is1st = true
+		while true {
+			if strm.isEmpty() {
+				return .failure(NSError.parseError(message: "Unterminated function type declaration"))
+			}
+			if strm.requireSymbol(symbol: "]") {
+				break
+			}
+			if is1st {
+				is1st = false
+			} else if !strm.requireSymbol(symbol: ",") {
+				return .failure(NSError.parseError(message: "\",\" is required for function type declaration"))
+			}
+			switch decode(stream: strm) {
+			case .success(let elmtype):
+				paramtypes.append(elmtype)
+			case .failure(let err):
+				return .failure(err)
+			}
+		}
+
+		guard strm.requireSymbol(symbol: ")") else {
+			return .failure(NSError.parseError(message: "\")\" is required for function type declaration"))
+		}
+
+		return .success((rettype, paramtypes))
 	}
 }
 

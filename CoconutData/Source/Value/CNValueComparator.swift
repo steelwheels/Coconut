@@ -50,6 +50,8 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 
 	var result: ComparisonResult? = nil
 	switch cval0.valueType {
+	case .voidType:
+		result = .orderedSame
 	case .anyType:
 		result = .orderedSame
 	case .boolType:
@@ -79,7 +81,7 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .objectType(_):
+	case .objectType(_), .functionType(_, _):
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 	}
 
