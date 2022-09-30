@@ -74,29 +74,24 @@ public extension FileManager
 		return createFile(atPath: url.absoluteString, contents: data, attributes: attr)
 	}
 
-	func removeFile(atURL url: URL) -> Result {
+	func removeFile(atURL url: URL) -> NSError? {
 		do {
 			try self.removeItem(at: url)
-			return .ok
+			return nil
 		} catch  {
-			return .error(error as NSError)
+			return (error as NSError)
 		}
 	}
 
-	enum Result {
-		case ok
-		case error(NSError)
-	}
-
-	func createDirectories(directory dir: URL) -> Result {
+	func createDirectories(directory dir: URL) -> NSError? {
 		guard dir.pathComponents.count > 0 else {
-			return .error(NSError.parseError(message: "No directory is contained"))
+			return NSError.parseError(message: "No directory is contained")
 		}
 		do {
 			try createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
-			return .ok
+			return nil
 		} catch {
-			return .error(error as NSError)
+			return (error as NSError)
 		}
 	}
 
@@ -113,23 +108,48 @@ public extension FileManager
 		}
 	}
 
-	func openFile(URL url: URL, accessType acctyp: CNFileAccessType) -> CNFileOpenResult {
+	func openFile(URL url: URL, accessType acctyp: CNFileAccessType) -> Result<CNFile, NSError> {
+		switch acctyp {
+		case .ReadAccess:
+			return openFile(forReadingFrom: url)
+		case .WriteAccess:
+			return openFile(forWritingFrom: url)
+		case .AppendAccess:
+			return openFile(forAppendingFrom: url)
+		}
+	}
+
+	func openFile(forReadingFrom url: URL) -> Result<CNFile, NSError> {
 		do {
-			var file: CNFile
-			switch acctyp {
-			case .ReadAccess:
-				let handle = try FileHandle(forReadingFrom: url)
-				file = CNFile(access: .reader, fileHandle: handle)
-			case .WriteAccess:
-				let handle = try FileHandle(forReadingFrom: url)
-				file = CNFile(access: .writer, fileHandle: handle)
-			case .AppendAccess:
-				let handle = try FileHandle(forWritingTo: url)
-				file = CNFile(access: .writer, fileHandle: handle)
-			}
-			return .ok(file)
+			let handle = try FileHandle(forReadingFrom: url)
+			let file   = CNFile(access: .reader, fileHandle: handle)
+			return .success(file)
 		} catch {
-			return .error(error as NSError)
+			return .failure(error as NSError)
+		}
+	}
+
+	func openFile(forWritingFrom url: URL) -> Result<CNFile, NSError> {
+		let filemgr = FileManager.default
+		if !fileExists(atURL: url) {
+			filemgr.createFile(atPath: url.path, contents: nil, attributes: nil)
+		}
+		do {
+			let handle = try FileHandle(forWritingTo: url)
+			let file = CNFile(access: .writer, fileHandle: handle)
+			return .success(file)
+		} catch {
+			return .failure(error as NSError)
+		}
+	}
+
+	func openFile(forAppendingFrom url: URL) -> Result<CNFile, NSError> {
+		do {
+			let handle = try FileHandle(forUpdating: url)
+			let file = CNFile(access: .writer, fileHandle: handle)
+			return .success(file)
+		} catch {
+			return .failure(error as NSError)
 		}
 	}
 

@@ -125,13 +125,11 @@ public class CNStorage
 	}
 
 	public func removeCacheFile() -> Result<CNValue, NSError> {
-		switch FileManager.default.removeFile(atURL: self.cacheFile) {
-		case .ok:
-			break // continue processing
-		case .error(let err):
+		if let err = FileManager.default.removeFile(atURL: self.cacheFile) {
 			return .failure(err)
+		} else {
+			return self.load()
 		}
-		return self.load()
 	}
 
 	public func allocateCache(forPath path: CNValuePath) -> Int {
@@ -298,10 +296,7 @@ public class CNStorage
 		let cachefile = self.cacheFile
 		let pathes    = cachefile.deletingLastPathComponent()
 		if !FileManager.default.fileExists(atPath: pathes.path) {
-			switch FileManager.default.createDirectories(directory: pathes) {
-			case .ok:
-				break // continue
-			case .error(let err):
+			if let err = FileManager.default.createDirectories(directory: pathes) {
 				CNLog(logLevel: .error, message: err.toString(), atFunction: #function, inFile: #file)
 				return false // stop the save operation
 			}

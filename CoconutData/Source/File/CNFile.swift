@@ -106,15 +106,31 @@ public class CNFile
 	}
 
 	public static func open(access acc: Access, for url: URL) -> CNFile? {
+		switch acc {
+		case .reader:
+			return open(forReading: url)
+		case .writer:
+			return open(forWriting: url)
+		}
+	}
+
+	public static func open(forReading url: URL) -> CNFile? {
 		do {
-			let handle: FileHandle
-			switch acc {
-			case .reader:
-				handle = try FileHandle(forReadingFrom: url)
-			case .writer:
-				handle = try FileHandle(forWritingTo: url)
+			let handle = try FileHandle(forReadingFrom: url)
+			return CNFile(access: .reader, fileHandle: handle)
+		} catch {
+			return nil
+		}
+	}
+
+	public static func open(forWriting url: URL) -> CNFile? {
+		do {
+			let path = url.path
+			if FileManager.default.createFile(atPath: path, contents: nil, attributes: nil) {
+				let handle = try FileHandle(forWritingTo: url)
+				return CNFile(access: .reader, fileHandle: handle)
 			}
-			return CNFile(access: acc, fileHandle: handle)
+			return nil
 		} catch {
 			return nil
 		}
