@@ -4,7 +4,7 @@ This document contains describes about Coconut Frameworks.
 It contains some frameworks based on the [Foundation Framework](https://developer.apple.com/documentation/foundation) for macOS and iOS.
 
 ## Copyright
-Copyright (C) 2014-2018 [Steel Wheels Project](https://sites.google.com/site/steelwheelsproject/).
+Copyright (C) 2014-2022 [Steel Wheels Project](https://github.com/steelwheels).
 This software is distributed under [GNU LESSER GENERAL PUBLIC LICENSE Version 2.1](https://www.gnu.org/licenses/lgpl-2.1-standalone.html) and the document is distributed under [GNU Free Documentation License](https://www.gnu.org/licenses/fdl-1.3.en.html).
 
 ## Frameworks in this package

@@ -289,14 +289,6 @@ public class CNContactDatabase: CNTable
 		return CNStorageRecord(defaultFields: result)
 	}
 
-	public func toValue() -> CNValue {
-		var result: Array<CNValue> = []
-		for rec in mRecords {
-			result.append(.dictionaryValue(rec.toValue()))
-		}
-		return .arrayValue(result)
-	}
-
 	private static func value(ofField fld: CNContactField, in cont: CNContact) -> CNValue? {
 		var result: CNValue? = nil
 		switch fld {

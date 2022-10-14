@@ -13,10 +13,23 @@ public class CNMappingRecord: CNRecord
 
 	private var mSourceRecord:		CNRecord
 	private var mVirtualFieldCallbacks:	Dictionary<String, VirtualFieldCallback>
+	private var mTypes:			Dictionary<String, CNValueType>
 
 	public init(sourceRecord rec: CNRecord, virtualFields fields: Dictionary<String, VirtualFieldCallback>){
 		mSourceRecord		= rec
 		mVirtualFieldCallbacks	= fields
+
+		mTypes = [:]
+		for field in rec.fieldNames {
+			if let val = rec.value(ofField: field) {
+				mTypes[field] = val.valueType
+			}
+		}
+		for field in mVirtualFieldCallbacks.keys {
+			if let cbfunc = mVirtualFieldCallbacks[field] {
+				mTypes[field] = cbfunc(self).valueType
+			}
+		}
 	}
 
 	public var index: Int? { get {
@@ -31,6 +44,10 @@ public class CNMappingRecord: CNRecord
 		var names = mSourceRecord.fieldNames
 		names.append(contentsOf: mVirtualFieldCallbacks.keys)
 		return names
+	}}
+
+	public var fieldTypes: Dictionary<String, CNValueType> { get {
+		return mTypes
 	}}
 
 	public func value(ofField name: String) -> CNValue? {
@@ -52,10 +69,6 @@ public class CNMappingRecord: CNRecord
 
 	public func cachedValues() -> Dictionary<String, CNValue>? {
 		return mSourceRecord.cachedValues()
-	}
-
-	public func toValue() -> Dictionary<String, CNValue> {
-		return mSourceRecord.toValue()
 	}
 
 	public func compare(forField name: String, with rec: CNRecord) -> ComparisonResult {

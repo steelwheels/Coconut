@@ -41,7 +41,5 @@ public protocol CNTable
 	func save() -> Bool
 
 	func forEach(callback cbfunc: (_ record: CNRecord) -> Void)
-
-	func toValue() -> CNValue
 }
 

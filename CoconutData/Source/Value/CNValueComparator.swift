@@ -81,6 +81,10 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
+	case .recordType(_):
+		if let s0 = cval0.toRecord(), let s1 = cval1.toRecord() {
+			result = compare(record0: s0, record1: s1)
+		}
 	case .objectType(_), .functionType(_, _):
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 	}
@@ -249,3 +253,10 @@ private func compare(string0 s0: String, string1 s1: String) -> ComparisonResult
 	}
 	return result
 }
+
+private func compare(record0 s0: CNRecord, record1 s1: CNRecord) -> ComparisonResult {
+	let d0 = s0.toDictionary()
+	let d1 = s1.toDictionary()
+	return compare(dictionary0: d0, dictionary1: d1)
+}
+

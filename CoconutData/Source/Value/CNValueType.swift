@@ -25,6 +25,7 @@ public indirect enum CNValueType
 	case	dictionaryType(CNValueType)			// element type
 	case	arrayType(CNValueType)				// element type
 	case	setType(CNValueType)				// element type
+	case 	recordType(Dictionary<String, CNValueType>)	// [item-name: item-type]
 	case	objectType(String?)				// class name or unkown
 	case	functionType(CNValueType, Array<CNValueType>)	// (return-type, parameter-types)
 
@@ -60,6 +61,7 @@ private class CNValueTypeCoder
 	private static let	DictionaryTypeIdentifier	= "d"
 	private static let	ArrayTypeIdentifier		= "a"
 	private static let	SetTypeIdentifier		= "t"
+	private static let 	RecordTypeIdentifier		= "r"
 	private static let	ObjectTypeIdentifier		= "o"
 	private static let	FunctionTypeIdentifier		= "f"
 
@@ -87,6 +89,17 @@ private class CNValueTypeCoder
 		case .setType(let elmtype):
 			let elmstr = encode(valueType: elmtype)
 			result = SetTypeIdentifier + "(" + elmstr + ")"
+		case .recordType(let dict):
+			var recstr = RecordTypeIdentifier + "["
+			var is1st  = true
+			for key in dict.keys.sorted() {
+				if is1st { is1st = false } else {recstr += "," }
+				if let etype = dict[key] {
+					recstr += key + ":" + encode(valueType: etype)
+				}
+			}
+			recstr += "]"
+			result = recstr
 		case .objectType(let clsnamep):
 			let clsname = clsnamep ?? "-"
 			result = ObjectTypeIdentifier + "(" + clsname + ")"
@@ -151,6 +164,13 @@ private class CNValueTypeCoder
 			switch decodeElementType(stream: strm) {
 			case .success(let elmtype):
 				result = .setType(elmtype)
+			case .failure(let err):
+				return .failure(err)
+			}
+		case RecordTypeIdentifier:
+			switch decodeRecordType(stream: strm) {
+			case .success(let types):
+				result = .recordType(types)
 			case .failure(let err):
 				return .failure(err)
 			}
@@ -229,6 +249,47 @@ private class CNValueTypeCoder
 			return .failure(NSError.parseError(message: "\")\" is required for type declaration"))
 		}
 		return .success(clsname)
+	}
+
+	public static func decodeRecordType(stream strm: CNTokenStream) -> Result<Dictionary<String, CNValueType>, NSError> {
+		var result: Dictionary<String, CNValueType> = [:]
+
+		guard strm.requireSymbol(symbol: "[") else {
+			return .failure(NSError.parseError(message: "\"[\" is required to begin record type declaration"))
+		}
+
+		var is1st  = true
+		while true {
+			if strm.isEmpty() {
+				return .failure(NSError.parseError(message: "Unexpected end of stream while decoding record type"))
+			} else if strm.requireSymbol(symbol: "]") {
+				break
+			}
+			if is1st {
+				is1st = false
+			} else if !strm.requireSymbol(symbol: ",") {
+				return .failure(NSError.parseError(message: "\",\" is required between record type declarations"))
+			}
+			let ename: String
+			if let ident = strm.requireIdentifier() {
+				ename = ident
+			} else {
+				return .failure(NSError.parseError(message: "Identifier is required for record type declaration"))
+			}
+			if !strm.requireSymbol(symbol: ":") {
+				return .failure(NSError.parseError(message: "\":\" is required between record identifier and type"))
+			}
+			let etype: CNValueType
+			switch decode(stream: strm) {
+			case .success(let type):
+				etype = type
+			case .failure(let err):
+				return .failure(err)
+			}
+			result[ename] = etype
+		}
+
+		return .success(result)
 	}
 
 	public static func decodeFunctionType(stream strm: CNTokenStream) -> Result<(CNValueType, Array<CNValueType>), NSError> {

@@ -279,6 +279,11 @@
 		05E7F00D274E8F7600938598 /* CNVectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E7F00B274E8F7600938598 /* CNVectorManager.swift */; };
 		05E88DEB26AA9F1B00FF993E /* CNImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E88DEA26AA9F1B00FF993E /* CNImage.swift */; };
 		05E88DEC26AA9F1B00FF993E /* CNImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E88DEA26AA9F1B00FF993E /* CNImage.swift */; };
+		05E9074528FA209900DBE76A /* dummy-storage-table.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E9074428FA209900DBE76A /* dummy-storage-table.json */; };
+		05E9074628FA209900DBE76A /* dummy-storage-table.json in Resources */ = {isa = PBXBuildFile; fileRef = 05E9074428FA209900DBE76A /* dummy-storage-table.json */; };
+		05E9074E28FA20BD00DBE76A /* dummy-storage-table.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E9074428FA209900DBE76A /* dummy-storage-table.json */; };
+		05E9075328FA20D700DBE76A /* dummy-storage-table.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05E9074428FA209900DBE76A /* dummy-storage-table.json */; };
+		05E9075C28FA22CE00DBE76A /* UTStorageTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E9075B28FA22CE00DBE76A /* UTStorageTable.swift */; };
 		05EF830C279D54CE00163256 /* chevron-down.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EF82FD279D549400163256 /* chevron-down.png */; };
 		05EF830D279D54CE00163256 /* chevron-up.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EF82FE279D549400163256 /* chevron-up.png */; };
 		05EF8314279D54E300163256 /* chevron-down.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05EF82FD279D549400163256 /* chevron-down.png */; };
@@ -453,6 +458,26 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05E9074A28FA20AC00DBE76A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Data;
+			dstSubfolderSpec = 7;
+			files = (
+				05E9074E28FA20BD00DBE76A /* dummy-storage-table.json in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05E9075228FA20C800DBE76A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Data;
+			dstSubfolderSpec = 7;
+			files = (
+				05E9075328FA20D700DBE76A /* dummy-storage-table.json in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05FC5C54255FF9DB006C3664 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -624,6 +649,8 @@
 		05E45BCA2736CD070034254D /* rectangle-rounded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rectangle-rounded.png"; sourceTree = "<group>"; };
 		05E7F00B274E8F7600938598 /* CNVectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNVectorManager.swift; sourceTree = "<group>"; };
 		05E88DEA26AA9F1B00FF993E /* CNImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNImage.swift; sourceTree = "<group>"; };
+		05E9074428FA209900DBE76A /* dummy-storage-table.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "dummy-storage-table.json"; sourceTree = "<group>"; };
+		05E9075B28FA22CE00DBE76A /* UTStorageTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTStorageTable.swift; sourceTree = "<group>"; };
 		05EF82FD279D549400163256 /* chevron-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-down.png"; sourceTree = "<group>"; };
 		05EF82FE279D549400163256 /* chevron-up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chevron-up.png"; sourceTree = "<group>"; };
 		05F3AC3D26571E1E0089C937 /* UTNativeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTNativeValue.swift; sourceTree = "<group>"; };
@@ -730,6 +757,7 @@
 				05FC385D255FEC1D004CA79E /* UTResource.swift */,
 				05FC3871255FEC1E004CA79E /* UTStringStream.swift */,
 				05FC3866255FEC1D004CA79E /* UTStringUtil.swift */,
+				05E9075B28FA22CE00DBE76A /* UTStorageTable.swift */,
 				05252C5A26E782A50026230C /* UTText.swift */,
 				05FC3858255FEC1C004CA79E /* UTTextStorage.swift */,
 				05FC3860255FEC1D004CA79E /* UTThread.swift */,
@@ -828,6 +856,7 @@
 		05ADE083255C24D000DA3EB6 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				05E9074328FA204800DBE76A /* Data */,
 				0596C55A2722E2E100E9A24F /* Images */,
 				055BF94E255C25070004C250 /* CoconutScript.sdef */,
 			);
@@ -1094,6 +1123,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		05E9074328FA204800DBE76A /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				05E9074428FA209900DBE76A /* dummy-storage-table.json */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		05FC5C2A255FF5E8006C3664 /* UnitTestBundle */ = {
 			isa = PBXGroup;
 			children = (
@@ -1204,6 +1241,7 @@
 				05B32C80251501B1000D1411 /* Frameworks */,
 				05B32C81251501B1000D1411 /* Resources */,
 				0596C5622722E30F00E9A24F /* CopyFiles */,
+				05E9074A28FA20AC00DBE76A /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1223,6 +1261,7 @@
 				05B32C8F251501D7000D1411 /* Frameworks */,
 				05B32C90251501D7000D1411 /* Resources */,
 				0596C56D2722E32A00E9A24F /* CopyFiles */,
+				05E9075228FA20C800DBE76A /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1324,6 +1363,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				055BF94F255C25070004C250 /* CoconutScript.sdef in Resources */,
+				05E9074528FA209900DBE76A /* dummy-storage-table.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1332,6 +1372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				055BF950255C25070004C250 /* CoconutScript.sdef in Resources */,
+				05E9074628FA209900DBE76A /* dummy-storage-table.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1366,6 +1407,7 @@
 				05FC3888255FEC1E004CA79E /* UTKeyBinding.swift in Sources */,
 				051EE76625E24C3A006FED4D /* UTBitmap.swift in Sources */,
 				05FC3875255FEC1E004CA79E /* UTColor.swift in Sources */,
+				05E9075C28FA22CE00DBE76A /* UTStorageTable.swift in Sources */,
 				05FC3885255FEC1E004CA79E /* UTFilePath.swift in Sources */,
 				0535D8542856198900FD720C /* UTValueSet.swift in Sources */,
 				05FC3887255FEC1E004CA79E /* UTProcess.swift in Sources */,

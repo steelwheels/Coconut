@@ -18,6 +18,7 @@ public class CNStorageRecord: CNRecord
 		case cache(Dictionary<String, CNValue>)		// (property-name, property-value)
 	}
 
+	private var mTypes:	Dictionary<String, CNValueType>
 	private var mSource:	SourceData
 
 	public var index: Int? { get {
@@ -29,10 +30,23 @@ public class CNStorageRecord: CNRecord
 
 	public init(table tbl: CNStorageTable, index idx: Int){
 		mSource	= .table(tbl, idx)
+		mTypes  = CNStorageRecord.defaultTypes(fields: tbl.defaultFields)
+
 	}
 
 	public init(defaultFields fields: Dictionary<String, CNValue>){
 		mSource = .cache(fields)
+		mTypes  = CNStorageRecord.defaultTypes(fields: fields)
+	}
+
+	private static func defaultTypes(fields flds: Dictionary<String, CNValue>) -> Dictionary<String, CNValueType> {
+		var result: Dictionary<String, CNValueType> = [:]
+		for fname in flds.keys {
+			if let val = flds[fname] {
+				result[fname] = val.valueType
+			}
+		}
+		return result
 	}
 
 	public var fieldCount: Int		{ get {
@@ -51,6 +65,10 @@ public class CNStorageRecord: CNRecord
 		case .cache(let dict):
 			return Array(dict.keys)
 		}
+	}}
+
+	public var fieldTypes: Dictionary<String, CNValueType> { get {
+		return mTypes
 	}}
 
 	public func value(ofField name: String) -> CNValue? {
@@ -101,9 +119,9 @@ public class CNStorageRecord: CNRecord
 		}
 	}
 
-	public func toValue() -> Dictionary<String, CNValue> {
+	public func toDictionary() -> Dictionary<String, CNValue> {
 		var result: Dictionary<String, CNValue> = [:]
-		for field in self.fieldNames {
+		for field in self.fieldNames.sorted() {
 			if let val = value(ofField: field) {
 				result[field] = val
 			}
@@ -112,15 +130,7 @@ public class CNStorageRecord: CNRecord
 		return result
 	}
 
-	public static func fromValue(value val: CNValue) -> CNRecord? {
-		if let dict = val.toDictionary() {
-			return fromValue(value: dict)
-		} else {
-			return nil
-		}
-	}
-
-	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNRecord? {
+	public static func fromDictionary(value val: Dictionary<String, CNValue>) -> CNRecord? {
 		if CNValue.hasClassName(inValue: val, className: CNStorageRecord.ClassName) {
 			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)
 			let newrec = CNStorageRecord(defaultFields: dupval)

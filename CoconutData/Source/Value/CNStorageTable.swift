@@ -22,6 +22,28 @@ public class CNStorageTable: CNTable
 	private var mRecordValuesCacheId:	Int
 	private var mRecordValuesCache:		Array<Dictionary<String, CNValue>>?
 
+	static public func loadDummyTable() -> CNStorageTable {
+		let FILENAME = "dummy-storage-table"
+		let FULLNAME = FILENAME + ".json"
+		guard let srcfile = CNFilePath.URLForResourceFile(fileName: FILENAME, fileExtension: "json", subdirectory: "Data", forClass: CNStorageTable.self) else {
+			CNLog(logLevel: .error, message: "Dummy table file is not found")
+			fatalError()
+		}
+		let cachefile = CNFilePath.URLForApplicationSupportFile(fileName: FILENAME, fileExtension: "json", subdirectory: "Data")
+		let srcdir    = srcfile.deletingLastPathComponent()
+		let cachedir  = cachefile.deletingLastPathComponent()
+		let storage   = CNStorage(sourceDirectory: srcdir, cacheDirectory: cachedir, filePath: FULLNAME)
+		switch storage.load() {
+		case .success(_):
+			break		// loaded
+		case .failure(let err):
+			CNLog(logLevel: .error, message: "Failed to load dummy table: \(err.toString())")
+			fatalError()
+		}
+		let vpath     = CNValuePath(identifier: nil, elements: [.member("table")])
+		return CNStorageTable(path: vpath, storage: storage)
+	}
+
 	public init(path pth: CNValuePath, storage strg: CNStorage) {
 		mPath			= pth
 		mStorage		= strg
@@ -100,6 +122,18 @@ public class CNStorageTable: CNTable
 				return [:]
 			}
 		}
+	}}
+
+	public var defaultTypes: Dictionary<String, CNValueType> { get {
+		var result: Dictionary<String, CNValueType> = [:]
+		let fields = self.defaultFields
+		for fname in fields.keys.sorted() {
+			if let val = fields[fname] {
+				result[fname] = val.valueType
+			}
+		}
+
+		return result
 	}}
 
 	private func allocateDefaultFields() -> Dictionary<String, CNValue> {
@@ -308,10 +342,6 @@ public class CNStorageTable: CNTable
 
 	public func save() -> Bool {
 		return mStorage.save()
-	}
-
-	public func toValue() -> CNValue {
-		return mStorage.toValue()
 	}
 }
 

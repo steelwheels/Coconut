@@ -129,6 +129,9 @@ results.append(UTResult(name: "vectorGraphics", result: testVectorGraphics(conso
 cons.print(string: "* testValueType\n")
 results.append(UTResult(name: "valueType", result: testValueType(console: cons)))
 
+cons.print(string: "* testStorageTable\n")
+results.append(UTResult(name: "storageTable", result: testStorageTable(console: cons)))
+
 var summary = true
 for res in results {
 	if res.result {

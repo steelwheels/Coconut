@@ -249,10 +249,6 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		}
 	}
 
-	public func toValue() -> CNValue {
-		return mSourceTable.toValue()
-	}
-
 	private func getRecords() -> Array<CNMappingRecord> {
 		let filterfunc = mFilterFunc ?? { (_ rec: CNRecord) -> Bool in return true }
 		if mDoReloadRecords || isDirty(cacheId: mRecordValuesCacheId) {
