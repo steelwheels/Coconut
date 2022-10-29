@@ -42,6 +42,36 @@ public extension CGSize
 		return result
 	}
 
+	func resizeWithKeepingAscpect(inWidth dstwidth: CGFloat) -> CGSize {
+		guard dstwidth > 0.0 && self.width > 0.0 && self.height > 0.0 else {
+			CNLog(logLevel: .error, message: "Invalid size", atFunction: #function, inFile: #file)
+			return self
+		}
+		let ratio = self.width / self.height
+		let newwidth  = dstwidth
+		let newheight = dstwidth / ratio
+		return CGSize(width: newwidth, height: newheight)
+	}
+
+	func resizeWithKeepingAscpect(inSize dst: CGSize) -> CGSize {
+		guard dst.width > 0.0 && dst.height > 0.0 else {
+			CNLog(logLevel: .error, message: "Invalid size", atFunction: #function, inFile: #file)
+			return self
+		}
+		let reswidth, resheight: CGFloat
+		let ratio = self.width / self.height
+		if ratio >= 1.0 {
+			/* width >= height */
+			reswidth  = dst.width
+			resheight = dst.width / ratio
+		} else {
+			/* width < height */
+			reswidth  = dst.height * ratio
+			resheight = dst.height
+		}
+		return CGSize(width: reswidth, height: resheight)
+	}
+
 	var description: String {
 		get {
 			let wstr = NSString(format: "%.2lf", self.width)
