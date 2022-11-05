@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		051985ED28A643DB004D4B9E /* CoconutModel_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 051985EB28A643DB004D4B9E /* CoconutModel_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		051985F328A643E9004D4B9E /* CNModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BFE0F928A6438800CB095B /* CNModel.swift */; };
 		0519860E28A64578004D4B9E /* CoconutModel_macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 0519860C28A64578004D4B9E /* CoconutModel_macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0519861628A64597004D4B9E /* CNModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BFE0F928A6438800CB095B /* CNModel.swift */; };
 		0519862128A64CFC004D4B9E /* CNEarthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519862028A64CFC004D4B9E /* CNEarthModel.swift */; };
 		0519862428A64D01004D4B9E /* CNEarthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519862028A64CFC004D4B9E /* CNEarthModel.swift */; };
 		0523C36228A9B009007E7A49 /* CNGeographicLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0523C36128A9B009007E7A49 /* CNGeographicLocation.swift */; };
@@ -89,7 +87,6 @@
 		0519860D28A64578004D4B9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0519862028A64CFC004D4B9E /* CNEarthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNEarthModel.swift; sourceTree = "<group>"; };
 		0523C36128A9B009007E7A49 /* CNGeographicLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNGeographicLocation.swift; sourceTree = "<group>"; };
-		05BFE0F928A6438800CB095B /* CNModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNModel.swift; sourceTree = "<group>"; };
 		05EBCCF928A677D8007C3939 /* CoconutModel.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoconutModel.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		05EBCCFB28A677D8007C3939 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		05EBCD0528A6781B007C3939 /* CoconutData.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CoconutData.xcframework; path = ../../../../Library/Frameworks/CoconutData.xcframework; sourceTree = "<group>"; };
@@ -198,7 +195,6 @@
 				0519861F28A64B1B004D4B9E /* Astronomy */,
 				0523C36028A9AF73007E7A49 /* Geography */,
 				05EBCD3928A67BE0007C3939 /* Time */,
-				05BFE0F928A6438800CB095B /* CNModel.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -430,7 +426,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0523C36328A9B009007E7A49 /* CNGeographicLocation.swift in Sources */,
-				051985F328A643E9004D4B9E /* CNModel.swift in Sources */,
 				0519862428A64D01004D4B9E /* CNEarthModel.swift in Sources */,
 				05EBCD3C28A67C1C007C3939 /* CNTimeModel.swift in Sources */,
 			);
@@ -441,7 +436,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0523C36228A9B009007E7A49 /* CNGeographicLocation.swift in Sources */,
-				0519861628A64597004D4B9E /* CNModel.swift in Sources */,
 				0519862128A64CFC004D4B9E /* CNEarthModel.swift in Sources */,
 				05EBCD3B28A67C1C007C3939 /* CNTimeModel.swift in Sources */,
 			);

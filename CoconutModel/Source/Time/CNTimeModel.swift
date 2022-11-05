@@ -9,7 +9,7 @@ import Foundation
 
 public class CNYearModel
 {
-	public static let days : Double = 365.24	// day
+	public static let days : Double = 365.242194	// day
 
 	public static func seconds() -> Double {
 		return CNDayModel.seconds() * CNYearModel.days
