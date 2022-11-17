@@ -25,8 +25,8 @@ public indirect enum CNValueType
 	case	dictionaryType(CNValueType)			// element type
 	case	arrayType(CNValueType)				// element type
 	case	setType(CNValueType)				// element type
-	case 	recordType(Dictionary<String, CNValueType>)	// [item-name: item-type]
 	case	objectType(String?)				// class name or unkown
+	case 	interfaceType(String)				// interface name
 	case	functionType(CNValueType, Array<CNValueType>)	// (return-type, parameter-types)
 
 	public static func encode(valueType vtype: CNValueType) -> String {
@@ -64,6 +64,7 @@ private class CNValueTypeCoder
 	private static let 	RecordTypeIdentifier		= "r"
 	private static let	ObjectTypeIdentifier		= "o"
 	private static let	FunctionTypeIdentifier		= "f"
+	private static let 	InterfaceTypeIdentifier		= "i"
 
 	public static func encode(valueType vtype: CNValueType) -> String {
 		let result: String
@@ -89,20 +90,11 @@ private class CNValueTypeCoder
 		case .setType(let elmtype):
 			let elmstr = encode(valueType: elmtype)
 			result = SetTypeIdentifier + "(" + elmstr + ")"
-		case .recordType(let dict):
-			var recstr = RecordTypeIdentifier + "["
-			var is1st  = true
-			for key in dict.keys.sorted() {
-				if is1st { is1st = false } else {recstr += "," }
-				if let etype = dict[key] {
-					recstr += key + ":" + encode(valueType: etype)
-				}
-			}
-			recstr += "]"
-			result = recstr
 		case .objectType(let clsnamep):
 			let clsname = clsnamep ?? "-"
 			result = ObjectTypeIdentifier + "(" + clsname + ")"
+		case .interfaceType(let ifname):
+			result = InterfaceTypeIdentifier + "(" + ifname + ")"
 		case .functionType(let rettype, let paramtypes):
 			let retstr   = encode(valueType: rettype)
 			let paramstr = paramtypes.map { encode(valueType: $0) }
@@ -167,17 +159,17 @@ private class CNValueTypeCoder
 			case .failure(let err):
 				return .failure(err)
 			}
-		case RecordTypeIdentifier:
-			switch decodeRecordType(stream: strm) {
-			case .success(let types):
-				result = .recordType(types)
-			case .failure(let err):
-				return .failure(err)
-			}
 		case ObjectTypeIdentifier:
 			switch decodeClassName(stream: strm) {
 			case .success(let clsname):
 				result = .objectType(clsname)
+			case .failure(let err):
+				return .failure(err)
+			}
+		case InterfaceTypeIdentifier:
+			switch decodeInterfaceName(stream: strm) {
+			case .success(let ifname):
+				result = .interfaceType(ifname)
 			case .failure(let err):
 				return .failure(err)
 			}
@@ -249,6 +241,22 @@ private class CNValueTypeCoder
 			return .failure(NSError.parseError(message: "\")\" is required for type declaration"))
 		}
 		return .success(clsname)
+	}
+
+	public static func decodeInterfaceName(stream strm: CNTokenStream) -> Result<String, NSError> {
+		guard strm.requireSymbol(symbol: "(") else {
+			return .failure(NSError.parseError(message: "\"(\" is required for type declaration"))
+		}
+		let ifname: String
+		if let name = strm.requireIdentifier() {
+			ifname = name
+		} else {
+			return .failure(NSError.parseError(message: "Identifier is required for interface type"))
+		}
+		guard strm.requireSymbol(symbol: ")") else {
+			return .failure(NSError.parseError(message: "\")\" is required for type declaration"))
+		}
+		return .success(ifname)
 	}
 
 	public static func decodeRecordType(stream strm: CNTokenStream) -> Result<Dictionary<String, CNValueType>, NSError> {

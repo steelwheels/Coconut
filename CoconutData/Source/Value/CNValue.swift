@@ -18,7 +18,6 @@ public enum CNValue {
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
-	case recordValue(_ val: CNRecord)
 	case objectValue(_ val: AnyObject)
 	//case functionValue(_ val: (_ params: Array<CNValue>) -> CNValue)
 
@@ -32,7 +31,6 @@ public enum CNValue {
 			case .dictionaryValue(_):	result = .dictionaryType(.anyType)
 			case .arrayValue(_):		result = .arrayType(.anyType)
 			case .setValue(_):		result = .setType(.anyType)
-			case .recordValue(let rec):	result = .recordType(rec.fieldTypes)
 			case .objectValue(let obj):
 				let name = String(describing: type(of: obj))
 				result = .objectType(name)
@@ -116,15 +114,6 @@ public enum CNValue {
 		return result
 	}
 
-	public func toRecord() -> CNRecord? {
-		let result: CNRecord?
-		switch self {
-		case .recordValue(let rec):	result = rec
-		default:			result = nil
-		}
-		return result
-	}
-
 	public func toObject() -> AnyObject? {
 		let result: AnyObject?
 		switch self {
@@ -177,14 +166,6 @@ public enum CNValue {
 	public func setProperty(identifier ident: String) -> Array<CNValue>? {
 		if let elm = valueProperty(identifier: ident){
 			return elm.toSet()
-		} else {
-			return nil
-		}
-	}
-
-	public func recordProperty(identifier ident: String) -> CNRecord? {
-		if let elm = valueProperty(identifier: ident){
-			return elm.toRecord()
 		} else {
 			return nil
 		}
@@ -256,17 +237,6 @@ public enum CNValue {
 			result = line
 		case .setValue(let val):
 			result = val.description
-		case .recordValue(let rec):
-			var line  = "["
-			var is1st = true
-			for field in rec.fieldNames {
-				if is1st { is1st = false } else { line += ", " }
-				if let val = rec.value(ofField: field) {
-					line += field + ":" + val.description
-				}
-			}
-			line += "]"
-			result = line
 		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
 			result = "instanceOf(\(classname))"
@@ -292,9 +262,6 @@ public enum CNValue {
 			result = arrayToScript(array: val)
 		case .setValue(let val):
 			result = setToScript(set: val)
-		case .recordValue(let val):
-			let dict = val.toDictionary()
-			result = dictionaryToScript(dictionary: dict)
 		}
 		return result
 	}
@@ -403,8 +370,6 @@ public enum CNValue {
 				newarr.append(elm.toAny())
 			}
 			result = newarr
-		case .recordValue(let rec):
-			result = rec
 		}
 		return result
 	}
@@ -417,8 +382,6 @@ public enum CNValue {
 			result = .numberValue(val)
 		} else if let val = obj as? String {
 			result = .stringValue(val)
-		} else if let val = obj as? CNRecord {
-			result = .recordValue(val)
 		} else if let val = obj as? Dictionary<String, Any> {
 			var newdict: Dictionary<String, CNValue> = [:]
 			for (key, elm) in val {
