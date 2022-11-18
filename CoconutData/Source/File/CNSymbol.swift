@@ -24,11 +24,14 @@ public class CNSymbol
 		case line4P
 		case line8P
 		case line16P
+		case moonStars
 		case oval(Bool)			// (doFill)
 		case paintbrush
 		case pencil(Bool)		// (doFill)
 		case rectangle(Bool, Bool)	// (doFill, rounded)
 		case questionmark
+		case sun(Bool)			// true: big, false: small
+		case sunAndMoon
 
 		public var name: String {
 			let result: String
@@ -45,6 +48,7 @@ public class CNSymbol
 			case .line4P:		result = "line-4p"
 			case .line8P:		result = "line-8p"
 			case .line16P:		result = "line-16p"
+			case .moonStars:	result = "moon-stars"
 			case .oval(let dofill):
 				if dofill {
 					result = "oval-filled"
@@ -73,6 +77,10 @@ public class CNSymbol
 					}
 				}
 			case .questionmark:	result = "questionmark"
+			case .sun(let isbig):
+				result = isbig ? "sun-max" : "sun-min"
+			case .sunAndMoon:
+				result = "sun-and-moon"
 			}
 			return result
 		}
