@@ -404,6 +404,14 @@ public class CNEnumTable
 		])
 		self.add(enumType: fontsize)
 
+		let iconsize = CNEnumType(typeName: "IconSize")
+		fontsize.add(members: [
+			"small":		Int(CNIconSize.small.rawValue),
+			"regular":		Int(CNIconSize.regular.rawValue),
+			"large": 		Int(CNIconSize.large.rawValue)
+		])
+		self.add(enumType: iconsize)
+
 		let textalign = CNEnumType(typeName: "TextAlign")
 		textalign.add(members: [
 			"left":			NSTextAlignment.left.rawValue,
@@ -445,6 +453,13 @@ public class CNEnumTable
 			"decreasing":		CNSortOrder.decreasing.rawValue
 		])
 		self.add(enumType: sortorder)
+
+		/* Symbol */
+		let symbol = CNEnumType(typeName: "Symbol")
+		for symtyp in CNSymbol.SymbolType.allCases {
+			symbol.add(name: symtyp.name, value: symtyp.rawValue)
+		}
+		self.add(enumType: symbol)
 	}
 }
 

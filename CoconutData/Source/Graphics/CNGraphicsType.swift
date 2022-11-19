@@ -24,7 +24,6 @@ public enum CNAxis: Int
 	}
 }
 
-
 public enum CNAlignment: Int {
 	case leading
 	case trailing
@@ -55,6 +54,12 @@ public enum CNHorizontalPosition {
 	case left
 	case center
 	case right
+}
+
+public enum CNIconSize: Int {
+	case small
+	case regular
+	case large
 }
 
 public struct CNPosition {
