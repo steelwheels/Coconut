@@ -405,7 +405,7 @@ public class CNEnumTable
 		self.add(enumType: fontsize)
 
 		let iconsize = CNEnumType(typeName: "IconSize")
-		fontsize.add(members: [
+		iconsize.add(members: [
 			"small":		Int(CNIconSize.small.rawValue),
 			"regular":		Int(CNIconSize.regular.rawValue),
 			"large": 		Int(CNIconSize.large.rawValue)
@@ -455,7 +455,7 @@ public class CNEnumTable
 		self.add(enumType: sortorder)
 
 		/* Symbol */
-		let symbol = CNEnumType(typeName: "Symbol")
+		let symbol = CNEnumType(typeName: "SymbolType")
 		for symtyp in CNSymbol.SymbolType.allCases {
 			symbol.add(name: symtyp.name, value: symtyp.rawValue)
 		}
