@@ -56,6 +56,26 @@ public enum CNHorizontalPosition {
 	case right
 }
 
+public enum CNButtonState: Int {
+	case hidden	= 0
+	case disable	= 1
+	case off	= 2
+	case on		= 3
+
+	public static var typeName = "ButtonState"
+
+	public var description: String { get {
+		let result: String
+		switch self {
+		case .hidden:	result = "hidden"
+		case .disable:	result = "disable"
+		case .off:	result = "off"
+		case .on:	result = "on"
+		}
+		return result
+	}}
+}
+
 public enum CNIconSize: Int {
 	case small
 	case regular

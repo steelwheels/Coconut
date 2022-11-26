@@ -387,6 +387,15 @@ public class CNEnumTable
 		])
 		self.add(enumType: alignment)
 
+		let btnstate = CNEnumType(typeName: CNButtonState.typeName)
+		btnstate.add(members: [
+			"hidden":	CNButtonState.hidden.rawValue,
+			"disable":	CNButtonState.disable.rawValue,
+			"off":		CNButtonState.off.rawValue,
+			"on":		CNButtonState.on.rawValue
+		])
+		self.add(enumType: btnstate)
+
 		let distribution = CNEnumType(typeName: CNDistribution.typeName)
 		distribution.add(members: [
 			"fill":			CNDistribution.fill.rawValue,
