@@ -515,13 +515,9 @@ public class CNTerminalPreference: CNPreferenceTable
 			if let color = self.getColor(itemName: ForegroundTextColorItem) {
 				return color
 			} else {
-				let result: CNColor
-				switch CNPreference.shared.systemPreference.interfaceStyle {
-				case .dark:	result = CNColor.white
-				case .light:	result = CNColor.black
-				}
-				self.saveColor(itemName: ForegroundTextColorItem, color: result)
-				return result
+				let color = CNSemanticColorTable.foregroundTextColor
+				self.saveColor(itemName: ForegroundTextColorItem, color: color)
+				return color
 			}
 		}
 		set(newcol) {
@@ -534,13 +530,9 @@ public class CNTerminalPreference: CNPreferenceTable
 			if let color = self.getColor(itemName: BackgroundTextColorItem) {
 				return color
 			} else {
-				let result: CNColor
-				switch CNPreference.shared.systemPreference.interfaceStyle {
-				case .dark:	result = CNColor.black
-				case .light:	result = CNColor.white
-				}
-				self.saveColor(itemName: BackgroundTextColorItem, color: result)
-				return result
+				let color = CNSemanticColorTable.backgroundTextColor
+				self.saveColor(itemName: BackgroundTextColorItem, color: color)
+				return color
 			}
 		}
 		set(newcol) {

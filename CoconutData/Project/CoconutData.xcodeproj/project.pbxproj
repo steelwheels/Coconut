@@ -92,6 +92,10 @@
 		057588E82629DB5D00D6F418 /* CNCommandComplementer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */; };
 		057623E026A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */; };
 		057623E126A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */; };
+		057B753629337EC800827E4A /* CNRGBColorTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057B753529337EC800827E4A /* CNRGBColorTable.swift */; };
+		057B753729337EC800827E4A /* CNRGBColorTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057B753529337EC800827E4A /* CNRGBColorTable.swift */; };
+		057B75502933811D00827E4A /* CNSemanticColorTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057B754F2933811D00827E4A /* CNSemanticColorTable.swift */; };
+		057B75512933811D00827E4A /* CNSemanticColorTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057B754F2933811D00827E4A /* CNSemanticColorTable.swift */; };
 		0585E85E2860ACD900C5C1B8 /* CNStorageArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0585E85D2860ACD900C5C1B8 /* CNStorageArray.swift */; };
 		0585E85F2860ACD900C5C1B8 /* CNStorageArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0585E85D2860ACD900C5C1B8 /* CNStorageArray.swift */; };
 		0585E8672860B6F100C5C1B8 /* CNStorageSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0585E8662860B6F100C5C1B8 /* CNStorageSet.swift */; };
@@ -564,6 +568,8 @@
 		056F5701278AB95B0078C25D /* CNMutableValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNMutableValue.swift; sourceTree = "<group>"; };
 		057588E62629DB5D00D6F418 /* CNCommandComplementer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCommandComplementer.swift; sourceTree = "<group>"; };
 		057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSortDescriptors.swift; sourceTree = "<group>"; };
+		057B753529337EC800827E4A /* CNRGBColorTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNRGBColorTable.swift; sourceTree = "<group>"; };
+		057B754F2933811D00827E4A /* CNSemanticColorTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNSemanticColorTable.swift; sourceTree = "<group>"; };
 		0585E85D2860ACD900C5C1B8 /* CNStorageArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStorageArray.swift; sourceTree = "<group>"; };
 		0585E8662860B6F100C5C1B8 /* CNStorageSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStorageSet.swift; sourceTree = "<group>"; };
 		0586D130274D241600EF076D /* CNPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPoint.swift; sourceTree = "<group>"; };
@@ -1121,6 +1127,8 @@
 				05B32D6825150945000D1411 /* CNQueue.swift */,
 				053C3A98275FA729009FA25D /* CNRange.swift */,
 				05DD2BAA281CA01700C725AD /* CNRecord.swift */,
+				057B753529337EC800827E4A /* CNRGBColorTable.swift */,
+				057B754F2933811D00827E4A /* CNSemanticColorTable.swift */,
 				057623DF26A8E2CC007A3966 /* CNSortDescriptors.swift */,
 				05B32D6625150945000D1411 /* CNStack.swift */,
 				05B32D6C25150945000D1411 /* CNStringStream.swift */,
@@ -1505,6 +1513,7 @@
 				0586D131274D241600EF076D /* CNPoint.swift in Sources */,
 				05B32D8C25150946000D1411 /* CNType.swift in Sources */,
 				05B32D9425150946000D1411 /* CNStringUtil.swift in Sources */,
+				057B75502933811D00827E4A /* CNSemanticColorTable.swift in Sources */,
 				055039A0277D7DC0007FA515 /* CNStorageRecord.swift in Sources */,
 				05C66A9F28E1D52C00C5F44B /* CNValueType.swift in Sources */,
 				0559FB1327F719A400FE8726 /* CNMappingTable.swift in Sources */,
@@ -1515,6 +1524,7 @@
 				05BD1FFC292E1E0E00D8D1D3 /* CNWorkspace.swift in Sources */,
 				05DD2BA2281C9BEA00C725AD /* CNMappingRecord.swift in Sources */,
 				05B32D31251508D9000D1411 /* CNFile.swift in Sources */,
+				057B753629337EC800827E4A /* CNRGBColorTable.swift in Sources */,
 				05B32CAA2515025E000D1411 /* CNValueParser.swift in Sources */,
 				0591786128612B90008DB4BE /* CNMutableScalar.swift in Sources */,
 				05B32CD7251502E6000D1411 /* CNOperationContext.swift in Sources */,
@@ -1615,6 +1625,7 @@
 				05B32D44251508D9000D1411 /* CNConsole.swift in Sources */,
 				05B32CF225150328000D1411 /* CNUserDefaults.swift in Sources */,
 				055039A1277D7DC0007FA515 /* CNStorageRecord.swift in Sources */,
+				057B75512933811D00827E4A /* CNSemanticColorTable.swift in Sources */,
 				05C66AA028E1D52C00C5F44B /* CNValueType.swift in Sources */,
 				0559FB1427F719A400FE8726 /* CNMappingTable.swift in Sources */,
 				0596C57A2722EEF200E9A24F /* CNSymbol.swift in Sources */,
@@ -1625,6 +1636,7 @@
 				05BD1FFD292E1E0E00D8D1D3 /* CNWorkspace.swift in Sources */,
 				05B32D50251508F7000D1411 /* CNAppleEventManager.swift in Sources */,
 				05B32D8B25150946000D1411 /* CNObservedValue.swift in Sources */,
+				057B753729337EC800827E4A /* CNRGBColorTable.swift in Sources */,
 				0591786228612B90008DB4BE /* CNMutableScalar.swift in Sources */,
 				05B32D32251508D9000D1411 /* CNFile.swift in Sources */,
 				05B32CD8251502E6000D1411 /* CNOperationContext.swift in Sources */,
