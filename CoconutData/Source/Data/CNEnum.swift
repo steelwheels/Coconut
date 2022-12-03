@@ -413,11 +413,11 @@ public class CNEnumTable
 		])
 		self.add(enumType: fontsize)
 
-		let iconsize = CNEnumType(typeName: "IconSize")
+		let iconsize = CNEnumType(typeName: "SymbolSize")
 		iconsize.add(members: [
-			"small":		Int(CNIconSize.small.rawValue),
-			"regular":		Int(CNIconSize.regular.rawValue),
-			"large": 		Int(CNIconSize.large.rawValue)
+			"small":		Int(CNSymbolSize.small.rawValue),
+			"regular":		Int(CNSymbolSize.regular.rawValue),
+			"large": 		Int(CNSymbolSize.large.rawValue)
 		])
 		self.add(enumType: iconsize)
 
@@ -465,8 +465,8 @@ public class CNEnumTable
 
 		/* Symbol */
 		let symbol = CNEnumType(typeName: "SymbolType")
-		for symtyp in CNSymbol.SymbolType.allCases {
-			symbol.add(name: symtyp.name, value: symtyp.rawValue)
+		for symtyp in CNSymbol.allCases {
+			symbol.add(name: symtyp.identifier, value: symtyp.rawValue)
 		}
 		self.add(enumType: symbol)
 	}

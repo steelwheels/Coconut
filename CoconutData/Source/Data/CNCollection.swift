@@ -2,32 +2,19 @@
  * @file	CNCollection.swift
  * @brief	Define CNCollection class
  * @par Copyright
- *   Copyright (C) 2021 Steel Wheels Project
+ *   Copyright (C) 2021-2022 Steel Wheels Project
  */
 
 import Foundation
 
 public class CNCollection
 {
-	public enum Item {
-		case image(URL)
-
-		public var description: String { get {
-			let result: String
-			switch self {
-			case .image(let url):
-				result = "resource(\(url.path))"
-			}
-			return result
-		}}
-	}
-
 	private struct Section {
 		var header: String
 		var footer: String
-		var items: Array<Item>
+		var items: Array<CNSymbol>
 
-		public init(header hdr: String, footer ftr: String, items itms: Array<Item>){
+		public init(header hdr: String, footer ftr: String, items itms: Array<CNSymbol>){
 			header	= hdr
 			footer	= ftr
 			items   = itms
@@ -84,7 +71,7 @@ public class CNCollection
 		}
 	}
 
-	public func value(section sec: Int, item itm: Int) -> Item? {
+	public func value(section sec: Int, item itm: Int) -> CNSymbol? {
 		if 0<=sec && sec<mSections.count {
 			let sect = mSections[sec]
 			if 0<=itm && itm<sect.items.count {
@@ -94,7 +81,7 @@ public class CNCollection
 		return nil
 	}
 
-	public func add(header hdr: String, footer ftr: String, items itms: Array<Item>) {
+	public func add(header hdr: String, footer ftr: String, items itms: Array<CNSymbol>) {
 		let newsect = Section(header: hdr, footer: ftr, items: itms)
 		mSections.append(newsect)
 	}
@@ -111,11 +98,8 @@ public class CNCollection
 			newarr.header = "["
 			newarr.footer = "]"
 			for item in subsec.items {
-				switch item {
-				case .image(let url):
-					let line = CNTextLine(string: "image(\(url.path))")
-					newarr.add(text: line)
-				}
+				let line = CNTextLine(string: "symbol(\(item.name))")
+				newarr.add(text: line)
 			}
 			newsec.add(text: newarr)
 		}

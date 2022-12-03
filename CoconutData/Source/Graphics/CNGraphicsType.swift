@@ -76,12 +76,6 @@ public enum CNButtonState: Int {
 	}}
 }
 
-public enum CNIconSize: Int {
-	case small
-	case regular
-	case large
-}
-
 public struct CNPosition {
 	public var 	horizontal:	CNHorizontalPosition
 	public var	vertical:	CNVerticalPosition
