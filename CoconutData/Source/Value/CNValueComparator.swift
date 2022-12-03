@@ -28,7 +28,7 @@ public extension ComparisonResult
 private func CNCastToCompareValue(value val: CNValue) -> CNValue {
 	switch val {
 	case .enumValue(let eval):
-		return .numberValue(NSNumber(integerLiteral: eval.value))
+		return eval.value.toValue()
 	default:
 		return val
 	}

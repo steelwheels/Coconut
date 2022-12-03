@@ -9,22 +9,27 @@ import Foundation
 
 public func CNCastValue(from srcval: CNValue, to dsttyp: CNValueType) -> CNValue
 {
-	let result: CNValue
+	let eval: CNEnumType.Value
 	switch srcval {
 	case .numberValue(let num):
-		switch dsttyp {
-		case .enumType(let etype):
-			if let eobj = etype.search(byValue: num.intValue) {
-				result = .enumValue(eobj)
-			} else {
-				CNLog(logLevel: .error, message: "Unexpected raw value \(num.intValue) for \(etype.typeName)", atFunction: #function, inFile: #file)
-				result = srcval
-			}
-		default:
-			result = srcval
+		eval = .intValue(num.intValue)
+	case .stringValue(let str):
+		eval = .stringValue(str)
+	default:
+		return srcval	// Can not cast to enum
+	}
+
+	let result: CNValue
+	switch dsttyp {
+	case .enumType(let etype):
+		if let eobj = etype.search(byValue: eval) {
+			result = .enumValue(eobj)
+		} else {
+			CNLog(logLevel: .error, message: "Unexpected raw value \(srcval.description) for \(etype.typeName)", atFunction: #function, inFile: #file)
+			result = srcval	// Failed to cast to enum
 		}
 	default:
-		result = srcval
+		return srcval	// Can not cast to enum
 	}
 	return result
 }

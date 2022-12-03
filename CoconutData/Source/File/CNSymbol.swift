@@ -12,7 +12,10 @@ import UIKit
 #endif
 import Foundation
 
-public enum CNSymbolSize: Int {
+public enum CNSymbolSize: Int
+{
+	public static let typeName = "SymbolSize"
+	
 	case small	= 0
 	case regular	= 1
 	case large	= 2
@@ -20,9 +23,9 @@ public enum CNSymbolSize: Int {
 	public func toSize() -> CGSize {
 		let width: CGFloat
 		switch self {
-		case .small:	width =  64.0
-		case .regular:	width = 128.0
-		case .large:	width = 256.0
+		case .small:	width = 128.0
+		case .regular:	width = 256.0
+		case .large:	width = 384.0
 		}
 		return CGSize(width: width, height: width)
 	}
@@ -38,27 +41,27 @@ private let imagesInResource: Dictionary<String, String> = [ // (name, filename)
 
 	/* Following items are built-in at BigSur */
 	"character"		: "character.png",
-	"chevronBackward"	: "chevron_backward.png",
-	"chevronDown"		: "chevron_down.png",
-	"chevronForward"	: "chevron_forward.png",
-	"chevronUp"		: "chevron_up.png",
+	"chevron.backward"	: "chevron_backward.png",
+	"chevron.down"		: "chevron_down.png",
+	"chevron.forward"	: "chevron_forward.png",
+	"chevron.up"		: "chevron_up.png",
 	"gearshape"		: "gearshape.png",
-	"handPointUp"		: "hand_point_up.png",
-	"handRaised"		: "hand_raised.png",
-	"lineDiagonal"		: "line_diagonal.png",
-	"moonStars"		: "moon_stars.png",
+	"hand.point.up"		: "hand_point_up.png",
+	"hand.raised"		: "hand_raised.png",
+	"line.diagonal"		: "line_diagonal.png",
+	"moon.stars"		: "moon_stars.png",
 	"oval"			: "oval.png",
-	"ovalFill"		: "oval_fill.png",
+	"oval.fill"		: "oval_fill.png",
 	"paintbrush"		: "paintbrush.png",
 	"pencil"		: "pencil.png",
-	"pencilCircle"		: "pencil_circle.png",
-	"pencilCircleFill"	: "pencil_circle_fill.png",
+	"pencil.circle"		: "pencil_circle.png",
+	"pencil.circle.fill"	: "pencil_circle_fill.png",
 	"play"			: "play.png",
 	"questionmark"		: "questionmark.png",
 	"rectangle"		: "rectangle.png",
-	"rectangleFill"		: "rectangle_fill.png",
-	"sunMax"		: "sun_max.png",
-	"sunMin"		: "sun_min.png"
+	"rectangle.fill"	: "rectangle_fill.png",
+	"sun.max"		: "sun_max.png",
+	"sun.min"		: "sun_min.png"
 ]
 
 public enum CNSymbol: Int
@@ -157,6 +160,7 @@ public enum CNSymbol: Int
 		return result
 	}}
 
+	/*
 	public var identifier: String { get {
 		let result: String
 		switch self {
@@ -189,7 +193,7 @@ public enum CNSymbol: Int
 		case .sunMin:		result = "sunMin"
 		}
 		return result
-	}}
+	}}*/
 
 	public static func pencil(doFill fill: Bool) -> CNSymbol {
 		return fill ? .pencilCircleFill : .pencil
@@ -207,10 +211,9 @@ public enum CNSymbol: Int
 		return fill ? .ovalFill : .oval
 	}
 
-	public func load(size sz: CNSymbolSize) -> CNImage {
-		let targsize = sz.toSize()
+	public func load(size sz: CGSize) -> CNImage {
 		if let img = CNSymbol.loadImage(symbol: self) {
-			let newsize = img.size.resizeWithKeepingAscpect(inSize: targsize)
+			let newsize = img.size.resizeWithKeepingAscpect(inSize: sz)
 			if let newimg = img.resize(to: newsize) {
 				return newimg
 			}

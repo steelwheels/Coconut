@@ -14,7 +14,8 @@ import Foundation
 
 public struct CNEnum
 {
-	public static let ClassName = "enum"
+	public static let 	ClassName = "enum"
+	public typealias	Value     = CNEnumType.Value
 
 	private weak var	mEnumType:	CNEnumType?
 	private var 		mMemberName:	String
@@ -41,7 +42,7 @@ public struct CNEnum
 		}
 	}}
 
-	public var value: Int { get {
+	public var value: Value { get {
 		if let etype = mEnumType {
 			if let val = etype.value(forMember: mMemberName) {
 				return val
@@ -51,7 +52,7 @@ public struct CNEnum
 		} else {
 			CNLog(logLevel: .error, message: "No owner type", atFunction: #function, inFile: #file)
 		}
-		return 0
+		return .intValue(0)
 	}}
 
 	public static func fromValue(typeName tname: String, memberName mname: String) -> CNEnum? {
@@ -100,8 +101,48 @@ public class CNEnumType
 {
 	public static let ClassName		= "enumType"
 
+	public enum Value {
+		case intValue(Int)
+		case stringValue(String)
+
+		public func toValue() -> CNValue {
+			switch self {
+			case .intValue(let ival):	return CNValue.numberValue(NSNumber(integerLiteral: ival))
+			case .stringValue(let sval):	return CNValue.stringValue(sval)
+			}
+		}
+
+		public func toScript() -> String {
+			switch self {
+			case .intValue(let ival):	return "\(ival)"
+			case .stringValue(let sval):	return "\"\(sval)\""
+			}
+		}
+
+		public static func isSame(_ val0: Value, _ val1: Value) -> Bool {
+			var result = false
+			switch val0 {
+			case .intValue(let i0):
+				switch val1 {
+				case .intValue(let i1):
+					result = (i0 == i1)
+				case .stringValue(_):
+					break
+				}
+			case .stringValue(let s0):
+				switch val1 {
+				case .intValue(_):
+					break
+				case .stringValue(let s1):
+					result = (s0 == s1)
+				}
+			}
+			return result
+		}
+	}
+
 	private var mTypeName:		String
-	private var mMembers:		Dictionary<String, Int>	// <member-name, value>
+	private var mMembers:		Dictionary<String, Value>	// <member-name, value>
 
 	public var typeName: String { get {
 		return mTypeName
@@ -120,11 +161,11 @@ public class CNEnumType
 		}
 	}
 
-	public func add(name nm: String, value val: Int){
+	public func add(name nm: String, value val: Value){
 		mMembers[nm] = val
 	}
 
-	public func add(members membs: Dictionary<String, Int>){
+	public func add(members membs: Dictionary<String, Value>){
 		for key in membs.keys.sorted() {
 			if let val = membs[key] {
 				self.add(name: key, value: val)
@@ -136,13 +177,13 @@ public class CNEnumType
 		return mMembers.keys.sorted()
 	}}
 
-	public func value(forMember name: String) -> Int? {
+	public func value(forMember name: String) -> Value? {
 		return mMembers[name]
 	}
 
-	public func search(byValue targ: Int) -> CNEnum? {
+	public func search(byValue targ: Value) -> CNEnum? {
 		for (key, val) in mMembers {
-			if targ == val {
+			if CNEnumType.Value.isSame(targ, val) {
 				return CNEnum(type: self, member: key)
 			}
 		}
@@ -154,9 +195,11 @@ public class CNEnumType
 		for (key, val) in topval {
 			switch val {
 			case .boolValue(let val):
-				result.add(name: key, value: val ? 1 : 0)
+				result.add(name: key, value: .intValue(val ? 1 : 0))
 			case .numberValue(let num):
-				result.add(name: key, value: num.intValue)
+				result.add(name: key, value: .intValue(num.intValue))
+			case .stringValue(let str):
+				result.add(name: key, value: .stringValue(str))
 			default:
 				let txt = val.toScript().toStrings().joined(separator: "\n")
 				let err = NSError.parseError(message: "Invalid enum value: \(txt)")
@@ -169,7 +212,12 @@ public class CNEnumType
 	public func toValue() -> Dictionary<String, CNValue> {
 		var result: Dictionary<String, CNValue> = [:]
 		for (key, val) in mMembers {
-			result[key] = .numberValue(NSNumber(integerLiteral: val))
+			switch val {
+			case .intValue(let ival):
+				result[key] = .numberValue(NSNumber(integerLiteral: ival))
+			case .stringValue(let sval):
+				result[key] = .stringValue(sval)
+			}
 		}
 		return result
 	}
@@ -329,146 +377,139 @@ public class CNEnumTable
 	private func setDefaultValues() {
 		let alertcode = CNEnumType(typeName: "AlertType")
 		alertcode.add(members: [
-			"informational":	CNAlertType.informational.rawValue,
-			"warning":		CNAlertType.warning.rawValue,
-			"critical": 		CNAlertType.critical.rawValue
+			"informational":	.intValue(CNAlertType.informational.rawValue),
+			"warning":		.intValue(CNAlertType.warning.rawValue),
+			"critical": 		.intValue(CNAlertType.critical.rawValue)
 		])
 		self.add(enumType: alertcode)
 
 		let exitcode = CNEnumType(typeName: "ExitCode")
 		exitcode.add(members: [
-			"noError": 		CNExitCode.NoError.rawValue,
-			"internalError":	CNExitCode.InternalError.rawValue,
-			"commaneLineError":	CNExitCode.CommandLineError.rawValue,
-			"syntaxError":		CNExitCode.SyntaxError.rawValue,
-			"exception":		CNExitCode.Exception.rawValue
+			"noError": 		.intValue(CNExitCode.NoError.rawValue),
+			"internalError":	.intValue(CNExitCode.InternalError.rawValue),
+			"commaneLineError":	.intValue(CNExitCode.CommandLineError.rawValue),
+			"syntaxError":		.intValue(CNExitCode.SyntaxError.rawValue),
+			"exception":		.intValue(CNExitCode.Exception.rawValue)
 		])
 		self.add(enumType: exitcode)
 
 		let logcode = CNEnumType(typeName: "LogLevel")
 		logcode.add(members: [
-			"nolog":		CNConfig.LogLevel.nolog.rawValue,
-			"error":		CNConfig.LogLevel.error.rawValue,
-			"warning":		CNConfig.LogLevel.warning.rawValue,
-			"debug":		CNConfig.LogLevel.debug.rawValue,
-			"detail":		CNConfig.LogLevel.detail.rawValue
+			"nolog":		.intValue(CNConfig.LogLevel.nolog.rawValue),
+			"error":		.intValue(CNConfig.LogLevel.error.rawValue),
+			"warning":		.intValue(CNConfig.LogLevel.warning.rawValue),
+			"debug":		.intValue(CNConfig.LogLevel.debug.rawValue),
+			"detail":		.intValue(CNConfig.LogLevel.detail.rawValue)
 		])
 		self.add(enumType: logcode)
 
 		let filetype = CNEnumType(typeName: "FileType")
 		filetype.add(members: [
-			"notExist":		CNFileType.NotExist.rawValue,
-			"file":			CNFileType.File.rawValue,
-			"directory":		CNFileType.Directory.rawValue
+			"notExist":		.intValue(CNFileType.NotExist.rawValue),
+			"file":			.intValue(CNFileType.File.rawValue),
+			"directory":		.intValue(CNFileType.Directory.rawValue)
 		])
 		self.add(enumType: filetype)
 
 		let acctype = CNEnumType(typeName: "AccessType")
 		acctype.add(members: [
-			"read":			CNFileAccessType.ReadAccess.rawValue,
-			"write": 		CNFileAccessType.WriteAccess.rawValue,
-			"append": 		CNFileAccessType.AppendAccess.rawValue
+			"read":			.intValue(CNFileAccessType.ReadAccess.rawValue),
+			"write": 		.intValue(CNFileAccessType.WriteAccess.rawValue),
+			"append": 		.intValue(CNFileAccessType.AppendAccess.rawValue)
 		])
 		self.add(enumType: acctype)
 
 		let axis = CNEnumType(typeName: CNAxis.typeName)
 		axis.add(members: [
-			"horizontal":		CNAxis.horizontal.rawValue,
-			"vertical":		CNAxis.vertical.rawValue
+			"horizontal":		.intValue(CNAxis.horizontal.rawValue),
+			"vertical":		.intValue(CNAxis.vertical.rawValue)
 		])
 		self.add(enumType: axis)
 
 		let alignment = CNEnumType(typeName: CNAlignment.typeName)
 		alignment.add(members: [
-			"leading": 		CNAlignment.leading.rawValue,
-			"trailing": 		CNAlignment.trailing.rawValue,
-			"fill": 		CNAlignment.fill.rawValue,
-			"center": 		CNAlignment.center.rawValue
+			"leading": 		.intValue(CNAlignment.leading.rawValue),
+			"trailing": 		.intValue(CNAlignment.trailing.rawValue),
+			"fill": 		.intValue(CNAlignment.fill.rawValue),
+			"center": 		.intValue(CNAlignment.center.rawValue)
 		])
 		self.add(enumType: alignment)
 
 		let btnstate = CNEnumType(typeName: CNButtonState.typeName)
 		btnstate.add(members: [
-			"hidden":	CNButtonState.hidden.rawValue,
-			"disable":	CNButtonState.disable.rawValue,
-			"off":		CNButtonState.off.rawValue,
-			"on":		CNButtonState.on.rawValue
+			"hidden":	.intValue(CNButtonState.hidden.rawValue),
+			"disable":	.intValue(CNButtonState.disable.rawValue),
+			"off":		.intValue(CNButtonState.off.rawValue),
+			"on":		.intValue(CNButtonState.on.rawValue)
 		])
 		self.add(enumType: btnstate)
 
 		let distribution = CNEnumType(typeName: CNDistribution.typeName)
 		distribution.add(members: [
-			"fill":			CNDistribution.fill.rawValue,
-			"fillProportinally":	CNDistribution.fillProportinally.rawValue,
-			"fillEqually":		CNDistribution.fillEqually.rawValue,
-			"equalSpacing":		CNDistribution.equalSpacing.rawValue
+			"fill":			.intValue(CNDistribution.fill.rawValue),
+			"fillProportinally":	.intValue(CNDistribution.fillProportinally.rawValue),
+			"fillEqually":		.intValue(CNDistribution.fillEqually.rawValue),
+			"equalSpacing":		.intValue(CNDistribution.equalSpacing.rawValue)
 		])
 		self.add(enumType: distribution)
 
 		let fontsize = CNEnumType(typeName: "FontSize")
 		fontsize.add(members: [
-			"small":		Int(CNFont.smallSystemFontSize),
-			"regular":		Int(CNFont.systemFontSize),
-			"large": 		Int(CNFont.systemFontSize * 1.5)
+			"small":		.intValue(Int(CNFont.smallSystemFontSize)),
+			"regular":		.intValue(Int(CNFont.systemFontSize)),
+			"large": 		.intValue(Int(CNFont.systemFontSize * 1.5))
 		])
 		self.add(enumType: fontsize)
 
-		let iconsize = CNEnumType(typeName: "SymbolSize")
-		iconsize.add(members: [
-			"small":		Int(CNSymbolSize.small.rawValue),
-			"regular":		Int(CNSymbolSize.regular.rawValue),
-			"large": 		Int(CNSymbolSize.large.rawValue)
+		let symsize = CNEnumType(typeName: CNSymbolSize.typeName)
+		symsize.add(members: [
+			"small":		.intValue(Int(CNSymbolSize.small.rawValue)),
+			"regular":		.intValue(Int(CNSymbolSize.regular.rawValue)),
+			"large": 		.intValue(Int(CNSymbolSize.large.rawValue))
 		])
-		self.add(enumType: iconsize)
+		self.add(enumType: symsize)
 
 		let textalign = CNEnumType(typeName: "TextAlign")
 		textalign.add(members: [
-			"left":			NSTextAlignment.left.rawValue,
-			"center":		NSTextAlignment.center.rawValue,
-			"right":		NSTextAlignment.right.rawValue,
-			"justfied":		NSTextAlignment.justified.rawValue,
-			"normal":		NSTextAlignment.natural.rawValue
+			"left":			.intValue(NSTextAlignment.left.rawValue),
+			"center":		.intValue(NSTextAlignment.center.rawValue),
+			"right":		.intValue(NSTextAlignment.right.rawValue),
+			"justfied":		.intValue(NSTextAlignment.justified.rawValue),
+			"normal":		.intValue(NSTextAlignment.natural.rawValue)
 		])
 		self.add(enumType: textalign)
 
 		let authorize = CNEnumType(typeName: "Authorize")
 		authorize.add(members: [
-			"undetermined":		CNAuthorizeState.Undetermined.rawValue,
-			"denied":		CNAuthorizeState.Denied.rawValue,
-			"authorized":		CNAuthorizeState.Authorized.rawValue
+			"undetermined":		.intValue(CNAuthorizeState.Undetermined.rawValue),
+			"denied":		.intValue(CNAuthorizeState.Denied.rawValue),
+			"authorized":		.intValue(CNAuthorizeState.Authorized.rawValue)
 		])
 		self.add(enumType: authorize)
 
 		let animstate = CNEnumType(typeName: "AnimationState")
 		animstate.add(members: [
-			"idle":			CNAnimationState.idle.rawValue,
-			"run":			CNAnimationState.run.rawValue,
-			"pause":		CNAnimationState.pause.rawValue
+			"idle":			.intValue(CNAnimationState.idle.rawValue),
+			"run":			.intValue(CNAnimationState.run.rawValue),
+			"pause":		.intValue(CNAnimationState.pause.rawValue)
 		])
 		self.add(enumType: animstate)
 
 		let compres = CNEnumType(typeName: "ComparisonResult")
 		compres.add(members: [
-			"ascending":		ComparisonResult.orderedAscending.rawValue,
-			"same":			ComparisonResult.orderedSame.rawValue,
-			"descending":		ComparisonResult.orderedDescending.rawValue
+			"ascending":		.intValue(ComparisonResult.orderedAscending.rawValue),
+			"same":			.intValue(ComparisonResult.orderedSame.rawValue),
+			"descending":		.intValue(ComparisonResult.orderedDescending.rawValue)
 		])
 		self.add(enumType: compres)
 
 		let sortorder = CNEnumType(typeName: "SortOrder")
 		sortorder.add(members: [
-			"none":			CNSortOrder.none.rawValue,
-			"increasing":		CNSortOrder.increasing.rawValue,
-			"decreasing":		CNSortOrder.decreasing.rawValue
+			"none":			.intValue(CNSortOrder.none.rawValue),
+			"increasing":		.intValue(CNSortOrder.increasing.rawValue),
+			"decreasing":		.intValue(CNSortOrder.decreasing.rawValue)
 		])
 		self.add(enumType: sortorder)
-
-		/* Symbol */
-		let symbol = CNEnumType(typeName: "SymbolType")
-		for symtyp in CNSymbol.allCases {
-			symbol.add(name: symtyp.identifier, value: symtyp.rawValue)
-		}
-		self.add(enumType: symbol)
 	}
 }
 
