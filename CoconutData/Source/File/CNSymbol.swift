@@ -66,6 +66,8 @@ private let imagesInResource: Dictionary<String, String> = [ // (name, filename)
 
 public enum CNSymbol: Int
 {
+	public static let typeName = "Symbols"
+
 	case character
 	case chevronBackward
 	case chevronDown
@@ -160,7 +162,6 @@ public enum CNSymbol: Int
 		return result
 	}}
 
-	/*
 	public var identifier: String { get {
 		let result: String
 		switch self {
@@ -193,7 +194,7 @@ public enum CNSymbol: Int
 		case .sunMin:		result = "sunMin"
 		}
 		return result
-	}}*/
+	}}
 
 	public static func pencil(doFill fill: Bool) -> CNSymbol {
 		return fill ? .pencilCircleFill : .pencil

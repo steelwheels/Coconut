@@ -461,6 +461,14 @@ public class CNEnumTable
 		])
 		self.add(enumType: fontsize)
 
+		let symbol = CNEnumType(typeName: CNSymbol.typeName)
+		var symbols: Dictionary<String, CNEnumType.Value> = [:]
+		for sym in CNSymbol.allCases {
+			symbols[sym.identifier] = .stringValue(sym.name)
+		}
+		symbol.add(members: symbols)
+		self.add(enumType: symbol)
+
 		let symsize = CNEnumType(typeName: CNSymbolSize.typeName)
 		symsize.add(members: [
 			"small":		.intValue(Int(CNSymbolSize.small.rawValue)),
