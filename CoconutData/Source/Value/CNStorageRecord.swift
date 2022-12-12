@@ -119,7 +119,7 @@ public class CNStorageRecord: CNRecord
 		}
 	}
 
-	public func toDictionary() -> Dictionary<String, CNValue> {
+	public func toStructure() -> Dictionary<String, CNValue> {
 		var result: Dictionary<String, CNValue> = [
 			"class" : .stringValue(CNStorageRecord.ClassName)
 		]
@@ -131,7 +131,7 @@ public class CNStorageRecord: CNRecord
 		return result
 	}
 
-	public static func fromDictionary(value val: Dictionary<String, CNValue>) -> CNRecord? {
+	public static func fromStruct(value val: Dictionary<String, CNValue>) -> CNRecord? {
 		if CNValue.hasClassName(inValue: val, className: CNStorageRecord.ClassName) {
 			var dupval = val ; dupval["class"] = nil
 			let newrec = CNStorageRecord(defaultFields: dupval)

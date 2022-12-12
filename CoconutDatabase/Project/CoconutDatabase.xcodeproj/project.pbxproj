@@ -17,6 +17,7 @@
 		050916D126BE006C0019879C /* CNContactValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050916CF26BE006C0019879C /* CNContactValue.swift */; };
 		050916D726BE011F0019879C /* CNContactField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050916D626BE011F0019879C /* CNContactField.swift */; };
 		050916D826BE011F0019879C /* CNContactField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050916D626BE011F0019879C /* CNContactField.swift */; };
+		051A23B029476EA2007C6667 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F21E2E264295AD00B195E9 /* CoconutData.xcframework */; };
 		05911A2627F5F47C00061124 /* CNContactCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05911A2527F5F47C00061124 /* CNContactCache.swift */; };
 		05911A2727F5F47C00061124 /* CNContactCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05911A2527F5F47C00061124 /* CNContactCache.swift */; };
 		059226A526457EE90083E304 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059226A426457EE90083E304 /* AppDelegate.swift */; };
@@ -28,7 +29,6 @@
 		059226C22645848E0083E304 /* CoconutDatabase.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05C20D132642A3070021FC02 /* CoconutDatabase.xcframework */; };
 		059226C32645848E0083E304 /* CoconutDatabase.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05C20D132642A3070021FC02 /* CoconutDatabase.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		05EDD29F2644243600767743 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05EDD29E2644243600767743 /* Contacts.framework */; };
-		05F21E2F264295AD00B195E9 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F21E2E264295AD00B195E9 /* CoconutData.xcframework */; };
 		05F21E30264295AD00B195E9 /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05F21E2E264295AD00B195E9 /* CoconutData.xcframework */; };
 /* End PBXBuildFile section */
 
@@ -100,8 +100,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05F21E2F264295AD00B195E9 /* CoconutData.xcframework in Frameworks */,
 				05EDD29F2644243600767743 /* Contacts.framework in Frameworks */,
+				051A23B029476EA2007C6667 /* CoconutData.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,7 +521,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -602,7 +602,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutDatabase-macOS";
@@ -681,12 +681,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CoconutDatabase_iOS/Info.plist;
 				INSTALL_PATH = "$(HOME)/loca/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -763,12 +764,13 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CoconutDatabase_iOS/Info.plist;
 				INSTALL_PATH = "$(HOME)/loca/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutDatabase-iOS";
