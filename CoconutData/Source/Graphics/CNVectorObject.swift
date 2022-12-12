@@ -45,7 +45,7 @@ private func boolInDictionary(dictionary dict: Dictionary<String, CNValue>, forK
 private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGPoint? {
 	if let val = dict[key] {
 		switch val {
-		case .dictionaryValue(let dict):
+		case .structValue(let dict):
 			return CGPoint.fromValue(value: dict)
 		default:
 			break
@@ -57,7 +57,7 @@ private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, for
 private func sizeInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGSize? {
 	if let val = dict[key] {
 		switch val {
-		case .dictionaryValue(let dict):
+		case .structValue(let dict):
 			return CGSize.fromValue(value: dict)
 		default:
 			break
@@ -171,15 +171,22 @@ open class CNVectorObject
 		NSLog("Must be override: \(#function)")
 	}
 
-	public func toValue() -> Dictionary<String, CNValue> {
-		let result: Dictionary<String, CNValue> = [
+	/*
+	public func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNVectorObject.ClassName) {
+			stype = typ
+		} else {
+			stype = CNStructType(typeName: "dummy")
+		}
+		let values: Dictionary<String, CNValue> = [
 			"lineWidth"   : floatToValue(value: self.lineWidth),
 			"doFill"      : boolToValue(value: self.doFill),
-			"fillColor"   : .dictionaryValue(fillColor.toValue()),
-			"strokeColor" : .dictionaryValue(strokeColor.toValue())
+			"fillColor"   : .structValue(fillColor.toValue()),
+			"strokeColor" : .structValue(strokeColor.toValue())
 		]
-		return result
-	}
+		return CNStruct(type: stype, values: values)
+	}*/
 
 	public static func decode(value val: Dictionary<String, CNValue>) -> (CGFloat, Bool, CNColor, CNColor)? {
 		guard let lwidth = floatInDictionary(dictionary: val, forKey: "lineWidth") else {
@@ -231,7 +238,7 @@ public class CNPathObject: CNVectorObject
 
 public class CNVectorPath: CNPathObject
 {
-	public static let ClassName = "vectorPath"
+	public static let ClassName = "VectorPath"
 
 	private var mPoints:	Array<CGPoint>
 
@@ -266,7 +273,7 @@ public class CNVectorPath: CNPathObject
 			var result: Array<CGPoint> = []
 			for elm in elms {
 				switch elm {
-				case .dictionaryValue(let dict):
+				case .structValue(let dict):
 					if let pt = CGPoint.fromValue(value: dict) {
 						result.append(pt)
 					} else {
@@ -311,21 +318,31 @@ public class CNVectorPath: CNPathObject
 		mPoints = newpoints
 	}
 
-	public override func toValue() -> Dictionary<String, CNValue> {
-		var result = super.toValue()
+	public func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNVectorPath.ClassName) {
+			stype = typ
+		} else {
+			stype = CNStructType(typeName: "dummy")
+		}
 		var points: Array<CNValue> = []
 		for pt in mPoints {
-			points.append(.dictionaryValue(pt.toValue()))
+			points.append(.structValue(pt.toValue()))
 		}
-		result["class" ] = .stringValue(CNVectorPath.ClassName)
-		result["points"] = .arrayValue(points)
-		return result
+		let values: Dictionary<String, CNValue> = [
+			"lineWidth"   : floatToValue(value: self.lineWidth),
+			"doFill"      : boolToValue(value: self.doFill),
+			"fillColor"   : .structValue(fillColor.toValue()),
+			"strokeColor" : .structValue(strokeColor.toValue()),
+			"points"      : .arrayValue(points)
+		]
+		return CNStruct(type: stype, values: values)
 	}
 }
 
 public class CNVectorRect: CNPathObject
 {
-	public static let ClassName = "vectorRect"
+	public static let ClassName = "VectorRect"
 
 	public var originPoint:		CGPoint
 	public var endPoint:		CGPoint
@@ -362,16 +379,26 @@ public class CNVectorRect: CNPathObject
 		return nil
 	}
 
-	public override func toValue() -> Dictionary<String, CNValue> {
+	public func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNVectorRect.ClassName) {
+			stype = typ
+		} else {
+			stype = CNStructType(typeName: "dummy")
+		}
 		let rect = self.toRect()
-		var result = super.toValue()
-		result["class"    ] = .stringValue(CNVectorRect.ClassName)
-		result["origin"   ] = .dictionaryValue(rect.origin.toValue())
-		result["size"     ] = .dictionaryValue(rect.size.toValue())
-		result["isRounded"] = .boolValue(self.isRounded)
-		result["rx"       ] = floatToValue(value: self.roundValue)
-		result["ry"       ] = floatToValue(value: self.roundValue)
-		return result
+		let values: Dictionary<String, CNValue> = [
+			"lineWidth"   : floatToValue(value: self.lineWidth),
+			"doFill"      : boolToValue(value: self.doFill),
+			"fillColor"   : .structValue(fillColor.toValue()),
+			"strokeColor" : .structValue(strokeColor.toValue()),
+			"origin"      : .structValue(rect.origin.toValue()),
+			"size"	      : .structValue(rect.size.toValue()),
+			"isRounded"   : .boolValue(self.isRounded),
+			"rx"	      : floatToValue(value: self.roundValue),
+			"ry"	      : floatToValue(value: self.roundValue)
+		]
+		return CNStruct(type: stype, values: values)
 	}
 
 	public var roundValue: CGFloat {
@@ -452,7 +479,7 @@ public class CNVectorRect: CNPathObject
 
 public class CNVectorOval: CNPathObject
 {
-	public static let ClassName = "vectorOval"
+	public static let ClassName = "VectorOval"
 
 	public var centerPoint:		CGPoint
 	public var endPoint:		CGPoint
@@ -484,18 +511,24 @@ public class CNVectorOval: CNPathObject
 		return nil
 	}
 
-	public override func toValue() -> Dictionary<String, CNValue> {
-		var result = super.toValue()
-		let rnum   = NSNumber(floatLiteral: Double(self.radius))
-		let local: Dictionary<String, CNValue> = [
+	public func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNVectorOval.ClassName) {
+			stype = typ
+		} else {
+			stype = CNStructType(typeName: "dummy")
+		}
+		let rnum = NSNumber(floatLiteral: Double(self.radius))
+		let values: Dictionary<String, CNValue> = [
+			"lineWidth"   : floatToValue(value: self.lineWidth),
+			"doFill"      : boolToValue(value: self.doFill),
+			"fillColor"   : .structValue(fillColor.toValue()),
+			"strokeColor" : .structValue(strokeColor.toValue()),
 			"class"	      : .stringValue(CNVectorOval.ClassName),
-			"center"      : .dictionaryValue(centerPoint.toValue()),
+			"center"      : .structValue(centerPoint.toValue()),
 			"radius"      : .numberValue(rnum)
 		]
-		for (key, val) in local {
-			result[key] = val
-		}
-		return result
+		return CNStruct(type: stype, values: values)
 	}
 
 	public var radius: CGFloat { get {
@@ -556,7 +589,7 @@ public class CNVectorString: CNVectorObject
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorString? {
 		if let orgval = val["origin"], let txtval = val["text"], let fontval = val["font"], let colval = val["color"] {
-			if let orgdict = orgval.toDictionary(), let txtstr = txtval.toString(), let fontdict = fontval.toDictionary(), let coldict = colval.toDictionary() {
+			if let orgdict = orgval.toStruct(), let txtstr = txtval.toString(), let fontdict = fontval.toDictionary(), let coldict = colval.toDictionary() {
 				if let orgpt = CGPoint.fromValue(value: orgdict),
 				   let font  = CNFont.fromValue(value: fontdict),
 				   let color = CNColor.fromValue(value: coldict) {
@@ -570,19 +603,24 @@ public class CNVectorString: CNVectorObject
 		return nil
 	}
 
-	public override func toValue() -> Dictionary<String, CNValue> {
+	public func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNFont.ClassName) {
+			stype = typ
+		} else {
+			stype = CNStructType(typeName: "dummy")
+		}
 		let orgpt = self.originPoint.toValue()
 		let text  = CNValue.stringValue(string)
 		let fnt   = font.toValue()
 		let color = self.strokeColor.toValue()
-		let result: Dictionary<String, CNValue> = [
-			"class":	.stringValue(CNVectorString.ClassName),
-			"origin":	.dictionaryValue(orgpt),
+		let values: Dictionary<String, CNValue> = [
+			"origin":	.structValue(orgpt),
 			"text":		text,
-			"font":		.dictionaryValue(fnt),
-			"color":	.dictionaryValue(color)
+			"font":		.structValue(fnt),
+			"color":	.structValue(color)
 		]
-		return result
+		return CNStruct(type: stype, values: values)
 	}
 
 	public var isEmpty: Bool {

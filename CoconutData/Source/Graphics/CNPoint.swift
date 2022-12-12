@@ -10,18 +10,18 @@ import Foundation
 
 public extension CGPoint
 {
-	static let ClassName = "point"
+	static let ClassName = "Point"
 
 	static func fromValue(value val: CNValue) -> CGPoint? {
-		if let dict = val.toDictionary() {
+		if let dict = val.toStruct() {
 			return fromValue(value: dict)
 		} else {
 			return nil
 		}
 	}
 
-	static func fromValue(value val: Dictionary<String, CNValue>) -> CGPoint? {
-		if let xval = val["x"], let yval = val["y"] {
+	static func fromValue(value val: CNStruct) -> CGPoint? {
+		if let xval = val.value(forMember: "x"), let yval = val.value(forMember: "y") {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
 				let x:CGFloat = CGFloat(xnum.floatValue)
 				let y:CGFloat = CGFloat(ynum.floatValue)
@@ -31,15 +31,20 @@ public extension CGPoint
 		return nil
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
+	func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CGPoint.ClassName) {
+			stype = typ
+		} else {
+			stype = CNStructType(typeName: "dummy")
+		}
 		let xnum = NSNumber(floatLiteral: Double(self.x))
 		let ynum = NSNumber(floatLiteral: Double(self.y))
-		let result: Dictionary<String, CNValue> = [
-			"class" : .stringValue(CGPoint.ClassName),
+		let values: Dictionary<String, CNValue> = [
 			"x"     : .numberValue(xnum),
 			"y"     : .numberValue(ynum)
 		]
-		return result
+		return CNStruct(type: stype, values: values)
 	}
 
 	func moving(dx x: CGFloat, dy y: CGFloat) -> CGPoint {

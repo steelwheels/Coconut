@@ -14,7 +14,7 @@ import UIKit
 
 public extension CNImage
 {
-	private static let ClassName = "Image"
+	static let ClassName = "Image"
 
 	#if os(OSX)
 	func pngData() -> Data? {
@@ -33,12 +33,17 @@ public extension CNImage
 	}
 	#endif
 
-	func toValue() -> Dictionary<String, CNValue> {
-		let result: Dictionary<String, CNValue> = [
-			"class":	.stringValue(CNImage.ClassName),
-			"size":		.dictionaryValue(self.size.toValue())
+	func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNImage.ClassName) {
+			stype = typ
+		} else {
+			stype = CNStructType(typeName: "dummy")
+		}
+		let values: Dictionary<String, CNValue> = [
+			"size":		.structValue(self.size.toValue())
 		]
-		return result
+		return CNStruct(type: stype, values: values)
 	}
 }
 

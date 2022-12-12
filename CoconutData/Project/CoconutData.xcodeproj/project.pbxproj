@@ -29,8 +29,6 @@
 		052F1DA728AA4781006C21D9 /* CNValueCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052F1DA628AA4781006C21D9 /* CNValueCaster.swift */; };
 		052F1DA828AA4781006C21D9 /* CNValueCaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052F1DA628AA4781006C21D9 /* CNValueCaster.swift */; };
 		052F30F4278F246500CADA5C /* UTValuePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052F30F3278F246500CADA5C /* UTValuePath.swift */; };
-		0535D84B28560FBE00FD720C /* CNValueSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535D84A28560FBE00FD720C /* CNValueSet.swift */; };
-		0535D84C28560FBE00FD720C /* CNValueSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535D84A28560FBE00FD720C /* CNValueSet.swift */; };
 		0535D8542856198900FD720C /* UTValueSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535D8532856198900FD720C /* UTValueSet.swift */; };
 		0538CFD9293ABA5200C10093 /* character.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0538CF96293AB68F00C10093 /* character.png */; };
 		0538CFDA293ABA5200C10093 /* chevron_backward.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0538CF99293AB68F00C10093 /* chevron_backward.png */; };
@@ -94,6 +92,8 @@
 		053C3A9A275FA729009FA25D /* CNRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053C3A98275FA729009FA25D /* CNRange.swift */; };
 		053C3AA2275FAABC009FA25D /* CNEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053C3AA1275FAABC009FA25D /* CNEnum.swift */; };
 		053C3AA3275FAABC009FA25D /* CNEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053C3AA1275FAABC009FA25D /* CNEnum.swift */; };
+		053D3342294239BF009E2F0E /* CNValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D3341294239BF009E2F0E /* CNValueCoder.swift */; };
+		053D3343294239BF009E2F0E /* CNValueCoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053D3341294239BF009E2F0E /* CNValueCoder.swift */; };
 		053E2A792936565100D94C85 /* line_1p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053E2A75293655D400D94C85 /* line_1p.png */; };
 		053E2A7A2936565100D94C85 /* line_2p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053E2A76293655D400D94C85 /* line_2p.png */; };
 		053E2A7B2936565100D94C85 /* line_4p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053E2A73293655D400D94C85 /* line_4p.png */; };
@@ -105,6 +105,8 @@
 		053E2A852936566600D94C85 /* line_8p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053E2A74293655D400D94C85 /* line_8p.png */; };
 		053E2A862936566600D94C85 /* line_16p.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 053E2A77293655D400D94C85 /* line_16p.png */; };
 		053EC40927F7CEC10053FE24 /* UTMappingTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053EC40827F7CEC10053FE24 /* UTMappingTable.swift */; };
+		053F38AE2943E56C0090D0F5 /* CNStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F38AD2943E56C0090D0F5 /* CNStruct.swift */; };
+		053F38AF2943E56C0090D0F5 /* CNStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F38AD2943E56C0090D0F5 /* CNStruct.swift */; };
 		05484964278A6D1800642FAC /* CNValuePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05484963278A6D1800642FAC /* CNValuePath.swift */; };
 		05484965278A6D1800642FAC /* CNValuePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05484963278A6D1800642FAC /* CNValuePath.swift */; };
 		0548496D278A888400642FAC /* UTMutableValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0548496C278A888400642FAC /* UTMutableValue.swift */; };
@@ -290,6 +292,13 @@
 		05C66AA028E1D52C00C5F44B /* CNValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C66A9E28E1D52C00C5F44B /* CNValueType.swift */; };
 		05D0C7EC280BB22F00CE3AFC /* CoconutData.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; };
 		05D0C7ED280BB22F00CE3AFC /* CoconutData.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 05B32DD025160330000D1411 /* CoconutData.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		05D26A012942DFDB0022E154 /* CNValueConverters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D26A002942DFDB0022E154 /* CNValueConverters.swift */; };
+		05D26A022942DFDB0022E154 /* CNValueConverters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D26A002942DFDB0022E154 /* CNValueConverters.swift */; };
+		05D26A16294374490022E154 /* CNNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D26A15294374490022E154 /* CNNumber.swift */; };
+		05D26A17294374490022E154 /* CNNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D26A15294374490022E154 /* CNNumber.swift */; };
+		05D5DE6D2945E6DF00803401 /* UTValueConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D5DE6C2945E6DF00803401 /* UTValueConvert.swift */; };
+		05D5DE70294603B200803401 /* CNComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D5DE6E2945FB6100803401 /* CNComparator.swift */; };
+		05D5DE71294603B300803401 /* CNComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D5DE6E2945FB6100803401 /* CNComparator.swift */; };
 		05DD2BA2281C9BEA00C725AD /* CNMappingRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DD2BA1281C9BEA00C725AD /* CNMappingRecord.swift */; };
 		05DD2BA3281C9BEA00C725AD /* CNMappingRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DD2BA1281C9BEA00C725AD /* CNMappingRecord.swift */; };
 		05DD2BAB281CA01700C725AD /* CNRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DD2BAA281CA01700C725AD /* CNRecord.swift */; };
@@ -542,7 +551,6 @@
 		052E27DF2625E5EF00414C26 /* UTCommandTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTCommandTable.swift; sourceTree = "<group>"; };
 		052F1DA628AA4781006C21D9 /* CNValueCaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueCaster.swift; sourceTree = "<group>"; };
 		052F30F3278F246500CADA5C /* UTValuePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValuePath.swift; sourceTree = "<group>"; };
-		0535D84A28560FBE00FD720C /* CNValueSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueSet.swift; sourceTree = "<group>"; };
 		0535D8532856198900FD720C /* UTValueSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValueSet.swift; sourceTree = "<group>"; };
 		0538CF94293AB68F00C10093 /* hand_point_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hand_point_up.png; sourceTree = "<group>"; };
 		0538CF95293AB68F00C10093 /* chevron_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron_down.png; sourceTree = "<group>"; };
@@ -576,12 +584,14 @@
 		053B4EE9255FE176004B9052 /* UnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = UnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		053C3A98275FA729009FA25D /* CNRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRange.swift; sourceTree = "<group>"; };
 		053C3AA1275FAABC009FA25D /* CNEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNEnum.swift; sourceTree = "<group>"; };
+		053D3341294239BF009E2F0E /* CNValueCoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValueCoder.swift; sourceTree = "<group>"; };
 		053E2A73293655D400D94C85 /* line_4p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_4p.png; sourceTree = "<group>"; };
 		053E2A74293655D400D94C85 /* line_8p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_8p.png; sourceTree = "<group>"; };
 		053E2A75293655D400D94C85 /* line_1p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_1p.png; sourceTree = "<group>"; };
 		053E2A76293655D400D94C85 /* line_2p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_2p.png; sourceTree = "<group>"; };
 		053E2A77293655D400D94C85 /* line_16p.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_16p.png; sourceTree = "<group>"; };
 		053EC40827F7CEC10053FE24 /* UTMappingTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMappingTable.swift; sourceTree = "<group>"; };
+		053F38AD2943E56C0090D0F5 /* CNStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStruct.swift; sourceTree = "<group>"; };
 		05484963278A6D1800642FAC /* CNValuePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValuePath.swift; sourceTree = "<group>"; };
 		0548496C278A888400642FAC /* UTMutableValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTMutableValue.swift; sourceTree = "<group>"; };
 		0550399F277D7DC0007FA515 /* CNStorageRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNStorageRecord.swift; sourceTree = "<group>"; };
@@ -689,6 +699,10 @@
 		05BD1FFB292E1E0E00D8D1D3 /* CNWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNWorkspace.swift; sourceTree = "<group>"; };
 		05BEE0ED2634E02100178484 /* CNStandardFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStandardFiles.swift; sourceTree = "<group>"; };
 		05C66A9E28E1D52C00C5F44B /* CNValueType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueType.swift; sourceTree = "<group>"; };
+		05D26A002942DFDB0022E154 /* CNValueConverters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNValueConverters.swift; sourceTree = "<group>"; };
+		05D26A15294374490022E154 /* CNNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNNumber.swift; sourceTree = "<group>"; };
+		05D5DE6C2945E6DF00803401 /* UTValueConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTValueConvert.swift; sourceTree = "<group>"; };
+		05D5DE6E2945FB6100803401 /* CNComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNComparator.swift; sourceTree = "<group>"; };
 		05DD2BA1281C9BEA00C725AD /* CNMappingRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNMappingRecord.swift; sourceTree = "<group>"; };
 		05DD2BAA281CA01700C725AD /* CNRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNRecord.swift; sourceTree = "<group>"; };
 		05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTVectorGraphics.swift; sourceTree = "<group>"; };
@@ -809,6 +823,7 @@
 				055C8AEA25DD62F50053510B /* UTToken.swift */,
 				059BA6D2256B20B500893641 /* UTType.swift */,
 				05FC3861255FEC1D004CA79E /* UTURL.swift */,
+				05D5DE6C2945E6DF00803401 /* UTValueConvert.swift */,
 				0535D8532856198900FD720C /* UTValueSet.swift */,
 				059ED0AA28D8ACD900E12253 /* UTValueType.swift */,
 				05DDE3D0275BA2D7009F0B6E /* UTVectorGraphics.swift */,
@@ -991,13 +1006,14 @@
 				0591787E286132C8008DB4BE /* CNMutableSegment.swift */,
 				05B32CA32515025E000D1411 /* CNValue.swift */,
 				052F1DA628AA4781006C21D9 /* CNValueCaster.swift */,
+				053D3341294239BF009E2F0E /* CNValueCoder.swift */,
 				05A501B426A4203E00A992F9 /* CNValueComparator.swift */,
+				05D26A002942DFDB0022E154 /* CNValueConverters.swift */,
 				050E87172813D09000E84644 /* CNValueLabels.swift */,
 				05B32CA02515025E000D1411 /* CNValueParser.swift */,
 				05484963278A6D1800642FAC /* CNValuePath.swift */,
 				05A506B028016FA100F5B53A /* CNValuePointer.swift */,
 				05B7B1AE277606810077DEDC /* CNValueSegment.swift */,
-				0535D84A28560FBE00FD720C /* CNValueSet.swift */,
 				05C66A9E28E1D52C00C5F44B /* CNValueType.swift */,
 				05A1AFB8277689F90091D527 /* CNStorage.swift */,
 				0585E85D2860ACD900C5C1B8 /* CNStorageArray.swift */,
@@ -1132,6 +1148,7 @@
 				05B32D6525150945000D1411 /* CNAttributedString.swift */,
 				05B32D6325150945000D1411 /* CNCharacter.swift */,
 				05F924AE27243267008BAFDC /* CNCollection.swift */,
+				05D5DE6E2945FB6100803401 /* CNComparator.swift */,
 				05B32D7225150945000D1411 /* CNColor.swift */,
 				053C3AA1275FAABC009FA25D /* CNEnum.swift */,
 				05B32D6425150945000D1411 /* CNEscapeCode.swift */,
@@ -1140,6 +1157,7 @@
 				05B32D6725150945000D1411 /* CNKeyCode.swift */,
 				05DD2BA1281C9BEA00C725AD /* CNMappingRecord.swift */,
 				0559FB1227F719A400FE8726 /* CNMappingTable.swift */,
+				05D26A15294374490022E154 /* CNNumber.swift */,
 				05B32D6E25150945000D1411 /* CNObservedValue.swift */,
 				05B32D6825150945000D1411 /* CNQueue.swift */,
 				053C3A98275FA729009FA25D /* CNRange.swift */,
@@ -1150,6 +1168,7 @@
 				05B32D6625150945000D1411 /* CNStack.swift */,
 				05B32D6C25150945000D1411 /* CNStringStream.swift */,
 				05B32D7325150945000D1411 /* CNStringUtil.swift */,
+				053F38AD2943E56C0090D0F5 /* CNStruct.swift */,
 				05692FE3286B2CE8006F85F2 /* CNSort.swift */,
 				05FDF1B8276D6350004E2781 /* CNTable.swift */,
 				05B32D6F25150945000D1411 /* CNType.swift */,
@@ -1351,7 +1370,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1410;
 				TargetAttributes = {
 					050331D628A3244100321BD4 = {
 						CreatedOnToolsVersion = 12.4;
@@ -1445,6 +1464,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05D5DE6D2945E6DF00803401 /* UTValueConvert.swift in Sources */,
 				05FC3880255FEC1E004CA79E /* UTFile.swift in Sources */,
 				05FC387F255FEC1E004CA79E /* UTObserver.swift in Sources */,
 				05FC3876255FEC1E004CA79E /* UTFileManager.swift in Sources */,
@@ -1505,7 +1525,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0535D84B28560FBE00FD720C /* CNValueSet.swift in Sources */,
 				052F1DA728AA4781006C21D9 /* CNValueCaster.swift in Sources */,
 				05B32CF325150328000D1411 /* CNPreferenceTable.swift in Sources */,
 				05B32D0225150368000D1411 /* CNTokenStream.swift in Sources */,
@@ -1516,6 +1535,7 @@
 				05B32D37251508D9000D1411 /* CNCurses.swift in Sources */,
 				05BEE0EE2634E02100178484 /* CNStandardFiles.swift in Sources */,
 				05B32D3D251508D9000D1411 /* CNFileHandle.swift in Sources */,
+				05D26A16294374490022E154 /* CNNumber.swift in Sources */,
 				051ED8E425C99269003AD1F6 /* CNBitmapContext.swift in Sources */,
 				05B32CC6251502BE000D1411 /* CNFont.swift in Sources */,
 				05B32CC8251502BE000D1411 /* CNFontManager.swift in Sources */,
@@ -1528,6 +1548,7 @@
 				055039A0277D7DC0007FA515 /* CNStorageRecord.swift in Sources */,
 				05C66A9F28E1D52C00C5F44B /* CNValueType.swift in Sources */,
 				0559FB1327F719A400FE8726 /* CNMappingTable.swift in Sources */,
+				053F38AE2943E56C0090D0F5 /* CNStruct.swift in Sources */,
 				05B32D4F251508F7000D1411 /* CNAppleEventManager.swift in Sources */,
 				0596C5792722EEF200E9A24F /* CNSymbol.swift in Sources */,
 				05B32D8A25150945000D1411 /* CNObservedValue.swift in Sources */,
@@ -1565,6 +1586,7 @@
 				052E27D42625DCA100414C26 /* CNCommandTable.swift in Sources */,
 				05DD2BAB281CA01700C725AD /* CNRecord.swift in Sources */,
 				05A1AFB9277689F90091D527 /* CNStorage.swift in Sources */,
+				053D3342294239BF009E2F0E /* CNValueCoder.swift in Sources */,
 				05A501B526A4203E00A992F9 /* CNValueComparator.swift in Sources */,
 				057623E026A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */,
 				0551394125CC2BD6007B1C6B /* CNTimer.swift in Sources */,
@@ -1572,6 +1594,7 @@
 				05B32D8625150945000D1411 /* CNStringStream.swift in Sources */,
 				05B32D2B251508D9000D1411 /* CNFilePath.swift in Sources */,
 				05B32D8225150945000D1411 /* CNCommandHistory.swift in Sources */,
+				05D5DE71294603B300803401 /* CNComparator.swift in Sources */,
 				055C85E625A1F47F0064BE93 /* CNReadline.swift in Sources */,
 				0585E8672860B6F100C5C1B8 /* CNStorageSet.swift in Sources */,
 				0586D148274D2AFA00EF076D /* CNSize.swift in Sources */,
@@ -1598,6 +1621,7 @@
 				05B32D7425150945000D1411 /* CNCharacter.swift in Sources */,
 				05F4AA21263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */,
 				05A506B128016FA100F5B53A /* CNValuePointer.swift in Sources */,
+				05D26A012942DFDB0022E154 /* CNValueConverters.swift in Sources */,
 				05DE4D4C2864B09500ABA462 /* CNMutableSet.swift in Sources */,
 				0591788828613339008DB4BE /* CNMutablePointer.swift in Sources */,
 				05B32D5C25150926000D1411 /* CNExitCode.swift in Sources */,
@@ -1617,7 +1641,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0535D84C28560FBE00FD720C /* CNValueSet.swift in Sources */,
 				052F1DA828AA4781006C21D9 /* CNValueCaster.swift in Sources */,
 				05B32CF425150328000D1411 /* CNPreferenceTable.swift in Sources */,
 				05B32D0325150368000D1411 /* CNTokenStream.swift in Sources */,
@@ -1628,6 +1651,7 @@
 				05B32D38251508D9000D1411 /* CNCurses.swift in Sources */,
 				05B32CB525150299000D1411 /* CNValue.swift in Sources */,
 				05BEE0EF2634E02100178484 /* CNStandardFiles.swift in Sources */,
+				05D26A17294374490022E154 /* CNNumber.swift in Sources */,
 				05B32D3E251508D9000D1411 /* CNFileHandle.swift in Sources */,
 				051ED8E525C99269003AD1F6 /* CNBitmapContext.swift in Sources */,
 				05B32CC7251502BE000D1411 /* CNFont.swift in Sources */,
@@ -1640,6 +1664,7 @@
 				05C66AA028E1D52C00C5F44B /* CNValueType.swift in Sources */,
 				0559FB1427F719A400FE8726 /* CNMappingTable.swift in Sources */,
 				0596C57A2722EEF200E9A24F /* CNSymbol.swift in Sources */,
+				053F38AF2943E56C0090D0F5 /* CNStruct.swift in Sources */,
 				05B32D8D25150946000D1411 /* CNType.swift in Sources */,
 				05B32D9525150946000D1411 /* CNStringUtil.swift in Sources */,
 				05917880286132C8008DB4BE /* CNMutableSegment.swift in Sources */,
@@ -1677,6 +1702,7 @@
 				05A1AFBA277689F90091D527 /* CNStorage.swift in Sources */,
 				05DD2BAC281CA01700C725AD /* CNRecord.swift in Sources */,
 				052E27D52625DCA100414C26 /* CNCommandTable.swift in Sources */,
+				053D3343294239BF009E2F0E /* CNValueCoder.swift in Sources */,
 				05A501B626A4203E00A992F9 /* CNValueComparator.swift in Sources */,
 				057623E126A8E2CC007A3966 /* CNSortDescriptors.swift in Sources */,
 				0551394225CC2BD6007B1C6B /* CNTimer.swift in Sources */,
@@ -1684,6 +1710,7 @@
 				05B32D8725150945000D1411 /* CNStringStream.swift in Sources */,
 				05B32D2C251508D9000D1411 /* CNFilePath.swift in Sources */,
 				0586D149274D2AFA00EF076D /* CNSize.swift in Sources */,
+				05D5DE70294603B200803401 /* CNComparator.swift in Sources */,
 				05B32D8325150945000D1411 /* CNCommandHistory.swift in Sources */,
 				0585E8682860B6F100C5C1B8 /* CNStorageSet.swift in Sources */,
 				055C85E725A1F47F0064BE93 /* CNReadline.swift in Sources */,
@@ -1710,6 +1737,7 @@
 				05B32D7525150945000D1411 /* CNCharacter.swift in Sources */,
 				05F4AA22263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */,
 				05A506B228016FA100F5B53A /* CNValuePointer.swift in Sources */,
+				05D26A022942DFDB0022E154 /* CNValueConverters.swift in Sources */,
 				05DE4D4D2864B09500ABA462 /* CNMutableSet.swift in Sources */,
 				0591788928613339008DB4BE /* CNMutablePointer.swift in Sources */,
 				05B32D5D25150926000D1411 /* CNExitCode.swift in Sources */,
@@ -1796,6 +1824,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUGGING_SYMBOLS = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
@@ -1834,6 +1863,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1863,8 +1893,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1881,10 +1913,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_INCLUDE_PATHS = "$(HOME)/local/Frameworks/macos";
@@ -1911,6 +1945,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1923,10 +1958,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_INCLUDE_PATHS = "$(HOME)/local/Frameworks/macos";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1957,6 +1993,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1975,7 +2012,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.ResourceTest;
@@ -2011,6 +2048,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -2025,7 +2063,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
@@ -2033,7 +2071,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_DISABLE_SAFETY_CHECKS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -2061,6 +2099,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2070,6 +2109,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -2095,6 +2135,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2103,6 +2144,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -2141,10 +2183,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
@@ -2175,10 +2219,10 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutData-macOS";
 				PRODUCT_NAME = CoconutData;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2226,10 +2270,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
@@ -2255,7 +2301,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
@@ -2264,7 +2310,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
-				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2305,7 +2351,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2334,15 +2380,16 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CoconutData_iOS/Info.plist;
 				INSTALL_PATH = "$(HOME)/local/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutData-iOS";
 				PRODUCT_NAME = CoconutData;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2392,7 +2439,8 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2416,21 +2464,23 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = CoconutData_iOS/Info.plist;
 				INSTALL_PATH = "$(HOME)/local/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "github.com.steelwheels.CoconutData-iOS";
 				PRODUCT_NAME = CoconutData;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_COMPILATION_MODE = singlefile;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2475,6 +2525,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUGGING_SYMBOLS = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
@@ -2539,6 +2590,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2577,6 +2629,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -2590,7 +2643,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ../Test/UnitTestBundle/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UnitTestBundle;
@@ -2620,6 +2673,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2628,7 +2682,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = ../Test/UnitTestBundle/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = github.com.steelwheels.UnitTestBundle;

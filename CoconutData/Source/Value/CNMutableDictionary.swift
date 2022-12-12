@@ -53,7 +53,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 					result = curdict._value(forPath: rest, in: root)
 				}
 			} else {
-				result = .failure(NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)"))
+				result = .failure(NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)"))
 			}
 		}
 		return result
@@ -95,7 +95,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 					result = curdict._set(value: val, forPath: rest, in: root)
 				}
 			} else {
-				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
+				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
 			}
 		}
 		return result
@@ -121,13 +121,13 @@ public class CNMutableDictionaryValue: CNMutableValue
 		case .keyAndValue(let srckey, let srcval):
 			if let (_, curdict) = searchChild(key: srckey, value: srcval) {
 				if rest.count == 0 {
-					result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
+					result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
 				} else {
 					/* Trace child */
 					result = curdict._append(value: val, forPath: rest, in: root)
 				}
 			} else {
-				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
+				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
 			}
 		}
 		return result
@@ -170,7 +170,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 					result = curdict._delete(forPath: rest, in: root)
 				}
 			} else {
-				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
+				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
 			}
 		}
 		return result
@@ -180,7 +180,7 @@ public class CNMutableDictionaryValue: CNMutableValue
 		for key in mDictionaryValue.keys {
 			if let dict = mDictionaryValue[key] as? CNMutableDictionaryValue {
 				if let curval = dict.get(forKey: srckey) {
-					if CNIsSameValue(nativeValue0: curval.toValue(), nativeValue1: srcval){
+					if CNIsSameValue(value0: curval.toValue(), value1: srcval){
 						return (key, dict)
 					}
 				}

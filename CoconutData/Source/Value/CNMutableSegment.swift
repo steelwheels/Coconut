@@ -27,8 +27,8 @@ public class CNMutableValueSegment: CNMutableValue
 	public var cacheFile: URL { get {
 		return self.cacheDirectory.appendingPathComponent(mSegmentValue.filePath)
 	}}
-	public var description: String { get {
-		return self.toValue().description
+	public var script: String { get {
+		return self.toValue().script
 	}}
 
 	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Result<CNMutableValue?, NSError> {

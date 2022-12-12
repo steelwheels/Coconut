@@ -10,18 +10,18 @@ import Foundation
 
 public extension CGRect
 {
-	static let ClassName = "rect"
+	static let ClassName = "Rect"
 
 	static func fromValue(value val: CNValue) -> CGRect? {
-		if let dict = val.toDictionary() {
+		if let dict = val.toStruct() {
 			return fromValue(value: dict)
 		} else {
 			return nil
 		}
 	}
 
-	static func fromValue(value val: Dictionary<String, CNValue>) -> CGRect? {
-		if let xval = val["x"], let yval = val["y"], let wval = val["width"], let hval = val["height"] {
+	static func fromValue(value val: CNStruct) -> CGRect? {
+		if let xval = val.value(forMember: "x"), let yval = val.value(forMember: "y"), let wval = val.value(forMember: "width"), let hval = val.value(forMember: "height") {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber(), let wnum = wval.toNumber(), let hnum = hval.toNumber() {
 				let x      : CGFloat = CGFloat(xnum.floatValue)
 				let y      : CGFloat = CGFloat(ynum.floatValue)
@@ -33,19 +33,24 @@ public extension CGRect
 		return nil
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
+	func toValue() -> CNStruct {
+		let stype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CGRect.ClassName){
+			stype = typ
+		} else {
+			stype = CNStructType.init(typeName: "dummy")
+		}
 		let x      = NSNumber(floatLiteral: Double(self.origin.x))
 		let y      = NSNumber(floatLiteral: Double(self.origin.y))
 		let width  = NSNumber(floatLiteral: Double(self.size.width))
 		let height = NSNumber(floatLiteral: Double(self.size.height))
-		let result: Dictionary<String, CNValue> = [
-			"class"  : .stringValue(CGRect.ClassName),
+		let values: Dictionary<String, CNValue> = [
 			"x"      : .numberValue(x),
 			"y"      : .numberValue(y),
 			"width"  : .numberValue(width),
 			"height" : .numberValue(height)
 		]
-		return result
+		return CNStruct(type: stype, values: values)
 	}
 
 	var center: CGPoint { get {

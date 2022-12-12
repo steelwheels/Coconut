@@ -88,11 +88,11 @@ public class CNStorageRecord: CNRecord
 		switch mSource {
 		case .table(let tbl, let idx):
 			if let curval = tbl.getRecordValue(index: idx, field: name) {
-				if CNIsSameValue(nativeValue0: curval, nativeValue1: val) {
+				if CNIsSameValue(value0: curval, value1: val) {
 					return true // already set
 				}
-				let cval = CNCastValue(from: val, to: curval.valueType)
-				return tbl.setRecordValue(cval, index: idx, field: name)
+				let newval = CNValue.fromPrimiteValue(value: curval)
+				return tbl.setRecordValue(newval, index: idx, field: name)
 			} else {
 				return tbl.setRecordValue(val, index: idx, field: name)
 			}
@@ -100,7 +100,7 @@ public class CNStorageRecord: CNRecord
 			var newdict   = dict
 			let newval: CNValue
 			if let curval = newdict[name] {
-				newval = CNCastValue(from: val, to: curval.valueType)
+				newval = CNValue.fromPrimiteValue(value: curval)
 			} else {
 				newval = val
 			}
@@ -120,19 +120,20 @@ public class CNStorageRecord: CNRecord
 	}
 
 	public func toDictionary() -> Dictionary<String, CNValue> {
-		var result: Dictionary<String, CNValue> = [:]
+		var result: Dictionary<String, CNValue> = [
+			"class" : .stringValue(CNStorageRecord.ClassName)
+		]
 		for field in self.fieldNames.sorted() {
 			if let val = value(ofField: field) {
 				result[field] = val
 			}
 		}
-		CNValue.setClassName(toValue: &result, className: CNStorageRecord.ClassName)
 		return result
 	}
 
 	public static func fromDictionary(value val: Dictionary<String, CNValue>) -> CNRecord? {
 		if CNValue.hasClassName(inValue: val, className: CNStorageRecord.ClassName) {
-			var dupval = val ; CNValue.removeClassName(fromValue: &dupval)
+			var dupval = val ; dupval["class"] = nil
 			let newrec = CNStorageRecord(defaultFields: dupval)
 			return newrec
 		} else {
@@ -143,7 +144,7 @@ public class CNStorageRecord: CNRecord
 	public func compare(forField name: String, with rec: CNRecord) -> ComparisonResult {
 		let s0 = self.value(ofField: name) ?? CNValue.null
 		let s1 = rec.value(ofField: name)  ?? CNValue.null
-		return CNCompareValue(nativeValue0: s0, nativeValue1: s1)
+		return CNCompareValue(value0: s0, value1: s1)
 	}
 }
 

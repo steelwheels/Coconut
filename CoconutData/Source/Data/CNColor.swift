@@ -120,16 +120,24 @@ public extension CNColor
 		return (red, green, blue, alpha)
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
+	func toValue() -> CNStruct {
+		let ctype: CNStructType
+		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNColor.ClassName) {
+			ctype = typ
+		} else {
+			CNLog(logLevel: .error, message: "Can not hapen", atFunction: #function, inFile: #file)
+			ctype = CNStructType(typeName: "dummy")
+		}
+
 		let (r, g, b, a) = self.toRGBA()
-		let result: Dictionary<String, CNValue> = [
+		let dict: Dictionary<String, CNValue> = [
 			"class":	.stringValue(CNColor.ClassName),
 			"r":		.numberValue(NSNumber(floatLiteral: Double(r))),
 			"g":		.numberValue(NSNumber(floatLiteral: Double(g))),
 			"b":		.numberValue(NSNumber(floatLiteral: Double(b))),
 			"a":		.numberValue(NSNumber(floatLiteral: Double(a)))
 		]
-		return result
+		return CNStruct(type: ctype, values: dict)
 	}
 
 	func toData() -> Data? {

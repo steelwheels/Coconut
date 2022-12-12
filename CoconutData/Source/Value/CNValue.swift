@@ -10,44 +10,84 @@ import UIKit
 #endif
 import Foundation
 
-public enum CNValue {
+public enum CNValue
+{
 	case boolValue(_ val: Bool)
 	case numberValue(_ val: NSNumber)
 	case stringValue(_ val: String)
 	case enumValue(_ val: CNEnum)
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
+	case structValue(_ val: CNStruct)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
 	case objectValue(_ val: AnyObject)
 	//case functionValue(_ val: (_ params: Array<CNValue>) -> CNValue)
 
-	public var valueType: CNValueType {
-		get {
-			let result: CNValueType
-			switch self {
-			case .boolValue(_):		result = .boolType
-			case .numberValue(_):		result = .numberType
-			case .stringValue(_):		result = .stringType
-			case .dictionaryValue(_):	result = .dictionaryType(.anyType)
-			case .arrayValue(_):		result = .arrayType(.anyType)
-			case .setValue(_):		result = .setType(.anyType)
-			case .objectValue(let obj):
-				let name = String(describing: type(of: obj))
-				result = .objectType(name)
-			case .enumValue(let eobj):
-				if let etype = eobj.enumType {
-					result = .enumType(etype)
-				} else {
-					CNLog(logLevel: .error, message: "Failed to get enum type (Can not happen)", atFunction: #function, inFile: #file)
-					result = .anyType
-				}
+	public var valueType: CNValueType { get {
+		let result: CNValueType
+		switch self {
+		case .boolValue(_):
+			result = .boolType
+		case .numberValue(_):
+			result = .numberType
+		case .stringValue(_):
+			result = .stringType
+		case .dictionaryValue(let dict):
+			let elmtype: CNValueType
+			if let elmval = dict.values.first {
+				elmtype = elmval.valueType
+			} else {
+				elmtype = .anyType
 			}
-			return result
+			result = .dictionaryType(elmtype)
+		case .structValue(let sval):
+			if let stype = CNStructTable.currentStructTable().search(byTypeName: sval.type.typeName) {
+				result = .structType(stype)
+			} else {
+				CNLog(logLevel: .error, message: "Unknow struct type name: \(sval.type.typeName)", atFunction: #function, inFile: #file)
+				result = .anyType
+			}
+		case .arrayValue(let vals):
+			let elmtype: CNValueType
+			if vals.count > 0 {
+				elmtype = vals[0].valueType
+			} else {
+				elmtype = .anyType
+			}
+			result = .arrayType(elmtype)
+		case .setValue(let vals):
+			let elmtype: CNValueType
+			if vals.count > 0 {
+				elmtype = vals[0].valueType
+			} else {
+				elmtype = .setType(.anyType)
+			}
+			result = .setType(elmtype)
+		case .objectValue(let obj):
+			let name = String(describing: type(of: obj))
+			result = .objectType(name)
+		case .enumValue(let eobj):
+			if let etype = eobj.enumType {
+				result = .enumType(etype)
+			} else {
+				CNLog(logLevel: .error, message: "Failed to get enum type (Can not happen)", atFunction: #function, inFile: #file)
+				result = .anyType
+			}
 		}
-	}
+		return result
+	}}
 
 	public static var null: CNValue { get {
 		return CNValue.objectValue(NSNull())
+	}}
+
+	public var isBool: Bool { get {
+		let result: Bool
+		switch self {
+		case .boolValue(_):		result = true
+		default:			result = false
+		}
+		return result
 	}}
 
 	public func toBool() -> Bool? {
@@ -59,6 +99,15 @@ public enum CNValue {
 		return result
 	}
 
+	public var isNumber: Bool { get {
+		let result: Bool
+		switch self {
+		case .numberValue(_):		result = true
+		default:			result = false
+		}
+		return result
+	}}
+
 	public func toNumber() -> NSNumber? {
 		let result: NSNumber?
 		switch self {
@@ -67,6 +116,15 @@ public enum CNValue {
 		}
 		return result
 	}
+
+	public var isString: Bool { get {
+		let result: Bool
+		switch self {
+		case .stringValue(_):		result = true
+		default:			result = false
+		}
+		return result
+	}}
 
 	public func toString() -> String? {
 		let result: String?
@@ -77,15 +135,32 @@ public enum CNValue {
 		return result
 	}
 
+	public var isEnum: Bool { get {
+		let result: Bool
+		switch self {
+		case .enumValue(_):		result = true
+		default:			result = false
+		}
+		return result
+	}}
+
 	public func toEnum() -> CNEnum? {
 		let result: CNEnum?
 		switch self {
 		case .enumValue(let eval):		result = eval
-		case .dictionaryValue(let dict):	result = CNEnum.fromValue(value: dict)
 		default:				result = nil
 		}
 		return result
 	}
+
+	public var isDictionary: Bool { get {
+		let result: Bool
+		switch self {
+		case .dictionaryValue(_):	result = true
+		default:			result = false
+		}
+		return result
+	}}
 
 	public func toDictionary() -> Dictionary<String, CNValue>? {
 		let result: Dictionary<String, CNValue>?
@@ -96,6 +171,33 @@ public enum CNValue {
 		return result
 	}
 
+	public var isStruct: Bool { get {
+		let result: Bool
+		switch self {
+		case .structValue(_):		result = true
+		default:			result = false
+		}
+		return result
+	}}
+
+	public func toStruct() -> CNStruct? {
+		let result: CNStruct?
+		switch self {
+		case .structValue(let obj):	result = obj
+		default:			result = nil
+		}
+		return result
+	}
+
+	public var isArray: Bool { get {
+		let result: Bool
+		switch self {
+		case .arrayValue(_):		result = true
+		default:			result = false
+		}
+		return result
+	}}
+
 	public func toArray() -> Array<CNValue>? {
 		let result: Array<CNValue>?
 		switch self {
@@ -105,6 +207,15 @@ public enum CNValue {
 		return result
 	}
 
+	public var isSet: Bool { get {
+		let result: Bool
+		switch self {
+		case .setValue(_):		result = true
+		default:			result = false
+		}
+		return result
+	}}
+
 	public func toSet() -> Array<CNValue>? {
 		let result: Array<CNValue>?
 		switch self {
@@ -113,6 +224,15 @@ public enum CNValue {
 		}
 		return result
 	}
+
+	public var isObject: Bool { get {
+		let result: Bool
+		switch self {
+		case .objectValue(_):		result = true
+		default:			result = false
+		}
+		return result
+	}}
 
 	public func toObject() -> AnyObject? {
 		let result: AnyObject?
@@ -201,130 +321,6 @@ public enum CNValue {
 		return result
 	}
 
-	public var description: String { get {
-		let result: String
-		switch self {
-		case .boolValue(let val):
-			result = val ? "true" : "false"
-		case .numberValue(let val):
-			result = val.stringValue
-		case .stringValue(let val):
-			result = val
-		case .enumValue(let val):
-			result = val.memberName
-		case .dictionaryValue(let val):
-			var line  = "["
-			var is1st = true
-			let keys  = val.keys.sorted()
-			for key in keys {
-				if is1st { is1st = false } else { line += ", " }
-				if let elm = val[key] {
-					line += key + ":" + elm.description
-				} else {
-					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-				}
-			}
-			line += "]"
-			result = line
-		case .arrayValue(let val):
-			var line  = "["
-			var is1st = true
-			for elm in val {
-				if is1st { is1st = false } else { line += ", " }
-				line += elm.description
-			}
-			line += "]"
-			result = line
-		case .setValue(let val):
-			result = val.description
-		case .objectValue(let val):
-			let classname = String(describing: type(of: val))
-			result = "instanceOf(\(classname))"
-		}
-		return result
-	}}
-
-	public func toScript() -> CNText {
-		let result: CNText
-		switch self {
-		case .boolValue(_), .numberValue(_), .objectValue(_):
-			// Use description
-			result = CNTextLine(string: self.description)
-		case .stringValue(let val):
-			let txt = CNStringUtil.insertEscapeForQuote(source: val)
-			result = CNTextLine(string: "\"" + txt + "\"")
-		case .enumValue(let val):
-			let txt = "\(val.typeName).\(val.memberName)"
-			result = CNTextLine(string: txt)
-		case .dictionaryValue(let val):
-			result = dictionaryToScript(dictionary: val)
-		case .arrayValue(let val):
-			result = arrayToScript(array: val)
-		case .setValue(let val):
-			result = setToScript(set: val)
-		}
-		return result
-	}
-
-	private func arrayToScript(array arr: Array<CNValue>) -> CNTextSection {
-		let sect = CNTextSection()
-		sect.header = "[" ; sect.footer = "]" ; sect.separator = ","
-		for elm in arr {
-			sect.add(text: elm.toScript())
-		}
-		return sect
-	}
-
-	private func setToScript(set vals: Array<CNValue>) -> CNTextSection {
-		let dict: Dictionary<String, CNValue> = [
-			"class":	.stringValue(CNValueSet.ClassName),
-			"values":	.arrayValue(vals)
-		]
-		return dictionaryToScript(dictionary: dict)
-	}
-
-	private func dictionaryToScript(dictionary dict: Dictionary<String, CNValue>) -> CNTextSection {
-		let sect = CNTextSection()
-		sect.header = "{" ; sect.footer = "}" ; sect.separator = ","
-		let keys = dict.keys.sorted()
-		for key in keys {
-			if let val = dict[key] {
-				let newtxt = val.toScript()
-				let labtxt = CNLabeledText(label: "\(key): ", text: newtxt)
-				sect.add(text: labtxt)
-			}
-		}
-		return sect
-	}
-
-	public static func className(forValue dict: Dictionary<String, CNValue>) -> String? {
-		guard let val = dict["class"] else {
-			return nil
-		}
-		switch val {
-		case .stringValue(let str):
-			return str
-		default:
-			return nil
-		}
-	}
-
-	public static func hasClassName(inValue dict: Dictionary<String, CNValue>, className expname: String) -> Bool {
-		if let name = CNValue.className(forValue: dict) {
-			return expname == name
-		} else {
-			return false
-		}
-	}
-
-	public static func setClassName(toValue dict: inout Dictionary<String, CNValue>, className name: String){
-		dict["class"] = .stringValue(name)
-	}
-
-	public static func removeClassName(fromValue dict: inout Dictionary<String, CNValue>){
-		dict["class"] = nil
-	}
-
 	private static func stringFromDate(date: Date) -> String {
 		let formatter: DateFormatter = DateFormatter()
 		formatter.calendar = Calendar(identifier: .gregorian)
@@ -337,93 +333,5 @@ public enum CNValue {
 		formatter.calendar = Calendar(identifier: .gregorian)
 		formatter.dateFormat = "yyyy/MM/dd HH:mm:ss Z"
 		return formatter.date(from: string)
-	}
-
-	public func toAny() -> Any {
-		let result: Any
-		switch self {
-		case .boolValue(let val):
-			result = val
-		case .numberValue(let val):
-			result = val
-		case .stringValue(let val):
-			result = val
-		case .enumValue(let val):
-			result = val.toValue()
-		case .objectValue(let val):
-			result = val
-		case .dictionaryValue(let dict):
-			var newdict: Dictionary<String, Any> = [:]
-			for (key, elm) in dict {
-				newdict[key] = elm.toAny()
-			}
-			result = newdict
-		case .arrayValue(let arr):
-			var newarr: Array<Any> = []
-			for elm in arr {
-				newarr.append(elm.toAny())
-			}
-			result = newarr
-		case .setValue(let arr):
-			var newarr: Array<Any> = []
-			for elm in arr {
-				newarr.append(elm.toAny())
-			}
-			result = newarr
-		}
-		return result
-	}
-
-	public static func anyToValue(object obj: Any) -> CNValue {
-		var result: CNValue
-		if let _ = obj as? NSNull {
-			result = CNValue.null
-		} else if let val = obj as? NSNumber {
-			result = .numberValue(val)
-		} else if let val = obj as? String {
-			result = .stringValue(val)
-		} else if let val = obj as? Dictionary<String, Any> {
-			var newdict: Dictionary<String, CNValue> = [:]
-			for (key, elm) in val {
-				let child = anyToValue(object: elm)
-				newdict[key] = child
-			}
-			if let val = dictionaryToValue(dictionary: newdict){
-				result = val
-			} else {
-				result = .dictionaryValue(newdict)
-			}
-		} else if let val = obj as? Array<Any> {
-			var newarr: Array<CNValue> = []
-			for elm in val {
-				let child = anyToValue(object: elm)
-				newarr.append(child)
-			}
-			result = .arrayValue(newarr)
-		} else {
-			result = .objectValue(obj as AnyObject)
-		}
-		return result
-	}
-
-	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue? {
-		var result: CNValue? = nil
-		if let clsval = dict["class"] {
-			if let clsname = clsval.toString() {
-				switch clsname {
-				case CNEnum.ClassName:
-					if let eval = CNEnum.fromValue(value: dict) {
-						result = .enumValue(eval)
-					}
-				case CNValueSet.ClassName:
-					if let val = CNValueSet.fromValue(value: dict) {
-						result = val
-					}
-				default:
-					break
-				}
-			}
-		}
-		return result
 	}
 }

@@ -20,9 +20,9 @@ public class CNValueSegment
 		mContext	= nil
 	}
 
-	public var description: String { get {
+	public var script: String { get {
 		let val: CNValue = .dictionaryValue(self.toValue())
-		return val.description
+		return val.script
 	}}
 
 	public static func fromValue(value val: CNValue) -> CNValueSegment? {

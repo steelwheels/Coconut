@@ -55,7 +55,7 @@ public class CNStorageTable: CNTable
 
 		/* check storage */
 		if strg.value(forPath: pth) == nil {
-			let msg = "No root object on storage: path=\(pth.description), storage=\(mStorage.description)"
+			let msg = "No root object on storage: path=\(pth.script), storage=\(mStorage.description)"
 			CNLog(logLevel: .error, message: msg, atFunction: #function, inFile: #file)
 		}
 
@@ -214,7 +214,7 @@ public class CNStorageTable: CNTable
 		}
 		let recs = search(value: val, forField: field)
 		guard recs.count > 0 else {
-			CNLog(logLevel: .error, message: "No matched record for \(field):\(val.description)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "No matched record for \(field):\(val.script)", atFunction: #function, inFile: #file)
 			return nil
 		}
 		let elements: Array<CNValuePath.Element> = [
@@ -231,7 +231,7 @@ public class CNStorageTable: CNTable
 		let count = dicts.count
 		for i in 0..<count {
 			if let dval = dicts[i][field] {
-				switch CNCompareValue(nativeValue0: dval, nativeValue1: val) {
+				switch CNCompareValue(value0: dval, value1: val) {
 				case .orderedSame:
 					let newrec = CNStorageRecord(table: self, index: i)
 					result.append(newrec)
@@ -327,7 +327,7 @@ public class CNStorageTable: CNTable
 				return result
 			}
 		}
-		CNLog(logLevel: .error, message: "No \"\(CNStorageTable.RecordsItem)\" property at \(recordPath().description)", atFunction: #function, inFile: #file)
+		CNLog(logLevel: .error, message: "No \"\(CNStorageTable.RecordsItem)\" property at \(recordPath().script)", atFunction: #function, inFile: #file)
 		return []
 	}
 

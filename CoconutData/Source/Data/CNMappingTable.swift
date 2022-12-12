@@ -195,7 +195,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		}
 		let recs = search(value: val, forField: field)
 		guard recs.count > 0 else {
-			CNLog(logLevel: .error, message: "No matched record for \(field):\(val.description)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "No matched record for \(field):\(val.script)", atFunction: #function, inFile: #file)
 			return nil
 		}
 		let elements: Array<CNValuePath.Element> = [
@@ -212,7 +212,7 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 		for rec in recs {
 			CNLog(logLevel: .error, message: "search", atFunction: #function, inFile: #file)
 			if let rval = rec.value(ofField: field) {
-				if CNIsSameValue(nativeValue0: rval, nativeValue1: val) {
+				if CNIsSameValue(value0: rval, value1: val) {
 					result.append(rec)
 				}
 			}
