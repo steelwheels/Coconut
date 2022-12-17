@@ -45,7 +45,6 @@ public extension URL
 			panel.canChooseDirectories = true
 		}
 		panel.allowsMultipleSelection = false
-		panel.allowedFileTypes = exts
 		switch panel.runModal() {
 		case .OK:
 			let urls = panel.urls

@@ -129,6 +129,9 @@ results.append(UTResult(name: "vectorGraphics", result: testVectorGraphics(conso
 cons.print(string: "* testValueType\n")
 results.append(UTResult(name: "valueType", result: testValueType(console: cons)))
 
+cons.print(string: "* testPrimitiveValue\n")
+results.append(UTResult(name: "primitiveValue", result: testPrimitiveValue(console: cons)))
+
 cons.print(string: "* testStorageTable\n")
 results.append(UTResult(name: "storageTable", result: testStorageTable(console: cons)))
 

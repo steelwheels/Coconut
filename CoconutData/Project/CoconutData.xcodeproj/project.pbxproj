@@ -313,6 +313,9 @@
 		05F3AC3E26571E1E0089C937 /* UTNativeValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F3AC3D26571E1E0089C937 /* UTNativeValue.swift */; };
 		05F4AA21263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F4AA20263C274700BAE5E2 /* CNResourceInstaller.swift */; };
 		05F4AA22263C274700BAE5E2 /* CNResourceInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F4AA20263C274700BAE5E2 /* CNResourceInstaller.swift */; };
+		05F910D6294DF8C4006CBC61 /* CNPrimitiveValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F910D5294DF8C4006CBC61 /* CNPrimitiveValue.swift */; };
+		05F910D7294DF8C4006CBC61 /* CNPrimitiveValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F910D5294DF8C4006CBC61 /* CNPrimitiveValue.swift */; };
+		05F910D9294E0BF7006CBC61 /* UTPrimitiveValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F910D8294E0BF7006CBC61 /* UTPrimitiveValue.swift */; };
 		05F924AF27243267008BAFDC /* CNCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F924AE27243267008BAFDC /* CNCollection.swift */; };
 		05F924B027243267008BAFDC /* CNCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F924AE27243267008BAFDC /* CNCollection.swift */; };
 		05F969B026467E7E00E676C5 /* CNStorageTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F969AF26467E7E00E676C5 /* CNStorageTable.swift */; };
@@ -703,6 +706,8 @@
 		05E9075B28FA22CE00DBE76A /* UTStorageTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTStorageTable.swift; sourceTree = "<group>"; };
 		05F3AC3D26571E1E0089C937 /* UTNativeValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTNativeValue.swift; sourceTree = "<group>"; };
 		05F4AA20263C274700BAE5E2 /* CNResourceInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNResourceInstaller.swift; sourceTree = "<group>"; };
+		05F910D5294DF8C4006CBC61 /* CNPrimitiveValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNPrimitiveValue.swift; sourceTree = "<group>"; };
+		05F910D8294E0BF7006CBC61 /* UTPrimitiveValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTPrimitiveValue.swift; sourceTree = "<group>"; };
 		05F924AE27243267008BAFDC /* CNCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNCollection.swift; sourceTree = "<group>"; };
 		05F969AF26467E7E00E676C5 /* CNStorageTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNStorageTable.swift; sourceTree = "<group>"; };
 		05F9A92C25C2C89400BC062E /* UTGraphicsContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTGraphicsContext.swift; sourceTree = "<group>"; };
@@ -800,6 +805,7 @@
 				05FC3862255FEC1D004CA79E /* UTOperation.swift */,
 				05FC3868255FEC1D004CA79E /* UTOperationQueue.swift */,
 				05FC386F255FEC1E004CA79E /* UTPreference.swift */,
+				05F910D8294E0BF7006CBC61 /* UTPrimitiveValue.swift */,
 				05FC386C255FEC1D004CA79E /* UTProcess.swift */,
 				05FC385C255FEC1D004CA79E /* UTQueue.swift */,
 				05FC385D255FEC1D004CA79E /* UTResource.swift */,
@@ -992,6 +998,7 @@
 				05DE4D4B2864B09500ABA462 /* CNMutableSet.swift */,
 				0591786028612B90008DB4BE /* CNMutableScalar.swift */,
 				0591787E286132C8008DB4BE /* CNMutableSegment.swift */,
+				05F910D5294DF8C4006CBC61 /* CNPrimitiveValue.swift */,
 				05B32CA32515025E000D1411 /* CNValue.swift */,
 				052F1DA628AA4781006C21D9 /* CNValueCaster.swift */,
 				05A501B426A4203E00A992F9 /* CNValueComparator.swift */,
@@ -1485,6 +1492,7 @@
 				05F9A92D25C2C89400BC062E /* UTGraphicsContext.swift in Sources */,
 				05FC3874255FEC1E004CA79E /* UTAttributedString.swift in Sources */,
 				05FC3877255FEC1E004CA79E /* UTQueue.swift in Sources */,
+				05F910D9294E0BF7006CBC61 /* UTPrimitiveValue.swift in Sources */,
 				059BA6D3256B20B500893641 /* UTType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1560,6 +1568,7 @@
 				05B32D2F251508D9000D1411 /* CNURL.swift in Sources */,
 				05B32CC4251502BE000D1411 /* CNText.swift in Sources */,
 				05B32CE1251502E7000D1411 /* CNProcess.swift in Sources */,
+				05F910D6294DF8C4006CBC61 /* CNPrimitiveValue.swift in Sources */,
 				05484964278A6D1800642FAC /* CNValuePath.swift in Sources */,
 				05B32D9225150946000D1411 /* CNColor.swift in Sources */,
 				05917873286131DF008DB4BE /* CNMutableDictionary.swift in Sources */,
@@ -1673,6 +1682,7 @@
 				05B32D30251508D9000D1411 /* CNURL.swift in Sources */,
 				05B32CC5251502BE000D1411 /* CNText.swift in Sources */,
 				05B32CE2251502E7000D1411 /* CNProcess.swift in Sources */,
+				05F910D7294DF8C4006CBC61 /* CNPrimitiveValue.swift in Sources */,
 				05484965278A6D1800642FAC /* CNValuePath.swift in Sources */,
 				05B32D9325150946000D1411 /* CNColor.swift in Sources */,
 				05917874286131DF008DB4BE /* CNMutableDictionary.swift in Sources */,
@@ -1871,13 +1881,14 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = x86_84;
 				FRAMEWORK_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1889,12 +1900,14 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_INCLUDE_PATHS = "$(HOME)/local/Frameworks/macos";
@@ -1926,15 +1939,17 @@
 				DEVELOPMENT_TEAM = TR2DNF3P93;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				"EXCLUDED_ARCHS[sdk=*]" = x86_64;
 				FRAMEWORK_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/$(PRODUCT_NAME).bundle/Contents/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(TARGET_BUILD_DIR)/$(PRODUCT_NAME).bundle/Contents/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2155,7 +2170,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -2242,7 +2257,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -2324,7 +2339,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
