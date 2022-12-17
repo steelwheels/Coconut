@@ -132,9 +132,6 @@ results.append(UTResult(name: "valueType", result: testValueType(console: cons))
 cons.print(string: "* testStorageTable\n")
 results.append(UTResult(name: "storageTable", result: testStorageTable(console: cons)))
 
-cons.print(string: "* testValueConvert\n")
-results.append(UTResult(name: "valueConvert", result: testValueConvert(console: cons)))
-
 var summary = true
 for res in results {
 	if res.result {

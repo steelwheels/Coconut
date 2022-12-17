@@ -54,7 +54,7 @@ private func compareValues(console cons: CNConsole) -> Bool {
 
 private func compareValue(value0 val0: CNValue, value1 val1: CNValue, expected exp: ComparisonResult, console cons: CNConsole) -> Bool {
 	cons.print(string: "Compare \(val0.toScript().toStrings().joined()) and \(val1.toScript().toStrings().joined()) ... ")
-	let res = CNCompareValue(value0: val0, value1: val1)
+	let res = CNCompareValue(nativeValue0: val0, nativeValue1: val1)
 	cons.print(string: " \(res.toString()) -> ")
 	if res == exp {
 		cons.print(string: "OK\n")

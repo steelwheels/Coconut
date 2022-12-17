@@ -10,18 +10,18 @@ import Foundation
 
 public extension CGSize
 {
-	static let ClassName = "Size"
+	static let ClassName = "size"
 
 	static func fromValue(value val: CNValue) -> CGSize? {
-		if let dict = val.toStruct() {
+		if let dict = val.toDictionary() {
 			return fromValue(value: dict)
 		} else {
 			return nil
 		}
 	}
 
-	static func fromValue(value val: CNStruct) -> CGSize? {
-		if let wval = val.value(forMember: "width"), let hval = val.value(forMember: "height") {
+	static func fromValue(value val: Dictionary<String, CNValue>) -> CGSize? {
+		if let wval = val["width"], let hval = val["height"] {
 			if let wnum = wval.toNumber(), let hnum = hval.toNumber() {
 				let width  : CGFloat = CGFloat(wnum.doubleValue)
 				let height : CGFloat = CGFloat(hnum.doubleValue)
@@ -31,20 +31,15 @@ public extension CGSize
 		return nil
 	}
 
-	func toValue() -> CNStruct {
-		let stype: CNStructType
-		if let typ = CNStructTable.currentStructTable().search(byTypeName: CGSize.ClassName) {
-			stype = typ
-		} else {
-			stype = CNStructType(typeName: "dummy")
-		}
+	func toValue() -> Dictionary<String, CNValue> {
 		let wnum = NSNumber(floatLiteral: Double(self.width))
 		let hnum = NSNumber(floatLiteral: Double(self.height))
-		let values: Dictionary<String, CNValue> = [
+		let result: Dictionary<String, CNValue> = [
+			"class":  .stringValue(CGSize.ClassName),
 			"width":  .numberValue(wnum),
 			"height": .numberValue(hnum)
 		]
-		return CNStruct(type: stype, values: values)
+		return result
 	}
 
 	func resizeWithKeepingAscpect(inWidth dstwidth: CGFloat) -> CGSize {

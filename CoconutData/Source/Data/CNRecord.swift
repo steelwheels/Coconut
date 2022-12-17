@@ -23,9 +23,9 @@ public protocol CNRecord
 
 public extension CNRecord
 {
-	var script: String { get {
+	var description: String { get {
 		let val: CNValue = .dictionaryValue(self.toDictionary())
-		return val.script
+		return val.description
 	}}
 
 	func toDictionary() -> Dictionary<String, CNValue> {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol CNStorageSetProtocol
+public protocol CNSet
 {
 	var count: Int { get }
 	var values: Array<CNValue> { get }
@@ -18,7 +18,7 @@ public protocol CNStorageSetProtocol
 	func insert(value src: CNValue) -> Bool
 }
 
-public class CNStorageSet: CNStorageSetProtocol
+public class CNStorageSet: CNSet
 {
 	private var mPath:	CNValuePath
 	private var mStorage:	CNStorage
@@ -52,7 +52,7 @@ public class CNStorageSet: CNStorageSetProtocol
 	public func contains(value src: CNValue) -> Bool {
 		if let vals = getSetValue() {
 			for val in vals {
-				switch CNCompareValue(value0: src, value1: val) {
+				switch CNCompareValue(nativeValue0: src, nativeValue1: val) {
 				case .orderedAscending:	// src < val[x]
 					break	// continue
 				case .orderedSame:	// src == vals[x]

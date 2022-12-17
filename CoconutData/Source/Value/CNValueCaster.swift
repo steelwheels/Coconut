@@ -7,7 +7,6 @@
 
 import Foundation
 
-/*
 public func CNCastValue(from srcval: CNValue, to dsttyp: CNValueType) -> CNValue
 {
 	let eval: CNEnumType.Value
@@ -26,7 +25,7 @@ public func CNCastValue(from srcval: CNValue, to dsttyp: CNValueType) -> CNValue
 		if let eobj = etype.search(byValue: eval) {
 			result = .enumValue(eobj)
 		} else {
-			CNLog(logLevel: .error, message: "Unexpected raw value \(srcval.script) for \(etype.typeName)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Unexpected raw value \(srcval.description) for \(etype.typeName)", atFunction: #function, inFile: #file)
 			result = srcval	// Failed to cast to enum
 		}
 	default:
@@ -34,5 +33,4 @@ public func CNCastValue(from srcval: CNValue, to dsttyp: CNValueType) -> CNValue
 	}
 	return result
 }
-*/
 

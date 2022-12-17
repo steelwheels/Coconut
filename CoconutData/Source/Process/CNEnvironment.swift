@@ -114,7 +114,7 @@ public class CNEnvironment
 				if let str = valueToString(value: val) {
 					result[key] = str
 				} else {
-					CNLog(logLevel: .error, message: "Failed to convert value to string: \(val.script)", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "Failed to convert value to string: \(val.description)", atFunction: #function, inFile: #file)
 				}
 			}
 			return result
@@ -214,7 +214,7 @@ public class CNEnvironment
 					}
 					arrstr += str
 				} else {
-					CNLog(logLevel: .error, message: "Failed to convert to string: \(elm.script)", atFunction: #function, inFile: #file)
+					CNLog(logLevel: .error, message: "Failed to convert to string: \(elm.description)", atFunction: #function, inFile: #file)
 				}
 			}
 			result = arrstr

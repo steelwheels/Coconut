@@ -37,7 +37,7 @@ public class CNValuePath
 					result = false
 				case .keyAndValue(let key1, let val1):
 					if key0 == key1 {
-						switch CNCompareValue(value0: val0, value1: val1){
+						switch CNCompareValue(nativeValue0: val0, nativeValue1: val1){
 						case .orderedAscending, .orderedDescending:
 							result = false
 						case .orderedSame:
@@ -117,7 +117,7 @@ public class CNValuePath
 		}
 	}
 
-	public var script: String { get {
+	public var description: String { get {
 		var result = ""
 		var is1st  = true
 		for elm in mElements {
@@ -132,7 +132,7 @@ public class CNValuePath
 			case .index(let idx):
 				result += "[\(idx)]"
 			case .keyAndValue(let key, let val):
-				result += "[\(key):\(val.script)]"
+				result += "[\(key):\(val.description)]"
 			}
 		}
 		return result
@@ -163,7 +163,7 @@ public class CNValuePath
 				case .stringValue(let str):
 					path = quote + str + quote
 				default:
-					path = quote + val.script + quote
+					path = quote + val.description + quote
 				}
 				result 	  += "[\(key):\(path)]"
 			}

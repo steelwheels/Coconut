@@ -258,7 +258,7 @@ public func CNCompareMutableValue(value0 v0: CNMutableValue, value1 v1: CNMutabl
 	case .orderedDescending:
 		return .orderedDescending
 	case .orderedSame:
-		return CNCompareValue(value0: v0.toValue(), value1: v1.toValue())
+		return CNCompareValue(nativeValue0: v0.toValue(), nativeValue1: v1.toValue())
 	}
 }
 

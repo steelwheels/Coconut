@@ -28,7 +28,7 @@ public class CNValueLabels
 				fullelms.append(contentsOf: ptr.path.elements)
 				elms = fullelms
 			} else {
-				CNLog(logLevel: .error, message: "Label \(ident) is not found: \(ptr.path.script)", atFunction: #function, inFile: #file)
+				CNLog(logLevel: .error, message: "Label \(ident) is not found: \(ptr.path.description)", atFunction: #function, inFile: #file)
 				elms = ptr.path.elements
 			}
 		} else {

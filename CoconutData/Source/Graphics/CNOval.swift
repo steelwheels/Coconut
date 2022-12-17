@@ -10,7 +10,7 @@ import Foundation
 
 public struct CNOval
 {
-	public static let ClassName = "Oval"
+	public static let ClassName = "oval"
 
 	private var mCenter:	CGPoint
 	private var mRadius:	CGFloat
@@ -21,16 +21,16 @@ public struct CNOval
 	}
 
 	public static func fromValue(value val: CNValue) -> CNOval? {
-		if let dict = val.toStruct() {
+		if let dict = val.toDictionary() {
 			return fromValue(value: dict)
 		} else {
 			return nil
 		}
 	}
 
-	public static func fromValue(value val: CNStruct) -> CNOval? {
-		if let centerval = val.value(forMember: "center"), let radval = val.value(forMember: "radius") {
-			if let centerdict = centerval.toStruct(), let radius = radval.toNumber() {
+	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNOval? {
+		if let centerval = val["center"], let radval = val["radius"] {
+			if let centerdict = centerval.toDictionary(), let radius = radval.toNumber() {
 				if let center = CGPoint.fromValue(value: centerdict) {
 					return CNOval(center: center, radius: CGFloat(radius.floatValue))
 				}
@@ -39,20 +39,15 @@ public struct CNOval
 		return nil
 	}
 
-	public func toValue() -> CNStruct {
-		let stype: CNStructType
-		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNOval.ClassName) {
-			stype = typ
-		} else {
-			stype = CNStructType(typeName: "dummy")
-		}
+	public func toValue() -> Dictionary<String, CNValue> {
 		let center = mCenter.toValue()
 		let radius = NSNumber(floatLiteral: Double(mRadius))
-		let values: Dictionary<String, CNValue> = [
-			"center"	: .structValue(center),
+		let result: Dictionary<String, CNValue> = [
+			"class"		: .stringValue(CNOval.ClassName),
+			"center"	: .dictionaryValue(center),
 			"radius"	: .numberValue(radius)
 		]
-		return CNStruct(type: stype, values: values)
+		return result
 	}
 
 	public var center: CGPoint { get { return mCenter }}

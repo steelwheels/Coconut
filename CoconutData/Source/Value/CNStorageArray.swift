@@ -63,7 +63,7 @@ public class CNStorageArray: CNArray
 	public func contains(value src: CNValue) -> Bool {
 		if let vals = getArrayValue() {
 			for val in vals {
-				switch CNCompareValue(value0: src, value1: val) {
+				switch CNCompareValue(nativeValue0: src, nativeValue1: val) {
 				case .orderedAscending:	// src < val[x]
 					break	// continue
 				case .orderedSame:	// src == vals[x]

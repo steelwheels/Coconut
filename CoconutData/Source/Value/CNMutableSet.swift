@@ -53,7 +53,7 @@ public class CNMutableSetValue: CNMutableArrayValue
 		for mval in self.values {
 			vals.append(mval.toValue())
 		}
-		return .setValue(vals)
+		return CNValueSet.toValue(values: vals)
 	}
 }
 

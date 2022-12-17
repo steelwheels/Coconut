@@ -73,7 +73,7 @@ public class CNStorageDictionary: CNDictionary
 		let newval: CNValue
 		let path = memberPath(member: key)
 		if let cval = mStorage.value(forPath: path) {
-			newval = CNValue.fromPrimiteValue(value: cval)
+			newval = CNCastValue(from: src, to: cval.valueType)
 		} else {
 			newval = src
 		}

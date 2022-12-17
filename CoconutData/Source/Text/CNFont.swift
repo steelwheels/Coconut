@@ -15,8 +15,6 @@
 
 public extension CNFont
 {
-	static let ClassName = "Font"
-
 	static func fromValue(value val: CNValue) -> CNFont? {
 		if let dict = val.toDictionary() {
 			return fromValue(value: dict)
@@ -34,23 +32,17 @@ public extension CNFont
 		return nil
 	}
 
-	func toValue() -> CNStruct {
-		let stype: CNStructType
-		if let typ = CNStructTable.currentStructTable().search(byTypeName: CNFont.ClassName) {
-			stype = typ
-		} else {
-			stype = CNStructType(typeName: "dummy")
-		}
+	func toValue() -> Dictionary<String, CNValue> {
 		#if os(OSX)
 		let name: String   = self.familyName ?? "system"
 		#else
 		let name: String   = self.familyName
 		#endif
 		let size: NSNumber = NSNumber(floatLiteral: Double(self.pointSize))
-		let values: Dictionary<String, CNValue> = [
+		let result: Dictionary<String, CNValue> = [
 			"name":	.stringValue(name),
 			"size": .numberValue(size)
 		]
-		return CNStruct(type: stype, values: values)
+		return result
 	}
 }

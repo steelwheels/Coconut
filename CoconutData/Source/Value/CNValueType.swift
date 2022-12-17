@@ -22,89 +22,12 @@ public indirect enum CNValueType
 	case	numberType
 	case	stringType
 	case	enumType(CNEnumType)				// enum-type
-	case	dictionaryType(CNValueType)			// element-type
-	case	structType(CNStructType)			// struct-type
+	case	dictionaryType(CNValueType)			// element type
 	case	arrayType(CNValueType)				// element type
 	case	setType(CNValueType)				// element type
 	case	objectType(String?)				// class name or unkown
 	case 	interfaceType(String)				// interface name
 	case	functionType(CNValueType, Array<CNValueType>)	// (return-type, parameter-types)
-
-	public static func anyToType(anyValue aval: Any) -> CNValueType {
-		let result: CNValueType
-		if let num = aval as? NSNumber {
-			if num.isBoolean {
-				result = .boolType
-			} else {
-				result = .numberType
-			}
-		} else if let _ = aval as? String {
-			result = .stringType
-		} else if let arr = aval as? Array<Any> {
-			if arr.count > 0 {
-				result = .arrayType(anyToType(anyValue: arr[0]))
-			} else {
-				result = .arrayType(.anyType)
-			}
-		} else if let dict = aval as? Dictionary<String, Any> {
-			result = dictionaryToType(dictionaryValue: dict)
-		} else {
-			result = .anyType
-		}
-		return result
-	}
-
-	public static func dictionaryToType(dictionaryValue dict: Dictionary<String, Any>) -> CNValueType {
-		if let clsname = dict["class"] as? String {
-			switch clsname {
-			case CNValue.EnumClassName:
-				if let etype = enumToType(dictionaryValue: dict) {
-					return etype
-				} else {
-					CNLog(logLevel: .error, message: "Failed to parse enum type: \(dict)")
-				}
-			case CNValue.SetClassName:
-				if let stype = setToType(dictionaryValue: dict) {
-					return stype
-				} else {
-					CNLog(logLevel: .error, message: "Failed to parse set type: \(dict)")
-				}
-			default:
-				break
-			}
-		}
-		if let val = dict.values.first {
-			let elmtype = anyToType(anyValue: val)
-			return .dictionaryType(elmtype)
-		} else {
-			return .dictionaryType(.anyType)
-		}
-	}
-
-	private static func setToType(dictionaryValue dict: Dictionary<String, Any>) -> CNValueType? {
-		guard let typename = dict["type"] as? String else {
-			CNLog(logLevel: .error, message: "No \"type\" property")
-			return nil
-		}
-		if let etype = CNEnumTable.currentEnumTable().search(byTypeName: typename) {
-			return .enumType(etype)
-		} else {
-			CNLog(logLevel: .error, message: "Unknown enum type: \(typename)")
-			return nil
-		}
-	}
-
-	private static func enumToType(dictionaryValue dict: Dictionary<String, Any>) -> CNValueType? {
-		guard let values = dict["values"] as? Array<Any> else {
-			CNLog(logLevel: .error, message: "No \"values\" property")
-			return nil
-		}
-		if values.count > 0 {
-			return .setType(anyToType(anyValue: values[0]))
-		} else {
-			return .setType(.anyType)
-		}
-	}
 
 	public static func encode(valueType vtype: CNValueType) -> String {
 		return CNValueTypeCoder.encode(valueType: vtype)
@@ -136,7 +59,6 @@ private class CNValueTypeCoder
 	private static let	StringTypeIdentifier		= "s"
 	private static let	EnumTypeIdentifier		= "e"
 	private static let	DictionaryTypeIdentifier	= "d"
-	private static let 	StructTypeIdentifier		= "c"
 	private static let	ArrayTypeIdentifier		= "a"
 	private static let	SetTypeIdentifier		= "t"
 	private static let 	RecordTypeIdentifier		= "r"
@@ -160,9 +82,8 @@ private class CNValueTypeCoder
 		case .enumType(let etype):
 			result = EnumTypeIdentifier + "(" + etype.typeName + ")"
 		case .dictionaryType(let elmtype):
-			result = DictionaryTypeIdentifier + "(" + encode(valueType: elmtype) + ")"
-		case .structType(let strcttype):
-			result = StructTypeIdentifier + "(" + strcttype.typeName + ")"
+			let elmstr = encode(valueType: elmtype)
+			result = DictionaryTypeIdentifier + "(" + elmstr + ")"
 		case .arrayType(let elmtype):
 			let elmstr = encode(valueType: elmtype)
 			result = ArrayTypeIdentifier + "(" + elmstr + ")"
@@ -221,13 +142,6 @@ private class CNValueTypeCoder
 			switch decodeElementType(stream: strm) {
 			case .success(let elmtype):
 				result = .dictionaryType(elmtype)
-			case .failure(let err):
-				return .failure(err)
-			}
-		case StructTypeIdentifier:
-			switch decodeStructType(stream: strm) {
-			case .success(let strcttype):
-				result = .structType(strcttype)
 			case .failure(let err):
 				return .failure(err)
 			}
@@ -291,60 +205,6 @@ private class CNValueTypeCoder
 		} else {
 			return .failure(NSError.parseError(message: "Unknown enum type name: \(ename)"))
 		}
-	}
-
-	public static func decodeStructType(stream strm: CNTokenStream) -> Result<CNStructType, NSError> {
-		guard strm.requireSymbol(symbol: "(") else {
-			return .failure(NSError.parseError(message: "\"(\" is required for type declaration"))
-		}
-		guard let typename = strm.requireIdentifier() else {
-			return .failure(NSError.parseError(message: "Struct type name is required"))
-		}
-		let stable = CNStructTable.currentStructTable()
-		if let stype = stable.search(byTypeName: typename) {
-			return .success(stype)
-		} else {
-			return .failure(NSError.parseError(message: "Unknown struct type name: \(typename)"))
-		}
-	}
-
-	public static func decodeElementTypes(stream strm: CNTokenStream) -> Result<Dictionary<String, CNValueType>, NSError> {
-		guard strm.requireSymbol(symbol: "[") else {
-			return .failure(NSError.parseError(message: "\"[\" is required for type declaration"))
-		}
-		var result: Dictionary<String, CNValueType> = [:]
-		var is1st = true
-		while true {
-			if strm.isEmpty() {
-				return .failure(NSError.parseError(message: "Unexpected end of stream while decoding dictionary type"))
-			} else if strm.requireSymbol(symbol: "]") {
-				break
-			}
-			if is1st {
-				is1st = false
-			} else if !strm.requireSymbol(symbol: ",") {
-				return .failure(NSError.parseError(message: "\",\" is required between record type declarations"))
-			}
-			let key: String
-			if let ident = strm.requireIdentifier() {
-				key = ident
-			} else {
-				return .failure(NSError.parseError(message: "Identifier is required for record type declaration"))
-			}
-			if !strm.requireSymbol(symbol: ":") {
-				return .failure(NSError.parseError(message: "\":\" is required between record identifier and type"))
-			}
-			let etype: CNValueType
-			switch decode(stream: strm) {
-			case .success(let type):
-				etype = type
-			case .failure(let err):
-				return .failure(err)
-			}
-			result[key] = etype
-		}
-
-		return .success(result)
 	}
 
 	public static func decodeElementType(stream strm: CNTokenStream) -> Result<CNValueType, NSError> {

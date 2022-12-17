@@ -274,13 +274,13 @@ public class CNVectorManager
 		for obj in mGraphics {
 			switch obj {
 			case .path(let path):
-				objects.append(.structValue(path.toValue()))
+				objects.append(.dictionaryValue(path.toValue()))
 			case .rect(let rect):
-				objects.append(.structValue(rect.toValue()))
+				objects.append(.dictionaryValue(rect.toValue()))
 			case .oval(let oval):
-				objects.append(.structValue(oval.toValue()))
+				objects.append(.dictionaryValue(oval.toValue()))
 			case .string(let vstr):
-				objects.append(.structValue(vstr.toValue()))
+				objects.append(.dictionaryValue(vstr.toValue()))
 			}
 		}
 		return objects

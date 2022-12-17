@@ -25,9 +25,21 @@ public extension ComparisonResult
 	}
 }
 
-public func CNCompareValue(value0 val0: CNValue, value1 val1: CNValue) -> ComparisonResult
+private func CNCastToCompareValue(value val: CNValue) -> CNValue {
+	switch val {
+	case .enumValue(let eval):
+		return eval.value.toValue()
+	default:
+		return val
+	}
+}
+
+public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNValue) -> ComparisonResult
 {
-	switch CNValueType.compare(type0: val0.valueType, type1: val1.valueType) {
+	let cval0 = CNCastToCompareValue(value: ival0)
+	let cval1 = CNCastToCompareValue(value: ival1)
+
+	switch CNValueType.compare(type0: cval0.valueType, type1: cval1.valueType) {
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:
@@ -37,63 +49,54 @@ public func CNCompareValue(value0 val0: CNValue, value1 val1: CNValue) -> Compar
 	}
 
 	var result: ComparisonResult? = nil
-	switch val0.valueType {
+	switch cval0.valueType {
 	case .voidType:
 		result = .orderedSame
 	case .anyType:
 		result = .orderedSame
 	case .boolType:
-		if let s0 = val0.toBool(), let s1 = val1.toBool() {
-			result = CNComparator.compare(bool0: s0, bool1: s1)
+		if let s0 = cval0.toBool(), let s1 = cval1.toBool() {
+			result = compare(bool0: s0, bool1: s1)
 		}
 	case .numberType:
-		if let s0 = val0.toNumber(), let s1 = val1.toNumber() {
+		if let s0 = cval0.toNumber(), let s1 = cval1.toNumber() {
 			result = s0.compare(s1)
 		}
 	case .stringType:
-		if let s0 = val0.toString(), let s1 = val1.toString() {
+		if let s0 = cval0.toString(), let s1 = cval1.toString() {
 			result = s0.compare(s1)
 		}
 	case .enumType:
-		if let s0 = val0.toEnum(), let s1 = val1.toEnum() {
-			result = s0.compare(s1)
-		}
+		/* Cast operation replace this type */
+		CNLog(logLevel: .error, message: "Failed to compare enum", atFunction: #function, inFile: #file)
 	case .dictionaryType:
-		if let s0 = val0.toDictionary(), let s1 = val1.toDictionary() {
+		if let s0 = cval0.toDictionary(), let s1 = cval1.toDictionary() {
 			result = compare(dictionary0: s0, dictionary1: s1)
 		}
-	case .structType(_):
-		if let s0 = val0.toStruct(), let s1 = val1.toStruct() {
-			result = compare(struct0: s0, struct1: s1)
-		}
 	case .arrayType:
-		if let s0 = val0.toArray(), let s1 = val1.toArray() {
+		if let s0 = cval0.toArray(), let s1 = cval1.toArray() {
 			result = compare(array0: s0, array1: s1)
 		}
 	case .setType:
-		if let s0 = val0.toSet(), let s1 = val1.toSet() {
-			result = compare(array0: s0, array1: s1)
+		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
+			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .objectType:
-		if let s0 = val0.toObject(), let s1 = val1.toObject() {
-			result = compare(object0: s0, object1: s1)
-		}
-	case .functionType(_, _), .interfaceType(_):
+	case .objectType(_), .functionType(_, _), .interfaceType(_):
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 	}
 
 	if let res = result {
 		return res
 	} else {
-		CNLog(logLevel: .error, message: "Can not happen: \(val0.string) <-> \(val1.string)", atFunction: #function, inFile: #file)
+		CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
 		return .orderedAscending
 	}
 }
 
-public func CNIsSameValue(value0 val0: CNValue, value1 val1: CNValue) -> Bool
+public func CNIsSameValue(nativeValue0 val0: CNValue, nativeValue1 val1: CNValue) -> Bool
 {
 	let result: Bool
-	switch CNCompareValue(value0: val0, value1: val1) {
+	switch CNCompareValue(nativeValue0: val0, nativeValue1: val1) {
 	case .orderedAscending, .orderedDescending:
 		result = false
 	case .orderedSame:
@@ -102,20 +105,16 @@ public func CNIsSameValue(value0 val0: CNValue, value1 val1: CNValue) -> Bool
 	return result
 }
 
-public func CNInsertValue(target targ: inout Array<CNValue>, element elm: CNValue) {
-	let cnt = targ.count
-	for i in 0..<cnt {
-		switch CNCompareValue(value0: elm, value1: targ[i]) {
-		case .orderedAscending:		// src < mValues
-			targ.insert(elm, at: i)
-			return	// finish insertions
-		case .orderedSame:		// src == mValues
-			return	// already defined
-		case .orderedDescending:	//       mValues[i] < src
-			break   // continue
-		}
+private func compare(bool0 s0: Bool, bool1 s1: Bool) -> ComparisonResult {
+	let result: ComparisonResult
+	if s0 == s1 {
+		result = .orderedSame
+	} else if s0 { // s0:true,  s1: false
+		result = .orderedDescending
+	} else {       // s0:false, s1: true
+		result = .orderedAscending
 	}
-	targ.append(elm)
+	return result
 }
 
 private func compare(color0 s0: CNColor, color1 s1: CNColor) -> ComparisonResult {
@@ -125,7 +124,7 @@ private func compare(color0 s0: CNColor, color1 s1: CNColor) -> ComparisonResult
 	var r1 : CGFloat = 0.0, g1 : CGFloat = 0.0, b1 : CGFloat = 0.0, a1 : CGFloat = 0.0
 	s1.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
 
-	let resr = CNComparator.compare(float0: r0, float1: r1)
+	let resr = compare(float0: r0, float1: r1)
 	switch resr {
 	case .orderedAscending, .orderedDescending:
 		return resr
@@ -133,7 +132,7 @@ private func compare(color0 s0: CNColor, color1 s1: CNColor) -> ComparisonResult
 		break // continue
 	}
 
-	let resg = CNComparator.compare(float0: g0, float1: g1)
+	let resg = compare(float0: g0, float1: g1)
 	switch resg {
 	case .orderedAscending, .orderedDescending:
 		return resg
@@ -141,7 +140,7 @@ private func compare(color0 s0: CNColor, color1 s1: CNColor) -> ComparisonResult
 		break // continue
 	}
 
-	let resb = CNComparator.compare(float0: b0, float1: b1)
+	let resb = compare(float0: b0, float1: b1)
 	switch resb {
 	case .orderedAscending, .orderedDescending:
 		return resb
@@ -153,7 +152,7 @@ private func compare(color0 s0: CNColor, color1 s1: CNColor) -> ComparisonResult
 }
 
 private func compare(array0 s0: Array<CNValue>, array1 s1: Array<CNValue>) -> ComparisonResult {
-	switch CNComparator.compare(int0: s0.count, int1: s1.count) {
+	switch compare(int0: s0.count, int1: s1.count) {
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:
@@ -162,7 +161,7 @@ private func compare(array0 s0: Array<CNValue>, array1 s1: Array<CNValue>) -> Co
 		break
 	}
 	for i in 0..<s0.count {
-		switch CNCompareValue(value0: s0[i], value1: s1[i]) {
+		switch CNCompareValue(nativeValue0: s0[i], nativeValue1: s1[i]) {
 		case .orderedAscending:
 			return .orderedAscending
 		case .orderedDescending:
@@ -177,7 +176,7 @@ private func compare(array0 s0: Array<CNValue>, array1 s1: Array<CNValue>) -> Co
 private func compare(dictionary0 s0: Dictionary<String, CNValue>, dictionary1 s1: Dictionary<String, CNValue>) -> ComparisonResult {
 	let keys0 = s0.keys
 	let keys1 = s1.keys
-	switch CNComparator.compare(int0: keys0.count, int1: keys1.count){
+	switch compare(int0: keys0.count, int1: keys1.count){
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:
@@ -200,7 +199,7 @@ private func compare(dictionary0 s0: Dictionary<String, CNValue>, dictionary1 s1
 	for i in 0..<skeys0.count {
 		let key = skeys0[i]
 		if let v0 = s0[key], let v1 = s1[key] {
-			switch CNCompareValue(value0: v0, value1: v1) {
+			switch CNCompareValue(nativeValue0: v0, nativeValue1: v1) {
 			case .orderedAscending:
 				return .orderedAscending
 			case .orderedDescending:
@@ -215,22 +214,40 @@ private func compare(dictionary0 s0: Dictionary<String, CNValue>, dictionary1 s1
 	return .orderedSame
 }
 
-private func compare(struct0 s0: CNStruct, struct1 s1: CNStruct) -> ComparisonResult {
-	switch CNComparator.compare(string0: s0.type.typeName, string1: s1.type.typeName) {
-	case .orderedAscending:		return .orderedAscending
-	case .orderedDescending:	return .orderedDescending
-	case .orderedSame:		break
+private func compare(int0 s0: Int, int1 s1: Int) -> ComparisonResult {
+	let result: ComparisonResult
+	if s0 > s1 {
+		result = .orderedDescending
+	} else if s0 < s1 {
+		result = .orderedAscending
+	} else {
+		result = .orderedSame
 	}
-	return compare(dictionary0: s0.values, dictionary1: s1.values)
+	return result
 }
 
-private func compare(object0 s0: AnyObject, object1 s1: AnyObject) -> ComparisonResult {
-	if (s0 as? NSNull) != nil && (s1 as? NSNull) != nil {
-		return .orderedSame
+private func compare(float0 s0: CGFloat, float1 s1: CGFloat) -> ComparisonResult {
+	let result: ComparisonResult
+	if s0 > s1 {
+		result = .orderedDescending
+	} else if s0 < s1 {
+		result = .orderedAscending
 	} else {
-		CNLog(logLevel: .error, message: "Failed to compare object: \(s0) <> \(s1)", atFunction: #function, inFile: #file)
-		return CNComparator.compare(string0: s0.description, string1: s1.description)
+		result = .orderedSame
 	}
+	return result
+}
+
+private func compare(string0 s0: String, string1 s1: String) -> ComparisonResult {
+	let result: ComparisonResult
+	if s0 > s1 {
+		result = .orderedDescending
+	} else if s0 < s1 {
+		result = .orderedAscending
+	} else {
+		result = .orderedSame
+	}
+	return result
 }
 
 private func compare(record0 s0: CNRecord, record1 s1: CNRecord) -> ComparisonResult {

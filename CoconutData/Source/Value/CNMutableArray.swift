@@ -52,7 +52,7 @@ public class CNMutableArrayValue: CNMutableValue
 					result = curdict._value(forPath: rest, in: root)
 				}
 			} else {
-				result = .failure(NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)"))
+				result = .failure(NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)"))
 			}
 		}
 		return result
@@ -100,7 +100,7 @@ public class CNMutableArrayValue: CNMutableValue
 					result = curdict._set(value: val, forPath: rest, in: root)
 				}
 			} else {
-				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
+				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 			}
 		}
 		return result
@@ -122,13 +122,13 @@ public class CNMutableArrayValue: CNMutableValue
 			case .keyAndValue(let srckey, let srcval):
 				if let (_, curdict) = searchChild(key: srckey, value: srcval) {
 					if rest.count == 0 {
-						result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
+						result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 					} else {
 						/* Trace child */
 						result = curdict._append(value: val, forPath: rest, in: root)
 					}
 				} else {
-					result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
+					result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 				}
 			}
 		} else {
@@ -176,7 +176,7 @@ public class CNMutableArrayValue: CNMutableValue
 					result = curdict._delete(forPath: rest, in: root)
 				}
 			} else {
-				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.script)")
+				result = NSError.parseError(message: "Invalid key or value: \(srckey):\(srcval.description)")
 			}
 		}
 		return result
@@ -186,7 +186,7 @@ public class CNMutableArrayValue: CNMutableValue
 		for i in 0..<mValues.count {
 			if let dict = mValues[i] as? CNMutableDictionaryValue {
 				if let curval = dict.get(forKey: srckey) {
-					if CNIsSameValue(value0: curval.toValue(), value1: srcval){
+					if CNIsSameValue(nativeValue0: curval.toValue(), nativeValue1: srcval){
 						return (i, dict)
 					}
 				}

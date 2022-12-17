@@ -34,7 +34,7 @@ public class CNValueParser
 				/* Parse object */
 				switch parseValue(tokenStream: CNTokenStream(source: tokens)) {
 				case .success(let val):
-					let dec = CNValue.fromPrimiteValue(value: val)
+					let dec = decodeDictionary(value: val)
 					result = .success(dec)
 				case .failure(let err):
 					result = .failure(err)
@@ -55,6 +55,33 @@ public class CNValueParser
 			result.append(parts[0])
 		}
 		return result
+	}
+
+	private func decodeDictionary(value src: CNValue) -> CNValue {
+		let dst: CNValue
+		switch src {
+		case .boolValue(_), .numberValue(_), .stringValue(_), .setValue(_),
+		     .enumValue(_), .objectValue(_):
+			dst = src
+		case .dictionaryValue(let dict):
+			if let obj = CNValue.dictionaryToValue(dictionary: dict) {
+				dst = obj
+			} else {
+				var newdict: Dictionary<String, CNValue> = [:]
+				for (key, val) in dict {
+					newdict[key] = decodeDictionary(value: val)
+				}
+				dst = .dictionaryValue(newdict)
+			}
+		case .arrayValue(let arr):
+			var newarr: Array<CNValue> = []
+			for elm in arr {
+				let newelm = decodeDictionary(value: elm)
+				newarr.append(newelm)
+			}
+			dst = .arrayValue(newarr)
+		}
+		return dst
 	}
 
 	private func parseValue(tokenStream stream: CNTokenStream) -> Result<CNValue, NSError> {

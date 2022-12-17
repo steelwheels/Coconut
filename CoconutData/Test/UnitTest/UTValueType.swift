@@ -23,7 +23,14 @@ public func testValueType(console cons: CNConsole) -> Bool
 	let res4 = valueTypeTest(valueType: .functionType(.voidType, [.numberType, .stringType]), console: cons)
 	let res5 = valueTypeTest(valueType: .functionType(.numberType, [.numberType]), console: cons)
 
-	let result = res0 && res1 && res2 && res3 && res4 && res5
+	let rectype0: CNValueType = .recordType([
+		"a":	.boolType,
+		"b":	.numberType,
+		"c":	.stringType
+	])
+	let res6 = valueTypeTest(valueType: rectype0, console: cons)
+
+	let result = res0 && res1 && res2 && res3 && res4 && res5 && res6
 	return result
 }
 
