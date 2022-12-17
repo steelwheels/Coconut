@@ -167,7 +167,7 @@ public class CNContactDatabase: CNTable
 		for i in 0..<recnum {
 			let record = mRecords[i]
 			if let val = record.value(ofField: field) {
-				switch CNCompareValue(value0: val, value1: srcval) {
+				switch CNCompareValue(nativeValue0: val, nativeValue1: srcval) {
 				case .orderedSame:
 					result.append(record)
 				case .orderedAscending, .orderedDescending:
@@ -361,7 +361,7 @@ public class CNContactDatabase: CNTable
 			let val0p = rec0.value(ofField: key)
 			let val1p = rec1.value(ofField: key)
 			if let val0 = val0p, let val1 = val1p {
-				return CNCompareValue(value0: val0, value1: val1)
+				return CNCompareValue(nativeValue0: val0, nativeValue1: val1)
 			} else if val0p != nil {
 				return .orderedAscending
 			} else if val1p != nil {

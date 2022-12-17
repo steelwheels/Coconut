@@ -339,53 +339,58 @@ public enum CNValue {
 		return formatter.date(from: string)
 	}
 
-	public func toAny() -> Any {
-		let result: Any
+	public func toAnyObject() -> AnyObject {
+		let result: AnyObject
 		switch self {
 		case .boolValue(let val):
-			result = val
+			result = NSNumber(booleanLiteral: val)
 		case .numberValue(let val):
 			result = val
 		case .stringValue(let val):
-			result = val
+			result = val as NSString
 		case .enumValue(let val):
-			result = val.toValue()
+			let newval: CNValue = .dictionaryValue(val.toValue())
+			result = newval.toAnyObject()
 		case .objectValue(let val):
 			result = val
 		case .dictionaryValue(let dict):
-			var newdict: Dictionary<String, Any> = [:]
+			var newdict: Dictionary<String, AnyObject> = [:]
 			for (key, elm) in dict {
-				newdict[key] = elm.toAny()
+				newdict[key] = elm.toAnyObject()
 			}
-			result = newdict
+			result = newdict as NSDictionary
 		case .arrayValue(let arr):
-			var newarr: Array<Any> = []
+			var newarr: Array<AnyObject> = []
 			for elm in arr {
-				newarr.append(elm.toAny())
+				newarr.append(elm.toAnyObject())
 			}
-			result = newarr
+			result = newarr as NSArray
 		case .setValue(let arr):
-			var newarr: Array<Any> = []
+			var newarr: Array<AnyObject> = []
 			for elm in arr {
-				newarr.append(elm.toAny())
+				newarr.append(elm.toAnyObject())
 			}
-			result = newarr
+			result = newarr as NSArray
 		}
 		return result
 	}
 
-	public static func anyToValue(object obj: Any) -> CNValue {
+	public static func anyObjectToValue(object obj: AnyObject) -> CNValue {
 		var result: CNValue
 		if let _ = obj as? NSNull {
 			result = CNValue.null
 		} else if let val = obj as? NSNumber {
-			result = .numberValue(val)
-		} else if let val = obj as? String {
-			result = .stringValue(val)
-		} else if let val = obj as? Dictionary<String, Any> {
+			if val.hasBoolValue {
+				result = .boolValue(val.boolValue)
+			} else {
+				result = .numberValue(val)
+			}
+		} else if let val = obj as? NSString {
+			result = .stringValue(val as String)
+		} else if let val = obj as? Dictionary<String, AnyObject> {
 			var newdict: Dictionary<String, CNValue> = [:]
 			for (key, elm) in val {
-				let child = anyToValue(object: elm)
+				let child = anyObjectToValue(object: elm)
 				newdict[key] = child
 			}
 			if let val = dictionaryToValue(dictionary: newdict){
@@ -393,10 +398,10 @@ public enum CNValue {
 			} else {
 				result = .dictionaryValue(newdict)
 			}
-		} else if let val = obj as? Array<Any> {
+		} else if let val = obj as? Array<AnyObject> {
 			var newarr: Array<CNValue> = []
 			for elm in val {
-				let child = anyToValue(object: elm)
+				let child = anyObjectToValue(object: elm)
 				newarr.append(child)
 			}
 			result = .arrayValue(newarr)
