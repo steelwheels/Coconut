@@ -81,7 +81,9 @@ public func CNCompareValue(nativeValue0 ival0: CNValue, nativeValue1 ival1: CNVa
 		if let s0 = cval0.toSet(), let s1 = cval1.toSet() {
 			result = CNValueSet.compare(set0: s0, set1: s1)
 		}
-	case .objectType(_), .functionType(_, _), .interfaceType(_):
+	case .objectType(_):
+		result = compare(object0: cval0.toObject(), object1: cval1.toObject())
+	case .functionType(_, _), .interfaceType(_):
 		CNLog(logLevel: .error, message: "Failed to compare object", atFunction: #function, inFile: #file)
 	}
 
@@ -250,9 +252,32 @@ private func compare(string0 s0: String, string1 s1: String) -> ComparisonResult
 	return result
 }
 
+private func compare(object0 s0: AnyObject?, object1 s1: AnyObject?) -> ComparisonResult
+{
+	if let o0 = s0, let o1 = s1 {
+		if let _ = o0 as? NSNull, let _ = o1 as? NSNull {
+			return .orderedSame
+		} else {
+			/* s0 != nil && s1 != nil */
+			CNLog(logLevel: .error, message: "Failed to compare objects", atFunction: #function, inFile: #file)
+			return .orderedAscending
+		}
+	} else if let _ = s0 {
+		/* s0 != nil && s1 == nil */
+		return .orderedDescending
+	} else if let _ = s1 {
+		/* s0 == nil && s1 != nil */
+		return .orderedAscending
+	} else {
+		/* s0 == nil && s1 == nil */
+		return .orderedSame
+	}
+}
+
+/*
 private func compare(record0 s0: CNRecord, record1 s1: CNRecord) -> ComparisonResult {
 	let d0 = s0.toDictionary()
 	let d1 = s1.toDictionary()
 	return compare(dictionary0: d0, dictionary1: d1)
 }
-
+*/
