@@ -14,8 +14,11 @@ import Foundation
 
 public enum CNSymbolSize: Int
 {
-	public static let typeName = "SymbolSize"
-	
+	public static  let typeName = "SymbolSize"
+	private static let SmallSize   = 128.0
+	private static let RegularSize = 256.0
+	private static let LargeSize   = 384.0
+
 	case small	= 0
 	case regular	= 1
 	case large	= 2
@@ -23,11 +26,31 @@ public enum CNSymbolSize: Int
 	public func toSize() -> CGSize {
 		let width: CGFloat
 		switch self {
-		case .small:	width = 128.0
-		case .regular:	width = 256.0
-		case .large:	width = 384.0
+		case .small:	width = CNSymbolSize.SmallSize
+		case .regular:	width = CNSymbolSize.RegularSize
+		case .large:	width = CNSymbolSize.LargeSize
 		}
 		return CGSize(width: width, height: width)
+	}
+
+	public func size(fitIn targsize: CGSize) -> CGSize {
+		let dolarge, doregular: Bool
+		switch self {
+		case .large:	dolarge = true  ; doregular = true
+		case .regular:	dolarge = false ; doregular = true
+		case .small:	dolarge = false ; doregular = false
+		}
+		let result: CGFloat
+		if dolarge && targsize.width >= CNSymbolSize.LargeSize && targsize.height >= CNSymbolSize.LargeSize {
+			result = CNSymbolSize.LargeSize
+		} else if doregular && targsize.width >= CNSymbolSize.RegularSize && targsize.height >= CNSymbolSize.RegularSize {
+			result = CNSymbolSize.RegularSize
+		} else if targsize.width >= CNSymbolSize.SmallSize && targsize.height >= CNSymbolSize.SmallSize {
+			result = CNSymbolSize.SmallSize
+		} else {
+			result = min(targsize.width, targsize.height)
+		}
+		return CGSize(width: result, height: result)
 	}
 }
 
@@ -213,7 +236,9 @@ public enum CNSymbol: Int
 	}
 
 	public func load(size sz: CGSize) -> CNImage {
-		if let img = CNSymbol.loadImage(symbol: self) {
+		if let img = CNImage(symbolName: self.name) {
+			return img
+		} else if let img = CNSymbol.loadImage(symbol: self) {
 			let newsize = img.size.resizeWithKeepingAscpect(inSize: sz)
 			if let newimg = img.resize(to: newsize) {
 				return newimg

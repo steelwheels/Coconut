@@ -16,6 +16,14 @@ public extension CNImage
 {
 	private static let ClassName = "Image"
 
+	convenience init?(symbolName name: String) {
+		#if os(OSX)
+		self.init(systemSymbolName: name, accessibilityDescription: nil)
+		#else
+		self.init(systemName: name, withConfiguration: nil)
+		#endif
+	}
+
 	#if os(OSX)
 	func pngData() -> Data? {
 		if let cgimg = self.cgImage(forProposedRect: nil, context: nil, hints: nil) {

@@ -64,7 +64,7 @@ public class CNValueParser
 		     .enumValue(_), .objectValue(_):
 			dst = src
 		case .dictionaryValue(let dict):
-			if let obj = CNValue.dictionaryToValue(dictionary: dict) {
+			if let obj = CNDictionaryToValue(dictionary: dict) {
 				dst = obj
 			} else {
 				var newdict: Dictionary<String, CNValue> = [:]

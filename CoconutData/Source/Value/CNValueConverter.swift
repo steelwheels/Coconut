@@ -7,68 +7,35 @@
 
 import Foundation
 
-extension CNValue
-{
-	public static func dictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue? {
-		var result: CNValue? = nil
-		if let clsval = dict["class"] {
-			if let clsname = clsval.toString() {
-				switch clsname {
-				case CNEnum.ClassName:
-					if let eval = CNEnum.fromValue(value: dict) {
-						result = .enumValue(eval)
-					}
-				case CNValueSet.ClassName:
-					if let val = CNValueSet.fromValue(value: dict) {
-						result = val
-					}
-				default:
-					break
+public func CNDictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue? {
+	var result: CNValue? = nil
+	if let clsval = dict["class"] {
+		if let clsname = clsval.toString() {
+			switch clsname {
+			case CNEnum.ClassName:
+				if let eval = CNEnum.fromValue(value: dict) {
+					result = .enumValue(eval)
 				}
+			case CNValueSet.ClassName:
+				if let val = CNValueSet.fromValue(value: dict) {
+					result = val
+				}
+			default:
+				break
 			}
 		}
-		return result
 	}
-	
-	public static func anyObjectToValue(object obj: AnyObject) -> CNValue {
-		var result: CNValue
-		if let _ = obj as? NSNull {
-			result = CNValue.null
-		} else if let val = obj as? NSNumber {
-			if val.hasBoolValue {
-				result = .boolValue(val.boolValue)
-			} else {
-				result = .numberValue(val)
-			}
-		} else if let val = obj as? NSString {
-			result = .stringValue(val as String)
-		} else if let val = obj as? Dictionary<String, AnyObject> {
-			var newdict: Dictionary<String, CNValue> = [:]
-			for (key, elm) in val {
-				let child = anyObjectToValue(object: elm)
-				newdict[key] = child
-			}
-			if let val = dictionaryToValue(dictionary: newdict){
-				result = val
-			} else {
-				result = .dictionaryValue(newdict)
-			}
-		} else if let val = obj as? Array<AnyObject> {
-			var newarr: Array<CNValue> = []
-			for elm in val {
-				let child = anyObjectToValue(object: elm)
-				newarr.append(child)
-			}
-			result = .arrayValue(newarr)
-		} else {
-			result = .objectValue(obj as AnyObject)
-		}
-		return result
+	return result
+}
+
+open class CNValueToAnyObject
+{
+	public init() {
 	}
-	
-	public func toAnyObject() -> AnyObject {
+
+	open func convert(value src: CNValue) -> AnyObject {
 		let result: AnyObject
-		switch self {
+		switch src {
 		case .boolValue(let val):
 			result = NSNumber(booleanLiteral: val)
 		case .numberValue(let val):
@@ -76,30 +43,88 @@ extension CNValue
 		case .stringValue(let val):
 			result = val as NSString
 		case .enumValue(let val):
-			let newval: CNValue = .dictionaryValue(val.toValue())
-			result = newval.toAnyObject()
+			result = convert(enumValue: val)
 		case .objectValue(let val):
 			result = val
 		case .dictionaryValue(let dict):
-			var newdict: Dictionary<String, AnyObject> = [:]
-			for (key, elm) in dict {
-				newdict[key] = elm.toAnyObject()
-			}
-			result = newdict as NSDictionary
+			result = convert(dictionaryValue: dict)
 		case .arrayValue(let arr):
-			var newarr: Array<AnyObject> = []
-			for elm in arr {
-				newarr.append(elm.toAnyObject())
-			}
-			result = newarr as NSArray
+			result = convert(arrayValue: arr)
 		case .setValue(let arr):
-			var newarr: Array<AnyObject> = []
-			for elm in arr {
-				newarr.append(elm.toAnyObject())
+			result = convert(arrayValue: arr)
+		}
+		return result
+	}
+
+	open func convert(arrayValue src: Array<CNValue>) -> AnyObject {
+		var newarr: Array<AnyObject> = []
+		for elm in src {
+			newarr.append(convert(value: elm))
+		}
+		return newarr as NSArray
+	}
+
+	open func convert(dictionaryValue src: Dictionary<String, CNValue>) -> AnyObject {
+		var newdict: Dictionary<String, AnyObject> = [:]
+		for (key, elm) in src{
+			newdict[key] = convert(value: elm)
+		}
+		return newdict as NSDictionary
+	}
+
+	open func convert(enumValue src: CNEnum) -> AnyObject {
+		return convert(dictionaryValue: src.toValue())
+	}
+}
+
+open class CNAnyObjecToValue
+{
+	public init() {
+	}
+
+	open func convert(anyObject src: AnyObject) -> CNValue {
+		var result: CNValue
+		if let _ = src as? NSNull {
+			result = CNValue.null
+		} else if let val = src as? NSNumber {
+			if val.hasBoolValue {
+				result = .boolValue(val.boolValue)
+			} else {
+				result = .numberValue(val)
 			}
-			result = newarr as NSArray
+		} else if let val = src as? NSString {
+			result = .stringValue(val as String)
+		} else if let val = src as? Dictionary<String, AnyObject> {
+			result = convert(dictionaryObject: val)
+		} else if let val = src as? Array<AnyObject> {
+			result = convert(arrayObject: val)
+		} else {
+			result = .objectValue(src as AnyObject)
+		}
+		return result
+	}
+
+	open func convert(arrayObject src: Array<AnyObject>) -> CNValue {
+		var newarr: Array<CNValue> = []
+		for elm in src {
+			newarr.append(convert(anyObject: elm))
+		}
+		return .arrayValue(newarr)
+	}
+
+	open func convert(dictionaryObject src: Dictionary<String, AnyObject>) -> CNValue {
+		var newdict: Dictionary<String, CNValue> = [:]
+		for (key, elm) in src {
+			newdict[key] = convert(anyObject: elm)
+		}
+		let result: CNValue
+		if let val = CNDictionaryToValue(dictionary: newdict){
+			result = val
+		} else {
+			result = .dictionaryValue(newdict)
 		}
 		return result
 	}
 }
+
 

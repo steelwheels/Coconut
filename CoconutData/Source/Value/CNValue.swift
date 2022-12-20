@@ -20,32 +20,29 @@ public enum CNValue
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
 	case objectValue(_ val: AnyObject)
-	//case functionValue(_ val: (_ params: Array<CNValue>) -> CNValue)
 
-	public var valueType: CNValueType {
-		get {
-			let result: CNValueType
-			switch self {
-			case .boolValue(_):		result = .boolType
-			case .numberValue(_):		result = .numberType
-			case .stringValue(_):		result = .stringType
-			case .dictionaryValue(_):	result = .dictionaryType(.anyType)
-			case .arrayValue(_):		result = .arrayType(.anyType)
-			case .setValue(_):		result = .setType(.anyType)
-			case .objectValue(let obj):
-				let name = String(describing: type(of: obj))
-				result = .objectType(name)
-			case .enumValue(let eobj):
-				if let etype = eobj.enumType {
-					result = .enumType(etype)
-				} else {
-					CNLog(logLevel: .error, message: "Failed to get enum type (Can not happen)", atFunction: #function, inFile: #file)
-					result = .anyType
-				}
+	public var valueType: CNValueType { get {
+		let result: CNValueType
+		switch self {
+		case .boolValue(_):		result = .boolType
+		case .numberValue(_):		result = .numberType
+		case .stringValue(_):		result = .stringType
+		case .dictionaryValue(_):	result = .dictionaryType(.anyType)
+		case .arrayValue(_):		result = .arrayType(.anyType)
+		case .setValue(_):		result = .setType(.anyType)
+		case .objectValue(let obj):
+			let name = String(describing: type(of: obj))
+			result = .objectType(name)
+		case .enumValue(let eobj):
+			if let etype = eobj.enumType {
+				result = .enumType(etype)
+			} else {
+				CNLog(logLevel: .error, message: "Failed to get enum type (Can not happen)", atFunction: #function, inFile: #file)
+				result = .anyType
 			}
-			return result
 		}
-	}
+		return result
+	}}
 
 	public static var null: CNValue { get {
 		return CNValue.objectValue(NSNull())
