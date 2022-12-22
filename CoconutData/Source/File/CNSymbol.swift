@@ -15,22 +15,18 @@ import Foundation
 public enum CNSymbolSize: Int
 {
 	public static  let typeName = "SymbolSize"
-	private static let SmallSize   = 128.0
-	private static let RegularSize = 256.0
-	private static let LargeSize   = 384.0
 
-	case small	= 0
-	case regular	= 1
-	case large	= 2
+	case small	= 128
+	case regular	= 256
+	case large	= 384
+
+	public func toPointSize() -> CGFloat {
+		return CGFloat(self.rawValue)
+	}
 
 	public func toSize() -> CGSize {
-		let width: CGFloat
-		switch self {
-		case .small:	width = CNSymbolSize.SmallSize
-		case .regular:	width = CNSymbolSize.RegularSize
-		case .large:	width = CNSymbolSize.LargeSize
-		}
-		return CGSize(width: width, height: width)
+		let ptsize = CGFloat(self.rawValue)
+		return CGSize(width: ptsize, height: ptsize)
 	}
 
 	public func size(fitIn targsize: CGSize) -> CGSize {
@@ -40,15 +36,17 @@ public enum CNSymbolSize: Int
 		case .regular:	dolarge = false ; doregular = true
 		case .small:	dolarge = false ; doregular = false
 		}
+		let targpoint = min(targsize.width, targsize.height)
+
 		let result: CGFloat
-		if dolarge && targsize.width >= CNSymbolSize.LargeSize && targsize.height >= CNSymbolSize.LargeSize {
-			result = CNSymbolSize.LargeSize
-		} else if doregular && targsize.width >= CNSymbolSize.RegularSize && targsize.height >= CNSymbolSize.RegularSize {
-			result = CNSymbolSize.RegularSize
-		} else if targsize.width >= CNSymbolSize.SmallSize && targsize.height >= CNSymbolSize.SmallSize {
-			result = CNSymbolSize.SmallSize
+		if dolarge && targpoint >= CGFloat(CNSymbolSize.large.rawValue) {
+			result = CGFloat(CNSymbolSize.large.rawValue)
+		} else if doregular && targpoint >= CGFloat(CNSymbolSize.regular.rawValue) {
+			result = CGFloat(CNSymbolSize.regular.rawValue)
+		} else if targpoint >= CGFloat(CNSymbolSize.small.rawValue) {
+			result = CGFloat(CNSymbolSize.small.rawValue)
 		} else {
-			result = min(targsize.width, targsize.height)
+			result = targpoint
 		}
 		return CGSize(width: result, height: result)
 	}
@@ -235,17 +233,34 @@ public enum CNSymbol: Int
 		return fill ? .ovalFill : .oval
 	}
 
-	public func load(size sz: CGSize) -> CNImage {
-		if let img = CNImage(symbolName: self.name) {
+	public func load(size sz: CNSymbolSize) -> CNImage {
+		if let img = loadSymbol(size: sz){
 			return img
 		} else if let img = CNSymbol.loadImage(symbol: self) {
-			let newsize = img.size.resizeWithKeepingAscpect(inSize: sz)
+			let psize   = sz.toPointSize()
+			let newsize = img.size.resizeWithKeepingAscpect(inSize: CGSize(width: psize, height: psize))
 			if let newimg = img.resize(to: newsize) {
 				return newimg
 			}
 		}
 		CNLog(logLevel: .error, message: "Failed to load symbol: \(self.name)", atFunction: #function, inFile: #file)
 		return CNImage()
+	}
+
+	private func loadSymbol(size sz: CNSymbolSize) -> CNImage? {
+		let conf = CNImage.SymbolConfiguration(pointSize: sz.toPointSize(), weight: .regular)
+		#if os(OSX)
+			if let img = CNImage(symbolName: self.name) {
+				if let cimg = img.withSymbolConfiguration(conf) {
+					return cimg
+				} else {
+					CNLog(logLevel: .error, message: "Configuration failed", atFunction: #function, inFile: #file)
+				}
+			}
+			return nil
+		#else
+			return CNImage(systemName: self.name, withConfiguration: conf)
+		#endif
 	}
 
 	public static func decode(fromName name: String) -> CNSymbol? {
