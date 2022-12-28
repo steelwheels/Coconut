@@ -109,17 +109,12 @@ public class CNFilePath
 	}
 
 	public class func URLforApplicationSupportDirectory(subDirectory subdir: String?) -> URL {
-		let path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)
-		var dir: String
-		if path.count > 0 {
-			dir = path[0]
+		let url = FileManager.default.libraryDirectory
+		if let dir = subdir {
+			return url.appending(path: dir)
 		} else {
-			dir = NSHomeDirectory() + "/Application Support"
+			return url
 		}
-		if let sub = subdir {
-			dir += "/" + sub
-		}
-		return URL(fileURLWithPath: dir, isDirectory: true)
 	}
 
 	public class func URLForApplicationSupportFile(fileName fname: String, fileExtension fext: String, subdirectory subdir: String?) -> URL {

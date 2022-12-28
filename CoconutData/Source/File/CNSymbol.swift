@@ -16,9 +16,9 @@ public enum CNSymbolSize: Int
 {
 	public static  let typeName = "SymbolSize"
 
-	case small	= 128
-	case regular	= 256
-	case large	= 384
+	case small	=  60
+	case regular	= 120
+	case large	= 180
 
 	public func toPointSize() -> CGFloat {
 		return CGFloat(self.rawValue)

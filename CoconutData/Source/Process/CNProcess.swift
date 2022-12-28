@@ -117,8 +117,8 @@ open class CNProcess: CNProcessProtocol
 		}
 
 		/* Enable secure access */
-		let homeurl  = CNPreference.shared.userPreference.homeDirectory
-		let issecure = homeurl.startAccessingSecurityScopedResource()
+		let docurl   = CNPreference.shared.userPreference.documentDirectory
+		let issecure = docurl.startAccessingSecurityScopedResource()
 
 		mStatus			= .Running
 		mProcess.launchPath	= "/bin/sh"
@@ -127,7 +127,7 @@ open class CNProcess: CNProcessProtocol
 
 		/* Disable secure access */
 		if issecure {
-			homeurl.stopAccessingSecurityScopedResource()
+			docurl.stopAccessingSecurityScopedResource()
 		}
 	}
 

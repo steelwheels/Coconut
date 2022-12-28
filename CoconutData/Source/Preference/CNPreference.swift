@@ -223,37 +223,37 @@ public class CNSystemPreference: CNPreferenceTable
 
 public class CNUserPreference: CNPreferenceTable
 {
-	public let HomeDirectoryItem		= "homeDirectory"
+	public let DocumentDirectoryItem = "documentDirectory"
 
 	public init() {
 		super.init(sectionName: "UserPreference")
-		if let homedir = super.loadStringValue(forKey: HomeDirectoryItem) {
-			super.set(stringValue: homedir, forKey: HomeDirectoryItem)
+		if let docdir = super.loadStringValue(forKey: DocumentDirectoryItem) {
+			super.set(stringValue: docdir, forKey: DocumentDirectoryItem)
 		} else {
-			let homedir = URL.null()
-			super.set(stringValue: homedir.path, forKey: HomeDirectoryItem)
+			let docdir = FileManager.default.documentDirectory
+			super.set(stringValue: docdir.path, forKey: DocumentDirectoryItem)
 		}
 	}
 
-	public var homeDirectory: URL {
+	public var documentDirectory: URL {
 		get {
-			if let homedir = super.stringValue(forKey: HomeDirectoryItem) {
+			if let docdir = super.stringValue(forKey: DocumentDirectoryItem) {
 				let pref = CNPreference.shared.bookmarkPreference
-				if let homeurl = pref.search(pathString: homedir) {
-					return homeurl
+				if let docurl = pref.search(pathString: docdir) {
+					return docurl
 				} else {
-					return URL(fileURLWithPath: homedir)
+					return URL(fileURLWithPath: docdir)
 				}
 			}
 			fatalError("Can not happen at function \(#function) in file \(#file)")
 		}
 		set(newval){
 			var isdir: ObjCBool = false
-			let homedir         = newval.path
-			if FileManager.default.fileExists(atPath: homedir, isDirectory: &isdir) {
+			let docdir          = newval.path
+			if FileManager.default.fileExists(atPath: docdir, isDirectory: &isdir) {
 				if isdir.boolValue {
-					super.storeStringValue(stringValue: homedir, forKey: HomeDirectoryItem)
-					super.set(stringValue: homedir, forKey: HomeDirectoryItem)
+					super.storeStringValue(stringValue: docdir, forKey: DocumentDirectoryItem)
+					super.set(stringValue: docdir, forKey: DocumentDirectoryItem)
 					return
 				}
 			}

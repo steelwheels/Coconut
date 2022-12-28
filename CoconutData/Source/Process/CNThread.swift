@@ -86,7 +86,7 @@ public func CNExecuteInUserThread(level lvl: CNUserThreadLevel, execute exec: @e
 		CNExecuteInUserThread(level: .thread, execute: {
 			() -> Void in
 			/* Enable secure access */
-			let homeurl  = CNPreference.shared.userPreference.homeDirectory
+			let homeurl  = CNPreference.shared.userPreference.documentDirectory
 			let issecure = homeurl.startAccessingSecurityScopedResource()
 
 			/* Execute main */

@@ -261,22 +261,26 @@ public extension FileManager
 		return result
 	}
 
-	var usersHomeDirectory: URL {
-		get {
-			#if os(OSX)
-			/* https://developer.apple.com/forums/thread/107593 */
-			if let pw = getpwuid(getuid()) {
-				let url = URL(fileURLWithFileSystemRepresentation: pw.pointee.pw_dir, isDirectory: true, relativeTo: nil)
-				if isAccessible(pathString: url.path, accessType: .ReadAccess) {
-					return url
-				}
-			}
-			return URL(fileURLWithPath: NSHomeDirectory())
-			#else
-				return URL(fileURLWithPath: NSHomeDirectory())
-			#endif
-
+	var documentDirectory: URL { get {
+		let urls = self.urls(for: .documentDirectory, in: .userDomainMask)
+		if let url = urls.first {
+			return url
+		} else {
+			CNLog(logLevel: .error, message: "Can not find document directory path", atFunction: #function, inFile: #file)
+			let dir = NSHomeDirectory() + "/Document"
+			return URL(filePath: dir)
 		}
-	}
+	}}
+
+	var libraryDirectory: URL { get {
+		let urls = self.urls(for: .libraryDirectory, in: .userDomainMask)
+		if let url = urls.first {
+			return url
+		} else {
+			CNLog(logLevel: .error, message: "Can not find library directory path", atFunction: #function, inFile: #file)
+			let dir = NSHomeDirectory() + "/Library"
+			return URL(filePath: dir)
+		}
+	}}
 }
 
