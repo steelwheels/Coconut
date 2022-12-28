@@ -224,6 +224,7 @@ public class CNSystemPreference: CNPreferenceTable
 public class CNUserPreference: CNPreferenceTable
 {
 	public let DocumentDirectoryItem = "documentDirectory"
+	public let LibraryDirectoryItem  = "libraryDirectory"
 
 	public init() {
 		super.init(sectionName: "UserPreference")
@@ -232,6 +233,12 @@ public class CNUserPreference: CNPreferenceTable
 		} else {
 			let docdir = FileManager.default.documentDirectory
 			super.set(stringValue: docdir.path, forKey: DocumentDirectoryItem)
+		}
+		if let libdir = super.loadStringValue(forKey: LibraryDirectoryItem) {
+			super.set(stringValue: libdir, forKey: LibraryDirectoryItem)
+		} else {
+			let libdir = FileManager.default.libraryDirectory
+			super.set(stringValue: libdir.path, forKey: LibraryDirectoryItem)
 		}
 	}
 
@@ -254,6 +261,32 @@ public class CNUserPreference: CNPreferenceTable
 				if isdir.boolValue {
 					super.storeStringValue(stringValue: docdir, forKey: DocumentDirectoryItem)
 					super.set(stringValue: docdir, forKey: DocumentDirectoryItem)
+					return
+				}
+			}
+			CNLog(logLevel: .error, message: "Invalid parameter", atFunction: #function, inFile: #file)
+		}
+	}
+
+	public var libraryDirectory: URL {
+		get {
+			if let libdir = super.stringValue(forKey: LibraryDirectoryItem) {
+				let pref = CNPreference.shared.bookmarkPreference
+				if let liburl = pref.search(pathString: libdir) {
+					return liburl
+				} else {
+					return URL(fileURLWithPath: libdir)
+				}
+			}
+			fatalError("Can not happen at function \(#function) in file \(#file)")
+		}
+		set(newval){
+			var isdir: ObjCBool = false
+			let libdir          = newval.path
+			if FileManager.default.fileExists(atPath: libdir, isDirectory: &isdir) {
+				if isdir.boolValue {
+					super.storeStringValue(stringValue: libdir, forKey: LibraryDirectoryItem)
+					super.set(stringValue: libdir, forKey: LibraryDirectoryItem)
 					return
 				}
 			}
