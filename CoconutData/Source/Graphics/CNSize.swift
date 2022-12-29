@@ -81,24 +81,38 @@ public extension CGSize
 	}
 }
 
-public func CNMaxSize(sizeA a: CGSize, sizeB b: CGSize) -> CGSize
+public func CNIsSameSize(_ a: CGSize, _ b: CGSize) -> Bool {
+	return (a.width == b.width) && (a.height == b.height)
+}
+
+public func CNMaxSize(_ a: CGSize, _ b: CGSize) -> CGSize
 {
 	let width  = max(a.width,  b.width)
 	let height = max(a.height, b.height)
 	return CGSize(width: width, height: height)
 }
 
-public func CNMinSize(sizeA a: CGSize, sizeB b: CGSize) -> CGSize
+public func CNMinSize(_ a: CGSize, _ b: CGSize) -> CGSize
 {
 	let width  = min(a.width,  b.width)
 	let height = min(a.height, b.height)
 	return CGSize(width: width, height: height)
 }
 
-public func CNExpandSize(size sz: CGSize, byInsets insets: CNEdgeInsets) -> CGSize {
+public func CNExpandSize(_ sz: CGSize, byInsets insets: CNEdgeInsets) -> CGSize {
 	let width  = insets.left + sz.width  + insets.right
 	let height = insets.top  + sz.height + insets.bottom
 	return CGSize(width: width, height: height)
+}
+
+public func CNExpandSize(_ sz: CGSize, space spc: CGFloat) -> CGSize {
+	let width  = sz.width  + spc * 2.0
+	let height = sz.height + spc * 2.0
+	return CGSize(width: width, height: height)
+}
+
+public func CNScaledSize(size sz: CGSize, scale scl: CGFloat) -> CGSize {
+	return CGSize(width: sz.width * scl, height: sz.height * scl)
 }
 
 public func CNShrinkSize(size sz: CGSize, delta dlt: CGFloat) -> CGSize {
@@ -107,7 +121,7 @@ public func CNShrinkSize(size sz: CGSize, delta dlt: CGFloat) -> CGSize {
 	return CGSize(width: width, height: height)
 }
 
-public func CNUnionSize(sizeA a: CGSize, sizeB b: CGSize, doVertical vert: Bool, spacing space: CGFloat) -> CGSize
+public func CNUnionSize(_ a: CGSize, _ b: CGSize, doVertical vert: Bool, spacing space: CGFloat) -> CGSize
 {
 	if vert {
 		let width  = max(a.width, b.width)

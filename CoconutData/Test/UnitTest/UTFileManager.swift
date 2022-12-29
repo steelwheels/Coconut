@@ -57,11 +57,11 @@ public func testFileManager(console cons: CNConsole) -> Bool
 		result = false
 	}
 
-	let homedir = FileManager.default.usersHomeDirectory
-	cons.print(string: "home-dir: \(homedir.absoluteString)\n")
+	let docdir = FileManager.default.documentDirectory
+	cons.print(string: "doc-dir: \(docdir.absoluteString)\n")
 
 	cons.print(string: "rel: /tmp/a -> ")
-	let url0 = fmanager.fullPath(pathString: "/tmp/a", baseURL: homedir)
+	let url0 = fmanager.fullPath(pathString: "/tmp/a", baseURL: docdir)
 	if url0.path == "/tmp/a" {
 		cons.print(string: "OK\n")
 	} else {
@@ -69,8 +69,8 @@ public func testFileManager(console cons: CNConsole) -> Bool
 		result = false
 	}
 	cons.print(string: "rel: a.txt -> ")
-	let url1 = fmanager.fullPath(pathString: "a.txt", baseURL: homedir)
-	let exp1 = homedir.path + "/a.txt"
+	let url1 = fmanager.fullPath(pathString: "a.txt", baseURL: docdir)
+	let exp1 = docdir.path + "/a.txt"
 	if url1.path == exp1 {
 		cons.print(string: "OK\n")
 	} else {
@@ -78,8 +78,8 @@ public func testFileManager(console cons: CNConsole) -> Bool
 		result = false
 	}
 	cons.print(string: "rel: subdir/a.txt -> ")
-	let url2 = fmanager.fullPath(pathString: "subdir/a.txt", baseURL: homedir)
-	let exp2 = homedir.path + "/subdir/a.txt"
+	let url2 = fmanager.fullPath(pathString: "subdir/a.txt", baseURL: docdir)
+	let exp2 = docdir.path + "/subdir/a.txt"
 	if url2.path == exp2 {
 		cons.print(string: "OK\n")
 	} else {
@@ -87,7 +87,7 @@ public func testFileManager(console cons: CNConsole) -> Bool
 		result = false
 	}
 	cons.print(string: "rel: ../a.txt -> ")
-	let url3 = fmanager.fullPath(pathString: "../a.txt", baseURL: homedir)
+	let url3 = fmanager.fullPath(pathString: "../a.txt", baseURL: docdir)
 	let exp3 = "/Users/a.txt"
 	if url3.path == exp3 {
 		cons.print(string: "OK\n")
