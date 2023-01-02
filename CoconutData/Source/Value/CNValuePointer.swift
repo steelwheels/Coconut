@@ -31,7 +31,7 @@ public class CNPointerValue
 			return nil
 		}
 	}
-	
+
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNPointerValue? {
 		if CNValue.hasClassName(inValue: val, className: CNPointerValue.ClassName) {
 			if let pathval = val[CNPointerValue.PathItem] {

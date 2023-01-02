@@ -282,5 +282,14 @@ public extension FileManager
 			return URL(filePath: dir)
 		}
 	}}
+
+	var resourceDirectory: URL? { get {
+		let bundle = Bundle.main
+		if let url = bundle.resourceURL {
+			return url
+		} else {
+			return nil
+		}
+	}}
 }
 

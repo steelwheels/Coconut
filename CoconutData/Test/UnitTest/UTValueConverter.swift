@@ -60,5 +60,3 @@ private func valueConvert(value src: CNValue, console cons: CNConsole) -> Bool
 		return false
 	}
 
-	
-}
