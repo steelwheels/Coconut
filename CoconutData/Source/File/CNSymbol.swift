@@ -12,10 +12,11 @@ import UIKit
 #endif
 import Foundation
 
-public enum CNSymbolSize: Int
+public enum CNSymbolSize: Int, Comparable
 {
 	public static  let typeName = "SymbolSize"
 
+	case character	=  21
 	case small	=  60
 	case regular	= 120
 	case large	= 180
@@ -30,25 +31,23 @@ public enum CNSymbolSize: Int
 	}
 
 	public func size(fitIn targsize: CGSize) -> CGSize {
-		let dolarge, doregular: Bool
-		switch self {
-		case .large:	dolarge = true  ; doregular = true
-		case .regular:	dolarge = false ; doregular = true
-		case .small:	dolarge = false ; doregular = false
-		}
 		let targpoint = min(targsize.width, targsize.height)
 
 		let result: CGFloat
-		if dolarge && targpoint >= CGFloat(CNSymbolSize.large.rawValue) {
+		if (self >= .large) && targpoint >= CGFloat(CNSymbolSize.large.rawValue) {
 			result = CGFloat(CNSymbolSize.large.rawValue)
-		} else if doregular && targpoint >= CGFloat(CNSymbolSize.regular.rawValue) {
+		} else if (self >= .regular) && targpoint >= CGFloat(CNSymbolSize.regular.rawValue) {
 			result = CGFloat(CNSymbolSize.regular.rawValue)
-		} else if targpoint >= CGFloat(CNSymbolSize.small.rawValue) {
+		} else if (self >= .small) && targpoint >= CGFloat(CNSymbolSize.small.rawValue) {
 			result = CGFloat(CNSymbolSize.small.rawValue)
 		} else {
 			result = targpoint
 		}
 		return CGSize(width: result, height: result)
+	}
+	
+	public static func < (lhs: CNSymbolSize, rhs: CNSymbolSize) -> Bool {
+		return lhs.rawValue < rhs.rawValue
 	}
 }
 
@@ -90,6 +89,7 @@ public enum CNSymbol: Int
 	public static let typeName = "Symbols"
 
 	case character
+	case checkmarkSquare
 	case chevronBackward
 	case chevronDown
 	case chevronForward
@@ -114,12 +114,14 @@ public enum CNSymbol: Int
 	case questionmark
 	case rectangle
 	case rectangleFill
+	case square
 	case sunMax
 	case sunMin
 
 	public static var allCases: Array<CNSymbol> { get {
 		return [
 			.character,
+			.checkmarkSquare,
 			.chevronBackward,
 			.chevronDown,
 			.chevronForward,
@@ -144,6 +146,7 @@ public enum CNSymbol: Int
 			.questionmark,
 			.rectangle,
 			.rectangleFill,
+			.square,
 			.sunMax,
 			.sunMin
 		]
@@ -153,6 +156,7 @@ public enum CNSymbol: Int
 		let result: String
 		switch self {
 		case .character:	result = "character"
+		case .checkmarkSquare:	result = "checkmark.square"
 		case .chevronBackward:	result = "chevron.backward"
 		case .chevronDown:	result = "chevron.down"
 		case .chevronForward:	result = "chevron.forward"
@@ -177,6 +181,7 @@ public enum CNSymbol: Int
 		case .questionmark:	result = "questionmark"
 		case .rectangle:	result = "rectangle"
 		case .rectangleFill:	result = "rectangle.fill"
+		case .square:		result = "square"
 		case .sunMax:		result = "sun.max"
 		case .sunMin:		result = "sun.min"
 		}
@@ -186,6 +191,7 @@ public enum CNSymbol: Int
 	public var identifier: String { get {
 		let result: String
 		switch self {
+		case .checkmarkSquare:	result = "checkmarkSquare"
 		case .character:	result = "character"
 		case .chevronBackward:	result = "chevronBackward"
 		case .chevronDown:	result = "chevronDown"
@@ -211,6 +217,7 @@ public enum CNSymbol: Int
 		case .questionmark:	result = "questionmark"
 		case .rectangle:	result = "rectangle"
 		case .rectangleFill:	result = "rectangleFill"
+		case .square:		result = "square"
 		case .sunMax:		result = "sunMax"
 		case .sunMin:		result = "sunMin"
 		}

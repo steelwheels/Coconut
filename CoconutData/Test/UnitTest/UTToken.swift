@@ -40,6 +40,9 @@ private func testTokenToString(source src: String, console cons: CNConsole) -> B
 	case .error(let err):
 		cons.print(string: "Error: \(err.toString())\n")
 		result = false
+	//@unknown default:
+	//	cons.print(string: "Error: Unknown case\n")
+	//	result = false
 	}
 	return result
 }

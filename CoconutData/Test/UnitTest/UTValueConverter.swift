@@ -59,4 +59,5 @@ private func valueConvert(value src: CNValue, console cons: CNConsole) -> Bool
 	case .orderedAscending, .orderedDescending:
 		return false
 	}
+}
 
