@@ -117,7 +117,7 @@ open class CNProcess: CNProcessProtocol
 		}
 
 		/* Enable secure access */
-		let docurl   = CNPreference.shared.userPreference.documentDirectory
+		let docurl   = FileManager.default.documentDirectory
 		let issecure = docurl.startAccessingSecurityScopedResource()
 
 		mStatus			= .Running

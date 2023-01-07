@@ -383,6 +383,16 @@ public class CNEnumTable
 		])
 		self.add(enumType: alertcode)
 
+		let devcode = CNEnumType(typeName: "Device")
+		devcode.add(members: [
+			"mac":			.intValue(CNDevice.mac.rawValue),
+			"phone":		.intValue(CNDevice.phone.rawValue),
+			"ipad":			.intValue(CNDevice.ipad.rawValue),
+			"tv":			.intValue(CNDevice.tv.rawValue),
+			"carPlay":		.intValue(CNDevice.carPlay.rawValue)
+		])
+		self.add(enumType: devcode)
+		
 		let exitcode = CNEnumType(typeName: "ExitCode")
 		exitcode.add(members: [
 			"noError": 		.intValue(CNExitCode.NoError.rawValue),

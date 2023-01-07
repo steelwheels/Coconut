@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0504D17C2751C24900EFE0D7 /* CNOval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0504D17B2751C24900EFE0D7 /* CNOval.swift */; };
 		0504D17D2751C24900EFE0D7 /* CNOval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0504D17B2751C24900EFE0D7 /* CNOval.swift */; };
+		0505A9FE2963DD6800B66C08 /* CNDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0505A9FD2963DD6800B66C08 /* CNDevice.swift */; };
+		0505A9FF2963DD6800B66C08 /* CNDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0505A9FD2963DD6800B66C08 /* CNDevice.swift */; };
 		05084D13283880E900432602 /* UTEnumValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05084D12283880E900432602 /* UTEnumValue.swift */; };
 		05084D1A2838B10200432602 /* enum.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 05084D0D283880A200432602 /* enum.json */; };
 		050E87182813D09000E84644 /* CNValueLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050E87172813D09000E84644 /* CNValueLabels.swift */; };
@@ -533,6 +535,7 @@
 
 /* Begin PBXFileReference section */
 		0504D17B2751C24900EFE0D7 /* CNOval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNOval.swift; sourceTree = "<group>"; };
+		0505A9FD2963DD6800B66C08 /* CNDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNDevice.swift; sourceTree = "<group>"; };
 		05084D0D283880A200432602 /* enum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = enum.json; sourceTree = "<group>"; };
 		05084D12283880E900432602 /* UTEnumValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UTEnumValue.swift; sourceTree = "<group>"; };
 		050E87172813D09000E84644 /* CNValueLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CNValueLabels.swift; sourceTree = "<group>"; };
@@ -1049,6 +1052,7 @@
 		05B32CED25150302000D1411 /* Preference */ = {
 			isa = PBXGroup;
 			children = (
+				0505A9FD2963DD6800B66C08 /* CNDevice.swift */,
 				05B32CF025150328000D1411 /* CNPreference.swift */,
 				05B32CEF25150328000D1411 /* CNPreferenceTable.swift */,
 				05B32CEE25150328000D1411 /* CNUserDefaults.swift */,
@@ -1563,6 +1567,7 @@
 				05B32D41251508D9000D1411 /* CNFileManager.swift in Sources */,
 				05F924AF27243267008BAFDC /* CNCollection.swift in Sources */,
 				0585E85E2860ACD900C5C1B8 /* CNStorageArray.swift in Sources */,
+				0505A9FE2963DD6800B66C08 /* CNDevice.swift in Sources */,
 				0512074B274E6DD200189550 /* CNRect.swift in Sources */,
 				053C3AA2275FAABC009FA25D /* CNEnum.swift in Sources */,
 				05B32D2F251508D9000D1411 /* CNURL.swift in Sources */,
@@ -1677,6 +1682,7 @@
 				0512074C274E6DD200189550 /* CNRect.swift in Sources */,
 				0585E85F2860ACD900C5C1B8 /* CNStorageArray.swift in Sources */,
 				053C3AA3275FAABC009FA25D /* CNEnum.swift in Sources */,
+				0505A9FF2963DD6800B66C08 /* CNDevice.swift in Sources */,
 				05B32D3C251508D9000D1411 /* CNResource.swift in Sources */,
 				05B32D42251508D9000D1411 /* CNFileManager.swift in Sources */,
 				05B32D30251508D9000D1411 /* CNURL.swift in Sources */,

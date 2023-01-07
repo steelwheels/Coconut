@@ -261,13 +261,17 @@ public extension FileManager
 		return result
 	}
 
+	var defaultHomeDirectory: URL { get {
+		return URL(filePath: NSHomeDirectory())
+	}}
+
 	var documentDirectory: URL { get {
 		let urls = self.urls(for: .documentDirectory, in: .userDomainMask)
 		if let url = urls.first {
 			return url
 		} else {
 			CNLog(logLevel: .error, message: "Can not find document directory path", atFunction: #function, inFile: #file)
-			let dir = NSHomeDirectory() + "/Document"
+			let dir = NSHomeDirectory() + "/Documents"
 			return URL(filePath: dir)
 		}
 	}}

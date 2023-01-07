@@ -5,6 +5,11 @@
  *   Copyright (C) 2019 Steel Wheels Project
  */
 
+#if os(OSX)
+import AppKit
+#else
+import UIKit
+#endif
 import Foundation
 
 open class CNConfig
@@ -180,31 +185,31 @@ public class CNSystemPreference: CNPreferenceTable
 		self.logLevel = conf.logLevel
 	}
 
-	public var version: String {
-		get {
-			if let str = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-				return str
-			} else {
-				return "unknown"
-			}
+	public var device: CNDevice { get {
+		return CNDevice.device()
+	}}
+	
+	public var version: String { get {
+		if let str = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
+			return str
+		} else {
+			return "unknown"
 		}
-	}
+	}}
 
-	public var interfaceStyle: CNInterfaceStyle {
-                get {
-			let result: CNInterfaceStyle
-                        #if os(OSX)
-				if let _ = UserDefaults.standard.string(forKey: "AppleInterfaceStyle") {
-					result = .dark
-				} else {
-					result = .light
-				}
-                        #else
-                                result = .light
-                        #endif
-                        return result
-                }
-        }
+	public var interfaceStyle: CNInterfaceStyle { get {
+		let result: CNInterfaceStyle
+		#if os(OSX)
+			if let _ = UserDefaults.standard.string(forKey: "AppleInterfaceStyle") {
+				result = .dark
+			} else {
+				result = .light
+			}
+		#else
+			result = .light
+		#endif
+		return result
+	}}
 
 	public var logLevel: LogLevel {
 		get {
@@ -223,70 +228,47 @@ public class CNSystemPreference: CNPreferenceTable
 
 public class CNUserPreference: CNPreferenceTable
 {
-	public let DocumentDirectoryItem = "documentDirectory"
-	public let LibraryDirectoryItem  = "libraryDirectory"
-
+	public let HomeDirectoryItem		= "homeDirectory"
+	
 	public init() {
 		super.init(sectionName: "UserPreference")
-		if let docdir = super.loadStringValue(forKey: DocumentDirectoryItem) {
-			super.set(stringValue: docdir, forKey: DocumentDirectoryItem)
+		if let homedir = super.loadStringValue(forKey: HomeDirectoryItem) {
+			super.set(stringValue: homedir, forKey: HomeDirectoryItem)
 		} else {
-			let docdir = FileManager.default.documentDirectory
-			super.set(stringValue: docdir.path, forKey: DocumentDirectoryItem)
-		}
-		if let libdir = super.loadStringValue(forKey: LibraryDirectoryItem) {
-			super.set(stringValue: libdir, forKey: LibraryDirectoryItem)
-		} else {
-			let libdir = FileManager.default.libraryDirectory
-			super.set(stringValue: libdir.path, forKey: LibraryDirectoryItem)
+			let defdir = FileManager.default.defaultHomeDirectory
+			let homedir: URL
+			#if os(OSX)
+				homedir = defdir.appending(component: NSUserName())
+			#else
+				homedir = defdir
+			#endif
+			super.set(stringValue: homedir.path, forKey: HomeDirectoryItem)
 		}
 	}
 
-	public var documentDirectory: URL {
+	public var homeDirectory: URL {
 		get {
-			if let docdir = super.stringValue(forKey: DocumentDirectoryItem) {
+			if let homedir = super.stringValue(forKey: HomeDirectoryItem) {
 				let pref = CNPreference.shared.bookmarkPreference
-				if let docurl = pref.search(pathString: docdir) {
-					return docurl
+				if let homeurl = pref.search(pathString: homedir) {
+					return homeurl
 				} else {
-					return URL(fileURLWithPath: docdir)
+					let homeurl = URL(fileURLWithPath: homedir)
+					return homeurl
 				}
 			}
 			fatalError("Can not happen at function \(#function) in file \(#file)")
 		}
 		set(newval){
 			var isdir: ObjCBool = false
-			let docdir          = newval.path
-			if FileManager.default.fileExists(atPath: docdir, isDirectory: &isdir) {
+			let homedir = newval.path
+			if FileManager.default.fileExists(atPath: homedir, isDirectory: &isdir) {
 				if isdir.boolValue {
-					super.storeStringValue(stringValue: docdir, forKey: DocumentDirectoryItem)
-					super.set(stringValue: docdir, forKey: DocumentDirectoryItem)
-					return
-				}
-			}
-			CNLog(logLevel: .error, message: "Invalid parameter", atFunction: #function, inFile: #file)
-		}
-	}
-
-	public var libraryDirectory: URL {
-		get {
-			if let libdir = super.stringValue(forKey: LibraryDirectoryItem) {
-				let pref = CNPreference.shared.bookmarkPreference
-				if let liburl = pref.search(pathString: libdir) {
-					return liburl
-				} else {
-					return URL(fileURLWithPath: libdir)
-				}
-			}
-			fatalError("Can not happen at function \(#function) in file \(#file)")
-		}
-		set(newval){
-			var isdir: ObjCBool = false
-			let libdir          = newval.path
-			if FileManager.default.fileExists(atPath: libdir, isDirectory: &isdir) {
-				if isdir.boolValue {
-					super.storeStringValue(stringValue: libdir, forKey: LibraryDirectoryItem)
-					super.set(stringValue: libdir, forKey: LibraryDirectoryItem)
+					super.storeStringValue(stringValue: homedir, forKey: HomeDirectoryItem)
+					super.set(stringValue: homedir, forKey: HomeDirectoryItem)
+					
+					let pref = CNPreference.shared.bookmarkPreference
+					pref.add(URL: URL(filePath: homedir))
 					return
 				}
 			}
