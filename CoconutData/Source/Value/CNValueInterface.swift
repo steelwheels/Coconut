@@ -28,6 +28,15 @@ public class CNInterfaceType
 		mTypes	= src
 	}
 
+	public var allTypes: Dictionary<String, CNValueType> { get {
+		var result: Dictionary<String, CNValueType> = [:]
+		if let base = mBase {
+			result.merge(base.types) { (_, new) in new }
+		}
+		result.merge(self.types) { (_, new) in new }
+		return result
+	}}
+
 	public static func temporaryName() -> String {
 		let name = "_iftyp\(mUniqId)"
 		mUniqId += 1
