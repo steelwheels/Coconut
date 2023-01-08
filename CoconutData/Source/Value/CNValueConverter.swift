@@ -52,6 +52,8 @@ open class CNValueToAnyObject
 			result = convert(arrayValue: arr)
 		case .setValue(let arr):
 			result = convert(arrayValue: arr)
+		case .interfaceValue(let val):
+			result = convert(dictionaryValue: val.values)
 		}
 		return result
 	}

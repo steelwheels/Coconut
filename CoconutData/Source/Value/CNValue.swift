@@ -19,6 +19,7 @@ public enum CNValue
 	case dictionaryValue(_ val: Dictionary<String, CNValue>)
 	case arrayValue(_ val: Array<CNValue>)
 	case setValue(_ val: Array<CNValue>)	// Sorted in ascending order
+	case interfaceValue(_ val: CNInterfaceValue)
 	case objectValue(_ val: AnyObject)
 
 	public var valueType: CNValueType { get {
@@ -30,6 +31,7 @@ public enum CNValue
 		case .dictionaryValue(_):	result = .dictionaryType(.anyType)
 		case .arrayValue(_):		result = .arrayType(.anyType)
 		case .setValue(_):		result = .setType(.anyType)
+		case .interfaceValue(let val):	result = .interfaceType(val.toType())
 		case .objectValue(let obj):
 			let name = String(describing: type(of: obj))
 			result = .objectType(name)
@@ -211,19 +213,7 @@ public enum CNValue
 		case .enumValue(let val):
 			result = val.memberName
 		case .dictionaryValue(let val):
-			var line  = "["
-			var is1st = true
-			let keys  = val.keys.sorted()
-			for key in keys {
-				if is1st { is1st = false } else { line += ", " }
-				if let elm = val[key] {
-					line += key + ":" + elm.description
-				} else {
-					CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
-				}
-			}
-			line += "]"
-			result = line
+			result = dictionaryToDescription(dictionary: val)
 		case .arrayValue(let val):
 			var line  = "["
 			var is1st = true
@@ -235,12 +225,30 @@ public enum CNValue
 			result = line
 		case .setValue(let val):
 			result = val.description
+		case .interfaceValue(let val):
+			result = val.toType().name + ":" + dictionaryToDescription(dictionary: val.values)
 		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
 			result = "instanceOf(\(classname))"
 		}
 		return result
 	}}
+
+	private func dictionaryToDescription(dictionary val: Dictionary<String, CNValue>) -> String {
+		var line  = "["
+		var is1st = true
+		let keys  = val.keys.sorted()
+		for key in keys {
+			if is1st { is1st = false } else { line += ", " }
+			if let elm = val[key] {
+				line += key + ":" + elm.description
+			} else {
+				CNLog(logLevel: .error, message: "Can not happen", atFunction: #function, inFile: #file)
+			}
+		}
+		line += "]"
+		return line
+	}
 
 	public func toScript() -> CNText {
 		let result: CNText
@@ -260,6 +268,8 @@ public enum CNValue
 			result = arrayToScript(array: val)
 		case .setValue(let val):
 			result = setToScript(set: val)
+		case .interfaceValue(let val):
+			result = interfaceToScript(value: val)
 		}
 		return result
 	}
@@ -293,6 +303,10 @@ public enum CNValue
 			}
 		}
 		return sect
+	}
+
+	private func interfaceToScript(value val: CNInterfaceValue) -> CNTextSection {
+		return dictionaryToScript(dictionary: val.values)
 	}
 
 	public static func className(forValue dict: Dictionary<String, CNValue>) -> String? {

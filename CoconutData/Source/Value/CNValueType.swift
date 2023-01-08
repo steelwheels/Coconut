@@ -26,7 +26,7 @@ public indirect enum CNValueType
 	case	arrayType(CNValueType)				// element type
 	case	setType(CNValueType)				// element type
 	case	objectType(String?)				// class name or unkown
-	case 	interfaceType(String)				// interface name
+	case 	interfaceType(CNInterfaceType)			// interface name
 	case	functionType(CNValueType, Array<CNValueType>)	// (return-type, parameter-types)
 
 	public static func encode(valueType vtype: CNValueType) -> String {
@@ -93,8 +93,8 @@ private class CNValueTypeCoder
 		case .objectType(let clsnamep):
 			let clsname = clsnamep ?? "-"
 			result = ObjectTypeIdentifier + "(" + clsname + ")"
-		case .interfaceType(let ifname):
-			result = InterfaceTypeIdentifier + "(" + ifname + ")"
+		case .interfaceType(let iftype):
+			result = InterfaceTypeIdentifier + "(" + iftype.name + ")"
 		case .functionType(let rettype, let paramtypes):
 			let retstr   = encode(valueType: rettype)
 			let paramstr = paramtypes.map { encode(valueType: $0) }
@@ -169,7 +169,11 @@ private class CNValueTypeCoder
 		case InterfaceTypeIdentifier:
 			switch decodeInterfaceName(stream: strm) {
 			case .success(let ifname):
-				result = .interfaceType(ifname)
+				if let iftype = CNInterfaceTable.currentInterfaceTable().search(byTypeName: ifname) {
+					result = .interfaceType(iftype)
+				} else {
+					return .failure(NSError.parseError(message: "Unknown interface name: \(ident)"))
+				}
 			case .failure(let err):
 				return .failure(err)
 			}
