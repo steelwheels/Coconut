@@ -202,6 +202,12 @@ public class CNInterfaceTable
 		mTypes[iftype.name] = iftype
 	}
 
+	public func add(interfaceTypes iftypes: Array<CNInterfaceType>){
+		for iftype in iftypes {
+			mTypes[iftype.name] = iftype
+		}
+	}
+
 	private static func allocateDefaultInterfaceTable() {
 		if mInterfaceTables.count == 0 {
 			let table = CNInterfaceTable()
@@ -221,8 +227,11 @@ public class CNInterfaceTable
 	}
 
 	private func setDefaultValues() {
-		self.add(interfaceType: CGPoint.allocateInterfaceType())
-		self.add(interfaceType: CGSize.allocateInterfaceType())
+		let pointif = CGPoint.allocateInterfaceType()
+		let sizeif  = CGSize.allocateInterfaceType()
+		let ovalif  = CNOval.allocateInterfaceType(pointIF: pointif)
+
+		self.add(interfaceTypes: [pointif, sizeif, ovalif])
 	}
 }
 

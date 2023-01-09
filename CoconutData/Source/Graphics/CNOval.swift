@@ -10,26 +10,29 @@ import Foundation
 
 public struct CNOval
 {
-	public static let ClassName = "oval"
+	public static let InterfaceName = "OvalIF"
 
 	private var mCenter:	CGPoint
 	private var mRadius:	CGFloat
+
+	static func allocateInterfaceType(pointIF ptif: CNInterfaceType) -> CNInterfaceType {
+		let ptypes: Dictionary<String, CNValueType> = [
+			"center":	.interfaceType(ptif),
+			"radius":	.numberType
+		]
+		return CNInterfaceType(name: InterfaceName, base: nil, types: ptypes)
+	}
 
 	public init(center ctr: CGPoint, radius rad: CGFloat){
 		mCenter		= ctr
 		mRadius		= rad
 	}
 
-	public static func fromValue(value val: CNValue) -> CNOval? {
-		if let dict = val.toDictionary() {
-			return fromValue(value: dict)
-		} else {
+	public static func fromValue(value val: CNInterfaceValue) -> CNOval? {
+		guard val.toType().name == InterfaceName else {
 			return nil
 		}
-	}
-
-	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNOval? {
-		if let centerval = val["center"], let radval = val["radius"] {
+		if let centerval = val.get(name: "center"), let radval = val.get(name: "radius") {
 			if let centerif = centerval.toInterface(interfaceName: CGPoint.InterfaceName),
 			   let radius = radval.toNumber() {
 				if let center = CGPoint.fromValue(value: centerif) {
@@ -40,15 +43,27 @@ public struct CNOval
 		return nil
 	}
 
-	public func toValue() -> Dictionary<String, CNValue> {
+	public func toValue() -> CNInterfaceValue {
+		let iftype = thisIfType()
 		let center = mCenter.toValue()
 		let radius = NSNumber(floatLiteral: Double(mRadius))
-		let result: Dictionary<String, CNValue> = [
-			"class"		: .stringValue(CNOval.ClassName),
+		let ptypes: Dictionary<String, CNValue> = [
 			"center"	: .interfaceValue(center),
 			"radius"	: .numberValue(radius)
 		]
-		return result
+		return CNInterfaceValue(types: iftype, values: ptypes)
+	}
+
+	private func thisIfType() -> CNInterfaceType {
+		let iftype: CNInterfaceType
+		if let typ = CNInterfaceTable.currentInterfaceTable().search(byTypeName: CNOval.InterfaceName) {
+			iftype = typ
+		} else {
+			CNLog(logLevel: .error, message: "No interface type: \"\(CNOval.InterfaceName)\"",
+			      atFunction: #function, inFile: #file)
+			iftype = CNInterfaceType.nilType
+		}
+		return iftype
 	}
 
 	public var center: CGPoint { get { return mCenter }}
