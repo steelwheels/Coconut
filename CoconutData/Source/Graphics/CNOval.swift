@@ -30,8 +30,9 @@ public struct CNOval
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNOval? {
 		if let centerval = val["center"], let radval = val["radius"] {
-			if let centerdict = centerval.toDictionary(), let radius = radval.toNumber() {
-				if let center = CGPoint.fromValue(value: centerdict) {
+			if let centerif = centerval.toInterface(className: CGPoint.ClassName),
+			   let radius = radval.toNumber() {
+				if let center = CGPoint.fromValue(value: centerif) {
 					return CNOval(center: center, radius: CGFloat(radius.floatValue))
 				}
 			}
@@ -44,7 +45,7 @@ public struct CNOval
 		let radius = NSNumber(floatLiteral: Double(mRadius))
 		let result: Dictionary<String, CNValue> = [
 			"class"		: .stringValue(CNOval.ClassName),
-			"center"	: .dictionaryValue(center),
+			"center"	: .interfaceValue(center),
 			"radius"	: .numberValue(radius)
 		]
 		return result

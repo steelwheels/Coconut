@@ -8,23 +8,29 @@
 import Foundation
 
 public func CNDictionaryToValue(dictionary dict: Dictionary<String, CNValue>) -> CNValue? {
+	guard let clsval = dict["class"] else {
+		return nil
+	}
+	guard let clsname = clsval.toString() else {
+		return nil
+	}
 	var result: CNValue? = nil
-	if let clsval = dict["class"] {
-		if let clsname = clsval.toString() {
-			switch clsname {
-			case CNEnum.ClassName:
-				if let eval = CNEnum.fromValue(value: dict) {
-					result = .enumValue(eval)
-				}
-			case CNValueSet.ClassName:
-				if let val = CNValueSet.fromValue(value: dict) {
-					result = val
-				}
-			default:
-				break
-			}
+	switch clsname {
+	case CNEnum.ClassName:
+		if let eval = CNEnum.fromValue(value: dict) {
+			result = .enumValue(eval)
+		}
+	case CNValueSet.ClassName:
+		if let val = CNValueSet.fromValue(value: dict) {
+			result = val
+		}
+	default:
+		/* Try to convert to interface value */
+		if let ifval = CNInterfaceValue.fromValue(className: clsname, value: dict) {
+			result = .interfaceValue(ifval)
 		}
 	}
+
 	return result
 }
 

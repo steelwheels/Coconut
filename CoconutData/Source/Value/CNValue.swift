@@ -96,6 +96,20 @@ public enum CNValue
 		return result
 	}
 
+	public func toInterface(className cname: String) -> CNInterfaceValue? {
+		let result: CNInterfaceValue?
+		switch self {
+		case .interfaceValue(let ifval):
+			if ifval.toType().name == cname {
+				result = ifval
+			} else {
+				result = nil
+			}
+		default:				result = nil
+		}
+		return result
+	}
+
 	public func toArray() -> Array<CNValue>? {
 		let result: Array<CNValue>?
 		switch self {

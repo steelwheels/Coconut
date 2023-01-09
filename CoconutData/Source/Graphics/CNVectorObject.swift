@@ -45,8 +45,8 @@ private func boolInDictionary(dictionary dict: Dictionary<String, CNValue>, forK
 private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGPoint? {
 	if let val = dict[key] {
 		switch val {
-		case .dictionaryValue(let dict):
-			return CGPoint.fromValue(value: dict)
+		case .interfaceValue(let ifval):
+			return CGPoint.fromValue(value: ifval)
 		default:
 			break
 		}
@@ -266,8 +266,8 @@ public class CNVectorPath: CNPathObject
 			var result: Array<CGPoint> = []
 			for elm in elms {
 				switch elm {
-				case .dictionaryValue(let dict):
-					if let pt = CGPoint.fromValue(value: dict) {
+				case .interfaceValue(let ifval):
+					if let pt = CGPoint.fromValue(value: ifval) {
 						result.append(pt)
 					} else {
 						CNLog(logLevel: .error, message: "Failed to load point", atFunction: #function, inFile: #file)
@@ -315,7 +315,7 @@ public class CNVectorPath: CNPathObject
 		var result = super.toValue()
 		var points: Array<CNValue> = []
 		for pt in mPoints {
-			points.append(.dictionaryValue(pt.toValue()))
+			points.append(.interfaceValue(pt.toValue()))
 		}
 		result["class" ] = .stringValue(CNVectorPath.ClassName)
 		result["points"] = .arrayValue(points)
@@ -366,7 +366,7 @@ public class CNVectorRect: CNPathObject
 		let rect = self.toRect()
 		var result = super.toValue()
 		result["class"    ] = .stringValue(CNVectorRect.ClassName)
-		result["origin"   ] = .dictionaryValue(rect.origin.toValue())
+		result["origin"   ] = .interfaceValue(rect.origin.toValue())
 		result["size"     ] = .dictionaryValue(rect.size.toValue())
 		result["isRounded"] = .boolValue(self.isRounded)
 		result["rx"       ] = floatToValue(value: self.roundValue)
@@ -489,7 +489,7 @@ public class CNVectorOval: CNPathObject
 		let rnum   = NSNumber(floatLiteral: Double(self.radius))
 		let local: Dictionary<String, CNValue> = [
 			"class"	      : .stringValue(CNVectorOval.ClassName),
-			"center"      : .dictionaryValue(centerPoint.toValue()),
+			"center"      : .interfaceValue(centerPoint.toValue()),
 			"radius"      : .numberValue(rnum)
 		]
 		for (key, val) in local {
@@ -556,8 +556,10 @@ public class CNVectorString: CNVectorObject
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorString? {
 		if let orgval = val["origin"], let txtval = val["text"], let fontval = val["font"], let colval = val["color"] {
-			if let orgdict = orgval.toDictionary(), let txtstr = txtval.toString(), let fontdict = fontval.toDictionary(), let coldict = colval.toDictionary() {
-				if let orgpt = CGPoint.fromValue(value: orgdict),
+			if let orgif    = orgval.toInterface(className: CGPoint.ClassName),
+			   let txtstr   = txtval.toString(),
+			   let fontdict = fontval.toDictionary(), let coldict = colval.toDictionary() {
+				if let orgpt = CGPoint.fromValue(value: orgif),
 				   let font  = CNFont.fromValue(value: fontdict),
 				   let color = CNColor.fromValue(value: coldict) {
 					let vstr = CNVectorString(font: font, color: color)
@@ -577,7 +579,7 @@ public class CNVectorString: CNVectorObject
 		let color = self.strokeColor.toValue()
 		let result: Dictionary<String, CNValue> = [
 			"class":	.stringValue(CNVectorString.ClassName),
-			"origin":	.dictionaryValue(orgpt),
+			"origin":	.interfaceValue(orgpt),
 			"text":		text,
 			"font":		.dictionaryValue(fnt),
 			"color":	.dictionaryValue(color)

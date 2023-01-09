@@ -10,18 +10,14 @@ import Foundation
 
 public extension CGPoint
 {
-	static let ClassName = "point"
+	static let ClassName = "Point"
 
-	static func fromValue(value val: CNValue) -> CGPoint? {
-		if let dict = val.toDictionary() {
-			return fromValue(value: dict)
-		} else {
+	static func fromValue(value val: CNInterfaceValue) -> CGPoint? {
+		guard val.toType().name == ClassName else {
 			return nil
 		}
-	}
-
-	static func fromValue(value val: Dictionary<String, CNValue>) -> CGPoint? {
-		if let xval = val["x"], let yval = val["y"] {
+		let values = val.values
+		if let xval = values["x"], let yval = values["y"] {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
 				let x:CGFloat = CGFloat(xnum.floatValue)
 				let y:CGFloat = CGFloat(ynum.floatValue)
@@ -31,15 +27,23 @@ public extension CGPoint
 		return nil
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
+	func toValue() -> CNInterfaceValue {
+		let iftype: CNInterfaceType
+		if let typ = CNInterfaceTable.currentInterfaceTable().search(byTypeName: CGPoint.ClassName) {
+			iftype = typ
+		} else {
+			CNLog(logLevel: .error, message: "No interface type: \"\(CGPoint.ClassName)\"",
+			      atFunction: #function, inFile: #file)
+			iftype = CNInterfaceType.nilType
+		}
+
 		let xnum = NSNumber(floatLiteral: Double(self.x))
 		let ynum = NSNumber(floatLiteral: Double(self.y))
-		let result: Dictionary<String, CNValue> = [
-			"class" : .stringValue(CGPoint.ClassName),
+		let pvalues: Dictionary<String, CNValue> = [
 			"x"     : .numberValue(xnum),
 			"y"     : .numberValue(ynum)
 		]
-		return result
+		return CNInterfaceValue(types: iftype, values: pvalues)
 	}
 
 	func moving(dx x: CGFloat, dy y: CGFloat) -> CGPoint {
@@ -52,13 +56,11 @@ public extension CGPoint
 		return CGPoint(x: self.x - p.x, y: self.y - p.y)
 	}
 
-	var description: String {
-		get {
-			let xstr = NSString(format: "%.2lf", Double(self.x))
-			let ystr = NSString(format: "%.2lf", Double(self.y))
-			return "{x:\(xstr), y:\(ystr)}"
-		}
-	}
+	var description: String { get {
+		let xstr = NSString(format: "%.2lf", Double(self.x))
+		let ystr = NSString(format: "%.2lf", Double(self.y))
+		return "{x:\(xstr), y:\(ystr)}"
+	}}
 
 	static func center(_ pt0: CGPoint, _ pt1: CGPoint) -> CGPoint {
 		let x = (pt0.x + pt1.x) / 2.0
