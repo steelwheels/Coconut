@@ -92,6 +92,19 @@ public class CNInterfaceValue
 		return result
 	}
 
+	public func get(name nm: String) -> CNValue? {
+		return mValues[nm]
+	}
+
+	public func set(name nm: String, value val: CNValue) {
+		if let _ = self.toType().types[nm] {
+			mValues[nm] = val
+		} else {
+			CNLog(logLevel: .error, message: "Unexpected property: \(nm)",
+			      atFunction: #function, inFile: #file)
+		}
+	}
+
 	public func toType() -> CNInterfaceType {
 		if let typ = mType {
 			return typ
@@ -208,13 +221,8 @@ public class CNInterfaceTable
 	}
 
 	private func setDefaultValues() {
-		/* Point */
-		let ptypes: Dictionary<String, CNValueType> = [
-			"x":	.numberType,
-			"y":	.numberType
-		]
-		let pointif = CNInterfaceType(name: "PointIF", base: nil, types: ptypes)
-		self.add(interfaceType: pointif)
+		self.add(interfaceType: CGPoint.allocateInterfaceType())
+		self.add(interfaceType: CGSize.allocateInterfaceType())
 	}
 }
 

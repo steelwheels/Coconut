@@ -10,14 +10,21 @@ import Foundation
 
 public extension CGPoint
 {
-	static let ClassName = "Point"
+	static let InterfaceName = "PointIF"
+
+	static func allocateInterfaceType() -> CNInterfaceType {
+		let ptypes: Dictionary<String, CNValueType> = [
+			"x":	.numberType,
+			"y":	.numberType
+		]
+		return CNInterfaceType(name: InterfaceName, base: nil, types: ptypes)
+	}
 
 	static func fromValue(value val: CNInterfaceValue) -> CGPoint? {
-		guard val.toType().name == ClassName else {
+		guard val.toType().name == InterfaceName else {
 			return nil
 		}
-		let values = val.values
-		if let xval = values["x"], let yval = values["y"] {
+		if let xval = val.get(name: "x"), let yval = val.get(name: "y") {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber() {
 				let x:CGFloat = CGFloat(xnum.floatValue)
 				let y:CGFloat = CGFloat(ynum.floatValue)
@@ -29,10 +36,10 @@ public extension CGPoint
 
 	func toValue() -> CNInterfaceValue {
 		let iftype: CNInterfaceType
-		if let typ = CNInterfaceTable.currentInterfaceTable().search(byTypeName: CGPoint.ClassName) {
+		if let typ = CNInterfaceTable.currentInterfaceTable().search(byTypeName: CGPoint.InterfaceName) {
 			iftype = typ
 		} else {
-			CNLog(logLevel: .error, message: "No interface type: \"\(CGPoint.ClassName)\"",
+			CNLog(logLevel: .error, message: "No interface type: \"\(CGPoint.InterfaceName)\"",
 			      atFunction: #function, inFile: #file)
 			iftype = CNInterfaceType.nilType
 		}

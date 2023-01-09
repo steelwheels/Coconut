@@ -57,8 +57,8 @@ private func pointInDictionary(dictionary dict: Dictionary<String, CNValue>, for
 private func sizeInDictionary(dictionary dict: Dictionary<String, CNValue>, forKey key: String) -> CGSize? {
 	if let val = dict[key] {
 		switch val {
-		case .dictionaryValue(let dict):
-			return CGSize.fromValue(value: dict)
+		case .interfaceValue(let ifval):
+			return CGSize.fromValue(value: ifval)
 		default:
 			break
 		}
@@ -367,7 +367,7 @@ public class CNVectorRect: CNPathObject
 		var result = super.toValue()
 		result["class"    ] = .stringValue(CNVectorRect.ClassName)
 		result["origin"   ] = .interfaceValue(rect.origin.toValue())
-		result["size"     ] = .dictionaryValue(rect.size.toValue())
+		result["size"     ] = .interfaceValue(rect.size.toValue())
 		result["isRounded"] = .boolValue(self.isRounded)
 		result["rx"       ] = floatToValue(value: self.roundValue)
 		result["ry"       ] = floatToValue(value: self.roundValue)
@@ -556,7 +556,7 @@ public class CNVectorString: CNVectorObject
 
 	public static func fromValue(value val: Dictionary<String, CNValue>) -> CNVectorString? {
 		if let orgval = val["origin"], let txtval = val["text"], let fontval = val["font"], let colval = val["color"] {
-			if let orgif    = orgval.toInterface(className: CGPoint.ClassName),
+			if let orgif    = orgval.toInterface(interfaceName: CGPoint.InterfaceName),
 			   let txtstr   = txtval.toString(),
 			   let fontdict = fontval.toDictionary(), let coldict = colval.toDictionary() {
 				if let orgpt = CGPoint.fromValue(value: orgif),

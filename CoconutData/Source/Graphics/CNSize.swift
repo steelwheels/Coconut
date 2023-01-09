@@ -10,18 +10,21 @@ import Foundation
 
 public extension CGSize
 {
-	static let ClassName = "size"
+	static let InterfaceName = "SizeIF"
 
-	static func fromValue(value val: CNValue) -> CGSize? {
-		if let dict = val.toDictionary() {
-			return fromValue(value: dict)
-		} else {
-			return nil
-		}
+	static func allocateInterfaceType() -> CNInterfaceType {
+		let ptypes: Dictionary<String, CNValueType> = [
+			"width":	.numberType,
+			"height":	.numberType
+		]
+		return CNInterfaceType(name: InterfaceName, base: nil, types: ptypes)
 	}
 
-	static func fromValue(value val: Dictionary<String, CNValue>) -> CGSize? {
-		if let wval = val["width"], let hval = val["height"] {
+	static func fromValue(value val: CNInterfaceValue) -> CGSize? {
+		guard val.toType().name == InterfaceName else {
+			return nil
+		}
+		if let wval = val.get(name: "width"), let hval = val.get(name: "height") {
 			if let wnum = wval.toNumber(), let hnum = hval.toNumber() {
 				let width  : CGFloat = CGFloat(wnum.doubleValue)
 				let height : CGFloat = CGFloat(hnum.doubleValue)
@@ -31,15 +34,22 @@ public extension CGSize
 		return nil
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
+	func toValue() -> CNInterfaceValue {
+		let iftype: CNInterfaceType
+		if let typ = CNInterfaceTable.currentInterfaceTable().search(byTypeName: CGSize.InterfaceName) {
+			iftype = typ
+		} else {
+			CNLog(logLevel: .error, message: "No interface type: \"\(CGSize.InterfaceName)\"",
+			      atFunction: #function, inFile: #file)
+			iftype = CNInterfaceType.nilType
+		}
 		let wnum = NSNumber(floatLiteral: Double(self.width))
 		let hnum = NSNumber(floatLiteral: Double(self.height))
-		let result: Dictionary<String, CNValue> = [
-			"class":  .stringValue(CGSize.ClassName),
+		let ptypes: Dictionary<String, CNValue> = [
 			"width":  .numberValue(wnum),
 			"height": .numberValue(hnum)
 		]
-		return result
+		return CNInterfaceValue(types: iftype, values: ptypes)
 	}
 
 	func resizeWithKeepingAscpect(inWidth dstwidth: CGFloat) -> CGSize {

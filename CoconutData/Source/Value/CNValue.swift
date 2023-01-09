@@ -96,11 +96,11 @@ public enum CNValue
 		return result
 	}
 
-	public func toInterface(className cname: String) -> CNInterfaceValue? {
+	public func toInterface(interfaceName ifname: String) -> CNInterfaceValue? {
 		let result: CNInterfaceValue?
 		switch self {
 		case .interfaceValue(let ifval):
-			if ifval.toType().name == cname {
+			if ifval.toType().name == ifname {
 				result = ifval
 			} else {
 				result = nil
