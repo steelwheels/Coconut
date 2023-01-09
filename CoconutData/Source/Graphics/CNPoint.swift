@@ -21,7 +21,7 @@ public extension CGPoint
 	}
 
 	static func fromValue(value val: CNInterfaceValue) -> CGPoint? {
-		guard val.toType().name == InterfaceName else {
+		guard val.type.name == InterfaceName else {
 			return nil
 		}
 		if let xval = val.get(name: "x"), let yval = val.get(name: "y") {

@@ -20,7 +20,7 @@ public extension NSRange
 	}
 
 	static func fromValue(value val: CNInterfaceValue) -> NSRange? {
-		guard val.toType().name == InterfaceName else {
+		guard val.type.name == InterfaceName else {
 			return nil
 		}
 		if let locval = val.get(name: "location"), let lenval = val.get(name: "length") {

@@ -21,7 +21,7 @@ public extension CGSize
 	}
 
 	static func fromValue(value val: CNInterfaceValue) -> CGSize? {
-		guard val.toType().name == InterfaceName else {
+		guard val.type.name == InterfaceName else {
 			return nil
 		}
 		if let wval = val.get(name: "width"), let hval = val.get(name: "height") {

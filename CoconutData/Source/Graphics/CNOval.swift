@@ -29,7 +29,7 @@ public struct CNOval
 	}
 
 	public static func fromValue(value val: CNInterfaceValue) -> CNOval? {
-		guard val.toType().name == InterfaceName else {
+		guard val.type.name == InterfaceName else {
 			return nil
 		}
 		if let centerval = val.get(name: "center"), let radval = val.get(name: "radius") {

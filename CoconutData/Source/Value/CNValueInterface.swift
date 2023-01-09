@@ -70,8 +70,7 @@ public class CNInterfaceValue
 
 	public func validate() -> Bool {
 		var result = true
-		let type   = self.toType()
-		loop: for (tkey, ttyp) in type.types {
+		loop: for (tkey, ttyp) in self.type.types {
 			if let val = mValues[tkey] {
 				switch CNValueType.compare(type0: ttyp, type1: val.valueType) {
 				case .orderedSame:
@@ -97,7 +96,7 @@ public class CNInterfaceValue
 	}
 
 	public func set(name nm: String, value val: CNValue) {
-		if let _ = self.toType().types[nm] {
+		if let _ = self.type.types[nm] {
 			mValues[nm] = val
 		} else {
 			CNLog(logLevel: .error, message: "Unexpected property: \(nm)",
@@ -105,7 +104,7 @@ public class CNInterfaceValue
 		}
 	}
 
-	public func toType() -> CNInterfaceType {
+	public var type: CNInterfaceType { get {
 		if let typ = mType {
 			return typ
 		} else if let typ = mTypeCache {
@@ -113,7 +112,7 @@ public class CNInterfaceValue
 		} else {
 			fatalError("Can not happen")
 		}
-	}
+	}}
 
 	public static func fromValue(className clsname: String, value dict: Dictionary<String,CNValue>) -> CNInterfaceValue? {
 		var result: CNInterfaceValue? = nil

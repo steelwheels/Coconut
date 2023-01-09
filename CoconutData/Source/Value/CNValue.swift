@@ -31,7 +31,7 @@ public enum CNValue
 		case .dictionaryValue(_):	result = .dictionaryType(.anyType)
 		case .arrayValue(_):		result = .arrayType(.anyType)
 		case .setValue(_):		result = .setType(.anyType)
-		case .interfaceValue(let val):	result = .interfaceType(val.toType())
+		case .interfaceValue(let val):	result = .interfaceType(val.type)
 		case .objectValue(let obj):
 			let name = String(describing: type(of: obj))
 			result = .objectType(name)
@@ -100,7 +100,7 @@ public enum CNValue
 		let result: CNInterfaceValue?
 		switch self {
 		case .interfaceValue(let ifval):
-			if ifval.toType().name == ifname {
+			if ifval.type.name == ifname {
 				result = ifval
 			} else {
 				result = nil
@@ -240,7 +240,7 @@ public enum CNValue
 		case .setValue(let val):
 			result = val.description
 		case .interfaceValue(let val):
-			result = val.toType().name + ":" + dictionaryToDescription(dictionary: val.values)
+			result = val.type.name + ":" + dictionaryToDescription(dictionary: val.values)
 		case .objectValue(let val):
 			let classname = String(describing: type(of: val))
 			result = "instanceOf(\(classname))"
