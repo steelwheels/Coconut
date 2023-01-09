@@ -231,8 +231,9 @@ public class CNInterfaceTable
 		let sizeif  = CGSize.allocateInterfaceType()
 		let rectif  = CGRect.allocateInterfaceType()
 		let ovalif  = CNOval.allocateInterfaceType(pointIF: pointif)
+		let rangeif = NSRange.allocateInterfaceType()
 
-		self.add(interfaceTypes: [pointif, sizeif, rectif, ovalif])
+		self.add(interfaceTypes: [pointif, sizeif, rectif, ovalif, rangeif])
 	}
 }
 

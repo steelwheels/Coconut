@@ -20,7 +20,7 @@ private func valueTest(console cons: CNConsole) -> Bool {
 	/* CGPoint */
 	let point0 = CGPoint(x: 12.0, y: 34.0)
 	let point0val = point0.toValue()
-	printValue(message: "point0:", value: .dictionaryValue(point0val), console: cons)
+	printValue(message: "point0:", value: .interfaceValue(point0val), console: cons)
 	if let point0rev = CGPoint.fromValue(value: point0val) {
 		if point0.equalTo(point0rev) {
 			cons.print(string: "OK: point0 (0)\n")
@@ -36,7 +36,7 @@ private func valueTest(console cons: CNConsole) -> Bool {
 	/* CGSize */
 	let size0 = CGSize(width: 12.0, height: 34.0)
 	let size0val = size0.toValue()
-	printValue(message: "size0:", value: .dictionaryValue(size0val), console: cons)
+	printValue(message: "size0:", value: .interfaceValue(size0val), console: cons)
 	if let size0rev = CGSize.fromValue(value: size0val) {
 		if size0.equalTo(size0rev) {
 			cons.print(string: "OK: size0 (0)\n")

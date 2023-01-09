@@ -9,18 +9,21 @@ import Foundation
 
 public extension NSRange
 {
-	static let ClassName = "range"
+	static let InterfaceName = "RangeIF"
 
-	static func fromValue(value val: CNValue) -> NSRange? {
-		if let dict = val.toDictionary() {
-			return fromValue(value: dict)
-		} else {
-			return nil
-		}
+	static func allocateInterfaceType() -> CNInterfaceType {
+		let ptypes: Dictionary<String, CNValueType> = [
+			"location":	.numberType,
+			"length":	.numberType
+		]
+		return CNInterfaceType(name: InterfaceName, base: nil, types: ptypes)
 	}
 
-	static func fromValue(value val: Dictionary<String, CNValue>) -> NSRange? {
-		if let locval = val["location"], let lenval = val["length"] {
+	static func fromValue(value val: CNInterfaceValue) -> NSRange? {
+		guard val.toType().name == InterfaceName else {
+			return nil
+		}
+		if let locval = val.get(name: "location"), let lenval = val.get(name: "length") {
 			if let locnum = locval.toNumber(), let lennum = lenval.toNumber() {
 				let loc = locnum.intValue
 				let len = lennum.intValue
@@ -30,15 +33,23 @@ public extension NSRange
 		return nil
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
+	func toValue() -> CNInterfaceValue {
+		let iftype: CNInterfaceType
+		if let typ = CNInterfaceTable.currentInterfaceTable().search(byTypeName: NSRange.InterfaceName) {
+			iftype = typ
+		} else {
+			CNLog(logLevel: .error, message: "No interface type: \"\(NSRange.InterfaceName)\"",
+			      atFunction: #function, inFile: #file)
+			iftype = CNInterfaceType.nilType
+		}
+
 		let locnum = NSNumber(integerLiteral: self.location)
 		let lennum = NSNumber(integerLiteral: self.length)
-		let result: Dictionary<String, CNValue> = [
-			"class"    : .stringValue(NSRange.ClassName),
+		let ptypes: Dictionary<String, CNValue> = [
 			"location" : .numberValue(locnum),
 			"length"   : .numberValue(lennum)
 		]
-		return result
+		return CNInterfaceValue(types: iftype, values: ptypes)
 	}
 }
 
