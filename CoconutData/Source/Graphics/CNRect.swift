@@ -10,18 +10,24 @@ import Foundation
 
 public extension CGRect
 {
-	static let ClassName = "rect"
+	static let InterfaceName = "RectIF"
 
-	static func fromValue(value val: CNValue) -> CGRect? {
-		if let dict = val.toDictionary() {
-			return fromValue(value: dict)
-		} else {
-			return nil
-		}
+	static func allocateInterfaceType() -> CNInterfaceType {
+		let ptypes: Dictionary<String, CNValueType> = [
+			"x":		.numberType,
+			"y":		.numberType,
+			"width":	.numberType,
+			"height":	.numberType
+		]
+		return CNInterfaceType(name: InterfaceName, base: nil, types: ptypes)
 	}
 
-	static func fromValue(value val: Dictionary<String, CNValue>) -> CGRect? {
-		if let xval = val["x"], let yval = val["y"], let wval = val["width"], let hval = val["height"] {
+	static func fromValue(value val: CNInterfaceValue) -> CGRect? {
+		guard val.toType().name == InterfaceName else {
+			return nil
+		}
+		if let xval = val.get(name: "x"),     let yval = val.get(name: "y"),
+		   let wval = val.get(name: "width"), let hval = val.get(name: "height") {
 			if let xnum = xval.toNumber(), let ynum = yval.toNumber(), let wnum = wval.toNumber(), let hnum = hval.toNumber() {
 				let x      : CGFloat = CGFloat(xnum.floatValue)
 				let y      : CGFloat = CGFloat(ynum.floatValue)
@@ -33,19 +39,26 @@ public extension CGRect
 		return nil
 	}
 
-	func toValue() -> Dictionary<String, CNValue> {
+	func toValue() -> CNInterfaceValue {
+		let iftype: CNInterfaceType
+		if let typ = CNInterfaceTable.currentInterfaceTable().search(byTypeName: CGRect.InterfaceName) {
+			iftype = typ
+		} else {
+			CNLog(logLevel: .error, message: "No interface type: \"\(CGRect.InterfaceName)\"",
+			      atFunction: #function, inFile: #file)
+			iftype = CNInterfaceType.nilType
+		}
 		let x      = NSNumber(floatLiteral: Double(self.origin.x))
 		let y      = NSNumber(floatLiteral: Double(self.origin.y))
 		let width  = NSNumber(floatLiteral: Double(self.size.width))
 		let height = NSNumber(floatLiteral: Double(self.size.height))
-		let result: Dictionary<String, CNValue> = [
-			"class"  : .stringValue(CGRect.ClassName),
+		let ptypes: Dictionary<String, CNValue> = [
 			"x"      : .numberValue(x),
 			"y"      : .numberValue(y),
 			"width"  : .numberValue(width),
 			"height" : .numberValue(height)
 		]
-		return result
+		return CNInterfaceValue(types: iftype, values: ptypes)
 	}
 
 	var center: CGPoint { get {
