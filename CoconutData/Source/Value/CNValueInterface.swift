@@ -42,6 +42,14 @@ public class CNInterfaceType
 		return result
 	}}
 
+	public func type(for name: String) -> CNValueType? {
+		return mTypes[name]
+	}
+
+	public static func compare(_ s0: CNInterfaceType, _ s1: CNInterfaceType) -> ComparisonResult {
+		return CNCompare(s0.name, s1.name)
+	}
+
 	public static func temporaryName() -> String {
 		let name = "_iftyp\(mUniqId)"
 		mUniqId += 1

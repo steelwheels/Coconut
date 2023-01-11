@@ -119,22 +119,23 @@ public class CNEnumType
 			}
 		}
 
-		public static func isSame(_ val0: Value, _ val1: Value) -> Bool {
-			var result = false
+		public static func compare(_ val0: Value, _ val1: Value) -> ComparisonResult {
+			/* int < string */
+			let result: ComparisonResult
 			switch val0 {
-			case .intValue(let i0):
+			case intValue(let e0):
 				switch val1 {
-				case .intValue(let i1):
-					result = (i0 == i1)
-				case .stringValue(_):
-					break
+				case intValue(let e1):
+					result = CNCompare(e0, e1)
+				case stringValue(_):
+					result = .orderedAscending
 				}
-			case .stringValue(let s0):
+			case stringValue(let e0):
 				switch val1 {
-				case .intValue(_):
-					break
-				case .stringValue(let s1):
-					result = (s0 == s1)
+				case intValue(_):
+					result = .orderedDescending
+				case stringValue(let e1):
+					result = CNCompare(e0, e1)
 				}
 			}
 			return result
@@ -183,11 +184,18 @@ public class CNEnumType
 
 	public func search(byValue targ: Value) -> CNEnum? {
 		for (key, val) in mMembers {
-			if CNEnumType.Value.isSame(targ, val) {
+			switch CNEnum.Value.compare(targ, val) {
+			case .orderedSame:
 				return CNEnum(type: self, member: key)
+			case .orderedAscending, .orderedDescending:
+				break
 			}
 		}
 		return nil
+	}
+
+	public static func compare(_ s0: CNEnumType, _ s1: CNEnumType) -> ComparisonResult {
+		return CNCompare(s0.typeName, s1.typeName)
 	}
 
 	public static func fromValue(typeName name: String, value topval: Dictionary<String, CNValue>) -> Result<CNEnumType, NSError> {

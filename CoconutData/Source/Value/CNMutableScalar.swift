@@ -13,7 +13,7 @@ public class CNMutableScalarValue: CNMutableValue
 
 	public init(scalarValue val: CNValue, sourceDirectory srcdir: URL, cacheDirectory cachedir: URL){
 		mScalarValue = val
-		super.init(type: .scaler, sourceDirectory: srcdir, cacheDirectory: cachedir)
+		super.init(type: .scaler(val.valueType), sourceDirectory: srcdir, cacheDirectory: cachedir)
 	}
 
 	public override func _value(forPath path: Array<CNValuePath.Element>, in root: CNMutableValue) -> Result<CNMutableValue?, NSError> {

@@ -38,16 +38,124 @@ public indirect enum CNValueType
 	}
 
 	public static func compare(type0 t0: CNValueType, type1 t1: CNValueType) -> ComparisonResult {
-		let str0 = encode(valueType: t0)
-		let str1 = encode(valueType: t1)
-		if str0 > str1 {
+		let imm0 = t0.intValue
+		let imm1 = t1.intValue
+		switch CNCompare(imm0, imm1) {
+		case .orderedSame:
+			var result: ComparisonResult = .orderedSame
+			switch t0 {
+			case .enumType(let e0):
+				switch t1 {
+				case .enumType(let e1):
+					result = CNEnumType.compare(e0, e1)
+				default:
+					NSLog("can not happen (enum)")
+				}
+			case .dictionaryType(let e0):
+				switch t1 {
+				case .dictionaryType(let e1):
+					result = compare(type0: e0, type1: e1)
+				default:
+					NSLog("can not happen (dictionary)")
+				}
+			case .arrayType(let e0):
+				switch t1 {
+				case .arrayType(let e1):
+					result = compare(type0: e0, type1: e1)
+				default:
+					NSLog("can not happen (array)")
+				}
+			case .setType(let e0):
+				switch t1 {
+				case .setType(let e1):
+					result = compare(type0: e0, type1: e1)
+				default:
+					NSLog("can not happen (set)")
+				}
+			case .objectType(let e0):
+				switch t1 {
+				case .objectType(let e1):
+					let s0 = e0 ?? "" ; let s1 = e1 ?? ""
+					result = CNCompare(s0, s1)
+				default:
+					NSLog("can not happen (set)")
+				}
+			case .interfaceType(let e0):
+				switch t1 {
+				case .interfaceType(let e1):
+					result = CNInterfaceType.compare(e0, e1)
+				default:
+					NSLog("can not happen (interfaceType)")
+				}
+			case .functionType(let rtype0, let ptypes0):
+				switch t1 {
+				case .functionType(let rtype1, let ptypes1):
+					switch compare(type0: rtype0, type1: rtype1) {
+					case .orderedSame:
+						result = compare(types0: ptypes0, types1: ptypes1)
+					case .orderedAscending:
+						result = .orderedAscending
+					case .orderedDescending:
+						result = .orderedDescending
+					}
+				default:
+					NSLog("can not happen (functionType)")
+				}
+			default:
+				result = .orderedSame
+			}
+			return result
+		case .orderedAscending:
 			return .orderedAscending
-		} else if str0 < str1 {
+		case .orderedDescending:
 			return .orderedDescending
-		} else {
-			return .orderedSame
 		}
 	}
+
+	private static func compare(types0 ts0 :Array<CNValueType>, types1 ts1: Array<CNValueType>) -> ComparisonResult {
+		let result: ComparisonResult
+		switch CNCompare(ts0.count, ts1.count) {
+		case .orderedSame:
+			var tmpres: ComparisonResult = .orderedSame
+			loop: for i in 0..<ts0.count {
+				switch compare(type0: ts0[i], type1: ts1[i]) {
+				case .orderedSame:
+					break
+				case .orderedAscending:
+					tmpres = .orderedAscending
+					break loop
+				case .orderedDescending:
+					tmpres = .orderedDescending
+					break loop
+				}
+			}
+			result = tmpres
+		case .orderedAscending:
+			result = .orderedAscending
+		case .orderedDescending:
+			result = .orderedDescending
+		}
+		return result
+	}
+
+	public var intValue: Int { get {
+		let result: Int
+		switch self {
+		case .voidType:			result = 0
+		case .anyType:			result = 1
+		case .boolType:			result = 2
+		case .numberType:		result = 3
+		case .stringType:		result = 4
+		case .enumType(_):		result = 5
+		case .dictionaryType(_):	result = 6
+		case .arrayType(_):		result = 7
+		case .setType(_):		result = 8
+		case .objectType(_):		result = 9
+		case .interfaceType(_):		result = 10
+		case .functionType(_, _):	result = 11
+		}
+		return result
+	}}
 }
 
 private class CNValueTypeCoder

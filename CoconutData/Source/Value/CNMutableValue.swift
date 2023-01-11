@@ -9,23 +9,41 @@ import Foundation
 
 public class CNMutableValue
 {
-	public enum ValueType: Int {
-		case scaler		= 0
-		case array		= 1
-		case set		= 2
-		case dictionary		= 3
-		case segment		= 4
-		case pointer		= 5
+	public enum ValueType {
+		case scaler(CNValueType)
+		case array
+		case set
+		case dictionary
+		case segment
+		case pointer
 
-		public func compare(type t: ValueType) -> ComparisonResult {
-			if self.rawValue < t.rawValue {
-				return .orderedAscending
-			} else if self.rawValue == t.rawValue {
-				return .orderedSame
-			} else {
-				return .orderedDescending
+		public func compare(_ src: ValueType) -> ComparisonResult {
+			switch self {
+			case .scaler(let thistype):
+				switch src {
+				case .scaler(let srctype):
+					return CNValueType.compare(type0: thistype, type1: srctype)
+				default:
+					break
+				}
+			default:
+				break
 			}
+			return CNCompare(self.intValue, src.intValue)
 		}
+
+		private var intValue: Int { get {
+			let result: Int
+			switch self {
+			case .scaler(_):	result = 0
+			case .array:		result = 1
+			case .set:		result = 2
+			case .dictionary:	result = 3
+			case .segment:		result = 4
+			case .pointer:		result = 5
+			}
+			return result
+		}}
 	}
 
 	fileprivate var mType:    	ValueType
@@ -252,7 +270,7 @@ public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNVa
 }
 
 public func CNCompareMutableValue(value0 v0: CNMutableValue, value1 v1: CNMutableValue) -> ComparisonResult {
-	switch v0.mType.compare(type: v1.mType) {
+	switch v0.mType.compare(v1.mType) {
 	case .orderedAscending:
 		return .orderedAscending
 	case .orderedDescending:
