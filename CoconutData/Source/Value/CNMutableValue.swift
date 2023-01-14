@@ -14,6 +14,7 @@ public class CNMutableValue
 		case array
 		case set
 		case dictionary
+		case record(CNInterfaceType)
 		case segment
 		case pointer
 
@@ -39,11 +40,29 @@ public class CNMutableValue
 			case .array:		result = 1
 			case .set:		result = 2
 			case .dictionary:	result = 3
-			case .segment:		result = 4
-			case .pointer:		result = 5
+			case .record:		result = 4
+			case .segment:		result = 5
+			case .pointer:		result = 6
 			}
 			return result
 		}}
+
+		public static func from(valueType src: CNValueType) -> ValueType {
+			let result: ValueType
+			switch src {
+			case .voidType, .anyType, .boolType, .numberType, .stringType, .functionType(_, _), .enumType(_), .objectType(_):
+				result = scaler(src)
+			case .arrayType(_):
+				result = .array
+			case .dictionaryType(_):
+				result = .dictionary
+			case .setType(_):
+				result = .set
+			case .interfaceType(let iftyp):
+				result = .record(iftyp)
+			}
+			return result
+		}
 	}
 
 	fileprivate var mType:    	ValueType
@@ -194,6 +213,13 @@ public class CNMutableValue
 				}
 				result = newdict
 			}
+		case .interfaceValue(let ifval):
+			let newrec = CNMutableRecordValue(fieldTypes: ifval.type, sourceDirectory: srcdir, cacheDirectory: cachedir)
+			for (key, elm) in ifval.values {
+				let newelm = valueToMutableValue(from: elm, sourceDirectory: srcdir, cacheDirectory: cachedir)
+				newrec.set(value: newelm, forKey: key)
+			}
+			result = newrec
 		default:
 			let newscalar = CNMutableScalarValue(scalarValue: val, sourceDirectory: srcdir, cacheDirectory: cachedir)
 			result = newscalar
@@ -220,7 +246,16 @@ public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNVa
 				result.append(contentsOf: cres)
 			}
 		} else {
-			CNLog(logLevel: .error, message: "Can not happen (1)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Can not happen (dictionary)", atFunction: #function, inFile: #file)
+		}
+	case .record(_):
+		if let rec = val as? CNMutableRecordValue {
+			for child in rec.values {
+				let cres = CNSegmentsInValue(value: child, traceOption: trace)
+				result.append(contentsOf: cres)
+			}
+		} else {
+			CNLog(logLevel: .error, message: "Can not happen (record)", atFunction: #function, inFile: #file)
 		}
 	case .array:
 		if let arr = val as? CNMutableArrayValue {
@@ -229,7 +264,7 @@ public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNVa
 				result.append(contentsOf: cres)
 			}
 		} else {
-			CNLog(logLevel: .error, message: "Can not happen (2)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Can not happen (array)", atFunction: #function, inFile: #file)
 		}
 	case .set:
 		if let set = val as? CNMutableSetValue {
@@ -238,7 +273,7 @@ public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNVa
 				result.append(contentsOf: cres)
 			}
 		} else {
-			CNLog(logLevel: .error, message: "Can not happen (3)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Can not happen (set)", atFunction: #function, inFile: #file)
 		}
 	case .segment:
 		if let ref = val as? CNMutableValueSegment {
@@ -261,7 +296,7 @@ public func CNSegmentsInValue(value val: CNMutableValue, traceOption trace: CNVa
 				}
 			}
 		} else {
-			CNLog(logLevel: .error, message: "Can not happen (3)", atFunction: #function, inFile: #file)
+			CNLog(logLevel: .error, message: "Can not happen (segment)", atFunction: #function, inFile: #file)
 		}
 	case .pointer:
 		break

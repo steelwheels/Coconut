@@ -9,6 +9,7 @@ import Foundation
 
 public class CNStorageTable: CNTable
 {
+	public static let InterfaceName		= "TableDataIF"
 	public static let DefaultFieldsItem	= "defaultFields"
 	public static let RecordsItem		= "records"
 	public static let IdItem		= "id"
@@ -22,6 +23,23 @@ public class CNStorageTable: CNTable
 	private var mRecordValuesCacheId:	Int
 	private var mRecordValuesCache:		Array<Dictionary<String, CNValue>>?
 
+	static public var className: String { get {
+		return "Table"
+	}}
+
+	static func allocateInterfaceType(recordInterface recif: CNInterfaceType, frameInterface frameif: CNInterfaceType) -> CNInterfaceType {
+		let ptypes: Dictionary<String, CNValueType> = [
+			"count":		.numberType,
+			"fieldNames":		.arrayType(.stringType),
+			"fieldName":		.functionType(.stringType, [.stringType]),
+			"newRecord":		.functionType(.interfaceType(recif), []),
+			"record":		.functionType(.interfaceType(recif), [.numberType]),
+			"save":			.functionType(.boolType, []),
+			"toString":		.functionType(.stringType, [])
+		]
+		return CNInterfaceType(name: CNStorageTable.InterfaceName, base: frameif, types: ptypes)
+	}
+	
 	static public func loadDummyTable() -> CNStorageTable {
 		let FILENAME = "dummy-storage-table"
 		let FULLNAME = FILENAME + ".json"

@@ -38,6 +38,10 @@ public class CNMappingTable: CNTable, CNMappingTableProtocol
 	private var mRecordValuesCacheId:	Int
 	private var mRecordValuesCache:		Array<Dictionary<String, CNValue>>?
 
+	public static var className: String { get {
+		return "MappingTable"
+	}}
+
 	public init(sourceTable table: CNTable){
 		mSourceTable 		= table
 		mRecords		= []

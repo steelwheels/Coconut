@@ -14,9 +14,9 @@ public class CNInterfaceType
 {
 	static private var mUniqId = 0
 
-	private var		mName:	String
-	private weak var	mBase:	CNInterfaceType?
-	private var		mTypes:	Dictionary<String, CNValueType>
+	private var	mName:	String
+	private var	mBase:	CNInterfaceType?
+	private var	mTypes:	Dictionary<String, CNValueType>
 
 	public var name:  String				{ get { return mName	}}
 	public var base:  CNInterfaceType?			{ get { return mBase	}}
@@ -234,13 +234,17 @@ public class CNInterfaceTable
 	}
 
 	private func setDefaultValues() {
+		let frameif = CNInterfaceType(name: "FrameIF", base: nil, types: [:])
+
 		let pointif = CGPoint.allocateInterfaceType()
 		let sizeif  = CGSize.allocateInterfaceType()
 		let rectif  = CGRect.allocateInterfaceType()
 		let ovalif  = CNOval.allocateInterfaceType(pointIF: pointif)
 		let rangeif = NSRange.allocateInterfaceType()
+		let recif   = CNStorageRecord.allocateInterfaceType()
+		let tableif = CNStorageTable.allocateInterfaceType(recordInterface: recif, frameInterface: frameif)
 
-		self.add(interfaceTypes: [pointif, sizeif, rectif, ovalif, rangeif])
+		self.add(interfaceTypes: [pointif, sizeif, rectif, ovalif, rangeif, recif, tableif])
 	}
 }
 

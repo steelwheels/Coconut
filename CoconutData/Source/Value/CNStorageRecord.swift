@@ -9,9 +9,10 @@ import Foundation
 
 public class CNStorageRecord: CNRecord
 {
-	public static let 	RecordIdItem	= "recordId"
+	public static let InterfaceName	= "RecordIF"
+	public static let RecordIdItem	= "recordId"
 
-	static let 		ClassName = "record"
+	static let 	  ClassName = "record"
 
 	private enum SourceData {
 		case table(CNStorageTable, Int)			// (Source table, index)
@@ -39,6 +40,16 @@ public class CNStorageRecord: CNRecord
 		mTypes  = CNStorageRecord.defaultTypes(fields: fields)
 	}
 
+	static func allocateInterfaceType() -> CNInterfaceType {
+		let ptypes: Dictionary<String, CNValueType> = [
+			"fieldCount":		.numberType,
+			"fieldNames":		.arrayType(.stringType),
+			"value":		.functionType(.anyType, [.stringType]),
+			"setValue":		.functionType(.voidType, [.anyType, .stringType])
+		]
+		return CNInterfaceType(name: CNStorageRecord.InterfaceName, base: nil, types: ptypes)
+	}
+	
 	private static func defaultTypes(fields flds: Dictionary<String, CNValue>) -> Dictionary<String, CNValueType> {
 		var result: Dictionary<String, CNValueType> = [:]
 		for fname in flds.keys {

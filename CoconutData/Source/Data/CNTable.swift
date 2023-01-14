@@ -14,6 +14,8 @@ public enum CNTableLoadResult {
 
 public protocol CNTable
 {
+	static var className: String { get }
+
 	var identifier: String? { get }
 	var recordCount: Int { get }
 
@@ -42,4 +44,5 @@ public protocol CNTable
 
 	func forEach(callback cbfunc: (_ record: CNRecord) -> Void)
 }
+
 

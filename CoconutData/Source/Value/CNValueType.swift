@@ -280,7 +280,7 @@ private class CNValueTypeCoder
 				if let iftype = CNInterfaceTable.currentInterfaceTable().search(byTypeName: ifname) {
 					result = .interfaceType(iftype)
 				} else {
-					return .failure(NSError.parseError(message: "Unknown interface name: \(ident)"))
+					return .failure(NSError.parseError(message: "Unknown interface name: \(ifname)"))
 				}
 			case .failure(let err):
 				return .failure(err)

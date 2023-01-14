@@ -27,6 +27,10 @@ private class CNContactCache
 
 public class CNContactDatabase: CNTable
 {
+	public static var className: String { get {
+		return "ContactDatabase"
+	}}
+
 	/* Define singleton object */
 	public static var mShared: CNContactDatabase? = nil
 	public static var shared: CNContactDatabase { get {
